@@ -7,3 +7,7 @@ https://www.youtube.com/watch?v=PZBg5DIzNww
 Kotlin Tutorial (nicht gecheckt)
 
 https://www.tutorialspoint.com/kotlin/index.htm
+
+Jetpack (nicht gecheckt)
+
+https://developer.android.com/jetpack
