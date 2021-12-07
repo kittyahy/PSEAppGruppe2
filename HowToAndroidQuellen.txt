@@ -3,6 +3,8 @@ Videos:
 Android Architektur Design
 https://www.youtube.com/watch?v=PZBg5DIzNww
 
+Lifecycle Tutorial (Englisch; hoher detailgrad, aber kompakt)
+https://www.vogella.com/tutorials/AndroidLifeCycle/article.html
 
 Kotlin Tutorial (nicht gecheckt)
 
