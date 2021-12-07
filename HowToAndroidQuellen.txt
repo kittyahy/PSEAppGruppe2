@@ -2,3 +2,8 @@ Videos:
 
 Android Architektur Design
 https://www.youtube.com/watch?v=PZBg5DIzNww
+
+
+Kotlin Tutorial (nicht gecheckt)
+
+https://www.tutorialspoint.com/kotlin/index.htm
