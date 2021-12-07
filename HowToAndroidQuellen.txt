@@ -9,3 +9,7 @@ https://www.vogella.com/tutorials/AndroidLifeCycle/article.html
 Kotlin Tutorial (nicht gecheckt)
 
 https://www.tutorialspoint.com/kotlin/index.htm
+
+Jetpack (nicht gecheckt)
+
+https://developer.android.com/jetpack
