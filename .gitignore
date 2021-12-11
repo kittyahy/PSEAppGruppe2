@@ -81,3 +81,12 @@ __MACOSX/
 
 # Windows
 Thumbs.db*
+
+# Markdown locks
+*.md~
+
+# PlantUML locks
+*.puml~
+
+# .gitignore lock
+.gitignore~
