@@ -1,0 +1,77 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+hide circle
+
+
+class TableRow {
+  row: Integer
+  col: Integer
+}
+
+abstract class AppDataBase {
+  ..Entities..
+  IntegerRow
+  TimeRow
+  ..TypeConverters..
+  RoomDateTimeConversion
+}
+
+package Entities {
+  '@Entity(primaryKeys=["row", "col"])
+  class IntegerRow {
+    value: Integer
+  }
+  
+  '@Entity(primaryKeys=["row", "col"])
+  class DateTimeRow {
+    value: DateTime
+  }
+}
+
+package DAOs {
+  interface IntegerDAO {
+    --
+    insertAll(vararg integers: IntegerRow): Unit
+    getAll(): List<IntegerRow>
+    getByRow(row: Integer): List<IntegerRow>
+    delete(integer: IntegerRow): Unit
+  }
+  
+  interface DateTimeDAO {
+    --
+    insertAll(vararg times: DateTimeRow): Unit
+    getAll(): List<DateTimeRow>
+    getByRow(row: Integer): List<DateTimeRow>
+    delete(integer: DateTimeRow): Unit
+  }
+}
+
+package TypeConverters {
+  class RoomDateTimeConversion {
+    --
+    DateTimeToLong(DateTime): Long
+    LongToDateTime(Long): DateTime
+  }
+}
+
+class TableAccess {
+  --
+  getRow(row: Integer)
+}
+
+TableAccess - IntegerDAO
+TableAccess - DateTimeDAO
+
+TableRow <|-- IntegerRow
+TableRow <|-- DateTimeRow
+RoomDatabase <|-- AppDataBase
+
+TypeConverters -[hidden]-> TableAccess
+Entities -[hidden]-> TypeConverters
+TableAccess -[hidden]-> DAOs
+
+
+@enduml
