@@ -13,3 +13,5 @@ https://www.tutorialspoint.com/kotlin/index.htm
 Jetpack (nicht gecheckt)
 
 https://developer.android.com/jetpack
+
+https://github.com/android/architecture-components-samples/tree/main/BasicSample
