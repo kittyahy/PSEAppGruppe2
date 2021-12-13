@@ -7,28 +7,37 @@ skinparam classAttributeIconSize 0
 hide circle
 
 
-class TableRow {
+class TableValue {
   row: Integer
   col: Integer
+  projectID: Integer
 }
 
 abstract class AppDataBase {
   ..Entities..
-  IntegerRow
-  TimeRow
+  IntegerValue
+  TimeValue
   ..TypeConverters..
   RoomDateTimeConversion
 }
 
 package Entities {
   '@Entity(primaryKeys=["row", "col"])
-  class IntegerRow {
+  class IntegerValue {
     value: Integer
   }
   
   '@Entity(primaryKeys=["row", "col"])
-  class DateTimeRow {
+  class DateTimeValue {
     value: DateTime
+  }
+  
+  '@Entity
+  class RowProperties {
+    'PrimaryKey
+    rowID
+    createdOn: DateTime
+    createdBy: String
   }
   
   '@Entity
@@ -60,15 +69,37 @@ package Entities {
     customizing: GraphCustomizing 
   }
   
+  '@Entity(primaryKey=["id", "col"])
+  class TableLayoutColumn {
+    id: Integer
+    col: Integer
+    type: String
+  }
+  
+  '@Entity
+  class ProjectEntity {
+    'PrimaryKey
+    id: Integer
+    tableID: Integer
+    tableLayoutID: Integer
+  }
+  
   '@Entity
   class Settings {
     ???
+  }
+  
+  '@Entity
+  class ProjectTemplate {
+    name: String
+    description: String
+    tableLayoutID: Integer
+    wallpaperPath: String
   }
 }
 
 package DAOs {
   interface IntegerDAO {
-    --
     insertAll(vararg integers: IntegerRow): Unit
     getAll(): List<IntegerRow>
     getByRow(row: Integer): List<IntegerRow>
@@ -76,7 +107,6 @@ package DAOs {
   }
   
   interface DateTimeDAO {
-    --
     insertAll(vararg times: DateTimeRow): Unit
     getAll(): List<DateTimeRow>
     getByRow(row: Integer): List<DateTimeRow>
@@ -113,15 +143,21 @@ Project "1" -- "0..n" Graph
 
 
 class Wallpaper {
+  name: String
   path: String
+  'Some kind of method to read the specified file and return the image or whatever is needed for the UI
 }
 
 class Notification {
   
 }
 
+class DataType<T> {
+  
+}
+
 class Table {
-  TODO wie sieht die aus?!?
+  getRow(Integer) : Collection<DataType>
 }
 'Das sollten wahrscheinlich undbounded Arrays werden
 Table -- "1..n" ProjectTableColumnProperties
@@ -147,8 +183,15 @@ class Graph {
   
 }
 Graph -- GraphCustomizing : has >
+Graph - GraphData : is generated from >
+(Graph, GraphData) .. TableGraphTransformation : by applying
 
 class GraphData {
+  
+}
+GraphData o-- "1..n" DataSeries
+
+class DataSeries {
   
 }
 
@@ -156,22 +199,24 @@ class GraphCustomizing {
   
 }
 
-class ProjectTemplate {
+class TableGraphTransformation {
   
 }
+
+
 
 TableAccess - IntegerDAO
 TableAccess - DateTimeDAO
 
-TableRow <|-- IntegerRow
-TableRow <|-- DateTimeRow
+TableValue <|-- IntegerValue
+TableValue <|-- DateTimeValue
 RoomDatabase <|-- AppDataBase
 
 AppDataBase -[hidden]-> TableAccess
 DAOs -[hidden]> TypeConverters
 TableAccess -[hidden]-> DAOs
 Table -[hidden]-> Wallpaper
-GraphCustomizing -[hidden]-> ProjectTemplate
+GraphCustomizing -[hidden]-> TableValue
 
 
 @enduml
