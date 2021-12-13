@@ -29,6 +29,40 @@ package Entities {
   class DateTimeRow {
     value: DateTime
   }
+  
+  '@Entity
+  class ProjectCustomizing {
+    'PrimaryKey
+    id: Integer 
+    name: String
+    'Embedded
+    customzing: ProjectCustomizing 
+  }
+  
+  '@Entity
+  class Graph {
+    'PrimaryKey
+    id: Integer 
+    templateId: Integer
+    projectId: Integer
+    'Embedded
+    map: TableGraphTransformation
+    picturePath: String
+  }
+  
+  '@Entity
+  class GraphTemplate {
+    id: Integer
+    name: String
+    createdBy: String
+    'Embedded
+    customizing: GraphCustomizing 
+  }
+  
+  '@Entity
+  class Settings {
+    ???
+  }
 }
 
 package DAOs {
@@ -55,6 +89,12 @@ package TypeConverters {
     DateTimeToLong(DateTime): Long
     LongToDateTime(Long): DateTime
   }
+  
+  class BooleanConversion {
+    --
+    BooleanToInt(Boolean): Integer
+    IntToBoolean(Integer): Boolean
+  }
 }
 
 class TableAccess {
@@ -69,8 +109,8 @@ TableRow <|-- IntegerRow
 TableRow <|-- DateTimeRow
 RoomDatabase <|-- AppDataBase
 
-TypeConverters -[hidden]-> TableAccess
-Entities -[hidden]-> TypeConverters
+AppDataBase -[hidden]-> TableAccess
+DAOs -[hidden]> TypeConverters
 TableAccess -[hidden]-> DAOs
 
 
