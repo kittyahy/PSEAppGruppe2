@@ -3,6 +3,7 @@
 skinparam monochrome true
 skinparam shadowing false
 skinparam genericDisplay old
+skinparam classAttributeIconSize 0
 hide circle
 
 
@@ -40,7 +41,7 @@ package Entities {
   }
   
   '@Entity
-  class Graph {
+  class GraphEntity {
     'PrimaryKey
     id: Integer 
     templateId: Integer
@@ -85,21 +86,78 @@ package DAOs {
 
 package TypeConverters {
   class RoomDateTimeConversion {
-    --
     DateTimeToLong(DateTime): Long
     LongToDateTime(Long): DateTime
   }
   
   class BooleanConversion {
-    --
     BooleanToInt(Boolean): Integer
     IntToBoolean(Integer): Boolean
   }
 }
 
 class TableAccess {
-  --
   getRow(row: Integer)
+}
+
+class Project {
+  - name: String
+  - description: String
+  ~ Constructor(ProjectTemplate) : Project
+  ~ setName(String)
+}
+Project - "0..1" Wallpaper : has >
+Project -- "0..n" Notification : has >
+Project "1" - "1" Table : has data of <
+Project "1" -- "0..n" Graph
+
+
+class Wallpaper {
+  path: String
+}
+
+class Notification {
+  
+}
+
+class Table {
+  TODO wie sieht die aus?!?
+}
+'Das sollten wahrscheinlich undbounded Arrays werden
+Table -- "1..n" ProjectTableColumnProperties
+Table - "0..m" ProjectTableRow
+
+class ProjectTableRow {
+  
+}
+ProjectTableRow - "1..n" ProjectEntry
+
+class ProjectEntry<T> {
+  value: T
+}
+
+class ProjectTableColumnProperties {
+  - id: Integer
+  - name: String
+  - unit: String
+  - uiElement: () -> Unit
+}
+
+class Graph {
+  
+}
+Graph -- GraphCustomizing : has >
+
+class GraphData {
+  
+}
+
+class GraphCustomizing {
+  
+}
+
+class ProjectTemplate {
+  
 }
 
 TableAccess - IntegerDAO
@@ -112,6 +170,8 @@ RoomDatabase <|-- AppDataBase
 AppDataBase -[hidden]-> TableAccess
 DAOs -[hidden]> TypeConverters
 TableAccess -[hidden]-> DAOs
+Table -[hidden]-> Wallpaper
+GraphCustomizing -[hidden]-> ProjectTemplate
 
 
 @enduml
