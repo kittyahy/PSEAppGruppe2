@@ -37,9 +37,8 @@ package Repository {
     +getGraphs(): Collection<Graph>
     +getProjectSettings(): Settings
     +getNotifications(): Collection<Notification>
-    +getAdmin(): Boolean
+    +getAdmin(): User
     +getUsers(): Collection<Users>
-    ~Constructor(Table, User)
     ~setName(String)
     ~setDescription(String)
     ~setWallpaper(path: String)
@@ -51,12 +50,7 @@ package Repository {
     +getDataSets(): Collection<Collection<Any>>
     +getCustomizing(): Settings
     +getImage(): Drawable?
-    'Can a Graph exist without a project? What happens to a Graph if its TGT can't convert
-    'the Graph's Project's Table into DataSets anymore? Who may create a new Graph?
-    ~Constructor(Project, (Table) -> Collection<Collection<Any>>)
-    ~setCalculationFunction((Table) -> Collection<Collection<Any>>)
-    
-    -recalculateDataSets()
+    ~setCalculationFunction(DataTransformation)
   }
   
   interface Settings <<interface>> {
@@ -87,6 +81,10 @@ package Repository {
     +getThumbnail(): Drawable
     +getCustomizing(): Settings
   }
+}
+
+class Types <<utility>> {
+  +{static}isPositive(Integer): Boolean
 }
 
 Repository ----[hidden]-> WeißNochNichtWoDasLiegt
