@@ -1,0 +1,104 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+
+package Repository {
+  class ProjectHelper <<singleton>> {
+    +getProject(Integer): Project
+    +createProject(): Project
+  }
+
+  interface Table <<interface>> {
+    +getRow(Integer): Collection<Any>
+    +getMetaRow(Integer): RowMetaInformation
+    +getColumn(Integer): Collection<Any>
+    +getCell(Integer, Integer): Any
+    +insertRow(Collection<Any>) throws IllegalTypeException
+    +getLayout(): Collection<Class<Any>>
+    +addColumn(Class<Any>)
+    +deleteColumn(Integer)
+    'This is something I am not sure about. How do our InputElement look like?
+    +getUIElement(Integer): Function(Any)
+    +setUIElement(Integer, Function(Any))
+  }
+
+  interface Project <<interface>> {
+    +getID(): Integer
+    +getName(): String
+    +getDescription(): String
+    +getWallpaper(): Drawable
+    +getThumbnail(): Drawable
+    +getTable(): Table
+    +getGraphs(): Collection<Graph>
+    +getProjectSettings(): Settings
+    +getNotifications(): Collection<Notification>
+    +getAdmin(): User
+    +getUsers(): Collection<Users>
+    ~setName(String)
+    ~setDescription(String)
+    ~setWallpaper(path: String)
+    ~setThumbnail(path: String)
+  }
+
+  interface Graph <<interface>> {
+    'Does this always recompute the DataSets? If not how does it decide when to recompute?
+    +getDataSets(): Collection<Collection<Any>>
+    +getCustomizing(): Settings
+    +getImage(): Drawable?
+    ~setCalculationFunction(DataTransformation)
+  }
+
+  interface Settings <<interface>> {
+    +getSetting(String): Any throws SettingNotFoundException
+    +setSetting(String, Any) throws SettingNotFoundException
+  }
+
+  interface Notification <<interface>> {
+    +getMessage(): String
+    +sendNow(vararg Any): Boolean throws IllegalContextException
+  }
+
+  'This is kind of the same as a project without Data. However, a project really isn't
+  'a subtype of ProjectTemplate. How do we want to do this? Do we know any Patterns that
+  'fit this problem?
+  interface ProjectTemplate <<interface>> {
+    +getName(): String
+    +getDescription(): String
+    +getWallpaper(): Drawable
+    +getThumbnail(): Drawable
+    +getTableLayout(): Collection<Class<Any>>
+    +getProjectSettings(): Settings
+  }
+
+  interface GraphTemplate <<interface>> {
+    +getName(): String
+    +getDescription(): String
+    +getThumbnail(): Drawable
+    +getCustomizing(): Settings
+  }
+}
+
+class Types <<utility>> {
+  +{static}isPositive(Integer): Boolean
+}
+
+Repository ----[hidden]-> WeißNochNichtWoDasLiegt
+
+package WeißNochNichtWoDasLiegt {
+
+  class RowMetaInformation <<data>> {
+    createdOn: DateTime
+    createdBy: User
+  }
+
+  class User <<data>> {
+    name: String
+  }
+
+}
+
+@enduml
