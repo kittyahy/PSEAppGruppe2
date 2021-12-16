@@ -13,13 +13,13 @@ package Repository {
     +getRow(Integer): Row
     +insertRow(Row) throws IllegalTypeException
     +deleteRow(Integer)
-    +getColumn(Integer): Collection<Any>
+    +getColumn(Integer): List<Any>
     +getCell(Integer, Integer): Any
     +getLayout(): TableLayout
   }
   
   interface Row <<Interface>> {
-    +getAll(): Collection<Any>
+    +getAll(): List<Any>
     +getCell(Integer): Any
     +setCell(Integer, Any) throws IllegalTypeException
     +getMetaData(Integer): RowMetaData
