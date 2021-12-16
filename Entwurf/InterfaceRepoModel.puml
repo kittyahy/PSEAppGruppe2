@@ -9,126 +9,136 @@ hide circle
 
 package Repository {
   
-  interface Table <<interface>> {
-    +getRow(Integer): Row
-    +insertRow(Row) throws IllegalTypeException
-    +deleteRow(Integer)
-    +getColumn(Integer): List<Any>
-    +getCell(Integer, Integer): Any
-    +getLayout(): TableLayout
-  }
-  
-  interface Row <<Interface>> {
-    +getAll(): List<Any>
-    +getCell(Integer): Any
-    +setCell(Integer, Any) throws IllegalTypeException
-    +getMetaData(Integer): RowMetaData
-  }
-  
-  interface Project <<interface>> {
-    +getProjectSkeleton(): ProjectSkeleton
-    +getTable(): Table
-    +getAdmin(): User
-    +setAdmin(User)
-    +getUsers(): Collection<Users>
-    +addUser(User)
-    +removeUser(User)
-    +createGraph()
-  }
-  
-  'Nested Class: You need an object of a class Implementing Project in Order to create
-  'a DataTransformation
-  class Project::DataTransformation {
-    
-  }
-  
-  interface ProjectSkeleton <<interface>> {
-    +getID(): Integer
-    +getName(): String
-    +getDescription(): String
-    +getWallpaper(): Drawable
-    +getThumbnail(): Drawable
-    +getGraphs(): Collection<Graph>
-    +getProjectSettings(): Settings
-    +getNotifications(): Collection<Notification>
-    +setName(String)
-    +setDescription(String)
-    +setWallpaper(path: String)
-    +setThumbnail(path: String)
-  }
-  
-  interface Graph <<interface>> {
-    'Does this always recompute the DataSets? If not how does it decide when to recompute?
-    +getDataSets(): Collection<Collection<Any>>
-    +getCustomizing(): Settings
-    +getImage(): Drawable?
-    +setCalculationFunction(DataTransformation)
-  }
-  
-  interface Settings <<interface>> {
-    +getSetting(String): Any throws SettingNotFoundException
-    +setSetting(String, Any) throws SettingNotFoundException
-  }
-  
-  interface Notification <<interface>> {
-    +getMessage(): String
-    +sendNow(vararg Any): Boolean throws IllegalContextException
-  }
-  
-  interface ProjectTemplate <<interface>> {
-    +getProjectSkeleton(): ProjectSkeleton
-    +getTableLayout(): Collection<Class<Any>>
-  }
-  
-  interface GraphTemplate <<interface>> {
-    +getName(): String
-    +getDescription(): String
-    +getThumbnail(): Drawable
-    +getCustomizing(): Settings
-    
-  }
-  
-  interface Post <<interface>> {
-    +getContent(): Content
-    +getName(): String
-    +getDescription(): String
-  }
-  
-  interface Content <<interface>> {
-    
-  }
-  
-  interface TableLayout <<interface>> {
-    +getColumnType(Integer): Class<Any>
-    +addColumn(Class<Any>)
-    +deleteColumn(Integer)
-    +getUIElement(Integer): UIElementType 
-    +setUIElement(Integer, UIElementType)
-  }
+    interface Table <<interface>> {
+        +getCell(Integer, Integer): Any
+        +getLayout(): TableLayout
+        +getSize(): Integer
+        ..Row Operations..
+        +getRow(Integer): Row
+        +addRow(Row) throws IllegalTypeException
+        +deleteRow(Integer)
+        ..Column Operations..
+        +getColumn(Integer): List<Any>
+        +addColumn(Class<Any>)
+        +deleteColumn(Integer)
+    }
 
-  class RowMetaData <<data>> {
-    createdOn: DateTime
-    createdBy: User
-  }
+    interface Row <<Interface>> {
+        +getAll(): List<Any>
+        +getCell(Integer): Any
+        +setCell(Integer, Any) throws IllegalTypeException
+        +getMetaData(Integer): RowMetaData
+        +getSize(): Integer
+    }
+
+    interface Project <<interface>> {
+        +getProjectSkeleton(): ProjectSkeleton
+        +getTable(): Table
+        +getAdmin(): User
+        +setAdmin(User)
+        +getUsers(): Collection<Users>
+        +addUser(User)
+        +removeUser(User)
+        +createGraph()
+    }
   
-  enum UIElementType <<enum>>{
-    BUTTON,
-    NUMBER_FIELD,
-    DATE_TIME_PICKER
-  }
+    'Nested Class: You need an object of a class Implementing Project in Order to create
+    'a DataTransformation
+    class Project::DataTransformation {
+
+    }
+
+    interface ProjectSkeleton <<interface>> {
+        +getID(): Integer
+        +getName(): String
+        +getDescription(): String
+        +getWallpaper(): Drawable
+        +getThumbnail(): Drawable
+        +getGraphs(): Collection<Graph>
+        +getProjectSettings(): Settings
+        +getNotifications(): Collection<Notification>
+        +setName(String)
+        +setDescription(String)
+        +setWallpaper(path: String)
+        +setThumbnail(path: String)
+    }
+
+    interface Graph <<interface>> {
+        'Does this always recompute the DataSets? If not how does it decide when to recompute?
+        +getDataSets(): Collection<Collection<Any>>
+        +getCustomizing(): Settings
+        +getImage(): Drawable?
+        +setCalculationFunction(DataTransformation)
+    }
+
+    interface Settings <<interface>> {
+        +getSetting(String): Any throws SettingNotFoundException
+        +setSetting(String, Any) throws SettingNotFoundException
+    }
+
+    interface Notification <<interface>> {
+        +getMessage(): String
+        +sendNow(vararg Any): Boolean throws IllegalContextException
+    }
+  
+    interface ProjectTemplate <<interface>> {
+        +getProjectSkeleton(): ProjectSkeleton
+        +getTableLayout(): Collection<Class<Any>>
+    }
+
+    interface GraphTemplate <<interface>> {
+        +getName(): String
+        +getDescription(): String
+        +getThumbnail(): Drawable
+        +getCustomizing(): Settings
+
+    }
+
+    interface Post <<interface>> {
+        +getContent(): Content
+        +getName(): String
+        +getDescription(): String
+    }
+
+    interface Content <<interface>> {
+
+    }
+
+    interface TableLayout <<interface>> {
+        +size(): Integer
+        +getColumnType(Integer): Class<Any>
+        +getUIElement(Integer): UIElementType
+        +setUIElement(Integer, UIElementType)
+        ~addColumn(Class<Any>)
+        ~deleteColumn(Integer)
+    }
+
+    class RowMetaData <<data>> {
+        +Constructor(DateTime, User)
+        +getCreationDate(): DateTime
+        +getCreator(): User
+        -createdOn: DateTime
+        -createdBy: User
+    }
+
+    enum UIElementType <<enum>>{
+        BUTTON,
+        NUMBER_FIELD,
+        DATE_TIME_PICKER
+    }
 }
 
 Repository ----[hidden]-> WeißNochNichtWoDasLiegt
 
 package WeißNochNichtWoDasLiegt {
 
-  class User <<data>> {
-    name: String
-  }
-  
-  class Post {
-    
-  }
+    class User <<data>> {
+        name: String
+    }
+
+    class Post {
+
+    }
 
 }
 
