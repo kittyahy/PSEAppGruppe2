@@ -1,0 +1,27 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+
+package View
+
+package ViewModel
+
+package Repository
+
+package RemoteDataSource
+
+package Model
+
+View --> ViewModel
+ViewModel --> Repository
+Repository --> RemoteDataSource
+Repository --> Model
+Model -[hidden]> Model
+
+
+@enduml
