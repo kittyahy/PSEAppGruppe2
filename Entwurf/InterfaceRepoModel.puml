@@ -8,39 +8,38 @@ hide circle
 
 
 package Repository {
-  class ProjectHelper <<singleton>> {
-    +getProject(Integer): Project
-    +getProjects(): Collection<Project>
-    +createProject(): Project
-  }
   
   interface Table <<interface>> {
     +getRow(Integer): Row
+    +insertRow(Row) throws IllegalTypeException
+    +deleteRow(Integer)
     +getColumn(Integer): Collection<Any>
     +getCell(Integer, Integer): Any
-    +insertRow(Row) throws IllegalTypeException
-    +getLayout(): Collection<Class<Any>>
-    +addColumn(Class<Any>)
-    +deleteColumn(Integer)
-    'This is something I am not sure about. How do our InputElements look like?
-    +getUIElement(Integer): Function(Any) 
-    +setUIElement(Integer, Function(Any))
+    +getLayout(): TableLayout
   }
   
   interface Row <<Interface>> {
+    +getAll(): Collection<Any>
     +getCell(Integer): Any
-    +getMetaData(Integer): RowMetaInformation
+    +setCell(Integer, Any) throws IllegalTypeException
+    +getMetaData(Integer): RowMetaData
   }
   
   interface Project <<interface>> {
     +getProjectSkeleton(): ProjectSkeleton
     +getTable(): Table
     +getAdmin(): User
+    +setAdmin(User)
     +getUsers(): Collection<Users>
-    +setName(String)
-    +setDescription(String)
-    +setWallpaper(path: String)
-    +setThumbnail(path: String)
+    +addUser(User)
+    +removeUser(User)
+    +createGraph()
+  }
+  
+  'Nested Class: You need an object of a class Implementing Project in Order to create
+  'a DataTransformation
+  class Project::DataTransformation {
+    
   }
   
   interface ProjectSkeleton <<interface>> {
@@ -52,6 +51,10 @@ package Repository {
     +getGraphs(): Collection<Graph>
     +getProjectSettings(): Settings
     +getNotifications(): Collection<Notification>
+    +setName(String)
+    +setDescription(String)
+    +setWallpaper(path: String)
+    +setThumbnail(path: String)
   }
   
   interface Graph <<interface>> {
@@ -72,9 +75,6 @@ package Repository {
     +sendNow(vararg Any): Boolean throws IllegalContextException
   }
   
-  'This is kind of the same as a project without Data. However, a project really isn't
-  'a subtype of ProjectTemplate. How do we want to do this? Do we know any Patterns that
-  'fit this problem?
   interface ProjectTemplate <<interface>> {
     +getProjectSkeleton(): ProjectSkeleton
     +getTableLayout(): Collection<Class<Any>>
@@ -97,16 +97,30 @@ package Repository {
   interface Content <<interface>> {
     
   }
+  
+  interface TableLayout <<interface>> {
+    +getColumnType(Integer): Class<Any>
+    +addColumn(Class<Any>)
+    +deleteColumn(Integer)
+    +getUIElement(Integer): UIElementType 
+    +setUIElement(Integer, UIElementType)
+  }
+
+  class RowMetaData <<data>> {
+    createdOn: DateTime
+    createdBy: User
+  }
+  
+  enum UIElementType <<enum>>{
+    BUTTON,
+    NUMBER_FIELD,
+    DATE_TIME_PICKER
+  }
 }
 
 Repository ----[hidden]-> WeißNochNichtWoDasLiegt
 
 package WeißNochNichtWoDasLiegt {
-
-  class RowMetaInformation <<data>> {
-    createdOn: DateTime
-    createdBy: User
-  }
 
   class User <<data>> {
     name: String
@@ -117,5 +131,7 @@ package WeißNochNichtWoDasLiegt {
   }
 
 }
+
+
 
 @enduml
