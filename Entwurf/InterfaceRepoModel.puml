@@ -10,39 +10,48 @@ hide circle
 package Repository {
   class ProjectHelper <<singleton>> {
     +getProject(Integer): Project
+    +getProjects(): Collection<Project>
     +createProject(): Project
   }
   
   interface Table <<interface>> {
-    +getRow(Integer): Collection<Any>
-    +getMetaRow(Integer): RowMetaInformation
+    +getRow(Integer): Row
     +getColumn(Integer): Collection<Any>
     +getCell(Integer, Integer): Any
-    +insertRow(Collection<Any>) throws IllegalTypeException
+    +insertRow(Row) throws IllegalTypeException
     +getLayout(): Collection<Class<Any>>
     +addColumn(Class<Any>)
     +deleteColumn(Integer)
-    'This is something I am not sure about. How do our InputElement look like?
+    'This is something I am not sure about. How do our InputElements look like?
     +getUIElement(Integer): Function(Any) 
     +setUIElement(Integer, Function(Any))
   }
   
+  interface Row <<Interface>> {
+    +getCell(Integer): Any
+    +getMetaData(Integer): RowMetaInformation
+  }
+  
   interface Project <<interface>> {
+    +getProjectSkeleton(): ProjectSkeleton
+    +getTable(): Table
+    +getAdmin(): User
+    +getUsers(): Collection<Users>
+    +setName(String)
+    +setDescription(String)
+    +setWallpaper(path: String)
+    +setThumbnail(path: String)
+  }
+  
+  interface ProjectSkeleton <<interface>> {
     +getID(): Integer
     +getName(): String
     +getDescription(): String
     +getWallpaper(): Drawable
     +getThumbnail(): Drawable
-    +getTable(): Table
     +getGraphs(): Collection<Graph>
     +getProjectSettings(): Settings
     +getNotifications(): Collection<Notification>
-    +getAdmin(): User
-    +getUsers(): Collection<Users>
-    ~setName(String)
-    ~setDescription(String)
-    ~setWallpaper(path: String)
-    ~setThumbnail(path: String)
   }
   
   interface Graph <<interface>> {
@@ -50,7 +59,7 @@ package Repository {
     +getDataSets(): Collection<Collection<Any>>
     +getCustomizing(): Settings
     +getImage(): Drawable?
-    ~setCalculationFunction(DataTransformation)
+    +setCalculationFunction(DataTransformation)
   }
   
   interface Settings <<interface>> {
@@ -67,12 +76,8 @@ package Repository {
   'a subtype of ProjectTemplate. How do we want to do this? Do we know any Patterns that
   'fit this problem?
   interface ProjectTemplate <<interface>> {
-    +getName(): String
-    +getDescription(): String
-    +getWallpaper(): Drawable
-    +getThumbnail(): Drawable
+    +getProjectSkeleton(): ProjectSkeleton
     +getTableLayout(): Collection<Class<Any>>
-    +getProjectSettings(): Settings
   }
   
   interface GraphTemplate <<interface>> {
@@ -80,11 +85,18 @@ package Repository {
     +getDescription(): String
     +getThumbnail(): Drawable
     +getCustomizing(): Settings
+    
   }
-}
-
-class Types <<utility>> {
-  +{static}isPositive(Integer): Boolean
+  
+  interface Post <<interface>> {
+    +getContent(): Content
+    +getName(): String
+    +getDescription(): String
+  }
+  
+  interface Content <<interface>> {
+    
+  }
 }
 
 Repository ----[hidden]-> WeißNochNichtWoDasLiegt
@@ -98,6 +110,10 @@ package WeißNochNichtWoDasLiegt {
 
   class User <<data>> {
     name: String
+  }
+  
+  class Post {
+    
   }
 
 }
