@@ -1,0 +1,31 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+
+class Client
+
+Client - Firebase : authenticates via >
+
+class Firebase
+
+class Job
+
+Client -- Job : Creates >
+
+class Controller
+
+note left of Job
+  Command Pattern?
+end note
+Job -- Controller : Processes <
+
+class Database
+
+Controller -- Database : Read/Write >
+
+@enduml
