@@ -119,7 +119,16 @@ package ServerSchnittstelle {
       }
 '=================================================================================================='
   package Commands {
-    
+    abstract class Command <<abstract>> {
+            -table: Table
+            -userRole: UserRole
+
+            {abstract} +execute(): void
+        }
+        enum UserRole <<enumeration>> {
+            ADMIN
+            CASUAL
+        }
   }
 }
 
