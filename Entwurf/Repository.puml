@@ -128,20 +128,42 @@ package ServerSchnittstelle {
     class IllegalOperationException {
     }
 
-    abstract class Command <<abstract>> {
+    abstract class TableCommand <<abstract>> {
                 -table: Table
                 -userRole: UserRole
+                -requiredRole: UserRole
+                -index: Integer
 
-                {abstract} +execute(): void trows IllegalOperationException
+                +run(): void throws IllegalOperationException
+                {abstract} -execute(): void
         }
-    class RowAction {
-        +execute(): void
+    class DeleteRow {
+        -execute(): void
     }
-    class ColumnAction {
-        +execute(): void
+    class DeleteColumn {
+        -execute(): void
     }
-    Command <|-- RowAction
-    Command <|-- ColumnAction
+    class AddRow {
+        -execute(): void
+    }
+    class AddColumn {
+        -execute(): void
+    }
+    class SetCellInRow {
+        -positionInRow: Integer
+        -execute(): void
+    }
+    note right of TableCommand::run
+    if userRole >= requiredRole
+        execute();
+    else
+        throw IllegalOperationException;
+    end note
+    TableCommand <|-- DeleteRow
+    TableCommand <|-- DeleteColumn
+    TableCommand <|-- AddRow
+    TableCommand <|-- AddColumn
+    TableCommand <|-- SetCellInRow
   }
 }
 
