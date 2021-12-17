@@ -119,16 +119,29 @@ package ServerSchnittstelle {
       }
 '=================================================================================================='
   package Commands {
-    abstract class Command <<abstract>> {
-            -table: Table
-            -userRole: UserRole
 
-            {abstract} +execute(): void
+    enum UserRole <<enumeration>> {
+        ADMIN
+        CASUAL
+    }
+
+    class IllegalOperationException {
+    }
+
+    abstract class Command <<abstract>> {
+                -table: Table
+                -userRole: UserRole
+
+                {abstract} +execute(): void trows IllegalOperationException
         }
-        enum UserRole <<enumeration>> {
-            ADMIN
-            CASUAL
-        }
+    class RowAction {
+        +execute(): void
+    }
+    class ColumnAction {
+        +execute(): void
+    }
+    Command <|-- RowAction
+    Command <|-- ColumnAction
   }
 }
 
