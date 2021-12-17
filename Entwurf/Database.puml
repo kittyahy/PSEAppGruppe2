@@ -46,7 +46,7 @@ package Entities {
     id: Integer 
     name: String
     'Embedded
-    customzing: ProjectCustomizing 
+    customizing: ProjectCustomizing
   }
   
   '@Entity
@@ -159,7 +159,7 @@ class DataType<T> {
 class Table {
   getRow(Integer) : Collection<DataType>
 }
-'Das sollten wahrscheinlich undbounded Arrays werden
+'Das sollten wahrscheinlich unbounded Arrays werden
 Table -- "1..n" ProjectTableColumnProperties
 Table - "0..m" ProjectTableRow
 
