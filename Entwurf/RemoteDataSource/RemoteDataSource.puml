@@ -20,9 +20,7 @@ class ServerClientAPI {
 }
 
 package Server {
-	class Spring {
-
-	}
+	
 }
 
 

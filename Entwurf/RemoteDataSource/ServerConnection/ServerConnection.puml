@@ -9,7 +9,19 @@ package ServerConnection {
 	class RESTController <<Singleton>>{
 	-ServerIP : String
 
-	void connectToServer();
+	void connectToServer()
 
+    WorkToken RequestToServer.saveDelta()
+    WorkToken RequestToServer.getLatestDelta()
+
+    WorkToken RequestToServer.addUser()
+    WorkToken RequestToServer.removeUser()
+
+    WorkToken RequestToServer.getOldData()
+    
+    WorkToken RequestToServer.showPosts()
+    WorkToken RequestToServer.displayPost()
+    
+    WorkToken RequestToServer.downloadTemplate()
 	}
 }
