@@ -1,0 +1,100 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+class ServerClientAPI {
+	+ GetBefehl()
+}
+
+' Kuemmert sich um die Connection mit unserem Server
+class RESTController <<Singleton>>{
+   -ServerIP : String
+
+   void connectToServer();
+}
+
+' Kuemmert sich um die Google Anmeldung in Firebase
+' -> Gibt User_Id und Token bei angemeldeten User aus
+class FirebaseController {
+	' Um alle Firebase Anmelde und Authentifizierung methoden aufzurufen
+	-FirebaseAuth auth
+
+	' Speichert alle Werte vom angemeldetem User. Wie Name, ID, ...
+	-FirebaseUser user
+
+	
+
+
+	+int RegisterUser(String eMail, String passwort)
+	+int SignInUser(String eMail, String passwort)
+
+	-int GetUserInformations()
+
+
+	int LogOut()
+	' -1 bei Fehler
+
+	+String GetUserID() 
+	' returns null, when no User connected
+	+String GetToken()
+}
+
+note right of FirebaseController::RegisterUser
+	auth.createUserWithEmailAndPassword(email, passwort)
+end note
+note right of FirebaseController::SignInUser
+	auth.signInWithEmailAndPassword(email, password)
+end note
+note right of FirebaseController::GetUserInformations
+	val user = Firebase.auth.currentUser
+	'Fängt mit Firebase. an -> Ruft Firebase auf
+end note
+
+class FirebaseAPI {
+	+FirebaseUser auth.currentUser();
+
+	String getToken() 
+	' auf Firebase mit GetTokenResult().getToken() aufrufen
+}
+
+
+' Nimmt Commands entgegen, macht sie gegebenfalls Server�bertragbar
+' Sendet Commands an den Server (�ber RESTAPI)
+class CommandAPI {
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+' Aggregationen:
+
+' ServerClientAPI ist eine _Fassade_ -> Muss als einzige Klasse vom Repository aufgerufen werden
+ServerClientAPI "1" *-- "1" FirebaseController: contains
+ServerClientAPI "1" *-- "1" RESTController: contains
+ServerClientAPI "1" *-- "1" CommandAPI: contains
+
+' Commands muessen an den Server gesendet werden
+CommandAPI "1" *-left- "1" RESTController: contains
+
+' Firebase conntection
+FirebaseController "1" ..> "1" FirebaseAPI: uses
+
+'FirebaseAPI Klassen
+FirebaseAPI "1" *-- "0,1" UserID: contains
+
+
+' Ideen fuer Spaeter:
+'    - Benutze _Singleton_ fuer ResAPI dmit ServerClient und CommandAPI die gleiche RESTAPI besitzen
+@enduml
