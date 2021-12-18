@@ -37,7 +37,7 @@ ServerClientAPI "1" *-- "1" CommandController: contains
 CommandController "1" *-left- "1" RESTController: contains
 
 ' Serverconnection
-RESTController "1" .left.> "1" Server
+RESTController "1" .down.> "1" Server
 
 ' Ideen fuer Spaeter:
 '    - Benutze _Singleton_ fuer ResAPI dmit ServerClient und CommandAPI die gleiche RESTAPI besitzen

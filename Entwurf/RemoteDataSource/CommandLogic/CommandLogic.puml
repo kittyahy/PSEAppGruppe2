@@ -47,13 +47,28 @@ package CommandToJSON {
 package JSONToCommand {
 	'strategy
 	class JSONToCommand <<interface>> {
-		+Command convert(JSON)
+    	+Command convert(JSON)
 	}
 
+    class JSONToTableCommand <<singleton>> {
+		+Command convert(Command)
+	}
+
+	class JSONToTemplateCommand <<singleton>> {
+		+Command convert(Command)	
+	}
+
+	class JSONToPostCommand <<singleton>> {	
+		+Command convert(Command)
+	}
+
+	class JSONToUserCommand <<singleton>> {
+		+Command convert(Command)
+	}
 }
 
 ' CommandToJSON Strategy
-CommandController "1" *-right- "n" CommandToJSON: contains
+CommandController "1" *-down- "n" CommandToJSON: contains
 
 class TableCommandToJSON implements CommandToJSON
 
@@ -64,7 +79,14 @@ class PostCommandToJSON implements CommandToJSON
 class UserCommandToJSON implements CommandToJSON
 
 ' JSONToCommand Strategy
-CommandController "1" *-right- "n" JSONToCommand: contains
+CommandController "1" *-down- "n" JSONToCommand: contains
 
+class JSONToTableCommand implements JSONToCommand
+
+class JSONToTemplateCommand implements JSONToCommand
+
+class JSONToPostCommand implements JSONToCommand
+
+class JSONToUserCommand implements JSONToCommand
 
 }

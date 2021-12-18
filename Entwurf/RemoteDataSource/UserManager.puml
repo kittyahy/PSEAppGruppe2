@@ -1,0 +1,55 @@
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+package UserManager{
+' Kuemmert sich um die Google Anmeldung in Firebase
+' -> Gibt User_Id und Token bei angemeldeten User aus
+class UserAccount {
+	' Um alle Firebase Anmelde und Authentifizierung methoden aufzurufen
+	-FirebaseAuth auth
+	' Speichert alle Werte vom angemeldetem User. Wie Name, ID, ...
+	-FirebaseUser user
+
+	+int RegisterUser(String eMail, String passwort)
+	+int SignInUser(String eMail, String passwort)
+	+int SignOut()
+	
+	-int GetUserInformations()
+	
+	+String GetUserID() 
+	' returns null, when no User connected
+	+String GetToken()
+}
+
+note right of UserAccount::RegisterUser
+	auth.createUserWithEmailAndPassword(email, passwort)
+end note
+note right of UserAccount::SignInUser
+	auth.signInWithEmailAndPassword(email, password)
+end note
+note right of UserAccount::SignOut
+	Firebase.auth.signOut()
+end note
+note right of UserAccount::GetUserInformations
+	val user = Firebase.auth.currentUser
+	'Fängt mit Firebase. an -> Ruft Firebase auf
+end note
+
+}
+
+
+
+class FirebaseAPI {
+	+FirebaseUser auth.currentUser();
+	+void auth.signOut()
+
+	+String getToken() 
+	' auf Firebase mit GetTokenResult().getToken() aufrufen
+}
+
+
+' Firebase conntection
+UserAccount "1" ..> "1" FirebaseAPI: uses
