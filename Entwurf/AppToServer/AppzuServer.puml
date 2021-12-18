@@ -5,23 +5,28 @@ skinparam genericDisplay old
 skinparam classAttributeIconSize 0
 hide circle
 
+package AppToServer {
+
 class ServerClientAPI {
 	+ GetBefehl()
 }
 
-' Kuemmert sich um die Connection mit unserem Server
-class RESTController <<Singleton>>{
-   -ServerIP : String
+package ServerConnection {
+	' Kuemmert sich um die Connection mit unserem Server
+	class RESTController <<Singleton>>{
+	-ServerIP : String
 
-   void connectToServer();
+	void connectToServer();
+	}
 }
 
+
+package Authentifizierung{
 ' Kuemmert sich um die Google Anmeldung in Firebase
 ' -> Gibt User_Id und Token bei angemeldeten User aus
-class FirebaseController {
+class Authentification {
 	' Um alle Firebase Anmelde und Authentifizierung methoden aufzurufen
 	-FirebaseAuth auth
-
 	' Speichert alle Werte vom angemeldetem User. Wie Name, ID, ...
 	-FirebaseUser user
 
@@ -30,50 +35,77 @@ class FirebaseController {
 
 	+int RegisterUser(String eMail, String passwort)
 	+int SignInUser(String eMail, String passwort)
-
+	+int SignOut()
+	
 	-int GetUserInformations()
-
-
-	int LogOut()
-	' -1 bei Fehler
-
+	
 	+String GetUserID() 
 	' returns null, when no User connected
 	+String GetToken()
 }
 
-note right of FirebaseController::RegisterUser
+note right of Authentification::RegisterUser
 	auth.createUserWithEmailAndPassword(email, passwort)
 end note
-note right of FirebaseController::SignInUser
+note right of Authentification::SignInUser
 	auth.signInWithEmailAndPassword(email, password)
 end note
-note right of FirebaseController::GetUserInformations
+note right of Authentification::SignOut
+	Firebase.auth.signOut()
+end note
+note right of Authentification::GetUserInformations
 	val user = Firebase.auth.currentUser
 	'Fängt mit Firebase. an -> Ruft Firebase auf
 end note
 
 class FirebaseAPI {
 	+FirebaseUser auth.currentUser();
+	+void auth.signOut()
 
-	String getToken() 
+	+String getToken() 
 	' auf Firebase mit GetTokenResult().getToken() aufrufen
 }
 
+}
 
+
+package CommandLogic {
 ' Nimmt Commands entgegen, macht sie gegebenfalls Server�bertragbar
 ' Sendet Commands an den Server (�ber RESTAPI)
-class CommandAPI {
+class CommandController {
+	Command SendCommand()
+}
+
+'strategy
+class CommandToJSON <<interface>> {
+	
+}
+
+class TableCommandToJSON {
+
+}
+
+class TemplateCommandToJSON {
+
+}
+
+class PostCommandToJSON {
+
+}
+
+class UserCommandToJSON {
+
+}
+
+'strategy
+class JSONToCommand <<interface>> {
 
 }
 
 
 
-
-
-
-
-
+}
+}
 
 
 
@@ -81,18 +113,30 @@ class CommandAPI {
 ' Aggregationen:
 
 ' ServerClientAPI ist eine _Fassade_ -> Muss als einzige Klasse vom Repository aufgerufen werden
-ServerClientAPI "1" *-- "1" FirebaseController: contains
+ServerClientAPI "1" *-- "1" Authentification: contains
 ServerClientAPI "1" *-- "1" RESTController: contains
-ServerClientAPI "1" *-- "1" CommandAPI: contains
+ServerClientAPI "1" *-- "1" CommandController: contains
 
 ' Commands muessen an den Server gesendet werden
-CommandAPI "1" *-left- "1" RESTController: contains
+CommandController "1" *-left- "1" RESTController: contains
 
 ' Firebase conntection
-FirebaseController "1" ..> "1" FirebaseAPI: uses
+Authentification "1" ..> "1" FirebaseAPI: uses
 
-'FirebaseAPI Klassen
-FirebaseAPI "1" *-- "0,1" UserID: contains
+
+' CommandToJSON Strategy
+CommandController "1" *-right- "n" CommandToJSON: contains
+
+class TableCommandToJSON implements CommandToJSON
+
+class TemplateCommandToJSON implements CommandToJSON
+
+class PostCommandToJSON implements CommandToJSON
+
+class UserCommandToJSON implements CommandToJSON
+
+' JSONToCommand Strategy
+CommandController "1" *-right- "n" JSONToCommand: contains
 
 
 ' Ideen fuer Spaeter:
