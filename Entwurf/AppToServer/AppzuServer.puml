@@ -5,7 +5,7 @@ skinparam genericDisplay old
 skinparam classAttributeIconSize 0
 hide circle
 
-package AppToServer {
+package RemoteDataSource {
 
 class ServerClientAPI {
 	+ GetBefehl()
@@ -73,40 +73,53 @@ package CommandLogic {
 ' Nimmt Commands entgegen, macht sie gegebenfalls Server�bertragbar
 ' Sendet Commands an den Server (�ber RESTAPI)
 class CommandController {
-	Command SendCommand()
-}
-
-'strategy
-class CommandToJSON <<interface>> {
 	
-}
+	-JSON CommandToJSON(Command)
+	-Command JSONToCommand(JSON)
 
-class TableCommandToJSON {
-
-}
-
-class TemplateCommandToJSON {
+	Command SendCommand()
 
 }
 
-class PostCommandToJSON {
 
-}
-
-class UserCommandToJSON {
-
-}
-
+package CommandToJSON {
 'strategy
-class JSONToCommand <<interface>> {
+	class CommandToJSON <<interface>> {
+		
+	}
 
+	class TableCommandToJSON {
+
+	}
+
+	class TemplateCommandToJSON {
+
+	}
+
+	class PostCommandToJSON {
+
+	}
+
+	class UserCommandToJSON {
+
+	}
 }
 
+package JSONToCommand {
+	'strategy
+	class JSONToCommand <<interface>> {
 
+	}
+}
 
 }
 }
 
+package Server {
+	class Spring {
+
+	}
+}
 
 
 
@@ -138,6 +151,8 @@ class UserCommandToJSON implements CommandToJSON
 ' JSONToCommand Strategy
 CommandController "1" *-right- "n" JSONToCommand: contains
 
+' Serverconnection
+ServerConnection "1" ..> "1" Server
 
 ' Ideen fuer Spaeter:
 '    - Benutze _Singleton_ fuer ResAPI dmit ServerClient und CommandAPI die gleiche RESTAPI besitzen
