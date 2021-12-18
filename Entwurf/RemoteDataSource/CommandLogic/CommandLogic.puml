@@ -1,0 +1,70 @@
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+package CommandLogic {
+
+' Nimmt Commands entgegen, macht sie gegebenfalls Server�bertragbar
+' Sendet Commands an den Server (ueber RESTAPI)
+class CommandController {
+    -List<CommandToJSON> CommandToJSONConverter
+	-List<JSONToCommand> JSONToCommandConverter
+
+	-JSON CommandToJSON(Command)
+	-Command JSONToCommand(JSON)
+
+	+Command InputCommand(Command)
+}
+
+
+package CommandToJSON {
+'strategy
+'abstrakte Frabrik - zur Erzeugung. Lieber nicht, da die Klassen nur 1 Mal erzeugt werden -> overengineering
+'Schablonenmethode -> Grobe struktur bleibt ja gleich -> könnte mit Strategie verwendet werden
+	class CommandToJSON <<interface>> {
+		+JSON convert(Command)
+	}
+
+	class TableCommandToJSON <<singleton>> {
+		+JSON convert(Command)
+	}
+
+	class TemplateCommandToJSON <<singleton>> {
+		+JSON convert(Command)	
+	}
+
+	class PostCommandToJSON <<singleton>> {	
+		+JSON convert(Command)
+	}
+
+	class UserCommandToJSON <<singleton>> {
+		+JSON convert(Command)
+	}
+}
+
+package JSONToCommand {
+	'strategy
+	class JSONToCommand <<interface>> {
+		+Command convert(JSON)
+	}
+
+}
+
+' CommandToJSON Strategy
+CommandController "1" *-right- "n" CommandToJSON: contains
+
+class TableCommandToJSON implements CommandToJSON
+
+class TemplateCommandToJSON implements CommandToJSON
+
+class PostCommandToJSON implements CommandToJSON
+
+class UserCommandToJSON implements CommandToJSON
+
+' JSONToCommand Strategy
+CommandController "1" *-right- "n" JSONToCommand: contains
+
+
+}

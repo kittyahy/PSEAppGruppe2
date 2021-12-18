@@ -1,0 +1,5 @@
+@startuml CommandLogic
+
+!include CommandLogic.puml!CommandLogic
+
+@enduml
