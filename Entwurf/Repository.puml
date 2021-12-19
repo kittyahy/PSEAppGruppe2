@@ -128,6 +128,16 @@ package ServerSchnittstelle {
     class IllegalOperationException {
     }
 
+    abstract class Command <<abstract>> {
+    -OnlineProjectID: String?
+    -WentOnline: UnixTime?
+    -WentOffline: UnixTime?
+
+    +setOnlineProjectID(String)
+    +setWentOnline(UnixTime)
+    +setWentOffline(UnixTime)
+    }
+
     abstract class TableCommand <<abstract>> {
                 -table: Table
                 -userRole: UserRole
@@ -159,6 +169,7 @@ package ServerSchnittstelle {
     else
         throw IllegalOperationException;
     end note
+    Command<|-- TableCommand
     TableCommand <|-- DeleteRow
     TableCommand <|-- DeleteColumn
     TableCommand <|-- AddRow
