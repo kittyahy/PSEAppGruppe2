@@ -114,8 +114,16 @@ package Repository {
         'dann Frage ich jemanden auf dem Server an, der in diesen 72h keine Blindspots hat
   }
 '=================================================================================================='
-package ServerSchnittstelle {
+package RemoteDataSourceSchnittstelle {
+    class CommandBuffer <<sigleton>> {
+    -incoming: List<Command>
+    -outgoing: List<Command>
 
+    +appendIncoming(List<Command>): void
+    +appendOutgoing(List<Command>): void
+    +collectIncoming(): List<Command>
+    +collectOutgoing(): List<Command>
+    }
       }
 '=================================================================================================='
   package Commands {
