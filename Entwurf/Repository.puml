@@ -124,6 +124,16 @@ package RemoteDataSourceSchnittstelle {
     +collectIncoming(): List<Command>
     +collectOutgoing(): List<Command>
     }
+    class RemoteDataSourceSchnittstelle <<sigleton>> {
+
+    'Gibt an ob zum Zeitpukt des Methodenaufrufs eine Serververbindung aufgabaut werden konnte
+    +checkServerConnection(): Boolean
+    +getPosts(): List<Post>
+    'gibt alle aktuellen Deltas der Projekte an denen Nutzender teilnimmt
+    +getCurrentDeltas(): List<Command>
+    'Fragt Deltas von einem Online Project an, die in einem bestimmten Zeitraum erstellt wurden
+    +requestOldDeltas(OnlineProjectID:String, from:UnixTime, to:UnixTime): List<Command>
+    }
     class PostWrapper {
         -image: Drawable
         }
