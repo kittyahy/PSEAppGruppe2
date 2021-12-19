@@ -10,33 +10,24 @@ package server
 {
 interface RequestToServer<<interface>>{
   
-  +saveDelta(project: int, delta: String, user: UserID) /' don't know the Type of Token nor UserID '/
-  +getLatestDelta(lastDataIdentifier: String, user: UserID): WorkTorken
-  +addUser(project: int, user: UserID): WorkToken
-   +removeUser(project: int, delta: String, removedUser: UserID, admin: UserID): WorkToken
-   +getOldData(lastDataIdentifier: String, project: int, user: UserID ):WorkToken /' i'm not sure if its enough'/
+  +saveDelta(project: int, delta: String, user: String) /' don't know the Type of Token nor String '/
+  +getLatestDelta(lastDataIdentifier: String, user: String): JSON
+  +addUser(project: int, user: String): String
+   +removeUser(project: int, delta: String, removedUser: String, admin: String): void
+   +getOldData(lastDataIdentifier: String, project: int, user: String ): JSON /' i'm not sure if its enough'/
     
     
-    +showPosts(user: UserID): WorkToken
-    +displayPost(postID: int, user: UserID): WorkToken
-    +downloadTemplate(templateID: int, userID):WorkToken /' i'm not sure, if we have something like a templateID, or we need a postID and a templateID'/
+    +showPosts(user: String): List of png /'probably Png'/
+    +displayPost(postID: int, user: String): List of png /'probably Png'/
+    +downloadTemplate(templateID: int, String): JSON /' i'm not sure, if we have something like a templateID, or we need a postID and a templateID'/
     
   }
 
-note left of RequestToServer
+note right of RequestToServer
   First request for using the server, triggered by an action from the user.
     end note
-note right of RequestToServer /'To be removed'/
-      please read the inline commentary
-    end note
-  
-  interface StatusRequest <<interface>>>{
-    +isFinished(workToken):Token
-    +getResult(finishToken):String
-}
-note right of StatusRequest
-      Requests to get the result o,f an request
-    end note
+
+
 
 
 abstract class Command <<abstract>>{
@@ -47,18 +38,52 @@ abstract class Command <<abstract>>{
    buildCommand(String): Command
     
   }
-  
- 
-  
-  ' not sure if this is a good idea, to be replaced by a Database
-  class project{ 
-    - user: UserID[]
-    - admin: int
-    - delta: Database
-    }
-  
-  
-  
-  
+
+package OnlineDatabase{
+ class Delta <<Entity>>{
+    {primaryKey}: AddedToServer:Date
+    {primaryKey}: User: String
+    delta:JSON
+    downloadedBy: Int
+    project: int
+ }
+class deltaController() {
+- repo: DeltaRepository
++ getLatestDelta(primaryKey: Tupel(Date,String), project: int): Tupel(Collection<Delta>,latestDelta: Tupel(Date, String))
++ saveDelta(project: int, delta: String, user: String)
++ getOldData(PrimaryKey(Data, String), user: String, project: int)
+}
+interface DeltaRepository{}
+
+class ProjectParticipants <<Entity>>{
+{primaryKey} user: String
+{primaryKey} project: int
+role: Role
+}
+
+class ProjectParticipantsController{
+- repo: ProjectParticipantsRepository
++ participates(user: String, project: int): boolean
++ isAdmin(user: String, project: int): boolean
++ addUser(user: String, project: int):boolean
++ removeUser(user: String, project: int): boolean
++ getAmountOfPartition(project: int): int
+}
+interface ProjectParticipantsRepository{}
+
+enum Role{
+Participant
+Admin
+}
+}
+package PostDatabase{
+'/Things for access to post things/'
+}
+
   }
+
+
+
+
+
 @enduml
