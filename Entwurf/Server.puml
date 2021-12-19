@@ -40,18 +40,38 @@ abstract class Command <<abstract>>{
   }
 
 package OnlineDatabase{
+
+class OldData<<Entity>>{
+{primaryKey} requestID: int
+ user: String
+ keyForData:Tupel Date, String
+project: int
+canGet: int
+}
+class OldDataController(){
+- repo: OldDataRepository
++ add(user: String, keyForData: Tupel(Date, String), project: int):requestID
++ IsDataAvailable(requestID): boolean
++removeRequest(requestID)
+}
+
+interface OldDataRepository{}
+
  class Delta <<Entity>>{
     {primaryKey}: AddedToServer:Date
     {primaryKey}: User: String
     delta:JSON
     downloadedBy: Int
     project: int
+    requestedBy: String
  }
 class deltaController() {
 - repo: DeltaRepository
 + getLatestDelta(primaryKey: Tupel(Date,String), project: int): Tupel(Collection<Delta>,latestDelta: Tupel(Date, String))
 + saveDelta(project: int, delta: String, user: String)
-+ getOldData(PrimaryKey(Data, String), user: String, project: int)
++ getOldData(PrimaryKey(Data, String), requestID: int, project: int) :Tupel(Collection<Delta>,latestDelta: Tupel(Date, String))
++ deleteOldData()
++ deleteDownloadedData()
 }
 interface DeltaRepository{}
 
@@ -77,7 +97,42 @@ Admin
 }
 }
 package PostDatabase{
-'/Things for access to post things/'
+
+class Posts <<Entity>>{
+{primaryKey} PostID: int
+PostPreview: PNG
+PostDetail: PNG
+CreatedBy: String
+projectTemplate: JSON
+}
+interface PostsRepository <<interface>>{}
+
+class PostsController{
+- repo: PostsRepository
++ getAllPostPreview():Collection(PNG)
++ getPostDetail(fromPost: int)
++ getProjectTemplate(fromPost: int): JSON
++ addPost(postPreview: PNG, postDetail: PNG, user: String, projectTemplate: JSON, graphTemplate: List(JSON))
++ removePost(postID, user: String)
+}
+
+class Graphtemplates <<Entity>>{
+{primaryKey} PostID: int
+{primaryKey} TemplateNumber: int
+Template: JSON
+}
+interface GraphtemplatesRepository<<interface>>{}
+
+class GraphtemplatesController {
+-repo: GraphtemplatesRepository
++removePost(postID: int)
++ addOne(template: JSON, postID: int)
++ addPost(templates: List(JSON), postID: int)
++ getTemplate(postID: int, TemplateNumber: int):JSON
+
+
+}
+
 }
 
   }
