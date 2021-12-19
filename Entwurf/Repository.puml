@@ -124,7 +124,10 @@ package RemoteDataSourceSchnittstelle {
     +collectIncoming(): List<Command>
     +collectOutgoing(): List<Command>
     }
-      }
+    class PostWrapper {
+        -image: Drawable
+        }
+    }
 '=================================================================================================='
   package Commands {
 
