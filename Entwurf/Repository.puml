@@ -143,10 +143,12 @@ package RemoteDataSourceSchnittstelle {
     -OnlineProjectID: String?
     -WentOnline: UnixTime?
     -WentOffline: UnixTime?
+    -permissions: Permission
 
-    +setOnlineProjectID(String)
-    +setWentOnline(UnixTime)
-    +setWentOffline(UnixTime)
+    +setOnlineProjectID(String): void
+    +setWentOnline(UnixTime): void
+    +setWentOffline(UnixTime): void
+    +checkPermissions(): Boolean
     }
 
     abstract class TableCommand <<abstract>> {
