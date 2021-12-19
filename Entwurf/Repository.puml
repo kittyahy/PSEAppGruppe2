@@ -149,10 +149,11 @@ package RemoteDataSourceSchnittstelle {
     class IllegalOperationException {
     }
 
-    abstract class Command <<abstract>> {
+    abstract class ProjectCommand <<abstract>> {
     -OnlineProjectID: String?
     -WentOnline: UnixTime?
     -WentOffline: UnixTime?
+    'Wäre gut, wenn Merlin du diese Zeiten von Antonia mitgeteilt  bekommst und sie mir dann hier mitgeben kannst
     -permissions: Permission
 
     +setOnlineProjectID(String): void
@@ -186,13 +187,25 @@ package RemoteDataSourceSchnittstelle {
         -positionInRow: Integer
         -execute(): void
     }
+    abstract class GraphCommand <<abstract>> {
+    -GraphID: Integer
+    }
+    abstract class GUICommand <<abstract>> {
+    -ButtonID: Integer
+    }
+    abstract class SettingCommand <<abstract>> {
+    }
+
     note right of TableCommand::run
     if userRole >= requiredRole
         execute();
     else
         throw IllegalOperationException;
     end note
-    Command<|-- TableCommand
+    ProjectCommand<|-- TableCommand
+    ProjectCommand<|-- GraphCommand
+    ProjectCommand<|-- GUICommand
+    ProjectCommand<|-- SettingCommand
     TableCommand <|-- DeleteRow
     TableCommand <|-- DeleteColumn
     TableCommand <|-- AddRow
