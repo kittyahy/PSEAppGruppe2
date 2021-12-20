@@ -23,7 +23,9 @@ package Repository {
         +deleteColumn(Integer)
     }
     note right of Table::getLayout()
-        Deep Copy,
+        Deep Copy, Operations on
+        TableLayout have to be
+        executed on the Table Object
     end note
 
     interface Row <<interface>> {
