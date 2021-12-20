@@ -23,7 +23,7 @@ package Repository {
         +deleteColumn(Integer)
     }
 
-    interface Row <<Interface>> {
+    interface Row <<interface>> {
         +getAll(): List<Any>
         +getCell(Integer): Any
         +setCell(Integer, Any) throws IllegalTypeException
