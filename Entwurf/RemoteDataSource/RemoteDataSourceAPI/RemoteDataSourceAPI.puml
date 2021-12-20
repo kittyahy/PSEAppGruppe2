@@ -1,0 +1,26 @@
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+class RemoteDataSourceAPI {
+	+ String GetServerTime()	
+	..Project Operations..
+	+ String CreateOnlineProject()
+	' gibt die ID des OnlineProjekts zurück
+	+ String IsProjectOnline(String ProjectID)
+	+ String LaunchProject(String ProjectID)
+	' Startet ein online Projekt (welches schon auf dem Server war, aber nicht online ist)
+	..Table Operations..
+	+ int DeleteRow(TableCommand)
+	+ int DeleteColumn(TableCommand)
+	+ int AddRow(TableCommand)
+	+ int AddColumn(TableCommand)
+	+ int SetCellInRow(TableCommand)
+	'
+	' ..Setting Operations..
+	' + int 
+	' ..Table Operations..
+	' ..Table Operations..
+}

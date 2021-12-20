@@ -7,43 +7,42 @@ hide circle
 
 package RemoteDataSource {
 
-class ServerClientAPI {
-	+ GetBefehl()
-}
-
-
-
+!include RemoteDataSourceAPI\RemoteDataSourceAPI.puml!RemoteDataSourceAPI
 
 !include UserManager\UserManager.puml!UserManager
 !include CommandLogic\CommandLogic.puml!CommandLogic
 !include ServerConnection\ServerConnection.puml!ServerConnection
 }
 
-package Server {
-	
-}
+
 
 
 ' Aggregationen:
 
-' ServerClientAPI ist eine _Fassade_ -> Muss als einzige Klasse vom Repository aufgerufen werden
-ServerClientAPI "1" *-- "1" UserAccount: contains
-ServerClientAPI "1" *-- "1" RESTController: contains
-ServerClientAPI "1" *-- "1" CommandController: contains
+' RemoteDatSourceAPI ist eine _Fassade_ -> Muss als einzige Klasse vom Repository aufgerufen werden
+RemoteDataSourceAPI "1" *-- "1" UserAccount: contains
+RemoteDataSourceAPI "1" *-- "1" RESTController: contains
+RemoteDataSourceAPI "1" *-- "1" CommandController: contains
 
 ' Commands muessen an den Server gesendet werden
 CommandController "1" *-left- "1" RESTController: contains
 
-' Serverconnection
-RESTController "1" .down.> "1" Server
 
-' Ideen fuer Spaeter:
-'    - Benutze _Singleton_ fuer ResAPI dmit ServerClient und CommandAPI die gleiche RESTAPI besitzen
 
 class FirebaseAPI {
 }
 
-
 ' Firebase conntection
-FirebaseManager "1" ..> "1" FirebaseAPI: uses
+FirebaseManager "1" .right.> "1" FirebaseAPI: uses
+
+
+package Server {
+	
+}
+
+' Serverconnection
+RESTController "1" .left.> "1" Server
+
+
+
 @enduml
