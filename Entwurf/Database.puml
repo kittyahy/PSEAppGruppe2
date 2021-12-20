@@ -35,7 +35,7 @@ package Entities {
   '@Entity
   class RowProperties {
     'PrimaryKey
-    rowID
+    rowID: Integer
     createdOn: DateTime
     createdBy: String
   }
