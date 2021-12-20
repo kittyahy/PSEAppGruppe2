@@ -5,8 +5,14 @@ skinparam classAttributeIconSize 0
 hide circle
 
 package ServerConnection {
+    class ServerManager <<singleton>>{
+    - RESTController restController
+    - 
+    }
+
+
 	' Kuemmert sich um die Connection mit unserem Server
-	class RESTController <<Singleton>>{
+	class RESTAPI <<singleton>>{
 	-ServerIP : String
 
 	void connectToServer()
@@ -24,4 +30,6 @@ package ServerConnection {
     
     WorkToken RequestToServer.downloadTemplate()
 	}
+
+    ServerManager "1" *-down- "1" RESTAPI: contains
 }

@@ -1,0 +1,12 @@
+@startuml ConverterLogic
+
+!include ConverterLogic.puml!CommandConverter
+
+note right of CommandConverter::CommandToJSON
+    gson.fromJson(json, Command)
+end note
+note right of CommandConverter::JSONToCommand
+    gson.fromJson(json, Command)
+end note
+
+@enduml

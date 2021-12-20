@@ -5,7 +5,11 @@ skinparam classAttributeIconSize 0
 hide circle
 
 class RemoteDataSourceAPI <<fassade>> {
-	--ServerRequests--
+	- CommandController commandController
+	- UserAccount userAccount
+	- ServerManager serverManager
+	----
+	..ServerRequests..
 	+ bool ServerConnectable()
 	+ String GetServerTime()
 	+ String GetCommandDurationOfStayOnServer()	
