@@ -39,4 +39,11 @@ RESTController "1" .down.> "1" Server
 
 ' Ideen fuer Spaeter:
 '    - Benutze _Singleton_ fuer ResAPI dmit ServerClient und CommandAPI die gleiche RESTAPI besitzen
+
+class FirebaseAPI {
+}
+
+
+' Firebase conntection
+FirebaseManager "1" ..> "1" FirebaseAPI: uses
 @enduml
