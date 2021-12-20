@@ -22,6 +22,9 @@ package Repository {
         +addColumn(Class<Any>)
         +deleteColumn(Integer)
     }
+    note right of Table::getLayout()
+        Deep Copy,
+    end note
 
     interface Row <<interface>> {
         +getAll(): List<Any>
