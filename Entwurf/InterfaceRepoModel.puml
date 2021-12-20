@@ -22,8 +22,13 @@ package Repository {
         +addColumn(Class<Any>)
         +deleteColumn(Integer)
     }
+    note right of Table::getLayout()
+        Deep Copy, Operations on
+        TableLayout have to be
+        executed on the Table Object
+    end note
 
-    interface Row <<Interface>> {
+    interface Row <<interface>> {
         +getAll(): List<Any>
         +getCell(Integer): Any
         +setCell(Integer, Any) throws IllegalTypeException

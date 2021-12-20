@@ -30,6 +30,15 @@ interface Repository::Row <<Interface>> {
     +getSize(): Integer
 }
 
+class TableDispatcher {
+    +registerObserver(TableObserver)
+    ~callback: (List<Row>) -> Unit
+}
+
+note right of TableDispatcher
+    Observer Pattern
+end note
+
 Any "1..n" --* "1" Repository::Row  : consists of <
 
 interface Repository::TableLayout <<interface>> {
@@ -43,11 +52,13 @@ interface Repository::TableLayout <<interface>> {
 
 class ProjectTable {
     +Constructor(TableLayout)
+    +setRowDispatcher(TableDispatcher)
 }
 
 Repository::Table "1" *- "0..n" Repository::Row : contains >
 Repository::Table "1" --> "1" Repository::TableLayout : has >
 ProjectTable ..|> Repository::Table
+TableDispatcher "1" -- "1" ProjectTable : distributes changes in >
 
 class ArrayListRow implements Repository::Row {
     +Constructor(RowMetaData)

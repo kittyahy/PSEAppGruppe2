@@ -7,95 +7,98 @@ skinparam classAttributeIconSize 0
 hide circle
 
 
-class TableValue {
-  row: Integer
-  col: Integer
-  projectID: Integer
-}
-
 abstract class AppDataBase {
   ..Entities..
   IntegerValue
   TimeValue
   ..TypeConverters..
-  RoomDateTimeConversion
+  DateTimeConversion
+  UserConversion
 }
 
 package Entities {
-  '@Entity(primaryKeys=["row", "col"])
-  class IntegerValue {
-    value: Integer
-  }
+    '@Entity(primaryKeys=["tableId", "rowId"])
+    class RowEntity {
+        projectId: Integer
+        rowId: Integer
+        createdOn: DateTime
+        createdBy: User
+        values: String
+    }
+
+    '@Entity
+    class ProjectEntity {
+        'PrimaryKey
+        id: Integer
+        '@Embedded
+        skeleton: ProjectSkeletonEntity
+        admin: User
+    }
+
+    '@Entity
+    class ProjectTemplateEntity {
+        id: Integer
+        tableLayoutId: Integer
+        '@Embedded
+        skeleton: ProjectSkeletonEntity
+    }
+
+    '@Entity
+    class ProjectCustomizingEntity {
+        'PrimaryKey
+        id: Integer
+        name: String
+        'Embedded
+        customizing: ProjectCustomizing
+    }
   
-  '@Entity(primaryKeys=["row", "col"])
-  class DateTimeValue {
-    value: DateTime
-  }
+    '@Entity
+    class GraphEntity {
+        'PrimaryKey
+        id: Integer
+        skeletonId: Integer
+        'Embedded
+        map: TableGraphTransformation
+        picturePath: String
+    }
   
-  '@Entity
-  class RowProperties {
-    'PrimaryKey
-    rowID
-    createdOn: DateTime
-    createdBy: String
-  }
+    '@Entity
+    class GraphTemplate {
+        id: Integer
+        name: String
+        createdBy: String
+        'Embedded
+        customizing: GraphCustomizing
+    }
+
+    '@Entity(primaryKey=["projectId", "name"])
+    class ProjectSettingEntity {
+        projectId: Integer
+        name: String
+        value: String
+    }
+
+    '@Entity(primaryKey=["projectId", "name"])
+    class GraphSettingsEntity {
+        graphId: Integer
+        name: String
+        value: String
+    }
   
-  '@Entity
-  class ProjectCustomizing {
-    'PrimaryKey
-    id: Integer 
-    name: String
-    'Embedded
-    customizing: ProjectCustomizing
-  }
-  
-  '@Entity
-  class GraphEntity {
-    'PrimaryKey
-    id: Integer 
-    templateId: Integer
-    projectId: Integer
-    'Embedded
-    map: TableGraphTransformation
-    picturePath: String
-  }
-  
-  '@Entity
-  class GraphTemplate {
-    id: Integer
-    name: String
-    createdBy: String
-    'Embedded
-    customizing: GraphCustomizing 
-  }
-  
-  '@Entity(primaryKey=["id", "col"])
-  class TableLayoutColumn {
-    id: Integer
-    col: Integer
-    type: String
-  }
-  
-  '@Entity
-  class ProjectEntity {
-    'PrimaryKey
-    id: Integer
-    tableID: Integer
-    tableLayoutID: Integer
-  }
-  
-  '@Entity
-  class Settings {
-    ???
-  }
-  
-  '@Entity
-  class ProjectTemplate {
-    name: String
-    description: String
-    tableLayoutID: Integer
-    wallpaperPath: String
-  }
+    class ProjectSkeletonEntity {
+        id: Integer
+        name: String
+        description: String
+        wallpaper: String
+        thumbnail: String
+        layout: String
+    }
+
+    '@Entity(primaryKey=["projectId", "user"])
+    class UserProjectMap {
+        projectId: Integer
+        user: User
+    }
 }
 
 package DAOs {
@@ -115,16 +118,22 @@ package DAOs {
 }
 
 package TypeConverters {
-  class RoomDateTimeConversion {
-    DateTimeToLong(DateTime): Long
-    LongToDateTime(Long): DateTime
-  }
-  
-  class BooleanConversion {
-    BooleanToInt(Boolean): Integer
-    IntToBoolean(Integer): Boolean
-  }
+    class DateTimeConversion {
+        DateTimeToLong(DateTime): Long
+        LongToDateTime(Long): DateTime
+    }
+
+    class UserConversion {
+        UserToString(User): String
+        StringToUser(String: User
+    }
 }
+
+note bottom of UserConversion
+    might want to save users as
+    json (UserId, name, dont know
+    what else?)
+end note
 
 class TableAccess {
   getRow(row: Integer)
@@ -208,8 +217,6 @@ class TableGraphTransformation {
 TableAccess - IntegerDAO
 TableAccess - DateTimeDAO
 
-TableValue <|-- IntegerValue
-TableValue <|-- DateTimeValue
 RoomDatabase <|-- AppDataBase
 
 AppDataBase -[hidden]-> TableAccess
