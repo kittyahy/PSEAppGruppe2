@@ -9,84 +9,15 @@ package CommandLogic {
 ' Nimmt Commands entgegen, macht sie gegebenfalls Server�bertragbar
 ' Sendet Commands an den Server (ueber RESTAPI)
 class CommandController {
-    -List<CommandToJSON> CommandToJSONConverter
-	-List<JSONToCommand> JSONToCommandConverter
-
-	-JSON CommandToJSON(Command)
-	-Command JSONToCommand(JSON)
-
-	+Command InputCommand(Command)
+	..Converter..
+	+JSON CommandToJSON(Command)
+	+Command JSONToCommand(JSON)
 }
 
-
-package CommandToJSON {
-'strategy
-'abstrakte Frabrik - zur Erzeugung. Lieber nicht, da die Klassen nur 1 Mal erzeugt werden -> overengineering
-'Schablonenmethode -> Grobe struktur bleibt ja gleich -> könnte mit Strategie verwendet werden
-	class CommandToJSON <<interface>> {
-		+JSON convert(Command)
-	}
-
-	class TableCommandToJSON <<singleton>> {
-		+JSON convert(Command)
-	}
-
-	class TemplateCommandToJSON <<singleton>> {
-		+JSON convert(Command)	
-	}
-
-	class PostCommandToJSON <<singleton>> {	
-		+JSON convert(Command)
-	}
-
-	class UserCommandToJSON <<singleton>> {
-		+JSON convert(Command)
-	}
-}
-
-package JSONToCommand {
-	'strategy
-	class JSONToCommand <<interface>> {
-    	+Command convert(JSON)
-	}
-
-    class JSONToTableCommand <<singleton>> {
-		+Command convert(Command)
-	}
-
-	class JSONToTemplateCommand <<singleton>> {
-		+Command convert(Command)	
-	}
-
-	class JSONToPostCommand <<singleton>> {	
-		+Command convert(Command)
-	}
-
-	class JSONToUserCommand <<singleton>> {
-		+Command convert(Command)
-	}
-}
-
-' CommandToJSON Strategy
-CommandController "1" *-down- "n" CommandToJSON: contains
-
-class TableCommandToJSON implements CommandToJSON
-
-class TemplateCommandToJSON implements CommandToJSON
-
-class PostCommandToJSON implements CommandToJSON
-
-class UserCommandToJSON implements CommandToJSON
-
-' JSONToCommand Strategy
-CommandController "1" *-down- "n" JSONToCommand: contains
-
-class JSONToTableCommand implements JSONToCommand
-
-class JSONToTemplateCommand implements JSONToCommand
-
-class JSONToPostCommand implements JSONToCommand
-
-class JSONToUserCommand implements JSONToCommand
-
+note right of CommandController::CommandToJSON
+    gson.fromJson(json, Command)
+end note
+note right of CommandController::JSONToCommand
+    gson.fromJson(json, Command)
+end note
 }
