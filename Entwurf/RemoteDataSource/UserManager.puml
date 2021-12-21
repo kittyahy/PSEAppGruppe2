@@ -52,4 +52,4 @@ class FirebaseAPI {
 
 
 ' Firebase conntection
-UserAccount "1" ..> "1" FirebaseAPI: uses
+UserAccount "1" *-- "1" FirebaseAPI: uses

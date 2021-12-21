@@ -58,27 +58,3 @@ end note
 
 
 @enduml
-
-
-
-note right of FirebaseManager::instantiateFirebaseAuth()
-	FirebaseAuth auth = Firebase.auth
-end note
-note right of FirebaseManager::registerUser
-	auth.createUserWithEmailAndPassword(email, passwort)
-end note
-note right of FirebaseManager::signInUser
-	auth.signInWithEmailAndPassword(email, password)
-end note
-note right of FirebaseManager::signOut
-	auth.signOut()
-end note
-note right of FirebaseManager::getUser
-	return auth.currentUser()
-end note
-note right of FirebaseManager::getToken
-	return auth.GetToken()
-end note
-
-
-

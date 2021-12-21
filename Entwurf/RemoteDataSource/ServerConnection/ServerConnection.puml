@@ -29,7 +29,20 @@ package ServerConnection {
     WorkToken RequestToServer.displayPost()
     
     WorkToken RequestToServer.downloadTemplate()
+
+
+
+
+
+
+
+
+
 	}
 
     ServerManager "1" *-down- "1" RESTAPI: contains
 }
+
+
+
+
