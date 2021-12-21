@@ -87,6 +87,7 @@ Thumbs.db*
 
 # PlantUML locks
 *.puml~
+*.png
 
 # .gitignore lock
 .gitignore~
