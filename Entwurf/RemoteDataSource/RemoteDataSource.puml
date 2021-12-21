@@ -22,7 +22,7 @@ package RemoteDataSource {
 ' RemoteDatSourceAPI ist eine _Fassade_ -> Muss als einzige Klasse vom Repository aufgerufen werden
 RemoteDataSourceAPI "1" *-- "1" UserAccount: contains
 RemoteDataSourceAPI "1" *-- "1" ServerManager: contains
-RemoteDataSourceAPI "1" *-- "1" ConverterLogic: contains
+RemoteDataSourceAPI "1" *-- "1" CommandConverter: contains
 
 
 class FirebaseAPI {
