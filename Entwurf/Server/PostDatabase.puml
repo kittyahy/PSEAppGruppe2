@@ -1,0 +1,49 @@
+@startuml
+'https://plantuml.com/class-diagram
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+package PostDatabase{
+    PostDatabase - PostsRepository
+    Graphtemplate - GraphtemplatesRepository
+    PostsController -- PostsRepository : repo <
+    GraphtemplatesController -- GraphtemplatesRepository : repo <
+
+    class Posts <<Entity>>{
+        {primaryKey} PostID: int
+        PostPreview: PNG
+        PostDetail: PNG
+        CreatedBy: String
+        projectTemplate: JSON
+    }
+    interface PostsRepository <PostDatabase,int>{}
+
+    class PostsController{
+        - repo: PostsRepository
+        + getAllPostPreview():Collection(PNG)
+        + getPostDetail(fromPost: int)
+        + getProjectTemplate(fromPost: int): JSON
+        + addPost(postPreview: PNG, postDetail: PNG, user: String, projectTemplate: JSON, graphTemplate: List(JSON))
+        + removePost(postID, user: String)
+    }
+
+    class Graphtemplate <<Entity>>{
+        {primaryKey} PostID: int
+        {primaryKey} TemplateNumber: int
+        Template: JSON
+    }
+    interface GraphtemplatesRepository<Graphtemplate, Tupel(int,int)>{}
+
+    class GraphtemplatesController {
+        -repo: GraphtemplatesRepository
+        +removePost(postID: int)
+        + addOne(template: JSON, postID: int)
+        + addPost(templates: List(JSON), postID: int)
+        + getTemplate(postID: int, TemplateNumber: int):JSON
+    }
+  }
+
+@enduml
