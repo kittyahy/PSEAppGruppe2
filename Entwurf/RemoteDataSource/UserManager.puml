@@ -1,3 +1,5 @@
+@startuml
+
 skinparam monochrome true
 skinparam shadowing false
 skinparam genericDisplay old
@@ -52,4 +54,10 @@ class FirebaseAPI {
 
 
 ' Firebase conntection
+<<<<<<< HEAD
 UserAccount "1" *-- "1" FirebaseAPI: uses
+=======
+UserAccount "1" ..> "1" FirebaseAPI: uses
+
+@enduml
+>>>>>>> efd6e069fc85c69880c2c554b3ca5682f38a328a

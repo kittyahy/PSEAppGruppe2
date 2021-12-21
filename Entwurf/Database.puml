@@ -8,12 +8,12 @@ hide circle
 
 
 abstract class AppDataBase {
-  ..Entities..
-  IntegerValue
-  TimeValue
-  ..TypeConverters..
-  DateTimeConversion
-  UserConversion
+    ..Entities..
+    IntegerValue
+    TimeValue
+    ..TypeConverters..
+    DateTimeConversion
+    UserConversion
 }
 
 package Entities {
@@ -30,6 +30,7 @@ package Entities {
     class ProjectEntity {
         'PrimaryKey
         id: Integer
+        tableLayoutId: Integer
         '@Embedded
         skeleton: ProjectSkeletonEntity
         admin: User
@@ -38,7 +39,7 @@ package Entities {
     '@Entity
     class ProjectTemplateEntity {
         id: Integer
-        tableLayoutId: Integer
+        layoutId: Integer
         '@Embedded
         skeleton: ProjectSkeletonEntity
     }
@@ -84,6 +85,18 @@ package Entities {
         name: String
         value: String
     }
+
+    '@Entity(primaryKey=["projectId", "user"])
+    class UserProjectMap {
+        projectId: Integer
+        user: User
+    }
+
+    class LayoutEntity {
+        'PrimaryKey
+        layoutId: Integer
+        layout: String
+    }
   
     class ProjectSkeletonEntity {
         id: Integer
@@ -91,30 +104,23 @@ package Entities {
         description: String
         wallpaper: String
         thumbnail: String
-        layout: String
-    }
-
-    '@Entity(primaryKey=["projectId", "user"])
-    class UserProjectMap {
-        projectId: Integer
-        user: User
     }
 }
 
 package DAOs {
-  interface IntegerDAO {
-    insertAll(vararg integers: IntegerRow): Unit
-    getAll(): List<IntegerRow>
-    getByRow(row: Integer): List<IntegerRow>
-    delete(integer: IntegerRow): Unit
-  }
-  
-  interface DateTimeDAO {
-    insertAll(vararg times: DateTimeRow): Unit
-    getAll(): List<DateTimeRow>
-    getByRow(row: Integer): List<DateTimeRow>
-    delete(integer: DateTimeRow): Unit
-  }
+    abstract class TableContentDAO <<abstract>> {
+        +getRowsByIds(vararg ids: Integer): Flow<Row>
+        +insertRow(row: Row, projectId: Integer): Unit
+        +deleteRow(id: Integer, projectId: Integer): Unit
+        -insertRowEntity(row: RowEntity, projectId: Integer): Unit
+        -getRowEntitiesByProjects(vararg ids: Integer): Flow<RowEntity>
+    }
+
+    interface ProjectDataDAO {
+        +getProjectDataByIds(varargs ids: Integer): Flow<ProjectEntity>
+        +getLayoutByIds(vararg ids: Integer): Flow<LayoutEntity>
+        +getUsersByIds(vararg ids: Integer): Flow<UserProjectMap>
+    }
 }
 
 package TypeConverters {
@@ -158,10 +164,6 @@ class Wallpaper {
 }
 
 class Notification {
-  
-}
-
-class DataType<T> {
   
 }
 
@@ -212,18 +214,14 @@ class TableGraphTransformation {
   
 }
 
-
-
-TableAccess - IntegerDAO
-TableAccess - DateTimeDAO
-
 RoomDatabase <|-- AppDataBase
 
 AppDataBase -[hidden]-> TableAccess
-DAOs -[hidden]> TypeConverters
-TableAccess -[hidden]-> DAOs
 Table -[hidden]-> Wallpaper
-GraphCustomizing -[hidden]-> TableValue
+GraphCustomizing -[hidden]-> TypeConverters
+TypeConverters -[hidden]> AppDataBase
+AppDataBase -[hidden]> DAOs
+
 
 
 @enduml

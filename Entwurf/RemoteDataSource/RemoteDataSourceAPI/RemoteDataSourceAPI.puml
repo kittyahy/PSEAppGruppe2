@@ -11,17 +11,18 @@ class RemoteDataSourceAPI <<fassade>> {
 	----
 	..ServerRequests..
 	+ bool ServerConnectable()
-	+ String GetServerTime()
+	'+ String GetServerTime()
 	+ String GetCommandDurationOfStayOnServer()	
 	' Die Zeit, bis ein Command nach seiner Erstellung vom Server gelöscht wird. Normal 72 Stunden
 	..Project Operations..
-	+ String CreateOnlineProject()
+	+ int CreateOnlineProject()
 	' gibt die ID des OnlineProjekts zurück
-	+ String IsProjectOnline(String ProjectID)
-	+ String LaunchProject(String ProjectID)
+	+ String IsProjectOnline(int ProjectID)
+	+ String LaunchProject(int ProjectID)
 	' Startet ein online Projekt (welches schon auf dem Server war, aber nicht online ist)
 	..Commands..
-	+ int SaveCommandToServer(Command command, String ProjectID)
-	+ List<Command> GetCommandDeltas(Timestamp startTime, String ProjectID)
+	+ int SaveCommandToServer(Command command, int ProjectID)
+	+ List<Command> GetCommandDeltas(Timestamp startTime, int ProjectID)
+    ..PostLogic..
 
 }
