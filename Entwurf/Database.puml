@@ -17,7 +17,7 @@ abstract class AppDataBase {
 }
 
 package Entities {
-    '@Entity(primaryKeys=["tableId", "createdOn", "createdBy"])
+    '@Entity(primaryKeys=["projectId", "createdOn", "createdBy"])
     class RowEntity {
         projectId: Integer
         createdOn: DateTime
@@ -57,8 +57,8 @@ package Entities {
         '@PrimaryKey
         id: Integer
         projectId: Integer
-        'Embedded
-        map: TableGraphTransformation
+        dataTransformation: Project::DataTransformation
+        type: GraphType
         path: String
     }
   
@@ -120,17 +120,32 @@ class ProjectData {
     wallpaper: String
 }
 
+class GraphData {
+    id: Integer
+    projectId: Integer
+    type: GraphType
+    path: String
+}
+
 package DAOs {
+    class ProjectCDManager {
+        +insertProject(project: Project)
+        +deleteProject(project: Project
+    }
+
     abstract class TableContentDAO <<abstract>> {
         +getRowsByIds(vararg ids: Integer): Flow<Row>
         +insertRow(row: Row, projectId: Integer, before: Integer)
-        +deleteRows(vararg row: Row, projectId: Integer)
+        +deleteRows(projectId: Integer, vararg rows: Row)
+        +changeRow(projectId: Integer, vararg rows: Row)
         '@Insert
         -insertRowEntity(row: RowEntity)
         '@Query("SELECT * FROM row WHERE projectId IN (:ids)")
         -getRowEntitiesByIds(vararg ids: Integer): Flow<RowEntity>
         '@Delete
-        -deleteRows(vararg rows: RowEntity)
+        -deleteRowEntities(vararg rows: RowEntity)
+        '@Update
+        -changeRowEntities(vararg rows: RowEntity)
     }
 
     abstract class ProjectDataDAO <<abstract>> {
@@ -140,6 +155,12 @@ package DAOs {
         '        FROM   project
         '        WHERE  id IN (:ids)")
         +getProjectDataByIds(vararg ids: Integer): Flow<List<ProjectData>>
+        '@Query("UPDATE project SET name = :name WHERE id = :id")
+        +setName(id: Integer, name: String)
+        '@Query("UPDATE project SET description = :description WHERE id = :id")
+        +setDescription(id: Integer, description: String)
+        '@Query("UPDATE project SET wallpaper = :wallpaper WHERE id = :id")
+        +setWallpaper(id: Integer, wallpaper: String)
         '@Query("SELECT * FROM user WHERE projectId IN (:ids)")
         +getUsersByIds(vararg ids: Integer): Flow<List<ProjectUserMap>>
         +addUser(projectId: Integer, user User)
@@ -148,6 +169,10 @@ package DAOs {
         +getAdminByIds(vararg ids: Integer): Flow<List<ProjectUserMap>>
         '@Query("UPDATE project SET admin = :admin WHERE id = :projectId")
         +changeAdmin(projectId: Integer, admin: User)
+        '@Insert
+        ~insertProjectEntity(project: ProjectEntity)
+        '@Delete
+        ~deleteProjectEntity(project: ProjectEntity)
         '@Insert
         -addProjectUserMap(userMap: ProjectUserMap)
         '@Delete
@@ -161,6 +186,8 @@ package DAOs {
         +changeGraphSetting(graphId: Integer, setting: Setting)
         +createProjectSetting(projectId: Integer, setting: Setting)
         +createGraphSetting(graphId: Integer, setting: Setting)
+        +deleteProjectSetting(projectId: Integer, setting: Setting)
+        +deleteGraphSetting(graphId: Integer, setting: Setting)
         '@Query("SELECT name, value FROM projectSetting WHERE projectId = :projectId")
         -getProjectSettingsEntity(projectId: Integer): Flow<List<ProjectSettingEntity>>
         '@Query("SELECT name, value FROM graphSetting WHERE graphId = :graphId")
@@ -173,6 +200,10 @@ package DAOs {
         -createProjectSettingEntity(setting: ProjectSettingEntity)
         '@Insert
         -createGraphSettingEntity(setting: GraphSettingEntity)
+        '@Delete
+        -deleteProjectSettingEntity(setting: ProjectSettingEntity)
+        '@Delete
+        -deleteGraphSettingEntity(setting: GraphSettingEntity
     }
 
     abstract class LayoutDAO <<abstract>> {
@@ -188,7 +219,13 @@ package DAOs {
     }
 
     abstract class GraphDAO <<abstract>> {
-
+        '@Query("SELECT id, projectId, type, path FROM graph WHERE projectId IN (:ids)")
+        +getGraphDataForProjects(vararg ids: Integer): Flow<List<GraphData>>
+        +getGraphs(id: Integer): Flow<List<Graph>>
+        '@Query("SELECT * FROM graph WHERE projectId = :id")
+        -getGraphs(id: Integer): Flow<List<GraphEntity>>
+        '@Query("SELECT name, value FROM graphSetting WHERE graphId = :id")
+        -getSettings(id: Integer): Flow<List<GraphSettingEntity>>
     }
 
     abstract class UIElementDAO <<abstract>> {
@@ -205,7 +242,7 @@ package TypeConverters {
 
     class UserConversion {
         UserToString(User): String
-        StringToUser(String: User
+        StringToUser(String): User
     }
 
     class UIElementTypeConversion {
@@ -216,6 +253,11 @@ package TypeConverters {
     class TransformationConversion {
         TraFoToString(Project::DataTransformation): String
         StringToTraFo(String): Project::DataTransformation
+    }
+
+    class GraphTypeConversion {
+        GraphTypeToString(GraphType): String
+        StringToGraphType(String): GraphType
     }
 }
 
@@ -308,6 +350,7 @@ SettingsDAO -[hidden]-> RowEntity
 LayoutDAO -[hidden]-> SettingsDAO
 SettingsDAO -[hidden]> TableContentDAO
 ProjectDataDAO -[hidden]> UIElementDAO
+TableContentDAO -[hidden]> GraphDAO
 
 
 
