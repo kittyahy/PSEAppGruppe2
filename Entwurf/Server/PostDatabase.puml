@@ -7,18 +7,22 @@ skinparam classAttributeIconSize 0
 hide circle
 
 package PostDatabase{
-    PostDatabase - PostsRepository
-    Graphtemplate - GraphtemplatesRepository
     PostsController -- PostsRepository : repo <
     GraphtemplatesController -- GraphtemplatesRepository : repo <
 
     class Posts <<Entity>>{
         {primaryKey} PostID: int
         PostPreview: PNG
-        PostDetail: PNG
+        PostDetail: List(PNG)
         CreatedBy: String
         projectTemplate: JSON
     }
+
+
+   note right of Posts::PostDetail
+    I have no idea how the connection to the templates is provided
+    #TODO
+   end note
     interface PostsRepository <PostDatabase,int>{}
 
     class PostsController{

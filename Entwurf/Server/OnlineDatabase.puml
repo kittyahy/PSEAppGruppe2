@@ -7,31 +7,28 @@ skinparam classAttributeIconSize 0
 hide circle
 
 package OnlineDatabase{
+
+
     DeltaController -- DeltaRepository : repo <
     OldDataController -- OldDataRepository : repo <
     ProjectParticipants ..> Role : use
+    AccessToProjectInterceptor ..> ProjectParticipantsRepository
     /'OldData ..> Tupel : use'/
     ProjectParticipantsController -- ProjectParticipantsRepository : repo <
 
 
-    class RequestOldDataInterceptor{
-        postHandle(): boolean
-    }
+
     class AccessToProjectInterceptor{
         preHandle(): boolean
 
     }
 
-    note right of AccessToProjectInterceptor::preHandle
+    note left of AccessToProjectInterceptor::preHandle
         used before any call in OnlineDatabase except addUser at ProjectParticipantsController
     end note
 
-note right of RequestOldDataInterceptor::postHandle{
-    used after getData, to check, if anybody else needs old delta
-}
-note left of RequestOldDataInterceptor{
-only needed if getDeltaAndDemand is the solution
-}
+
+
     class OldData<<Entity>>{
         {primaryKey}: ID: String
         user: String
@@ -43,10 +40,6 @@ only needed if getDeltaAndDemand is the solution
         + needOldData(user: String, project: int):Collection(<OldData>)
     }
 
-    note right of OldDataController::needOldData
-        more beautiful, but depends on, the variante of getData
-    end note
-
     interface OldDataRepository{
      hasOldData(project:int, user: String)
      getDemand(project:int): Collection<OldData>
@@ -56,24 +49,26 @@ only needed if getDeltaAndDemand is the solution
         {primaryKey}: AddedToServer: Date
         {primaryKey}: User: String
         delta: JSON
-        downloadedBy: int
+        downloadedBy: String[23]
         project: int
         requestedBy: String
     }
     class DeltaController {
         + saveDelta(project: int, delta: String, user: String)
-        + getDelta(added: Date, byUser: String, project: int, user: String):Collection(<Delta>)
+        + getDelta(project: int, user: String):Collection(<Delta>)
         + provideOldData(delta: String, forUser: String, initialAdded: Date, initialAddedBy: String, project: int)
 
     }
 
-    note right of DeltaController::getDelta
-    alternative:  + getDeltaAndDemand(added: Date, byUser: String, project: int, user: String): Tupel(Collection(<Delta>),Collection<oldData>)
-    end note
-
     interface DeltaRepository <Delta, Tupel(Date, String)>{
     deleteOldData()
     deleteDownloadedData()
+    }
+
+note left of DeltaController{
+#TODO MEthod to get how many days a delta can be stored     }
+    note right of DeltaRepository{
+    need possebility to change, how long data can be stored
     }
     interface ProjectParticipantsRepository <ProjectParticipants,Tupel(String, int)>{
          participates(user: String, project: int): boolean
