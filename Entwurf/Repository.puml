@@ -146,6 +146,22 @@ package RemoteDataSourceSchnittstelle {
         CASUAL
     }
 
+    enum ProjectCommandType <<enumeration>>{
+    DELETE_ROW
+    DELETE_COLUMN
+    ADD_ROW
+    ADD_COLUMN
+    SET_CELL_IN_ROW
+    }
+
+    class ProjectCommandData <<data class>>{
+    }
+
+    class TableCommandData <<data class>>{
+    }
+    class SetCellInRowCommandData <<data class>>{
+    }
+
     class IllegalOperationException {
     }
 
@@ -156,10 +172,12 @@ package RemoteDataSourceSchnittstelle {
     'Wäre gut, wenn Merlin du diese Zeiten von Antonia mitgeteilt  bekommst und sie mir dann hier mitgeben kannst
     -permissions: Permission
 
+    +CONSTRUCTOR(ProjectCommandData)
     +setOnlineProjectID(String): void
     +setWentOnline(UnixTime): void
     +setWentOffline(UnixTime): void
     +checkPermissions(): Boolean
+    +getProjectCommandData(): ProjectCommandData
     }
 
     abstract class TableCommand <<abstract>> {
@@ -211,6 +229,9 @@ package RemoteDataSourceSchnittstelle {
     TableCommand <|-- AddRow
     TableCommand <|-- AddColumn
     TableCommand <|-- SetCellInRow
+
+    ProjectCommandData<|-- TableCommandData
+    TableCommandData <|-- SetCellInRowCommandData
   }
 }
 
