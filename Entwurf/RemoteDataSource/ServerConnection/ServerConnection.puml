@@ -8,6 +8,8 @@ package ServerConnection {
     class ServerManager <<singleton>>{
     - RESTController restController
 
+    + connectionToServerPossible(): bool
+    
     }
 
 
@@ -15,7 +17,7 @@ package ServerConnection {
 	class RESTAPI <<singleton>>{
 	-ServerIP : String
 
-	+ connectToServer(): bool
+	+ connectionToServerPossible(): bool
     ..GraphtemplatesController..
     + removePost(postID: int): int
     + addOne(template: JSON, postID: int): int

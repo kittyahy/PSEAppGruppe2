@@ -14,7 +14,7 @@ class RemoteDataSourceAPI <<fassade>> {
 	
 	+ GetCommandDurationOfStayOnServer(): String 	
 	..Project Operations..
-	+ CreateOnlineProject():int 
+	+ CreateOnlineProject(): int 
 	' gibt die ID des OnlineProjekts zurück
 	+ IsProjectOnline(int ProjectID): String 
 	+ LaunchProject(int ProjectID): String
