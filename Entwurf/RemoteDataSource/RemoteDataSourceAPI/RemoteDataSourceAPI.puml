@@ -5,24 +5,23 @@ skinparam classAttributeIconSize 0
 hide circle
 
 class RemoteDataSourceAPI <<fassade>> {
-	- CommandController commandController
-	- UserAccount userAccount
-	- ServerManager serverManager
+	- commandController: CommandController 
+	- userAccount: UserAccount 
+	- serverManager: ServerManager 
 	----
 	..ServerRequests..
-	+ bool ServerConnectable()
-	'+ String GetServerTime()
-	+ String GetCommandDurationOfStayOnServer()	
-	' Die Zeit, bis ein Command nach seiner Erstellung vom Server gelöscht wird. Normal 72 Stunden
+	+ ServerConnectable(): bool
+	
+	+ GetCommandDurationOfStayOnServer(): String 	
 	..Project Operations..
-	+ int CreateOnlineProject()
+	+ CreateOnlineProject():int 
 	' gibt die ID des OnlineProjekts zurück
-	+ String IsProjectOnline(int ProjectID)
-	+ String LaunchProject(int ProjectID)
+	+ IsProjectOnline(int ProjectID): String 
+	+ LaunchProject(int ProjectID): String
 	' Startet ein online Projekt (welches schon auf dem Server war, aber nicht online ist)
 	..Commands..
-	+ int SaveCommandToServer(Command command, int ProjectID)
-	+ List<Command> GetCommandDeltas(Timestamp startTime, int ProjectID)
+	+ SaveCommandToServer(Command command, int ProjectID): int
+	+ GetCommandDeltas(Timestamp startTime, int ProjectID): List<Command> 
     ..PostLogic..
 
 }
