@@ -9,7 +9,7 @@ package ConverterLogic {
 	' Wandelt Commands in/von JSON um
 	class CommandConverter <<singleton>>{
 		..Converter..
-		+JSON CommandToJSON(Command)
-		+Command JSONToCommand(JSON)
+		+CommandToJSON(Command): JSON
+		+JSONToCommand(JSON): Command
 	}
 }

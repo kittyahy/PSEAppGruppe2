@@ -1,0 +1,103 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+package OnlineDatabase{
+    DeltaController -- DeltaRepository : repo <
+    OldDataController -- OldDataRepository : repo <
+    ProjectParticipants ..> Role : use
+    /'OldData ..> Tupel : use'/
+    ProjectParticipantsController -- ProjectParticipantsRepository : repo <
+
+
+    class RequestOldDataInterceptor{
+        postHandle(): boolean
+    }
+    class AccessToProjectInterceptor{
+        preHandle(): boolean
+
+    }
+
+    note right of AccessToProjectInterceptor::preHandle
+        used before any call in OnlineDatabase except addUser at ProjectParticipantsController
+    end note
+
+note right of RequestOldDataInterceptor::postHandle{
+    used after getData, to check, if anybody else needs old delta
+}
+note left of RequestOldDataInterceptor{
+only needed if getDeltaAndDemand is the solution
+}
+    class OldData<<Entity>>{
+        {primaryKey}: ID: String
+        user: String
+        project: int
+        requestInfo: String
+    }
+    class OldDataController{
+        + demandOldData(user: String, project: int, requestInfo: String)
+        + needOldData(user: String, project: int):Collection(<OldData>)
+    }
+
+    note right of OldDataController::needOldData
+        more beautiful, but depends on, the variante of getData
+    end note
+
+    interface OldDataRepository{
+     hasOldData(project:int, user: String)
+     getDemand(project:int): Collection<OldData>
+    }
+
+    class Delta <<Entity>> {
+        {primaryKey}: AddedToServer: Date
+        {primaryKey}: User: String
+        delta: JSON
+        downloadedBy: int
+        project: int
+        requestedBy: String
+    }
+    class DeltaController {
+        + saveDelta(project: int, delta: String, user: String)
+        + getDelta(added: Date, byUser: String, project: int, user: String):Collection(<Delta>)
+        + provideOldData(delta: String, forUser: String, initialAdded: Date, initialAddedBy: String, project: int)
+
+    }
+
+    note right of DeltaController::getDelta
+    alternative:  + getDeltaAndDemand(added: Date, byUser: String, project: int, user: String): Tupel(Collection(<Delta>),Collection<oldData>)
+    end note
+
+    interface DeltaRepository <Delta, Tupel(Date, String)>{
+    deleteOldData()
+    deleteDownloadedData()
+    }
+    interface ProjectParticipantsRepository <ProjectParticipants,Tupel(String, int)>{
+         participates(user: String, project: int): boolean
+         isAdmin(user: String, project: int): boolean
+         getAmountOfPartition(project: int): int
+         newAdmin(project: int): String
+    }
+
+    class ProjectParticipantsController{
+         + addUser(user: String, project: int):boolean
+         + removeUser(userToRemove: String, project: int, user: String): boolean
+
+
+         + addProject(user:String): int
+    }
+    class ProjectParticipants <<Entity>>{
+        {primaryKey} user: String
+        {primaryKey} project: int
+        role: Role
+        NumberOfJoin: int
+    }
+    enum Role{
+        Participant
+        Admin
+    }
+}
+@enduml

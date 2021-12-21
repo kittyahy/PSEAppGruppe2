@@ -49,23 +49,51 @@ package Repository {
   
     'Nested Class: You need an object of a class Implementing Project in Order to create
     'a DataTransformation
-    class Project::DataTransformation {
-
+    class Project::DataTransformation<O> {
+        -function: TransformationFunction<O, Any>
+        -table: Table
+        -mapFromTable(): O
+        +recalculate(): List<Any>
     }
+
+    class TransformationFunction<I, O> {
+        ~Constructor(function: (I) -> O, functionString: String)
+        +execute(input: I): List<Any>
+        +toString(input: String): String
+        +setComposition(composition: Project::DataTransformation<O, Any>)
+        -function: (I) -> O
+        -composition: Project::DataTransformation?
+        -functionString: String
+    }
+
+    note top
+        <b>Nested Class</b>
+        Decorator Pattern:
+        <i>execute(data)</i> returns composition.execute(function(data))
+        <i>toString(previous)</i> returns functionString + "(" + previous + ")"
+    end note
+
+    class TransformationFactory {
+        +createSum(): TransformationFunction<List<Integer>, Integer>
+    }
+
+    TransformationFunction -[hidden]-> TransformationFactory
+
+    note right of TransformationFunction::Constructor
+        Should only be used by TransformationFactory
+    end note
 
     interface ProjectSkeleton <<interface>> {
         +getID(): Integer
         +getName(): String
         +getDescription(): String
         +getWallpaper(): Drawable
-        +getThumbnail(): Drawable
         +getGraphs(): Collection<Graph>
         +getProjectSettings(): Settings
         +getNotifications(): Collection<Notification>
         +setName(String)
         +setDescription(String)
         +setWallpaper(path: String)
-        +setThumbnail(path: String)
     }
 
     interface Graph <<interface>> {
@@ -73,6 +101,7 @@ package Repository {
         +getDataSets(): Collection<Collection<Any>>
         +getCustomizing(): Settings
         +getImage(): Drawable?
+        +getType(): GraphType
         +setCalculationFunction(DataTransformation)
     }
 
@@ -94,7 +123,6 @@ package Repository {
     interface GraphTemplate <<interface>> {
         +getName(): String
         +getDescription(): String
-        +getThumbnail(): Drawable
         +getCustomizing(): Settings
 
     }
@@ -126,10 +154,15 @@ package Repository {
         -createdBy: User
     }
 
-    enum UIElementType <<enum>>{
+    enum UIElementType <<enum>> {
         BUTTON,
         NUMBER_FIELD,
         DATE_TIME_PICKER
+    }
+
+    enum GraphType <<enum>> {
+        PIE_CHART,
+        LINE_CHART
     }
 }
 
@@ -138,13 +171,9 @@ Repository ----[hidden]-> WeißNochNichtWoDasLiegt
 package WeißNochNichtWoDasLiegt {
 
     class User <<data>> {
+        id: String
         name: String
     }
-
-    class Post {
-
-    }
-
 }
 
 

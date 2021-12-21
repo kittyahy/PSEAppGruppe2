@@ -8,25 +8,25 @@ package UserManager{
 ' Kuemmert sich um die Google Anmeldung in Firebase
 ' -> Gibt User_Id und Token bei angemeldeten User aus
 class UserAccount {
-	-FirebaseManager firebaseManager
-	-FirebaseUser user
+	- firebaseManager: FirebaseManager 
+	- user: FirebaseUser 
 	' Speichert alle Werte vom angemeldetem User. Wie Name, ID, ...
 
 
-	+int registerUser(String eMail, String passwort)
-	+int signInUser(String eMail, String passwort)
-	+int signOut()
+	+ registerUser(String eMail, String passwort): int 
+	+ signInUser(String eMail, String passwort): int
+	+ signOut(): int
 	
-	-void updateCurrentUser()
+	- updateCurrentUser(): void
 	
-	+String getUserID() 
+	+getUserID(): String
 	' returns null, when no User connected
 	' direkt von user ablesbar
-	+String getUserName()
-	+String getUserEMail()
-	+String getUserPhotoUrl()
+	+getUserName(): String
+	+getUserEMail(): String
+	+getUserPhotoUrl(): String
 	
-	+String getToken()
+	+getToken(): String 
 }
 
 
