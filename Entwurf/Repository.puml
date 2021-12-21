@@ -171,6 +171,7 @@ package RemoteDataSourceSchnittstelle {
     -WentOffline: UnixTime?
     'Wäre gut, wenn Merlin du diese Zeiten von Antonia mitgeteilt  bekommst und sie mir dann hier mitgeben kannst
     -permissions: Permission
+    +{static}toJason
 
     +CONSTRUCTOR(ProjectCommandData)
     +setOnlineProjectID(String): void
@@ -233,6 +234,12 @@ package RemoteDataSourceSchnittstelle {
     ProjectCommandData<|-- TableCommandData
     TableCommandData <|-- SetCellInRowCommandData
   }
+  package CommandCenter {
+    class CommandInbox {
+        -commandQueue: List<Command>
+    }
+  }
+
 }
 
 @enduml
