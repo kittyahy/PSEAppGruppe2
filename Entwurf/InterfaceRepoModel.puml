@@ -50,22 +50,39 @@ package Repository {
     'Nested Class: You need an object of a class Implementing Project in Order to create
     'a DataTransformation
     class Project::DataTransformation {
-
+        -function: TransformationFunction
+        -table: Table
+        +recalculate(): Collection<Any>
     }
+
+    class TransformationFunction<I, O> <<sealed>> {
+        +Constructor(function: (I) -> O, functionString: String)
+        +execute(input: I): Collection<Any>
+        +toString(input: String): String
+        +setComposition(composition: Project::DataTransformation<O, Any>)
+        -function: (I) -> O
+        -composition: Project::DataTransformation?
+        -functionString: String
+    }
+
+    note top
+        <b>Nested Class</b>
+        Decorator Pattern:
+        <i>execute(data)</i> returns composition.execute(function(data))
+        <i>toString(previous)</i> returns functionString + "(" + previous + ")"
+    end note
 
     interface ProjectSkeleton <<interface>> {
         +getID(): Integer
         +getName(): String
         +getDescription(): String
         +getWallpaper(): Drawable
-        +getThumbnail(): Drawable
         +getGraphs(): Collection<Graph>
         +getProjectSettings(): Settings
         +getNotifications(): Collection<Notification>
         +setName(String)
         +setDescription(String)
         +setWallpaper(path: String)
-        +setThumbnail(path: String)
     }
 
     interface Graph <<interface>> {
@@ -75,6 +92,13 @@ package Repository {
         +getImage(): Drawable?
         +setCalculationFunction(DataTransformation)
     }
+
+    note bottom
+        This needs have a type
+        of graph as well, need
+        to check with whoever
+        is doing Graph generation
+    end note
 
     interface Settings <<interface>> {
         +getSetting(String): Any throws SettingNotFoundException
@@ -94,7 +118,6 @@ package Repository {
     interface GraphTemplate <<interface>> {
         +getName(): String
         +getDescription(): String
-        +getThumbnail(): Drawable
         +getCustomizing(): Settings
 
     }
@@ -138,13 +161,9 @@ Repository ----[hidden]-> WeißNochNichtWoDasLiegt
 package WeißNochNichtWoDasLiegt {
 
     class User <<data>> {
+        id: String
         name: String
     }
-
-    class Post {
-
-    }
-
 }
 
 
