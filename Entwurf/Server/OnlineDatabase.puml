@@ -1,0 +1,98 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+package OnlineDatabase{
+
+
+    DeltaController -- DeltaRepository : repo <
+    OldDataController -- OldDataRepository : repo <
+    ProjectParticipants ..> Role : use
+    AccessToProjectInterceptor ..> ProjectParticipantsRepository
+    /'OldData ..> Tupel : use'/
+    ProjectParticipantsController -- ProjectParticipantsRepository : repo <
+
+
+
+    class AccessToProjectInterceptor{
+        preHandle(): boolean
+
+    }
+
+    note left of AccessToProjectInterceptor::preHandle
+        used before any call in OnlineDatabase except addUser at ProjectParticipantsController
+    end note
+
+
+
+    class OldData<<Entity>>{
+        {primaryKey}: ID: String
+        user: String
+        project: int
+        requestInfo: String
+    }
+    class OldDataController{
+        + demandOldData(user: String, project: int, requestInfo: String)
+        + needOldData(user: String, project: int):Collection(<OldData>)
+    }
+
+    interface OldDataRepository{
+     hasOldData(project:int, user: String)
+     getDemand(project:int): Collection<OldData>
+    }
+
+    class Delta <<Entity>> {
+        {primaryKey}: AddedToServer: Date
+        {primaryKey}: User: String
+        delta: JSON
+        downloadedBy: String[23]
+        project: int
+        requestedBy: String
+    }
+    class DeltaController {
+        + saveDelta(project: int, delta: String, user: String)
+        + getDelta(project: int, user: String):Collection(<Delta>)
+        + provideOldData(delta: String, forUser: String, initialAdded: Date, initialAddedBy: String, project: int)
+
+    }
+
+    interface DeltaRepository <Delta, Tupel(Date, String)>{
+    deleteOldData()
+    deleteDownloadedData()
+    }
+
+note left of DeltaController{
+#TODO MEthod to get how many days a delta can be stored     }
+    note right of DeltaRepository{
+    need possebility to change, how long data can be stored
+    }
+    interface ProjectParticipantsRepository <ProjectParticipants,Tupel(String, int)>{
+         participates(user: String, project: int): boolean
+         isAdmin(user: String, project: int): boolean
+         getAmountOfPartition(project: int): int
+         newAdmin(project: int): String
+    }
+
+    class ProjectParticipantsController{
+         + addUser(user: String, project: int):boolean
+         + removeUser(userToRemove: String, project: int, user: String): boolean
+
+
+         + addProject(user:String): int
+    }
+    class ProjectParticipants <<Entity>>{
+        {primaryKey} user: String
+        {primaryKey} project: int
+        role: Role
+        NumberOfJoin: int
+    }
+    enum Role{
+        Participant
+        Admin
+    }
+}
+@enduml
