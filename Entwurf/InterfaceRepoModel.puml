@@ -40,6 +40,7 @@ package Repository {
         +getProjectSkeleton(): ProjectSkeleton
         +getTable(): Table
         +getAdmin(): User
+        +isOnline(): Boolean
         +setAdmin(User)
         +getUsers(): Collection<Users>
         +addUser(User)
@@ -113,18 +114,21 @@ package Repository {
     interface Notification <<interface>> {
         +getMessage(): String
         +sendNow(vararg Any): Boolean throws IllegalContextException
+        +toString(): String
     }
   
     interface ProjectTemplate <<interface>> {
         +getProjectSkeleton(): ProjectSkeleton
         +getTableLayout(): Collection<Class<Any>>
+        +getCreator(): User
     }
 
     interface GraphTemplate <<interface>> {
         +getName(): String
         +getDescription(): String
         +getCustomizing(): Settings
-
+        +getType(): GraphType
+        +getCreator(): User
     }
 
     interface Post <<interface>> {
