@@ -98,7 +98,7 @@ package Entities {
     class NotificationEntity {
         projectId: Integer
         id: Integer
-        type: String
+        params: String
         message: String
     }
 
