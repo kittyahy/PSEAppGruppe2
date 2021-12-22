@@ -139,7 +139,7 @@ package RemoteDataSourceSchnittstelle {
         }
     }
 '=================================================================================================='
-  package Commands {
+  /'package Commands {
 
     enum UserRole <<enumeration>> {
         ADMIN
@@ -171,14 +171,14 @@ package RemoteDataSourceSchnittstelle {
     -WentOffline: UnixTime?
     'Wäre gut, wenn Merlin du diese Zeiten von Antonia mitgeteilt  bekommst und sie mir dann hier mitgeben kannst
     -permissions: Permission
-    +{static}toJason
 
-    +CONSTRUCTOR(ProjectCommandData)
+    +CONSTRUCTOR(int ProjectCommandType.ordinal, Json)
     +setOnlineProjectID(String): void
     +setWentOnline(UnixTime): void
     +setWentOffline(UnixTime): void
     +checkPermissions(): Boolean
     +getProjectCommandData(): ProjectCommandData
+    +{static}toJson(): (int ProjectCommandType.ordinal, Json)
     }
 
     abstract class TableCommand <<abstract>> {
@@ -234,6 +234,40 @@ package RemoteDataSourceSchnittstelle {
     ProjectCommandData<|-- TableCommandData
     TableCommandData <|-- SetCellInRowCommandData
   }
+ '/
+ package Commands {
+ enum UserRole <<enumeration>> {
+         ADMIN
+         CASUAL
+     }
+ enum ProjectCommand <<enumeration>> {
+    DELETE_ROW
+    DELETE_COLUMN
+    ADD_ROW
+    ADD_COLUMN
+    SET_CELL_IN_ROW
+    +execute(ProjectCommandData) throws IllegalOperationException
+ }
+ class ProjectCommandData <<data class>> {
+    +commandType: ProjectCommand
+    +projectID: ProjectID
+    +OnlineProjectID: OnlineProjectID?
+    {field}+wentOnline: int '(UnixTime)?
+    {field}+serverRemoveTime: int '(UnixDuration)?
+    +userRole: UserRole
+    +row: int
+    +column: int
+ }
+ class ProjectCommandDataUtitlity <<static>> {
+    +{static} setServerInfo(ProjectCommandData, OnlineProjectID, int wentOnline, int serverRemoveTime):ProjectCommandData
+    +{static} toJson(ProjectCommandData): Json
+    +{static} constructFromJson(Json):ProjectCommandData throws IllegalFormatException
+ }
+ class IllegalOperationException {
+     }
+ class IllegalFormatException {
+     }
+ }
   package CommandCenter {
     class CommandInbox {
         -commandQueue: List<Command>

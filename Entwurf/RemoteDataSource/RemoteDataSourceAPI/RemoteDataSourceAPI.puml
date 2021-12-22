@@ -8,20 +8,20 @@ class RemoteDataSourceAPI <<fassade>> {
 	- commandController: CommandController 
 	- userAccount: UserAccount 
 	- serverManager: ServerManager 
-	----
-	..ServerRequests..
-	+ ServerConnectable(): bool
-	
-	+ GetCommandDurationOfStayOnServer(): String 	
-	..Project Operations..
-	+ CreateOnlineProject(): int 
-	' gibt die ID des OnlineProjekts zurück
-	+ IsProjectOnline(int ProjectID): String 
-	+ LaunchProject(int ProjectID): String
-	' Startet ein online Projekt (welches schon auf dem Server war, aber nicht online ist)
-	..Commands..
-	+ SaveCommandToServer(Command command, int ProjectID): int
-	+ GetCommandDeltas(Timestamp startTime, int ProjectID): List<Command> 
-    ..PostLogic..
 
+	----
+	..UserDetails..
+	+getUserID(): String
+	+getUserName(): String
+	+getUserEMail(): String
+	+getUserPhotoUrl(): String
+	..ServerAccess..
+	+isServerAccessible(): bool
+	+sendCommandsToServer(List<Commands>): void
+	+getDeltasFromServer(): Liste<(UploadTime, UserID, JSON)>
+	+getPostsFromServer():List<Post>
+	+getOldDeltaRequest(JSON)
+	+uploadOldDelta(List<JSON>)
+	+downloadTemplate(int templateID, enum TemplateType): JSON
+	+removeUserFromProject(String User_Id_toRemove, int projectID)
 }

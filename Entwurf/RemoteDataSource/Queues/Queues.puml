@@ -1,0 +1,54 @@
+package Queues{
+
+package ProjectCommandQueue {
+
+class ProjectCommandQueue {
+    - List<JSON> projectCommands;
+    - List<ProjectCommandQueueObserver> projectCommandQueueObserver;
+    ..QueueLogic..
+    + GetProjectCommand(): JSON
+    + AddProjectCommand(JSON): void
+    ..ObserverLogic..
+    + registerObserver(ProjectCommandQueueObserver)
+    + unregisterObserver(ProjectCommandQueueObserver)
+    - notifyObservers()
+}
+
+class ProjectCommandQueueObserver <<interface>><<observer>>{
+    + update()
+}
+
+
+ProjectCommandQueue "1" *-up- "1" ProjectCommandQueueObserver
+}
+
+
+
+
+package FetchRequestQueue {
+' Store the fetchRequests for the ProjectCommands
+class FetchRequestQueue {
+    - fetchRequests: List<JSON>
+    - observer: List<FetchRequestQueueObserver>;
+    ..QueueLogic..
+    + GetFetchRequest(): JSON
+    + AddFetchRequest(JSON): void
+    ..ObserverLogic..
+    + registerObserver(FetchRequestsQueueObserver)
+    + unregisterObserver(FetchRequestsQueueObserver)
+    - notifyObservers()
+}
+
+class FetchRequestsQueueObserver <<interface>><<observer>>{
+    + update()
+}
+
+
+FetchRequestQueue "1" *-up- "1" FetchRequestsQueueObserver 
+
+}
+
+
+package SendCommandToServerQueue {
+
+}

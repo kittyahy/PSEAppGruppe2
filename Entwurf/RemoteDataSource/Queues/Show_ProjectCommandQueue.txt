@@ -1,0 +1,16 @@
+@startuml ProjectCommandQueue
+
+!include Queues.puml!ProjectCommandQueue
+
+note right of ProjectCommandQueue::GetProjectCommand
+    Returns projectCommands<0>
+    Removes it from List
+end note
+
+note right of ProjectCommandQueue::AddProjectCommand
+	Checks if the JSON is a duplicate in projectCommands 
+    Adds JSON in projectCommands
+    use notifyObservers()
+end note
+
+@enduml

@@ -6,11 +6,23 @@ hide circle
 
 package ServerConnection {
     class ServerManager <<singleton>>{
-    - RESTController restController
+    - restController: RESTController
+    - projectCommandQueue: ProjectCommandQueue
+    - fetchRequestQueue: FetchRequestQueue
 
-    + connectionToServerPossible(): bool
-    
+    + isServerAccessible(): bool
+	+ sendCommandsToServer(List<Commands>): void
+	+ getDeltasFromServer(): Liste<(UploadTime, UserID, JSON)>
+	+ getPostsFromServer():List<Post>
+	+ getOldDeltaRequest(JSON): void
+	+ uploadOldDelta(List<JSON>)
+	+ downloadTemplate(int templateID, enum TemplateType): JSON
+	+ removeUserFromProject(String User_Id_toRemove, int projectID)
     }
+
+    note left of ServerManager::getOldDataRequests
+        'Fetches ProjectCommandFetchRequests from the Server and puts them into the FetchRequestQueue
+    end note
 
 
 	' Ruft die Funktionen des Servers auf
