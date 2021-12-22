@@ -23,9 +23,6 @@ activate cd
 ref over cd
     Insert Project Entity
 end
-ref over cd
-    Insert Table Layout
-end
 loop foreach Graph in proj
     ref over cd
         Insert Graph
