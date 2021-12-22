@@ -41,6 +41,7 @@ package Repository {
         +getTable(): Table
         +getAdmin(): User
         +isOnline(): Boolean
+        +getOnlineId(): Integer
         +setAdmin(User)
         +getUsers(): Collection<Users>
         +addUser(User)
@@ -153,8 +154,10 @@ package Repository {
     class RowMetaData <<data>> {
         +Constructor(DateTime, User)
         +getCreationDate(): DateTime
+        +getPublishDate(): DateTime
         +getCreator(): User
         -createdOn: DateTime
+        -publishedOn: DateTime
         -createdBy: User
     }
 
