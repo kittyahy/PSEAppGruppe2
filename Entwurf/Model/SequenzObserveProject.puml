@@ -1,0 +1,43 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+participant "repo: Repository" as repo
+participant "dao: TableContentDAO" as dao
+participant "rowFlow: Flow<Row>" as rowFlow
+'TODO: Needs to be adjusted when communication between repo and ViewModel has been defined
+participant "repoFlow: SharedFlow<?>" as repoFlow
+
+[-> repo : openProject(id)
+activate repo
+repo -> dao : rowFlow = getRowsByIds(id)
+activate dao
+dao --> repo
+deactivate dao
+repo -> rowFlow : collect(fun doSomething(Row): ?)
+activate rowFlow
+loop foreach Row in Project id
+rowFlow --> repo : emit(row)
+repo -> repo : t = doSomething(row)
+repo -> repoFlow : emit(t)
+activate repoFlow
+repoFlow -->] : t (to ViewModel)
+deactivate repoFlow
+end
+... on every change to an observed row in the Database ...
+rowFlow --> repo : emit(row)
+repo -> repo : t = doSomething(row)
+repo -> repoFlow : emit(t)
+activate repoFlow
+repoFlow -->] : t (to ViewModel))
+deactivate repoFlow
+deactivate rowFlow
+repo -->[
+deactivate repo
+
+
+@enduml
