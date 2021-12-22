@@ -1,0 +1,49 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+title Create Project
+
+participant "CREATE_PROJECT: ProjectCommand" as crtCommand
+participant "data: ProjectCommandData" as data
+participant "projectCreator: ProjectCDManager" as cd
+participant "dao: ProjectDataDAO" as dao
+
+[-> crtCommand : execute(data)
+activate crtCommand
+crtCommand -> data : proj = getProject()
+activate data
+data --> crtCommand
+deactivate data
+crtCommand -> cd : proj = createProject(proj)
+activate cd
+ref over cd
+    Create Project Entity
+end
+
+ref over cd
+    Insert Graph
+end
+ref over cd
+    Create Notification Entity
+end
+ref over cd
+    Create UI Elements
+end
+ref over cd
+    Create Table Layout
+end
+ref over cd
+    Create UserMaps
+end
+cd --> crtCommand
+deactivate cd
+crtCommand -->[
+deactivate crtCommand
+
+
+@enduml
