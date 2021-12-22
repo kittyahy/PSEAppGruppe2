@@ -1,0 +1,17 @@
+cd -> cd : skel = createSkeleton(proj)
+activate cd
+cd --> cd
+deactivate cd
+cd -> proj : admin = getAdmin()
+activate proj
+proj --> cd
+deactivate proj
+cd -> proj : onlineId = getOnlineId()
+activate proj
+proj --> cd
+deactivate proj
+cd -> cd : id = getNextId()
+activate cd
+cd --> cd
+deactivate cd
+cd -> "ent: ProjectEntity" as ent** : <<create>> (id, skel, admin, onlineId)
