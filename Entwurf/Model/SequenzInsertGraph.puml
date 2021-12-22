@@ -1,0 +1,16 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+title Insert Graph Entity
+
+participant "graphCD: GraphCDManager" as cd
+
+[-> cd : insertGraph(id, graph)
+activate cd
+
+@enduml
