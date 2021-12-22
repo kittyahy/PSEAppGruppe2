@@ -1,0 +1,236 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+
+class ApplicationViewModel {
+
+    navController : NavHostController
+    projectNavController : NavHostController
+    projectDataNavController : NavHostController
+    templateNavController : NavHostController
+    serverNavController : NavHostController
+
+    init()
+}
+
+class InvitationLinkViewModel {
+
+    name : MutableLiveData<String>
+    _name : LiveData<String>
+
+    onNameChange(name : String)
+
+    accept()
+}
+
+
+
+class ProjectOverviewViewModel {
+    projects : LiveData<List<ProjectPreview>
+
+    initFlows()
+}
+
+class ProjectCreationViewModel {
+    title : MutableLiveData<String>
+    _title : LiveData<String>
+    description : MutableLiveData<String>
+    _description : LiveData<String>
+    wallpaper : MutableLiveData<Image>
+    _wallpaper : LiveData<Image>
+    table : MutableLiveData<List<Column>>
+    _table : LiveData<List<Column>>
+    buttons : MutableLiveData<List<Button>>
+    _buttons : LiveData<List<Button>>
+    notifications : MutableLiveData<List<Notification>>
+    _notifications : LiveData<List<Notification>>
+    graphs : MutableLiveData<String>
+    _graphs : LiveData<String>
+
+    wallpaperDialog : MutableLiveData<Boolean>
+    _wallpaperDialog : LiveData<Boolean>
+    tableDialog : MutableLiveData<Boolean>
+    _tableDialog : LiveData<Boolean>
+    buttonsDialog : MutableLiveData<Boolean>
+    _buttonsDialog : LiveData<Boolean>
+    notificationsDialog : MutableLiveData<Boolean>
+    _notificationsDialog : LiveData<Boolean>
+    graphsDialog : MutableLiveData<Boolean>
+    _graphsDialog : LiveData<Boolean>
+
+    initFlows()
+    createProject()
+
+    onTitleChange(title : String)
+    onDescriptionChange(description : String)
+    onWallpaperChange(wallpaper : Image)
+    onTableAdd(column : Column)
+    onTableRemove(id : GZ)
+    onButtonAdd(button : Button)
+    onButtonRemove(id : GZ)
+    onNotificationAdd(notification : Notification)
+    onNotificationRemove(id : GZ)
+    onGraphAdd(graph : String)
+    onGraphRemove(graph : String)
+    onWallpaperDialogChange(isOpen : Boolean)
+    onTableDialogChange(isOpen : Boolean)
+    onButtonDialogChange(isOpen : Boolean)
+    onNotificationDialogChange(isOpen : Boolean)
+    onGraphDialogChange(isOpen : Boolean)
+}
+
+class ProjectEditingViewModel {
+
+    isOnlineProject : LiveData<Boolean>
+    isAdmin : LiveData<Boolean>
+
+    title : MutableLiveData<String>
+    _title : LiveData<String>
+    description : MutableLiveData<String>
+    _description : LiveData<String>
+    wallpaper : MutableLiveData<Image>
+    _wallpaper : LiveData<Image>
+    table : MutableLiveData<List<Column>>
+    _table : LiveData<List<Column>>
+    buttons : MutableLiveData<List<Button>>
+    _buttons : LiveData<List<Button>>
+    notifications : MutableLiveData<List<Notification>>
+    _notifications : LiveData<List<Notification>>
+    graphs : MutableLiveData<List<Graph>>
+    _graphs : LiveData<List<Graph>>
+    members : MutableLiveData<List<Member>>
+    _members : LiveData<List<Member>>
+
+    wallpaperDialog : MutableLiveData<Boolean>
+    _wallpaperDialog : LiveData<Boolean>
+    tableDialog : MutableLiveData<Boolean>
+    _tableDialog : LiveData<Boolean>
+    buttonsDialog : MutableLiveData<Boolean>
+    _buttonsDialog : LiveData<Boolean>
+    notificationsDialog : MutableLiveData<Boolean>
+    _notificationsDialog : LiveData<Boolean>
+    graphsDialog : MutableLiveData<Boolean>
+    _graphsDialog : LiveData<Boolean>
+
+    initFlows()
+    alterProject()
+
+    onTitleChange(title : String)
+    onDescriptionChange(description : String)
+    onWallpaperChange(wallpaper : Image)
+    onTableAdd(column : Column)
+    onTableRemove(id : GZ)
+    onButtonAdd(button : Button)
+    onButtonRemove(id : GZ)
+    onNotificationAdd(notification : Notification)
+    onNotificationRemove(id : GZ)
+    onGraphAdd(graph : String)
+    onGraphRemove(graph : String)
+    onWallpaperDialogChange(isOpen : Boolean)
+    onTableDialogChange(isOpen : Boolean)
+    onButtonDialogChange(isOpen : Boolean)
+    onNotificationDialogChange(isOpen : Boolean)
+    onGraphDialogChange(isOpen : Boolean)
+    onMemberRemove(id : GZ)
+}
+
+class ProjectDataInputViewModel {
+
+    isOnlineProject : LiveData<Boolean>
+    isAdmin : LiveData<Boolean>
+
+    title : LiveData<String>
+    description : LiveData<String>
+    wallpaper : LiveData<Image>
+    table : LiveData<List<Column>>
+    members : LiveData<List<Member>>
+    buttons : MutableLiveData<List<Button>>
+    _buttons : LiveData<List<Button>>
+
+    data : MutableLiveData<List<List<String>>
+    _data : LiveData<List<List<String>>>
+    dataHorizontalScrollState : MutableLiveData<ScrollState>
+    _dataHorizontalScrollState : LiveData<ScrollState>
+    membersScrollState : MutableLiveData<ScrollState>
+    _membersScrollState : LiveData<ScrollState>
+
+    initFlows()
+
+    onDataScroll(scrollState : ScrollState)
+    onMembersScroll(scrollState : ScrollState)
+    onButtonInc(id : GZ)
+    onButtonDec(id : GZ)
+    onDataAddRow(row : List<String>)
+    onDataRemoveRow(id : GZ)
+    onOnlineLinkCreation() : String
+}
+
+class ProjectDataGraphViewModel {
+
+    graphs : LiveData<List<Graph>>
+    _graphs : MutableLiveData<List<Graph>>
+    _scrollState : MutableLiveData<ScrollState>
+    scrollState : LiveData<ScrollState>
+    _selected : MutableLiveData<Boolean>
+    selected : LiveData<Boolean>
+
+    initFlows()
+
+    onChangeGraph(id : GZ, graph : Graph)
+    onScroll(scrollState : ScrollState)
+    onSelectGraphTemplate(scrollState : ScrollState)
+
+}
+
+class ServerViewModel {
+    graphTemplates : LiveData<List<GraphTemplate>>
+    projectTemplates : LiveData<List<ProjectTemplate>>
+
+    _graphTemplatesScrollState : MutableLiveData<ScrollState>
+    graphTemplatesScrollState : LiveData<ScrollState>
+    _projectTemplatesScrollState : MutableLiveData<ScrollState>
+    projectTemplatesScrollState : LiveData<ScrollState>
+    _graphTemplateSelected : MutableLiveData<Boolean>
+    graphTemplateSelected : LiveData<Boolean>
+    _projectTemplateSelected : MutableLiveData<Boolean>
+    projectTemplateSelected : LiveData<Boolean>
+
+    initFlows()
+
+    downloadGraphTemplate(id : GZ)
+    downloadProjectTemplate(id :GZ)
+    onGraphTemplateScroll(scrollState : ScrollState)
+    onProjectTemplateScroll(scrollState : ScrollState)
+    onSelectGraphTemplate(scrollState : ScrollState)
+    onSelectProjectTemplate(scrollState : ScrollState)
+}
+
+class TemplateViewModel {
+    graphTemplates : LiveData<List<GraphTemplate>>
+    projectTemplates : LiveData<List<ProjectTemplate>>
+
+    _graphTemplatesScrollState : MutableLiveData<ScrollState>
+    graphTemplatesScrollState : LiveData<ScrollState>
+    _projectTemplatesScrollState : MutableLiveData<ScrollState>
+    projectTemplatesScrollState : LiveData<ScrollState>
+    _graphTemplateSelected : MutableLiveData<Boolean>
+    graphTemplateSelected : LiveData<Boolean>
+    _projectTemplateSelected : MutableLiveData<Boolean>
+    projectTemplateSelected : LiveData<Boolean>
+
+    initFlows()
+
+    deleteGraphTemplate(id : GZ)
+    deleteProjectTemplate(id : GZ)
+    onGraphTemplateScroll(scrollState : ScrollState)
+    onProjectTemplateScroll(scrollState : ScrollState)
+    onSelectGraphTemplate(scrollState : ScrollState)
+    onSelectProjectTemplate(scrollState : ScrollState)
+}
+
+@enduml

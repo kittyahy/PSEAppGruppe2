@@ -1,0 +1,222 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+class Column {
+    id : GZ
+    name : String
+    unit : String
+    datatype : DataType
+
+    getId() : GZ
+    getName() : String
+    getUnit() : String
+    getDatatype() : DataType
+    setId(id : GZ)
+    setName(name : String)
+    setUnit(unit : String)
+    setDatatype(datatype : DataType)
+}
+
+class Button {
+    id : GZ
+    name : String
+    columnId : GZ
+    value : GZ
+
+    getId() : GZ
+    getName() : String
+    getColumnId() : GZ
+    getValue() : GZ
+    setID(id : GZ)
+    setName(name : String)
+    setColumnId(columnId : GZ)
+    setValue(value : GZ)
+}
+
+class Notification {
+    id : GZ
+    message : String
+    time : Time
+
+    getId() : GZ
+    getMessage() : String
+    getTime() : Time
+    setID(id : GZ)
+    setMessage(message : String)
+    setTime(time : Time)
+}
+
+class Time {
+    hour : GZ
+    minute : GZ
+    second : GZ
+
+    getHour() : GZ
+    getMinute() : GZ
+    getSecond() : GZ
+    setHour(hour : GZ)
+    setMinute(minute : GZ)
+    setSecond(second : GZ)
+}
+
+class Member {
+    id : GZ
+    name : String
+
+    getId() : GZ
+    getName() : String
+    setID(id : GZ)
+    setName(name : String)
+}
+
+class ProjectPreview {
+    id : GZ
+    name : String
+    image : Image
+
+    getId() : GZ
+    getName() : String
+    getImage() : Image
+    setID(id : GZ)
+    setName(name : String)
+    setImage(image : Image)
+}
+
+class Graph {
+    id : GZ
+    image : Image
+
+    getId() : GZ
+    getImage() : Image
+    setID(id : GZ)
+    setImage(image : Image)
+}
+
+class LineChart {
+    dotSize : DotSize
+    dotColor : Color
+    lineType : LineType
+    mappingVertical : List<Column>
+    mappingHorizontal : Column
+
+    getDotSize() : DotSize
+    getDotColor() : Color
+    getLineType() : LineType
+    getMappingVertical() : List<Column>
+    getMappingHorizontal() : Column
+    setDotSize(dotSize : DotSize)
+    setDotColor(dotColor : Color)
+    setLineType(lineType : LineType)
+    setMappingVertical(mappingVertical : List<Column>)
+    setMappingHorizontal(mappingHorizontal : Column)
+}
+
+enum DotSize <<Enum>> {
+    SMALL
+    MEDIUM
+    BIG
+}
+
+enum LineType <<Enum>> {
+    DOTTED
+    NONE
+    CONTINUOUS
+}
+
+class PieChart {
+    color : List<Color>
+    mapping : List<Column>
+    showPercentages : Boolean
+
+    getColor() : List<Color>
+    getMapping() : List<Column>
+    getShowPercentages() : Boolean
+    setMapping(mapping : List<Column>)
+    setShowPercentages(showPercentages : Boolean)
+}
+
+
+enum DataType <<Enum>> {
+    WHOLE_NUMBER
+    FLOATING_POINT_NUMBER
+    TIME
+    STRING
+}
+
+class Project {
+    id : GZ
+    isOnlineProject : Boolean
+    isAdmin : Boolean
+    title : String
+    description : String
+    wallpaper : Image
+    table : List<Column>
+    data : List<Row>
+    buttons : List<Button>
+    notifications : List<Notification>
+    graphs : List<Graph>
+    members : List<Member>
+
+    getId() : GZ
+    getIsOnlineProject() : Boolean
+    getIsAdmin() : Boolean
+    getTitle() : String
+    getDescription() : String
+    getWallpaper() : Image
+    getTable() : List<Column>
+    getData() : List<Row>
+    getButtons() : List<Button>
+    getNotifications() : List<Notification>
+    getGraphs() : List<Graph>
+    getMembers() : List<Member>
+    setId(id : GZ)
+    setIsOnlineProject(isOnlineProject : Boolean)
+    setIsAdmin(isAdmin : Boolean)
+    setTitle(title : String)
+    setDescription(description : String)
+    setWallpaper(wallpaper : Image)
+    setTable(table : List<Column>)
+    setData(data : List<Row>)
+    setButtons(buttons : List<Button>)
+    setNotifications(notifications : List<Notification>)
+    setGraphs(graphs : List<Graph>)
+    setMembers(members : List<Member>)
+}
+
+class Row {
+    id : GZ
+    elements : List<String>
+
+    getId() : GZ
+    getElements() : List<String>
+    setId(id : GZ)
+    setElements(elements : List<String>)
+}
+
+Graph <|-- LineChart
+Graph <|-- PieChart
+
+Project ..> Column
+Project ..> Row
+Project ..> Graph
+Project ..> Button
+Project ..> Member
+Project ..> Notification
+
+LineChart ..> LineType
+LineChart ..> DotSize
+LineChart ..> Column
+
+PieChart ..> Column
+
+Notification ..> Time
+
+Column ..> DataType
+
+
+@enduml
