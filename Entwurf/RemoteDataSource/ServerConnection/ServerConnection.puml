@@ -5,74 +5,14 @@ skinparam classAttributeIconSize 0
 hide circle
 
 package ServerConnection {
-    class ServerManager <<singleton>>{
-    - restController: RESTController
-    - projectCommandQueue: ProjectCommandQueue
-    - fetchRequestQueue: FetchRequestQueue
-    ----
-	connectionToServerPossible(): bool
-    ..GraphtemplatesController..
-    + removePost(postID: int): int
-    + addOne(template: JSON, postID: int): int
-    + addPost(templates: Collection(JSON), postID: int): int
-    + getTemplate(postID: int, TemplateNumber: int):JSON
-    ..PostsController..
-    + getAllPostPreview(): Collection(PNG)
-    + getPostDetail(fromPost: int): JSON
-    + getProjectTemplate(fromPost: int): JSON
-    + addPost(postPreview: PNG, postDetail: PNG, user: String, projectTemplate: JSON, graphTemplate: Collection(JSON)): int
-    + removePost(postID, user: String): int
-    ..ProjectParticipantsController..
-    + addUser(user: String, projectID: long):boolean
-    + removeUser(userToRemove: String, projectID: long, user: String): boolean
-    + addProject(user:String): long
-    ..OldDataController..
-    + demandOldData(user: String, projectID: long, requestInfo: String): int
-    + needOldData(user: String, projectID: long): Collection(<OldData>)
-    ..DeltaController..
-    + sendCommandsToServer(projectID: long, delta: Collection<JSON>, user: String): int
-    + getDeltasFromServer(projectID: long, user: String):Collection(<Delta>): int
-    ' Tut Commands in die ProjectCommandQueue
-	+ provideOldData(DeltasToUpload: Collection<JSON>, forUser: String, initialAdded: Date, initialAddedBy: String, projectID: int, wasAdmin: boolean): int
-    + removeTime(): Date
-    }
-
-    note left of ServerManager::getOldDataRequests
-        'Fetches ProjectCommandFetchRequests from the Server and puts them into the FetchRequestQueue
-    end note
+    
+    !include ServerManager\ServerManager.puml!ServerManager
+    
     
 
     ' Ruft die Funktionen des Servers auf
-    class RESTAPI <<singleton>> {
-    -ServerIP : String
-    ----
-    + connectionToServerPossible(): bool
-    ..GraphtemplatesController..
-    + removePost(postID: int): int
-    + addOne(template: JSON, postID: int): int
-    + addPost(templates: List(JSON), postID: int): int
-    + getTemplate(postID: int, TemplateNumber: int):JSON
-    ..PostsController..
-    + getAllPostPreview(): Collection(PNG)
-    + getPostDetail(fromPost: int): JSON
-    + getProjectTemplate(fromPost: int): JSON
-    + addPost(postPreview: PNG, postDetail: PNG, user: String, projectTemplate: JSON, graphTemplate: List(JSON)): int
-    + removePost(postID, user: String): int
-    ..ProjectParticipantsController..
-    + addUser(user: String, projectID: long):boolean
-    + removeUser(userToRemove: String, projectID: long, user: String): boolean
-    + addProject(user:String): long
-    ..OldDataController..
-    + demandOldData(user: String, projectID: long, requestInfo: String): int
-    + needOldData(user: String, projectID: long): Collection(<OldData>)
-    ..DeltaController..
-    + saveDelta(project: long, delta: String, user: String): int
-    + getDelta(project: long, user: String):Collection(<Delta>)
-    + provideOldData(delta: String, forUser: String, initialAdded: Date, initialAddedBy: String, project: int, wasAdmin: boolean): int
-    + removeTime(): Date
+    !include RESTAPI\RESTAPI.puml!RESTAPI
 
-    - ConvertDeltaIntoProjectCommandInfo(deltaToConvert: JSON) 
-    }
 
     ServerManager "1" *-down- "1" RESTAPI: contains
 }
