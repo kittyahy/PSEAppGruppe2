@@ -7,47 +7,59 @@ skinparam classAttributeIconSize 0
 hide circle
 
 package PostDatabase{
-    PostsController -- PostsRepository : repo <
-    GraphtemplatesController -- GraphtemplatesRepository : repo <
+    PostsController -- PostsRepository : postRepo <
+    PostsController -- GraphtemplatesRepository : templateRepo <
 
     class Posts <<Entity>>{
         {primaryKey} PostID: int
-        PostPreview: PNG
-        PostDetail: List(PNG)
+        PostPreview: JSON
         CreatedBy: String
-        projectTemplate: JSON
     }
 
+    interface PostsRepository <PostDatabase,int> extends JpaRepository{}
 
-   note right of Posts::PostDetail
-    I have no idea how the connection to the templates is provided
-    #TODO
-   end note
-    interface PostsRepository <PostDatabase,int>{}
+    class PostsController {
+        - postRepo: PostsRepository
+        - templateRepo: TemplatesRepository
 
-    class PostsController{
-        - repo: PostsRepository
-        + getAllPostPreview():Collection(PNG)
-        + getPostDetail(fromPost: int)
+        + getAllPostPreview():Collection(String)
+        + getPostDetail(fromPost: int):Collection(String)
         + getProjectTemplate(fromPost: int): JSON
-        + addPost(postPreview: PNG, postDetail: PNG, user: String, projectTemplate: JSON, graphTemplate: List(JSON))
+        + addPost(postPreview: PNG, user: String, projectTemplate: JSON, graphTemplate: List(JSON))
         + removePost(postID, user: String)
     }
 
-    class Graphtemplate <<Entity>>{
+    note right of PostsController::getAllPostPreview{
+        postRepo.getAll().getPostPreview()
+        postRepo.getAll().getPostID()
+        //Each to string
+    }
+
+    note right of PostsController::getPostDetail{
+        templateRepo.get(fromPost).getTemplateNumber()
+        templateRepo.get(fromPost).getDetailView()
+    }
+
+    note right of PostsController::addPost{
+            postRepo.add(//Detail)
+            templateRepo.add(//Detail)
+        }
+
+
+    class Template <<Entity>>{
         {primaryKey} PostID: int
         {primaryKey} TemplateNumber: int
         Template: JSON
+        isProjectTemplate: boolean
+        detailView: JSON
     }
-    interface GraphtemplatesRepository<Graphtemplate, Tupel(int,int)>{}
+    interface TemplatesRepository <Template, Tupel(int,int)> extends JpaRepository {
+        getToProject(projectNumber: int): Collection(Templates)
+    }
 
-    class GraphtemplatesController {
-        -repo: GraphtemplatesRepository
-        +removePost(postID: int)
-        + addOne(template: JSON, postID: int)
-        + addPost(templates: List(JSON), postID: int)
-        + getTemplate(postID: int, TemplateNumber: int):JSON
-    }
+  }
+  note top of PostDatabase{
+  TODO: Something like DatabaseLoader
   }
 
 @enduml
