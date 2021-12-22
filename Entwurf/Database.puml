@@ -100,6 +100,15 @@ package Entities {
         type: String
         message: String
     }
+
+    '@Entity(primaryKey=["projectId", "version"])
+    class MigrationEntity {
+        projectId: Integer
+        version: Integer
+        type: MigrationOperation
+        columnId: Integer
+        parameter: String
+    }
   
     class ProjectSkeletonEntity {
         name: String
@@ -113,6 +122,7 @@ class ProjectData {
     id: Integer
     name: String
     description: String
+    online: Boolean
     wallpaper: String
 }
 
@@ -148,18 +158,24 @@ package DAOs {
     }
 
     abstract class ProjectDataDAO <<abstract>> {
-        '@Query("SELECT id, name, description, wallpaper FROM project")
+        '@Query("SELECT id, name, description, wallpaper, online FROM project")
         +getAllProjectData(): Flow<List<ProjectData>>
-        '@Query("SELECT id, name, description, wallpaper
+        '@Query("SELECT id, name, description, wallpaper, online
         '        FROM   project
         '        WHERE  id IN (:ids)")
         +getProjectDataByIds(vararg ids: Integer): Flow<List<ProjectData>>
+        '@Query("SELECT id, name, description, wallpaper, online
+        '        FROM   project
+        '        WHERE  id = :id)
+        +getProjectData(id: Integer): ProjectData
         '@Query("UPDATE project SET name = :name WHERE id = :id")
         +setName(id: Integer, name: String)
         '@Query("UPDATE project SET description = :description WHERE id = :id")
         +setDescription(id: Integer, description: String)
         '@Query("UPDATE project SET wallpaper = :wallpaper WHERE id = :id")
         +setWallpaper(id: Integer, wallpaper: String)
+        '@Query("UPDATE project SET online = :online WHERE id = :id")
+        +setOnline(id: Integer, online: Boolean)
         '@Query("SELECT * FROM user WHERE projectId IN (:ids)")
         +getUsersByIds(vararg ids: Integer): Flow<List<ProjectUserMap>>
         +addUser(projectId: Integer, user User)
@@ -209,6 +225,10 @@ package DAOs {
         +getLayoutByIds(vararg ids: Integer): Flow<List<TableLayout>>
         +addColumn(id: Integer, type: Class<Any>, before: Integer): Integer
         +deleteColumn(id: Integer, columnId: Integer)
+        '@Query("SELECT * FROM migration WHERE projectId = :projectId AND version > :version")
+        +getMigrationsSince(projectId: Integer, version: Integer): List<MigrationEntity>
+        '@Delete
+        +deleteMigration(migration: MigrationEntity)
         '@Query("UPDATE project SET layout = :layout WHERE id = :projectId")
         -changeProjectLayout(projectId: Integer, layout: String)
         '@Query("UPDATE projectTemplate SET layout = :layout WHERE id = :templateId")
@@ -221,6 +241,8 @@ package DAOs {
         -getProjectLayout(id: Integer): String
         '@Query("SELECT layout FROM projectTemplate WHERE id = :id")
         -getTemplateLayout(id: Integer): String
+        '@Insert
+        -insertMigration(migration: MigrationEntity)
         -getNextColumnId(id: Integer): Integer
     }
 

@@ -168,6 +168,12 @@ package Repository {
         PIE_CHART,
         LINE_CHART
     }
+
+    enum MigrationOperation <<enum>> {
+        ADD_COL,
+        DELETE_COL,
+        RENAME_COL
+    }
 }
 
 Repository ----[hidden]-> WeißNochNichtWoDasLiegt
