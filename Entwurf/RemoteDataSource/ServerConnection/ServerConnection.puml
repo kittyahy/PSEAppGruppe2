@@ -9,15 +9,32 @@ package ServerConnection {
     - restController: RESTController
     - projectCommandQueue: ProjectCommandQueue
     - fetchRequestQueue: FetchRequestQueue
-
-    + isServerAccessible(): bool
-	+ sendCommandsToServer(List<Commands>): void
-	+ getDeltasFromServer(): Liste<(UploadTime, UserID, JSON)>
-	+ getPostsFromServer():List<Post>
-	+ getOldDeltaRequest(JSON): void
-	+ uploadOldDelta(List<JSON>)
-	+ downloadTemplate(int templateID, enum TemplateType): JSON
-	+ removeUserFromProject(String User_Id_toRemove, int projectID)
+    ----
+	connectionToServerPossible(): bool
+    ..GraphtemplatesController..
+    + removePost(postID: int): int
+    + addOne(template: JSON, postID: int): int
+    + addPost(templates: Collection(JSON), postID: int): int
+    + getTemplate(postID: int, TemplateNumber: int):JSON
+    ..PostsController..
+    + getAllPostPreview(): Collection(PNG)
+    + getPostDetail(fromPost: int): JSON
+    + getProjectTemplate(fromPost: int): JSON
+    + addPost(postPreview: PNG, postDetail: PNG, user: String, projectTemplate: JSON, graphTemplate: Collection(JSON)): int
+    + removePost(postID, user: String): int
+    ..ProjectParticipantsController..
+    + addUser(user: String, projectID: long):boolean
+    + removeUser(userToRemove: String, projectID: long, user: String): boolean
+    + addProject(user:String): long
+    ..OldDataController..
+    + demandOldData(user: String, projectID: long, requestInfo: String): int
+    + needOldData(user: String, projectID: long): Collection(<OldData>)
+    ..DeltaController..
+    + sendCommandsToServer(projectID: long, delta: Collection<JSON>, user: String): int
+    + getDeltasFromServer(projectID: long, user: String):Collection(<Delta>): int
+    ' Tut Commands in die ProjectCommandQueue
+	+ provideOldData(DeltasToUpload: Collection<JSON>, forUser: String, initialAdded: Date, initialAddedBy: String, projectID: int, wasAdmin: boolean): int
+    + removeTime(): Date
     }
 
     note left of ServerManager::getOldDataRequests
@@ -53,6 +70,8 @@ package ServerConnection {
     + getDelta(project: long, user: String):Collection(<Delta>)
     + provideOldData(delta: String, forUser: String, initialAdded: Date, initialAddedBy: String, project: int, wasAdmin: boolean): int
     + removeTime(): Date
+
+    - ConvertDeltaIntoProjectCommandInfo(deltaToConvert: JSON) 
     }
 
     ServerManager "1" *-down- "1" RESTAPI: contains
