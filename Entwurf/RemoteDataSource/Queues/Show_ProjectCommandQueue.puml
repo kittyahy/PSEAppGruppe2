@@ -1,4 +1,4 @@
-@startuml ProjectCommandQueue
+@startuml Queues
 
 !include Queues.puml!ProjectCommandQueue
 
