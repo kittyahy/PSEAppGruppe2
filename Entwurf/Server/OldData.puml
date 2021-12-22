@@ -1,0 +1,63 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+participant Alice
+participant Bob
+
+activate Alice
+
+ref over Alice: requestToAProjectValidation
+Alice -> OldDataController: requestOldData()
+activate OldDataController
+OldDataController -> OldDataRepository : add(user: String, project:long,requestInfo: String)
+deactivate OldDataController
+activate OldDataRepository
+OldDataRepository -> "AliceRequest: OldData" as AliceRequest **: create
+deactivate OldDataController
+deactivate OldDataRepository
+deactivate Alice
+
+activate Bob
+ref over Bob: requestToAProjectValidation
+Bob -> OldDataController: retieveOldData(user:String,project:long)
+activate OldDataController
+OldDataController -> OldDataRepository:getDemand(project: long)
+activate OldDataRepository
+OldDataRepository --> AliceRequest
+note over AliceRequest: selected by OldDataRepository
+AliceRequest --> OldDataRepository
+OldDataRepository --> OldDataController: AliceRequest and maybe more
+deactivate OldDataRepository
+OldDataController -->Bob: Collection<Delta>
+
+ref over Bob: requestToAProjectValidation
+Bob -> DeltaController: provideOldData
+activate DeltaController
+DeltaController --> DeltaRepository: deleteDelta
+activate DeltaRepository
+DeltaController -> DeltaRepository: createDelta(delta, initialAdded, initialAddedBy, project, wasAdmin,forUser)
+DeltaController -> OldDataRepository: addedOldData(user:String, project: long)
+deactivate DeltaRepository
+deactivate DeltaController
+deactivate Bob
+
+activate Alice
+ref over Alice: requestToAProjectValidation
+Alice -> DeltaController: getDelta
+activate DeltaController
+DeltaController ->DeltaRepository: getDelta(project, user)
+activate DeltaRepository
+DeltaController -> OldDataRepository:gotOldData(user,project)
+DeltaRepository --> DeltaController: Collection<Delta>
+deactivate DeltaRepository
+DeltaController --> Alice: Collection<Delta> (old and new Delta)
+deactivate DeltaController
+deactivate Alice
+
+
+
+@enduml

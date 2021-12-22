@@ -1,0 +1,28 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+participant Alice
+
+activate Alice
+TODO; validation
+ref over Alice: LoginValidation
+Alice -> AccessToProjectInterceptor: requestForAProject
+activate AccessToProjectInterceptor
+note over AccessToProjectInterceptor: The AccessToProjectInterceptor interrupts \nthe connection between \nAlice and Controller
+alt login succeded
+AccessToProjectInterceptor --> Alice: accepted
+ref over Alice,AccessToProjectInterceptor,Controller: requestForAProject can be executed
+deactivate
+else login failed
+AccessToProjectInterceptor --> Alice!!: rejected
+end else
+deactivate Alice
+
+
+@enduml

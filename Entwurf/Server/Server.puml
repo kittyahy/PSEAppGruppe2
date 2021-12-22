@@ -27,7 +27,6 @@ GreetingController ..> ServerGreetings: uses
    AccessToProjectInterceptor -- GeneralConfig
 
 
-
     class ServerApplication <<SpringBootApplication>>{
         main(this:ServerApplication,args:String[])
     }
@@ -60,5 +59,8 @@ LoginIntercepter ... Firebase : uses >
 package Firebase {
 }
 
-
+DeltaRepository -[hidden]up-> PostsRepository
+PostsController -[hidden]up-> Template
+PostsController -[hidden]>TemplatesRepository
+Tupel -[hidden]up> OnlineDatabase
 @enduml

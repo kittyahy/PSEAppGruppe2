@@ -58,8 +58,6 @@ package PostDatabase{
     }
 
   }
-  note top of PostDatabase{
-  TODO: Something like DatabaseLoader
-  }
+
 
 @enduml
