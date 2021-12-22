@@ -23,8 +23,10 @@ package OnlineDatabase{
 
     }
 
-    note left of AccessToProjectInterceptor::preHandle
-        used before any call in OnlineDatabase except addUser at ProjectParticipantsController
+    note right of AccessToProjectInterceptor::preHandle
+        used before any call in OnlineDatabase
+         except addUser at ProjectParticipantsController
+         and removeTime in DeltaController
     end note
 
 
@@ -32,17 +34,17 @@ package OnlineDatabase{
     class OldData<<Entity>>{
         {primaryKey}: ID: String
         user: String
-        project: int
+        project: long
         requestInfo: String
     }
     class OldDataController{
-        + demandOldData(user: String, project: int, requestInfo: String)
-        + needOldData(user: String, project: int):Collection(<OldData>)
+        + demandOldData(user: String, project: long, requestInfo: String)
+        + needOldData(user: String, project: long):Collection(<OldData>)
     }
 
-    interface OldDataRepository{
-     hasOldData(project:int, user: String)
-     getDemand(project:int): Collection<OldData>
+    interface OldDataRepository<OldData, String>{
+     hasOldData(project:long, user: String)
+     getDemand(project:long): Collection<OldData>
     }
 
     class Delta <<Entity>> {
@@ -50,43 +52,43 @@ package OnlineDatabase{
         {primaryKey}: User: String
         delta: JSON
         downloadedBy: String[23]
-        project: int
+        project: long
         requestedBy: String
+        isAdmin: boolean
     }
-    class DeltaController {
-        + saveDelta(project: int, delta: String, user: String)
-        + getDelta(project: int, user: String):Collection(<Delta>)
-        + provideOldData(delta: String, forUser: String, initialAdded: Date, initialAddedBy: String, project: int)
-
+    class DeltaController{
+        + saveDelta(project: long, delta: String, user: String)
+        + getDelta(project: long, user: String):Collection(<Delta>)
+        + provideOldData(delta: String, forUser: String, initialAdded: Date, initialAddedBy: String, project: int, wasAdmin: boolean)
+        + removeTime():Date
     }
 
-    interface DeltaRepository <Delta, Tupel(Date, String)>{
+    interface DeltaRepository <Delta, Tupel(Date, String)> extends JpaRepository{
+    - removeTime: Date
     deleteOldData()
     deleteDownloadedData()
+    getRemoveTime()
     }
 
-note left of DeltaController{
-#TODO MEthod to get how many days a delta can be stored     }
-    note right of DeltaRepository{
-    need possebility to change, how long data can be stored
-    }
-    interface ProjectParticipantsRepository <ProjectParticipants,Tupel(String, int)>{
-         participates(user: String, project: int): boolean
-         isAdmin(user: String, project: int): boolean
-         getAmountOfPartition(project: int): int
-         newAdmin(project: int): String
+
+    interface ProjectParticipantsRepository <ProjectParticipants,Tupel(String, int)> extends JpaRepository{
+         participates(user: String, project: long): boolean
+         isAdmin(user: String, project: long): boolean
+         getAmountOfPartition(project: long): int
+         newAdmin(project: long): String
     }
 
     class ProjectParticipantsController{
-         + addUser(user: String, project: int):boolean
-         + removeUser(userToRemove: String, project: int, user: String): boolean
+        - projectID: long
+         + addUser(user: String, project: long):boolean
+         + removeUser(userToRemove: String, project: long, user: String): boolean
 
 
-         + addProject(user:String): int
+         + addProject(user:String): long
     }
     class ProjectParticipants <<Entity>>{
         {primaryKey} user: String
-        {primaryKey} project: int
+        {primaryKey} project: long
         role: Role
         NumberOfJoin: int
     }
