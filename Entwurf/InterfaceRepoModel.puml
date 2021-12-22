@@ -103,7 +103,9 @@ package Repository {
         +getDataSets(): Collection<Collection<Any>>
         +getCustomizing(): Settings
         +getImage(): Drawable?
+        +getPath(): String?
         +getType(): GraphType
+        +getCalculationFunction(): DataTransformation
         +setCalculationFunction(DataTransformation)
     }
 
