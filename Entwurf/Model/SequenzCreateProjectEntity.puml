@@ -9,13 +9,36 @@ title Insert Project Entity
 
 participant "projectCreator: ProjectCDManager" as cd
 participant "proj: Project" as proj
+participant "skel: ProjectSkeletonEntity" as skel
 participant "ent: ProjectEntity" as ent
 participant "dao: ProjectDataDAO" as dao
+participant "GSON" as gson
 
 [-> cd : createProjectEntity(proj)
 activate cd
 cd -> cd : skel = createSkeleton(proj)
 activate cd
+cd -> proj : name = getProjectSkeleton().getName()
+activate proj
+proj --> cd
+deactivate proj
+cd -> proj : desc = getProjectSkeleton().getDescription()
+activate proj
+proj --> cd
+deactivate proj
+cd -> proj : wallpaper = getProjectSkeleton().getWallpaper()
+activate proj
+proj --> cd
+deactivate proj
+cd -> proj : layout = getTable().getLayout()
+activate proj
+proj --> cd
+deactivate proj
+cd -> gson : layoutStr = layout.toJSON()
+activate gson
+gson --> cd
+deactivate gson
+cd -> skel** : <<create>> (name, desc, wallpaper, layoutStr)
 cd --> cd
 deactivate cd
 cd -> proj : admin = getAdmin()
