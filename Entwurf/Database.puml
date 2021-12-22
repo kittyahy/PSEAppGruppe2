@@ -144,7 +144,7 @@ package DAOs {
         ~isTemplate(id: Integer): Boolean
         -getNextId(projectId: Integer): Integer
         -createSkeleton(project: Project): ProjectSkeletonEntity
-        -createProjectEntity(project: Project): ProjectEntity
+        -insertProjectEntity(project: Project): Integer
     }
 
     class GraphCDManager {
