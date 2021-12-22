@@ -24,19 +24,27 @@ ref over cd
     Insert Project Entity
 end
 ref over cd
-    Insert Graph
-end
-ref over cd
-    Create Notification Entity
-end
-ref over cd
-    Create UI Elements
-end
-ref over cd
     Create Table Layout
 end
-ref over cd
-    Create UserMaps
+loop foreach Graph in proj
+    ref over cd
+        Insert Graph
+    end
+end
+loop foreach Notification in proj
+    ref over cd
+        Create Notification Entity
+    end
+end
+loop foreach UI Element in proj
+    ref over cd
+        Create UI Elements
+    end
+end
+loop foreach User in proj
+    ref over cd
+        Create UserMaps
+    end
 end
 note over cd
     if applicable: proj gets updated with new IDs
