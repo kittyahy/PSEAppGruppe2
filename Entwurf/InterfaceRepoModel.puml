@@ -119,7 +119,7 @@ package Repository {
         +getMessage(): String
         +sendNow(vararg Any): Boolean throws IllegalContextException
         +toString(): String
-        +{static}fromString(String): Notification
+        +{static}fromString(notifStr: String, message: String): Notification
     }
     note left of Notification::toString()
         should serialize both the type
