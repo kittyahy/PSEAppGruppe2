@@ -6,11 +6,11 @@ skinparam genericDisplay old
 skinparam classAttributeIconSize 0
 hide circle
 
-participant "table: ProjectTable" as table
-participant "row: ArrayListRow" as row
+participant "ADD_ROW: ProjectCommand" as addCommand
+participant "test" as row
 
-[-> table : addRow(row)
-activate table
+[-> addCommand : execute()
+activate addCommand
 
 
 
