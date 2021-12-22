@@ -1,3 +1,19 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+title Insert Project Entity
+
+participant "projectCreator: ProjectCDManager" as cd
+participant "proj: Project" as proj
+participant "ent: ProjectEntity" as ent
+participant "dao: ProjectDataDAO" as dao
+
+[-> cd : createProjectEntity(proj)
+activate cd
 cd -> cd : skel = createSkeleton(proj)
 activate cd
 cd --> cd
@@ -15,3 +31,11 @@ activate cd
 cd --> cd
 deactivate cd
 cd -> "ent: ProjectEntity" as ent** : <<create>> (id, skel, admin, onlineId)
+cd -> dao : insertProjectEntity(ent)
+activate dao
+dao --> cd
+deactivate dao
+cd -->[ : id
+deactivate cd
+
+@enduml
