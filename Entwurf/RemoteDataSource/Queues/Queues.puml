@@ -1,3 +1,9 @@
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
 package Queues{
 
 package ProjectCommandQueue {
@@ -31,8 +37,8 @@ class FetchRequestQueue {
     - fetchRequests: List<JSON>
     - observer: List<FetchRequestQueueObserver>;
     ..QueueLogic..
-    + GetFetchRequest(): JSON
-    + AddFetchRequest(JSON): void
+    + GetFetchRequest(): ProjectCommandInfo
+    + AddFetchRequest(ProjectCommandInfo): void
     ..ObserverLogic..
     + registerObserver(FetchRequestsQueueObserver)
     + unregisterObserver(FetchRequestsQueueObserver)
@@ -49,6 +55,20 @@ FetchRequestQueue "1" *-up- "1" FetchRequestsQueueObserver
 }
 
 
-package SendCommandToServerQueue {
 
+
+}
+
+class ProjectCommandInfo <<dataclass>> {
+    - wentOnline : int 
+    - serverRemoveTime: int
+    - commandByUser: String
+    - IsProjectAdmin: Boolean
+
+    - ProjectCommand: JSON
+    getWentOnline(): int
+    getServerRemoveTime(): int
+    getCommandByUser(): String
+    getIsProjectAdmin(): int
+    getProjectCommand(): JSON
 }

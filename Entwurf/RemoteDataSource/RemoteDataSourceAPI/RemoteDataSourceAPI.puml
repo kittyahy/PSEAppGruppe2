@@ -10,6 +10,10 @@ class RemoteDataSourceAPI <<fassade>> {
 	- serverManager: ServerManager 
 
 	----
+	..UserAccount..
+	+ registerUser(String eMail, String passwort): int 
+	+ signInUser(String eMail, String passwort): int
+	+ signOut(): int
 	..UserDetails..
 	+getUserID(): String
 	+getUserName(): String
