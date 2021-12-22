@@ -32,7 +32,7 @@ package Entities {
         '@Embedded
         skeleton: ProjectSkeletonEntity
         admin: User
-        online: Boolean
+        onlineId: String
     }
     ProjectEntity - ProjectSkeletonEntity
 
@@ -44,7 +44,7 @@ package Entities {
         createdBy: User
     }
     ProjectSkeletonEntity -- ProjectTemplateEntity
-  
+
     '@Entity(primaryKey=["id", "projectId"])
     class GraphEntity {
         id: Integer
@@ -109,6 +109,13 @@ package Entities {
         columnId: Integer
         parameter: String
     }
+
+    '@Entity(primaryKey=["projectId", "from", "until"])
+    class MissingSlotEntity {
+        projectId: Integer
+        from: DateTime
+        until: DateTime
+    }
   
     class ProjectSkeletonEntity {
         name: String
@@ -122,7 +129,7 @@ class ProjectData {
     id: Integer
     name: String
     description: String
-    online: Boolean
+    onlineId: Boolean
     wallpaper: String
 }
 
@@ -158,13 +165,13 @@ package DAOs {
     }
 
     abstract class ProjectDataDAO <<abstract>> {
-        '@Query("SELECT id, name, description, wallpaper, online FROM project")
+        '@Query("SELECT id, name, description, wallpaper, onlineId FROM project")
         +getAllProjectData(): Flow<List<ProjectData>>
-        '@Query("SELECT id, name, description, wallpaper, online
+        '@Query("SELECT id, name, description, wallpaper, onlineId
         '        FROM   project
         '        WHERE  id IN (:ids)")
         +getProjectDataByIds(vararg ids: Integer): Flow<List<ProjectData>>
-        '@Query("SELECT id, name, description, wallpaper, online
+        '@Query("SELECT id, name, description, wallpaper, onlineId
         '        FROM   project
         '        WHERE  id = :id)
         +getProjectData(id: Integer): ProjectData
@@ -174,8 +181,8 @@ package DAOs {
         +setDescription(id: Integer, description: String)
         '@Query("UPDATE project SET wallpaper = :wallpaper WHERE id = :id")
         +setWallpaper(id: Integer, wallpaper: String)
-        '@Query("UPDATE project SET online = :online WHERE id = :id")
-        +setOnline(id: Integer, online: Boolean)
+        '@Query("UPDATE project SET onlineId = :onlineId WHERE id = :id")
+        +setOnlineId(id: Integer, onlineId: Boolean)
         '@Query("SELECT * FROM user WHERE projectId IN (:ids)")
         +getUsersByIds(vararg ids: Integer): Flow<List<ProjectUserMap>>
         +addUser(projectId: Integer, user User)
@@ -184,6 +191,12 @@ package DAOs {
         +getAdminByIds(vararg ids: Integer): Flow<List<ProjectUserMap>>
         '@Query("UPDATE project SET admin = :admin WHERE id = :projectId")
         +changeAdmin(projectId: Integer, admin: User)
+        '@Insert
+        +insertMissingSlot(missingSlot: MissingSlotEntity)
+        '@Delete
+        +deleteMissingSlot(missingSlot: MissingSlotEntity)
+        '@Query("SELECT * FROM missingSlot WHERE projectId = :projectId")
+        +getMissingSlots(projectId: Integer): List<MissingSlotEntity>
         '@Insert
         ~insertProjectEntity(project: ProjectEntity)
         '@Delete
