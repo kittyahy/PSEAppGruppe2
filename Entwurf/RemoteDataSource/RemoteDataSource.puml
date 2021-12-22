@@ -10,8 +10,9 @@ package RemoteDataSource {
 !include RemoteDataSourceAPI\RemoteDataSourceAPI.puml!RemoteDataSourceAPI
 
 !include UserManager\UserManager.puml!UserManager
-!include ConverterLogic\ConverterLogic.puml!ConverterLogic
 !include ServerConnection\ServerConnection.puml!ServerConnection
+
+!include Queues\Queues.puml!Queues
 }
 
 
@@ -22,7 +23,6 @@ package RemoteDataSource {
 ' RemoteDatSourceAPI ist eine _Fassade_ -> Muss als einzige Klasse vom Repository aufgerufen werden
 RemoteDataSourceAPI "1" *-- "1" UserAccount: contains
 RemoteDataSourceAPI "1" *-- "1" ServerManager: contains
-RemoteDataSourceAPI "1" *-- "1" CommandConverter: contains
 
 
 class FirebaseAPI {
@@ -37,8 +37,10 @@ package Server {
 }
 
 ' Serverconnection
-RESTAPI "1" .down.> "1" Server
+RESTAPI "1" .down.> "1" Server: calls
 
-
+' Queues
+ServerManager "1" *-- "1" ProjectCommandQueue
+ServerManager "1" *-- "1" FetchRequestQueue
 
 @enduml
