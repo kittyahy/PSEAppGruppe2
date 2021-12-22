@@ -151,7 +151,7 @@ package DAOs {
 
     abstract class TableContentDAO <<abstract>> {
         +getRowsByIds(vararg ids: Integer): Flow<Row>
-        +insertRow(row: Row, projectId: Integer, before: Integer)
+        +insertRow(row: Row, projectId: Integer)
         +deleteRows(projectId: Integer, vararg rows: Row)
         +changeRow(projectId: Integer, vararg rows: Row)
         '@Insert
@@ -162,6 +162,7 @@ package DAOs {
         -deleteRowEntities(vararg rows: RowEntity)
         '@Update
         -changeRowEntities(vararg rows: RowEntity)
+        -buildRowEntity(row: Row, projectId: Integer)
     }
 
     abstract class ProjectDataDAO <<abstract>> {
