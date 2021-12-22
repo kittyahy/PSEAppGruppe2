@@ -24,7 +24,7 @@ ref over cd
     Insert Project Entity
 end
 ref over cd
-    Create Table Layout
+    Insert Table Layout
 end
 loop foreach Graph in proj
     ref over cd
@@ -33,17 +33,17 @@ loop foreach Graph in proj
 end
 loop foreach Notification in proj
     ref over cd
-        Create Notification Entity
+        Insert Notification Entity
     end
 end
 loop foreach UI Element in proj
     ref over cd
-        Create UI Elements
+        Insert UI Elements
     end
 end
 loop foreach User in proj
     ref over cd
-        Create UserMaps
+        Insert UserMaps
     end
 end
 note over cd
