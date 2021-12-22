@@ -108,8 +108,9 @@ package Repository {
     }
 
     interface Settings <<interface>> {
-        +getSetting(String): Any throws SettingNotFoundException
-        +setSetting(String, Any) throws SettingNotFoundException
+        +getAllSettings(): Map<String, String>
+        +getSetting(String): String throws SettingNotFoundException
+        +setSetting(String, String) throws SettingNotFoundException
     }
 
     interface Notification <<interface>> {
