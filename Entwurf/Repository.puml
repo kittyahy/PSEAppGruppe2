@@ -252,8 +252,8 @@ package RemoteDataSourceSchnittstelle {
     +commandType: ProjectCommand
     +projectID: ProjectID
     +OnlineProjectID: OnlineProjectID?
-    +wentOnline: int '(UnixTime)?
-    +serverRemoveTime: int '(UnixDuration)?
+    {field}+wentOnline: int '(UnixTime)?
+    {field}+serverRemoveTime: int '(UnixDuration)?
     +userRole: UserRole
     +row: int
     +column: int
