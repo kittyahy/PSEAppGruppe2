@@ -150,6 +150,7 @@ package DAOs {
     class GraphCDManager {
         +insertGraph(projectId: Integer, graph: Graph): Integer
         +deleteGraph(projectId: Integer, id: Integer)
+        -insertGraphEntity(projectId: Integer, graph: Graph): Integer
         -getNextId(projectId: Integer): Integer
     }
 
@@ -213,14 +214,14 @@ package DAOs {
     }
 
     abstract class SettingsDAO <<abstract>> {
-        +getProjectSettings(projectId: Integer): Flow<List<Setting>>
-        +getGraphSettings(graphId: Integer): Flow<List<Setting>>
-        +changeProjectSetting(projectId: Integer, setting: Setting)
-        +changeGraphSetting(graphId: Integer, setting: Setting)
-        +createProjectSetting(projectId: Integer, setting: Setting)
-        +createGraphSetting(graphId: Integer, setting: Setting)
-        +deleteProjectSetting(projectId: Integer, setting: Setting)
-        +deleteGraphSetting(graphId: Integer, setting: Setting)
+        +getProjectSettings(projectId: Integer): Flow<List<Pair<String, String>>>
+        +getGraphSettings(graphId: Integer): Flow<List<Pair<String, String>>>
+        +changeProjectSetting(projectId: Integer, key: String, value: String)
+        +changeGraphSetting(graphId: Integer, key: String, value: String)
+        +createProjectSetting(projectId: Integer, key: String, value: String)
+        +createGraphSetting(graphId: Integer, key: String, value: String)
+        +deleteProjectSetting(projectId: Integer, key: String, value: String)
+        +deleteGraphSetting(graphId: Integer, key: String, value: String)
         '@Query("SELECT name, value FROM projectSetting WHERE projectId = :projectId")
         -getProjectSettingsEntity(projectId: Integer): Flow<List<ProjectSettingEntity>>
         '@Query("SELECT name, value FROM graphSetting WHERE graphId = :graphId")
