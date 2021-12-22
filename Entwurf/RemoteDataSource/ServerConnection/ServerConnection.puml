@@ -23,32 +23,37 @@ package ServerConnection {
     note left of ServerManager::getOldDataRequests
         'Fetches ProjectCommandFetchRequests from the Server and puts them into the FetchRequestQueue
     end note
+    
 
-
-	' Ruft die Funktionen des Servers auf
-	class RESTAPI <<singleton>>{
-	-ServerIP : String
-
-	+ connectionToServerPossible(): bool
+    ' Ruft die Funktionen des Servers auf
+    class RESTAPI <<singleton>> {
+    -ServerIP : String
+    ----
+    + connectionToServerPossible(): bool
     ..GraphtemplatesController..
     + removePost(postID: int): int
     + addOne(template: JSON, postID: int): int
     + addPost(templates: List(JSON), postID: int): int
     + getTemplate(postID: int, TemplateNumber: int):JSON
     ..PostsController..
-    + getAllPostPreview():Collection(PNG)
+    + getAllPostPreview(): Collection(PNG)
     + getPostDetail(fromPost: int): JSON
     + getProjectTemplate(fromPost: int): JSON
     + addPost(postPreview: PNG, postDetail: PNG, user: String, projectTemplate: JSON, graphTemplate: List(JSON)): int
     + removePost(postID, user: String): int
     ..ProjectParticipantsController..
-    + addUser(user: String, project: int): boolean
-    + removeUser(user: String, project: int): boolean
+    + addUser(user: String, projectID: long):boolean
+    + removeUser(userToRemove: String, projectID: long, user: String): boolean
+    + addProject(user:String): long
     ..OldDataController..
-    + add(user: String, keyForData: Tupel(Date, String), project: int): requestID
-    + IsDataAvailable(requestID): boolean
-    + removeRequest(requestID): int
-	}
+    + demandOldData(user: String, projectID: long, requestInfo: String): int
+    + needOldData(user: String, projectID: long): Collection(<OldData>)
+    ..DeltaController..
+    + saveDelta(project: long, delta: String, user: String): int
+    + getDelta(project: long, user: String):Collection(<Delta>)
+    + provideOldData(delta: String, forUser: String, initialAdded: Date, initialAddedBy: String, project: int, wasAdmin: boolean): int
+    + removeTime(): Date
+    }
 
     ServerManager "1" *-down- "1" RESTAPI: contains
 }
