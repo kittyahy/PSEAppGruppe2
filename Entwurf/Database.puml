@@ -32,6 +32,7 @@ package Entities {
         '@Embedded
         skeleton: ProjectSkeletonEntity
         admin: User
+        online: Boolean
     }
     ProjectEntity - ProjectSkeletonEntity
 
@@ -40,21 +41,12 @@ package Entities {
         id: Integer
         '@Embedded
         skeleton: ProjectSkeletonEntity
+        createdBy: User
     }
     ProjectSkeletonEntity -- ProjectTemplateEntity
-
-    '@Entity
-    class ProjectCustomizingEntity {
-        'PrimaryKey
-        id: Integer
-        name: String
-        'Embedded
-        customizing: ProjectCustomizing
-    }
   
-    '@Entity
+    '@Entity(primaryKey=["id", "projectId"])
     class GraphEntity {
-        '@PrimaryKey
         id: Integer
         projectId: Integer
         dataTransformation: Project::DataTransformation
@@ -63,22 +55,23 @@ package Entities {
     }
   
     '@Entity
-    class GraphTemplate {
+    class GraphTemplateEntity {
         '@PrimaryKey
         id: Integer
-        graphId: Integer
         name: String
+        description: String
+        type: GraphType
         createdBy: String
     }
 
-    '@Entity(primaryKey=["settingsId", "name"])
+    '@Entity(primaryKey=["projectId", "name"])
     class ProjectSettingEntity {
         projectId: Integer
         name: String
         value: String
     }
 
-    '@Entity(primaryKey=["settingsId", "name"])
+    '@Entity(primaryKey=["graphId", "name"])
     class GraphSettingEntity {
         graphId: Integer
         name: String
@@ -95,7 +88,17 @@ package Entities {
     class UIElementMap {
         projectId: Integer
         id: Integer
+        columnId: Integer
         type: String
+        state: String
+    }
+
+    '@Entity(primaryKey=["projectId", "id"])
+    class NotificationEntity {
+        projectId: Integer
+        id: Integer
+        type: String
+        message: String
     }
   
     class ProjectSkeletonEntity {
@@ -104,13 +107,6 @@ package Entities {
         wallpaper: String
         layout: String
     }
-
-    note right of ProjectSkeletonEntity::layout
-        contains both the type of the
-        column as well as the ids of
-        the UI Elements used for the
-        column
-    end note
 }
 
 class ProjectData {
@@ -120,17 +116,20 @@ class ProjectData {
     wallpaper: String
 }
 
-class GraphData {
-    id: Integer
-    projectId: Integer
-    type: GraphType
-    path: String
-}
-
 package DAOs {
     class ProjectCDManager {
-        +insertProject(project: Project)
-        +deleteProject(project: Project
+        +insertProject(project: Project): Integer
+        +deleteProject(project: Project)
+        +insertProjectTemplate(template: ProjectTemplate): Integer
+        +deleteProjectTemplate(template: ProjectTemplate)
+        ~isTemplate(id: Integer): Boolean
+        -getNextId(projectId: Integer): Integer
+    }
+
+    class GraphCDManager {
+        +insertGraph(projectId: Integer, graph: Graph): Integer
+        +deleteGraph(projectId: Integer, id: Integer)
+        -getNextId(projectId: Integer): Integer
     }
 
     abstract class TableContentDAO <<abstract>> {
@@ -208,29 +207,98 @@ package DAOs {
 
     abstract class LayoutDAO <<abstract>> {
         +getLayoutByIds(vararg ids: Integer): Flow<List<TableLayout>>
-        +addColumn(projectId: Integer, type: Class<Any>, before: Integer)
-        +deleteColumn(projectId: Integer, columnId: Integer)
+        +addColumn(id: Integer, type: Class<Any>, before: Integer): Integer
+        +deleteColumn(id: Integer, columnId: Integer)
         '@Query("UPDATE project SET layout = :layout WHERE id = :projectId")
-        -changeLayout(projectId: Integer, layout: String)
+        -changeProjectLayout(projectId: Integer, layout: String)
+        '@Query("UPDATE projectTemplate SET layout = :layout WHERE id = :templateId")
+        -changeTemplateLayout(templateId: Integer, layout: String)
         '@Query("SELECT layout FROM project WHERE id IN (:ids)")
-        -getLayouts(vararg ids: Integer): Flow<List<String>>
+        -getProjectLayouts(vararg ids: Integer): Flow<List<String>>
+        '@Query("SELECT layout FROM projectTemplate WHERE id IN (:ids)")
+        -getTemplateLayouts(vararg ids: Integer): Flow<List<String>>
         '@Query("SELECT layout FROM project WHERE id = :id")
-        -getLayout(id: Integer): String
+        -getProjectLayout(id: Integer): String
+        '@Query("SELECT layout FROM projectTemplate WHERE id = :id")
+        -getTemplateLayout(id: Integer): String
+        -getNextColumnId(id: Integer): Integer
     }
 
     abstract class GraphDAO <<abstract>> {
         '@Query("SELECT id, projectId, type, path FROM graph WHERE projectId IN (:ids)")
-        +getGraphDataForProjects(vararg ids: Integer): Flow<List<GraphData>>
-        +getGraphs(id: Integer): Flow<List<Graph>>
-        '@Query("SELECT * FROM graph WHERE projectId = :id")
-        -getGraphs(id: Integer): Flow<List<GraphEntity>>
-        '@Query("SELECT name, value FROM graphSetting WHERE graphId = :id")
-        -getSettings(id: Integer): Flow<List<GraphSettingEntity>>
+        +getGraphEntityForProjects(vararg ids: Integer): Flow<List<GraphEntity>
+        '@Query("UPDATE graph SET path = :path WHERE projectId = :projectId AND id = :id")
+        +changePath(projectId: Integer, id: Integer, path: String)
+        '@Insert
+        ~insertGraph(graph: GraphEntity)
+        '@Delete
+        ~deleteGraph(graph: GraphEntity)
     }
 
     abstract class UIElementDAO <<abstract>> {
-        +getUIElements(vararg ids: Integer): Flow<List<UIElementMap>>
-        +removeUIElement(projectId: Integer, column
+        '@Query("SELECT * FROM uiElement
+        '        WHERE projectId = :projectId
+        +getUIElements(projectId: Integer): Flow<List<UIElementMap>>
+        +insertUIElement(projectId: Integer, columnId: Integer, type: UIElementType): Integer
+        +removeUIElements(projectId: Integer, vararg ids: Integer)
+        '@Query("UPDATE uiElement
+        '        SET state = :state
+        '        WHERE projectId = :projectID AND id = :id")
+        +changeUIElementState(projectId: Integer, id: Integer, state: String)
+        '@Delete
+        -removeUIElementMap(vararg uiElements: UIElementMap)
+        '@Insert
+        -insertUIElement(uiElement: UIElementMap)
+        -getNextId(projectId: Integer): Integer
+    }
+
+    abstract class NotificationsDAO <<abstract>> {
+        +getNotifications(projectId: Integer): Flow<List<Notification>>
+        +insertNotification(projectId: Integer, notification: Notification): Integer
+        +deleteNotification(projectId: Integer, notification: Notification)
+        '@Query("UPDATE notification SET message = :message
+        '        WHERE projectId = :projectId AND id = :id")
+        +setNotificationMessage(projectId: Integer, id: Integer, message: String)
+        '@Query("SELECT * FROM notification WHERE projectId = :projectId")
+        -getNotificationEntities(projectId: Integer) Flow<List<NotificationEntity>>
+        '@Insert
+        -insertNotification(notification: NotificationEntity)
+        '@Delete
+        -deleteNotification(notification: NotificationEntity)
+        -getNextId(projectId: Integer): Integer
+    }
+
+    abstract class TemplateDAO <<abstract>> {
+        '@Query("SELECT * FROM projectTemplate")
+        +getAllProjectTemplateData(): Flow<List<ProjectTemplateEntity>>
+        '@Query("SELECT * FROM projectTemplate WHERE id in (:ids)")
+        +getProjectTemplateData(vararg ids: Integer): Flow<List<ProjectTemplateEntity>>
+        '@Query("SELECT * FROM projectTemplate WHERE createdBy = :creator")
+        +getProjectTemplateByCreator(creator: String): Flow<List<ProjectTemplateEntity>>
+        '@Query("UPDATE projectTemplate SET name = :name WHERE id = :id")
+        +setName(id: Integer, name: String)
+        '@Query("UPDATE projectTemplate SET description = :description WHERE id = :id")
+        +setDescription(id: Integer, description: String)
+        '@Query("UPDATE projectTemplate SET wallpaper = :wallpaper WHERE id = :id")
+        +setWallpaper(id: Integer, wallpaper: String)
+        '@Query("SELECT * FROM graphTemplate")
+        +getAllGraphTemplateData(): Flow<List<GraphTemplateEntity>>
+        '@Query("SELECT * FROM graphTemplate WHERE id in (:ids)")
+        +getGraphTemplateData(vararg ids: Integer): Flow<List<GraphTemplateEntity>>
+        '@Query("SELECT * FROM graphTemplate WHERE createdBy = :creator")
+        +getGraphTemplateByCreator(creator: String): Flow<List<GraphTemplateEntity>>
+        '@Query("UPDATE graphTemplate SET name = :name WHERE id = :id")
+        +setGraphTemplateName(id: Integer, name: String)
+        '@Query("UPDATE graphTemplate SET description = :description WHERE id = :id")
+        +setGraphTemplateDescription(id: Integer, description: String)
+        '@Insert
+        ~insertProjectTemplate(project: ProjectTemplateEntity)
+        '@Delete
+        ~deleteProjectTemplate(project: ProjectTemplateEntity)
+        '@Insert
+        ~insertGraphTemplate(graph: GraphTemplateEntity)
+        '@Delete
+        ~deleteGraphTemplate(graph: GraphTemplateEntity)
     }
 }
 
@@ -344,8 +412,6 @@ RoomDatabase <|-- AppDataBase
 
 AppDataBase -[hidden]-> TableAccess
 Table -[hidden]-> Wallpaper
-GraphCustomizing -[hidden]-> TypeConverters
-TypeConverters -[hidden]-> RoomDatabase
 SettingsDAO -[hidden]-> RowEntity
 LayoutDAO -[hidden]-> SettingsDAO
 SettingsDAO -[hidden]> TableContentDAO
