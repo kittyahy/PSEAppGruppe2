@@ -254,14 +254,15 @@ package RemoteDataSourceSchnittstelle {
     +OnlineProjectID: OnlineProjectID?
     {field}+wentOnline: int '(UnixTime)?
     {field}+serverRemoveTime: int '(UnixDuration)?
-    +userRole: UserRole
+    +commandByUser: String?
+    +isProjectAdmin: boolean?
     +row: int
     +column: int
  }
  class ProjectCommandDataUtitlity <<static>> {
-    +{static} setServerInfo(ProjectCommandData, OnlineProjectID, int wentOnline, int serverRemoveTime):ProjectCommandData
+    +{static} setServerInfo(ProjectCommandData, serverInfo: ServerInfo):ProjectCommandData
     +{static} toJson(ProjectCommandData): Json
-    +{static} constructFromJson(Json):ProjectCommandData throws IllegalFormatException
+    +{static} constructFromJson(Json): ProjectCommandData throws IllegalFormatException
  }
  class IllegalOperationException {
      }
