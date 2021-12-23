@@ -47,6 +47,8 @@ class RemoteDataSourceAPI <<fassade>> {
 	+ provideOldData(DeltasToUpload: Collection<JSON>, forUser: String, initialAdded: Date, initialAddedBy: String, projectID: int, wasAdmin: boolean): int
     + removeTime(): Date
 	..ObserverLogic..
-	+ AddObserverToFetchRequestQueue(FetchRequestQueueObserver): void
-    + AddObserverToProjectCommandQueue(ProjectCommandQueueObserver): void
+    + AddObserverToFetchRequestQueue(observer: FetchRequestQueueObserver)
+    + UnregisterObserverFromFetchRequestQueue(observer: FetchRequestQueueObserver)
+    + AddObserverToProjectCommandQueue(observer: ProjectCommandQueueObserver)
+    + UnregisterObserverFromProjectCommandQueue(observer: ProjectCommandQueueObserver)
 }

@@ -63,12 +63,12 @@ class ProjectCommandInfo <<dataclass>> {
     - wentOnline : int 
     - serverRemoveTime: int
     - commandByUser: String
-    - IsProjectAdmin: Boolean
+    - isProjectAdmin: boolean
 
-    - ProjectCommand: JSON
+    - projectCommand: JSON
     getWentOnline(): int
     getServerRemoveTime(): int
     getCommandByUser(): String
-    getIsProjectAdmin(): int
+    getIsProjectAdmin(): boolean
     getProjectCommand(): JSON
 }

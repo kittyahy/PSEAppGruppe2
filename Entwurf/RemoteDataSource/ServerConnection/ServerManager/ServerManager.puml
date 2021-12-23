@@ -5,11 +5,11 @@ skinparam classAttributeIconSize 0
 hide circle
 
 class ServerManager <<singleton>>{
-    - restController: RESTController
+    - restAPI: RESTAPI
     - projectCommandQueue: ProjectCommandQueue
     - fetchRequestQueue: FetchRequestQueue
     ----
-	connectionToServerPossible(): bool
+	connectionToServerPossible(): boolean
     ..GraphtemplatesController..
     + removePost(postID: int): int
     + addOne(template: JSON, postID: int): int
@@ -35,10 +35,12 @@ class ServerManager <<singleton>>{
 	+ provideOldData(DeltasToUpload: Collection<JSON>, forUser: String, initialAdded: Date, initialAddedBy: String, projectID: int, wasAdmin: boolean): int
     + removeTime(): Date
     ..ObserverLogic..
-    + AddObserverToFetchRequestQueue(FetchRequestQueueObserver)
-    + AddObserverToProjectCommandQueue(ProjectCommandQueueObserver)
+    + AddObserverToFetchRequestQueue(observer: FetchRequestQueueObserver)
+    + UnregisterObserverFromFetchRequestQueue(observer: FetchRequestQueueObserver)
+    + AddObserverToProjectCommandQueue(observer: ProjectCommandQueueObserver)
+    + UnregisterObserverFromProjectCommandQueue(observer: ProjectCommandQueueObserver)
     ..HelpingMethods..
-    - ConvertDeltaIntoProjectCommandInfo(deltaToConvert: JSON) 
-    - AddToFetchRequestQueue(JSON): void
-    - AddToProjectCommandQueue(ProjectCommandInfo): void
+    - ConvertDeltaIntoProjectCommandInfo(deltaToConvert: JSON): ProjectCommandInfo 
+    - AddToFetchRequestQueue(fetchRequest: JSON)
+    - AddToProjectCommandQueue(projectCpmmand: ProjectCommandInfo)
     }
