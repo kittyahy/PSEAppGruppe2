@@ -200,9 +200,13 @@ package RemoteDataSourceSchnittstelle {
  CommandTypeData <|-- SettingCommandData
  CommandTypeData <|-- UserCommandData
  }
+'=================================================================================================='
   package CommandCenter {
     class CommandInbox {
         -commandQueue: List<Command>
+    }
+    class OldCommandConverter {
+    +{static} toNewCommand(Command): Command
     }
   }
 
