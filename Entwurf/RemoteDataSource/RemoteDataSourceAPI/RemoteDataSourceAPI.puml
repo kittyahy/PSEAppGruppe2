@@ -6,10 +6,10 @@ hide circle
 
 
 class RemoteDataSourceAPI <<fassade>> {
-	- commandController: CommandController 
 	- userAccount: UserAccount 
 	- serverManager: ServerManager 
 	----
+	..Firebase..
 	..UserAccount..
 	+ registerUser(String eMail, String passwort): int 
 	+ signInUser(String eMail, String passwort): int
@@ -19,33 +19,33 @@ class RemoteDataSourceAPI <<fassade>> {
 	+ getUserName(): String
 	+ getUserEMail(): String
 	+ getUserPhotoUrl(): String
-	....
 	..ServerAccess..
-	connectionToServerPossible(): bool
-	..GraphtemplatesController..
-	+ removePost(postID: int): int
-    + addOne(template: JSON, postID: int): int
-    + addPost(templates: Collection(JSON), postID: int): int
-    + getTemplate(postID: int, TemplateNumber: int):JSON
+	..GreetingController..
+	+ connectionToServerPossible(): bool
+    '
 	..PostsController..
-    + getAllPostPreview(): Collection(PNG)
-    + getPostDetail(fromPost: int): JSON
+    + getAllPostPreview(): Collection(String)
+    + getPostDetail(fromPost: int): Collection(String)
     + getProjectTemplate(fromPost: int): JSON
-    + addPost(postPreview: PNG, postDetail: PNG, user: String, projectTemplate: JSON, graphTemplate: Collection(JSON)): int
-    + removePost(postID, user: String): int
+    + getGraphTemplate(fromPost: int,templateNumber: int): JSON
+    + addPost(postPreview: JSON, user: String, projectTemplate: JSON, graphTemplate: List(JSON))
+    + removePost(postID, user: String)    
+    '
 	..ProjectParticipantsController..
-    + addUser(user: String, projectID: long):boolean
+    + addUser(user: String, projectID: long): boolean
     + removeUser(userToRemove: String, projectID: long, user: String): boolean
     + addProject(user:String): long
-	..OldDataController..
-    + demandOldData(user: String, projectID: long, requestInfo: String): int
-    + needOldData(user: String, projectID: long): Collection(<OldData>)
+    '
 	..DeltaController..
-    + sendCommandsToServer(projectID: long, delta: Collection<JSON>, user: String): int
-    + getDeltasFromServer(projectID: long, user: String):Collection(<Delta>): int
-    ' Tut Commands in die ProjectCommandQueue
-	+ provideOldData(DeltasToUpload: Collection<JSON>, forUser: String, initialAdded: Date, initialAddedBy: String, projectID: int, wasAdmin: boolean): int
+    + sendCommandsToServer(projectID: long, projectCommands: Collection<JSON>, user: String): Collection<JSON>
+    + getDeltasFromServer(projectID: long, user: String):Collection(<Delta>)
+	+ provideOldData(projectCommand: JSON, forUser: String, initialAdded: Date, initialAddedBy: String, projectID: long, wasAdmin: boolean)
     + removeTime(): Date
+    '
+	..OldDataController..
+    + demandOldData(user: String, projectID: long, requestInfo: JSON)
+    + getFetchRequests(user: String, projectID: long): Collection(<FetchRequest>)
+    '
 	..ObserverLogic..
     + AddObserverToFetchRequestQueue(observer: FetchRequestQueueObserver)
     + UnregisterObserverFromFetchRequestQueue(observer: FetchRequestQueueObserver)

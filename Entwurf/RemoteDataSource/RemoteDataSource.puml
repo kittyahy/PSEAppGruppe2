@@ -4,6 +4,9 @@ skinparam shadowing false
 skinparam genericDisplay old
 skinparam classAttributeIconSize 0
 hide circle
+skinparam Linetype ortho
+
+
 
 package RemoteDataSource {
 

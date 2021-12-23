@@ -3,6 +3,7 @@ skinparam shadowing false
 skinparam genericDisplay old
 skinparam classAttributeIconSize 0
 hide circle
+skinparam Linetype ortho
 
 package Queues{
 
@@ -25,7 +26,7 @@ class ProjectCommandQueueObserver <<interface>><<observer>>{
 }
 
 
-ProjectCommandQueue "1" *-up- "1" ProjectCommandQueueObserver
+ProjectCommandQueue "1" *-up- "n" ProjectCommandQueueObserver
 }
 
 
@@ -50,7 +51,7 @@ class FetchRequestsQueueObserver <<interface>><<observer>>{
 }
 
 
-FetchRequestQueue "1" *-up- "1" FetchRequestsQueueObserver 
+FetchRequestQueue "1" *-up- "n" FetchRequestsQueueObserver 
 
 }
 
