@@ -5,18 +5,20 @@ skinparam shadowing false
 skinparam genericDisplay old
 skinparam classAttributeIconSize 0
 hide circle
-
+skinparam {
+Linetype ortho
+}
 package PostDatabase{
     PostsController -- PostsRepository : postRepo <
-    PostsController -- GraphtemplatesRepository : templateRepo <
+    PostsController -- TemplatesRepository : templateRepo <
 
     class Posts <<Entity>>{
         {primaryKey} PostID: int
         PostPreview: JSON
         CreatedBy: String
     }
-
-    interface PostsRepository <PostDatabase,int> extends JpaRepository{}
+'extends JpaRepository
+    interface PostsRepository <PostDatabase,int> {}
 
     class PostsController {
         - postRepo: PostsRepository
@@ -27,7 +29,7 @@ package PostDatabase{
         + getProjectTemplate(fromPost: int): JSON
         + getGraphTemplate(fromPost: int,templateNumber: int): JSON
         + addPost(postPreview: JSON, user: String, projectTemplate: JSON, graphTemplate: List(JSON))
-        + removePost(postID, user: String)
+        + removePost(postID, user: String):boolean
     }
 
     note right of PostsController::getAllPostPreview{
@@ -50,12 +52,13 @@ package PostDatabase{
     class Template <<Entity>>{
         {primaryKey} PostID: int
         {primaryKey} TemplateNumber: int
-        Template: JSON
+        templateInital: JSON
         isProjectTemplate: boolean
         detailView: JSON
     }
-    interface TemplatesRepository <Template, Tupel(int,int)> extends JpaRepository {
-        getToProject(projectNumber: int): Collection(Templates)
+    ' extends JpaRepository
+    interface TemplatesRepository <Template, Tupel(int,int)> {
+        getToPost(postID: int): Collection(Template)
     }
 
   }

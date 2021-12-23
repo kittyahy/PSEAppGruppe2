@@ -11,36 +11,35 @@ participant Bob
 activate Alice
 
 ref over Alice: requestToAProjectValidation
-Alice -> OldDataController: requestOldData()
-activate OldDataController
-OldDataController -> OldDataRepository : add(user: String, project:long,requestInfo: String)
-deactivate OldDataController
-activate OldDataRepository
-OldDataRepository -> "AliceRequest: OldData" as AliceRequest **: create
-deactivate OldDataController
-deactivate OldDataRepository
+Alice -> FetchRequestController: demandOldData()
+activate FetchRequestController
+FetchRequestController -> FetchRequestRepository : add(user: String, project:long,requestInfo: String)
+deactivate FetchRequestController
+activate FetchRequestRepository
+FetchRequestRepository -> "AliceRequest: FetchRequest" as AliceRequest **: create
+deactivate FetchRequestController
+deactivate FetchRequestRepository
 deactivate Alice
 
 activate Bob
 ref over Bob: requestToAProjectValidation
-Bob -> OldDataController: retieveOldData(user:String,project:long)
-activate OldDataController
-OldDataController -> OldDataRepository:getDemand(project: long)
-activate OldDataRepository
-OldDataRepository --> AliceRequest
-note over AliceRequest: selected by OldDataRepository
-AliceRequest --> OldDataRepository
-OldDataRepository --> OldDataController: AliceRequest and maybe more
-deactivate OldDataRepository
-OldDataController -->Bob: Collection<Delta>
+Bob -> FetchRequestController: getFetchRequest(user:String,project:long)
+activate FetchRequestController
+FetchRequestController -> FetchRequestRepository:getRequests(project: long)
+activate FetchRequestRepository
+FetchRequestRepository --> AliceRequest
+note over AliceRequest: selected by FetchRequestRepository
+AliceRequest --> FetchRequestRepository
+FetchRequestRepository --> FetchRequestController: AliceRequest and maybe more
+deactivate FetchRequestRepository
+FetchRequestController -->Bob: Collection<FetchRequest>
 
 ref over Bob: requestToAProjectValidation
-Bob -> DeltaController: provideOldData
+Bob -> DeltaController: provideOldData(delta, forUser, initialAdded, initalAddedBy,  project, wasAdmin)
 activate DeltaController
 DeltaController --> DeltaRepository: deleteDelta
 activate DeltaRepository
 DeltaController -> DeltaRepository: createDelta(delta, initialAdded, initialAddedBy, project, wasAdmin,forUser)
-DeltaController -> OldDataRepository: addedOldData(user:String, project: long)
 deactivate DeltaRepository
 deactivate DeltaController
 deactivate Bob
@@ -51,8 +50,12 @@ Alice -> DeltaController: getDelta
 activate DeltaController
 DeltaController ->DeltaRepository: getDelta(project, user)
 activate DeltaRepository
-DeltaController -> OldDataRepository:gotOldData(user,project)
 DeltaRepository --> DeltaController: Collection<Delta>
+opt Collection<Delta> contains old Delta
+DeltaController -> FetchRequestRepository:gotOldData(user,project)
+end opt
+DeltaController --> DeltaRepository: deleteOldDelta()
+DeltaController --> DeltaRepository: deleteDownloadedData(requestedBy, project)
 deactivate DeltaRepository
 DeltaController --> Alice: Collection<Delta> (old and new Delta)
 deactivate DeltaController

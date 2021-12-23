@@ -35,7 +35,7 @@ loop foreach Notification in proj
 end
 loop foreach UI Element in proj
     ref over cd
-        Insert UI Elements
+        Insert UI Element
     end
 end
 loop foreach User in proj
