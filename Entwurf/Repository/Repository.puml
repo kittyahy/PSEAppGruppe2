@@ -98,7 +98,7 @@ package Repository {
       interface Content <<interface>> {
 
       }
-      '-von Anton definiert------------------------------------------------------------------------------'
+'-von Anton definiert------------------------------------------------------------------------------'
       class TemplateHelper <<singleton>> {
                   +getProjectTemplates(): Collection<ProjectTemplate>
                   +getGraphTemplates(): Collection<GraphTemplate>
@@ -112,6 +112,13 @@ package Repository {
   package UpToDater {
         'Wenn ich einmal länger als 72h am Stück offline war merke ich mir diese Intervalle
         'dann Frage ich jemanden auf dem Server an, der in diesen 72h keine Blindspots hat
+        class OldDataFetcher {
+        +from: DateTime
+        +to: DateTime
+        +from: Project
+        'null == daten nicht vorhanden
+        +getOldData(): List<OldData>?
+        }
   }
 '=================================================================================================='
 package RemoteDataSourceSchnittstelle {
