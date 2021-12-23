@@ -4,6 +4,7 @@ skinparam genericDisplay old
 skinparam classAttributeIconSize 0
 hide circle
 
+
 class RemoteDataSourceAPI <<fassade>> {
 	- commandController: CommandController 
 	- userAccount: UserAccount 
@@ -21,28 +22,33 @@ class RemoteDataSourceAPI <<fassade>> {
 	....
 	..ServerAccess..
 	connectionToServerPossible(): bool
-    ..GraphtemplatesController..
-    + removePost(postID: int): int
+	..GraphtemplatesController..
+	+ removePost(postID: int): int
     + addOne(template: JSON, postID: int): int
     + addPost(templates: Collection(JSON), postID: int): int
     + getTemplate(postID: int, TemplateNumber: int):JSON
-    ..PostsController..
+	..PostsController..
     + getAllPostPreview(): Collection(PNG)
     + getPostDetail(fromPost: int): JSON
     + getProjectTemplate(fromPost: int): JSON
     + addPost(postPreview: PNG, postDetail: PNG, user: String, projectTemplate: JSON, graphTemplate: Collection(JSON)): int
     + removePost(postID, user: String): int
-    ..ProjectParticipantsController..
+	..ProjectParticipantsController..
     + addUser(user: String, projectID: long):boolean
     + removeUser(userToRemove: String, projectID: long, user: String): boolean
     + addProject(user:String): long
-    ..OldDataController..
+	..OldDataController..
     + demandOldData(user: String, projectID: long, requestInfo: String): int
     + needOldData(user: String, projectID: long): Collection(<OldData>)
-    ..DeltaController..
+	..DeltaController..
     + sendCommandsToServer(projectID: long, delta: Collection<JSON>, user: String): int
     + getDeltasFromServer(projectID: long, user: String):Collection(<Delta>): int
     ' Tut Commands in die ProjectCommandQueue
 	+ provideOldData(DeltasToUpload: Collection<JSON>, forUser: String, initialAdded: Date, initialAddedBy: String, projectID: int, wasAdmin: boolean): int
     + removeTime(): Date
+	..ObserverLogic..
+    + AddObserverToFetchRequestQueue(observer: FetchRequestQueueObserver)
+    + UnregisterObserverFromFetchRequestQueue(observer: FetchRequestQueueObserver)
+    + AddObserverToProjectCommandQueue(observer: ProjectCommandQueueObserver)
+    + UnregisterObserverFromProjectCommandQueue(observer: ProjectCommandQueueObserver)
 }

@@ -1,0 +1,42 @@
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+class ServerManager <<singleton>>{
+    - restAPI: RESTAPI
+    - projectCommandQueue: ProjectCommandQueue
+    - fetchRequestQueue: FetchRequestQueue
+    ----
+	+ connectionToServerPossible(): int
+    ..PostsController..
+    + getAllPostPreview(): Collection(String)
+    + getPostDetail(fromPost: int): Collection(String)
+    + getProjectTemplate(fromPost: int): JSON
+    '+ addPost(postPreview: PNG, postDetail: PNG, user: String, projectTemplate: JSON, graphTemplate: Collection(JSON)): int
+    + addPost(postPreview: PNG, user: String, projectTemplate: JSON, graphTemplate: List(JSON))
+    + removePost(postID, user: String): int
+    ..ProjectParticipantsController..
+    + addUser(user: String, projectID: long): int
+    + removeUser(userToRemove: String, projectID: long, user: String): int
+    + addProject(user:String): long
+    ..DeltaController..
+    + sendCommandsToServer(projectID: long, delta: Collection<JSON>, user: String): Collection<JSON>
+    + getDeltasFromServer(projectID: long, user: String):Collection(<Delta>): int
+    ' Tut Commands in die ProjectCommandQueue
+	+ provideOldData(DeltasToUpload: Collection<JSON>, forUser: String, initialAdded: Date, initialAddedBy: String, projectID: int, wasAdmin: boolean): int
+    + removeTime(): Date
+    ..OldDataController..
+    + demandOldData(user: String, projectID: long, requestInfo: String): int
+    + needOldData(user: String, projectID: long)
+    ..ObserverLogic..
+    + AddObserverToFetchRequestQueue(observer: FetchRequestQueueObserver)
+    + UnregisterObserverFromFetchRequestQueue(observer: FetchRequestQueueObserver)
+    + AddObserverToProjectCommandQueue(observer: ProjectCommandQueueObserver)
+    + UnregisterObserverFromProjectCommandQueue(observer: ProjectCommandQueueObserver)
+    ..HelpingMethods..
+    - ConvertDeltaIntoProjectCommandInfo(deltaToConvert: JSON): ProjectCommandInfo 
+    - AddToFetchRequestQueue(fetchRequest: JSON)
+    - AddToProjectCommandQueue(projectCpmmand: ProjectCommandInfo)
+    }

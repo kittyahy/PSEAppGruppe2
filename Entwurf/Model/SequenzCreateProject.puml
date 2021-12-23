@@ -1,0 +1,55 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+title Create Project
+
+participant "CREATE_PROJECT: ProjectCommand" as crtCommand
+participant "data: ProjectCommandData" as data
+participant "projectCreator: ProjectCDManager" as cd
+
+[-> crtCommand : execute(data)
+activate crtCommand
+crtCommand -> data : proj = getProject()
+activate data
+data --> crtCommand
+deactivate data
+crtCommand -> cd : proj = createProject(proj)
+activate cd
+ref over cd
+    Insert Project Entity
+end
+loop foreach Graph in proj
+    ref over cd
+        Insert Graph
+    end
+end
+loop foreach Notification in proj
+    ref over cd
+        Insert Notification Entity
+    end
+end
+loop foreach UI Element in proj
+    ref over cd
+        Insert UI Elements
+    end
+end
+loop foreach User in proj
+    ref over cd
+        Insert UserMaps
+    end
+end
+note over cd
+    if applicable: proj gets updated with new IDs
+end note
+cd --> crtCommand
+deactivate cd
+crtCommand -->[
+deactivate crtCommand
+
+
+@enduml

@@ -1,0 +1,39 @@
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+class RESTAPI <<singleton>> {
+    -NetworkLocation : String
+    -GreetingController : String
+    -PostsController : String
+    -ProjectParticipantsController : String
+    -DeltaController : String
+    -OldDataController : String
+    ----
+    --GreetingController--
+    + greets(): int
+    '+ connectionToServerPossible(): bool
+    ..PostsController..
+    '+ getAllPostPreview(): Collection(PNG)
+    + getAllPostPreview(): Collection(String)
+    '+ getPostDetail(fromPost: int): JSON
+    + getPostDetail(fromPost: int): Collection(String)
+    '+ getProjectTemplate(fromPost: int): JSON
+    '+ addPost(postPreview: PNG, postDetail: PNG, user: String, projectTemplate: JSON, graphTemplate: List(JSON)): int
+    + addPost(postPreview: PNG, user: String, projectTemplate: JSON, graphTemplate: List(JSON))
+    + removePost(postID, user: String): int
+    ..ProjectParticipantsController..
+    + addUser(user: String, projectID: long): int
+    + removeUser(userToRemove: String, projectID: long, user: String): int
+    + addProject(user:String): long
+    ..DeltaController..
+    + saveDelta(projectID: long, delta: String, user: String): int
+    + getDelta(projectID: long, user: String): Collection(<Delta>)
+    + provideOldData(delta: String, forUser: String, initialAdded: Date, initialAddedBy: String, projectID: int, wasAdmin: boolean): int
+    + removeTime(): Date
+    ..OldDataController..
+    + demandOldData(user: String, projectID: long, requestInfo: String): int
+    + needOldData(user: String, projectID: long): Collection(<OldData>)
+    }

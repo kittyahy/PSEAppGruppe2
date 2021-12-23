@@ -139,102 +139,6 @@ package RemoteDataSourceSchnittstelle {
         }
     }
 '=================================================================================================='
-  /'package Commands {
-
-    enum UserRole <<enumeration>> {
-        ADMIN
-        CASUAL
-    }
-
-    enum ProjectCommandType <<enumeration>>{
-    DELETE_ROW
-    DELETE_COLUMN
-    ADD_ROW
-    ADD_COLUMN
-    SET_CELL_IN_ROW
-    }
-
-    class ProjectCommandData <<data class>>{
-    }
-
-    class TableCommandData <<data class>>{
-    }
-    class SetCellInRowCommandData <<data class>>{
-    }
-
-    class IllegalOperationException {
-    }
-
-    abstract class ProjectCommand <<abstract>> {
-    -OnlineProjectID: String?
-    -WentOnline: UnixTime?
-    -WentOffline: UnixTime?
-    'Wäre gut, wenn Merlin du diese Zeiten von Antonia mitgeteilt  bekommst und sie mir dann hier mitgeben kannst
-    -permissions: Permission
-
-    +CONSTRUCTOR(int ProjectCommandType.ordinal, Json)
-    +setOnlineProjectID(String): void
-    +setWentOnline(UnixTime): void
-    +setWentOffline(UnixTime): void
-    +checkPermissions(): Boolean
-    +getProjectCommandData(): ProjectCommandData
-    +{static}toJson(): (int ProjectCommandType.ordinal, Json)
-    }
-
-    abstract class TableCommand <<abstract>> {
-                -table: Table
-                -userRole: UserRole
-                -requiredRole: UserRole
-                -index: Integer
-
-                +run(): void throws IllegalOperationException
-                {abstract} -execute(): void
-        }
-    class DeleteRow {
-        -execute(): void
-    }
-    class DeleteColumn {
-        -execute(): void
-    }
-    class AddRow {
-        -execute(): void
-    }
-    class AddColumn {
-        -execute(): void
-    }
-    class SetCellInRow {
-        -positionInRow: Integer
-        -execute(): void
-    }
-    abstract class GraphCommand <<abstract>> {
-    -GraphID: Integer
-    }
-    abstract class GUICommand <<abstract>> {
-    -ButtonID: Integer
-    }
-    abstract class SettingCommand <<abstract>> {
-    }
-
-    note right of TableCommand::run
-    if userRole >= requiredRole
-        execute();
-    else
-        throw IllegalOperationException;
-    end note
-    ProjectCommand<|-- TableCommand
-    ProjectCommand<|-- GraphCommand
-    ProjectCommand<|-- GUICommand
-    ProjectCommand<|-- SettingCommand
-    TableCommand <|-- DeleteRow
-    TableCommand <|-- DeleteColumn
-    TableCommand <|-- AddRow
-    TableCommand <|-- AddColumn
-    TableCommand <|-- SetCellInRow
-
-    ProjectCommandData<|-- TableCommandData
-    TableCommandData <|-- SetCellInRowCommandData
-  }
- '/
  package Commands {
  enum UserRole <<enumeration>> {
          ADMIN
@@ -246,7 +150,7 @@ package RemoteDataSourceSchnittstelle {
     ADD_ROW
     ADD_COLUMN
     SET_CELL_IN_ROW
-    +execute(ProjectCommandData) throws IllegalOperationException
+    +execute(ProjectCommandData) throws IllegalOperationException, JsonSyntaxException
  }
  class ProjectCommandData <<data class>> {
     +commandType: ProjectCommand
@@ -256,21 +160,38 @@ package RemoteDataSourceSchnittstelle {
     {field}+serverRemoveTime: int '(UnixDuration)?
     +commandByUser: String?
     +isProjectAdmin: boolean?
-    +row: int
-    +column: int
+    +commandTypeDataJson: Json
  }
- class ProjectCommandDataUtitlity <<static>> {
+ class CommandTypeData <<data class>> {
+ }
+ class TableCommandData <<data class>> {
+    +indices: List<int>
+    +content: List<Any>
+ }
+ class GraphCommandData <<data class>> {
+
+ }
+ class UserCommandData <<data class>> {
+
+ }
+ class SettingCommandData <<data class>> {
+
+ }
+ class CommandUtility <<static>> {
     +{static} setServerInfo(ProjectCommandData, serverInfo: ServerInfo):ProjectCommandData
     +{static} toJson(ProjectCommandData): Json
-    +{static} constructFromJson(Json): ProjectCommandData throws IllegalFormatException
+    +{static} constructFromJson(Json): ProjectCommandData throws JsonSyntaxException
  }
  class IllegalOperationException {
      }
- class IllegalFormatException {
-     }
- ProjectCommandDataUtitlity ..> Gson : <<uses>>
+ CommandUtility ..> Gson : <<uses>>
  ProjectCommandData ..> ProjectCommand : <<uses>>
  ProjectCommand ..> IllegalOperationException : <<throws>>
+
+ CommandTypeData <|-- TableCommandData
+ CommandTypeData <|-- GraphCommandData
+ CommandTypeData <|-- SettingCommandData
+ CommandTypeData <|-- UserCommandData
  }
   package CommandCenter {
     class CommandInbox {
