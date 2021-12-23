@@ -154,10 +154,6 @@ package RemoteDataSourceSchnittstelle {
     }
 '=================================================================================================='
  package Commands {
- enum UserRole <<enumeration>> {
-         ADMIN
-         CASUAL
-     }
  enum ProjectCommand <<enumeration>> {
     DELETE_ROW
     DELETE_COLUMN
