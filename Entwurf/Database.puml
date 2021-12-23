@@ -211,6 +211,10 @@ package DAOs {
         -addProjectUserMap(userMap: ProjectUserMap)
         '@Delete
         -removeProjectUserMap(vararg userMaps: ProjectUserMap)
+        '@Insert
+        -insertUserMap(user: ProjectUserMap)
+        '@Delete
+        -deleteUserMap(user: ProjectUserMap)
     }
 
     abstract class SettingsDAO <<abstract>> {
