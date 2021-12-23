@@ -22,8 +22,8 @@ package Server
 
 GreetingController ..> ServerGreetings: uses
 
-!include OnlineDatabase.puml
-!include PostDatabase.puml
+package OnlineDatabase{}
+package PostDatabase{}
 
  LoginInterceptor --  GeneralConfig
   AccessToProjectInterceptor - GeneralConfig
@@ -54,19 +54,12 @@ GreetingController ..> ServerGreetings: uses
   }
 }
 
-Tupel .. DeltaRepository : uses <
-Tupel .. ProjectParticipantsRepository : uses <
+Tupel .. OnlineDatabase : uses <
 
 package Firebase {
 }
 LoginInterceptor ... Firebase : uses >
 
-OnlineDatabase -[hidden]up----> PostDatabase
-Firebase  -[hidden]-> LoginInterceptor
-GreetingController -[hidden]left---> PostDatabase
-ServerApplication  -[hidden]left-> GreetingController
-WebMvcConfigurerAdapter -[hidden]-> HandlerInterceptorAdapter
-        Server -[hidden]left--> Spring
 
 
 
