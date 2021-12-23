@@ -116,15 +116,17 @@ package Repository {
     }
   }
 '=================================================================================================='
+  'Overleaf
   package UpToDater {
         'Wenn ich einmal länger als 72h am Stück offline war merke ich mir diese Intervalle
         'dann Frage ich jemanden auf dem Server an, der in diesen 72h keine Blindspots hat
+        'Overleaf
         class OldDataFetcher {
         +from: DateTime
         +to: DateTime
-        +from: Project
+        +from: ProjectID
         'null == daten nicht vorhanden
-        +getOldData(): List<OldData>?
+        +getOldData(): List<OldData>
         }
   }
 '=================================================================================================='
@@ -153,7 +155,18 @@ package RemoteDataSourceSchnittstelle {
         }
     }
 '=================================================================================================='
+'Overleaf
+package ViewModelSchnittstelle {
+    'Overleaf
+    class ProjectHandler {
+        -projectPreviews: Collection<ProjectPreview>
+        +getProjectPreviews(): Collection<ProjectPreview>
+        +getProjectByID(id: int):Flow<Project>
+    }
+}
+'=================================================================================================='
  package Commands {
+ 'Overleaf TODO: alle Felder
  enum ProjectCommand <<enumeration>> {
     DELETE_ROW
     DELETE_COLUMN
@@ -162,58 +175,74 @@ package RemoteDataSourceSchnittstelle {
     SET_CELL_IN_ROW
     +execute(ProjectCommandData) throws IllegalOperationException, JsonSyntaxException
  }
+ 'Overleaf
  class ProjectCommandData <<data class>> {
     +commandType: ProjectCommand
     +projectID: ProjectID
     +OnlineProjectID: OnlineProjectID?
-    {field}+wentOnline: int '(UnixTime)?
-    {field}+serverRemoveTime: int '(UnixDuration)?
+    {field}+wentOnline: DateTime?
+    {field}+serverRemoveTime: DateTime?
     +commandByUser: String?
     +isProjectAdmin: boolean?
     +commandTypeDataJson: Json
  }
+ 'Overleaf provisorisch
  class CommandTypeData <<data class>> {
  }
+ 'Overleaf
  class TableCommandData <<data class>> {
     +indices: List<int>
     +content: List<Any>
  }
+ 'Overleaf provisorisch
  class GraphCommandData <<data class>> {
 
  }
+ 'Overleaf provisorisch
  class UserCommandData <<data class>> {
 
  }
+ 'Overleaf provisorisch
  class SettingCommandData <<data class>> {
 
  }
+ 'Overleaf
  class CommandUtility <<static>> {
     +{static} setServerInfo(ProjectCommandData, serverInfo: ServerInfo):ProjectCommandData
     +{static} toJson(ProjectCommandData): Json
     +{static} constructFromJson(Json): ProjectCommandData throws JsonSyntaxException
  }
+ 'Overleaf
  class IllegalOperationException {
      }
  CommandUtility ..> Gson : <<uses>>
  ProjectCommandData ..> ProjectCommand : <<uses>>
  ProjectCommand ..> IllegalOperationException : <<throws>>
-
+ CommandTypeData "1" -o "1" ProjectCommandData
  CommandTypeData <|-- TableCommandData
  CommandTypeData <|-- GraphCommandData
  CommandTypeData <|-- SettingCommandData
  CommandTypeData <|-- UserCommandData
+ IllegalOperationException -|> Throwable
  }
 '=================================================================================================='
+  'Overleaf
   package CommandCenter {
+    'Overleaf
     class CommandInbox {
-        -commandQueue: List<Command>
+        -commandQueue: List<ProjectCommandData>
     }
-    class OldCommandConverter {
-    +{static} toNewCommand(Command): Command
+    'Overleaf
+    class OldCommandConverter <<static>>{
+    +{static} toNewCommand(ProjectCommandData): ProjectCommandData
     }
   }
 
 }
 package Gson {}
-
+'Todo schön anzeigen
+package Kotlin{
+class Throwable {
+}
+}
 @enduml
