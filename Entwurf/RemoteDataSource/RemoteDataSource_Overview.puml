@@ -1,0 +1,59 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+skinparam Linetype ortho
+
+package RemoteDataSource{
+
+
+
+package UserManager{
+    class UserManager{}
+    class FirebaseManager{}
+
+    UserManager *--FirebaseManager
+}
+
+package ServerConnection{
+    class ServerManager
+    class RESTAPI{}
+}
+
+
+    
+
+    ServerManager *-- RESTAPI
+
+package Queues {
+    package FetchRequestQueue {
+        class FetchRequestQueueObserver{}
+        class FetchRequestQueue{}
+
+        FetchRequestQueue *-up- FetchRequestQueueObserver
+    }
+
+    package ProjectCommandQueue {
+        class ProjectCommandQueueObserver{}
+        class ProjectCommandQueue{}
+
+        ProjectCommandQueue *-up- ProjectCommandQueueObserver
+    }
+}
+
+ServerManager *-left- ProjectCommandQueue
+ServerManager *-left- FetchRequestQueue
+
+RemoteDataSouceAPI *-- UserManager
+RemoteDataSouceAPI *-- ServerManager
+}
+
+package FirebaseAPI{}
+FirebaseManager .down.> FirebaseAPI: uses
+
+package Server{}
+RESTAPI .down.> Server: calls
+
+@enduml

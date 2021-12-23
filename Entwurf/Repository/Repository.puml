@@ -98,20 +98,34 @@ package Repository {
       interface Content <<interface>> {
 
       }
-      '-von Anton definiert------------------------------------------------------------------------------'
+'-von Anton definiert------------------------------------------------------------------------------'
       class TemplateHelper <<singleton>> {
                   +getProjectTemplates(): Collection<ProjectTemplate>
                   +getGraphTemplates(): Collection<GraphTemplate>
                 }
     }
 '=================================================================================================='
-  package SanityCheck {
-
+  package Posts {
+    class PostRepo <<singleton>>{
+        +getPostPreviews(): Collection<Post>
+        +getPostDetail(id: String): PostDetail
+        'teplate downloaden via postid
+        +getProjectTemplate(id: String): void
+        'teplate downloaden via postid + index des graph temlates im Post
+        +getGraphTemplate((id: String, index: int): void
+    }
   }
 '=================================================================================================='
   package UpToDater {
         'Wenn ich einmal länger als 72h am Stück offline war merke ich mir diese Intervalle
         'dann Frage ich jemanden auf dem Server an, der in diesen 72h keine Blindspots hat
+        class OldDataFetcher {
+        +from: DateTime
+        +to: DateTime
+        +from: Project
+        'null == daten nicht vorhanden
+        +getOldData(): List<OldData>?
+        }
   }
 '=================================================================================================='
 package RemoteDataSourceSchnittstelle {
@@ -193,9 +207,13 @@ package RemoteDataSourceSchnittstelle {
  CommandTypeData <|-- SettingCommandData
  CommandTypeData <|-- UserCommandData
  }
+'=================================================================================================='
   package CommandCenter {
     class CommandInbox {
         -commandQueue: List<Command>
+    }
+    class OldCommandConverter {
+    +{static} toNewCommand(Command): Command
     }
   }
 
