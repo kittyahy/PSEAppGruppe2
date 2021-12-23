@@ -41,6 +41,7 @@ package Repository {
         +getTable(): Table
         +getAdmin(): User
         +isOnline(): Boolean
+        +getOnlineId(): Integer
         +setAdmin(User)
         +getUsers(): Collection<Users>
         +addUser(User)
@@ -102,20 +103,30 @@ package Repository {
         +getDataSets(): Collection<Collection<Any>>
         +getCustomizing(): Settings
         +getImage(): Drawable?
+        +getPath(): String?
         +getType(): GraphType
+        +getCalculationFunction(): DataTransformation
         +setCalculationFunction(DataTransformation)
     }
 
     interface Settings <<interface>> {
-        +getSetting(String): Any throws SettingNotFoundException
-        +setSetting(String, Any) throws SettingNotFoundException
+        +getAllSettings(): Map<String, String>
+        +getSetting(String): String throws SettingNotFoundException
+        +setSetting(String, String) throws SettingNotFoundException
     }
 
     interface Notification <<interface>> {
         +getMessage(): String
         +sendNow(vararg Any): Boolean throws IllegalContextException
         +toString(): String
+        +{static}fromString(notifStr: String, message: String): Notification
     }
+    note left of Notification::toString()
+        should serialize both the type
+        of the notification as well as
+        any parameters the implementation
+        uses
+    end note
   
     interface ProjectTemplate <<interface>> {
         +getProjectSkeleton(): ProjectSkeleton
@@ -153,8 +164,10 @@ package Repository {
     class RowMetaData <<data>> {
         +Constructor(DateTime, User)
         +getCreationDate(): DateTime
+        +getPublishDate(): DateTime
         +getCreator(): User
         -createdOn: DateTime
+        -publishedOn: DateTime
         -createdBy: User
     }
 
@@ -176,6 +189,7 @@ package Repository {
     }
 }
 
+Notification -[hidden]-> Table
 Repository ----[hidden]-> WeißNochNichtWoDasLiegt
 
 package WeißNochNichtWoDasLiegt {
