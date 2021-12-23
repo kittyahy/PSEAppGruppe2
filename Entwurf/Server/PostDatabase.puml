@@ -25,7 +25,8 @@ package PostDatabase{
         + getAllPostPreview():Collection(String)
         + getPostDetail(fromPost: int):Collection(String)
         + getProjectTemplate(fromPost: int): JSON
-        + addPost(postPreview: PNG, user: String, projectTemplate: JSON, graphTemplate: List(JSON))
+        + getGraphTemplate(fromPost: int,templateNumber: int): JSON
+        + addPost(postPreview: JSON, user: String, projectTemplate: JSON, graphTemplate: List(JSON))
         + removePost(postID, user: String)
     }
 
@@ -41,8 +42,8 @@ package PostDatabase{
     }
 
     note right of PostsController::addPost{
-            postRepo.add(//Detail)
-            templateRepo.add(//Detail)
+            postRepo.add()
+            templateRepo.add()
         }
 
 

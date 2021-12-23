@@ -10,7 +10,7 @@ package OnlineDatabase{
 
 
     DeltaController - DeltaRepository : repo <
-   OldDataRepository --up OldDataController : repo <
+   OldDataRepository --up OldDataController : repo >
     ProjectParticipants ..> Role : use
     AccessToProjectInterceptor ..down> ProjectParticipantsRepository
     ProjectParticipantsController - ProjectParticipantsRepository : repo <
@@ -35,10 +35,10 @@ package OnlineDatabase{
         {primaryKey}: ID: String
         user: String
         project: long
-        requestInfo: String
+        requestInfo: JSON
     }
     class OldDataController{
-        + demandOldData(user: String, project: long, requestInfo: String)
+        + demandOldData(user: String, project: long, requestInfo: JSON)
         + retieveOldData(user: String, project: long):Collection(<OldData>)
     }
 
@@ -58,10 +58,10 @@ package OnlineDatabase{
         isAdmin: boolean
     }
     class DeltaController{
-        + saveDelta(project: long, delta: String, user: String)
+        + saveDelta(project: long, delta: JSON, user: String)
         + getDelta(project: long, user: String):Collection(<Delta>)
-        + provideOldData(delta: String, forUser: String, initialAdded: Date, initialAddedBy: String, project: long, wasAdmin: boolean)
-        + removeTime():Date
+        + provideOldData(delta: JSON, forUser: String, initialAdded: Date, initialAddedBy: String, project: long, wasAdmin: boolean)
+        + getRemoveTime():Date
     }
 
     interface DeltaRepository <Delta, Tupel(Date, String)> extends JpaRepository{
@@ -75,7 +75,7 @@ package OnlineDatabase{
     interface ProjectParticipantsRepository <ProjectParticipants,Tupel(String, int)> extends JpaRepository{
          participates(user: String, project: long): boolean
          isAdmin(user: String, project: long): boolean
-         getAmountOfPartition(project: long): int
+         getAmountOfParticipants(project: long): int
          newAdmin(project: long): String
     }
 
