@@ -1,0 +1,64 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+title Insert Project Entity
+
+participant "projectCreator: ProjectCDManager" as cd
+participant "proj: Project" as proj
+participant "skel: ProjectSkeletonEntity" as skel
+participant "ent: ProjectEntity" as ent
+participant "dao: ProjectDataDAO" as dao
+participant "GSON" as gson
+
+[-> cd : createProjectEntity(proj)
+activate cd
+cd -> cd : skel = createSkeleton(proj)
+activate cd
+cd -> proj : name = getProjectSkeleton().getName()
+activate proj
+proj --> cd
+deactivate proj
+cd -> proj : desc = getProjectSkeleton().getDescription()
+activate proj
+proj --> cd
+deactivate proj
+cd -> proj : wallpaper = getProjectSkeleton().getWallpaper()
+activate proj
+proj --> cd
+deactivate proj
+cd -> proj : layout = getTable().getLayout()
+activate proj
+proj --> cd
+deactivate proj
+cd -> gson : layoutStr = layout.toJSON()
+activate gson
+gson --> cd
+deactivate gson
+cd -> skel** : <<create>> (name, desc, wallpaper, layoutStr)
+cd --> cd
+deactivate cd
+cd -> proj : admin = getAdmin()
+activate proj
+proj --> cd
+deactivate proj
+cd -> proj : onlineId = getOnlineId()
+activate proj
+proj --> cd
+deactivate proj
+cd -> cd : id = getNextId()
+activate cd
+cd --> cd
+deactivate cd
+cd -> "ent: ProjectEntity" as ent** : <<create>> (id, skel, admin, onlineId)
+cd -> dao : insertProjectEntity(ent)
+activate dao
+dao --> cd
+deactivate dao
+cd -->[ : id
+deactivate cd
+
+@enduml

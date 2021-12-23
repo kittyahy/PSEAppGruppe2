@@ -26,7 +26,7 @@ package PostDatabase{
         + getPostDetail(fromPost: int):Collection(String)
         + getProjectTemplate(fromPost: int): JSON
         + addPost(postPreview: PNG, user: String, projectTemplate: JSON, graphTemplate: List(JSON))
-        + removePost(postID, user: String)
+        + removePost(postID: int, user: String)
     }
 
     note right of PostsController::getAllPostPreview{

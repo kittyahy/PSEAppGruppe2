@@ -1,4 +1,4 @@
-@startuml ProjectCommandQueue
+@startuml Queues
 
 !include Queues.puml!ProjectCommandQueue
 
@@ -8,7 +8,7 @@ note right of ProjectCommandQueue::GetProjectCommand
 end note
 
 note right of ProjectCommandQueue::AddProjectCommand
-	Checks if the JSON is a duplicate in projectCommands 
+	'Checks if the JSON is a duplicate in projectCommands 
     Adds JSON in projectCommands
     use notifyObservers()
 end note

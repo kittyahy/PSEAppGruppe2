@@ -1,0 +1,37 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+title Insert Notification Entity
+
+participant "notificationDAO: NotificationDAO" as nDAO
+participant "notification: Notification" as notif
+participant "notifEntity: NotificationEntity" as nEnt
+
+[-> nDAO : insertNotification(id, notification)
+activate nDAO
+nDAO -> nDAO : notifId = getNextId()
+activate nDAO
+nDAO --> nDAO
+deactivate nDAO
+nDAO -> notif : message = getMessage()
+activate notif
+notif --> nDAO
+deactivate notif
+nDAO -> notif : params = toString()
+activate notif
+notif --> nDAO
+deactivate notif
+nDAO -> nEnt** : <<create>> (id, notifId, params, message)
+nDAO -> nDAO : insertNotificationEntity(notifEntity)
+activate nDAO
+nDAO --> nDAO
+deactivate nDAO
+nDAO -->[ : notifId
+deactivate nDAO
+
+@enduml
