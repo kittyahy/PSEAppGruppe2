@@ -13,8 +13,8 @@ class UserAccount {
 	' Speichert alle Werte vom angemeldetem User. Wie Name, ID, ...
 
 
-	+ registerUser(String eMail, String passwort): int 
-	+ signInUser(String eMail, String passwort): int
+	+ registerUser(eMail: String, passwort: String): int 
+	+ signInUser(eMail: String, passwort: String): int
 	+ signOut(): int
 	
 	- updateCurrentUser(): void
@@ -26,7 +26,7 @@ class UserAccount {
 	+getUserEMail(): String
 	+getUserPhotoUrl(): String
 	
-	+getToken(): String 
+	+ getToken(): String
 }
 
 
@@ -51,20 +51,20 @@ class UserAccount {
 ' Die Connection zu Firebase von der App aus
 class FirebaseManager {
 	' Um alle Firebase Anmelde und Authentifizierung methoden aufzurufen:
-	-FirebaseAuth auth
+	-auth: FirebaseAuth
 
-	-auth instantiateFirebaseAuth()
+	-instantiateFirebaseAuth(): auth
 
-	+int registerUser(String eMail, String passwort)
-	+int signInUser(String eMail, String passwort)
-	+int signOut()
+	+registerUser(eMail: String, passwort: String): int
+	+signInUser(eMail: String, passwort: String): int
+	+signOut()
 
-	+FirebaseUser getUser()
-	+String getToken() 
+	+getUser(): FirebaseUser
+	+getToken(): String 
 	' auf Firebase mit aufrufen
 }
 
 
 ' Firebase conntection
-UserAccount "1" *-- "1" FirebaseManager: uses
+UserAccount "1" *-- "1" FirebaseManager: contains
 }

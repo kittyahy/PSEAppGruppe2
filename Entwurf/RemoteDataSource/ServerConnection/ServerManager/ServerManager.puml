@@ -10,33 +10,33 @@ class ServerManager {
     - fetchRequestQueue: FetchRequestQueue
     ----
     ..GreetingController..
-	+ connectionToServerPossible(): bool
+	+ connectionToServerPossible(): boolean
     ..PostsController..
-    + getAllPostPreview(): Collection(String)
-    + getPostDetail(fromPost: int): Collection(String)
-    + getProjectTemplate(fromPost: int): JSON
-    + getGraphTemplate(fromPost: int,templateNumber: int): JSON
-    + addPost(postPreview: JSON, user: String, projectTemplate: JSON, graphTemplate: List(JSON))
-    + removePost(postID, user: String)    
+    + getAllPostPreview(AuthToken: String): Collection(String)
+    + getPostDetail(fromPost: int, AuthToken: String): Collection(String)
+    + getProjectTemplate(fromPost: int, AuthToken: String): JSON
+    + getGraphTemplate(fromPost: int,templateNumber: int, AuthToken: String): JSON
+    + addPost(postPreview: JSON, user: String, projectTemplate: JSON, graphTemplate: List(JSON), AuthToken: String)
+    + removePost(postID: long, user: String, AuthToken: String)    
     ..ProjectParticipantsController..
-    + addUser(user: String, projectID: long): boolean
-    + removeUser(userToRemove: String, projectID: long, user: String): boolean
-    + addProject(user:String): long
+    + addUser(user: String, projectID: long, AuthToken: String): boolean
+    + removeUser(userToRemove: String, projectID: long, user: String, AuthToken: String): boolean
+    + addProject(user:String, AuthToken: String): long
     ..DeltaController..
-    + sendCommandsToServer(projectID: long, projectCommands: Collection<JSON>, user: String): Collection<JSON>
-    + getDeltasFromServer(projectID: long, user: String):Collection(<Delta>)
-	+ provideOldData(projectCommand: JSON, forUser: String, initialAdded: Date, initialAddedBy: String, projectID: long, wasAdmin: boolean)
-    + removeTime(): Date
-    ..OldDataController..
-    + demandOldData(user: String, projectID: long, requestInfo: JSON)
-    + getFetchRequests(user: String, projectID: long): Collection(<FetchRequest>)
+    + sendCommandsToServer(projectID: long, projectCommands: Collection<JSON>, user: String, AuthToken: String): Collection<JSON>
+    + getDeltasFromServer(projectID: long, user: String, AuthToken: String):Collection(<Delta>)
+	+ provideOldData(projectCommand: JSON, forUser: String, initialAdded: Date, initialAddedBy: String, projectID: long, wasAdmin: boolean, AuthToken: String)
+    + getRemoveTime(AuthToken: String): Date
+    ..FetchRequestController..
+    + demandOldData(user: String, projectID: long, requestInfo: JSON, AuthToken: String)
+    + getFetchRequests(user: String, projectID: long, AuthToken: String): Collection(<FetchRequest>)
     ..ObserverLogic..
-    + AddObserverToFetchRequestQueue(observer: FetchRequestQueueObserver)
-    + UnregisterObserverFromFetchRequestQueue(observer: FetchRequestQueueObserver)
-    + AddObserverToProjectCommandQueue(observer: ProjectCommandQueueObserver)
-    + UnregisterObserverFromProjectCommandQueue(observer: ProjectCommandQueueObserver)
+    + addObserverToFetchRequestQueue(observer: FetchRequestQueueObserver)
+    + unregisterObserverFromFetchRequestQueue(observer: FetchRequestQueueObserver)
+    + addObserverToProjectCommandQueue(observer: ProjectCommandQueueObserver)
+    + unregisterObserverFromProjectCommandQueue(observer: ProjectCommandQueueObserver)
     ..HelpingMethods..
-    - ConvertDeltaIntoProjectCommandInfo(deltaToConvert: JSON): ProjectCommandInfo 
-    - AddToFetchRequestQueue(fetchRequest: JSON)
-    - AddToProjectCommandQueue(projectCpmmand: ProjectCommandInfo)
+    - convertDeltaIntoProjectCommandInfo(deltaToConvert: JSON): ProjectCommandInfo 
+    - addToFetchRequestQueue(fetchRequest: JSON)
+    - addToProjectCommandQueue(projectCpmmand: ProjectCommandInfo)
     }

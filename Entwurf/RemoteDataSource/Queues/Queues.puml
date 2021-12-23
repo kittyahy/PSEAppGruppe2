@@ -13,8 +13,8 @@ class ProjectCommandQueue {
     - projectCommands: List<JSON>
     - projectCommandQueueObserver: List<ProjectCommandQueueObserver>
     ..QueueLogic..
-    + GetProjectCommand(): ProjectCommandInfo
-    + AddProjectCommand(projectCommand: ProjectCommandInfo)
+    + getProjectCommand(): ProjectCommandInfo
+    + addProjectCommand(projectCommand: ProjectCommandInfo)
     ..ObserverLogic..
     + registerObserver(toObserve: ProjectCommandQueueObserver)
     + unregisterObserver(toStopObeserving: ProjectCommandQueueObserver)
@@ -38,8 +38,8 @@ class FetchRequestQueue {
     - fetchRequests: List<JSON>
     - observer: List<FetchRequestQueueObserver>
     ..QueueLogic..
-    + GetFetchRequest(): JSON
-    + AddFetchRequest(fetchRequest: JSON)
+    + getFetchRequest(): JSON
+    + addFetchRequest(fetchRequest: JSON)
     ..ObserverLogic..
     + registerObserver(FetchRequestsQueueObserver)
     + unregisterObserver(FetchRequestsQueueObserver)
