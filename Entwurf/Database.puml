@@ -289,7 +289,7 @@ package DAOs {
         '@Delete
         -removeUIElementMap(vararg uiElements: UIElementMap)
         '@Insert
-        -insertUIElement(uiElement: UIElementMap)
+        -insertUIEntity(uiElement: UIElementMap)
         -getNextId(projectId: Integer): Integer
     }
 
