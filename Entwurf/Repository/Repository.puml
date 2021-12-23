@@ -105,8 +105,15 @@ package Repository {
                 }
     }
 '=================================================================================================='
-  package SanityCheck {
-
+  package Posts {
+    class PostRepo <<singleton>>{
+        +getPostPreviews(): Collection<Post>
+        +getPostDetail(id: String): PostDetail
+        'teplate downloaden via postid
+        +getProjectTemplate(id: String): void
+        'teplate downloaden via postid + index des graph temlates im Post
+        +getGraphTemplate((id: String, index: int): void
+    }
   }
 '=================================================================================================='
   package UpToDater {
