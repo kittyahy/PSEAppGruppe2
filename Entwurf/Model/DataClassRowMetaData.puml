@@ -1,0 +1,18 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+class RowMetaData <<data>> {
+        +getCreationDate(): DateTime
+        +getPublishDate(): DateTime
+        +getCreator(): User
+        -createdOn: DateTime
+        -publishedOn: DateTime
+        -createdBy: User
+    }
+
+@enduml

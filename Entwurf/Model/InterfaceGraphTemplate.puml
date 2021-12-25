@@ -1,0 +1,17 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+interface GraphTemplate <<interface>> {
+        +getName(): String
+        +getDescription(): String
+        +getCustomizing(): Settings
+        +getType(): GraphType
+        +getCreator(): User
+    }
+
+@enduml

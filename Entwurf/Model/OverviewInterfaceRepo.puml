@@ -1,0 +1,51 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+skinparam nodesep 80
+skinparam ranksep 60
+hide circle
+
+interface Project <<interface>>
+interface ProjectSkeleton <<interface>>
+Project -up-> ProjectSkeleton : saves Metadata in >
+interface ProjectTemplate <<interface>>
+ProjectSkeleton <-- ProjectTemplate : saves Metadata in <
+
+interface Settings <<interface>>
+ProjectSkeleton "0..1" -right-> "1" Settings
+Settings "1" <- "0..1" GraphTemplate
+
+interface Row <<interface>>
+interface Table <<interface>>
+Project "1" -> "1" Table : saves Data in >
+Row "*" -up-o "1" Table
+
+interface Graph <<interface>>
+ProjectSkeleton "1" -left-> "*" Graph
+Graph "0..1" -> "1" DataTransformation
+
+interface Notification <<interface>>
+ProjectSkeleton "0..1" -up-> "*" Notification
+
+interface GraphTemplate <<interface>>
+
+class RowMetaData <<data>>
+Row "1" *- "1" RowMetaData
+
+interface TableLayout <<interface>>
+Table "0..1" - "1" TableLayout
+
+class DataTransformation
+DataTransformation -> "0..1" Table
+Project .. DataTransformation : nested in <
+Project -[hidden]> ProjectTemplate
+ProjectTemplate "1" --> "1" TableLayout
+
+interface User <<interface>>
+
+User "1..m" <- "0..n" Project
+
+@enduml

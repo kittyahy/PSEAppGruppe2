@@ -211,6 +211,10 @@ package DAOs {
         -addProjectUserMap(userMap: ProjectUserMap)
         '@Delete
         -removeProjectUserMap(vararg userMaps: ProjectUserMap)
+        '@Insert
+        -insertUserMap(user: ProjectUserMap)
+        '@Delete
+        -deleteUserMap(user: ProjectUserMap)
     }
 
     abstract class SettingsDAO <<abstract>> {
@@ -280,7 +284,7 @@ package DAOs {
         '@Query("SELECT * FROM uiElement
         '        WHERE projectId = :projectId
         +getUIElements(projectId: Integer): Flow<List<UIElementMap>>
-        +insertUIElement(projectId: Integer, columnId: Integer, type: UIElementType): Integer
+        +insertUIElement(projectId: Integer, columnId: Integer, type: UIElementType, state: String): Integer
         +removeUIElements(projectId: Integer, vararg ids: Integer)
         '@Query("UPDATE uiElement
         '        SET state = :state
@@ -289,7 +293,7 @@ package DAOs {
         '@Delete
         -removeUIElementMap(vararg uiElements: UIElementMap)
         '@Insert
-        -insertUIElement(uiElement: UIElementMap)
+        -insertUIEntity(uiElement: UIElementMap)
         -getNextId(projectId: Integer): Integer
     }
 

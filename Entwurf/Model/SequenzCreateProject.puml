@@ -40,7 +40,7 @@ loop foreach UI Element in proj
 end
 loop foreach User in proj
     ref over cd
-        Insert UserMaps
+        Insert User
     end
 end
 note over cd
