@@ -1,0 +1,19 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+interface Graph <<interface>> {
+    'Does this always recompute the DataSets? If not how does it decide when to recompute?
+    +getDataSets(): Collection<Collection<Any>>
+    +getCustomizing(): Settings
+    +getImage(): Drawable?
+    +getPath(): String?
+    +getType(): GraphType
+    +getCalculationFunction(): DataTransformation
+}
+
+@enduml

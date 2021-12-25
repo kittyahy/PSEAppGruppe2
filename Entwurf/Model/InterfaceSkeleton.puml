@@ -1,0 +1,19 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+interface ProjectSkeleton <<interface>> {
+    +getID(): Integer
+    +getName(): String
+    +getDescription(): String
+    +getWallpaper(): Drawable
+    +getGraphs(): Collection<Graph>
+    +getProjectSettings(): Settings
+    +getNotifications(): Collection<Notification>
+}
+
+@enduml

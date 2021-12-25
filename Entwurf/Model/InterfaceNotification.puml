@@ -1,0 +1,16 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+interface Notification <<interface>> {
+        +getMessage(): String
+        +sendNow(vararg Any): Boolean throws IllegalContextException
+        +toString(): String
+        +{static}fromString(notifStr: String, message: String): Notification
+    }
+
+@enduml
