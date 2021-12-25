@@ -4,21 +4,25 @@ skinparam monochrome true
 skinparam shadowing false
 skinparam genericDisplay old
 skinparam classAttributeIconSize 0
+skinparam {
+Linetype ortho
+}
 hide circle
 
 package OnlineDatabase{
 
 
-    DeltaController - DeltaRepository : repo <
-   OldDataRepository --up OldDataController : repo >
+    DeltaController -- DeltaRepository : repo <
+    FetchRequestRepository --down FetchRequestController : repo >
+    ProjectParticipantsRepository .. DeltaRepository: uses <
     ProjectParticipants ..> Role : use
     AccessToProjectInterceptor ..down> ProjectParticipantsRepository
     ProjectParticipantsController - ProjectParticipantsRepository : repo <
-        DeltaController - OldDeltaRepository : forOldData <
+    DeltaController ---up FetchRequestRepository : forOldData <
 
 
-
-    class AccessToProjectInterceptor{
+/''/
+    class AccessToProjectInterceptor extends HandlerInterceptorAdapter {
         preHandle(): boolean
 
     }
@@ -31,52 +35,51 @@ package OnlineDatabase{
 
 
 
-    class OldData<<Entity>>{
-        {primaryKey}: ID: String
+    class FetchRequest<<Entity>>{
+        {primaryKey}: ID: int
         user: String
         project: long
         requestInfo: JSON
     }
-    class OldDataController{
+    class FetchRequestController{
         + demandOldData(user: String, project: long, requestInfo: JSON)
-        + retieveOldData(user: String, project: long):Collection(<OldData>)
+        + getFetchRequests(user: String, project: long):Collection(<FetchRequest>)
     }
 
-    interface OldDataRepository<OldData, String>{
+    interface FetchRequestRepository<FetchRequest, String>{
      gotOldData(project:long, user: String)
-     addedOldData(user: String, project:long)
-
+     getRequests(project: long): Collection(FetchRequest)
     }
 
     class Delta <<Entity>> {
         {primaryKey}: AddedToServer: Date
         {primaryKey}: User: String
-        delta: JSON
+        projectCommand: JSON
         downloadedBy: String[23]
         project: long
         requestedBy: String
         isAdmin: boolean
     }
     class DeltaController{
-        + saveDelta(project: long, delta: JSON, user: String)
+        + saveDelta(project: long, projectCommand: JSON, user: String)
         + getDelta(project: long, user: String):Collection(<Delta>)
-        + provideOldData(delta: JSON, forUser: String, initialAdded: Date, initialAddedBy: String, project: long, wasAdmin: boolean)
+        + provideOldData(projectCommand: JSON, forUser: String, initialAdded: Date, initialAddedBy: String, project: long, wasAdmin: boolean)
         + getRemoveTime():Date
     }
-
-    interface DeltaRepository <Delta, Tupel(Date, String)> extends JpaRepository{
+/''/
+    interface DeltaRepository <Delta, Tupel(Date, String)> extends JpaRepository {
     - removeTime: Date
     deleteOldData()
-    deleteDownloadedData()
-    getRemoveTime()
+    deleteDownloadedData(requestedBy: String, project: long)
+    getRemoveTime():Date
     }
 
-
+/''/
     interface ProjectParticipantsRepository <ProjectParticipants,Tupel(String, int)> extends JpaRepository{
          participates(user: String, project: long): boolean
          isAdmin(user: String, project: long): boolean
          getAmountOfParticipants(project: long): int
-         newAdmin(project: long): String
+         getAdmin(project: long): String
     }
 
     class ProjectParticipantsController{
@@ -93,10 +96,15 @@ package OnlineDatabase{
         role: Role
         NumberOfJoin: int
     }
-    enum Role{
+    enum Role<<Enummeration>>{
         Participant
         Admin
     }
+
+    Role -[hidden]right-> AccessToProjectInterceptor
+    FetchRequestRepository -[hidden]down--> DeltaController
+    FetchRequest -[hidden]up-> ProjectParticipantsRepository
+
 
 }
 @enduml

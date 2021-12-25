@@ -3,6 +3,7 @@ skinparam shadowing false
 skinparam genericDisplay old
 skinparam classAttributeIconSize 0
 hide circle
+skinparam Linetype ortho
 
 package Queues{
 
@@ -12,8 +13,8 @@ class ProjectCommandQueue {
     - projectCommands: List<JSON>
     - projectCommandQueueObserver: List<ProjectCommandQueueObserver>
     ..QueueLogic..
-    + GetProjectCommand(): ProjectCommandInfo
-    + AddProjectCommand(projectCommand: ProjectCommandInfo)
+    + getProjectCommand(): ProjectCommandInfo
+    + addProjectCommand(projectCommand: ProjectCommandInfo)
     ..ObserverLogic..
     + registerObserver(toObserve: ProjectCommandQueueObserver)
     + unregisterObserver(toStopObeserving: ProjectCommandQueueObserver)
@@ -25,7 +26,7 @@ class ProjectCommandQueueObserver <<interface>><<observer>>{
 }
 
 
-ProjectCommandQueue "1" *-up- "1" ProjectCommandQueueObserver
+ProjectCommandQueue "1" *-up- "n" ProjectCommandQueueObserver
 }
 
 
@@ -37,8 +38,8 @@ class FetchRequestQueue {
     - fetchRequests: List<JSON>
     - observer: List<FetchRequestQueueObserver>
     ..QueueLogic..
-    + GetFetchRequest(): JSON
-    + AddFetchRequest(fetchRequest: JSON)
+    + getFetchRequest(): JSON
+    + addFetchRequest(fetchRequest: JSON)
     ..ObserverLogic..
     + registerObserver(FetchRequestsQueueObserver)
     + unregisterObserver(FetchRequestsQueueObserver)
@@ -50,7 +51,7 @@ class FetchRequestsQueueObserver <<interface>><<observer>>{
 }
 
 
-FetchRequestQueue "1" *-up- "1" FetchRequestsQueueObserver 
+FetchRequestQueue "1" *-up- "n" FetchRequestsQueueObserver 
 
 }
 

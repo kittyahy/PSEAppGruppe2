@@ -10,17 +10,21 @@ hide circle
 participant Alice
 
 activate Alice
-TODO; validation
+
 ref over Alice: LoginValidation
 Alice -> AccessToProjectInterceptor: requestForAProject
 activate AccessToProjectInterceptor
 note over AccessToProjectInterceptor: The AccessToProjectInterceptor interrupts \nthe connection between \nAlice and Controller
-alt login succeded
-AccessToProjectInterceptor --> Alice: accepted
+AccessToProjectInterceptor -> ProjectParticipantsRepository: participates(user:String, project: long)
+activate ProjectParticipantsRepository
+alt the user participates
+ProjectParticipantsRepository --> AccessToProjectInterceptor : true
 ref over Alice,AccessToProjectInterceptor,Controller: requestForAProject can be executed
-deactivate
-else login failed
+else the user doesn't participate
+ProjectParticipantsRepository --> AccessToProjectInterceptor : false
+deactivate ProjectParticipantsRepository
 AccessToProjectInterceptor --> Alice!!: rejected
+deactivate AccessToProjectInterceptor
 end else
 deactivate Alice
 
