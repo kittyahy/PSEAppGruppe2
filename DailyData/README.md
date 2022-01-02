@@ -10,6 +10,7 @@
     - Style guide can be activated under Settings | Editor | Code Style | Kotlin | Set from... | Kotlin style guide
     - To verify your code complies, go to Settings | Editor | Inspections | Kotlin | Style Issues and check
       File is not formatted according to project settings
+    - Documentation works the same as Java Doc
 - Unit Tests:
     - Unit Tests should be written as soon as possible to assure that stuff is actually doing what it should
 - Git:
