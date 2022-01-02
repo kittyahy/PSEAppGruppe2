@@ -33,12 +33,14 @@ interface Project {
 interface ProjectSkeleton {
 
     public fun getID(): Int
+    public fun setID(id: Int)
 
     public fun getName(): String
 
     public fun getDescription(): String
 
     public fun getWallpaper(): Drawable
+    public fun getWallpaperPath(): String
 
     public fun getGraphs(): Collection<Graph>
 
