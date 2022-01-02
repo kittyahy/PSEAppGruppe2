@@ -2,6 +2,7 @@ package com.pseandroid2.dailydata.model.database
 
 import com.pseandroid2.dailydata.model.Project
 import com.pseandroid2.dailydata.model.ProjectTemplate
+import com.pseandroid2.dailydata.model.database.entities.ProjectSkeletonEntity
 import java.util.SortedSet
 import java.util.TreeSet
 
@@ -39,6 +40,7 @@ class ProjectCDManager {
 
     private fun createSkeleton(project: Project): ProjectSkeletonEntity {
         //TODO
+        return ProjectSkeletonEntity("", "", "", "")
     }
 
     private fun insertProjectEntity(project: Project): Int {
