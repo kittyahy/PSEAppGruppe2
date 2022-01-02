@@ -12,3 +12,5 @@
       File is not formatted according to project settings
 - Unit Tests:
     - Unit Tests should be written as soon as possible to assure that stuff is actually doing what it should
+- Git:
+    - Branches should be used to actually be able to merge stuff
