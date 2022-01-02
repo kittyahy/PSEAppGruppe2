@@ -18,7 +18,7 @@ interface Project {
 
     public fun isOnline(): Boolean
 
-    public fun getOnlineId(): Int
+    public fun getOnlineId(): Long
 
     public fun getUsers(): Collection<User>
 
