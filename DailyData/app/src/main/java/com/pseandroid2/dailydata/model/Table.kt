@@ -32,6 +32,10 @@ interface TableLayout {
 
     public fun getUIElement(col: Int): UIElementType
 
+    public fun toJSON(): String
+
+    public fun fromJSON(json: String): TableLayout
+
 }
 
 interface Row {
