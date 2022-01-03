@@ -53,7 +53,7 @@ class ProjectCDManager {
         val desc: String = skeleton.getDescription()
         val wallpaper: String = skeleton.getWallpaperPath()
         val layout: String =
-            project.getTable().getLayout().toString() //TODO instead convert to JSON
+            project.getTable().getLayout().toJSON()
         return ProjectSkeletonEntity(name, desc, wallpaper, layout)
     }
 
