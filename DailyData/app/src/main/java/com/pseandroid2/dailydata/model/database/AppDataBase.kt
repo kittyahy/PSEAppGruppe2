@@ -8,8 +8,9 @@ import com.pseandroid2.dailydata.model.database.daos.ProjectCDManager
 import com.pseandroid2.dailydata.model.database.daos.ProjectDataDAO
 import com.pseandroid2.dailydata.model.database.entities.ProjectEntity
 import com.pseandroid2.dailydata.model.database.entities.ProjectUserMap
+import com.pseandroid2.dailydata.model.database.entities.RowEntity
 
-@Database(entities = [ProjectEntity::class, ProjectUserMap::class], version = 1)
+@Database(entities = [ProjectEntity::class, ProjectUserMap::class, RowEntity::class], version = 1)
 @TypeConverters(
     DateTimeConversion::class,
     UserConversion::class,
