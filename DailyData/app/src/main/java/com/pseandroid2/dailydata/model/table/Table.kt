@@ -1,53 +1,67 @@
 package com.pseandroid2.dailydata.model
 
+import com.google.gson.Gson
+import com.pseandroid2.dailydata.model.database.entities.RowEntity
 import java.time.LocalDateTime
 
 interface Table {
 
-    public fun getCell(row: Int, col: Int): Any
+    fun getCell(row: Int, col: Int): Any
 
-    public fun getLayout(): TableLayout
+    fun getLayout(): TableLayout
 
-    public fun getSize(): Int
+    fun getSize(): Int
 
-    public fun getRow(row: Int): Row
+    fun getRow(row: Int): Row
 
-    public fun addRow(row: Row)
+    fun addRow(row: Row)
 
-    public fun deleteRow(row: Int)
+    fun deleteRow(row: Int)
 
-    public fun getColumn(col: Int): List<Any>
+    fun getColumn(col: Int): List<Any>
 
-    public fun addColumn(type: Class<Any>)
+    fun addColumn(type: Class<Any>)
 
-    public fun deleteColumn(col: Int)
+    fun deleteColumn(col: Int)
 
 }
 
 interface TableLayout {
 
-    public fun getSize(): Int
+    fun getSize(): Int
 
-    public fun getColumnType(col: Int): Class<Any>
+    fun getColumnType(col: Int): Class<Any>
 
-    public fun getUIElement(col: Int): UIElementType
+    fun getUIElement(col: Int): UIElementType
 
-    public fun toJSON(): String
+    fun toJSON(): String
 
-    public fun fromJSON(json: String): TableLayout
+    fun fromJSON(json: String): TableLayout
 
 }
 
 interface Row {
 
-    public fun getAll(): List<Any>
+    fun getAll(): List<Any>
 
-    public fun getCell(col: Int): Any
+    fun getCell(col: Int): Any
 
-    public fun getMetaData(): RowMetaData
+    fun getMetaData(): RowMetaData
 
-    public fun getSize(): Int
+    fun getSize(): Int
 
+}
+
+fun Row.toRowEntity(projectId: Int): RowEntity {
+    val meta = this.getMetaData()
+    val values = Gson().toJson(this.getAll())
+    return RowEntity(
+        projectId,
+        meta.createdOn,
+        meta.createdBy,
+        values,
+        meta.publishedOn
+    )
 }
 
 data class RowMetaData(
