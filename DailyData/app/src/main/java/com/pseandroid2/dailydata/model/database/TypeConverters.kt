@@ -27,7 +27,7 @@ class UserConversion {
 
     @TypeConverter
     fun stringToUser(userString: String): User {
-        //TODO return not possible because of no implementation of User interface
+        TODO()
     }
 }
 
@@ -39,7 +39,7 @@ class TransformationConversion {
 
     @TypeConverter
     fun stringToTraFo(trafoString: String): Project.DataTransformation<Any> {
-        //TODO figure something out as we need a Project object to create a DataTransformation...
+        TODO()
     }
 }
 
