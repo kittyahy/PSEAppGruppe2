@@ -34,7 +34,7 @@ class GraphCDManager private constructor() {
 
     private fun getNextId(projectId: Int): Int {
         //Get the List of existing Ids for the project
-        val list: MutableList<Int> = ArrayList(existingIds[projectId] ?: sortedSetOf())
+        val list: List<Int> = ArrayList(existingIds[projectId] ?: sortedSetOf())
 
         //Get the next missing id
         return SortedIntListUtil.getFirstMissingInt(list)
