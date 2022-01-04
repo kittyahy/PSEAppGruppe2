@@ -54,6 +54,4 @@ data class RowMetaData(
     val createdOn: LocalDateTime,
     var publishedOn: LocalDateTime,
     val createdBy: User
-) {
-
-}
+)
