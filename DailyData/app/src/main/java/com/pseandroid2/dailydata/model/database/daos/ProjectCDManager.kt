@@ -1,4 +1,4 @@
-package com.pseandroid2.dailydata.model.database
+package com.pseandroid2.dailydata.model.database.daos
 
 import com.pseandroid2.dailydata.model.Project
 import com.pseandroid2.dailydata.model.ProjectSkeleton
@@ -9,13 +9,20 @@ import com.pseandroid2.dailydata.model.database.entities.ProjectSkeletonEntity
 import java.util.SortedSet
 import java.util.TreeSet
 
-class ProjectCDManager {
+class ProjectCDManager private constructor() {
 
-    //TODO should this be a singleton?
+    //ProjectCDManager is a Singleton
+    companion object {
+        private var instance: ProjectCDManager? = null
+
+        fun getInstance(): ProjectCDManager {
+            return instance ?: ProjectCDManager()
+        }
+    }
 
     val existingIds: SortedSet<Int> = TreeSet<Int>()
 
-    public fun insertProject(project: Project): Project {
+    fun insertProject(project: Project): Project {
         val newID: Int = insertProjectEntity(project)
         project.getProjectSkeleton().setID(newID)
 
@@ -24,16 +31,16 @@ class ProjectCDManager {
         return project
     }
 
-    public fun deleteProject(project: Project) {
+    fun deleteProject(project: Project) {
         //TODO
     }
 
-    public fun insertProjectTemplate(template: ProjectTemplate): Int {
+    fun insertProjectTemplate(template: ProjectTemplate): Int {
         //TODO
         return 0
     }
 
-    public fun deleteProjectTemplate(template: ProjectTemplate) {
+    fun deleteProjectTemplate(template: ProjectTemplate) {
         //TODO
     }
 

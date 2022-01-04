@@ -1,11 +1,20 @@
-package com.pseandroid2.dailydata.model.database
+package com.pseandroid2.dailydata.model.database.daos
 
 import com.pseandroid2.dailydata.model.Graph
 import com.pseandroid2.dailydata.util.SortedIntListUtil
 import java.util.SortedSet
 import java.util.TreeSet
 
-class GraphCDManager {
+class GraphCDManager private constructor() {
+
+    //GraphCDManager is a Singleton
+    companion object {
+        private var instance: GraphCDManager? = null
+
+        fun getInstance(): GraphCDManager {
+            return instance ?: GraphCDManager()
+        }
+    }
 
     private val existingIds: MutableMap<Int, out SortedSet<Int>> = mutableMapOf<Int, TreeSet<Int>>()
 
