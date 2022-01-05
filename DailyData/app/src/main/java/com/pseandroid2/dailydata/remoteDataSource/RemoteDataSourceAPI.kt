@@ -2,6 +2,7 @@ package com.pseandroid2.dailydata.remoteDataSource
 
 import com.pseandroid2.dailydata.remoteDataSource.Queues.FetchRequestQueueObserver
 import com.pseandroid2.dailydata.remoteDataSource.Queues.ProjectCommandQueueObserver
+import java.time.LocalDateTime
 
 class RemoteDataSourceAPI {
 // -----------------------------FireBase-------------------------------
@@ -157,16 +158,16 @@ class RemoteDataSourceAPI {
     /**
      * @param projectCommand:String ist eine JSON Dateien
      */
-    fun provideOldData(projectCommand: String, forUser: String, initialAddedData: Int, initialAddedBy: String, projectID: Long, wasAdmin: Boolean) {
+    fun provideOldData(projectCommand: String, forUser: String, initialAddedDate: LocalDateTime, initialAddedBy: String, projectID: Long, wasAdmin: Boolean) {
         // TODO: Implement Method
 
         return;
     }
 
-    fun getRemoveTime(): Int { // TODO: Eigentlich ist der ausgabetyp "Date" -> kläre ob Int ok
-        // TODO: Implement Method
+    fun getRemoveTime(): LocalDateTime {
+        // TODO: Implement Method0
 
-        return -1;
+        return LocalDateTime.parse("0000-00-00 00:00");
     }
 
     // -----------------------------FetchController-------------------------------
