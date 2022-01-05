@@ -1,6 +1,9 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+
+    // Firebase:
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -32,9 +35,14 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
     def roomVersion = "2.4.0"
 
     implementation 'androidx.core:core-ktx:1.7.0'
@@ -51,4 +59,10 @@ dependencies {
     annotationProcessor "androidx.room:room-compiler:$roomVersion" //Room Annotations
 
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
+
+    //Firebase:
+    // Import the BoM for the Firebase platform
+    implementation platform('com.google.firebase:firebase-bom:29.0.3')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-auth-ktx'
 }

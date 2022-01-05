@@ -1,0 +1,40 @@
+@startuml Methode_FehlgeschlagenerAufrufVonSendCommandsToServer
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+    activate RemoteDataSourceAPI 
+UserAccount <- RemoteDataSourceAPI: getToken()
+    activate UserAccount 
+UserAccount -> RemoteDataSourceAPI: return authToken
+RemoteDataSourceAPI -> ServerManager: sendCommandsToServer(long, projectCommands, user, authToken)
+    activate ServerManager
+loop m times
+    ServerManager -> RESTAPI: saveDelta(projectID, projectCommand, user, authToken)
+        activate ServerManager #DDDDDD
+        activate RESTAPI 
+    RESTAPI ->  Server: saveDelta(projectID, projectCommand, user)
+        activate Server 
+    Server -> RESTAPI: return null
+        deactivate Server
+    RESTAPI -> ServerManager: return null
+        deactivate RESTAPI
+    deactivate ServerManager
+end
+
+ServerManager -> RESTAPI: saveDelta(projectID, projectCommand, user, authToken)
+        activate ServerManager #DDDDDD
+        activate RESTAPI 
+    RESTAPI ->  Server: saveDelta(projectID, projectCommand, user)
+        activate Server 
+    Server -> RESTAPI: error
+        deactivate Server
+    RESTAPI -> ServerManager: error
+        deactivate RESTAPI
+
+
+ServerManager -> RemoteDataSourceAPI: return letzte (n-m) Elemente aus projectCommands
+deactivate ServerManager
+@enduml

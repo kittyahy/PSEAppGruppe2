@@ -26,7 +26,7 @@ class ProjectCommandQueueObserver <<interface>><<observer>>{
 }
 
 
-ProjectCommandQueue "1" *-up- "n" ProjectCommandQueueObserver
+ProjectCommandQueue "m" *-up- "n" ProjectCommandQueueObserver
 }
 
 
@@ -51,7 +51,7 @@ class FetchRequestsQueueObserver <<interface>><<observer>>{
 }
 
 
-FetchRequestQueue "1" *-up- "n" FetchRequestsQueueObserver 
+FetchRequestQueue "m" *-up- "n" FetchRequestsQueueObserver 
 
 }
 
