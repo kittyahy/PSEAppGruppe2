@@ -17,6 +17,7 @@ class FetchRequestQueue {
             // TODO: Teste, ob der String schon in der Queue vorhanden ist (find element) und füge es gegebenfalls nicht hinzu
             if (!fetchRequests.contains(fetchRequest)) {
                 fetchRequests.add(fetchRequest)
+                notifyObservers()
             }
         }
     }
@@ -35,6 +36,16 @@ class FetchRequestQueue {
     fun unregisterObserver(observer: FetchRequestQueueObserver) {
         while (observers.contains(observer)) {
             observers.remove(observer)
+        }
+    }
+
+    private fun notifyObservers() {
+        observers.forEach {
+            if (it == null) { // TODO: Prüfe, ob das nicht doch relevant ist (Wenn Observer gelöscht wird)
+                observers.remove(it)
+            } else {
+                it.update()
+            }
         }
     }
 }

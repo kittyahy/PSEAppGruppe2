@@ -21,6 +21,7 @@ class ProjectCommandQueue {
                  */
 
             projectCommands.add(projectCommand)
+            notifyObservers()
         }
     }
 
@@ -38,6 +39,16 @@ class ProjectCommandQueue {
     fun unregisterObserver(observer: ProjectCommandQueueObserver) {
         while (observers.contains(observer)) {
             observers.remove(observer)
+        }
+    }
+
+    private fun notifyObservers() {
+        observers.forEach {
+            if (it == null) { // TODO: Prüfe, ob das nicht doch relevant ist (Wenn Observer gelöscht wird)
+                observers.remove(it)
+            } else {
+                it.update()
+            }
         }
     }
 }
