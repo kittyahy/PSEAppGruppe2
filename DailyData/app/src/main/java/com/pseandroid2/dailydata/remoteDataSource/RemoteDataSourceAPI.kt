@@ -1,10 +1,21 @@
 package com.pseandroid2.dailydata.remoteDataSource
 
+import com.pseandroid2.dailydata.model.User
 import com.pseandroid2.dailydata.remoteDataSource.Queues.FetchRequestQueueObserver
 import com.pseandroid2.dailydata.remoteDataSource.Queues.ProjectCommandQueueObserver
+import com.pseandroid2.dailydata.remoteDataSource.ServerConnection.ServerManager
+import com.pseandroid2.dailydata.remoteDataSource.UserManager.UserAccount
 import java.time.LocalDateTime
 
 class RemoteDataSourceAPI {
+    private val userAccount: UserAccount
+    private val serverManager: ServerManager
+
+    init {
+        userAccount = UserAccount()
+        serverManager = ServerManager()
+    }
+
 // -----------------------------FireBase-------------------------------
     // -----------------------------UserAccount-------------------------------
 

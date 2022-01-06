@@ -9,5 +9,9 @@ enum class FirebaseReturnOptions (val success: Boolean){
     REGISTRATION_FAILED(false),
     LOGIN(true),
     WRONG_LOGIN_VALUES(false),
+    SINGED_IN(true),
+    SIGN_IN_FAILED(false),
+    SINGED_OUT(true),
+
     NOT_PROCCESSED(false) // Wenn die Firebaseanfrage noch nicht fertig ist
 }
