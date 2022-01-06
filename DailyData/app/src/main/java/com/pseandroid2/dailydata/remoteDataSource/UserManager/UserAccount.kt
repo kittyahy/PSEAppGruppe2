@@ -14,13 +14,24 @@ class UserAccount {
         firebaseManager = FirebaseManager()
     }
 
-    fun registerUser(eMail: String, password: String): FirebaseReturnOptions {
+    fun registerUser(eMail: String, password: String, type: SignInTypes): FirebaseReturnOptions {
         // Hier können dann später, falls mehere Anmeldemöglichkeiten zur Verfüngung stehen, die jeweils ausgewählte Anmeldemöglichkeit ausgewählt werden
-        return firebaseManager.registerUserWithEmailAndPassword(eMail, password)
+        when(type)
+        {
+            SignInTypes.EMAIL -> return firebaseManager.registerUserWithEmailAndPassword(eMail, password)
+            SignInTypes.GOOGLE -> Log.d("SignIn: ", "SignInType not implemented") // TODO: Wenn später noch google Anmeldung hinzugefügt werden sollen
+        }
+        return FirebaseReturnOptions.REGISTRATION_FAILED
     }
 
-    fun signInUser(eMail: String, password: String): FirebaseReturnOptions {
-        return firebaseManager.signInWithEmailAndPassword(eMail, password)
+    fun signInUser(eMail: String, password: String, type: SignInTypes): FirebaseReturnOptions {
+        // Hier können dann später, falls mehere Anmeldemöglichkeiten zur Verfüngung stehen, die jeweils ausgewählte Anmeldemöglichkeit ausgewählt werden
+        when(type)
+        {
+            SignInTypes.EMAIL -> return firebaseManager.signInWithEmailAndPassword(eMail, password)
+            SignInTypes.GOOGLE -> Log.d("SignIn: ", "SignInType not implemented") // TODO: Wenn später noch google Anmeldung hinzugefügt werden sollen
+        }
+        return FirebaseReturnOptions.REGISTRATION_FAILED
     }
 
     fun signOut(): FirebaseReturnOptions {

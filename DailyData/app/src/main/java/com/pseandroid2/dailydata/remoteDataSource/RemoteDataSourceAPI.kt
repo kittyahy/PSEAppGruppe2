@@ -4,6 +4,8 @@ import com.pseandroid2.dailydata.model.User
 import com.pseandroid2.dailydata.remoteDataSource.Queues.FetchRequestQueueObserver
 import com.pseandroid2.dailydata.remoteDataSource.Queues.ProjectCommandQueueObserver
 import com.pseandroid2.dailydata.remoteDataSource.ServerConnection.ServerManager
+import com.pseandroid2.dailydata.remoteDataSource.UserManager.FirebaseReturnOptions
+import com.pseandroid2.dailydata.remoteDataSource.UserManager.SignInTypes
 import com.pseandroid2.dailydata.remoteDataSource.UserManager.UserAccount
 import java.time.LocalDateTime
 
@@ -19,54 +21,38 @@ class RemoteDataSourceAPI {
 // -----------------------------FireBase-------------------------------
     // -----------------------------UserAccount-------------------------------
 
-    fun registerUser(eMail: String, passwort: String) : Int { // TODO: ersetze Rückgabetypen durch einen Enum
-        // TODO: Implement Method
-
-        return -1;
+    fun registerUser(eMail: String, password: String, type: SignInTypes) : FirebaseReturnOptions {
+        return userAccount.registerUser(eMail, password, type)
     }
 
-    fun signInUser(eMail: String, passwort: String) : Int { // TODO: ersetze Rückgabetypen durch einen Enum
-        // TODO: Implement Method
-
-        return -1;
+    fun signInUser(eMail: String, password: String, type: SignInTypes) : FirebaseReturnOptions {
+        return userAccount.signInUser(eMail, password, type)
     }
 
-    fun signOut() : Int { // TODO: ersetze Rückgabetypen durch einen Enum
-        // TODO: Implement Method
-
-        return -1;
+    fun signOut() : FirebaseReturnOptions {
+        return userAccount.signOut()
     }
 
     // -----------------------------UserDetails-------------------------------
     fun getUserID(): String {
-        // TODO: Implement Method
-
-        return "";
+        return userAccount.getUserID()
     }
 
     fun getUserName(): String {
-        // TODO: Implement Method
-
-        return "";
+        return userAccount.getUserName()
     }
 
     fun getUserEMail(): String {
-        // TODO: Implement Method
-
-        return "";
+        return userAccount.getUserEMail()
     }
 
     fun getUserPhotoUrl(): String {
-        // TODO: Implement Method
-
-        return "";
+        return userAccount.getUserPhotoUrl()
     }
 
     // -----------------------------Authentification-------------------------------
     fun getToken(): String {
-        // TODO: Implement Method
-
-        return "";
+        return userAccount.getToken()
     }
 
 // -----------------------------ServerAccess-------------------------------

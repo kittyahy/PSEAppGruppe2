@@ -96,7 +96,7 @@ class FirebaseManager {
                 val returnParameter = FirebaseReturnOptions.SINGED_IN
             } else {
                 // If sign in fails
-                Log.w("FireBase: ", "signINWithEmail:failure", task.exception)
+                Log.d("FireBase: ", "signINWithEmail:failure", task.exception)
                 val returnParameter = FirebaseReturnOptions.SIGN_IN_FAILED
             }
             refreshIdToken()
@@ -109,7 +109,6 @@ class FirebaseManager {
     }
 
     fun signOut(): FirebaseReturnOptions {
-
         auth.signOut()
 
         refreshIdToken()
