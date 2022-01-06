@@ -8,6 +8,9 @@ import com.pseandroid2.dailydata.remoteDataSource.userManager.SignInTypes
 import com.pseandroid2.dailydata.remoteDataSource.userManager.UserAccount
 import java.time.LocalDateTime
 
+import com.pseandroid2.dailydata.remoteDataSource.userManager.UserAccount
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
+
 class RemoteDataSourceAPI {
     private val userAccount: UserAccount
     private val serverManager: ServerManager
@@ -183,37 +186,25 @@ class RemoteDataSourceAPI {
     }
 
     // -----------------------------ObserverLogic-------------------------------
-    fun addObserverToFetchRequestQueue(observer: FetchRequestQueueObserver, projectID: Long) {
-        // TODO: Implement Method
-
-        return;
+    fun addObserverToFetchRequestQueue(observer: FetchRequestQueueObserver) {
+        serverManager.addObserverToFetchRequestQueue(observer)
     }
-    fun unregisterObserverFromFetchRequestQueue(observer: FetchRequestQueueObserver, projectID: Long) {
-        // TODO: Implement Method
-
-        return;
+    fun unregisterObserverFromFetchRequestQueue(observer: FetchRequestQueueObserver) {
+        serverManager.unregisterObserverFromFetchRequestQueue(observer)
     }
 
     fun getFetchRequestQueueLength(): Int {
-        // TODO: Implement Method
-
-        return -1
+        return serverManager.getFetchRequestQueueLength()
     }
 
-    fun addObserverToProjectCommandQueue(observer: ProjectCommandQueueObserver, projectID: Long) {
-        // TODO: Implement Method
-
-        return;
+    fun addObserverToProjectCommandQueue(observer: ProjectCommandQueueObserver) {
+        serverManager.addObserverToProjectCommandQueue(observer)
     }
-    fun unregisterObserverFromProjectCommandQueue(observer: ProjectCommandQueueObserver, projectID: Long) {
-        // TODO: Implement Method
-
-        return;
+    fun unregisterObserverFromProjectCommandQueue(observer: ProjectCommandQueueObserver) {
+        serverManager.unregisterObserverFromProjectCommandQueue(observer)
     }
 
     fun getProjectCommandQueueLength(): Int {
-        // TODO: Implement Method
-
-        return -1
+        return serverManager.getProjectCommandQueueLength()
     }
 }
