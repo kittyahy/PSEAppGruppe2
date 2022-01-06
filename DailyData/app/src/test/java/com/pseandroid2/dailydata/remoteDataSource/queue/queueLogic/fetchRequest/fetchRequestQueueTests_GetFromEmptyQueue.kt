@@ -1,5 +1,6 @@
-package com.pseandroid2.dailydata.remoteDataSource.queue
+package com.pseandroid2.dailydata.remoteDataSource.queue.queueLogic.fetchRequest
 
+import com.pseandroid2.dailydata.remoteDataSource.queue.FetchRequestQueue
 import org.junit.Assert
 import org.junit.Test
 

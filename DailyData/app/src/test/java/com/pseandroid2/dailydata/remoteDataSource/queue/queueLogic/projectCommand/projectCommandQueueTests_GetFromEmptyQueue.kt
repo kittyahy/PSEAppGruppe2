@@ -1,5 +1,6 @@
-package com.pseandroid2.dailydata.remoteDataSource.queue
+package com.pseandroid2.dailydata.remoteDataSource.queue.queueLogic.projectCommand
 
+import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueue
 import org.junit.Assert
 import org.junit.Test
 

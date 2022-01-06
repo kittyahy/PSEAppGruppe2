@@ -1,12 +1,13 @@
-package com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic
+package com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.projectCommand
 
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueue
+import com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.UpdatedByObserver_ForTesting
 import org.junit.Assert
 import org.junit.Test
 
 class ProjectCommandObserverTests_AddDuplicateObserver {
     @Test
-    fun addOneObserver() {
+    fun addDuplicateObserver() {
         // Erstelle Observer
         var toUpdate = UpdatedByObserver_ForTesting()
         var observer = ProjectCommandQueueObserver_ForTesting(toUpdate)

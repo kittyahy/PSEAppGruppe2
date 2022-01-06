@@ -1,7 +1,7 @@
-package com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic
+package com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.fetchRequest
 
 import com.pseandroid2.dailydata.remoteDataSource.queue.FetchRequestQueue
-import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
+import com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.UpdatedByObserver_ForTesting
 import org.junit.Assert
 import org.junit.Test
 

@@ -1,12 +1,13 @@
-package com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic
+package com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.fetchRequest
 
 import com.pseandroid2.dailydata.remoteDataSource.queue.FetchRequestQueue
+import com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.UpdatedByObserver_ForTesting
 import org.junit.Assert
 import org.junit.Test
 
 class FetchRequestObserverTests_AddTenObserver {
     @Test
-    fun addOneObserver() {
+    fun addTenObserver() {
         var toUpdateObjects = mutableListOf<UpdatedByObserver_ForTesting>()
 
         // Erstelle Observer

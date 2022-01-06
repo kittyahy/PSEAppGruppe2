@@ -1,4 +1,4 @@
-package com.pseandroid2.dailydata.remoteDataSource.userManager
+package com.pseandroid2.dailydata.remoteDataSource.userManager.firebaseManager
 
 
 import android.util.Log

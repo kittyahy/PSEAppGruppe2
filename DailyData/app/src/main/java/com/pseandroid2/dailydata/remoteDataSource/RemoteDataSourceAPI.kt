@@ -8,9 +8,6 @@ import com.pseandroid2.dailydata.remoteDataSource.userManager.SignInTypes
 import com.pseandroid2.dailydata.remoteDataSource.userManager.UserAccount
 import java.time.LocalDateTime
 
-import com.pseandroid2.dailydata.remoteDataSource.userManager.UserAccount
-import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
-
 class RemoteDataSourceAPI {
     private val userAccount: UserAccount
     private val serverManager: ServerManager

@@ -1,13 +1,13 @@
-package com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic
+package com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.projectCommand
 
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueue
+import com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.UpdatedByObserver_ForTesting
 import org.junit.Assert
 import org.junit.Test
 
-class ProjectCommandObserverTests_SaveEmptyProjectCommand {
-    // No Update expected:
+class ProjectCommandObserverTests_RemoveObserver {
     @Test
-    fun saveEmptyProjectCommand() {
+    fun removeOneObserver() {
         // Erstelle Observer
         var toUpdate = UpdatedByObserver_ForTesting()
         var observer = ProjectCommandQueueObserver_ForTesting(toUpdate)
@@ -18,11 +18,17 @@ class ProjectCommandObserverTests_SaveEmptyProjectCommand {
 
         // Prüfe ob update() bei Observer ausgeführt wird
         Assert.assertEquals(toUpdate.isUpdated(), false)
-
         Assert.assertEquals(projectCommandQueue.getQueueLength(), 0)
-        var projectCommand = ""
+        var projectCommand = "Project Command: 1"
+        projectCommandQueue.addProjectCommand(projectCommand)
+        Assert.assertEquals(projectCommandQueue.getQueueLength(), 1)
+        Assert.assertEquals(toUpdate.getUpdated(), 1)
+
+
+        projectCommandQueue.unregisterObserver(observer)
+        var projectCommand2 = "Project Command: 2"
         projectCommandQueue.addProjectCommand(projectCommand)
 
-        Assert.assertEquals(toUpdate.isUpdated(), false)
+        Assert.assertEquals(toUpdate.getUpdated(), 1)
     }
 }

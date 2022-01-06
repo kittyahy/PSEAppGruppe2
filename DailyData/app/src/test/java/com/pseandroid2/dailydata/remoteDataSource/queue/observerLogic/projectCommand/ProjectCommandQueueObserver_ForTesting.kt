@@ -1,4 +1,4 @@
-package com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic
+package com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.projectCommand
 
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueueObserver
 import com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.UpdatedByObserver_ForTesting
