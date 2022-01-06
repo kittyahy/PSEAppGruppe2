@@ -1,12 +1,11 @@
 package com.pseandroid2.dailydata.remoteDataSource
 
-import com.pseandroid2.dailydata.model.User
-import com.pseandroid2.dailydata.remoteDataSource.Queues.FetchRequestQueueObserver
-import com.pseandroid2.dailydata.remoteDataSource.Queues.ProjectCommandQueueObserver
-import com.pseandroid2.dailydata.remoteDataSource.ServerConnection.ServerManager
-import com.pseandroid2.dailydata.remoteDataSource.UserManager.FirebaseReturnOptions
-import com.pseandroid2.dailydata.remoteDataSource.UserManager.SignInTypes
-import com.pseandroid2.dailydata.remoteDataSource.UserManager.UserAccount
+import com.pseandroid2.dailydata.remoteDataSource.queue.FetchRequestQueueObserver
+import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueueObserver
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
+import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
+import com.pseandroid2.dailydata.remoteDataSource.userManager.SignInTypes
+import com.pseandroid2.dailydata.remoteDataSource.userManager.UserAccount
 import java.time.LocalDateTime
 
 class RemoteDataSourceAPI {
@@ -195,6 +194,12 @@ class RemoteDataSourceAPI {
         return;
     }
 
+    fun getFetchRequestQueueLength(): Int {
+        // TODO: Implement Method
+
+        return -1
+    }
+
     fun addObserverToProjectCommandQueue(observer: ProjectCommandQueueObserver, projectID: Long) {
         // TODO: Implement Method
 
@@ -204,5 +209,11 @@ class RemoteDataSourceAPI {
         // TODO: Implement Method
 
         return;
+    }
+
+    fun getProjectCommandQueueLength(): Int {
+        // TODO: Implement Method
+
+        return -1
     }
 }

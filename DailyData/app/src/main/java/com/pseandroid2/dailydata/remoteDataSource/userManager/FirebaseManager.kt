@@ -1,33 +1,24 @@
-package com.pseandroid2.dailydata.remoteDataSource.UserManager
+package com.pseandroid2.dailydata.remoteDataSource.userManager
 
-import android.app.Activity
-import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
-import com.google.android.gms.tasks.OnSuccessListener
-import androidx.annotation.NonNull
-
-import com.google.android.gms.tasks.OnFailureListener
 import com.google.firebase.auth.GetTokenResult
 
 
 
 class FirebaseManager {
-    private lateinit var auth: FirebaseAuth
+
     private var idToken: String = ""
+
+    private lateinit var auth: FirebaseAuth
 
     init {
         // Initialize Firebase Auth
-
-        Log.d("FireBase: ", Firebase.auth.toString())
         auth = Firebase.auth
 
         refreshIdToken()

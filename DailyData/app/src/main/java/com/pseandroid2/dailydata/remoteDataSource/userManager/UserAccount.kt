@@ -1,10 +1,6 @@
-package com.pseandroid2.dailydata.remoteDataSource.UserManager
+package com.pseandroid2.dailydata.remoteDataSource.userManager
 
 import android.util.Log
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 
 class UserAccount {
     private val firebaseManager: FirebaseManager

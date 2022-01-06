@@ -1,4 +1,4 @@
-package com.pseandroid2.dailydata.remoteDataSource.UserManager
+package com.pseandroid2.dailydata.remoteDataSource.userManager
 
 /**
  * @return true: alles ist wie geplant verlaufen (kein Fehler)
