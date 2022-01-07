@@ -7,7 +7,6 @@ import com.pseandroid2.dailydata.model.ProjectSkeleton
 import com.pseandroid2.dailydata.model.ProjectTemplate
 import com.pseandroid2.dailydata.model.TableLayout
 import com.pseandroid2.dailydata.model.User
-import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.model.database.entities.ProjectEntity
 import com.pseandroid2.dailydata.model.database.entities.ProjectSkeletonEntity
 import com.pseandroid2.dailydata.model.notifications.Notification
@@ -23,22 +22,7 @@ class ProjectCDManager private constructor(
     private val graphManager: GraphCDManager
 ) {
 
-    //ProjectCDManager is a Singleton
-    companion object {
-        private var instance: ProjectCDManager? = null
-
-        //This should only be called from inside the model
-        fun getInstance(db: AppDataBase): ProjectCDManager {
-            return instance ?: ProjectCDManager(
-                db.projectDataDAO(),
-                db.uiElementDAO(),
-                db.notificationsDAO(),
-                db.graphCDManager()
-            )
-        }
-    }
-
-    val existingIds: SortedSet<Int> = TreeSet()
+    private val existingIds: SortedSet<Int> = TreeSet()
 
     fun insertProject(project: Project): Project {
         val newID: Int = insertProjectEntity(project)
@@ -108,7 +92,7 @@ class ProjectCDManager private constructor(
         val id = getNextId()
         val entity = ProjectEntity(id, skeleton, admin, onlineId)
 
-        //TODO insert entity via DAO
+        projectDAO.insertProjectEntity(entity)
 
         return id
     }

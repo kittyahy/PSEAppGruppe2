@@ -8,15 +8,6 @@ import java.util.TreeSet
 
 class GraphCDManager private constructor() {
 
-    //GraphCDManager is a Singleton
-    companion object {
-        private var instance: GraphCDManager? = null
-
-        fun getInstance(db: AppDataBase): GraphCDManager {
-            return instance ?: GraphCDManager()
-        }
-    }
-
     private val existingIds: MutableMap<Int, out SortedSet<Int>> = mutableMapOf<Int, TreeSet<Int>>()
 
     public fun insertGraph(projectId: Int, graph: Graph): Int {
