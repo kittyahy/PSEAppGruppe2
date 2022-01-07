@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "240472992001",
+    "project_id": "daily-data-69b6a",
+    "storage_bucket": "daily-data-69b6a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:240472992001:android:300a7a66a6ce6dec8ad300",
+        "android_client_info": {
+          "package_name": "com.pseandroid2.dailydata"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "240472992001-lq15nsv3m37e1fosirn5t6ciuqksm5l2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pseandroid2.dailydata",
+            "certificate_hash": "5b6f9c991923e434d4cffcf53741650ada490747"
+          }
+        },
+        {
+          "client_id": "240472992001-67fanp3onbtg25b31gqpe5t5qrdj7uug.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBilJJ9m_STIIvRt6G30cql6XqdvNzMLWo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "240472992001-67fanp3onbtg25b31gqpe5t5qrdj7uug.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
