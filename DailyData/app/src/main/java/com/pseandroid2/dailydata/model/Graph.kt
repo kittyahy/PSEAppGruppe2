@@ -3,32 +3,33 @@ package com.pseandroid2.dailydata.model
 import android.graphics.drawable.Drawable
 
 interface Graph {
+    var id: Int
 
-    public fun getDataSets(): List<List<Any>>
+    fun getDataSets(): List<List<Any>>
 
-    public fun getCustomizing(): Settings
+    fun getCustomizing(): Settings
 
-    public fun getImage(): Drawable?
+    fun getImage(): Drawable?
 
-    public fun getPath(): String?
+    fun getPath(): String?
 
-    public fun getType(): GraphType
+    fun getType(): GraphType
 
-    public fun getCalculationFunction(): Project.DataTransformation<Any>
+    fun getCalculationFunction(): Project.DataTransformation<Any>
 
 }
 
 interface GraphTemplate {
 
-    public fun getName(): String
+    fun getName(): String
 
-    public fun getDescription(): String
+    fun getDescription(): String
 
-    public fun getCustomizing(): Settings
+    fun getCustomizing(): Settings
 
-    public fun getType(): GraphType
+    fun getType(): GraphType
 
-    public fun getCreator(): User
+    fun getCreator(): User
 
 }
 
