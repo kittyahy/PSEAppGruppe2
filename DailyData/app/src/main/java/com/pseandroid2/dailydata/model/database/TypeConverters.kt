@@ -3,7 +3,7 @@ package com.pseandroid2.dailydata.model.database
 import androidx.room.TypeConverter
 import com.pseandroid2.dailydata.model.GraphType
 import com.pseandroid2.dailydata.model.Project
-import com.pseandroid2.dailydata.model.UIElementType
+import com.pseandroid2.dailydata.model.uielements.UIElementType
 import com.pseandroid2.dailydata.model.User
 import java.time.LocalDateTime
 
