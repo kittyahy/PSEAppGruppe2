@@ -173,6 +173,37 @@ package ViewModelInterface {
 
 '=================================================================================================='
  package Commands {
+ class CommandFactory <<singleton>> {
+    +operationPossible(): Flow<>
+    +addRow(projectID: ProjectID, index: int, content: List<Any>)
+ }
+ abstract class ProjectCommand <<abstract>>{
+     +projectID: ProjectID
+     +OnlineProjectID: OnlineProjectID?
+     {field}+wentOnline: DateTime?
+     {field}+serverRemoveTime: DateTime?
+     +commandByUser: String?
+     +isProjectAdmin: boolean?
+
+     {abstract}+execute() throws IllegalOperationException
+ }
+ class AddRow {
+    +index: Int
+    +content: List<Any>
+
+    +execute()
+ }
+ class CommandWrapper {
+ +commandCanonicalName: String
+ +commandJson: String
+
+ +Constructor(command: Command)
+ +toJson(): String
+ +unwrap(): Command
+ -jsonFromCommand(Command): String
+ }
+
+ /'
  'Overleaf
  enum ProjectCommand <<enumeration>> {
     ..Table Commands..
@@ -255,17 +286,16 @@ package ViewModelInterface {
  class BooleanCommandData <<data class>> {
 
  }
- 'Overleaf
+ '/
+ 'Overleaf deprecated
  class CommandUtility <<static>> {
-    +{static} setServerInfo(ProjectCommandData, serverInfo: ServerInfo):ProjectCommandData
-    +{static} toJson(ProjectCommandData): Json
-    +{static} constructFromJson(Json): ProjectCommandData throws JsonSyntaxException
+    +{static} setServerInfo(ProjectCommand, serverInfo: ServerInfo):ProjectCommand
  }
  'Overleaf
  class IllegalOperationException {
      }
 
-
+ /'
  CommandUtility ..right> Gson : <<uses>>
  ProjectCommandData ..> ProjectCommand : <<uses>>
  ProjectCommand ..> IllegalOperationException : <<throws>>
@@ -288,19 +318,20 @@ package ViewModelInterface {
  StringCommandData -[hidden]- UserCommandData
  NotificationCommandData -[hidden]- UIElementCommandData
  DateTimeCommandData -[hidden]- BooleanCommandData
-
+'/
 
  }
 '=================================================================================================='
-  'Overleaf
+  'Overleaf deprecated
   package CommandCenter {
-    'Overleaf
+    'Overleaf deprecated
     class CommandInbox {
-        -commandQueue: List<ProjectCommandData>
+        -commandQueue: List<ProjectCommand>
+        +addFromJson(commandWrapperJson: String) throws JsonSyntaxException
     }
     'Overleaf
     class OldCommandConverter <<static>>{
-    +{static} toNewCommand(ProjectCommandData): ProjectCommandData
+    +{static} toNewCommand(ProjectCommand): ProjectCommand
     }
   }
 }
