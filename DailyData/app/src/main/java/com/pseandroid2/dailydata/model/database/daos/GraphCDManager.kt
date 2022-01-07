@@ -1,6 +1,7 @@
 package com.pseandroid2.dailydata.model.database.daos
 
 import com.pseandroid2.dailydata.model.Graph
+import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.util.SortedIntListUtil
 import java.util.SortedSet
 import java.util.TreeSet
@@ -11,7 +12,7 @@ class GraphCDManager private constructor() {
     companion object {
         private var instance: GraphCDManager? = null
 
-        fun getInstance(): GraphCDManager {
+        fun getInstance(db: AppDataBase): GraphCDManager {
             return instance ?: GraphCDManager()
         }
     }
