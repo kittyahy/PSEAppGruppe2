@@ -34,7 +34,8 @@ jobs:
       - name: Instrumentation Tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 31
+          runs-on: macos-latest
+          api-level: 30
           target: default
           arch: x86
           profile: Nexus 6
