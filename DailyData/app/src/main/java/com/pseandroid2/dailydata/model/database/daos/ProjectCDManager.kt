@@ -92,7 +92,7 @@ class ProjectCDManager private constructor(
         val id = getNextId()
         val entity = ProjectEntity(id, skeleton, admin, onlineId)
 
-        projectDAO.insertProjectEntity(entity)
+        //projectDAO.insertProjectEntity(entity)
 
         return id
     }
