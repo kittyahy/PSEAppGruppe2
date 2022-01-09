@@ -27,7 +27,10 @@ jobs:
         uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
       - name: Make gradlew executable
         run: chmod +x DailyData/gradlew
+        working-directory: DailyData
       - name: Build with Gradle
         run: DailyData/gradlew build
+        working-directory: DailyData
       - name: Run instrumented Tests
         run: DailyData/gradlew connectedAndroidTest
+        working-directory: DailyData
