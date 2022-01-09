@@ -19,7 +19,7 @@ class ArrayListRow(
         }
 
         private fun getValuesFromJSON(json: String): List<Any> {
-            val list = Gson().fromJson<ArrayList<Any>>(json, ArrayList::class.java)
+            val list = Gson().fromJson(json, ArrayList::class.java)
             //TODO make sure Integers actually become Integers and stuff
             return list ?: listOf()
         }
