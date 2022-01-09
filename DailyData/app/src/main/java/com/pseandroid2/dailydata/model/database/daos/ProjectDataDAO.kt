@@ -39,7 +39,7 @@ abstract class ProjectDataDAO {
     @Query("SELECT * FROM user WHERE projectId IN (:ids)")
     abstract fun getUsersByIds(vararg ids: Int): Flow<List<ProjectUserMap>>
 
-    @Query("SELECT id AS projectID, admin AS user FROM project WHERE id IN (:ids)")
+    @Query("SELECT id AS projectId, admin AS user FROM project WHERE id IN (:ids)")
     abstract fun getAdminByIds(vararg ids: Int): Flow<List<ProjectUserMap>>
 
     fun addUser(projectId: Int, user: User) {
@@ -67,7 +67,7 @@ abstract class ProjectDataDAO {
 
     /*========================SHOULD ONLY BE CALLED FROM INSIDE THE MODEL=========================*/
     @Insert
-    abstract fun insertProjectEntity(entity: ProjectEntity)
+    abstract suspend fun insertProjectEntity(entity: ProjectEntity)
 
     @Delete
     abstract fun deleteProjectEntity(entity: ProjectEntity)
