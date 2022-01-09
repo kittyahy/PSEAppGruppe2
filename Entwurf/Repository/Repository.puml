@@ -280,7 +280,8 @@ package ViewModelInterface {
       +execute()
    }
    class RequestOldData {
-      'TODO: Felder'
+      +from: DateTime
+      +to: DateTime
       +execute()
    }
    class SetIsOnlineProject {
