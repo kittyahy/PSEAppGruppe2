@@ -26,7 +26,7 @@ jobs:
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
       - name: Make gradlew executable
-        run: chmod +x ./gradlew
+        run: chmod +x DailyData/gradlew
       - name: Build with Gradle
         run: DailyData/gradlew build
       - name: Run instrumented Tests
