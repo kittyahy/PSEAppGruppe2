@@ -10,6 +10,8 @@ package UserManager{
 class UserAccount {
 	- firebaseManager: FirebaseManager 
 	- user: FirebaseUser 
+	- observer: Collection(<UserManagerObserver>)
+	
 	' Speichert alle Werte vom angemeldetem User. Wie Name, ID, ...
 
 
@@ -25,14 +27,20 @@ class UserAccount {
 	+getUserName(): String
 	+getUserEMail(): String
 	+getUserPhotoUrl(): String
-	
+
 	+ getToken(): String
+	'..Observer Logic..
+	'+ registerUserAccountObserver(observer: UserAccountObserver)
+	'+ unregisterUserAccountObserver(observer: UserAccountObserver)
+	'+ notifyUserAccountObservers()
 }
 
+'class UserAccountObserver<<interface>><<observer>> {
+'	+ update()
+'}
 
 
-
-
+'UserAccount *-- UserAccountObserver
 
 
 
