@@ -1,5 +1,6 @@
 package com.pseandroid2.dailydata.model.database.daos
 
+import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
@@ -7,6 +8,7 @@ import com.pseandroid2.dailydata.model.database.entities.GraphTemplateEntity
 import com.pseandroid2.dailydata.model.database.entities.ProjectTemplateEntity
 import kotlinx.coroutines.flow.Flow
 
+@Dao
 abstract class TemplateDAO {
 
     @Query("SELECT * FROM projectTemplate")
