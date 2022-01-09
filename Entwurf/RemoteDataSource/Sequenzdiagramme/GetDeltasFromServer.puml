@@ -1,0 +1,39 @@
+@startuml Methode_GetDeltasFromServer
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+    activate RemoteDataSourceAPI 
+UserAccount <- RemoteDataSourceAPI: getToken()
+    activate UserAccount 
+UserAccount -> RemoteDataSourceAPI: return authToken
+RemoteDataSourceAPI -> ServerManager: getDeltasFromServer(projectID, user, authToken)
+    activate ServerManager
+
+
+ServerManager -> RESTAPI: getDeltasFromServer(projectID, user, authToken)
+    activate ServerManager #DDDDDD
+    activate RESTAPI 
+RESTAPI -> Server: getDelta(projectID, user)
+    activate Server
+Server -> RESTAPI: return delatas:Collection(<Delta>)
+    deactivate Server 
+RESTAPI -> ServerManager: return delatas:Collection(<Delta>)
+    deactivate RESTAPI
+    deactivate ServerManager #DDDDDD
+
+loop n times
+    ServerManager -> ServerManager: convertDeltaIntoProjectCommandInfo(deltas[i])
+    activate ServerManager #DDDDDD
+    ServerManager -> ProjectCommandQueue: addProjectCommand(projectCommandInfo)
+        activate ProjectCommandQueue 
+    ProjectCommandQueue -> ServerManager: return null    
+        deactivate ProjectCommandQueue 
+        deactivate ServerManager #DDDDDD
+end
+
+ServerManager -> RemoteDataSourceAPI: void
+deactivate ServerManager
+@enduml

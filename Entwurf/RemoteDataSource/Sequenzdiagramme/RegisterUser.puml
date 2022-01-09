@@ -1,0 +1,32 @@
+@startuml Methode_registerUser
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+    activate RemoteDataSourceAPI 
+RemoteDataSourceAPI -> UserAccount: registerUser(eMail, passwort)
+    activate UserAccount 
+UserAccount -> FirebaseManager: registerUser(eMail, passwort)
+    activate UserAccount #DDDDDD
+        activate FirebaseManager
+FirebaseManager -> Firebase: auth.createUserWithEmailAndPassword(email, password)
+' Ist die Funktion erfolgreich so bekommt man mit getCurrentUser() den registrierten user
+            activate FirebaseManager #DDDDDD
+            activate Firebase
+Firebase -> FirebaseManager: return null
+            deactivate Firebase
+            deactivate FirebaseManager
+FirebaseManager -> UserAccount: return null
+        deactivate FirebaseManager
+    deactivate UserAccount
+UserAccount -> UserAccount: updateCurrentUser()
+    activate UserAccount #DDDDDD
+UserAccount -> FirebaseManager: getUser()
+FirebaseManager -> UserAccount: return user
+    deactivate UserAccount
+UserAccount -> RemoteDataSourceAPI: return 0
+deactivate UserAccount
+
+@enduml

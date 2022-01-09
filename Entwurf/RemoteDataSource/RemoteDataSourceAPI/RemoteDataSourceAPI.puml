@@ -43,8 +43,8 @@ class RemoteDataSourceAPI <<fassade>> {
     + getDeltasFromServer(projectID: long, user: String):Collection(<Delta>)
 	+ provideOldData(projectCommand: JSON, forUser: String, initialAdded: Date, initialAddedBy: String, projectID: long, wasAdmin: boolean)
     + getRemoveTime(): Date
-	'
-    ..FetchRequestController..
+    '
+	..FetchRequestController..
     + demandOldData(user: String, projectID: long, requestInfo: JSON)
     + getFetchRequests(user: String, projectID: long): Collection(<FetchRequest>)
     '
