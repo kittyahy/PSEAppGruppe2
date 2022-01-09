@@ -29,8 +29,8 @@ jobs:
         run: chmod +x ./gradlew
         working-directory: DailyData
       - name: Build with Gradle
-        run: DailyData/gradlew build
+        run: ./gradlew build
         working-directory: DailyData
       - name: Run instrumented Tests
-        run: DailyData/gradlew connectedAndroidTest
+        run: ./gradlew connectedAndroidTest
         working-directory: DailyData
