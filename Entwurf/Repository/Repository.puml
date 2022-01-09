@@ -27,14 +27,14 @@ package ViewModelInterface {
         +getGraphTemplate((id: String, index: int): void
     }
     class CommandFactory <<singleton>> {
-        +operationPossible(): Flow<>
+        +operationPossible(): FlowShared<Map<String, Boolean>>
         +addRow(projectID: ProjectID, index: int, content: List<Any>)
      }
     'Overleaf
     class ProjectHandler {
         -projectPreviews: Collection<ProjectPreview>
-        +getProjectPreviews(): Collection<ProjectPreview>
-        +getProjectByID(id: int):Flow<Project>
+        +getProjectPreviews(): SharedFlow<Collection<ProjectPreview>>
+        +getProjectByID(id: int):SharedFlow<Project>
     }
     package CommunicationClasses {
     class Column {
