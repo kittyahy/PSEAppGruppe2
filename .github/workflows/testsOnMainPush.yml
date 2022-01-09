@@ -15,7 +15,7 @@ on:
     
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 15
@@ -53,8 +53,8 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
+            ~/DailyData/.gradle/caches
+            ~/DailyData/.gradle/wrapper
           key: ${{ runner.os }}-${{ github.job }}-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}-${{ hashFiles('**/buildSrc/**/*.kt') }}
           restore-keys: |
             ${{ runner.os }}-${{ github.job }}-
@@ -62,8 +62,8 @@ jobs:
         id: avd-cache
         with:
           path: |
-            ~/.android/avd/*
-            ~/.android/adb*
+            ~/DailyData/.android/avd/*
+            ~/DailyData/.android/adb*
           key: avd
 
       - name: Generate AVD snapshot for caching
@@ -71,6 +71,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 30
+          working-directory: DailyData
           target: aosp_atd
           arch: x86
           profile: Galaxy Nexus
@@ -84,6 +85,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 30
+          working-directory: DailyData
           target: aosp_atd
           arch: x86
           profile: Galaxy Nexus
