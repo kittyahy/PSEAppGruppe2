@@ -296,10 +296,10 @@ package ViewModelInterface {
    +commandCanonicalName: String
    +commandJson: String
 
-   +Constructor(command: Command)
+   +Constructor(command: ProjectCommand)
    +toJson(): String
-   +unwrap(): Command
-   -jsonFromCommand(Command): String
+   +unwrap(): ProjectCommand
+   -jsonFromCommand(ProjectCommand): String
    }
 
    'Overleaf
