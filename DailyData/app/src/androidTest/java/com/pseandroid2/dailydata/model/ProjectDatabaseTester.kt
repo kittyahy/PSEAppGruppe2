@@ -81,9 +81,14 @@ class ProjectDatabaseTester {
         for (i in 0 until noProjects) {
             assertEquals(i, deferredList[i].id)
             assertEquals("Test$i", deferredList[i].name)
-            assertEquals(i.toLong() + 1, deferredList[i].onlineId)
+            assertEquals(i.toLong(), deferredList[i].onlineId)
         }
 
+    }
+
+    @Test
+    fun simpleTest() {
+        assertEquals(1, 2)
     }
 
 
