@@ -31,11 +31,18 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
         working-directory: DailyData
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-${{ github.job }}-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}-${{ hashFiles('**/buildSrc/**/*.kt') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ github.job }}-
       - name: Instrumentation Tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 30
-          target: aosp_atd
           arch: x86
           profile: Galaxy Nexus
           script: ./gradlew connectedCheck --stacktrace
