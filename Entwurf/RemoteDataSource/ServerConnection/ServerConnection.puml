@@ -7,8 +7,8 @@ hide circle
 package ServerConnection {
     
     !include ServerManager\ServerManager.puml!ServerManager
-    
-    
+
+
 
     ' Ruft die Funktionen des Servers auf
     !include RESTAPI\RESTAPI.puml!RESTAPI

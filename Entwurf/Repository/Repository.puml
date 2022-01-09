@@ -2,6 +2,7 @@
 
 skinparam monochrome true
 skinparam shadowing false
+skinparam groupInheritance 3
 skinparam genericDisplay old
 skinparam classAttributeIconSize 0
 hide circle
@@ -307,6 +308,34 @@ package ViewModelInterface {
 
    }
   }
+
+  CommandWrapper .> Gson: <<uses>>
+  IllegalOperationException .> Throwable: <<implements>>
+
+  together {
+    ProjectCommand ^-- AddColumn
+    ProjectCommand ^-- AddRow
+    ProjectCommand ^-- DeleteRow
+    ProjectCommand ^-- DeleteColumn
+    ProjectCommand ^-- SetCell
+    ProjectCommand ^-- SetAdmin
+    ProjectCommand ^-- AddUser
+    ProjectCommand ^--- RemoveUser
+    ProjectCommand ^--- CreateGraph
+    ProjectCommand ^--- SetCalculationFunction
+    ProjectCommand ^--- SetTransformationFunctionComposition
+    ProjectCommand ^--- SetSetting
+    ProjectCommand ^--- SetProjectName
+    ProjectCommand ^--- SetProjectDescription
+    ProjectCommand ^---- SetWallpaper
+    ProjectCommand ^---- SetNotification
+    ProjectCommand ^---- DeleteNotification
+    ProjectCommand ^---- SetUIElement
+    ProjectCommand ^---- RequestOldData
+    ProjectCommand ^---- CreateProject
+    ProjectCommand ^---- SetIsOnlineProject
+  }
+
 }
 
 @enduml
