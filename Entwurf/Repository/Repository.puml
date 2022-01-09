@@ -207,6 +207,89 @@ package ViewModelInterface {
 
       +execute()
    }
+   class DeleteRow {
+      +index: Int
+      +execute()
+   }
+   class DeleteColumn {
+      +index: Int
+      +execute()
+   }
+   class AddColumn {
+      +index(): Int
+      +type: DataType
+      +execute()
+   }
+   class SetCell {
+      +indexColumn: Int
+      +indexRow: Int
+      +execute()
+   }
+   class SetAdmin {
+      +UserID: String
+      +execute()
+   }
+   class AddUser {
+      +UserID: String
+      +execute()
+   }
+
+   class RemoveUser {
+      +UserID: String
+      +execute()
+   }
+   class CreateGraph {
+      'TODO Felder'
+      +execute()
+   }
+   class SetCalculationFunction {
+      'TODO Felder'
+      +execute()
+   }
+   class SetTransformationFunctionComposition {
+      'TODO Felder'
+      +execute()
+   }
+   class SetSetting {
+      +name: String
+      +value: String
+      +execute()
+   }
+   class SetProjectName {
+      +value: String
+      +execute()
+   }
+   class SetProjectDescription {
+      +value: String
+      +execute()
+   }
+   class SetWallpaper {
+      +value: Drawable
+      +execute()
+   }
+   class SetNotification {
+      'TODO: Felder'
+      +execute()
+   }
+   class DeleteNotification {
+      +notificationID: String
+      +execute()
+   }
+   class SetUIElement {
+      'TODO: Felder'
+      +execute()
+   }
+   class RequestOldData {
+      'TODO: Felder'
+      +execute()
+   }
+   class SetIsOnlineProject {
+      +value: boolean
+      +execute()
+   }
+   class CreateProject {
+      +execute()
+   }
    class CommandWrapper {
    +commandCanonicalName: String
    +commandJson: String
