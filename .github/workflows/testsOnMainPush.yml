@@ -38,4 +38,5 @@ jobs:
           target: default
           arch: x86
           profile: Nexus 6
-          script: DailyData/gradlew connectedCheck --stacktrace
+          script: ./gradlew connectedCheck --stacktrace
+          working-directory: DailyData
