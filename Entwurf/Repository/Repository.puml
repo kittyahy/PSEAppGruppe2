@@ -2,7 +2,11 @@
 
 skinparam monochrome true
 skinparam shadowing false
+
+
+skinparam lineType ortho
 skinparam groupInheritance 22
+
 skinparam genericDisplay old
 skinparam classAttributeIconSize 0
 skinparam Linetype ortho
@@ -204,6 +208,9 @@ package ViewModelInterface {
 
        {abstract}+execute() throws IllegalOperationException
    }
+
+   <>PLACEHOLDER
+
    class AddRow {
       +index: Int
       +content: List<Any>
@@ -314,28 +321,32 @@ package ViewModelInterface {
   CommandWrapper .> Gson: <<uses>>
   IllegalOperationException .> Throwable: <<implements>>
 
+  ProjectCommand ^-- PLACEHOLDER
+
   together {
-    repoProjectCommand ^-- AddColumn
-    repoProjectCommand ^-- AddRow
-    repoProjectCommand ^-- DeleteRow
-    repoProjectCommand ^-- DeleteColumn
-    repoProjectCommand ^-- SetCell
-    repoProjectCommand ^-- SetAdmin
-    repoProjectCommand ^-- AddUser
-    repoProjectCommand ^--- RemoveUser
-    repoProjectCommand ^--- CreateGraph
-    repoProjectCommand ^--- SetCalculationFunction
-    repoProjectCommand ^--- SetTransformationFunctionComposition
-    repoProjectCommand ^--- SetSetting
-    repoProjectCommand ^--- SetProjectName
-    repoProjectCommand ^--- SetProjectDescription
-    repoProjectCommand ^---- SetWallpaper
-    repoProjectCommand ^---- SetNotification
-    repoProjectCommand ^---- DeleteNotification
-    repoProjectCommand ^---- SetUIElement
-    repoProjectCommand ^---- RequestOldData
-    repoProjectCommand ^---- CreateProject
-    repoProjectCommand ^---- SetIsOnlineProject
+
+    PLACEHOLDER ^-- AddColumn
+    PLACEHOLDER ^-- AddRow
+    PLACEHOLDER ^-- DeleteRow
+    PLACEHOLDER ^-- DeleteColumn
+    PLACEHOLDER ^-- SetCell
+    PLACEHOLDER ^-- SetAdmin
+    PLACEHOLDER ^-- AddUser
+    PLACEHOLDER ^--- RemoveUser
+    PLACEHOLDER ^--- CreateGraph
+    PLACEHOLDER ^--- SetCalculationFunction
+    PLACEHOLDER ^--- SetTransformationFunctionComposition
+    PLACEHOLDER ^--- SetSetting
+    PLACEHOLDER ^--- SetProjectName
+    PLACEHOLDER ^--- SetProjectDescription
+    PLACEHOLDER ^---- SetWallpaper
+    PLACEHOLDER ^---- SetNotification
+    PLACEHOLDER ^---- DeleteNotification
+    PLACEHOLDER ^---- SetUIElement
+    PLACEHOLDER ^---- RequestOldData
+    PLACEHOLDER ^---- CreateProject
+    PLACEHOLDER ^---- SetIsOnlineProject
+
   }
 
 }
