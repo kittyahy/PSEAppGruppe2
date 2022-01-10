@@ -1,0 +1,63 @@
+@startgantt
+
+printscale daily zoom 3
+
+Project starts the 3rd of January 2022
+
+[Implementierungsphase] starts 2022-01-03 and ends 2022-02-04
+[Implementierungsphase] is colored in lightgreen
+[Setup Git Repo] starts 2022-01-06 and ends 2022-01-10
+[Implementierungsplan erstellen] starts 2022-01-10 and lasts 2 days
+[Model Interfaces und Classes] starts 2022-01-03 and ends 2022-01-16
+[Model Interfaces und Classes] is colored in lightblue
+[interface Project] starts 2022-01-03
+[interface Table] starts 2022-01-03
+[interface ProjectSkeleton] starts 2022-01-03
+[interface ProjectTemplate] starts 2022-01-03
+[interface Settings] starts 2022-01-03
+[interface User] starts 2022-01-03
+[class SimpleUser] starts at [interface User]'s end
+[class UIElement] starts 2022-01-03
+[enum class UIElementType] starts 2022-01-03
+[interface Table] starts 2022-01-03
+[interface TableLayout] starts 2022-01-03
+[interface Row] starts 2022-01-03
+[class ArrayListRow] starts at [interface Row]'s end
+[class RowMetaData] starts 2022-01-03
+[interface Notification] starts 2022-01-03
+[class TimeNotification] starts at [interface Notification]'s end
+
+[Entities] starts 2022-01-06 and ends 2022-01-11
+[Entities] is colored in lightblue
+[class GraphEntity] starts 2022-01-06 and ends 2022-01-07
+[class GraphTemplateEntity] starts 2022-01-07
+[class MissingSlotEntity] starts 2022-01-09
+[class NotificationEntity] starts 2022-01-07
+[class ProjectData] starts 2022-01-06
+[class ProjectEntity] starts 2022-01-06
+[class ProjectSkeletonEntity] starts 2022-01-06
+[class ProjectTemplateEntity] starts 2022-01-07
+[class ProjectUserMap] starts 2022-01-07
+[class RowEntity] starts 2022-01-06
+[class ProjectSettingEntity] starts 2022-01-09
+[class ProjectSettingEntity] starts 2022-01-09
+[class UIElementMap] starts 2022-01-09
+
+[DAOs] starts 2022-01-08 and ends 2022-01-15
+[DAOs] is colored in lightblue
+
+[Type Converters] starts 2022-01-05 and ends 2022-01-13
+[Type Converters] is colored in lightblue
+
+[Other Database Tasks] starts 2022-01-03 and ends 2022-01-20
+[Other Database Tasks] is colored in lightblue
+[class AppDataBase] starts 2022-01-03
+
+legend
+    Aufgaben, die vor dem 10. Januar 2022 abgeschlossen sind,
+     sind zum Zeitpunkt der Erstellung dieses Diagramms bereits abgeschlossen.
+end legend
+
+
+
+@endgantt

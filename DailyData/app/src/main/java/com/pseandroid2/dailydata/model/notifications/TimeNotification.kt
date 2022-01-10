@@ -10,7 +10,7 @@ class TimeNotification(
     initId: Int
 ) : Notification {
     private var lastSent: LocalDate = LocalDate.now()
-    override val id: Int = initId
+    override var id: Int = initId
 
     companion object {
         fun fromString(paramString: String, message: String, id: Int): TimeNotification {

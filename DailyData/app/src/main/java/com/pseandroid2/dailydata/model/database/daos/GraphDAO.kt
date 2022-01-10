@@ -1,11 +1,13 @@
 package com.pseandroid2.dailydata.model.database.daos
 
+import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.pseandroid2.dailydata.model.database.entities.GraphEntity
 import kotlinx.coroutines.flow.Flow
 
+@Dao
 abstract class GraphDAO {
     @Query("SELECT * FROM graph WHERE projectId IN (:ids)")
     abstract fun getGraphEntityForProjects(vararg ids: Int): Flow<List<GraphEntity>>

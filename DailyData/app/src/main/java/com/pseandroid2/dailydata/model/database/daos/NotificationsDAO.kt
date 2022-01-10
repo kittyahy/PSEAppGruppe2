@@ -1,5 +1,6 @@
 package com.pseandroid2.dailydata.model.database.daos
 
+import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
@@ -11,6 +12,7 @@ import kotlinx.coroutines.flow.map
 import java.util.*
 import kotlin.collections.ArrayList
 
+@Dao
 abstract class NotificationsDAO {
     private val existingIds: MutableMap<Int, out SortedSet<Int>> = mutableMapOf<Int, TreeSet<Int>>()
 
