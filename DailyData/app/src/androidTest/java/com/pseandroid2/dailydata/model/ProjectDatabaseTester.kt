@@ -12,6 +12,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.fail
@@ -31,7 +32,7 @@ class ProjectDatabaseTester {
 
     @ExperimentalCoroutinesApi
     @Test
-    fun testProjectInsertion() = runTest {
+    fun testProjectInsertion() = runBlocking {
 
         val list = async { projectDAO.getAllProjectData().first { return@first it.isNotEmpty() } }
 
@@ -55,15 +56,12 @@ class ProjectDatabaseTester {
 
     @ExperimentalCoroutinesApi
     @Test
-    fun testMultipleInsertions() = runTest {
-        Log.w("TEST", "Multiple Insertions Test started")
+    fun testMultipleInsertions() = runBlocking {
 
         val noProjects = 5
 
         val list = async {
-            Log.w("TEST", "Start Listening to Project Data")
             val ret = projectDAO.getAllProjectData().drop(noProjects - 1).first()
-            Log.w("TEST", "Done Listening to Project Data")
             return@async ret
         }
 
@@ -78,7 +76,6 @@ class ProjectDatabaseTester {
                     i.toLong()
                 )
             )
-            Log.w("TEST", "Inserted Project $i")
         }
 
         val deferredList = list.await()
@@ -88,11 +85,7 @@ class ProjectDatabaseTester {
             assertEquals(i, deferredList[i].id)
             assertEquals("Test$i", deferredList[i].name)
             assertEquals(i.toLong(), deferredList[i].onlineId)
-            Log.w("TEST", "Checked Project $i")
         }
-
-        fail("Test Fail to assure this coroutineScope has started")
-
     }
 }
 
