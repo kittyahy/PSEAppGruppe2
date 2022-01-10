@@ -7,7 +7,9 @@
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the "MyLocation" functionality.
     -->
+    <!-- Something doesn't work here, commented this to try and make the project compile - Arne
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    -->T
 
     <application
         android:allowBackup="true"
@@ -29,10 +31,10 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity
+ <!--       <activity
             android:name=".remoteDataSource.MapsActivity"
             android:exported="false"
-            android:label="@string/title_activity_maps" />
+            android:label="@string/title_activity_maps" /> -->
     </application>
 
 </manifest>
