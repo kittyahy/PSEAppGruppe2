@@ -57,13 +57,13 @@ class ProjectDatabaseTester {
     @ExperimentalCoroutinesApi
     @Test
     fun testMultipleInsertions() = runTest {
-        Log.d("TEST", "Multiple Insertions Test started")
+        Log.w("TEST", "Multiple Insertions Test started")
         val noProjects = 5
 
         val list = async {
-            Log.d("TEST", "Start Listening to Project Data")
+            Log.w("TEST", "Start Listening to Project Data")
             val ret = projectDAO.getAllProjectData().drop(noProjects - 1).first()
-            Log.d("TEST", "Done Listening to Project Data")
+            Log.w("TEST", "Done Listening to Project Data")
             return@async ret
         }
 
@@ -78,7 +78,7 @@ class ProjectDatabaseTester {
                     i.toLong()
                 )
             )
-            Log.d("TEST", "Inserted Project $i")
+            Log.w("TEST", "Inserted Project $i")
         }
 
         val deferredList = list.await()
@@ -88,7 +88,7 @@ class ProjectDatabaseTester {
             assertEquals(i, deferredList[i].id)
             assertEquals("Test$i", deferredList[i].name)
             assertEquals(i.toLong(), deferredList[i].onlineId)
-            Log.d("TEST", "Checked Project $i")
+            Log.w("TEST", "Checked Project $i")
         }
 
     }
