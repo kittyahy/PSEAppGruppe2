@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Test
 
@@ -51,12 +52,14 @@ class ProjectDatabaseTester {
         assertEquals(1, lastId)
         assertEquals("Test", lastName)
 
-
+        fail("Test Fail to assure this coroutineScope has started")
     }
 
     @ExperimentalCoroutinesApi
     @Test
     fun testMultipleInsertions() = runTest {
+        fail("Test Fail to assure this coroutineScope has started")
+
         Log.w("TEST", "Multiple Insertions Test started")
         val noProjects = 5
 
@@ -92,7 +95,5 @@ class ProjectDatabaseTester {
         }
 
     }
-
-
 }
 
