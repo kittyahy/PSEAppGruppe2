@@ -10,9 +10,11 @@ import com.pseandroid2.dailydata.model.database.entities.ProjectEntity
 import com.pseandroid2.dailydata.model.database.entities.ProjectSkeletonEntity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.fail
@@ -32,7 +34,7 @@ class ProjectDatabaseTester {
 
     @ExperimentalCoroutinesApi
     @Test
-    fun testProjectInsertion() = runBlocking {
+    fun testProjectInsertion() = runTest {
 
         val list = async { projectDAO.getAllProjectData().first { return@first it.isNotEmpty() } }
 
@@ -56,14 +58,19 @@ class ProjectDatabaseTester {
 
     @ExperimentalCoroutinesApi
     @Test
-    fun testMultipleInsertions() = runBlocking {
+    fun testMultipleInsertions() = runTest {
 
         val noProjects = 5
 
         val list = async {
-            val ret = projectDAO.getAllProjectData().drop(noProjects - 1).first()
+            Log.d("XXX", "Start Async")
+            val ret = projectDAO.getAllProjectData().first {
+                return@first it.size == noProjects && it[noProjects - 1].id == (noProjects - 1)
+            }
+            Log.d("XXX", "End Async")
             return@async ret
         }
+        Log.d("XXX", "Continue Main")
 
         val user = SimpleUser("", "")
 
@@ -76,6 +83,7 @@ class ProjectDatabaseTester {
                     i.toLong()
                 )
             )
+            Log.d("XXX", "Inserted $i")
         }
 
         val deferredList = list.await()
@@ -86,6 +94,7 @@ class ProjectDatabaseTester {
             assertEquals("Test$i", deferredList[i].name)
             assertEquals(i.toLong(), deferredList[i].onlineId)
         }
+        Log.d("XXX", "Completed Test")
     }
 }
 
