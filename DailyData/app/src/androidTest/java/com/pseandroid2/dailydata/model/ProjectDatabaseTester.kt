@@ -96,10 +96,5 @@ class ProjectDatabaseTester {
         }
         Log.d("XXX", "Completed Test")
     }
-
-    @Test
-    fun fail() {
-        fail("Fail")
-    }
 }
 
