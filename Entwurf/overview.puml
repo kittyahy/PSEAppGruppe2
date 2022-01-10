@@ -9,8 +9,9 @@ skinparam Linetype ortho
 
 package viewModel {
 
-!include view/ViewModel.puml
+'!include view/ViewModel.puml
 '!include view/objects.puml
+
 }
 !include Repository/Repository.puml
 package model {
