@@ -51,16 +51,13 @@ class ProjectDatabaseTester {
 
         assertEquals(1, lastId)
         assertEquals("Test", lastName)
-
-        fail("Test Fail to assure this coroutineScope has started")
     }
 
     @ExperimentalCoroutinesApi
     @Test
     fun testMultipleInsertions() = runTest {
-        fail("Test Fail to assure this coroutineScope has started")
-
         Log.w("TEST", "Multiple Insertions Test started")
+        
         val noProjects = 5
 
         val list = async {
@@ -83,6 +80,8 @@ class ProjectDatabaseTester {
             )
             Log.w("TEST", "Inserted Project $i")
         }
+
+        fail("Test Fail to assure this coroutineScope has started")
 
         val deferredList = list.await()
 
