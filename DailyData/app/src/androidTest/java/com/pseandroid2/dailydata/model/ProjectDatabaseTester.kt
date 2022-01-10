@@ -86,11 +86,6 @@ class ProjectDatabaseTester {
 
     }
 
-    @Test
-    fun simpleTest() {
-        assertEquals(1, 2)
-    }
-
 
 }
 
