@@ -2,7 +2,7 @@ package com.pseandroid2.dailydata.model.notifications
 
 interface Notification {
 
-    val id: Int
+    var id: Int
 
     /**
      * @return the Message that should be delivered by this Notification

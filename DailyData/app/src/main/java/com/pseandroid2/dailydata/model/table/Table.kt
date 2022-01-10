@@ -2,6 +2,7 @@ package com.pseandroid2.dailydata.model
 
 import com.google.gson.Gson
 import com.pseandroid2.dailydata.model.database.entities.RowEntity
+import com.pseandroid2.dailydata.model.uielements.UIElement
 import java.time.LocalDateTime
 
 interface Table {
@@ -32,7 +33,7 @@ interface TableLayout {
 
     fun getColumnType(col: Int): Class<Any>
 
-    fun getUIElement(col: Int): UIElementType
+    fun getUIElements(col: Int): List<UIElement>
 
     fun toJSON(): String
 
