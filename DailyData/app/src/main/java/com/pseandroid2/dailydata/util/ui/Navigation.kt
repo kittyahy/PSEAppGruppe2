@@ -11,7 +11,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.pse.ui.server.ServerScreen
+import com.pseandroid2.dailydata.ui.server.ServerScreen
 import com.pseandroid2.dailydata.ui.project.ProjectScreen
 import com.pseandroid2.dailydata.ui.project.creation.ProjectCreationScreen
 import com.pseandroid2.dailydata.ui.project.data.ProjectDataScreen
