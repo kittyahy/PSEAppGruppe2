@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
-import com.example.pse.util.ui.UiEvent
+import com.pseandroid2.dailydata.util.ui.UiEvent
 import com.pseandroid2.dailydata.util.ui.ProjectNavigation
 
 @Composable

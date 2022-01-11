@@ -14,7 +14,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.pse.util.ui.UiEvent
+import com.pseandroid2.dailydata.util.ui.UiEvent
 import kotlinx.coroutines.flow.collect
 
 @Composable

@@ -18,7 +18,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.pse.util.ui.UiEvent
+import com.pseandroid2.dailydata.util.ui.UiEvent
 import com.example.pse.util.ui.Wallpapers
 import com.pseandroid2.dailydata.R
 import com.pseandroid2.dailydata.ui.composables.EnumDropDownMenu
