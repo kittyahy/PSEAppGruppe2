@@ -163,7 +163,7 @@ class RemoteDataSourceAPI {
     fun getRemoveTime(): LocalDateTime {
         // TODO: Implement Method0
 
-        return LocalDateTime.parse("0000-00-00 00:00");
+        return LocalDateTime.parse("0000-00-00 00:00")
     }
 
     // -----------------------------FetchController-------------------------------

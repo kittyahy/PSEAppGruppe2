@@ -31,47 +31,45 @@ class FirebaseManager {
             return
         }
 
-        val requestComplete: Boolean = false
+        val task = user.getIdToken(true)
+        task.addOnCompleteListener(OnCompleteListener<GetTokenResult> { task ->
+            if (task.isSuccessful) {
+                val idToken = task.result.token
 
-        user.getIdToken(true)
-            .addOnCompleteListener(OnCompleteListener<GetTokenResult> { task ->
-                if (task.isSuccessful) {
-                    val idToken = task.result.token
-                    // TODO: Send token to your backend via HTTPS
-                    // ...
-                } else {
-                    val idToken = ""
-                    // TODO: Handle error -> task.getException();
-                }
-                val requestComplete = true
-            })
-        while (!requestComplete) {
+                // TODO: Send token to your backend via HTTPS
+                // ...
+            } else {
+                val idToken = ""
+                // TODO: Handle error -> task.getException();
+            }
+            Log.d("FirebaseTokenRefresh", "refreshedToken " + idToken)
+        })
+        while (!task.isComplete) {
             // TODO: Maybe einen Timer für Abbruch
         }
     }
 
     fun registerUserWithEmailAndPassword(email: String, password: String): FirebaseReturnOptions {
-        Log.d("Register User1","register User Test")
-        val returnParameter = FirebaseReturnOptions.NOT_PROCCESSED
+        Log.d("Register User1", "register User Test")
+        var returnParameter: FirebaseReturnOptions = FirebaseReturnOptions.NOT_PROCCESSED
 
         val task = auth.createUserWithEmailAndPassword(email, password);
 
-        task.addOnCompleteListener {
-            if (task.isSuccessful) {
-                // Sign in success
-                Log.d("FireBase: ", "createUserWithEmail:success")
-                val returnParameter = FirebaseReturnOptions.REGISTERED
-            } else {
-                // If sign in fails
-                Log.w("FireBase: ", "createUserWithEmail:failure", task.exception)
-                val returnParameter = FirebaseReturnOptions.REGISTRATION_FAILED
-            }
-            refreshIdToken()
-        }
-
-        while(returnParameter == FirebaseReturnOptions.NOT_PROCCESSED) {
+        while (!task.isComplete) {
             // TODO: Maybe Abbruchtimer einbauen
         }
+
+        if (task.isSuccessful) {
+            // Sign in success
+            Log.d("FireBase: ", "createUserWithEmail:success")
+            returnParameter = FirebaseReturnOptions.REGISTERED
+        } else {
+            // If sign in fails
+            Log.w("FireBase: ", "createUserWithEmail:failure", task.exception)
+            returnParameter = FirebaseReturnOptions.REGISTRATION_FAILED
+        }
+        refreshIdToken()
+
         return returnParameter
     }
 
@@ -93,9 +91,11 @@ class FirebaseManager {
             refreshIdToken()
         }
 
-        while(returnParameter == FirebaseReturnOptions.NOT_PROCCESSED) {
+        while(!task.isComplete) {
+        //while(returnParameter == FirebaseReturnOptions.NOT_PROCCESSED) {
             // TODO: Maybe Abbruchtimer einbauen
         }
+
         return returnParameter
     }
 

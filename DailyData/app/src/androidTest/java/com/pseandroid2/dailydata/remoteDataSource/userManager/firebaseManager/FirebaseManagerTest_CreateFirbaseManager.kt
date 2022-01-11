@@ -3,13 +3,13 @@ package com.pseandroid2.dailydata.remoteDataSource.userManager.firebaseManager
 import android.util.Log
 import org.junit.Assert
 import org.junit.Test
+import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
 
-class FirebaseManager_CreateFirbaseManager {
+class FirebaseManagerTest_CreateFirbaseManager {
 
     // Notiz: Dieser Test wurde erstellt, da die FirebaseManager Klasse sofort bei ihrer Erstellung abgestürzt ist und dies hier vermieden werden soll
     @Test
     fun createFireBaseManagerObject() {
-        //var fm = FirebaseManager()
-        Assert.assertTrue(true)
+        var fm = FirebaseManager()
     }
 }
