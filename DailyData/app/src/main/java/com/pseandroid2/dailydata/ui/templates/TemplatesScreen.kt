@@ -3,7 +3,7 @@ package com.pseandroid2.dailydata.ui.templates
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.pse.util.ui.UiEvent
+import com.pseandroid2.dailydata.util.ui.UiEvent
 
 @Composable
 fun TemplatesScreen(

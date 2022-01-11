@@ -1,4 +1,4 @@
-package com.example.pse.util.ui
+package com.pseandroid2.dailydata.util.ui
 
 sealed class UiEvent {
     object PopBackStack: UiEvent()

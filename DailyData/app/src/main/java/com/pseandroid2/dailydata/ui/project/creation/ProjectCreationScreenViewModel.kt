@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pse.util.ui.UiEvent
+import com.pseandroid2.dailydata.util.ui.UiEvent
 import com.pseandroid2.dailydata.di.Repository
 import com.pseandroid2.dailydata.util.ui.Routes
 import com.pseandroid2.dailydata.util.ui.TableButton
