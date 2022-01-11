@@ -76,6 +76,7 @@ class FirebaseManager {
         return returnParameter
     }
 
+    // TODO: Baue Tests, sodass valide Eingabe Parameter da sind (email und password valide und != 0)
     fun signInWithEmailAndPassword(email: String, password: String): FirebaseReturnOptions {
         var returnParameter = FirebaseReturnOptions.NOT_PROCCESSED
 
@@ -112,5 +113,36 @@ class FirebaseManager {
 
     fun getToken(): String{
         return idToken
+    }
+
+    fun getUserID(): String {
+        if (auth.currentUser == null) {
+            return ""
+        }
+        return auth.currentUser!!.uid ?:  ""
+    }
+
+    fun getUserName(): String {
+        val user = getUser()
+        if (user == null || user.displayName == null) {
+            return ""
+        }
+        return user.displayName.toString() // TODO, prüfe ob das richtig ist
+    }
+
+    fun getUserEMail(): String {
+        val user = getUser()
+        if (user == null || user.email == null) {
+            return ""
+        }
+        return user.email.toString() // TODO, prüfe ob das richtig ist
+    }
+
+    fun getUserPhotoUrl(): String {
+        val user = getUser()
+        if (user == null || user.photoUrl == null) {
+            return ""
+        }
+        return user.photoUrl.toString() // TODO, prüfe ob das richtig ist
     }
 }

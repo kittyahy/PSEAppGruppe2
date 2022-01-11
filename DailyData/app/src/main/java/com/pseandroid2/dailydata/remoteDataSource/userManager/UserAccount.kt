@@ -34,34 +34,20 @@ class UserAccount {
         return firebaseManager.signOut()
     }
 
-
     fun getUserID(): String {
-        val user = firebaseManager.getUser() ?: return ""
-        return user.uid
+        return firebaseManager.getUserID()
     }
 
     fun getUserName(): String {
-        val user = firebaseManager.getUser()
-        if (user == null || user.displayName == null) {
-            return ""
-        }
-        return user.displayName.toString() // TODO, prüfe ob das richtig ist
+        return firebaseManager.getUserName()
     }
 
     fun getUserEMail(): String {
-        val user = firebaseManager.getUser()
-        if (user == null || user.email == null) {
-            return ""
-        }
-        return user.email.toString() // TODO, prüfe ob das richtig ist
+        return getUserEMail()
     }
 
     fun getUserPhotoUrl(): String {
-        val user = firebaseManager.getUser()
-        if (user == null || user.photoUrl == null) {
-            return ""
-        }
-        return user.photoUrl.toString() // TODO, prüfe ob das richtig ist
+        return firebaseManager.getUserPhotoUrl()
     }
 
     fun getToken(): String {
