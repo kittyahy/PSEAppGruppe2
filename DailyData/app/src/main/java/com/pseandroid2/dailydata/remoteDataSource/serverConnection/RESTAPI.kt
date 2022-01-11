@@ -12,6 +12,21 @@ class RESTAPI {
     val deltaController: String = ""
     val oldDataController: String = ""
 
+    var BASE_URL = "http://myserver.com/server/" // TODO: Die URL unseres Servers verwenden
+
+    //var retrofit: Retrofit
+
+    init {
+        /*
+        retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .build();
+         */
+
+        // Create Services
+        // https://square.github.io/retrofit/
+    }
+
     // Greetings Controller
     fun greets(): Boolean {
         // TODO: Implement Method
