@@ -32,21 +32,24 @@ class FirebaseManager {
         }
 
         val task = user.getIdToken(true)
-        task.addOnCompleteListener(OnCompleteListener<GetTokenResult> { task ->
-            if (task.isSuccessful) {
-                val idToken = task.result.token
 
-                // TODO: Send token to your backend via HTTPS
-                // ...
-            } else {
-                val idToken = ""
-                // TODO: Handle error -> task.getException();
-            }
-            Log.d("FirebaseTokenRefresh", "refreshedToken " + idToken)
-        })
         while (!task.isComplete) {
             // TODO: Maybe einen Timer für Abbruch
         }
+
+        idToken = ""
+        if (task.isSuccessful) {
+            if (task.result != null) {
+                idToken = task.result.token ?: ""
+            }
+
+            // TODO: Send token to your backend via HTTPS
+            // ...
+        } else {
+
+            // TODO: Handle error -> task.getException();
+        }
+        Log.d("FirebaseTokenRefresh", "refreshedToken " + idToken)
     }
 
     fun registerUserWithEmailAndPassword(email: String, password: String): FirebaseReturnOptions {
@@ -74,27 +77,23 @@ class FirebaseManager {
     }
 
     fun signInWithEmailAndPassword(email: String, password: String): FirebaseReturnOptions {
-        val returnParameter = FirebaseReturnOptions.NOT_PROCCESSED
+        var returnParameter = FirebaseReturnOptions.NOT_PROCCESSED
 
         val task = auth.signInWithEmailAndPassword(email, password);
 
-        task.addOnCompleteListener {
-            if (task.isSuccessful) {
-                // Sign in success
-                Log.d("FireBase: ", "signINWithEmail:success")
-                val returnParameter = FirebaseReturnOptions.SINGED_IN
-            } else {
-                // If sign in fails
-                Log.d("FireBase: ", "signINWithEmail:failure", task.exception)
-                val returnParameter = FirebaseReturnOptions.SIGN_IN_FAILED
-            }
-            refreshIdToken()
-        }
-
         while(!task.isComplete) {
-        //while(returnParameter == FirebaseReturnOptions.NOT_PROCCESSED) {
             // TODO: Maybe Abbruchtimer einbauen
         }
+        if (task.isSuccessful) {
+            // Sign in success
+            Log.d("FireBase: ", "signINWithEmail:success")
+            returnParameter = FirebaseReturnOptions.SINGED_IN
+        } else {
+            // If sign in fails
+            Log.d("FireBase: ", "signINWithEmail:failure", task.exception)
+            returnParameter = FirebaseReturnOptions.SIGN_IN_FAILED
+        }
+        refreshIdToken()
 
         return returnParameter
     }

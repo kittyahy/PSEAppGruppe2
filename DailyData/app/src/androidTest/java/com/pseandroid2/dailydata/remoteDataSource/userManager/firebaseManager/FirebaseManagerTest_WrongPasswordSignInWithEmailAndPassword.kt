@@ -6,17 +6,18 @@ import org.junit.Test
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
 
-class FirebaseManagerTest_RegisterUserWithEmailAndPasswordUnitTest {
+class FirebaseManagerTest_WrongPasswordSignInWithEmailAndPassword {
 
     @Test
     fun registerUser() {
         var email = "test@student.kit.edu"
-        var password = "PSEistsuper"
+        var password = "WrongPassword"
 
         var fm = FirebaseManager()
 
-        val returnParameter = fm.registerUserWithEmailAndPassword(email, password)
+        fm.signOut()
+        val returnParameter = fm.signInWithEmailAndPassword(email, password)
 
-        Assert.assertEquals(FirebaseReturnOptions.REGISTERED, returnParameter)
+        Assert.assertEquals(FirebaseReturnOptions.SIGN_IN_FAILED, returnParameter)
     }
 }
