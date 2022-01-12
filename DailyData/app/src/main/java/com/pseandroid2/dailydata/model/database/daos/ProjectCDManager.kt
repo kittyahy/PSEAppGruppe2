@@ -24,7 +24,7 @@ class ProjectCDManager private constructor(
 
     private val existingIds: SortedSet<Int> = TreeSet()
 
-    fun insertProject(project: Project): Project {
+    suspend fun insertProject(project: Project): Project {
         val newID: Int = insertProjectEntity(project)
         project.getProjectSkeleton().setID(newID)
 
