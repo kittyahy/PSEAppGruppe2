@@ -21,19 +21,19 @@ abstract class ProjectDataDAO {
     abstract fun getProjectDataByIds(vararg ids: Int): Flow<List<ProjectData>>
 
     @Query("SELECT id, name, description, wallpaper, onlineId FROM project WHERE id = :id")
-    abstract fun getProjectData(id: Int): Flow<ProjectData>
+    abstract fun getProjectData(id: Int): Flow<ProjectData?>
 
     @Query("UPDATE project SET name = :name WHERE id = :id")
-    abstract fun setName(id: Int, name: String)
+    abstract suspend fun setName(id: Int, name: String)
 
     @Query("UPDATE project SET description = :description WHERE id = :id")
-    abstract fun setDescription(id: Int, description: String)
+    abstract suspend fun setDescription(id: Int, description: String)
 
     @Query("UPDATE project SET wallpaper = :wallpaper WHERE id = :id")
-    abstract fun setWallpaper(id: Int, wallpaper: String)
+    abstract suspend fun setWallpaper(id: Int, wallpaper: String)
 
     @Query("UPDATE project SET onlineId = :onlineID WHERE id = :id")
-    abstract fun setOnlineID(id: Int, onlineID: Long)
+    abstract suspend fun setOnlineID(id: Int, onlineID: Long)
 
     /*=====================================USER RELATED STUFF=====================================*/
     @Query("SELECT * FROM user WHERE projectId IN (:ids)")
@@ -42,25 +42,25 @@ abstract class ProjectDataDAO {
     @Query("SELECT id AS projectId, admin AS user FROM project WHERE id IN (:ids)")
     abstract fun getAdminByIds(vararg ids: Int): Flow<List<ProjectUserMap>>
 
-    fun addUser(projectId: Int, user: User) {
+    suspend fun addUser(projectId: Int, user: User) {
         insertProjectUserMap(ProjectUserMap(projectId, user))
     }
 
-    fun removeUsers(projectId: Int, vararg users: User) {
+    suspend fun removeUsers(projectId: Int, vararg users: User) {
         for (user: User in users) {
             deleteProjectUserMap(ProjectUserMap(projectId, user))
         }
     }
 
     @Query("UPDATE project SET admin = :admin WHERE id = :projectId")
-    abstract fun changeAdmin(projectId: Int, admin: User)
+    abstract suspend fun changeAdmin(projectId: Int, admin: User)
 
     /*=====================================DELTA RELATED STUFF====================================*/
     @Insert
-    abstract fun insertMissingSlot(slot: MissingSlotEntity)
+    abstract suspend fun insertMissingSlot(slot: MissingSlotEntity)
 
     @Delete
-    abstract fun deleteMissingSlot(slot: MissingSlotEntity)
+    abstract suspend fun deleteMissingSlot(slot: MissingSlotEntity)
 
     @Query("SELECT * FROM missingSlot WHERE projectId = :projectId")
     abstract fun getMissingSlots(projectId: Int): List<MissingSlotEntity>
@@ -70,11 +70,11 @@ abstract class ProjectDataDAO {
     abstract suspend fun insertProjectEntity(entity: ProjectEntity)
 
     @Delete
-    abstract fun deleteProjectEntity(entity: ProjectEntity)
+    abstract suspend fun deleteProjectEntity(entity: ProjectEntity)
 
     @Insert
-    abstract fun insertProjectUserMap(userMap: ProjectUserMap)
+    abstract suspend fun insertProjectUserMap(userMap: ProjectUserMap)
 
     @Delete
-    abstract fun deleteProjectUserMap(userMap: ProjectUserMap)
+    abstract suspend fun deleteProjectUserMap(userMap: ProjectUserMap)
 }
