@@ -21,7 +21,7 @@ abstract class ProjectDataDAO {
     abstract fun getProjectDataByIds(vararg ids: Int): Flow<List<ProjectData>>
 
     @Query("SELECT id, name, description, wallpaper, onlineId FROM project WHERE id = :id")
-    abstract fun getProjectData(id: Int): Flow<ProjectData>
+    abstract fun getProjectData(id: Int): Flow<ProjectData?>
 
     @Query("UPDATE project SET name = :name WHERE id = :id")
     abstract suspend fun setName(id: Int, name: String)
