@@ -166,7 +166,7 @@ class RemoteDataSourceAPI {
         return LocalDateTime.parse("0000-00-00 00:00")
     }
 
-    // -----------------------------FetchController-------------------------------
+    // -----------------------------FetchRequestController-------------------------------
     /**
      * @param requestInfo:String ist eine JSON Datei
      */
