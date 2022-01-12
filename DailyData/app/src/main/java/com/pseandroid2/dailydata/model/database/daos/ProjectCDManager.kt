@@ -26,12 +26,12 @@ import com.pseandroid2.dailydata.model.Graph
 import com.pseandroid2.dailydata.model.Project
 import com.pseandroid2.dailydata.model.ProjectSkeleton
 import com.pseandroid2.dailydata.model.ProjectTemplate
-import com.pseandroid2.dailydata.model.TableLayout
 import com.pseandroid2.dailydata.model.User
 import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.model.database.entities.ProjectEntity
 import com.pseandroid2.dailydata.model.database.entities.ProjectSkeletonEntity
 import com.pseandroid2.dailydata.model.notifications.Notification
+import com.pseandroid2.dailydata.model.table.TableLayout
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.util.SortedIntListUtil
 import java.util.SortedSet

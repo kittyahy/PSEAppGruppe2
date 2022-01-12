@@ -20,11 +20,15 @@
 
 package com.pseandroid2.dailydata.model.database.daos
 
-import androidx.room.*
-import com.pseandroid2.dailydata.model.Row
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.Update
 import com.pseandroid2.dailydata.model.database.entities.RowEntity
 import com.pseandroid2.dailydata.model.table.ArrayListRow
-import com.pseandroid2.dailydata.model.toRowEntity
+import com.pseandroid2.dailydata.model.table.Row
+import com.pseandroid2.dailydata.model.table.toRowEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

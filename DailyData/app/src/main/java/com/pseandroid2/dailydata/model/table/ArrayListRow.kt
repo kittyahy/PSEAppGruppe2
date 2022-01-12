@@ -21,8 +21,8 @@
 package com.pseandroid2.dailydata.model.table
 
 import com.google.gson.Gson
-import com.pseandroid2.dailydata.model.Row
-import com.pseandroid2.dailydata.model.RowMetaData
+import com.pseandroid2.dailydata.model.table.Row
+import com.pseandroid2.dailydata.model.table.RowMetaData
 import com.pseandroid2.dailydata.model.database.entities.RowEntity
 
 class ArrayListRow(
