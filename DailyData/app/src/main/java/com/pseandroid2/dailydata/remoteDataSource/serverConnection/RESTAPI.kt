@@ -25,7 +25,6 @@ import com.pseandroid2.dailydata.model.ProjectTemplate
 import java.time.LocalDateTime
 import retrofit2.Retrofit
 import retrofit2.http.GET
-
 class RESTAPI {
     private var BASE_URL = "http://myserver.com/server/" // TODO: Die URL unseres Servers verwenden
 
@@ -66,9 +65,9 @@ class RESTAPI {
         retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .build();
+            //.addConverterFactory(GsonConverterFactore.create())
 
-
-        // Create Services
+        // Create Services // TODO mal schauen, ob ich das brauche
         // https://square.github.io/retrofit/
     }
 
