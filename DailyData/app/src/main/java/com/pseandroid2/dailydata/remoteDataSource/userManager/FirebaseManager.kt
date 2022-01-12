@@ -73,7 +73,10 @@ class FirebaseManager {
     }
 
     fun registerUserWithEmailAndPassword(email: String, password: String): FirebaseReturnOptions {
-        Log.d("Register User1", "register User Test")
+        if (email == "" || password == "") {
+            return FirebaseReturnOptions.WRONG_INPUT_PARAMETERS
+        }
+
         var returnParameter: FirebaseReturnOptions = FirebaseReturnOptions.NOT_PROCCESSED
 
         val task = auth.createUserWithEmailAndPassword(email, password);
@@ -98,6 +101,10 @@ class FirebaseManager {
 
     // TODO: Baue Tests, sodass valide Eingabe Parameter da sind (email und password valide und != 0)
     fun signInWithEmailAndPassword(email: String, password: String): FirebaseReturnOptions {
+        if (email == "" || password == "") {
+            return FirebaseReturnOptions.WRONG_INPUT_PARAMETERS
+        }
+
         var returnParameter = FirebaseReturnOptions.NOT_PROCCESSED
 
         val task = auth.signInWithEmailAndPassword(email, password);

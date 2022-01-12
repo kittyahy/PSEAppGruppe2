@@ -20,26 +20,26 @@ class FirebaseManagerTest_EmptyParameter {
 
         var returnParameter = fm.signInWithEmailAndPassword(email, "")
 
-        Assert.assertEquals(FirebaseReturnOptions.SIGN_IN_FAILED, returnParameter)
+        Assert.assertEquals(FirebaseReturnOptions.WRONG_INPUT_PARAMETERS, returnParameter)
 
         returnParameter = fm.signInWithEmailAndPassword("", password)
 
-        Assert.assertEquals(FirebaseReturnOptions.SIGN_IN_FAILED, returnParameter)
+        Assert.assertEquals(FirebaseReturnOptions.WRONG_INPUT_PARAMETERS, returnParameter)
 
         returnParameter = fm.registerUserWithEmailAndPassword(email, "")
 
-        Assert.assertEquals(FirebaseReturnOptions.REGISTRATION_FAILED, returnParameter)
+        Assert.assertEquals(FirebaseReturnOptions.WRONG_INPUT_PARAMETERS, returnParameter)
 
         returnParameter = fm.registerUserWithEmailAndPassword("", "")
 
-        Assert.assertEquals(FirebaseReturnOptions.REGISTRATION_FAILED, returnParameter)
+        Assert.assertEquals(FirebaseReturnOptions.WRONG_INPUT_PARAMETERS, returnParameter)
 
         returnParameter = fm.registerUserWithEmailAndPassword("", password)
 
-        Assert.assertEquals(FirebaseReturnOptions.REGISTRATION_FAILED, returnParameter)
+        Assert.assertEquals(FirebaseReturnOptions.WRONG_INPUT_PARAMETERS, returnParameter)
 
         returnParameter = fm.registerUserWithEmailAndPassword("", "")
 
-        Assert.assertEquals(FirebaseReturnOptions.REGISTRATION_FAILED, returnParameter)
+        Assert.assertEquals(FirebaseReturnOptions.WRONG_INPUT_PARAMETERS, returnParameter)
     }
 }
