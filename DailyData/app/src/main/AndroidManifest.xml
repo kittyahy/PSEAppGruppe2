@@ -11,8 +11,12 @@
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <!-- Something doesn't work here, commented this to try and make the project compile - Arne
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    -->
 
     <application
+        android:name=".DailyDataApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -21,6 +25,17 @@
         android:theme="@style/Theme.DailyData" >
         // android:name=".hilt.HiltApplication"
 
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.DailyData">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -33,10 +48,10 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity
+ <!--       <activity
             android:name=".remoteDataSource.MapsActivity"
             android:exported="false"
-            android:label="@string/title_activity_maps" />
+            android:label="@string/title_activity_maps" /> -->
     </application>
 
 </manifest>

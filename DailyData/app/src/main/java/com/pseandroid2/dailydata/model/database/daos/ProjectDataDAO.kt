@@ -1,3 +1,23 @@
+/*
+
+    DailyData is an android app to easily create diagrams from data one has collected
+    Copyright (C) 2022  Antonia Heiming, Anton Kadelbach, Arne Kuchenbecker, Merlin Opp, Robin Amman
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+*/
+
 package com.pseandroid2.dailydata.model.database.daos
 
 import androidx.room.Dao
@@ -21,60 +41,60 @@ abstract class ProjectDataDAO {
     abstract fun getProjectDataByIds(vararg ids: Int): Flow<List<ProjectData>>
 
     @Query("SELECT id, name, description, wallpaper, onlineId FROM project WHERE id = :id")
-    abstract fun getProjectData(id: Int): Flow<ProjectData>
+    abstract fun getProjectData(id: Int): Flow<ProjectData?>
 
     @Query("UPDATE project SET name = :name WHERE id = :id")
-    abstract fun setName(id: Int, name: String)
+    abstract suspend fun setName(id: Int, name: String)
 
     @Query("UPDATE project SET description = :description WHERE id = :id")
-    abstract fun setDescription(id: Int, description: String)
+    abstract suspend fun setDescription(id: Int, description: String)
 
     @Query("UPDATE project SET wallpaper = :wallpaper WHERE id = :id")
-    abstract fun setWallpaper(id: Int, wallpaper: String)
+    abstract suspend fun setWallpaper(id: Int, wallpaper: String)
 
     @Query("UPDATE project SET onlineId = :onlineID WHERE id = :id")
-    abstract fun setOnlineID(id: Int, onlineID: Long)
+    abstract suspend fun setOnlineID(id: Int, onlineID: Long)
 
     /*=====================================USER RELATED STUFF=====================================*/
     @Query("SELECT * FROM user WHERE projectId IN (:ids)")
     abstract fun getUsersByIds(vararg ids: Int): Flow<List<ProjectUserMap>>
 
-    @Query("SELECT id AS projectID, admin AS user FROM project WHERE id IN (:ids)")
+    @Query("SELECT id AS projectId, admin AS user FROM project WHERE id IN (:ids)")
     abstract fun getAdminByIds(vararg ids: Int): Flow<List<ProjectUserMap>>
 
-    fun addUser(projectId: Int, user: User) {
+    suspend fun addUser(projectId: Int, user: User) {
         insertProjectUserMap(ProjectUserMap(projectId, user))
     }
 
-    fun removeUsers(projectId: Int, vararg users: User) {
+    suspend fun removeUsers(projectId: Int, vararg users: User) {
         for (user: User in users) {
             deleteProjectUserMap(ProjectUserMap(projectId, user))
         }
     }
 
     @Query("UPDATE project SET admin = :admin WHERE id = :projectId")
-    abstract fun changeAdmin(projectId: Int, admin: User)
+    abstract suspend fun changeAdmin(projectId: Int, admin: User)
 
     /*=====================================DELTA RELATED STUFF====================================*/
     @Insert
-    abstract fun insertMissingSlot(slot: MissingSlotEntity)
+    abstract suspend fun insertMissingSlot(slot: MissingSlotEntity)
 
     @Delete
-    abstract fun deleteMissingSlot(slot: MissingSlotEntity)
+    abstract suspend fun deleteMissingSlot(slot: MissingSlotEntity)
 
     @Query("SELECT * FROM missingSlot WHERE projectId = :projectId")
     abstract fun getMissingSlots(projectId: Int): List<MissingSlotEntity>
 
     /*========================SHOULD ONLY BE CALLED FROM INSIDE THE MODEL=========================*/
     @Insert
-    abstract fun insertProjectEntity(entity: ProjectEntity)
+    abstract suspend fun insertProjectEntity(entity: ProjectEntity)
 
     @Delete
-    abstract fun deleteProjectEntity(entity: ProjectEntity)
+    abstract suspend fun deleteProjectEntity(entity: ProjectEntity)
 
     @Insert
-    abstract fun insertProjectUserMap(userMap: ProjectUserMap)
+    abstract suspend fun insertProjectUserMap(userMap: ProjectUserMap)
 
     @Delete
-    abstract fun deleteProjectUserMap(userMap: ProjectUserMap)
+    abstract suspend fun deleteProjectUserMap(userMap: ProjectUserMap)
 }
