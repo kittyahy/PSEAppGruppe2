@@ -17,18 +17,3 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
-
-package com.pseandroid2.dailydata.ui.templates
-
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.pseandroid2.dailydata.util.ui.UiEvent
-
-@Composable
-fun TemplatesScreen(
-    onNavigate: (UiEvent.Navigate) -> Unit,
-    viewModel: TemplatesScreenViewModel = hiltViewModel()
-) {
-    Text("Templates")
-}
