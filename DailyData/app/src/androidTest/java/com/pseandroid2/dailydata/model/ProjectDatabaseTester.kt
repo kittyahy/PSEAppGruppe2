@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
+import com.google.gson.Gson
 import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.model.database.daos.ProjectDataDAO
 import com.pseandroid2.dailydata.model.database.entities.ProjectData
@@ -100,7 +101,7 @@ class ProjectDatabaseTester {
     @Test
     fun testNonExistingGet() {
         assertThrows(NullPointerException::class.java) {
-            runBlocking<Unit> {
+            runTest {
                 projectDAO.insertProjectEntity(
                     ProjectEntity(
                         1,
@@ -110,11 +111,7 @@ class ProjectDatabaseTester {
                     )
                 )
 
-                val retProj = projectDAO.getProjectData(0).first()
-
-                if (retProj == null) {
-                    Log.d("XXX", "Null although not possible")
-                }
+                val retProj: ProjectData = projectDAO.getProjectData(0).first()!!
             }
         }
     }
@@ -125,9 +122,9 @@ class ProjectDatabaseTester {
     fun testRemoveProject() = runTest {
         val ent = ProjectEntity(1, ProjectSkeletonEntity("Test", "", "", ""), SimpleUser("", ""), 1)
         projectDAO.insertProjectEntity(ent)
-        assertEquals(ent, projectDAO.getProjectData(1).first())
+        assertEquals(ProjectData(1, "Test", "", 1, ""), projectDAO.getProjectData(1).first()!!)
         projectDAO.deleteProjectEntity(ent)
-        assertEquals(listOf<ProjectData>(), projectDAO.getProjectData(1).first())
+        assertNull(projectDAO.getProjectData(1).first())
     }
 }
 
