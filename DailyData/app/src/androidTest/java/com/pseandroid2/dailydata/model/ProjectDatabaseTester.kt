@@ -6,6 +6,7 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.model.database.daos.ProjectDataDAO
+import com.pseandroid2.dailydata.model.database.entities.ProjectData
 import com.pseandroid2.dailydata.model.database.entities.ProjectEntity
 import com.pseandroid2.dailydata.model.database.entities.ProjectSkeletonEntity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -17,9 +18,12 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertThrows
+import org.junit.Assert.assertNull
 import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Test
+import java.lang.NullPointerException
 
 class ProjectDatabaseTester {
     private lateinit var db: AppDataBase
@@ -63,14 +67,11 @@ class ProjectDatabaseTester {
         val noProjects = 5
 
         val list = async {
-            Log.d("XXX", "Start Async")
             val ret = projectDAO.getAllProjectData().first {
                 return@first it.size == noProjects && it[noProjects - 1].id == (noProjects - 1)
             }
-            Log.d("XXX", "End Async")
             return@async ret
         }
-        Log.d("XXX", "Continue Main")
 
         val user = SimpleUser("", "")
 
@@ -83,7 +84,6 @@ class ProjectDatabaseTester {
                     i.toLong()
                 )
             )
-            Log.d("XXX", "Inserted $i")
         }
 
         val deferredList = list.await()
@@ -94,7 +94,40 @@ class ProjectDatabaseTester {
             assertEquals("Test$i", deferredList[i].name)
             assertEquals(i.toLong(), deferredList[i].onlineId)
         }
-        Log.d("XXX", "Completed Test")
+    }
+
+    @ExperimentalCoroutinesApi
+    @Test
+    fun testNonExistingGet() {
+        assertThrows(NullPointerException::class.java) {
+            runBlocking<Unit> {
+                projectDAO.insertProjectEntity(
+                    ProjectEntity(
+                        1,
+                        ProjectSkeletonEntity("Test", "", "", ""),
+                        SimpleUser("", ""),
+                        1
+                    )
+                )
+
+                val retProj = projectDAO.getProjectData(0).first()
+
+                if (retProj == null) {
+                    Log.d("XXX", "Null although not possible")
+                }
+            }
+        }
+    }
+
+
+    @ExperimentalCoroutinesApi
+    @Test
+    fun testRemoveProject() = runTest {
+        val ent = ProjectEntity(1, ProjectSkeletonEntity("Test", "", "", ""), SimpleUser("", ""), 1)
+        projectDAO.insertProjectEntity(ent)
+        assertEquals(ent, projectDAO.getProjectData(1).first())
+        projectDAO.deleteProjectEntity(ent)
+        assertEquals(listOf<ProjectData>(), projectDAO.getProjectData(1).first())
     }
 }
 
