@@ -22,6 +22,7 @@ package com.pseandroid2.dailydata.model.database.daos
 
 
 import androidx.room.withTransaction
+import com.google.gson.Gson
 import com.pseandroid2.dailydata.model.Graph
 import com.pseandroid2.dailydata.model.Project
 import com.pseandroid2.dailydata.model.ProjectSkeleton
@@ -30,6 +31,7 @@ import com.pseandroid2.dailydata.model.User
 import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.model.database.entities.ProjectEntity
 import com.pseandroid2.dailydata.model.database.entities.ProjectSkeletonEntity
+import com.pseandroid2.dailydata.model.database.entities.ProjectTemplateEntity
 import com.pseandroid2.dailydata.model.notifications.Notification
 import com.pseandroid2.dailydata.model.table.TableLayout
 import com.pseandroid2.dailydata.model.uielements.UIElement
@@ -39,8 +41,10 @@ import java.util.TreeSet
 
 class ProjectCDManager private constructor(
     private val projectDAO: ProjectDataDAO,
+    private val templateDAO: TemplateDAO,
     private val uiDAO: UIElementDAO,
     private val notifDAO: NotificationsDAO,
+    private val graphDAO: GraphDAO,
     private val graphManager: GraphCDManager,
     private val db: AppDataBase
 ) {
@@ -84,48 +88,76 @@ class ProjectCDManager private constructor(
         return@withTransaction project
     }
 
-    fun deleteProject(project: Project) {
-        //TODO
+    /**
+     * Deletes a project from the Database. This method does so as a Transaction, i.e. it will roll
+     * back any changes if an exception occurs at any point during the deletion process.
+     *
+     * @param project The project that is to be deleted
+     */
+    suspend fun deleteProject(project: Project) = db.withTransaction {
+        val id = project.getProjectSkeleton().getID()
+        graphDAO.deleteAllGraphs(id)
+
+        notifDAO.deleteAllNotifications(id)
+
+        uiDAO.deleteAllUIElements(id)
+
+        projectDAO.deleteAllUsers(id)
+
+        projectDAO.deleteProjectEntityById(id)
     }
 
-    fun insertProjectTemplate(template: ProjectTemplate): Int {
-        //TODO
-        return 0
+    /**
+     * Inserts a new Project Template into the database.
+     * @param template The template to be inserted
+     * @return The id that was given to the template as unique identifier
+     */
+    suspend fun insertProjectTemplate(template: ProjectTemplate): Int {
+        val newId = getNextId()
+        val skeleton = createSkeleton(template.getProjectSkeleton(), template.getTableLayout())
+        val ent = ProjectTemplateEntity(newId, skeleton, template.getCreator())
+        templateDAO.insertProjectTemplate(ent)
+        return newId
     }
 
-    fun deleteProjectTemplate(template: ProjectTemplate) {
-        //TODO
+    /**
+     * Deletes a Project Template from the database
+     * @param template The template that is to be deleted
+     */
+    suspend fun deleteProjectTemplate(template: ProjectTemplate) {
+        templateDAO.deleteProjectTemplateById(template.getProjectSkeleton().getID())
     }
 
     private fun isTemplate(id: Int): Boolean {
-        //TODO
+        TODO("Do we even need this?")
         return false
+    }
+
+    private fun createSkeleton(
+        skeleton: ProjectSkeleton,
+        layout: TableLayout
+    ): ProjectSkeletonEntity {
+        val name: String = skeleton.getName()
+        val desc: String = skeleton.getDescription()
+        val wallpaper: String = skeleton.getWallpaperPath()
+        val onlineId: Long = skeleton.getOnlineId()
+        return ProjectSkeletonEntity(name, desc, wallpaper, layout.toJSON(), onlineId)
+    }
+
+    private suspend fun insertProjectEntity(project: Project): Int {
+        val skeleton: ProjectSkeletonEntity =
+            createSkeleton(project.getProjectSkeleton(), project.getTable().getLayout())
+        val admin: User = project.getAdmin()
+        val id = getNextId()
+        val entity = ProjectEntity(id, skeleton, admin)
+
+        projectDAO.insertProjectEntity(entity)
+
+        return id
     }
 
     private fun getNextId(): Int {
         return SortedIntListUtil.getFirstMissingInt(ArrayList(existingIds))
-    }
-
-    private fun createSkeleton(project: Project): ProjectSkeletonEntity {
-        val skeleton: ProjectSkeleton = project.getProjectSkeleton()
-        val name: String = skeleton.getName()
-        val desc: String = skeleton.getDescription()
-        val wallpaper: String = skeleton.getWallpaperPath()
-        val layout: String =
-            project.getTable().getLayout().toJSON()
-        return ProjectSkeletonEntity(name, desc, wallpaper, layout)
-    }
-
-    private fun insertProjectEntity(project: Project): Int {
-        val skeleton: ProjectSkeletonEntity = createSkeleton(project)
-        val admin: User = project.getAdmin()
-        val onlineId: Long = project.getOnlineId()
-        val id = getNextId()
-        val entity = ProjectEntity(id, skeleton, admin, onlineId)
-
-        //projectDAO.insertProjectEntity(entity)
-
-        return id
     }
 
 }
