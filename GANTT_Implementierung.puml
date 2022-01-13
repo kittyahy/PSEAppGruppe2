@@ -55,109 +55,109 @@ Project starts the 3rd of January 2022
 
 /'Repository====================================================================================='/
 
-[Repository Interfaces und Classes] starts 2022-01-13 and ends 2022-01-18
+[Repository Interfaces und Classes] starts 2022-01-13
 [Repository Interfaces und Classes] is colored in lightblue
 
-[View Model Interface] starts 2022-01-13
-[View Model Interface] is colored in lightblue
-    [CommunicationClasses] starts 2022-01-13
-    [CommunicationClasses] is colored in lightblue
-        [class DataType] starts 2022-01-13 and ends 2022-01-13
-        [class DotSize] starts 2022-01-13 and ends 2022-01-13
-        [class LineType] starts 2022-01-13 and ends 2022-01-13
-        [class Time] starts 2022-01-13 and ends 2022-01-13
-        [class Notification] starts at [class Time]'s end
-        [class Member] starts 2022-01-13 and ends 2022-01-13
-        [class Row] starts 2022-01-13 and ends 2022-01-13
-        [class Button] starts 2022-01-13 and ends 2022-01-13
-        [class Column] starts at [class DataType]'s end
-        [class Graph] starts 2022-01-13 and ends 2022-01-13
-        [class LineChart] starts at [class Graph]'s end
-            [class LineChart] starts at [class DotSize]'s end
-            [class LineChart] starts at [class LineType]'s end
-            [class LineChart] starts at [class Column]'s end
-        [class PieChart] starts at [class Graph]'s end
-        [class ProjectPreview] starts 2022-01-13 and ends 2022-01-13
-        [class Project] starts at [class Button]'s end
-            [class Project] starts at [class Notification]'s end
-            [class Project] starts at [class Member]'s end
-            [class Project] starts at [class PieChart]'s end
-            [class Project] starts at [class LineChart]'s end
-            [class Project] starts at [class Row]'s end
-    [CommunicationClasses] ends at [class Project]'s end
+    [View Model Interface] starts 2022-01-13
+    [View Model Interface] is colored in lightblue
+        [CommunicationClasses] starts 2022-01-13
+        [CommunicationClasses] is colored in lightblue
+            [class DataType] starts 2022-01-13 and ends 2022-01-13
+            [class DotSize] starts 2022-01-13 and ends 2022-01-13
+            [class LineType] starts 2022-01-13 and ends 2022-01-13
+            [class Time] starts 2022-01-13 and ends 2022-01-13
+            [class Notification] starts at [class Time]'s end
+            [class Member] starts 2022-01-13 and ends 2022-01-13
+            [class Row] starts 2022-01-13 and ends 2022-01-13
+            [class Button] starts 2022-01-13 and ends 2022-01-13
+            [class Column] starts at [class DataType]'s end
+            [class Graph] starts 2022-01-13 and ends 2022-01-13
+            [class LineChart] starts at [class Graph]'s end
+                [class LineChart] starts at [class DotSize]'s end
+                [class LineChart] starts at [class LineType]'s end
+                [class LineChart] starts at [class Column]'s end
+            [class PieChart] starts at [class Graph]'s end
+            [class ProjectPreview] starts 2022-01-13 and ends 2022-01-13
+            [class Project] starts at [class Button]'s end
+                [class Project] starts at [class Notification]'s end
+                [class Project] starts at [class Member]'s end
+                [class Project] starts at [class PieChart]'s end
+                [class Project] starts at [class LineChart]'s end
+                [class Project] starts at [class Row]'s end
+        [CommunicationClasses] ends at [class Project]'s end
 
-    [class ProjectHandler] starts at [CommunicationClasses]'s end
-    [class PostHandler] starts 2022-01-13 and ends 2022-01-13
-    [class CommandFactory] starts 2022-01-13 and ends 2022-01-13
+        [class ProjectHandler] starts at [CommunicationClasses]'s end
+        [class PostHandler] starts at [CommunicationClasses]'s end
+        [class CommandFactory] starts at [CommunicationClasses]'s end
 
-[View Model Interface] ends at [class PostHandler]'s end
-[View Model Interface] ends at [class CommandFactory]'s end
-[View Model Interface] ends at [CommunicationClasses]'s end
-[View Model Interface] ends at [class ProjectHandler]'s end
+    [View Model Interface] ends at [class PostHandler]'s end
+    [View Model Interface] ends at [class CommandFactory]'s end
+    [View Model Interface] ends at [CommunicationClasses]'s end
+    [View Model Interface] ends at [class ProjectHandler]'s end
 
-[CommandCenter] starts 2022-01-13 and ends 2022-01-13
-[CommandCenter] is colored in lightblue
+    [CommandCenter] starts at [View Model Interface]'s end
+    [CommandCenter] is colored in lightblue
 
-    [Commands] starts 2022-01-13
-    [Commands] is colored in lightblue
-        [class IllegalOperationException] starts 2022-01-13 and ends 2022-01-13
-        [class ProjectCommand] starts at [class IllegalOperationException]'s end
-        [class CommandWrapper] starts at [class ProjectCommand]'s end
-        [class AddRow] starts at [class ProjectCommand]'s end
-        [class DeleteRow] starts at [class ProjectCommand]'s end
-        [class DeleteColumn] starts at [class ProjectCommand]'s end
-        [class AddColumn] starts at [class ProjectCommand]'s end
-        [class SetCell] starts at [class ProjectCommand]'s end
-        [class SetAdmin] starts at [class ProjectCommand]'s end
-        [class AddUser] starts at [class ProjectCommand]'s end
-        [class RemoveUser] starts at [class ProjectCommand]'s end
-        [class CreateGraph] starts at [class ProjectCommand]'s end
-        [class SetCalculationFunction] starts at [class ProjectCommand]'s end
-        [class SetTransformationFunctionCompostition] starts at [class ProjectCommand]'s end
-        [class SetSetting] starts at [class ProjectCommand]'s end
-        [class SetProjectName] starts at [class ProjectCommand]'s end
-        [class SetProjectDesign] starts at [class ProjectCommand]'s end
-        [class SetWallpaper] starts at [class ProjectCommand]'s end
-        [class SetNotification] starts at [class ProjectCommand]'s end
-        [class DeleteNotification] starts at [class ProjectCommand]'s end
-        [class SetUIElement] starts at [class ProjectCommand]'s end
-        [class RequestOldData] starts at [class ProjectCommand]'s end
-        [class SetIsOnlineProject] starts at [class ProjectCommand]'s end
-        [class CreateProject] starts at [class ProjectCommand]'s end
-    [Commands] ends at [class CreateProject]'s end
-    [Commands] ends at [class AddRow]'s end
-    [Commands] ends at [class DeleteColumn]'s end
-    [Commands] ends at [class DeleteRow]'s end
-    [Commands] ends at [class AddColumn]'s end
-    [Commands] ends at [class SetCell]'s end
-    [Commands] ends at [class SetAdmin]'s end
-    [Commands] ends at [class AddUser]'s end
-    [Commands] ends at [class RemoveUser]'s end
-    [Commands] ends at [class CreateGraph]'s end
-    [Commands] ends at [class SetCalculationFunction]'s end
-    [Commands] ends at [class SetTransformationFunctionCompostition]'s end
-    [Commands] ends at [class SetSetting]'s end
-    [Commands] ends at [class SetProjectName]'s end
-    [Commands] ends at [class SetProjectDesign]'s end
-    [Commands] ends at [class SetWallpaper]'s end
-    [Commands] ends at [class SetNotification]'s end
-    [Commands] ends at [class SetUIElement]'s end
-    [Commands] ends at [class RequestOldData]'s end
-    [Commands] ends at [class SetIsOnlineProject]'s end
+        [Commands] starts at [CommandCenter]'s start
+        [Commands] is colored in lightblue
+            [class IllegalOperationException] starts at [Commands]'s start
+            [class ProjectCommand] starts at [class IllegalOperationException]'s end
+            [class CommandWrapper] starts at [class ProjectCommand]'s end
+            [class AddRow] starts at [class ProjectCommand]'s end
+            [class DeleteRow] starts at [class ProjectCommand]'s end
+            [class DeleteColumn] starts at [class ProjectCommand]'s end
+            [class AddColumn] starts at [class ProjectCommand]'s end
+            [class SetCell] starts at [class ProjectCommand]'s end
+            [class SetAdmin] starts at [class ProjectCommand]'s end
+            [class AddUser] starts at [class ProjectCommand]'s end
+            [class RemoveUser] starts at [class ProjectCommand]'s end
+            [class CreateGraph] starts at [class ProjectCommand]'s end
+            [class SetCalculationFunction] starts at [class ProjectCommand]'s end
+            [class SetTransformationFunctionCompostition] starts at [class ProjectCommand]'s end
+            [class SetSetting] starts at [class ProjectCommand]'s end
+            [class SetProjectName] starts at [class ProjectCommand]'s end
+            [class SetProjectDesign] starts at [class ProjectCommand]'s end
+            [class SetWallpaper] starts at [class ProjectCommand]'s end
+            [class SetNotification] starts at [class ProjectCommand]'s end
+            [class DeleteNotification] starts at [class ProjectCommand]'s end
+            [class SetUIElement] starts at [class ProjectCommand]'s end
+            [class RequestOldData] starts at [class ProjectCommand]'s end
+            [class SetIsOnlineProject] starts at [class ProjectCommand]'s end
+            [class CreateProject] starts at [class ProjectCommand]'s end
+        [Commands] ends at [class CreateProject]'s end
+        [Commands] ends at [class AddRow]'s end
+        [Commands] ends at [class DeleteColumn]'s end
+        [Commands] ends at [class DeleteRow]'s end
+        [Commands] ends at [class AddColumn]'s end
+        [Commands] ends at [class SetCell]'s end
+        [Commands] ends at [class SetAdmin]'s end
+        [Commands] ends at [class AddUser]'s end
+        [Commands] ends at [class RemoveUser]'s end
+        [Commands] ends at [class CreateGraph]'s end
+        [Commands] ends at [class SetCalculationFunction]'s end
+        [Commands] ends at [class SetTransformationFunctionCompostition]'s end
+        [Commands] ends at [class SetSetting]'s end
+        [Commands] ends at [class SetProjectName]'s end
+        [Commands] ends at [class SetProjectDesign]'s end
+        [Commands] ends at [class SetWallpaper]'s end
+        [Commands] ends at [class SetNotification]'s end
+        [Commands] ends at [class SetUIElement]'s end
+        [Commands] ends at [class RequestOldData]'s end
+        [Commands] ends at [class SetIsOnlineProject]'s end
 
-    [class CommandUtility] starts at [Commands]'s end
-    [class CommandInbox] starts at [Commands]'s end
+        [class CommandUtility] starts at [Commands]'s end
+        [class CommandInbox] starts at [Commands]'s end
 
 
-    [UpToDater] starts at [Commands]'s end
-    [UpToDater] is colored in lightblue
-        [class OldDataFetcher] starts at [UpToDater]'s start
-    [UpToDater] ends at [class OldDataFetcher]'s end
+        [UpToDater] starts at [Commands]'s end
+        [UpToDater] is colored in lightblue
+            [class OldDataFetcher] starts at [UpToDater]'s start
+        [UpToDater] ends at [class OldDataFetcher]'s end
 
-[CommandCenter] ends at [class CommandUtility]'s end
-[CommandCenter] ends at [class CommandInbox]'s end
-[CommandCenter] ends at [UpToDater]'s end
-
+    [CommandCenter] ends at [class CommandUtility]'s end
+    [CommandCenter] ends at [class CommandInbox]'s end
+    [CommandCenter] ends at [UpToDater]'s end
+[Repository Interfaces und Classes] ends at [CommandCenter]'s end
 legend
     Aufgaben, die vor dem 10. Januar 2022 abgeschlossen sind,
      sind zum Zeitpunkt der Erstellung dieses Diagramms bereits abgeschlossen.
