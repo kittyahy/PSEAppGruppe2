@@ -29,10 +29,10 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun TopNavigationBar(
-    items: List<TopNavItem>,
+    items: List<String>,
     indexCurrentTab : Int,
     modifier: Modifier = Modifier,
-    onItemClick: () -> Unit
+    onItemClick: (Int) -> Unit
 ) {
 
     TabRow(selectedTabIndex = indexCurrentTab, modifier = modifier) {
@@ -40,11 +40,11 @@ fun TopNavigationBar(
             val selected = (indexCurrentTab == index)
             Tab(
                 selected = selected,
-                onClick = onItemClick,
+                onClick = { onItemClick(index) },
                 modifier = Modifier.padding(10.dp)
             ) {
                 Text(
-                    text = item.name,
+                    text = item,
                     style = MaterialTheme.typography.body1,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )

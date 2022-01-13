@@ -55,6 +55,10 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
     var isGraphDialogOpen by mutableStateOf(false)
         private set
 
+    init {
+
+    }
+
     fun onEvent(event: ProjectCreationEvent) {
         when (event) {
             is ProjectCreationEvent.OnTitleChange -> {
