@@ -321,7 +321,6 @@ package ViewModelInterface {
   CommandWrapper .> Gson: <<uses>>
   IllegalOperationException .> Throwable: <<implements>>
 
-  ProjectCommand ^-- PLACEHOLDER
 
   together {
 
