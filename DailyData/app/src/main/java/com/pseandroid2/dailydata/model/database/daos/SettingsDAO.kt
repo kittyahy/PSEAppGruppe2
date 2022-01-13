@@ -25,6 +25,8 @@ import androidx.room.Query
 import androidx.room.Insert
 import androidx.room.Delete
 import androidx.room.Update
+import com.pseandroid2.dailydata.model.Settings
+import com.pseandroid2.dailydata.model.MapSettings
 import com.pseandroid2.dailydata.model.database.entities.GraphSettingEntity
 import com.pseandroid2.dailydata.model.database.entities.ProjectSettingEntity
 import kotlinx.coroutines.flow.Flow
@@ -33,75 +35,75 @@ import java.util.TreeMap
 
 @Dao
 abstract class SettingsDAO {
-    fun getProjectSettings(projectId: Int): Flow<Map<String, String>> {
+    suspend fun getProjectSettings(projectId: Int): Flow<Settings> {
         return getProjectSettingEntities(projectId).map {
             val map: MutableMap<String, String> = TreeMap()
             for (setting: ProjectSettingEntity in it) {
                 map[setting.key] = setting.value
             }
-            map.toMap()
+            MapSettings(map)
         }
     }
 
-    fun getGraphSettings(projectId: Int, graphId: Int): Flow<Map<String, String>> {
+    suspend fun getGraphSettings(projectId: Int, graphId: Int): Flow<Settings> {
         return getGraphSettingEntities(projectId, graphId).map {
             val map: MutableMap<String, String> = TreeMap()
             for (setting: GraphSettingEntity in it) {
                 map[setting.key] = setting.value
             }
-            map.toMap()
+            MapSettings(map)
         }
     }
 
-    fun changeProjectSetting(projectId: Int, key: String, value: String) {
+    suspend fun changeProjectSetting(projectId: Int, key: String, value: String) {
         changeProjectSettingEntity(ProjectSettingEntity(projectId, key, value))
     }
 
-    fun changeGraphSetting(projectId: Int, graphId: Int, key: String, value: String) {
+    suspend fun changeGraphSetting(projectId: Int, graphId: Int, key: String, value: String) {
         changeGraphSettingEntity(GraphSettingEntity(projectId, graphId, key, value))
     }
 
-    fun createProjectSetting(projectId: Int, key: String, value: String) {
+    suspend fun createProjectSetting(projectId: Int, key: String, value: String) {
         insertProjectSettingEntity(ProjectSettingEntity(projectId, key, value))
     }
 
-    fun createGraphSetting(projectId: Int, graphId: Int, key: String, value: String) {
+    suspend fun createGraphSetting(projectId: Int, graphId: Int, key: String, value: String) {
         insertGraphSettingsEntity(GraphSettingEntity(projectId, graphId, key, value))
     }
 
-    fun deleteProjectSetting(projectId: Int, key: String) {
+    suspend fun deleteProjectSetting(projectId: Int, key: String) {
         deleteProjectSettingEntity(ProjectSettingEntity(projectId, key, ""))
     }
 
-    fun deleteGraphSetting(projectId: Int, graphId: Int, key: String) {
+    suspend fun deleteGraphSetting(projectId: Int, graphId: Int, key: String) {
         deleteGraphSettingEntity(GraphSettingEntity(projectId, graphId, key, ""))
     }
 
     /*========================SHOULD ONLY BE CALLED FROM INSIDE THE MODEL=========================*/
     @Query("SELECT * FROM projectSetting WHERE projectId = :projectId")
-    abstract fun getProjectSettingEntities(projectId: Int): Flow<List<ProjectSettingEntity>>
+    abstract suspend fun getProjectSettingEntities(projectId: Int): Flow<List<ProjectSettingEntity>>
 
     @Query("SELECT * FROM graphSetting WHERE projectId = :projectId AND graphId = :graphId")
-    abstract fun getGraphSettingEntities(
+    abstract suspend fun getGraphSettingEntities(
         projectId: Int,
         graphId: Int
     ): Flow<List<GraphSettingEntity>>
 
     @Update
-    abstract fun changeProjectSettingEntity(setting: ProjectSettingEntity)
+    abstract suspend fun changeProjectSettingEntity(setting: ProjectSettingEntity)
 
     @Update
-    abstract fun changeGraphSettingEntity(setting: GraphSettingEntity)
+    abstract suspend fun changeGraphSettingEntity(setting: GraphSettingEntity)
 
     @Insert
-    abstract fun insertProjectSettingEntity(setting: ProjectSettingEntity)
+    abstract suspend fun insertProjectSettingEntity(setting: ProjectSettingEntity)
 
     @Insert
-    abstract fun insertGraphSettingsEntity(setting: GraphSettingEntity)
+    abstract suspend fun insertGraphSettingsEntity(setting: GraphSettingEntity)
 
     @Delete
-    abstract fun deleteProjectSettingEntity(setting: ProjectSettingEntity)
+    abstract suspend fun deleteProjectSettingEntity(setting: ProjectSettingEntity)
 
     @Delete
-    abstract fun deleteGraphSettingEntity(setting: GraphSettingEntity)
+    abstract suspend fun deleteGraphSettingEntity(setting: GraphSettingEntity)
 }

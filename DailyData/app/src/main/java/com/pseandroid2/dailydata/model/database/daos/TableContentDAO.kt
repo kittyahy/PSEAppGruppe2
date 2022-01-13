@@ -44,17 +44,17 @@ abstract class TableContentDAO {
         }
     }
 
-    fun insertRow(row: Row, projectId: Int) {
+    suspend fun insertRow(row: Row, projectId: Int) {
         insertRowEntity(row.toRowEntity(projectId))
     }
 
-    fun deleteRows(projectId: Int, vararg rows: Row) {
+    suspend fun deleteRows(projectId: Int, vararg rows: Row) {
         for (row: Row in rows) {
             deleteRowEntities(row.toRowEntity(projectId))
         }
     }
 
-    fun changeRows(projectId: Int, vararg rows: Row) {
+    suspend fun changeRows(projectId: Int, vararg rows: Row) {
         for (row: Row in rows) {
             changeRowEntities(row.toRowEntity(projectId))
         }
@@ -62,14 +62,14 @@ abstract class TableContentDAO {
 
     /*========================SHOULD ONLY BE CALLED FROM INSIDE THE MODEL=========================*/
     @Insert
-    abstract fun insertRowEntity(row: RowEntity)
+    abstract suspend fun insertRowEntity(row: RowEntity)
 
     @Query("SELECT * FROM `row` WHERE projectId = :id")
     abstract fun getRowEntitiesById(id: Int): Flow<List<RowEntity>>
 
     @Delete
-    abstract fun deleteRowEntities(vararg rows: RowEntity)
+    abstract suspend fun deleteRowEntities(vararg rows: RowEntity)
 
     @Update
-    abstract fun changeRowEntities(vararg rows: RowEntity)
+    abstract suspend fun changeRowEntities(vararg rows: RowEntity)
 }

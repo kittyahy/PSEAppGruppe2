@@ -30,16 +30,16 @@ class GraphCDManager private constructor() {
 
     private val existingIds: MutableMap<Int, out SortedSet<Int>> = mutableMapOf<Int, TreeSet<Int>>()
 
-    public fun insertGraph(projectId: Int, graph: Graph): Int {
+    suspend fun insertGraph(projectId: Int, graph: Graph): Int {
         //TODO
         return 0
     }
 
-    public fun deleteGraph(projectId: Int, id: Int) {
+    suspend fun deleteGraph(projectId: Int, id: Int) {
         //TODO
     }
 
-    private fun insertGraphEntity(projectId: Int, graph: Graph): Int {
+    private suspend fun insertGraphEntity(projectId: Int, graph: Graph): Int {
         //TODO
         return 0
     }

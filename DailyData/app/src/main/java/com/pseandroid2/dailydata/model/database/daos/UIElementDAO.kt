@@ -39,7 +39,7 @@ abstract class UIElementDAO {
     @Query("SELECT * FROM uiElement WHERE projectId = :projectId")
     abstract fun getUIElements(projectId: Int): Flow<List<UIElementMap>>
 
-    fun insertUIElement(
+    suspend fun insertUIElement(
         projectId: Int,
         columnId: Int,
         element: UIElement
@@ -57,21 +57,24 @@ abstract class UIElementDAO {
         return id
     }
 
-    fun removeUIElements(projectId: Int, vararg ids: Int) {
+    suspend fun removeUIElements(projectId: Int, vararg ids: Int) {
         for (id: Int in ids) {
             removeUIElementMap(UIElementMap(projectId, id, 0, "", ""))
         }
     }
 
     @Query("UPDATE uiElement SET state = :state WHERE projectId = :projectId AND id = :id")
-    abstract fun changeUIElementState(projectId: Int, id: Int, state: String)
+    abstract suspend fun changeUIElementState(projectId: Int, id: Int, state: String)
 
     /*========================SHOULD ONLY BE CALLED FROM INSIDE THE MODEL=========================*/
     @Delete
-    abstract fun removeUIElementMap(vararg uiElements: UIElementMap)
+    abstract suspend fun removeUIElementMap(vararg uiElements: UIElementMap)
 
     @Insert
-    abstract fun insertUIElementMap(uiElement: UIElementMap)
+    abstract suspend fun insertUIElementMap(uiElement: UIElementMap)
+
+    @Query("DELETE FROM uiElement WHERE projectId = :projectId")
+    abstract suspend fun deleteAllUIElements(projectId: Int)
 
     private fun getNextId(projectId: Int): Int {
         //Get the List of existing Ids for the project
