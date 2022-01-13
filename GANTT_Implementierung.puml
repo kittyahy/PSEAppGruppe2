@@ -73,6 +73,7 @@ Project starts the 3rd of January 2022
             [class Column] starts at [class DataType]'s end
             [class Graph] starts 2022-01-13 and ends 2022-01-13
             [class LineChart] starts at [class Graph]'s end
+            [class LineChart] starts at 2022-01-16
                 [class LineChart] starts at [class DotSize]'s end
                 [class LineChart] starts at [class LineType]'s end
                 [class LineChart] starts at [class Column]'s end
@@ -124,6 +125,31 @@ Project starts the 3rd of January 2022
             [class RequestOldData] starts at [class ProjectCommand]'s end
             [class SetIsOnlineProject] starts at [class ProjectCommand]'s end
             [class CreateProject] starts at [class ProjectCommand]'s end
+
+            [class CommandWrapper] lasts 3 days
+            [class AddRow] lasts 3 days
+            [class DeleteRow] lasts 3 days
+            [class DeleteColumn] lasts 3 days
+            [class AddColumn] lasts 3 days
+            [class SetCell] lasts 3 days
+            [class SetAdmin] lasts 3 days
+            [class AddUser] lasts 3 days
+            [class RemoveUser] lasts 3 days
+            [class CreateGraph] lasts 3 days
+            [class SetCalculationFunction] lasts 3 days
+            [class SetTransformationFunctionCompostition] lasts 3 days
+            [class SetSetting] lasts 3 days
+            [class SetProjectName] lasts 3 days
+            [class SetProjectDesign] lasts 3 days
+            [class SetWallpaper] lasts 3 days
+            [class SetNotification] lasts 3 days
+            [class DeleteNotification] lasts 3 days
+            [class SetUIElement] lasts 3 days
+            [class RequestOldData] lasts 3 days
+            [class SetIsOnlineProject] lasts 3 days
+            [class CreateProject] lasts 3 days
+
+
         [Commands] ends at [class CreateProject]'s end
         [Commands] ends at [class AddRow]'s end
         [Commands] ends at [class DeleteColumn]'s end
@@ -149,9 +175,10 @@ Project starts the 3rd of January 2022
         [class CommandInbox] starts at [Commands]'s end
 
 
-        [UpToDater] starts at [Commands]'s end
+        [UpToDater] starts at [class RequestOldData]'s end
         [UpToDater] is colored in lightblue
-            [class OldDataFetcher] starts at [UpToDater]'s start
+            [class OldDataFetcher] starts at [class RequestOldData]'s start
+            [class OldDataFetcher] ends at [class CommandUtility]'s end
         [UpToDater] ends at [class OldDataFetcher]'s end
 
     [CommandCenter] ends at [class CommandUtility]'s end
