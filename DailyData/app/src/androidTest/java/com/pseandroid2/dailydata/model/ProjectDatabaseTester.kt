@@ -66,9 +66,8 @@ class ProjectDatabaseTester {
         projectDAO.insertProjectEntity(
             ProjectEntity(
                 1,
-                ProjectSkeletonEntity("Test", "", "", ""),
-                SimpleUser("", ""),
-                1
+                ProjectSkeletonEntity("Test", "", "", "", 1),
+                SimpleUser("", "")
             )
         )
 
@@ -100,9 +99,8 @@ class ProjectDatabaseTester {
             projectDAO.insertProjectEntity(
                 ProjectEntity(
                     i,
-                    ProjectSkeletonEntity("Test$i", "", "", ""),
-                    user,
-                    i.toLong()
+                    ProjectSkeletonEntity("Test$i", "", "", "", i.toLong()),
+                    user
                 )
             )
         }
@@ -125,9 +123,8 @@ class ProjectDatabaseTester {
                 projectDAO.insertProjectEntity(
                     ProjectEntity(
                         1,
-                        ProjectSkeletonEntity("Test", "", "", ""),
-                        SimpleUser("", ""),
-                        1
+                        ProjectSkeletonEntity("Test", "", "", "", 1),
+                        SimpleUser("", "")
                     )
                 )
 
@@ -140,7 +137,7 @@ class ProjectDatabaseTester {
     @ExperimentalCoroutinesApi
     @Test
     fun testRemoveProject() = runTest {
-        val ent = ProjectEntity(1, ProjectSkeletonEntity("Test", "", "", ""), SimpleUser("", ""), 1)
+        val ent = ProjectEntity(1, ProjectSkeletonEntity("Test", "", "", "", 1), SimpleUser("", ""))
         projectDAO.insertProjectEntity(ent)
         assertEquals(ProjectData(1, "Test", "", 1, ""), projectDAO.getProjectData(1).first()!!)
         projectDAO.deleteProjectEntity(ent)
