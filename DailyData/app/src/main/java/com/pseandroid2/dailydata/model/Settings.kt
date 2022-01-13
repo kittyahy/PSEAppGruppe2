@@ -22,8 +22,11 @@ package com.pseandroid2.dailydata.model
 
 interface Settings {
 
-    public fun getAllSettings(): Map<String, String>
+    /**
+     * Shouldn't be used outside the repo
+     */
+    fun getAllSettings(): Map<String, String>
 
-    public fun getSetting(key: String): String
+    operator fun get(key: String): String
 
 }
