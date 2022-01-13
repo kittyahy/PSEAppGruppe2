@@ -2,9 +2,15 @@
 
 skinparam monochrome true
 skinparam shadowing false
-skinparam groupInheritance 3
+
+
+skinparam lineType ortho
+skinparam groupInheritance 22
+
 skinparam genericDisplay old
 skinparam classAttributeIconSize 0
+skinparam Linetype ortho
+
 hide circle
 
 package Gson {}
@@ -18,7 +24,7 @@ package Repository {
 'Overleaf
 package ViewModelInterface {
     'Overleaf deprecated
-    class PostHandler <<singleton>>{
+    class "PostHandler" as repoPostHandler <<singleton>> {
         +getPostPreviews(): Collection<Post>
         +getPostDetail(id: String): PostDetail
         'teplate downloaden via postid
@@ -26,18 +32,18 @@ package ViewModelInterface {
         'teplate downloaden via postid + index des graph temlates im Post
         +getGraphTemplate((id: String, index: int): void
     }
-    class CommandFactory <<singleton>> {
+    class "CommandFactory" as repoCommandFactory <<singleton>> {
         +operationPossible(): FlowShared<Map<String, Boolean>>
         +addRow(projectID: ProjectID, index: int, content: List<Any>)
      }
     'Overleaf
-    class ProjectHandler {
+    class "ProjectHandler" as repoProjectHandler {
         -projectPreviews: Collection<ProjectPreview>
         +getProjectPreviews(): SharedFlow<Collection<ProjectPreview>>
         +getProjectByID(id: int):SharedFlow<Project>
     }
     package CommunicationClasses {
-    class Column {
+    class "Column" as repoColumn {
             id : GZ
             name : String
             unit : String
@@ -45,42 +51,42 @@ package ViewModelInterface {
 
         }
 
-        class Button {
+        class "Button" as repoButton{
             id : GZ
             name : String
             columnId : GZ
             value : GZ
         }
 
-        class Notification {
+        class "Notification" as repoNotification {
             id : GZ
             message : String
             time : Time
         }
 
-        class Time {
+        class "Time" as repoTime {
             hour : GZ
             minute : GZ
             second : GZ
         }
 
-        class Member {
+        class "Member" as repoMember {
             id : GZ
             name : String
         }
 
-        class ProjectPreview {
+        class "ProjectPreview" as repoProjectPreview {
             id : GZ
             name : String
             image : Image
         }
 
-        class Graph {
+        class "Graph" as repoGraph {
             id : GZ
             image : Image
         }
 
-        class LineChart {
+        class "LineChart" as LineChart {
             dotSize : DotSize
             dotColor : Color
             lineType : LineType
@@ -88,33 +94,33 @@ package ViewModelInterface {
             mappingHorizontal : Column
         }
 
-        enum DotSize <<Enum>> {
+        enum "DotSize" as repoDotSize <<Enum>> {
             SMALL
             MEDIUM
             BIG
         }
 
-        enum LineType <<Enum>> {
+        enum "LineType" as repoLineType <<Enum>> {
             DOTTED
             NONE
             CONTINUOUS
         }
 
-        class PieChart {
+        class "PieChart" as repoPieChart {
             color : List<Color>
             mapping : List<Column>
             showPercentages : Boolean
         }
 
 
-        enum DataType <<Enum>> {
+        enum "DataType" as repoDataType <<Enum>> {
             WHOLE_NUMBER
             FLOATING_POINT_NUMBER
             TIME
             STRING
         }
 
-        class Project {
+        class "Project" as repoProject {
             id : GZ
             isOnlineProject : Boolean
             isAdmin : Boolean
@@ -129,7 +135,7 @@ package ViewModelInterface {
             members : List<Member>
         }
 
-        class Row {
+        class "Row" as repoRow {
             id : GZ
             elements : List<String>
 
@@ -139,25 +145,25 @@ package ViewModelInterface {
             setElements(elements : List<String>)
         }
 
-        Graph <|-- LineChart
-        Graph <|-- PieChart
+        repoGraph <|-- repoLineChart
+        repoGraph <|-- repoPieChart
 
-        Project ..> Column
-        Project ..> Row
-        Project ..> Graph
-        Project ..> Button
-        Project ..> Member
-        Project ..> Notification
+        repoProject ..> repoColumn
+        repoProject ..> repoRow
+        repoProject ..> repoGraph
+        repoProject ..> repoButton
+        repoProject ..> repoMember
+        repoProject ..> repoNotification
 
-        LineChart ..> LineType
-        LineChart ..> DotSize
-        LineChart ..> Column
+        repoLineChart ..> repoLineType
+        repoLineChart ..> repoDotSize
+        repoLineChart ..> repoColumn
 
-        PieChart ..> Column
+        repoPieChart ..> repoColumn
 
-        Notification ..> Time
+        repoNotification ..> repoTime
 
-        Column ..> DataType
+        repoColumn ..> repoDataType
     }
 
 }
@@ -166,12 +172,12 @@ package ViewModelInterface {
   'Overleaf deprecated
   package CommandCenter {
     'Overleaf deprecated
-    class CommandInbox {
+    class "CommandInbox" as repoCommandInbox {
         -commandQueue: List<ProjectCommand>
         +addFromJson(commandWrapperJson: String) throws JsonSyntaxException
     }
     'Overleaf deprecated
-     class CommandUtility <<static>> {
+     class "CommandUtility" as CommandUtility <<static>> {
         +{static} setServerInfo(ProjectCommand, serverInfo: ServerInfo):ProjectCommand
         +{static} toNewCommand(ProjectCommand): ProjectCommand
      }
@@ -181,7 +187,7 @@ package ViewModelInterface {
            'Wenn ich einmal länger als 72h am Stück offline war merke ich mir diese Intervalle
            'dann Frage ich jemanden auf dem Server an, der in diesen 72h keine Blindspots hat
            'Overleaf
-           class OldDataFetcher {
+           class "OldDataFetcher" as repoOldDataFetcher {
            +from: DateTime
            +to: DateTime
            +from: ProjectID
@@ -192,7 +198,7 @@ package ViewModelInterface {
    '-----------------------------------------------------------------------------------------------'
    package Commands {
 
-   abstract class ProjectCommand <<abstract>>{
+   abstract class "ProjectCommand" as repoProjectCommand <<abstract>>{
        +projectID: ProjectID
        +OnlineProjectID: OnlineProjectID?
        {field}+wentOnline: DateTime?
@@ -202,6 +208,9 @@ package ViewModelInterface {
 
        {abstract}+execute() throws IllegalOperationException
    }
+
+   <>PLACEHOLDER
+
    class AddRow {
       +index: Int
       +content: List<Any>
@@ -314,29 +323,30 @@ package ViewModelInterface {
 
 
 
-
   together {
-    ProjectCommand ^-- AddColumn
-    ProjectCommand ^-- AddRow
-    ProjectCommand ^-- DeleteRow
-    ProjectCommand ^-- DeleteColumn
-    ProjectCommand ^-- SetCell
-    ProjectCommand ^-- SetAdmin
-    ProjectCommand ^-- AddUser
-    ProjectCommand ^--- RemoveUser
-    ProjectCommand ^--- CreateGraph
-    ProjectCommand ^--- SetCalculationFunction
-    ProjectCommand ^--- SetTransformationFunctionComposition
-    ProjectCommand ^--- SetSetting
-    ProjectCommand ^--- SetProjectName
-    ProjectCommand ^--- SetProjectDescription
-    ProjectCommand ^---- SetWallpaper
-    ProjectCommand ^---- SetNotification
-    ProjectCommand ^---- DeleteNotification
-    ProjectCommand ^---- SetUIElement
-    ProjectCommand ^---- RequestOldData
-    ProjectCommand ^---- CreateProject
-    ProjectCommand ^---- SetIsOnlineProject
+
+    PLACEHOLDER ^-- AddColumn
+    PLACEHOLDER ^-- AddRow
+    PLACEHOLDER ^-- DeleteRow
+    PLACEHOLDER ^-- DeleteColumn
+    PLACEHOLDER ^-- SetCell
+    PLACEHOLDER ^-- SetAdmin
+    PLACEHOLDER ^-- AddUser
+    PLACEHOLDER ^--- RemoveUser
+    PLACEHOLDER ^--- CreateGraph
+    PLACEHOLDER ^--- SetCalculationFunction
+    PLACEHOLDER ^--- SetTransformationFunctionComposition
+    PLACEHOLDER ^--- SetSetting
+    PLACEHOLDER ^--- SetProjectName
+    PLACEHOLDER ^--- SetProjectDescription
+    PLACEHOLDER ^---- SetWallpaper
+    PLACEHOLDER ^---- SetNotification
+    PLACEHOLDER ^---- DeleteNotification
+    PLACEHOLDER ^---- SetUIElement
+    PLACEHOLDER ^---- RequestOldData
+    PLACEHOLDER ^---- CreateProject
+    PLACEHOLDER ^---- SetIsOnlineProject
+
   }
 
 }

@@ -6,7 +6,7 @@ skinparam genericDisplay old
 skinparam classAttributeIconSize 0
 hide circle
 
-class Column {
+class "Colum" as viewColumn {
     id : GZ
     name : String
     unit : String
@@ -22,7 +22,7 @@ class Column {
     setDatatype(datatype : DataType)
 }
 
-class Button {
+class "Button" as viewButton {
     id : GZ
     name : String
     columnId : GZ
@@ -38,7 +38,7 @@ class Button {
     setValue(value : GZ)
 }
 
-class Notification {
+class "Notification" as viewNotification {
     id : GZ
     message : String
     time : Time
@@ -51,7 +51,7 @@ class Notification {
     setTime(time : Time)
 }
 
-class Time {
+class "Time" as viewTime {
     hour : GZ
     minute : GZ
     second : GZ
@@ -64,7 +64,7 @@ class Time {
     setSecond(second : GZ)
 }
 
-class Member {
+class "Member" as viewMember {
     id : GZ
     name : String
 
@@ -74,7 +74,7 @@ class Member {
     setName(name : String)
 }
 
-class ProjectPreview {
+class "ProjectPreview" as viewProjectPreview {
     id : GZ
     name : String
     image : Image
@@ -87,7 +87,7 @@ class ProjectPreview {
     setImage(image : Image)
 }
 
-class Graph {
+class "Graph" as viewGraph {
     id : GZ
     image : Image
 
@@ -97,7 +97,7 @@ class Graph {
     setImage(image : Image)
 }
 
-class LineChart {
+class "LineChart" as viewLineChart {
     dotSize : DotSize
     dotColor : Color
     lineType : LineType
@@ -116,19 +116,19 @@ class LineChart {
     setMappingHorizontal(mappingHorizontal : Column)
 }
 
-enum DotSize <<Enum>> {
+enum "DotSize" as viewDotSize <<Enum>> {
     SMALL
     MEDIUM
     BIG
 }
 
-enum LineType <<Enum>> {
+enum "LineType" as viewLineType <<Enum>> {
     DOTTED
     NONE
     CONTINUOUS
 }
 
-class PieChart {
+class "PieChart" as viewPieChart {
     color : List<Color>
     mapping : List<Column>
     showPercentages : Boolean
@@ -141,14 +141,14 @@ class PieChart {
 }
 
 
-enum DataType <<Enum>> {
+enum "DataType" as viewDataType <<Enum>> {
     WHOLE_NUMBER
     FLOATING_POINT_NUMBER
     TIME
     STRING
 }
 
-class Project {
+class "Project" as viewProject {
     id : GZ
     isOnlineProject : Boolean
     isAdmin : Boolean
@@ -188,7 +188,7 @@ class Project {
     setMembers(members : List<Member>)
 }
 
-class Row {
+class "Row" as viewRow {
     id : GZ
     elements : List<String>
 
@@ -198,25 +198,25 @@ class Row {
     setElements(elements : List<String>)
 }
 
-Graph <|-- LineChart
-Graph <|-- PieChart
+viewGraph <|-- viewLineChart
+viewGraph <|-- viewPieChart
 
-Project ..> Column
-Project ..> Row
-Project ..> Graph
-Project ..> Button
-Project ..> Member
-Project ..> Notification
+viewProject ..> viewColumn
+viewProject ..> viewRow
+viewProject ..> viewGraph
+viewProject ..> viewButton
+viewProject ..> viewMember
+viewProject ..> viewNotification
 
-LineChart ..> LineType
-LineChart ..> DotSize
-LineChart ..> Column
+viewLineChart ..> viewLineType
+viewLineChart ..> viewDotSize
+viewLineChart ..> viewColumn
 
-PieChart ..> Column
+viewPieChart ..> viewColumn
 
-Notification ..> Time
+viewNotification ..> viewTime
 
-Column ..> DataType
+viewColumn ..> viewDataType
 
 
 @enduml

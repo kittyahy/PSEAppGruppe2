@@ -10,12 +10,12 @@ skinparam Linetype ortho
 
 package RemoteDataSource {
 
-!include RemoteDataSourceAPI\RemoteDataSourceAPI.puml!RemoteDataSourceAPI
+!include RemoteDataSourceAPI/RemoteDataSourceAPI.puml!RemoteDataSourceAPI
 
-!include UserManager\UserManager.puml!UserManager
-!include ServerConnection\ServerConnection.puml!ServerConnection
+!include UserManager/UserManager.puml!UserManager
+!include ServerConnection/ServerConnection.puml!ServerConnection
 
-!include Queues\Queues.puml!Queues
+!include Queues/Queues.puml!Queues
 }
 
 
