@@ -22,6 +22,7 @@ package com.pseandroid2.dailydata.ui.project.creation
 
 import androidx.compose.ui.graphics.Color
 import com.pseandroid2.dailydata.util.ui.DataType
+import com.pseandroid2.dailydata.util.ui.Graphs
 
 sealed class ProjectCreationEvent {
 
@@ -32,6 +33,13 @@ sealed class ProjectCreationEvent {
     data class OnTableRemove(val index : Int) : ProjectCreationEvent()
     data class OnButtonAdd(val name : String, val columnId : Int, val value: Int) : ProjectCreationEvent()
     data class OnButtonRemove(val index : Int) : ProjectCreationEvent()
+    data class OnGraphAdd(val graph: Graphs) : ProjectCreationEvent()
+    data class OnGraphRemove(val index : Int) : ProjectCreationEvent()
+    /*
+    TODO : change time from string to meaningful
+     */
+    data class OnNotificationAdd(val message : String, val time : String) : ProjectCreationEvent()
+    data class OnNotificationRemove(val index : Int) : ProjectCreationEvent()
     object OnSaveClick : ProjectCreationEvent()
 
     //dialogs

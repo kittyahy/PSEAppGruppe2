@@ -20,8 +20,15 @@
 
 package com.pseandroid2.dailydata.util.ui
 
+import android.media.Image
+import androidx.compose.ui.graphics.Color
+
 data class TableColumn(val id : Int, val name: String, val unit : String, val dataType : DataType)
 data class TableButton(val id : Int, val name: String, val column : TableColumn, val value : Int)
+data class Notification(val message : String, val time : String)
+data class Row(var elements : List<String>)
+data class Data(var columns: List<String>, var rows: List<Row>)
+
 
 enum class DataType(val representation : String) {
     WHOLE_NUMBER("Whole Number"), FLOATING_POINT_NUMBER("Floating Point Number"), TIME("Time"), STRING("String");
@@ -37,4 +44,25 @@ enum class DataType(val representation : String) {
         }
     }
 
+}
+
+enum class Wallpapers(val value : Color) {
+    ORANGE(Color(0xFFF57C00)),
+    GREEN(Color(0xFF388E3C)),
+    BLUE(Color(0xFF2196F3))
+}
+
+enum class Graphs(val representation: String) {
+    LINE_CHART("Line chart"),
+    PIE_CHART("Pie chart")
+}
+
+data class Post(
+    val id: Int,
+    val image: Image?,
+    val description: String,
+    val template: Template
+)
+
+class Template() {
 }
