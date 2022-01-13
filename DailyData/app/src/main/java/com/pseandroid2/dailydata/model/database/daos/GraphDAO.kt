@@ -41,4 +41,7 @@ abstract class GraphDAO {
 
     @Delete
     abstract fun deleteGraph(graph: GraphEntity)
+
+    @Query("DELETE FROM graph WHERE projectId = :projectId")
+    abstract suspend fun deleteAllGraphs(projectId: Int)
 }
