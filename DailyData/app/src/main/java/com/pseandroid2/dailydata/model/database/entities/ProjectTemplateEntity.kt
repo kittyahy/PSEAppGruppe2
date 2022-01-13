@@ -30,6 +30,5 @@ import com.pseandroid2.dailydata.model.User
 data class ProjectTemplateEntity(
     @PrimaryKey val id: Int,
     @Embedded val skeleton: ProjectSkeletonEntity,
-    val createdBy: User,
-    val onlineId: String
+    val createdBy: User
 )

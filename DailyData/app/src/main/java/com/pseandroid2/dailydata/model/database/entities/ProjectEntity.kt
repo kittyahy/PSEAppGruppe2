@@ -29,7 +29,6 @@ import com.pseandroid2.dailydata.model.User
 data class ProjectEntity(
     @PrimaryKey val id: Int,
     @Embedded val skeleton: ProjectSkeletonEntity,
-    val admin: User,
-    val onlineId: Long
+    val admin: User
 ) {
 }

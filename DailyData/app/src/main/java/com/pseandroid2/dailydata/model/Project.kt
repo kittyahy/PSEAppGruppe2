@@ -41,8 +41,6 @@ interface Project {
 
     fun isOnline(): Boolean
 
-    fun getOnlineId(): Long
-
     fun getUsers(): Collection<User>
 
     abstract class DataTransformation<O>(private val table: Table) {
@@ -57,6 +55,8 @@ interface ProjectSkeleton {
 
     fun getID(): Int
     fun setID(id: Int)
+
+    fun getOnlineId(): Long
 
     fun getName(): String
 
