@@ -52,6 +52,7 @@ Project starts the 3rd of January 2022
 [Other Database Tasks] starts 2022-01-03 and ends 2022-01-20
 [Other Database Tasks] is colored in lightblue
 [class AppDataBase] starts 2022-01-03
+
 '----------------------Server---------------------------------------------------'
 [class ServerApplication] starts at 2022-01-07 and ends at 2022-01-07
 [class ServerGreetings] starts at 2022-01-07 and ends at 2022-01-07
@@ -128,6 +129,7 @@ Project starts the 3rd of January 2022
 [implement GeneralConfig] starts at [implement AccessToProjectInterceptor]'s end
 [implement PostDatabase] starts at [Defining skeletons for PostDatabase]'s end and starts at 2022-01-23 and lasts 4 days
 [implement Online Database] starts at [Defining skeletons for Online Database]'s end  and starts at 2022-01-23 and lasts 4 days
+
 
 
 
