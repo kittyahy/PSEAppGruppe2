@@ -1,0 +1,142 @@
+@startgantt
+
+printscale daily zoom 3
+
+Project starts the 3rd of January 2022
+
+[Implementierungsphase] starts 2022-01-03 and ends 2022-02-04
+[Implementierungsphase] is colored in lightgreen
+[Setup Git Repo] starts 2022-01-06 and ends 2022-01-10
+[Implementierungsplan erstellen] starts 2022-01-10 and lasts 2 days
+[Model Interfaces und Classes] starts 2022-01-03 and ends 2022-01-16
+[Model Interfaces und Classes] is colored in lightblue
+[interface Project] starts 2022-01-03
+[interface Table] starts 2022-01-03
+[interface ProjectSkeleton] starts 2022-01-03
+[interface ProjectTemplate] starts 2022-01-03
+[interface Settings] starts 2022-01-03
+[interface User] starts 2022-01-03
+[class SimpleUser] starts at [interface User]'s end
+[class UIElement] starts 2022-01-03
+[enum class UIElementType] starts 2022-01-03
+[interface Table] starts 2022-01-03
+[interface TableLayout] starts 2022-01-03
+[interface Row] starts 2022-01-03
+[class ArrayListRow] starts at [interface Row]'s end
+[class RowMetaData] starts 2022-01-03
+[interface Notification] starts 2022-01-03
+[class TimeNotification] starts at [interface Notification]'s end
+
+[Entities] starts 2022-01-06 and ends 2022-01-11
+[Entities] is colored in lightblue
+[class GraphEntity] starts 2022-01-06 and ends 2022-01-07
+[class GraphTemplateEntity] starts 2022-01-07
+[class MissingSlotEntity] starts 2022-01-09
+[class NotificationEntity] starts 2022-01-07
+[class ProjectData] starts 2022-01-06
+[class ProjectEntity] starts 2022-01-06
+[class ProjectSkeletonEntity] starts 2022-01-06
+[class ProjectTemplateEntity] starts 2022-01-07
+[class ProjectUserMap] starts 2022-01-07
+[class RowEntity] starts 2022-01-06
+[class ProjectSettingEntity] starts 2022-01-09
+[class ProjectSettingEntity] starts 2022-01-09
+[class UIElementMap] starts 2022-01-09
+
+[DAOs] starts 2022-01-08 and ends 2022-01-15
+[DAOs] is colored in lightblue
+
+[Type Converters] starts 2022-01-05 and ends 2022-01-13
+[Type Converters] is colored in lightblue
+
+[Other Database Tasks] starts 2022-01-03 and ends 2022-01-20
+[Other Database Tasks] is colored in lightblue
+[class AppDataBase] starts 2022-01-03
+'----------------------Server---------------------------------------------------'
+[class ServerApplication] starts at 2022-01-07 and ends at 2022-01-07
+[class ServerGreetings] starts at 2022-01-07 and ends at 2022-01-07
+[class GreetingController] starts at 2022-01-07 and ends at 2022-01-07
+[testing GreetingController] starts at [class GreetingController]'s end
+
+[Defining Controller Skeletons] starts 2022-01-11
+[Defining Controller Skeletons] is colored in lightblue
+[class DeltaController] starts 2022-01-12 and ends 2022-01-13
+[class ProjectParticipantsController] starts 2022-01-13
+[class FetchRequestController] starts 2022-01-13
+[class PostsController] starts 2022-01-13
+[Defining Controller Skeletons] ends at [class PostsController]'s end
+[Defining Controller Skeletons] ends at [class DeltaController]'s end
+[Defining Controller Skeletons] ends at [class FetchRequestController]'s end
+[Defining Controller Skeletons] ends at [class ProjectParticipantsController]'s end
+
+
+
+[Defining skeletons for Online Database] starts at 2022-01-16
+
+
+ [Defining skeletons for Online Database] is colored in lightblue and lasts 3 days
+[class Delta] starts at [Defining skeletons for Online Database]'s start
+
+[class ProjectParticipants] starts at [Defining skeletons for Online Database]'s start
+[class FetchRequest] starts at [Defining skeletons for Online Database]'s start
+[class DeltaRepository] starts at [Defining skeletons for Online Database]'s start
+[class ProjectParticipantsRepository] starts at [Defining skeletons for Online Database]'s start
+[class FetchRequestRepository] starts at [Defining skeletons for Online Database]'s start
+[class DeltaService] starts at [Defining skeletons for Online Database]'s start
+[class ProjectParticipantsService] starts at [Defining skeletons for Online Database]'s start
+[class FetchRequestService] starts at [Defining skeletons for Online Database]'s start
+[Defining skeletons for Online Database] ends at [class Delta]'s end
+[Defining skeletons for Online Database] ends at [class ProjectParticipants]'s end
+[Defining skeletons for Online Database] ends at [class FetchRequest]'s end
+[Defining skeletons for Online Database] ends at [class DeltaRepository]'s end
+[Defining skeletons for Online Database] ends at [class ProjectParticipantsRepository]'s end
+[Defining skeletons for Online Database] ends at [class FetchRequestRepository]'s end
+[Defining skeletons for Online Database] ends at [class DeltaService]'s end
+[Defining skeletons for Online Database] ends at [class ProjectParticipantsService]'s end
+[Defining skeletons for Online Database] ends at [class FetchRequestService]'s end
+
+
+[Defining skeletons for PostDatabase] starts at 2022-01-19
+[Defining skeletons for PostDatabase] is colored in lightblue and lasts 3 days
+[class Template] starts at [Defining skeletons for PostDatabase]'s start
+[class Posts] starts at [Defining skeletons for PostDatabase]'s start
+[class PostService] starts at [Defining skeletons for PostDatabase]'s start
+[class PostsRepository] starts at [Defining skeletons for PostDatabase]'s start
+[class TemplatesRepository] starts at [Defining skeletons for PostDatabase]'s start
+[Defining skeletons for PostDatabase] ends at [class Template]'s end
+[Defining skeletons for PostDatabase] ends at [class Posts]'s end
+[Defining skeletons for PostDatabase] ends at [class PostService]'s end
+[Defining skeletons for PostDatabase] ends at [class PostsRepository]'s end
+[Defining skeletons for PostDatabase] ends at [class TemplatesRepository]'s end
+
+[Defining Interceptor Skeletons] starts at 2022-01-20 and is colored in lightblue
+
+[class LoginInterceptor] starts at [Defining Interceptor Skeletons]'s start
+[class AccessToProjectInterceptor] starts at [Defining Interceptor Skeletons]'s start
+[class GeneralConfig] starts at [Defining Interceptor Skeletons]'s start
+
+[Defining Interceptor Skeletons] ends at [class LoginInterceptor]'s end
+[Defining Interceptor Skeletons] ends at [class AccessToProjectInterceptor]'s end
+[Defining Interceptor Skeletons] ends at [class GeneralConfig]'s end
+
+[setup Firebase for Server] starts at 2022-01-17
+[setup Server] starts at 2022-01-18
+
+[implement LoginInterceptor] starts at [setup Firebase for Server]'s end
+[implement AccessToProjectInterceptor] starts at [Defining Interceptor Skeletons]'s end
+[implement GeneralConfig] starts at [implement LoginInterceptor]'s end
+[implement GeneralConfig] starts at [implement AccessToProjectInterceptor]'s end
+[implement PostDatabase] starts at [Defining skeletons for PostDatabase]'s end and starts at 2022-01-23 and lasts 4 days
+[implement Online Database] starts at [Defining skeletons for Online Database]'s end  and starts at 2022-01-23 and lasts 4 days
+
+
+
+
+legend
+    Aufgaben, die vor dem 10. Januar 2022 abgeschlossen sind,
+     sind zum Zeitpunkt der Erstellung dieses Diagramms bereits abgeschlossen.
+end legend
+
+
+
+@endgantt
