@@ -92,9 +92,15 @@ abstract class ProjectDataDAO {
     @Delete
     abstract suspend fun deleteProjectEntity(entity: ProjectEntity)
 
+    @Query("DELETE FROM project WHERE id = :id")
+    abstract suspend fun deleteProjectEntityById(id: Int)
+
     @Insert
     abstract suspend fun insertProjectUserMap(userMap: ProjectUserMap)
 
     @Delete
     abstract suspend fun deleteProjectUserMap(userMap: ProjectUserMap)
+
+    @Query("DELETE FROM user WHERE projectId = :projectId")
+    abstract suspend fun deleteAllUsers(projectId: Int)
 }
