@@ -38,7 +38,8 @@ import java.util.Calendar
 fun WallpaperDialog(
     isOpen : Boolean,
     onDismissRequest: () -> Unit,
-    onWallpaperClick : (Wallpapers) -> Unit) {
+    onWallpaperClick : (Wallpapers) -> Unit
+) {
     if(isOpen) {
         Dialog(
             onDismissRequest = onDismissRequest

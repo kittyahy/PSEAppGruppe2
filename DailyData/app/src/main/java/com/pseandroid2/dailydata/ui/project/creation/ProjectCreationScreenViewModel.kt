@@ -28,6 +28,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pseandroid2.dailydata.util.ui.UiEvent
 import com.pseandroid2.dailydata.di.Repository
+import com.pseandroid2.dailydata.util.ui.DataType
+import com.pseandroid2.dailydata.util.ui.Graphs
+import com.pseandroid2.dailydata.util.ui.Notification
 import com.pseandroid2.dailydata.util.ui.Routes
 import com.pseandroid2.dailydata.util.ui.TableButton
 import com.pseandroid2.dailydata.util.ui.TableColumn
@@ -54,6 +57,10 @@ class ProjectCreationScreenViewModel @Inject constructor(
     var table by mutableStateOf( listOf<TableColumn>() )
         private set
     var buttons by mutableStateOf( listOf<TableButton>() )
+        private set
+    var notifications by mutableStateOf( listOf<Notification>() )
+        private set
+    var graphs by mutableStateOf( listOf<Graphs>() )
         private set
 
     var isWallpaperDialogOpen by mutableStateOf(false)
@@ -110,11 +117,37 @@ class ProjectCreationScreenViewModel @Inject constructor(
                 mutable.removeAt(index = event.index)
                 buttons = mutable.toList()
             }
-
-            is ProjectCreationEvent.OnSaveClick -> {
-                TODO("Collect project data and send to repository")
-                sendUiEvent(UiEvent.Navigate(Routes.DATA))
+            is ProjectCreationEvent.OnNotificationAdd -> {
+                var mutable = notifications.toMutableList()
+                mutable.add(Notification(message = event.message, time = event.time))
+                notifications = mutable.toList()
             }
+            is ProjectCreationEvent.OnNotificationRemove -> {
+                var mutable = notifications.toMutableList()
+                mutable.removeAt(index = event.index)
+                notifications = mutable.toList()
+            }
+            is ProjectCreationEvent.OnGraphAdd -> {
+                var mutable = graphs.toMutableList()
+                mutable.add(event.graph)
+                graphs = mutable.toList()
+            }
+            is ProjectCreationEvent.OnGraphRemove -> {
+                var mutable = graphs.toMutableList()
+                mutable.removeAt(index = event.index)
+                graphs = mutable.toList()
+            }
+            is ProjectCreationEvent.OnSaveClick -> {
+                when {
+                    title.isBlank() -> sendUiEvent(UiEvent.ShowToast("Please Enter a title"))
+                    table.isEmpty() -> sendUiEvent(UiEvent.ShowToast("Please Enter a column"))
+                    else            -> {
+                        var id = 0 //id = repository.createProject(...)
+                        sendUiEvent(UiEvent.Navigate(Routes.DATA + "?projectId=$id"))
+                    }
+                }
+            }
+
             is ProjectCreationEvent.OnShowWallpaperDialog -> {
                 isWallpaperDialogOpen = event.isOpen
             }
@@ -122,7 +155,11 @@ class ProjectCreationScreenViewModel @Inject constructor(
                 isTableDialogOpen = event.isOpen
             }
             is ProjectCreationEvent.OnShowButtonsDialog -> {
-                isButtonsDialogOpen = event.isOpen
+                if(event.isOpen && table.none { it.dataType == DataType.WHOLE_NUMBER }) {
+                    sendUiEvent(UiEvent.ShowToast("Please Enter a compatible column first"))
+                } else {
+                    isButtonsDialogOpen = event.isOpen
+                }
             }
             is ProjectCreationEvent.OnShowNotificationDialog -> {
                 isNotificationDialogOpen = event.isOpen

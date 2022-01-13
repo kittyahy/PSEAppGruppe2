@@ -1,0 +1,1018 @@
+Index: app/src/main/java/com/pseandroid2/dailydata/ui/project/creation/ProjectCreationScreen.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.pseandroid2.dailydata.ui.project.creation\r\n\r\nimport androidx.compose.foundation.clickable\r\nimport androidx.compose.foundation.layout.*\r\nimport androidx.compose.foundation.rememberScrollState\r\nimport androidx.compose.foundation.shape.RoundedCornerShape\r\nimport androidx.compose.foundation.text.KeyboardOptions\r\nimport androidx.compose.foundation.verticalScroll\r\nimport androidx.compose.material.*\r\nimport androidx.compose.material.icons.Icons\r\nimport androidx.compose.material.icons.filled.Notifications\r\nimport androidx.compose.runtime.*\r\nimport androidx.compose.ui.Alignment\r\nimport androidx.compose.ui.Modifier\r\nimport androidx.compose.ui.graphics.vector.ImageVector\r\nimport androidx.compose.ui.res.vectorResource\r\nimport androidx.compose.ui.text.input.KeyboardType\r\nimport androidx.compose.ui.unit.dp\r\nimport androidx.compose.ui.window.Dialog\r\nimport androidx.hilt.navigation.compose.hiltViewModel\r\nimport com.pseandroid2.dailydata.util.ui.UiEvent\r\nimport com.example.pse.util.ui.Wallpapers\r\nimport com.pseandroid2.dailydata.R\r\nimport com.pseandroid2.dailydata.ui.composables.EnumDropDownMenu\r\nimport com.pseandroid2.dailydata.ui.composables.ListInput\r\nimport com.pseandroid2.dailydata.ui.composables.SaveButton\r\nimport com.pseandroid2.dailydata.ui.composables.TextInput\r\nimport com.pseandroid2.dailydata.ui.composables.WallpaperElement\r\nimport com.pseandroid2.dailydata.util.ui.DataType\r\nimport kotlinx.coroutines.flow.collect\r\nimport java.lang.NumberFormatException\r\n\r\n@Composable\r\nfun ProjectCreationScreen(\r\n    onNavigate: (UiEvent.Navigate) -> Unit,\r\n    viewModel: ProjectCreationScreenViewModel = hiltViewModel()\r\n) {\r\n\r\n    val scrollState = rememberScrollState()\r\n\r\n    LaunchedEffect(key1 = true) {\r\n        viewModel.uiEvent.collect { event ->\r\n            when(event) {\r\n                is UiEvent.Navigate -> {\r\n                    \r\n                }\r\n                else -> { }\r\n            }\r\n        }\r\n    }\r\n    Scaffold(\r\n        floatingActionButton = {\r\n            SaveButton(\r\n                text = \"Save\",\r\n                onClick = { }\r\n            )\r\n        }\r\n    ) {\r\n        Column(\r\n            modifier = Modifier\r\n                .fillMaxSize()\r\n                .padding(0.dp)\r\n                .verticalScroll(scrollState)\r\n        ) {\r\n            TextInput(\r\n                placeholder = \"Add Title\",\r\n                value = viewModel.title,\r\n                onValueChange = { viewModel.onEvent(ProjectCreationEvent.OnTitleChange(it)) }\r\n\r\n            )\r\n            Divider()\r\n            TextInput(\r\n                placeholder = \"Add Description\",\r\n                value = viewModel.description,\r\n                onValueChange = { viewModel.onEvent(ProjectCreationEvent.OnDescriptionChange(it)) },\r\n                singleLine = false,\r\n                icon = ImageVector.vectorResource(id = R.drawable.ic_subject)\r\n            )\r\n            Divider()\r\n            WallpaperDialog(viewModel = viewModel)\r\n            WallpaperElement(\r\n                color = viewModel.wallpaper,\r\n                label = \"Change Wallpaper\",\r\n                onClick = { viewModel.onEvent(ProjectCreationEvent.OnShowWallpaperDialog(true)) }\r\n            )\r\n            Divider()\r\n            TableDialog(viewModel = viewModel)\r\n            ListInput(\r\n                label = \"Add Table Column\",\r\n                mainIcon = ImageVector.vectorResource(id = R.drawable.ic_table),\r\n                onClick = { viewModel.onEvent(ProjectCreationEvent.OnShowTableDialog(true)) },\r\n                onClickItem = { viewModel.onEvent(ProjectCreationEvent.OnTableRemove(index = it)) },\r\n                elements = viewModel.table.map { \"${it.name} in ${it.unit}\" }\r\n            )\r\n            Divider()\r\n            ButtonDialog(viewModel = viewModel)\r\n            ListInput(\r\n                label = \"Button\",\r\n                mainIcon = ImageVector.vectorResource(id = R.drawable.ic_button),\r\n                onClick = { viewModel.onEvent(ProjectCreationEvent.OnShowButtonsDialog(true)) },\r\n                onClickItem = { viewModel.onEvent(ProjectCreationEvent.OnButtonRemove(index = it)) },\r\n                elements = viewModel.buttons.map { \"${it.name} in ${it.column.name}\" }\r\n            )\r\n            Divider()\r\n            NotificationDialog(viewModel = viewModel)\r\n            ListInput(\r\n                label = \"Add Notification\",\r\n                mainIcon = Icons.Default.Notifications,\r\n                onClick = { viewModel.onEvent(ProjectCreationEvent.OnShowNotificationDialog(true)) },\r\n                onClickItem = { },\r\n                elements = listOf(\"07:30\", \"09:00\")\r\n            )\r\n            Divider()\r\n            GraphDialog(viewModel = viewModel)\r\n            ListInput(\r\n                label = \"Add Graph\",\r\n                mainIcon = ImageVector.vectorResource(id = R.drawable.ic_chart),\r\n                onClick = { viewModel.onEvent(ProjectCreationEvent.OnShowGraphDialog(true)) },\r\n                onClickItem = {},\r\n                elements = listOf(\"Pie chart\", \"line chart\")\r\n            )\r\n        }\r\n    }\r\n}\r\n\r\n@Composable\r\nfun WallpaperDialog(viewModel: ProjectCreationScreenViewModel) {\r\n    if(viewModel.isWallpaperDialogOpen) {\r\n        Dialog(\r\n            onDismissRequest = { viewModel.onEvent(ProjectCreationEvent.OnShowWallpaperDialog(false)) }\r\n        ) {\r\n            Surface(\r\n                shape = RoundedCornerShape(5.dp),\r\n                color = MaterialTheme.colors.background,\r\n                modifier = Modifier.padding(10.dp)\r\n            ) {\r\n                Column(modifier = Modifier.width(200.dp)) {\r\n                    for (wallpaper in Wallpapers.values()) {\r\n                        Surface(\r\n                            modifier = Modifier\r\n                                .fillMaxWidth()\r\n                                .height(60.dp)\r\n                                .clickable {\r\n                                    viewModel.onEvent(\r\n                                        ProjectCreationEvent.OnWallpaperChange(\r\n                                            wallpaper.value\r\n                                        )\r\n                                    )\r\n                                    viewModel.onEvent(\r\n                                        ProjectCreationEvent.OnShowWallpaperDialog(\r\n                                            false\r\n                                        )\r\n                                    )\r\n                                },\r\n                        color = wallpaper.value\r\n                        ) {\r\n\r\n                        }\r\n                    }\r\n                }\r\n            }\r\n        }\r\n    }\r\n}\r\n\r\n@Composable\r\nfun TableDialog(viewModel: ProjectCreationScreenViewModel) {\r\n\r\n    if(viewModel.isTableDialogOpen) {\r\n        var name by remember { mutableStateOf(\"\") }\r\n        var nameError by remember { mutableStateOf(false) }\r\n        var unit by remember { mutableStateOf(\"\") }\r\n        var unitError by remember { mutableStateOf(false) }\r\n\r\n        val suggestions = DataType.values().toList().map { it.representation }\r\n        var dataType by remember { mutableStateOf(suggestions.first()) }\r\n\r\n        Dialog(\r\n            onDismissRequest = { viewModel.onEvent(ProjectCreationEvent.OnShowTableDialog(false)) }\r\n        ) {\r\n            Surface(\r\n                shape = RoundedCornerShape(5.dp),\r\n                color = MaterialTheme.colors.background,\r\n                modifier = Modifier.padding(10.dp)\r\n            ) {\r\n                Column(\r\n                    modifier = Modifier\r\n                        .width(300.dp),\r\n                    horizontalAlignment = Alignment.End\r\n                ) {\r\n                    TextField(\r\n                        label = { Text(\"Name\") },\r\n                        value = name,\r\n                        isError = nameError,\r\n                        onValueChange = {\r\n                            name = it\r\n                            nameError = false\r\n                        },\r\n                        modifier = Modifier.fillMaxWidth()\r\n                    )\r\n                    Spacer(modifier = Modifier.padding(10.dp))\r\n                    TextField(\r\n                        label = { Text(\"Unit\") },\r\n                        value = unit,\r\n                        isError = unitError,\r\n                        onValueChange = {\r\n                            unit = it\r\n                            unitError = false\r\n                        },\r\n                        modifier = Modifier.fillMaxWidth()\r\n                    )\r\n                    Spacer(modifier = Modifier.padding(10.dp))\r\n                    EnumDropDownMenu(\r\n                        suggestions = suggestions,\r\n                        value = dataType,\r\n                        onClick = { dataType = suggestions[it] }\r\n                    )\r\n                    Spacer(modifier = Modifier.padding(10.dp))\r\n                    Button(\r\n                        onClick = {\r\n                            if(unit.isBlank()) {\r\n                                unitError = true\r\n                            }\r\n                            if(name.isBlank()) {\r\n                                nameError = true\r\n                            }\r\n                            if(!unitError && !nameError) {\r\n                                viewModel.onEvent(ProjectCreationEvent.OnTableAdd(name = name, unit = unit, dataType = DataType.fromString(dataType)))\r\n                                viewModel.onEvent(ProjectCreationEvent.OnShowTableDialog(false))\r\n                            }\r\n                        }\r\n                    ) {\r\n                        Text(\"Add\")\r\n                    }\r\n                }\r\n            }\r\n        }\r\n    }\r\n}\r\n\r\n\r\n@Composable\r\nfun ButtonDialog(viewModel: ProjectCreationScreenViewModel) {\r\n    if(viewModel.isButtonsDialogOpen) {\r\n        var name by remember { mutableStateOf(\"\") }\r\n        var nameError by remember { mutableStateOf(false) }\r\n        var value by remember { mutableStateOf(\"\") }\r\n        var valueError by remember { mutableStateOf(false) }\r\n\r\n        val suggestions = viewModel.table.filter { it.dataType == DataType.WHOLE_NUMBER }.map { it.name }\r\n        var column by remember { mutableStateOf(0) }\r\n        Dialog(\r\n            onDismissRequest = { viewModel.onEvent(ProjectCreationEvent.OnShowTableDialog(false)) }\r\n        ) {\r\n            Surface(\r\n                shape = RoundedCornerShape(5.dp),\r\n                color = MaterialTheme.colors.background,\r\n                modifier = Modifier.padding(10.dp)\r\n            ) {\r\n                Column(\r\n                    modifier = Modifier\r\n                        .width(300.dp),\r\n                    horizontalAlignment = Alignment.End\r\n                ) {\r\n                    TextField(\r\n                        label = { Text(\"Name\") },\r\n                        value = name,\r\n                        isError = nameError,\r\n                        onValueChange = {\r\n                            name = it\r\n                            nameError = false\r\n                        },\r\n                        modifier = Modifier.fillMaxWidth()\r\n                    )\r\n                    Spacer(modifier = Modifier.padding(10.dp))\r\n                    TextField(\r\n                        label = { Text(\"Unit\") },\r\n                        value = value,\r\n                        isError = valueError,\r\n                        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),\r\n                        onValueChange = {\r\n                            value = it\r\n                            valueError = false\r\n                        },\r\n                        modifier = Modifier.fillMaxWidth()\r\n                    )\r\n                    Spacer(modifier = Modifier.padding(10.dp))\r\n                    EnumDropDownMenu(\r\n                        suggestions = suggestions,\r\n                        value = suggestions[column],\r\n                        onClick = {\r\n                            column = it\r\n                        }\r\n                    )\r\n                    Spacer(modifier = Modifier.padding(10.dp))\r\n                    Button(\r\n                        onClick = {\r\n                            try {\r\n                                value.toInt()\r\n                            } catch (e : NumberFormatException) {\r\n                                valueError = true\r\n                            }\r\n                            if(name.isBlank()) {\r\n                                nameError = true\r\n                            }\r\n                            if(!valueError && !nameError) {\r\n                                viewModel.onEvent(\r\n                                    ProjectCreationEvent.OnButtonAdd(\r\n                                    name = name,\r\n                                    columnId = viewModel.table.filter { it.dataType == DataType.WHOLE_NUMBER }[column].id,\r\n                                    value = value.toInt()\r\n                                ))\r\n                                viewModel.onEvent(ProjectCreationEvent.OnShowButtonsDialog(false))\r\n                            }\r\n                        }\r\n                    ) {\r\n                        Text(\"Add\")\r\n                    }\r\n                }\r\n            }\r\n        }\r\n    }\r\n}\r\n\r\n@Composable\r\nfun NotificationDialog(viewModel: ProjectCreationScreenViewModel) {\r\n\r\n}\r\n\r\n@Composable\r\nfun GraphDialog(viewModel: ProjectCreationScreenViewModel) {\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/pseandroid2/dailydata/ui/project/creation/ProjectCreationScreen.kt b/app/src/main/java/com/pseandroid2/dailydata/ui/project/creation/ProjectCreationScreen.kt
+--- a/app/src/main/java/com/pseandroid2/dailydata/ui/project/creation/ProjectCreationScreen.kt	
++++ b/app/src/main/java/com/pseandroid2/dailydata/ui/project/creation/ProjectCreationScreen.kt	
+@@ -1,5 +1,7 @@
+ package com.pseandroid2.dailydata.ui.project.creation
+ 
++import android.app.TimePickerDialog
++import android.widget.Toast
+ import androidx.compose.foundation.clickable
+ import androidx.compose.foundation.layout.*
+ import androidx.compose.foundation.rememberScrollState
+@@ -13,13 +15,14 @@
+ import androidx.compose.ui.Alignment
+ import androidx.compose.ui.Modifier
+ import androidx.compose.ui.graphics.vector.ImageVector
++import androidx.compose.ui.platform.LocalContext
+ import androidx.compose.ui.res.vectorResource
+ import androidx.compose.ui.text.input.KeyboardType
+ import androidx.compose.ui.unit.dp
+ import androidx.compose.ui.window.Dialog
+ import androidx.hilt.navigation.compose.hiltViewModel
+ import com.pseandroid2.dailydata.util.ui.UiEvent
+-import com.example.pse.util.ui.Wallpapers
++import com.pseandroid2.dailydata.util.ui.Wallpapers
+ import com.pseandroid2.dailydata.R
+ import com.pseandroid2.dailydata.ui.composables.EnumDropDownMenu
+ import com.pseandroid2.dailydata.ui.composables.ListInput
+@@ -27,24 +30,25 @@
+ import com.pseandroid2.dailydata.ui.composables.TextInput
+ import com.pseandroid2.dailydata.ui.composables.WallpaperElement
+ import com.pseandroid2.dailydata.util.ui.DataType
++import com.pseandroid2.dailydata.util.ui.Graphs
+ import kotlinx.coroutines.flow.collect
+ import java.lang.NumberFormatException
++import java.util.Calendar
+ 
+ @Composable
+ fun ProjectCreationScreen(
+     onNavigate: (UiEvent.Navigate) -> Unit,
+     viewModel: ProjectCreationScreenViewModel = hiltViewModel()
+ ) {
+-
+     val scrollState = rememberScrollState()
++    val context = LocalContext.current
+ 
+     LaunchedEffect(key1 = true) {
+         viewModel.uiEvent.collect { event ->
+             when(event) {
+-                is UiEvent.Navigate -> {
+-                    
+-                }
+-                else -> { }
++                is UiEvent.Navigate  -> onNavigate(event)
++                is UiEvent.ShowToast -> Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
++                else                 -> { }
+             }
+         }
+     }
+@@ -52,21 +56,21 @@
+         floatingActionButton = {
+             SaveButton(
+                 text = "Save",
+-                onClick = { }
++                onClick = {
++                    viewModel.onEvent(ProjectCreationEvent.OnSaveClick)
++                }
+             )
+         }
+     ) {
+         Column(
+             modifier = Modifier
+                 .fillMaxSize()
+-                .padding(0.dp)
+                 .verticalScroll(scrollState)
+         ) {
+             TextInput(
+                 placeholder = "Add Title",
+                 value = viewModel.title,
+                 onValueChange = { viewModel.onEvent(ProjectCreationEvent.OnTitleChange(it)) }
+-
+             )
+             Divider()
+             TextInput(
+@@ -77,14 +81,36 @@
+                 icon = ImageVector.vectorResource(id = R.drawable.ic_subject)
+             )
+             Divider()
+-            WallpaperDialog(viewModel = viewModel)
++            WallpaperDialog(
++                isOpen = viewModel.isWallpaperDialogOpen,
++                onDismissRequest = { viewModel.onEvent(ProjectCreationEvent.OnShowWallpaperDialog(false)) },
++                onWallpaperClick = { wallpaper ->
++                    viewModel.onEvent(
++                        ProjectCreationEvent.OnWallpaperChange(
++                            wallpaper.value
++                        )
++                    )
++                    viewModel.onEvent(
++                        ProjectCreationEvent.OnShowWallpaperDialog(
++                            false
++                        )
++                    )
++                }
++            )
+             WallpaperElement(
+                 color = viewModel.wallpaper,
+                 label = "Change Wallpaper",
+                 onClick = { viewModel.onEvent(ProjectCreationEvent.OnShowWallpaperDialog(true)) }
+             )
+             Divider()
+-            TableDialog(viewModel = viewModel)
++            TableDialog(
++                isOpen = viewModel.isTableDialogOpen,
++                onDismissRequest = { viewModel.onEvent(ProjectCreationEvent.OnShowTableDialog(false)) },
++                onClick = { name, unit, dataType ->
++                    viewModel.onEvent(ProjectCreationEvent.OnTableAdd(name = name, unit = unit, dataType = dataType))
++                    viewModel.onEvent(ProjectCreationEvent.OnShowTableDialog(false))
++                }
++            )
+             ListInput(
+                 label = "Add Table Column",
+                 mainIcon = ImageVector.vectorResource(id = R.drawable.ic_table),
+@@ -93,7 +119,20 @@
+                 elements = viewModel.table.map { "${it.name} in ${it.unit}" }
+             )
+             Divider()
+-            ButtonDialog(viewModel = viewModel)
++            ButtonDialog(
++                isOpen = viewModel.isButtonsDialogOpen,
++                buttons = viewModel.table.filter { it.dataType == DataType.WHOLE_NUMBER }.map { it.name },
++                onDismissRequest = { viewModel.onEvent(ProjectCreationEvent.OnShowButtonsDialog(false)) },
++                onClick = { name, column, value ->
++                    viewModel.onEvent(
++                        ProjectCreationEvent.OnButtonAdd(
++                            name = name,
++                            columnId = viewModel.table.filter { it.dataType == DataType.WHOLE_NUMBER }[column].id,
++                            value = value.toInt()
++                        ))
++                    viewModel.onEvent(ProjectCreationEvent.OnShowButtonsDialog(false))
++                }
++            )
+             ListInput(
+                 label = "Button",
+                 mainIcon = ImageVector.vectorResource(id = R.drawable.ic_button),
+@@ -102,232 +141,38 @@
+                 elements = viewModel.buttons.map { "${it.name} in ${it.column.name}" }
+             )
+             Divider()
+-            NotificationDialog(viewModel = viewModel)
++            NotificationDialog(
++                isOpen = viewModel.isNotificationDialogOpen,
++                onDismissRequest = { viewModel.onEvent(ProjectCreationEvent.OnShowNotificationDialog(false)) },
++                onClick = { message, time ->
++                    viewModel.onEvent(ProjectCreationEvent.OnNotificationAdd(message = message, time = time))
++                    viewModel.onEvent(ProjectCreationEvent.OnShowNotificationDialog(false))
++                }
++            )
+             ListInput(
+                 label = "Add Notification",
+                 mainIcon = Icons.Default.Notifications,
+                 onClick = { viewModel.onEvent(ProjectCreationEvent.OnShowNotificationDialog(true)) },
+-                onClickItem = { },
+-                elements = listOf("07:30", "09:00")
++                onClickItem = { viewModel.onEvent(ProjectCreationEvent.OnNotificationRemove(index = it)) },
++                elements = viewModel.notifications.map { it.time }
+             )
+             Divider()
+-            GraphDialog(viewModel = viewModel)
++            GraphDialog(
++                isOpen = viewModel.isGraphDialogOpen,
++                onDismissRequest = { viewModel.onEvent(ProjectCreationEvent.OnShowGraphDialog(false)) },
++                onClick = {graph ->
++                    viewModel.onEvent(ProjectCreationEvent.OnGraphAdd(graph = graph))
++                    viewModel.onEvent(ProjectCreationEvent.OnShowGraphDialog(false))
++                }
++            )
+             ListInput(
+                 label = "Add Graph",
+                 mainIcon = ImageVector.vectorResource(id = R.drawable.ic_chart),
+                 onClick = { viewModel.onEvent(ProjectCreationEvent.OnShowGraphDialog(true)) },
+-                onClickItem = {},
+-                elements = listOf("Pie chart", "line chart")
++                onClickItem = { viewModel.onEvent(ProjectCreationEvent.OnGraphRemove(index = it)) },
++                elements = viewModel.graphs.map { it.representation }
+             )
+         }
+     }
+ }
+-
+-@Composable
+-fun WallpaperDialog(viewModel: ProjectCreationScreenViewModel) {
+-    if(viewModel.isWallpaperDialogOpen) {
+-        Dialog(
+-            onDismissRequest = { viewModel.onEvent(ProjectCreationEvent.OnShowWallpaperDialog(false)) }
+-        ) {
+-            Surface(
+-                shape = RoundedCornerShape(5.dp),
+-                color = MaterialTheme.colors.background,
+-                modifier = Modifier.padding(10.dp)
+-            ) {
+-                Column(modifier = Modifier.width(200.dp)) {
+-                    for (wallpaper in Wallpapers.values()) {
+-                        Surface(
+-                            modifier = Modifier
+-                                .fillMaxWidth()
+-                                .height(60.dp)
+-                                .clickable {
+-                                    viewModel.onEvent(
+-                                        ProjectCreationEvent.OnWallpaperChange(
+-                                            wallpaper.value
+-                                        )
+-                                    )
+-                                    viewModel.onEvent(
+-                                        ProjectCreationEvent.OnShowWallpaperDialog(
+-                                            false
+-                                        )
+-                                    )
+-                                },
+-                        color = wallpaper.value
+-                        ) {
+-
+-                        }
+-                    }
+-                }
+-            }
+-        }
+-    }
+-}
+-
+-@Composable
+-fun TableDialog(viewModel: ProjectCreationScreenViewModel) {
+-
+-    if(viewModel.isTableDialogOpen) {
+-        var name by remember { mutableStateOf("") }
+-        var nameError by remember { mutableStateOf(false) }
+-        var unit by remember { mutableStateOf("") }
+-        var unitError by remember { mutableStateOf(false) }
+-
+-        val suggestions = DataType.values().toList().map { it.representation }
+-        var dataType by remember { mutableStateOf(suggestions.first()) }
+-
+-        Dialog(
+-            onDismissRequest = { viewModel.onEvent(ProjectCreationEvent.OnShowTableDialog(false)) }
+-        ) {
+-            Surface(
+-                shape = RoundedCornerShape(5.dp),
+-                color = MaterialTheme.colors.background,
+-                modifier = Modifier.padding(10.dp)
+-            ) {
+-                Column(
+-                    modifier = Modifier
+-                        .width(300.dp),
+-                    horizontalAlignment = Alignment.End
+-                ) {
+-                    TextField(
+-                        label = { Text("Name") },
+-                        value = name,
+-                        isError = nameError,
+-                        onValueChange = {
+-                            name = it
+-                            nameError = false
+-                        },
+-                        modifier = Modifier.fillMaxWidth()
+-                    )
+-                    Spacer(modifier = Modifier.padding(10.dp))
+-                    TextField(
+-                        label = { Text("Unit") },
+-                        value = unit,
+-                        isError = unitError,
+-                        onValueChange = {
+-                            unit = it
+-                            unitError = false
+-                        },
+-                        modifier = Modifier.fillMaxWidth()
+-                    )
+-                    Spacer(modifier = Modifier.padding(10.dp))
+-                    EnumDropDownMenu(
+-                        suggestions = suggestions,
+-                        value = dataType,
+-                        onClick = { dataType = suggestions[it] }
+-                    )
+-                    Spacer(modifier = Modifier.padding(10.dp))
+-                    Button(
+-                        onClick = {
+-                            if(unit.isBlank()) {
+-                                unitError = true
+-                            }
+-                            if(name.isBlank()) {
+-                                nameError = true
+-                            }
+-                            if(!unitError && !nameError) {
+-                                viewModel.onEvent(ProjectCreationEvent.OnTableAdd(name = name, unit = unit, dataType = DataType.fromString(dataType)))
+-                                viewModel.onEvent(ProjectCreationEvent.OnShowTableDialog(false))
+-                            }
+-                        }
+-                    ) {
+-                        Text("Add")
+-                    }
+-                }
+-            }
+-        }
+-    }
+-}
+-
+-
+-@Composable
+-fun ButtonDialog(viewModel: ProjectCreationScreenViewModel) {
+-    if(viewModel.isButtonsDialogOpen) {
+-        var name by remember { mutableStateOf("") }
+-        var nameError by remember { mutableStateOf(false) }
+-        var value by remember { mutableStateOf("") }
+-        var valueError by remember { mutableStateOf(false) }
+-
+-        val suggestions = viewModel.table.filter { it.dataType == DataType.WHOLE_NUMBER }.map { it.name }
+-        var column by remember { mutableStateOf(0) }
+-        Dialog(
+-            onDismissRequest = { viewModel.onEvent(ProjectCreationEvent.OnShowTableDialog(false)) }
+-        ) {
+-            Surface(
+-                shape = RoundedCornerShape(5.dp),
+-                color = MaterialTheme.colors.background,
+-                modifier = Modifier.padding(10.dp)
+-            ) {
+-                Column(
+-                    modifier = Modifier
+-                        .width(300.dp),
+-                    horizontalAlignment = Alignment.End
+-                ) {
+-                    TextField(
+-                        label = { Text("Name") },
+-                        value = name,
+-                        isError = nameError,
+-                        onValueChange = {
+-                            name = it
+-                            nameError = false
+-                        },
+-                        modifier = Modifier.fillMaxWidth()
+-                    )
+-                    Spacer(modifier = Modifier.padding(10.dp))
+-                    TextField(
+-                        label = { Text("Unit") },
+-                        value = value,
+-                        isError = valueError,
+-                        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+-                        onValueChange = {
+-                            value = it
+-                            valueError = false
+-                        },
+-                        modifier = Modifier.fillMaxWidth()
+-                    )
+-                    Spacer(modifier = Modifier.padding(10.dp))
+-                    EnumDropDownMenu(
+-                        suggestions = suggestions,
+-                        value = suggestions[column],
+-                        onClick = {
+-                            column = it
+-                        }
+-                    )
+-                    Spacer(modifier = Modifier.padding(10.dp))
+-                    Button(
+-                        onClick = {
+-                            try {
+-                                value.toInt()
+-                            } catch (e : NumberFormatException) {
+-                                valueError = true
+-                            }
+-                            if(name.isBlank()) {
+-                                nameError = true
+-                            }
+-                            if(!valueError && !nameError) {
+-                                viewModel.onEvent(
+-                                    ProjectCreationEvent.OnButtonAdd(
+-                                    name = name,
+-                                    columnId = viewModel.table.filter { it.dataType == DataType.WHOLE_NUMBER }[column].id,
+-                                    value = value.toInt()
+-                                ))
+-                                viewModel.onEvent(ProjectCreationEvent.OnShowButtonsDialog(false))
+-                            }
+-                        }
+-                    ) {
+-                        Text("Add")
+-                    }
+-                }
+-            }
+-        }
+-    }
+-}
+-
+-@Composable
+-fun NotificationDialog(viewModel: ProjectCreationScreenViewModel) {
+-
+-}
+-
+-@Composable
+-fun GraphDialog(viewModel: ProjectCreationScreenViewModel) {
+ 
+-}
+\ No newline at end of file
+Index: app/src/main/java/com/pseandroid2/dailydata/ui/project/data/graph/ProjectDataGraph.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/pseandroid2/dailydata/ui/project/data/graph/ProjectDataGraph.kt b/app/src/main/java/com/pseandroid2/dailydata/ui/project/data/graph/ProjectDataGraph.kt
+new file mode 100644
+--- /dev/null	
++++ b/app/src/main/java/com/pseandroid2/dailydata/ui/project/data/graph/ProjectDataGraph.kt	
+@@ -0,0 +1,2 @@
++package com.pseandroid2.dailydata.ui.project.data.graph
++
+Index: app/src/main/java/com/pseandroid2/dailydata/ui/project/data/settings/ProjectDataSettings.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/pseandroid2/dailydata/ui/project/data/settings/ProjectDataSettings.kt b/app/src/main/java/com/pseandroid2/dailydata/ui/project/data/settings/ProjectDataSettings.kt
+new file mode 100644
+--- /dev/null	
++++ b/app/src/main/java/com/pseandroid2/dailydata/ui/project/data/settings/ProjectDataSettings.kt	
+@@ -0,0 +1,173 @@
++package com.pseandroid2.dailydata.ui.project.data.settings
++
++import android.widget.Toast
++import androidx.compose.foundation.layout.Column
++import androidx.compose.foundation.layout.fillMaxSize
++import androidx.compose.foundation.rememberScrollState
++import androidx.compose.foundation.verticalScroll
++import androidx.compose.material.Divider
++import androidx.compose.material.Scaffold
++import androidx.compose.material.icons.Icons
++import androidx.compose.material.icons.filled.Notifications
++import androidx.compose.runtime.Composable
++import androidx.compose.runtime.LaunchedEffect
++import androidx.compose.ui.Modifier
++import androidx.compose.ui.graphics.vector.ImageVector
++import androidx.compose.ui.platform.LocalContext
++import androidx.compose.ui.res.vectorResource
++import androidx.hilt.navigation.compose.hiltViewModel
++import com.pseandroid2.dailydata.R
++import com.pseandroid2.dailydata.ui.composables.ListInput
++import com.pseandroid2.dailydata.ui.composables.SaveButton
++import com.pseandroid2.dailydata.ui.composables.TextInput
++import com.pseandroid2.dailydata.ui.composables.WallpaperElement
++import com.pseandroid2.dailydata.ui.project.creation.ButtonDialog
++import com.pseandroid2.dailydata.ui.project.creation.GraphDialog
++import com.pseandroid2.dailydata.ui.project.creation.NotificationDialog
++import com.pseandroid2.dailydata.ui.project.creation.ProjectCreationEvent
++import com.pseandroid2.dailydata.ui.project.creation.TableDialog
++import com.pseandroid2.dailydata.ui.project.creation.WallpaperDialog
++import com.pseandroid2.dailydata.util.ui.DataType
++import com.pseandroid2.dailydata.util.ui.UiEvent
++import kotlinx.coroutines.flow.collect
++
++@Composable
++fun ProjectDataInputScreen(
++    viewModel: ProjectDataSettingsScreenViewModel = hiltViewModel()
++) {
++    val scrollState = rememberScrollState()
++    val context = LocalContext.current
++
++    LaunchedEffect(key1 = true) {
++        viewModel.uiEvent.collect { event ->
++            when(event) {
++                is UiEvent.ShowToast -> Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
++                else                 -> { }
++            }
++        }
++    }
++    Scaffold(
++        floatingActionButton = {
++            SaveButton(
++                text = "Save",
++                onClick = { }
++            )
++        }
++    ) {
++        Column(
++            modifier = Modifier
++                .fillMaxSize()
++                .verticalScroll(scrollState)
++        ) {
++            TextInput(
++                placeholder = "Add Title",
++                value = viewModel.title,
++                onValueChange = { viewModel.onEvent(ProjectCreationEvent.OnTitleChange(it)) }
++            )
++            Divider()
++            TextInput(
++                placeholder = "Add Description",
++                value = viewModel.description,
++                onValueChange = { viewModel.onEvent(ProjectCreationEvent.OnDescriptionChange(it)) },
++                singleLine = false,
++                icon = ImageVector.vectorResource(id = R.drawable.ic_subject)
++            )
++            Divider()
++            WallpaperDialog(
++                isOpen = viewModel.isWallpaperDialogOpen,
++                onDismissRequest = { viewModel.onEvent(ProjectCreationEvent.OnShowWallpaperDialog(false)) },
++                onWallpaperClick = { wallpaper ->
++                    viewModel.onEvent(
++                        ProjectCreationEvent.OnWallpaperChange(
++                            wallpaper.value
++                        )
++                    )
++                    viewModel.onEvent(
++                        ProjectCreationEvent.OnShowWallpaperDialog(
++                            false
++                        )
++                    )
++                }
++            )
++            WallpaperElement(
++                color = viewModel.wallpaper,
++                label = "Change Wallpaper",
++                onClick = { viewModel.onEvent(ProjectCreationEvent.OnShowWallpaperDialog(true)) }
++            )
++            Divider()
++            /*
++            If its an online project
++             */
++            TableDialog(
++                isOpen = viewModel.isTableDialogOpen,
++                onDismissRequest = { viewModel.onEvent(ProjectCreationEvent.OnShowTableDialog(false)) },
++                onClick = { name, unit, dataType ->
++                    viewModel.onEvent(ProjectCreationEvent.OnTableAdd(name = name, unit = unit, dataType = dataType))
++                    viewModel.onEvent(ProjectCreationEvent.OnShowTableDialog(false))
++                }
++            )
++            ListInput(
++                label = "Add Table Column",
++                mainIcon = ImageVector.vectorResource(id = R.drawable.ic_table),
++                onClick = { viewModel.onEvent(ProjectCreationEvent.OnShowTableDialog(true)) },
++                onClickItem = { viewModel.onEvent(ProjectCreationEvent.OnTableRemove(index = it)) },
++                elements = viewModel.table.map { "${it.name} in ${it.unit}" }
++            )
++            Divider()
++            ButtonDialog(
++                isOpen = viewModel.isButtonsDialogOpen,
++                buttons = viewModel.table.filter { it.dataType == DataType.WHOLE_NUMBER }.map { it.name },
++                onDismissRequest = { viewModel.onEvent(ProjectCreationEvent.OnShowButtonsDialog(false)) },
++                onClick = { name, column, value ->
++                    viewModel.onEvent(
++                        ProjectCreationEvent.OnButtonAdd(
++                            name = name,
++                            columnId = viewModel.table.filter { it.dataType == DataType.WHOLE_NUMBER }[column].id,
++                            value = value.toInt()
++                        ))
++                    viewModel.onEvent(ProjectCreationEvent.OnShowButtonsDialog(false))
++                }
++            )
++            ListInput(
++                label = "Button",
++                mainIcon = ImageVector.vectorResource(id = R.drawable.ic_button),
++                onClick = { viewModel.onEvent(ProjectCreationEvent.OnShowButtonsDialog(true)) },
++                onClickItem = { viewModel.onEvent(ProjectCreationEvent.OnButtonRemove(index = it)) },
++                elements = viewModel.buttons.map { "${it.name} in ${it.column.name}" }
++            )
++            Divider()
++            NotificationDialog(
++                isOpen = viewModel.isNotificationDialogOpen,
++                onDismissRequest = { viewModel.onEvent(ProjectCreationEvent.OnShowNotificationDialog(false)) },
++                onClick = { message, time ->
++                    viewModel.onEvent(ProjectCreationEvent.OnNotificationAdd(message = message, time = time))
++                    viewModel.onEvent(ProjectCreationEvent.OnShowNotificationDialog(false))
++                }
++            )
++            ListInput(
++                label = "Add Notification",
++                mainIcon = Icons.Default.Notifications,
++                onClick = { viewModel.onEvent(ProjectCreationEvent.OnShowNotificationDialog(true)) },
++                onClickItem = { viewModel.onEvent(ProjectCreationEvent.OnNotificationRemove(index = it)) },
++                elements = viewModel.notifications.map { it.time }
++            )
++            Divider()
++            GraphDialog(
++                isOpen = viewModel.isGraphDialogOpen,
++                onDismissRequest = { viewModel.onEvent(ProjectCreationEvent.OnShowGraphDialog(false)) },
++                onClick = {graph ->
++                    viewModel.onEvent(ProjectCreationEvent.OnGraphAdd(graph = graph))
++                    viewModel.onEvent(ProjectCreationEvent.OnShowGraphDialog(false))
++                }
++            )
++            ListInput(
++                label = "Add Graph",
++                mainIcon = ImageVector.vectorResource(id = R.drawable.ic_chart),
++                onClick = { viewModel.onEvent(ProjectCreationEvent.OnShowGraphDialog(true)) },
++                onClickItem = { viewModel.onEvent(ProjectCreationEvent.OnGraphRemove(index = it)) },
++                elements = viewModel.graphs.map { it.representation }
++            )
++        }
++    }
++}
++
+Index: app/src/main/java/com/pseandroid2/dailydata/ui/project/data/input/ProjectDataInput.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/pseandroid2/dailydata/ui/project/data/input/ProjectDataInput.kt b/app/src/main/java/com/pseandroid2/dailydata/ui/project/data/input/ProjectDataInput.kt
+new file mode 100644
+--- /dev/null	
++++ b/app/src/main/java/com/pseandroid2/dailydata/ui/project/data/input/ProjectDataInput.kt	
+@@ -0,0 +1,212 @@
++package com.pseandroid2.dailydata.ui.project.data.input
++
++import androidx.compose.foundation.ScrollState
++import androidx.compose.foundation.gestures.detectTapGestures
++import androidx.compose.foundation.horizontalScroll
++import androidx.compose.foundation.layout.Box
++import androidx.compose.foundation.layout.Column
++import androidx.compose.foundation.layout.Row
++import androidx.compose.foundation.layout.fillMaxSize
++import androidx.compose.foundation.layout.fillMaxWidth
++import androidx.compose.foundation.layout.height
++import androidx.compose.foundation.layout.heightIn
++import androidx.compose.foundation.layout.padding
++import androidx.compose.foundation.layout.size
++import androidx.compose.foundation.layout.width
++import androidx.compose.foundation.lazy.LazyColumn
++import androidx.compose.foundation.lazy.items
++import androidx.compose.foundation.rememberScrollState
++import androidx.compose.foundation.shape.CircleShape
++import androidx.compose.foundation.verticalScroll
++import androidx.compose.material.Divider
++import androidx.compose.material.Icon
++import androidx.compose.material.OutlinedButton
++import androidx.compose.material.Surface
++import androidx.compose.material.Text
++import androidx.compose.material.icons.Icons
++import androidx.compose.material.icons.filled.Add
++import androidx.compose.runtime.Composable
++import androidx.compose.ui.Alignment
++import androidx.compose.ui.Modifier
++import androidx.compose.ui.geometry.Offset
++import androidx.compose.ui.graphics.vector.ImageVector
++import androidx.compose.ui.input.pointer.pointerInput
++import androidx.compose.ui.platform.LocalConfiguration
++import androidx.compose.ui.res.vectorResource
++import androidx.compose.ui.unit.dp
++import androidx.hilt.navigation.compose.hiltViewModel
++import com.pseandroid2.dailydata.R
++import com.pseandroid2.dailydata.util.ui.DataType
++import com.pseandroid2.dailydata.util.ui.Row
++import com.pseandroid2.dailydata.util.ui.TableColumn
++import com.pseandroid2.dailydata.util.ui.UiEvent
++
++
++@Composable
++fun ProjectDataInputScreen(
++    onNavigate: (UiEvent.Navigate) -> Unit,
++    viewModel: ProjectDataInputScreenViewModel = hiltViewModel()
++) {
++    var scrollState = rememberScrollState()
++    var tableScrollState = rememberScrollState()
++    Column(
++        modifier = Modifier
++            .fillMaxSize()
++            .padding(10.dp)
++            .verticalScroll(scrollState)
++    ) {
++        Surface(
++            modifier = Modifier
++                .fillMaxWidth()
++                .height(150.dp)
++        ) {
++            Column(
++                modifier = Modifier.fillMaxWidth()
++            ) {
++                Text(text = viewModel.title)
++                Text(viewModel.description)
++            }
++        }
++        Divider(modifier = Modifier.padding(10.dp))
++        IncButtons()
++        Divider(modifier = Modifier.padding(10.dp))
++        Columns()
++        Divider(modifier = Modifier.padding(10.dp))
++        Table(
++            columns = viewModel.columns,
++            data = viewModel.table,
++            scrollState = rememberScrollState(),
++            onPress = {
++
++            }
++        )
++    }
++}
++
++@Composable
++fun Table(
++    columns : List<TableColumn>,
++    data : List<Row>,
++    scrollState : ScrollState,
++    onPress: (Offset) -> Unit
++) {
++
++    val configuration = LocalConfiguration.current
++    val screenHeight = configuration.screenHeightDp.dp
++    Column(modifier = Modifier
++        .fillMaxWidth()
++        .heightIn(0.dp, screenHeight - 160.dp)
++    ) {
++
++        LazyColumn {
++            items(data) { row ->
++                DisplayRow(data = row, onPress = onPress, scrollState = scrollState)
++            }
++        }
++    }
++}
++
++@Composable
++fun DisplayRow(
++    data : Row,
++    onPress : (Offset) -> Unit,
++    scrollState : ScrollState
++) {
++    Row(
++        modifier = Modifier
++            .pointerInput(Unit) { detectTapGestures(onLongPress = onPress) }
++            .horizontalScroll(scrollState)
++    ) {
++
++    }
++}
++
++@Composable
++fun Columns(
++
++) {
++
++}
++
++@Composable
++fun TableColumn(
++    name : String,
++    unit : String,
++    dataType : DataType,
++    value : String,
++    onValueChange : (String) -> Unit
++) {
++    Column() {
++        Row(
++            modifier = Modifier.height(60.dp),
++            verticalAlignment = Alignment.CenterVertically
++        ) {
++            Text(
++                modifier = Modifier.width(120.dp),
++                text = "$name [$unit]:"
++            )
++            when(dataType) {
++                DataType.TIME -> {
++
++                }
++                DataType.STRING -> {
++
++                }
++                else -> {
++
++                }
++            }
++        }
++    }
++}
++
++@Composable
++fun IncButtons(
++) {
++
++}
++
++@Composable
++fun IncButton(
++    name : String,
++    value : Int,
++    onClickInc : () -> Unit,
++    onClickDec : () -> Unit,
++    onClickAdd : () -> Unit
++) {
++    Box(
++        modifier = Modifier
++            .fillMaxWidth()
++            .height(80.dp)
++    ){
++        Text(
++            modifier = Modifier.align(Alignment.TopStart),
++            text = name
++        )
++        Row(
++            modifier = Modifier.align(Alignment.BottomStart),
++            verticalAlignment = Alignment.CenterVertically
++        ) {
++            OutlinedButton(
++                modifier = Modifier.size(50.dp),
++                onClick = onClickDec,
++                shape = CircleShape
++            ){
++                Icon(modifier = Modifier.size(30.dp), imageVector = ImageVector.vectorResource(id = R.drawable.ic_remove), contentDescription = "")
++            }
++            Text(
++                modifier = Modifier.padding(10.dp),
++                text = "$value")
++            OutlinedButton(
++                modifier = Modifier.size(50.dp),
++                onClick = onClickInc,
++                shape = CircleShape
++            ){
++                Icon(modifier = Modifier.size(30.dp), imageVector = Icons.Default.Add, contentDescription = "")
++            }
++        }
++        OutlinedButton(modifier = Modifier.align(Alignment.BottomEnd), onClick = onClickAdd ) {
++            Text(text = "Add")
++        }
++    }
++}
+\ No newline at end of file
+Index: app/src/main/java/com/pseandroid2/dailydata/util/ui/UiEvent.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.pseandroid2.dailydata.util.ui\r\n\r\nsealed class UiEvent {\r\n    object PopBackStack: UiEvent()\r\n    data class Navigate(val route: String): UiEvent()\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/pseandroid2/dailydata/util/ui/UiEvent.kt b/app/src/main/java/com/pseandroid2/dailydata/util/ui/UiEvent.kt
+--- a/app/src/main/java/com/pseandroid2/dailydata/util/ui/UiEvent.kt	
++++ b/app/src/main/java/com/pseandroid2/dailydata/util/ui/UiEvent.kt	
+@@ -1,6 +1,7 @@
+ package com.pseandroid2.dailydata.util.ui
+ 
+ sealed class UiEvent {
+-    object PopBackStack: UiEvent()
+-    data class Navigate(val route: String): UiEvent()
++    object PopBackStack : UiEvent()
++    data class Navigate(val route : String) : UiEvent()
++    data class ShowToast(val message : String) : UiEvent()
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/pseandroid2/dailydata/ui/project/creation/ProjectCreationScreenViewModel.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.pseandroid2.dailydata.ui.project.creation\r\n\r\nimport androidx.compose.runtime.getValue\r\nimport androidx.compose.runtime.mutableStateOf\r\nimport androidx.compose.runtime.setValue\r\nimport androidx.compose.ui.graphics.Color\r\nimport androidx.lifecycle.ViewModel\r\nimport androidx.lifecycle.viewModelScope\r\nimport com.pseandroid2.dailydata.util.ui.UiEvent\r\nimport com.pseandroid2.dailydata.di.Repository\r\nimport com.pseandroid2.dailydata.util.ui.Routes\r\nimport com.pseandroid2.dailydata.util.ui.TableButton\r\nimport com.pseandroid2.dailydata.util.ui.TableColumn\r\nimport dagger.hilt.android.lifecycle.HiltViewModel\r\nimport kotlinx.coroutines.flow.MutableSharedFlow\r\nimport kotlinx.coroutines.flow.asSharedFlow\r\nimport kotlinx.coroutines.launch\r\nimport javax.inject.Inject\r\n\r\n@HiltViewModel\r\nclass ProjectCreationScreenViewModel @Inject constructor(\r\n    private val repository: Repository\r\n) : ViewModel() {\r\n\r\n    private val _uiEvent = MutableSharedFlow<UiEvent>()\r\n    val uiEvent = _uiEvent.asSharedFlow()\r\n\r\n    var title by mutableStateOf(\"\")\r\n        private set\r\n    var description by mutableStateOf(\"\")\r\n        private set\r\n    var wallpaper by mutableStateOf(Color.White)\r\n        private set\r\n    var table by mutableStateOf( listOf<TableColumn>() )\r\n        private set\r\n    var buttons by mutableStateOf( listOf<TableButton>() )\r\n        private set\r\n\r\n    var isWallpaperDialogOpen by mutableStateOf(false)\r\n        private set\r\n    var isTableDialogOpen by mutableStateOf(false)\r\n        private set\r\n    var isButtonsDialogOpen by mutableStateOf(false)\r\n        private set\r\n    var isNotificationDialogOpen by mutableStateOf(false)\r\n        private set\r\n    var isGraphDialogOpen by mutableStateOf(false)\r\n        private set\r\n\r\n    fun onEvent(event: ProjectCreationEvent) {\r\n        when (event) {\r\n            is ProjectCreationEvent.OnTitleChange -> {\r\n                title = event.title\r\n            }\r\n            is ProjectCreationEvent.OnDescriptionChange -> {\r\n                description = event.description\r\n            }\r\n            is ProjectCreationEvent.OnWallpaperChange -> {\r\n                wallpaper = event.wallpaper\r\n            }\r\n            is ProjectCreationEvent.OnTableAdd -> {\r\n                var id = if (table.isEmpty()) {\r\n                    0\r\n                } else {\r\n                    table.last().id + 1\r\n                }\r\n                var mutable = table.toMutableList()\r\n                mutable.add(TableColumn(id = id, name = event.name, unit = event.unit, dataType = event.dataType))\r\n                table = mutable.toList()\r\n            }\r\n            is ProjectCreationEvent.OnTableRemove -> {\r\n                var mutable = table.toMutableList()\r\n                var removed = mutable.removeAt(index = event.index)\r\n                var mutableButtons = buttons.toMutableList()\r\n                buttons = mutableButtons.filter { it.column.id != removed.id}.toList()\r\n                table = mutable.toList()\r\n            }\r\n            is ProjectCreationEvent.OnButtonAdd -> {\r\n                var id = if (buttons.isEmpty()) {\r\n                    0\r\n                } else {\r\n                    buttons.last().id + 1\r\n                }\r\n                var mutable = buttons.toMutableList()\r\n                mutable.add(TableButton(id = id, name = event.name, column = table.find {event.columnId == it.id}!!, value = event.value))\r\n                buttons = mutable.toList()\r\n            }\r\n            is ProjectCreationEvent.OnButtonRemove -> {\r\n                var mutable = buttons.toMutableList()\r\n                mutable.removeAt(index = event.index)\r\n                buttons = mutable.toList()\r\n            }\r\n\r\n            is ProjectCreationEvent.OnSaveClick -> {\r\n                TODO(\"Collect project data and send to repository\")\r\n                sendUiEvent(UiEvent.Navigate(Routes.DATA))\r\n            }\r\n            is ProjectCreationEvent.OnShowWallpaperDialog -> {\r\n                isWallpaperDialogOpen = event.isOpen\r\n            }\r\n            is ProjectCreationEvent.OnShowTableDialog -> {\r\n                isTableDialogOpen = event.isOpen\r\n            }\r\n            is ProjectCreationEvent.OnShowButtonsDialog -> {\r\n                isButtonsDialogOpen = event.isOpen\r\n            }\r\n            is ProjectCreationEvent.OnShowNotificationDialog -> {\r\n                isNotificationDialogOpen = event.isOpen\r\n            }\r\n            is ProjectCreationEvent.OnShowGraphDialog -> {\r\n                isGraphDialogOpen = event.isOpen\r\n            }\r\n        }\r\n    }\r\n\r\n    private fun sendUiEvent(event : UiEvent) {\r\n        viewModelScope.launch {\r\n            _uiEvent.emit(event)\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/pseandroid2/dailydata/ui/project/creation/ProjectCreationScreenViewModel.kt b/app/src/main/java/com/pseandroid2/dailydata/ui/project/creation/ProjectCreationScreenViewModel.kt
+--- a/app/src/main/java/com/pseandroid2/dailydata/ui/project/creation/ProjectCreationScreenViewModel.kt	
++++ b/app/src/main/java/com/pseandroid2/dailydata/ui/project/creation/ProjectCreationScreenViewModel.kt	
+@@ -8,6 +8,9 @@
+ import androidx.lifecycle.viewModelScope
+ import com.pseandroid2.dailydata.util.ui.UiEvent
+ import com.pseandroid2.dailydata.di.Repository
++import com.pseandroid2.dailydata.util.ui.DataType
++import com.pseandroid2.dailydata.util.ui.Graphs
++import com.pseandroid2.dailydata.util.ui.Notification
+ import com.pseandroid2.dailydata.util.ui.Routes
+ import com.pseandroid2.dailydata.util.ui.TableButton
+ import com.pseandroid2.dailydata.util.ui.TableColumn
+@@ -35,6 +38,10 @@
+         private set
+     var buttons by mutableStateOf( listOf<TableButton>() )
+         private set
++    var notifications by mutableStateOf( listOf<Notification>() )
++        private set
++    var graphs by mutableStateOf( listOf<Graphs>() )
++        private set
+ 
+     var isWallpaperDialogOpen by mutableStateOf(false)
+         private set
+@@ -90,11 +97,37 @@
+                 mutable.removeAt(index = event.index)
+                 buttons = mutable.toList()
+             }
+-
++            is ProjectCreationEvent.OnNotificationAdd -> {
++                var mutable = notifications.toMutableList()
++                mutable.add(Notification(message = event.message, time = event.time))
++                notifications = mutable.toList()
++            }
++            is ProjectCreationEvent.OnNotificationRemove -> {
++                var mutable = notifications.toMutableList()
++                mutable.removeAt(index = event.index)
++                notifications = mutable.toList()
++            }
++            is ProjectCreationEvent.OnGraphAdd -> {
++                var mutable = graphs.toMutableList()
++                mutable.add(event.graph)
++                graphs = mutable.toList()
++            }
++            is ProjectCreationEvent.OnGraphRemove -> {
++                var mutable = graphs.toMutableList()
++                mutable.removeAt(index = event.index)
++                graphs = mutable.toList()
++            }
+             is ProjectCreationEvent.OnSaveClick -> {
+-                TODO("Collect project data and send to repository")
+-                sendUiEvent(UiEvent.Navigate(Routes.DATA))
++                when {
++                    title.isBlank() -> sendUiEvent(UiEvent.ShowToast("Please Enter a title"))
++                    table.isEmpty() -> sendUiEvent(UiEvent.ShowToast("Please Enter a column"))
++                    else            -> {
++                        var id = 0 //id = repository.createProject(...)
++                        sendUiEvent(UiEvent.Navigate(Routes.DATA + "?projectId=$id"))
++                    }
++                }
+             }
++
+             is ProjectCreationEvent.OnShowWallpaperDialog -> {
+                 isWallpaperDialogOpen = event.isOpen
+             }
+@@ -102,7 +135,11 @@
+                 isTableDialogOpen = event.isOpen
+             }
+             is ProjectCreationEvent.OnShowButtonsDialog -> {
+-                isButtonsDialogOpen = event.isOpen
++                if(event.isOpen && table.none { it.dataType == DataType.WHOLE_NUMBER }) {
++                    sendUiEvent(UiEvent.ShowToast("Please Enter a compatible column first"))
++                } else {
++                    isButtonsDialogOpen = event.isOpen
++                }
+             }
+             is ProjectCreationEvent.OnShowNotificationDialog -> {
+                 isNotificationDialogOpen = event.isOpen
+Index: app/src/main/java/com/pseandroid2/dailydata/util/ui/Wallpapers.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/pseandroid2/dailydata/util/ui/Wallpapers.kt b/app/src/main/java/com/pseandroid2/dailydata/util/ui/Wallpapers.kt
+deleted file mode 100644
+--- a/app/src/main/java/com/pseandroid2/dailydata/util/ui/Wallpapers.kt	
++++ /dev/null	
+@@ -1,9 +0,0 @@
+-package com.example.pse.util.ui
+-
+-import androidx.compose.ui.graphics.Color
+-
+-enum class Wallpapers(val value : Color) {
+-    ORANGE(Color(0xFFF57C00)),
+-    GREEN(Color(0xFF388E3C)),
+-    BLUE(Color(0xFF2196F3))
+-}
+\ No newline at end of file
+Index: app/src/main/java/com/pseandroid2/dailydata/ui/project/data/graph/ProjectDataGraphViewModel.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/pseandroid2/dailydata/ui/project/data/graph/ProjectDataGraphViewModel.kt b/app/src/main/java/com/pseandroid2/dailydata/ui/project/data/graph/ProjectDataGraphViewModel.kt
+new file mode 100644
+--- /dev/null	
++++ b/app/src/main/java/com/pseandroid2/dailydata/ui/project/data/graph/ProjectDataGraphViewModel.kt	
+@@ -0,0 +1,2 @@
++package com.pseandroid2.dailydata.ui.project.data.graph
++
+Index: app/src/main/java/com/pseandroid2/dailydata/ui/composables/Post.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/pseandroid2/dailydata/ui/composables/Post.kt b/app/src/main/java/com/pseandroid2/dailydata/ui/composables/Post.kt
+new file mode 100644
+--- /dev/null	
++++ b/app/src/main/java/com/pseandroid2/dailydata/ui/composables/Post.kt	
+@@ -0,0 +1,46 @@
++package com.pseandroid2.dailydata.ui.composables
++
++import androidx.compose.foundation.Image
++import androidx.compose.foundation.clickable
++import androidx.compose.foundation.layout.Arrangement
++import androidx.compose.foundation.layout.Column
++import androidx.compose.foundation.layout.fillMaxWidth
++import androidx.compose.foundation.layout.padding
++import androidx.compose.material.Card
++import androidx.compose.material.Divider
++import androidx.compose.material.MaterialTheme
++import androidx.compose.material.Text
++import androidx.compose.runtime.Composable
++import androidx.compose.ui.Modifier
++import androidx.compose.ui.res.painterResource
++import androidx.compose.ui.unit.dp
++import com.pseandroid2.dailydata.R
++import com.pseandroid2.dailydata.util.ui.Post
++
++@Composable
++fun PostComposable(
++    post : Post
++) {
++    Card(
++        modifier = Modifier
++            .padding(5.dp)
++            .clickable {
++
++            },
++        shape = MaterialTheme.shapes.medium,
++        elevation = 10.dp
++    ) {
++        Column (
++            modifier = Modifier.padding(10.dp),
++            verticalArrangement = Arrangement.spacedBy(5.dp)
++        ){
++            Text(text = post.description)
++            Divider()
++            Image(
++                painter = painterResource(id = R.drawable.chart),
++                contentDescription = post.description,
++                modifier = Modifier.fillMaxWidth()
++            )
++        }
++    }
++}
+\ No newline at end of file
