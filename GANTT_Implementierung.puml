@@ -58,12 +58,8 @@ Project starts the 3rd of January 2022
 [Repository Interfaces und Classes] starts 2022-01-13 and ends 2022-01-18
 [Repository Interfaces und Classes] is colored in lightblue
 
-[View Model Interface] starts 2022-01-13 and ends 2022-01-18
+[View Model Interface] starts 2022-01-13
 [View Model Interface] is colored in lightblue
-    [class PostHandler] starts 2022-01-13 and ends 2022-01-13
-    [class CommandFactory] starts 2022-01-13 and ends 2022-01-13
-    [class ProjectHandler] starts 2022-01-13 and ends 2022-01-13
-
     [CommunicationClasses] starts 2022-01-13
     [CommunicationClasses] is colored in lightblue
         [class DataType] starts 2022-01-13 and ends 2022-01-13
@@ -90,41 +86,77 @@ Project starts the 3rd of January 2022
             [class Project] starts at [class Row]'s end
     [CommunicationClasses] ends at [class Project]'s end
 
+    [class ProjectHandler] starts at [CommunicationClasses]'s end
+    [class PostHandler] starts 2022-01-13 and ends 2022-01-13
+    [class CommandFactory] starts 2022-01-13 and ends 2022-01-13
+
+[View Model Interface] ends at [class PostHandler]'s end
+[View Model Interface] ends at [class CommandFactory]'s end
+[View Model Interface] ends at [CommunicationClasses]'s end
+[View Model Interface] ends at [class ProjectHandler]'s end
+
 [CommandCenter] starts 2022-01-13 and ends 2022-01-13
 [CommandCenter] is colored in lightblue
-    [class CommandUtility] starts 2022-01-13 and ends 2022-01-13
-    [class CommandInbox] starts 2022-01-13 and ends 2022-01-13
 
-    [Commands] starts 2022-01-13 and ends 2022-01-13
+    [Commands] starts 2022-01-13
     [Commands] is colored in lightblue
-        [class ProjectCommand] starts 2022-01-13 and ends 2022-01-13
         [class IllegalOperationException] starts 2022-01-13 and ends 2022-01-13
-        [class CommandWrapper] starts 2022-01-13 and ends 2022-01-13
-        [class AddRow] starts 2022-01-13 and ends 2022-01-13
-        [class DeleteRow] starts 2022-01-13 and ends 2022-01-13
-        [class DeleteColumn] starts 2022-01-13 and ends 2022-01-13
-        [class AddColumn] starts 2022-01-13 and ends 2022-01-13
-        [class SetCell] starts 2022-01-13 and ends 2022-01-13
-        [class SetAdmin] starts 2022-01-13 and ends 2022-01-13
-        [class AddUser] starts 2022-01-13 and ends 2022-01-13
-        [class RemoveUser] starts 2022-01-13 and ends 2022-01-13
-        [class CreateGraph] starts 2022-01-13 and ends 2022-01-13
-        [class SetCalculationFunction] starts 2022-01-13 and ends 2022-01-13
-        [class SetTransformationFunctionCompostition] starts 2022-01-13 and ends 2022-01-13
-        [class SetSetting] starts 2022-01-13 and ends 2022-01-13
-        [class SetProjectName] starts 2022-01-13 and ends 2022-01-13
-        [class SetProjectDesign] starts 2022-01-13 and ends 2022-01-13
-        [class SetWallpaper] starts 2022-01-13 and ends 2022-01-13
-        [class SetNotification] starts 2022-01-13 and ends 2022-01-13
-        [class DeleteNotification] starts 2022-01-13 and ends 2022-01-13
-        [class SetUIElement] starts 2022-01-13 and ends 2022-01-13
-        [class RequestOldData] starts 2022-01-13 and ends 2022-01-13
-        [class SetIsOnlineProject] starts 2022-01-13 and ends 2022-01-13
-        [class CreateProject] starts 2022-01-13 and ends 2022-01-13
+        [class ProjectCommand] starts at [class IllegalOperationException]'s end
+        [class CommandWrapper] starts at [class ProjectCommand]'s end
+        [class AddRow] starts at [class ProjectCommand]'s end
+        [class DeleteRow] starts at [class ProjectCommand]'s end
+        [class DeleteColumn] starts at [class ProjectCommand]'s end
+        [class AddColumn] starts at [class ProjectCommand]'s end
+        [class SetCell] starts at [class ProjectCommand]'s end
+        [class SetAdmin] starts at [class ProjectCommand]'s end
+        [class AddUser] starts at [class ProjectCommand]'s end
+        [class RemoveUser] starts at [class ProjectCommand]'s end
+        [class CreateGraph] starts at [class ProjectCommand]'s end
+        [class SetCalculationFunction] starts at [class ProjectCommand]'s end
+        [class SetTransformationFunctionCompostition] starts at [class ProjectCommand]'s end
+        [class SetSetting] starts at [class ProjectCommand]'s end
+        [class SetProjectName] starts at [class ProjectCommand]'s end
+        [class SetProjectDesign] starts at [class ProjectCommand]'s end
+        [class SetWallpaper] starts at [class ProjectCommand]'s end
+        [class SetNotification] starts at [class ProjectCommand]'s end
+        [class DeleteNotification] starts at [class ProjectCommand]'s end
+        [class SetUIElement] starts at [class ProjectCommand]'s end
+        [class RequestOldData] starts at [class ProjectCommand]'s end
+        [class SetIsOnlineProject] starts at [class ProjectCommand]'s end
+        [class CreateProject] starts at [class ProjectCommand]'s end
+    [Commands] ends at [class CreateProject]'s end
+    [Commands] ends at [class AddRow]'s end
+    [Commands] ends at [class DeleteColumn]'s end
+    [Commands] ends at [class DeleteRow]'s end
+    [Commands] ends at [class AddColumn]'s end
+    [Commands] ends at [class SetCell]'s end
+    [Commands] ends at [class SetAdmin]'s end
+    [Commands] ends at [class AddUser]'s end
+    [Commands] ends at [class RemoveUser]'s end
+    [Commands] ends at [class CreateGraph]'s end
+    [Commands] ends at [class SetCalculationFunction]'s end
+    [Commands] ends at [class SetTransformationFunctionCompostition]'s end
+    [Commands] ends at [class SetSetting]'s end
+    [Commands] ends at [class SetProjectName]'s end
+    [Commands] ends at [class SetProjectDesign]'s end
+    [Commands] ends at [class SetWallpaper]'s end
+    [Commands] ends at [class SetNotification]'s end
+    [Commands] ends at [class SetUIElement]'s end
+    [Commands] ends at [class RequestOldData]'s end
+    [Commands] ends at [class SetIsOnlineProject]'s end
 
-    [UpToDater] starts 2022-01-13 and ends 2022-01-13
+    [class CommandUtility] starts at [Commands]'s end
+    [class CommandInbox] starts at [Commands]'s end
+
+
+    [UpToDater] starts at [Commands]'s end
     [UpToDater] is colored in lightblue
-        [class OldDataFetcher] starts 2022-01-13 and ends 2022-01-13
+        [class OldDataFetcher] starts at [UpToDater]'s start
+    [UpToDater] ends at [class OldDataFetcher]'s end
+
+[CommandCenter] ends at [class CommandUtility]'s end
+[CommandCenter] ends at [class CommandInbox]'s end
+[CommandCenter] ends at [UpToDater]'s end
 
 legend
     Aufgaben, die vor dem 10. Januar 2022 abgeschlossen sind,
