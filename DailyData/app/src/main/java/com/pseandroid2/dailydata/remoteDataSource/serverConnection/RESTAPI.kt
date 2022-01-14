@@ -24,9 +24,12 @@ import com.pseandroid2.dailydata.model.GraphTemplate
 import com.pseandroid2.dailydata.model.ProjectTemplate
 import java.time.LocalDateTime
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Header
+
 class RESTAPI {
-    private var BASE_URL = "http://myserver.com/server/" // TODO: Die URL unseres Servers verwenden
+    private var baseUrl: String = "http://myserver.com/server/" // TODO: Die URL unseres Servers verwenden
 
     // Greetings Controller
     private val greetingController: String = ""
@@ -63,12 +66,14 @@ class RESTAPI {
 
     init {
         retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(baseUrl)
+            .addConverterFactory(GsonConverterFactory.create())
             .build();
-            //.addConverterFactory(GsonConverterFactore.create())
+
 
         // Create Services // TODO mal schauen, ob ich das brauche
         // https://square.github.io/retrofit/
+        // https://dev.to/paulodhiambo/kotlin-and-retrofit-network-calls-2353
     }
 
     // In keiner Methode muss die UserID des Nutzenden, welcher den Command sendet, mitgegeben werden, da diese durch dass Firebase authToken ablesbar ist
@@ -78,6 +83,8 @@ class RESTAPI {
         // TODO: Implement Method
         var relativeURL: String = greetingController+greets
 
+
+
         return false
     }
 
@@ -86,6 +93,10 @@ class RESTAPI {
     fun getAllPostsPreview(authToken: String): Collection<String> {
         // TODO: Implement Method
         var relativeURL: String = postsController+getAllPostsPreview
+
+        // TODO:
+        //@GET(relativeURL)
+        //fun fetchPosts(@Header(authToken) token: String): Call<StringRequest>
 
         return mutableListOf("")
     }
