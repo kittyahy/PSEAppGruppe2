@@ -2,7 +2,7 @@ package com.pseandroid2.dailydata.repository.viewModelInterface.communicationCla
 
 import android.graphics.drawable.Drawable
 
-interface Graph {
-    val id: Long
+interface Graph: Identifiable{
+    override val id: Long
     val image: Drawable
 }
