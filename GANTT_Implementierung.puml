@@ -7,27 +7,40 @@ Project starts the 3rd of January 2022
 [Implementierungsphase] starts 2022-01-03 and ends 2022-02-04
 [Implementierungsphase] is colored in lightgreen
 [Setup Git Repo] starts 2022-01-06 and ends 2022-01-10
-[Implementierungsplan erstellen] starts 2022-01-10 and lasts 2 days
-[Model Interfaces und Classes] starts 2022-01-03 and ends 2022-01-16
+[Implementierungsplan erstellen] starts 2022-01-10 and lasts 4 days
+[Model Interfaces und Classes] starts 2022-01-03 and ends 2022-01-17
 [Model Interfaces und Classes] is colored in lightblue
 [interface Project] starts 2022-01-03
+[implement Project] starts 13 days after [interface Project]'s end
 [interface Table] starts 2022-01-03
+[implement Table] starts 13 days after [interface Table]'s end
 [interface ProjectSkeleton] starts 2022-01-03
+[implement ProjectSkeleton] starts 13 days after [interface ProjectSkeleton]'s end
 [interface ProjectTemplate] starts 2022-01-03
+[implement ProjectTemplate] starts 13 days after [interface ProjectTemplate]'s end
 [interface Settings] starts 2022-01-03
+[implement Settings] starts 9 days after [interface Settings]'s end
 [interface User] starts 2022-01-03
 [class SimpleUser] starts at [interface User]'s end
 [class UIElement] starts 2022-01-03
 [enum class UIElementType] starts 2022-01-03
 [interface Table] starts 2022-01-03
 [interface TableLayout] starts 2022-01-03
+[implement TableLayout] starts 13 days after [interface TableLayout]'s end
 [interface Row] starts 2022-01-03
 [class ArrayListRow] starts at [interface Row]'s end
 [class RowMetaData] starts 2022-01-03
 [interface Notification] starts 2022-01-03
 [class TimeNotification] starts at [interface Notification]'s end
+[Test interfaces and classes] starts 3 days after [implement Project]'s end
+[Test interfaces and classes] starts 3 days after [implement Table]'s end
+[Test interfaces and classes] starts 3 days after [implement ProjectSkeleton]'s end
+[Test interfaces and classes] starts 3 days after [implement ProjectTemplate]'s end
+[Test interfaces and classes] starts 3 days after [class ArrayListRow]'s end
+[Test interfaces and classes] starts 3 days after [class TimeNotification]'s end
+[Test interfaces and classes] starts 3 days after [class SimpleUser]'s end
 
-[Entities] starts 2022-01-06 and ends 2022-01-11
+[Entities] starts 2022-01-06 and ends 2022-01-9
 [Entities] is colored in lightblue
 [class GraphEntity] starts 2022-01-06 and ends 2022-01-07
 [class GraphTemplateEntity] starts 2022-01-07
@@ -43,15 +56,23 @@ Project starts the 3rd of January 2022
 [class ProjectSettingEntity] starts 2022-01-09
 [class UIElementMap] starts 2022-01-09
 
-[DAOs] starts 2022-01-08 and ends 2022-01-15
+[DAOs] starts 2022-01-08 and ends 2022-01-20
 [DAOs] is colored in lightblue
+[DAO classes] starts 2022-01-08 and lasts 4 days
+[Test DAOs] starts 7 days after [DAO classes]'s end and lasts 2 days
+[Test DAOs] displays on same row as [DAO classes]
 
-[Type Converters] starts 2022-01-05 and ends 2022-01-13
+[Type Converters] starts 2022-01-05 and ends 2022-01-21
 [Type Converters] is colored in lightblue
+[Type Converter Classes] starts 2022-01-05 and lasts 2 days
+[Test Type Converters] starts 14 days after [Type Converter Classes]'s end
+[Test Type Converters] displays on same row as [Type Converter Classes]
 
-[Other Database Tasks] starts 2022-01-03 and ends 2022-01-20
+[Other Database Tasks] starts 2022-01-03 and ends 2022-01-25
 [Other Database Tasks] is colored in lightblue
 [class AppDataBase] starts 2022-01-03
+[Test Database] starts 18 days after [class AppDataBase]'s end and lasts 4 days
+[Test interaction with repo] starts after [Test Database]'s end and lasts 5 days
 
 
 /'Repository====================================================================================='/
@@ -265,9 +286,60 @@ Project starts the 3rd of January 2022
 [implement PostDatabase] starts at [Defining skeletons for PostDatabase]'s end and starts at 2022-01-23 and lasts 4 days
 [implement Online Database] starts at [Defining skeletons for Online Database]'s end  and starts at 2022-01-23 and lasts 4 days
 
+--View--
+
+[Util Classes]      starts at 2022-01-04 and lasts 2 day and is colored in LightBlue
+[Column]            starts at [Util Classes]'s start and lasts 1 day
+[Row]               starts at [Util Classes]'s start and lasts 1 day
+[Table]             starts at [Util Classes]'s start and lasts 1 day
+[IncButton]         starts at [Util Classes]'s start and lasts 1 day
+[Notification]      starts at [Util Classes]'s start and lasts 1 day
+[GraphTemplate]     starts at [Util Classes]'s start and lasts 1 day
+[ProjectTemplate]   starts at [Util Classes]'s start and lasts 1 day
+[Post]              starts at [Util Classes]'s start and lasts 1 day
+[DataType]          starts at [Util Classes]'s start and lasts 1 day
+[Wallpapers]        starts at [Util Classes]'s start and lasts 1 day
+[Graphs]            starts at [Util Classes]'s start and lasts 1 day
+[Routes]            starts at [Graphs]'s end and lasts 1 day
+[UiEvent]           starts at [Graphs]'s end and lasts 1 day
+
+[Navigation]            starts at 2022-01-06 and lasts 2 day and is colored in LightBlue
+[TopNavigationBar]      starts at [Navigation]'s start and lasts 1 day
+[BottomNavigationBar]   starts at [TopNavigationBar]'s end and lasts 1 day
+
+[Screens]                   starts at 2022-01-10 and lasts 18 day and is colored in LightBlue
+[ProjectScreen]             starts at [Screens]'s start and lasts 1 day
+[ProjectOverviewScreen]     starts at [ProjectScreen]'s end and lasts 1 day
+[ProjectCreationScreen]     starts at [ProjectOverviewScreen]'s end and lasts 3 day
+[ProjectDataScreen]         starts at 2022-01-17 and lasts 1 day
+[ProjectDataGraphScreen]    starts at [ProjectDataScreen]'s end and lasts 1 day
+[ProjectDataInputScreen]    starts at [ProjectDataGraphScreen]'s end and lasts 2 day
+[ProjectDataSettingsScreen] starts at [ProjectDataInputScreen]'s end and lasts 1 day
+
+[TemplateScreen] starts at 2022-01-24 and lasts 2 day
+
+[ServerScreen]      starts at [TemplateScreen]'s start and lasts 2 day
+[ServerLoginScreen] starts at [ServerScreen]'s end and lasts 2 day
+[LinkScreen]        starts at [ServerLoginScreen]'s start and lasts 2 day
+
+--ViewModel--
 
 
+[NavigationViewModel]            starts at [Navigation]'s start and lasts 2 day
 
+[ProjectScreenViewModel]             starts at [Screens]'s start and lasts 1 day
+[ProjectOverviewScreenViewModel]     starts at [ProjectScreen]'s end and lasts 1 day
+[ProjectCreationScreenViewModel]     starts at [ProjectOverviewScreen]'s end and lasts 3 day
+[ProjectDataScreenViewModel]         starts at 2022-01-17 and lasts 1 day
+[ProjectDataGraphScreenViewModel]    starts at [ProjectDataScreen]'s end and lasts 1 day
+[ProjectDataInputScreenViewModel]    starts at [ProjectDataGraphScreen]'s end and lasts 2 day
+[ProjectDataSettingsScreenViewModel] starts at [ProjectDataInputScreen]'s end and lasts 1 day
+
+[TemplateScreenViewModel] starts at 2022-01-24 and lasts 2 day
+
+[ServerScreenViewModel]      starts at [TemplateScreen]'s start and lasts 2 day
+[ServerLoginScreenViewModel] starts at [ServerScreen]'s end and lasts 2 day
+[LinkScreenViewModel]        starts at [ServerLoginScreen]'s start and lasts 2 day
 
 legend
     Aufgaben, die vor dem 10. Januar 2022 abgeschlossen sind,
