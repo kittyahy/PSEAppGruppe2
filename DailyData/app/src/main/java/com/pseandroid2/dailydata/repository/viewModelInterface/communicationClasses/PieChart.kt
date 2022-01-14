@@ -3,11 +3,10 @@ package com.pseandroid2.dailydata.repository.viewModelInterface.communicationCla
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 
-data class LineChart(
+data class PieChart(
     override val id: Long,
     override val image: Drawable,
-    val dotSize: DotSize,
-    val dotColor: Color,
-    val lineType: LineType,
-    val mappingVertical: List<Column>
+    val color: List<Color>,
+    val mapping: List<Column>,
+    val showPercentages: Boolean
 ): Graph
