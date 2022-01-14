@@ -285,9 +285,60 @@ Project starts the 3rd of January 2022
 [implement PostDatabase] starts at [Defining skeletons for PostDatabase]'s end and starts at 2022-01-23 and lasts 4 days
 [implement Online Database] starts at [Defining skeletons for Online Database]'s end  and starts at 2022-01-23 and lasts 4 days
 
+--View--
+
+[Util Classes]      starts at 2022-01-04 and lasts 2 day and is colored in LightBlue
+[Column]            starts at [Util Classes]'s start and lasts 1 day
+[Row]               starts at [Util Classes]'s start and lasts 1 day
+[Table]             starts at [Util Classes]'s start and lasts 1 day
+[IncButton]         starts at [Util Classes]'s start and lasts 1 day
+[Notification]      starts at [Util Classes]'s start and lasts 1 day
+[GraphTemplate]     starts at [Util Classes]'s start and lasts 1 day
+[ProjectTemplate]   starts at [Util Classes]'s start and lasts 1 day
+[Post]              starts at [Util Classes]'s start and lasts 1 day
+[DataType]          starts at [Util Classes]'s start and lasts 1 day
+[Wallpapers]        starts at [Util Classes]'s start and lasts 1 day
+[Graphs]            starts at [Util Classes]'s start and lasts 1 day
+[Routes]            starts at [Graphs]'s end and lasts 1 day
+[UiEvent]           starts at [Graphs]'s end and lasts 1 day
+
+[Navigation]            starts at 2022-01-06 and lasts 2 day and is colored in LightBlue
+[TopNavigationBar]      starts at [Navigation]'s start and lasts 1 day
+[BottomNavigationBar]   starts at [TopNavigationBar]'s end and lasts 1 day
+
+[Screens]                   starts at 2022-01-10 and lasts 18 day and is colored in LightBlue
+[ProjectScreen]             starts at [Screens]'s start and lasts 1 day
+[ProjectOverviewScreen]     starts at [ProjectScreen]'s end and lasts 1 day
+[ProjectCreationScreen]     starts at [ProjectOverviewScreen]'s end and lasts 3 day
+[ProjectDataScreen]         starts at 2022-01-17 and lasts 1 day
+[ProjectDataGraphScreen]    starts at [ProjectDataScreen]'s end and lasts 1 day
+[ProjectDataInputScreen]    starts at [ProjectDataGraphScreen]'s end and lasts 2 day
+[ProjectDataSettingsScreen] starts at [ProjectDataInputScreen]'s end and lasts 1 day
+
+[TemplateScreen] starts at 2022-01-24 and lasts 2 day
+
+[ServerScreen]      starts at [TemplateScreen]'s start and lasts 2 day
+[ServerLoginScreen] starts at [ServerScreen]'s end and lasts 2 day
+[LinkScreen]        starts at [ServerLoginScreen]'s start and lasts 2 day
+
+--ViewModel--
 
 
+[NavigationViewModel]            starts at [Navigation]'s start and lasts 2 day
 
+[ProjectScreenViewModel]             starts at [Screens]'s start and lasts 1 day
+[ProjectOverviewScreenViewModel]     starts at [ProjectScreen]'s end and lasts 1 day
+[ProjectCreationScreenViewModel]     starts at [ProjectOverviewScreen]'s end and lasts 3 day
+[ProjectDataScreenViewModel]         starts at 2022-01-17 and lasts 1 day
+[ProjectDataGraphScreenViewModel]    starts at [ProjectDataScreen]'s end and lasts 1 day
+[ProjectDataInputScreenViewModel]    starts at [ProjectDataGraphScreen]'s end and lasts 2 day
+[ProjectDataSettingsScreenViewModel] starts at [ProjectDataInputScreen]'s end and lasts 1 day
+
+[TemplateScreenViewModel] starts at 2022-01-24 and lasts 2 day
+
+[ServerScreenViewModel]      starts at [TemplateScreen]'s start and lasts 2 day
+[ServerLoginScreenViewModel] starts at [ServerScreen]'s end and lasts 2 day
+[LinkScreenViewModel]        starts at [ServerLoginScreen]'s start and lasts 2 day
 
 legend
     Aufgaben, die vor dem 10. Januar 2022 abgeschlossen sind,
