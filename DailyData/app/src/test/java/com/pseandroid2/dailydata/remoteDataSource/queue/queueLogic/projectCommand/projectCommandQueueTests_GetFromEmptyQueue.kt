@@ -24,6 +24,7 @@ import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueue
 import org.junit.Assert
 import org.junit.Test
 
+
 class projectCommandQueueTests_GetFromEmptyQueue {
     @Test
     fun saveOneProjectCommand() {
@@ -33,7 +34,9 @@ class projectCommandQueueTests_GetFromEmptyQueue {
 
         val returnedProjectCommand = projectCommandQueue.getProjectCommand()
 
-        Assert.assertEquals(returnedProjectCommand,"")
+        //Assert.assertEquals(returnedProjectCommand, null)
+
+        //Assert.assertTrue(returnedProjectCommand == null)
 
         Assert.assertEquals(projectCommandQueue.getQueueLength(), 0)
     }

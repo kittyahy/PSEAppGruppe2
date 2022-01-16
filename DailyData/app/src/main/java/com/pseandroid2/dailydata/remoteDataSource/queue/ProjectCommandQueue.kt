@@ -21,47 +21,63 @@
 package com.pseandroid2.dailydata.remoteDataSource.queue
 
 class ProjectCommandQueue {
-    private val projectCommands: MutableList<String> = mutableListOf<String>() // Speichert JSONs von FetchRequests
+    private val projectCommands: MutableList<ProjectCommandInfo> = mutableListOf<ProjectCommandInfo>() // Speichert JSONs von FetchRequests
     private val observers: MutableList<ProjectCommandQueueObserver> = mutableListOf<ProjectCommandQueueObserver>()
 
     // Queue Logic
-    fun getProjectCommand(): String {
+    /**
+     * @return ProjectCommandInfo?: Gibt einen ProjectCommand aus der Queue aus (und entfernt diesen aus der Queue)
+     *                              Ist kein ProjectCommand mehr in der Queue enthalten wird null ausgegeben
+     */
+    fun getProjectCommand(): ProjectCommandInfo? {
         if (projectCommands.isNotEmpty()) {
             return projectCommands.removeAt(0)
         }
-        return ""
+        return null
     }
 
-    fun addProjectCommand(projectCommand: String) {
-        if (projectCommand != "") {
+    /**
+     * @param projectCommand: Der ProjectCommand, der in die Queue hinzugefügt werden soll
+     */
+    fun addProjectCommand(projectCommand: ProjectCommandInfo) {
                 // TODO: Teste, ob der String schon in der Queue vorhanden ist (find element) und füge es gegebenfalls nicht hinzu
                 /* //TODO Wenn Projectcommands eindeutig per ID unterscheidbar sind, kann man zuerst den Vergleich durchführen
                 if (!projectCommands.contains(projectCommand)) {
                 projectCommands.add(projectCommand)
                  */
-
-            projectCommands.add(projectCommand)
-            notifyObservers()
-        }
+        projectCommands.add(projectCommand)
+        notifyObservers()
     }
 
+    /**
+     * @return INT: Die Länge der ProjectCommandQueue
+     */
     fun getQueueLength(): Int {
         return projectCommands.size
     }
 
     // Observer Logic
+    /**
+     * @param observer: Der Observer, der zur ProjectCommandQueue hinzugefügt werden soll
+     */
     fun registerObserver(observer: ProjectCommandQueueObserver) {
         if (!observers.contains(observer)) {
             observers.add(observer)
         }
     }
 
+    /**
+     * @param observer: Der Observer, der von der ProjectCommandQueue entfernt werden soll
+     */
     fun unregisterObserver(observer: ProjectCommandQueueObserver) {
         while (observers.contains(observer)) {
             observers.remove(observer)
         }
     }
 
+    /**
+     * Benachrichtige alle registrierte Observer der FetchRequest Queue
+     */
     private fun notifyObservers() {
         observers.forEach {
             if (it == null) { // TODO: Prüfe, ob das nicht doch relevant ist (Wenn Observer gelöscht wird)

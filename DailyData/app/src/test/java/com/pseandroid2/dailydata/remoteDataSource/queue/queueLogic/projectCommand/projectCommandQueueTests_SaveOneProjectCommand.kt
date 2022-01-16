@@ -20,6 +20,7 @@
 
 package com.pseandroid2.dailydata.remoteDataSource.queue.queueLogic.projectCommand
 
+import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandInfo
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueue
 import org.junit.Assert
 import org.junit.Test
@@ -29,7 +30,7 @@ class projectCommandQueueTests_SaveOneProjectCommand {
     fun saveOneProjectCommand() {
         val projectCommandQueue = ProjectCommandQueue()
 
-        val projectCommand = "projectCommand: 1"
+        val projectCommand: ProjectCommandInfo = ProjectCommandInfo()
 
         Assert.assertEquals(projectCommandQueue.getQueueLength(), 0)
 

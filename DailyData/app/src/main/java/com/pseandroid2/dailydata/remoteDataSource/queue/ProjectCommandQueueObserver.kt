@@ -21,5 +21,8 @@
 package com.pseandroid2.dailydata.remoteDataSource.queue
 
 interface ProjectCommandQueueObserver {
+    /**
+     * Wird von der ProjectCommandQueue aufgerufen, wenn neue Elemente in die Queue eingefügt werden
+     */
     fun update()
 }

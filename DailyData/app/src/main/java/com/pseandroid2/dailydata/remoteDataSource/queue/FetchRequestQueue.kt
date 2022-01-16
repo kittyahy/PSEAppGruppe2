@@ -25,6 +25,10 @@ class FetchRequestQueue {
     private val observers: MutableList<FetchRequestQueueObserver> = mutableListOf<FetchRequestQueueObserver>()
 
     // Queue Logic
+    /**
+     * @return String: Gibt eine FetchRequest aus der Queue aus (und entfernt diese aus der Queue)
+     *                              Ist keine FetchRequest mehr in der Queue enthalten wird "" ausgegeben
+     */
     fun getFetchRequest(): String {
         if (fetchRequests.isNotEmpty()) {
             return fetchRequests.removeAt(0)
@@ -32,6 +36,9 @@ class FetchRequestQueue {
         return ""
     }
 
+    /**
+     * @param fetchRequest: Die FetchRequest, die in die Queue hinzugefügt werden soll als
+     */
     fun addFetchRequest(fetchRequest: String) {
         if (fetchRequest != "") {
             // TODO: Teste, ob der String schon in der Queue vorhanden ist (find element) und füge es gegebenfalls nicht hinzu
@@ -42,23 +49,35 @@ class FetchRequestQueue {
         }
     }
 
+    /**
+     * @return Int: Die Länge der FetchRequestQueue
+     */
     fun getQueueLength(): Int {
         return fetchRequests.size
     }
 
     // Observer Logic
+    /**
+     * @param observer: Der Observer, der zur FetchRequestQueue hinzugefügt werden soll
+     */
     fun registerObserver(observer: FetchRequestQueueObserver) {
         if (!observers.contains(observer)) {
             observers.add(observer)
         }
     }
 
+    /**
+     * @param observer: Der Observer, der von der FetchRequestQueue entfernt werden soll
+     */
     fun unregisterObserver(observer: FetchRequestQueueObserver) {
         while (observers.contains(observer)) {
             observers.remove(observer)
         }
     }
 
+    /**
+     * Benachrichtige alle registrierte Observer der FetchRequest Queue
+     */
     private fun notifyObservers() {
         observers.forEach {
             if (it == null) { // TODO: Prüfe, ob das nicht doch relevant ist (Wenn Observer gelöscht wird)
