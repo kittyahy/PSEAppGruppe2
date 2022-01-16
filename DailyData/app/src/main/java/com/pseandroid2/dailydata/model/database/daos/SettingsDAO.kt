@@ -81,10 +81,10 @@ abstract class SettingsDAO {
 
     /*========================SHOULD ONLY BE CALLED FROM INSIDE THE MODEL=========================*/
     @Query("SELECT * FROM projectSetting WHERE projectId = :projectId")
-    abstract suspend fun getProjectSettingEntities(projectId: Int): Flow<List<ProjectSettingEntity>>
+    abstract fun getProjectSettingEntities(projectId: Int): Flow<List<ProjectSettingEntity>>
 
     @Query("SELECT * FROM graphSetting WHERE projectId = :projectId AND graphId = :graphId")
-    abstract suspend fun getGraphSettingEntities(
+    abstract fun getGraphSettingEntities(
         projectId: Int,
         graphId: Int
     ): Flow<List<GraphSettingEntity>>
