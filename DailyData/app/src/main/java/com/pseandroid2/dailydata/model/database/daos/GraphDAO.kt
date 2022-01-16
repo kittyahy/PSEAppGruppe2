@@ -36,12 +36,15 @@ abstract class GraphDAO {
     abstract fun changePath(projectId: Int, id: Int, path: String)
 
     /*========================SHOULD ONLY BE CALLED FROM INSIDE THE MODEL=========================*/
+    @Deprecated("This method should only be used from within the model, use GraphCDManager.insertGraph instead")
     @Insert
     abstract fun insertGraph(graph: GraphEntity)
 
+    @Deprecated("This method should only be used from within the model, use GraphCDManager.deleteGraph instead")
     @Delete
     abstract fun deleteGraph(graph: GraphEntity)
 
+    @Deprecated("This method should only be used from within the model")
     @Query("DELETE FROM graph WHERE projectId = :projectId")
     abstract suspend fun deleteAllGraphs(projectId: Int)
 }
