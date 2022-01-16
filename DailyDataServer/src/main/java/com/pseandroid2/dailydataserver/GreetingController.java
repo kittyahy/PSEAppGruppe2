@@ -23,7 +23,7 @@ public class GreetingController {
      *
      * @return greeting
      */
-    @GetMapping("/")
+    @GetMapping("/greet")
     public String greets() {
         return serverGreetings.greeting();
     }

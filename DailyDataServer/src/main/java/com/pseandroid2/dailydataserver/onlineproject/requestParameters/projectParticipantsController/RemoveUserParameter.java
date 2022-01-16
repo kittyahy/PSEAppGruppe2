@@ -2,6 +2,9 @@ package com.pseandroid2.dailydataserver.onlineproject.requestParameters.projectP
 
 import com.pseandroid2.dailydataserver.RequestParameter;
 
+/**
+ * #TODO Testen, JavaDoc
+ */
 public class RemoveUserParameter extends RequestParameter {
     private String userToRemove;
 

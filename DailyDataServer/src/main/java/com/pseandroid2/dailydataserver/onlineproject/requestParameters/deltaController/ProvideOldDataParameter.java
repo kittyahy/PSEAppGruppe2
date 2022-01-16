@@ -4,7 +4,9 @@ import com.pseandroid2.dailydataserver.RequestParameter;
 
 import java.sql.Date;
 
-
+/**
+ * #TODO Testen, JavaDoc
+ */
 public class ProvideOldDataParameter extends RequestParameter {
     private String command;
     private String forUser;

@@ -4,7 +4,9 @@ import com.pseandroid2.dailydataserver.RequestParameter;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * #TODO Testen, JavaDoc
+ */
 public class AddPostParameter extends RequestParameter {
 
     private String postPreview;

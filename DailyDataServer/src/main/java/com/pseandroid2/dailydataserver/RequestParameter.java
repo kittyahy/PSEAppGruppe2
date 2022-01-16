@@ -1,5 +1,8 @@
 package com.pseandroid2.dailydataserver;
 
+/**
+ * #TODO Testen, JavaDoc
+ */
 public  class RequestParameter {
     private String token;
 

@@ -2,6 +2,9 @@ package com.pseandroid2.dailydataserver.onlineproject.requestParameters.fetchReq
 
 import com.pseandroid2.dailydataserver.RequestParameter;
 
+/**
+ * #TODO Testen, JavaDoc
+ */
 public class DemandOldDataParameter extends RequestParameter {
     private String requestInfo;
 

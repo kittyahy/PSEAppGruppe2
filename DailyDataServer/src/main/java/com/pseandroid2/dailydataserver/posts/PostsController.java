@@ -7,7 +7,10 @@ import java.util.List;
 
 /**
  * Interface for all interaction for Posts
- */
+ * /**
+ *  * #TODO Testen, JavaDoc
+ *  */
+
 @RestController
 @RequestMapping("/Posts")
 public class PostsController {
