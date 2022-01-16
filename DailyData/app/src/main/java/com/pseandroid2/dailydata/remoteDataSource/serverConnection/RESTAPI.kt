@@ -20,6 +20,7 @@
 
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection
 
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerEndpoints
 import com.pseandroid2.dailydata.model.GraphTemplate
 import com.pseandroid2.dailydata.model.ProjectTemplate
 import java.time.LocalDateTime
@@ -62,29 +63,40 @@ class RESTAPI {
     private val demandOldData: String = ""
     private val getFetchRequests: String = ""
 
-    var retrofit: Retrofit
+    private var retrofit: Retrofit
+    private val server: ServerEndpoints
 
     init {
         retrofit = Retrofit.Builder()
             .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .build();
+            //.create(ServerEndpoints)
 
+        server = retrofit.create(ServerEndpoints::class.java)
 
         // Create Services // TODO mal schauen, ob ich das brauche
         // https://square.github.io/retrofit/
         // https://dev.to/paulodhiambo/kotlin-and-retrofit-network-calls-2353
+        // Synchrone Calls: https://futurestud.io/tutorials/retrofit-synchronous-and-asynchronous-requests
     }
 
     // In keiner Methode muss die UserID des Nutzenden, welcher den Command sendet, mitgegeben werden, da diese durch dass Firebase authToken ablesbar ist
 
     //------------------------------------- Greetings Controller -------------------------------------
-    fun greets(): Boolean {
-        // TODO: Implement Method
+    /**
+     * @return Boolean: true, wenn der Server erfolgreich erreicht werden konnte. Sonst false
+     */
+    fun greet(): Boolean {
         var relativeURL: String = greetingController+greets
 
+        val greetingCall = server.greet()
 
+        val greeting: String = greetingCall.execute().body() ?: ""
 
+        if (greeting == "hello") {
+            return true
+        }
         return false
     }
 

@@ -61,4 +61,10 @@ class ServerManager {
     fun getProjectCommandQueueLength(): Int {
         return projectCommandQueue.getQueueLength()
     }
+
+
+    // ------------------------------ServerLogic--------------------------------
+    fun greet(): Boolean {
+        return restAPI.greet()
+    }
 }
