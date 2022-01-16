@@ -111,10 +111,8 @@ Project starts the 3rd of January 2022
 
         [class ProjectHandler] starts at [CommunicationClasses]'s end
         [class PostHandler] starts at [CommunicationClasses]'s end
-        [class CommandFactory] starts at [CommunicationClasses]'s end
 
     [View Model Interface] ends at [class PostHandler]'s end
-    [View Model Interface] ends at [class CommandFactory]'s end
     [View Model Interface] ends at [CommunicationClasses]'s end
     [View Model Interface] ends at [class ProjectHandler]'s end
 
@@ -202,6 +200,9 @@ Project starts the 3rd of January 2022
             [class OldDataFetcher] starts at [class RequestOldData]'s start
             [class OldDataFetcher] ends at [class CommandUtility]'s end
         [UpToDater] ends at [class OldDataFetcher]'s end
+
+        [class CommandFactory] starts at [Commands]'s end
+    [View Model Interface] ends at [class CommandFactory]'s end
 
     [CommandCenter] ends at [class CommandUtility]'s end
     [CommandCenter] ends at [class CommandInbox]'s end
