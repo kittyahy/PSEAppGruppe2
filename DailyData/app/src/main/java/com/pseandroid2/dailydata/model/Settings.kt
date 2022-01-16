@@ -20,11 +20,9 @@
 
 package com.pseandroid2.dailydata.model
 
-interface Settings {
+interface Settings : Iterable<Pair<String, String>> {
 
-    /**
-     * Shouldn't be used outside the repo
-     */
+    @Deprecated("Should not be used outside the model. Use get or iterate over Settings directly")
     fun getAllSettings(): Map<String, String>
 
     operator fun get(key: String): String
