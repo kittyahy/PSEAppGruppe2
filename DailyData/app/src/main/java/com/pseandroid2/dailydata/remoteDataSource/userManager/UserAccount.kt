@@ -30,6 +30,11 @@ class UserAccount {
         firebaseManager = FirebaseManager()
     }
 
+    /**
+     * @param eMail: Die E-Mail des zu registrierenden Nutzenden
+     * @param password: Das Passwort des zu registrierenden Nutzenden
+     * @param type: Worüber die Registrierung stattfinden soll (standartmäßig EMail)
+     */
     fun registerUser(eMail: String, password: String, type: SignInTypes): FirebaseReturnOptions {
         // Hier können dann später, falls mehere Anmeldemöglichkeiten zur Verfüngung stehen, die jeweils ausgewählte Anmeldemöglichkeit ausgewählt werden
         when(type)
@@ -40,6 +45,11 @@ class UserAccount {
         return FirebaseReturnOptions.REGISTRATION_FAILED
     }
 
+    /**
+     * @param eMail: Die E-Mail des anzumeldenden Nutzenden
+     * @param password: Das Passwort des anzumeldenden Nutzenden
+     * @param type: Worüber die Anmeldung stattfinden soll (EMail. Falls implementiert auch Google, ...)
+     */
     fun signInUser(eMail: String, password: String, type: SignInTypes): FirebaseReturnOptions {
         // Hier können dann später, falls mehere Anmeldemöglichkeiten zur Verfüngung stehen, die jeweils ausgewählte Anmeldemöglichkeit ausgewählt werden
         when(type)
@@ -50,26 +60,44 @@ class UserAccount {
         return FirebaseReturnOptions.REGISTRATION_FAILED
     }
 
+    /**
+     * @return FirebaseReturnOptions: Der Erfolgstatus der Anfrage
+     */
     fun signOut(): FirebaseReturnOptions {
         return firebaseManager.signOut()
     }
 
+    /**
+     * @return String: Die Firebase_ID des angemeldeten Nutzenden. Wenn kein Nutzender angemeldet ist wird "" zurückgegeben
+     */
     fun getUserID(): String {
         return firebaseManager.getUserID()
     }
 
+    /**
+     * @return String: Der Nutzername des angemeldeten Nutzenden. Wenn kein Nutzender angemeldet ist wird "" zurückgegeben
+     */
     fun getUserName(): String {
         return firebaseManager.getUserName()
     }
 
+    /**
+     * @return String: Die EMail des angemeldeten Nutzenden, falls vorhanden. Wenn kein Nutzender angemeldet ist wird "" zurückgegeben
+     */
     fun getUserEMail(): String {
         return getUserEMail()
     }
 
+    /**
+     * @return String: Die Url des Nutzerfoto des angemeldeten Nutzenden, falls vorhanden. Wenn kein Nutzender angemeldet ist wird "" zurückgegeben
+     */
     fun getUserPhotoUrl(): String {
         return firebaseManager.getUserPhotoUrl()
     }
 
+    /**
+     * @return String: Das FirebaseToken des angemeldeten Nutzenden, falls vorhanden. Wenn kein Nutzender angemeldet ist wird "" zurückgegeben
+     */
     fun getToken(): String {
         return firebaseManager.getToken()
     }

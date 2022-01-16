@@ -93,7 +93,7 @@ class RemoteDataSourceAPI {
         return userAccount.getUserPhotoUrl()
     }
 
-    /** // TODO: vllt das hier verbergen
+    /** // TODO: vllt das hier verbergen und Token nicht an Repository weitergeben
      * @return String: Das FirebaseToken des angemeldeten Nutzenden, falls vorhanden. Wenn kein Nutzender angemeldet ist wird "" zurückgegeben
      */
     // -----------------------------Authentification-------------------------------

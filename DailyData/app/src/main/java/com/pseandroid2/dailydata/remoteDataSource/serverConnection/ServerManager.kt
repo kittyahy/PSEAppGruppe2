@@ -40,24 +40,39 @@ class ServerManager {
 
 
     // -----------------------------ObserverLogic-------------------------------
+    /**
+     * @param observer: Der Observer, der zur FetchRequestQueue hinzugefügt werden soll
+     */
     fun addObserverToFetchRequestQueue(observer: FetchRequestQueueObserver) {
         fetchRequestQueue.registerObserver(observer)
     }
+    /**
+     * @param observer: Der Observer, der von der FetchRequestQueue entfernt werden soll
+     */
     fun unregisterObserverFromFetchRequestQueue(observer: FetchRequestQueueObserver) {
         fetchRequestQueue.unregisterObserver(observer)
     }
-
+    /**
+     * @return INT: Die Länge der FetchRequestQueue
+     */
     fun getFetchRequestQueueLength(): Int {
         return fetchRequestQueue.getQueueLength()
     }
-
+    /**
+     * @param observer: Der Observer, der zur ProjectCommandQueue hinzugefügt werden soll
+     */
     fun addObserverToProjectCommandQueue(observer: ProjectCommandQueueObserver) {
         projectCommandQueue.registerObserver(observer)
     }
+    /**
+     * @param observer: Der Observer, der von der ProjectCommandQueue entfernt werden soll
+     */
     fun unregisterObserverFromProjectCommandQueue(observer: ProjectCommandQueueObserver) {
         projectCommandQueue.unregisterObserver(observer)
     }
-
+    /**
+     * @return INT: Die Länge der ProjectCommandQueue
+     */
     fun getProjectCommandQueueLength(): Int {
         return projectCommandQueue.getQueueLength()
     }

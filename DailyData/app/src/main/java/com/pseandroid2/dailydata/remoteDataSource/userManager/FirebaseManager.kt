@@ -44,6 +44,9 @@ class FirebaseManager {
         refreshIdToken()
     }
 
+    /**
+     * Erzeugt ein neues Firebase Authentifizierungs-Token
+     */
     private fun refreshIdToken() {
         val user: FirebaseUser? = auth.currentUser // TODO continue here
         if (user == null) {
@@ -72,6 +75,10 @@ class FirebaseManager {
         Log.d("FirebaseTokenRefresh", "refreshedToken " + idToken)
     }
 
+    /**
+     * @param eMail: Die E-Mail des zu registrierenden Nutzenden
+     * @param password: Das Passwort des zu registrierenden Nutzenden
+     */
     fun registerUserWithEmailAndPassword(email: String, password: String): FirebaseReturnOptions {
         if (email == "" || password == "") {
             return FirebaseReturnOptions.WRONG_INPUT_PARAMETERS
@@ -99,8 +106,11 @@ class FirebaseManager {
         return returnParameter
     }
 
-    // TODO: Baue Tests, sodass valide Eingabe Parameter da sind (email und password valide und != 0)
-    fun signInWithEmailAndPassword(email: String, password: String): FirebaseReturnOptions {
+    /**
+     * @param eMail: Die E-Mail des anzumeldenden Nutzenden
+     * @param password: Das Passwort des anzumeldenden Nutzenden
+     */
+    fun signInWithEmailAndPassword(email: String, password: String): FirebaseReturnOptions { // TODO: Baue Tests, sodass valide Eingabe Parameter da sind (email und password valide und != 0)
         if (email == "" || password == "") {
             return FirebaseReturnOptions.WRONG_INPUT_PARAMETERS
         }
@@ -126,6 +136,9 @@ class FirebaseManager {
         return returnParameter
     }
 
+    /**
+     * @return FirebaseReturnOptions: Der Erfolgstatus der Anfrage
+     */
     fun signOut(): FirebaseReturnOptions {
         auth.signOut()
 
@@ -134,10 +147,16 @@ class FirebaseManager {
         return FirebaseReturnOptions.SINGED_OUT
     }
 
+    /**
+     * @return String: Die Firebase_ID des angemeldeten Nutzenden. Wenn kein Nutzender angemeldet ist wird "" zurückgegeben
+     */
     fun getUser(): FirebaseUser? {
         return auth.currentUser
     }
 
+    /**
+     * @return String: Das FirebaseToken des angemeldeten Nutzenden, falls vorhanden. Wenn kein Nutzender angemeldet ist wird "" zurückgegeben
+     */
     fun getToken(): String{
         return idToken
     }
@@ -149,6 +168,9 @@ class FirebaseManager {
         return auth.currentUser!!.uid ?:  ""
     }
 
+    /**
+     * @return String: Der Nutzername des angemeldeten Nutzenden. Wenn kein Nutzender angemeldet ist wird "" zurückgegeben
+     */
     fun getUserName(): String {
         val user = getUser()
         if (user == null || user.displayName == null) {
@@ -157,6 +179,9 @@ class FirebaseManager {
         return user.displayName.toString() // TODO, prüfe ob das richtig ist
     }
 
+    /**
+     * @return String: Die EMail des angemeldeten Nutzenden, falls vorhanden. Wenn kein Nutzender angemeldet ist wird "" zurückgegeben
+     */
     fun getUserEMail(): String {
         val user = getUser()
         if (user == null || user.email == null) {
@@ -165,6 +190,9 @@ class FirebaseManager {
         return user.email.toString() // TODO, prüfe ob das richtig ist
     }
 
+    /**
+     * @return String: Die Url des Nutzerfoto des angemeldeten Nutzenden, falls vorhanden. Wenn kein Nutzender angemeldet ist wird "" zurückgegeben
+     */
     fun getUserPhotoUrl(): String {
         val user = getUser()
         if (user == null || user.photoUrl == null) {
