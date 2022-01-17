@@ -28,16 +28,14 @@ import org.junit.Test
 class projectCommandQueueTests_GetFromEmptyQueue {
     @Test
     fun saveOneProjectCommand() {
-        //val projectCommandQueue = ProjectCommandQueue()
+        val projectCommandQueue = ProjectCommandQueue()
 
-        //Assert.assertEquals(projectCommandQueue.getQueueLength(), 0)
+        Assert.assertEquals(projectCommandQueue.getQueueLength(), 0)
 
-        //val returnedProjectCommand = projectCommandQueue.getProjectCommand()
+        val returnedProjectCommand = projectCommandQueue.getProjectCommand()
 
-        //Assert.assertEquals(returnedProjectCommand, null)
+        Assert.assertEquals(returnedProjectCommand, null)
 
-        //Assert.assertTrue(returnedProjectCommand == null)
-
-        //Assert.assertEquals(projectCommandQueue.getQueueLength(), 0)
+        Assert.assertEquals(projectCommandQueue.getQueueLength(), 0)
     }
 }

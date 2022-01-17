@@ -8,8 +8,8 @@ import java.time.LocalDateTime
  * @param isProjectAdmin: Ob der Nutzender, der den Command hochgeladen hat, zu dem Zeitpunkt ein Projekt-Admin war
  * @param projectCommand: Der ProjectCommand als JSON
  */
-data class ProjectCommandInfo(val wentOnline: LocalDateTime = LocalDateTime.parse("0000-00-00 00:00"),
-                              val serverRemoveTime: LocalDateTime = LocalDateTime.parse("0000-00-00 00:00"),
+data class ProjectCommandInfo(val wentOnline: LocalDateTime = java.time.LocalDateTime.parse("0001-01-01T00:00"),
+                              val serverRemoveTime: LocalDateTime = java.time.LocalDateTime.parse("0001-01-01T00:00"),
                               val commandByUser: String = "",
                               val isProjectAdmin: Boolean = false,
                               val projectCommand: String = "")

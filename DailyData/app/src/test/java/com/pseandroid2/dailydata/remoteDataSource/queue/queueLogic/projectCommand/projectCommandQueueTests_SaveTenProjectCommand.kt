@@ -33,8 +33,7 @@ class projectCommandQueueTests_SaveTenProjectCommand {
 
         val projectCommands: MutableList<ProjectCommandInfo> = mutableListOf<ProjectCommandInfo>()
         for (idx in 1..10) {
-            val projectCommand: ProjectCommandInfo = ProjectCommandInfo(LocalDateTime.parse("0000-00-00 00:00"),
-                LocalDateTime.parse("0000-00-00 00:00"), "", false, idx.toString())
+            val projectCommand: ProjectCommandInfo = ProjectCommandInfo(projectCommand = idx.toString())
 
             projectCommands.add(projectCommand)
             projectCommandQueue.addProjectCommand(projectCommand)
