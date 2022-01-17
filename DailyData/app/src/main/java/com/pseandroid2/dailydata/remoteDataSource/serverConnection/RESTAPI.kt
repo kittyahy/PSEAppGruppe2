@@ -199,7 +199,7 @@ class RESTAPI {
         // TODO: Implement Method
         var relativeURL: String = deltaController+getRemoveTime
 
-        return LocalDateTime.parse("0000-00-00 00:00")
+        return LocalDateTime.parse("0001-01-01T00:00")
     }
 
     //------------------------------------- FetchRequestController -------------------------------------
