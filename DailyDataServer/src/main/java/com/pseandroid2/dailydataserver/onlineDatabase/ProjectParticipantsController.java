@@ -57,7 +57,7 @@ public class ProjectParticipantsController {
      * @return true, if the user is removed, false if it was not possible.
      */
     @DeleteMapping("/removeUser/{id}")
-    public boolean removeUser(@RequestAttribute String user, @PathVariable("id") long projectId, @RequestBody RemoveUserParameter param) {
+    public boolean removeUser(@RequestAttribute String user, @PathVariable("id") long projectId, @RequestBody RemoveUserParameter params) {
         return true;
     }
 

@@ -23,6 +23,7 @@ import com.pseandroid2.dailydataserver.RequestParameter;
 
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * #TODO Testen, JavaDoc
  */
@@ -32,6 +33,12 @@ public class AddPostParameter extends RequestParameter {
     private String projectTemplate;
     private List<String> graphTemplates;
 
+    /**
+     * @param token           the token, to verify the user, provided by the client
+     * @param postPreview     the postPreview for the post, provided by the client
+     * @param projectTemplate the projectTemplate, provided by the client
+     * @param graphTemplates  all graphTemplates, provided by the client
+     */
     public AddPostParameter(String token, String postPreview, String projectTemplate, List<String> graphTemplates) {
         super(token);
         this.postPreview = postPreview;

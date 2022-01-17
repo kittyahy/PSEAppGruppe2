@@ -43,7 +43,7 @@ public class FetchRequestController {
      * @param projectID   the project to which the request belongs, provided by the client
      */
     @PostMapping("/need/{id}")
-    public void demandOldData(@RequestAttribute String user, @PathVariable("id") long projectID, @RequestBody DemandOldDataParameter param) {
+    public void demandOldData(@RequestAttribute String user, @PathVariable("id") long projectID, @RequestBody DemandOldDataParameter params) {
 
     }
 
@@ -54,8 +54,8 @@ public class FetchRequestController {
      */
 
     @GetMapping("/provide/{id}")
-    public List<ProjectParticipants> getFetchRequests(@RequestAttribute String user, @PathVariable("id") long projectId, @RequestBody RequestParameter param) {
+    public List<FetchRequest> getFetchRequests(@RequestAttribute String user, @PathVariable("id") long projectId, @RequestBody RequestParameter param) {
 
-        return new ArrayList<ProjectParticipants>();
+        return new ArrayList<FetchRequest>();
     }
 }
