@@ -26,6 +26,7 @@ interface ServerEndpoints
     fun greet(): Call<String>
 
 
+    /*
     // Post Controller
     @GET("/Posts"+"/allPreview")
     fun getAllPostPreview(@Header String token): List<String>
@@ -49,6 +50,7 @@ interface ServerEndpoints
     fun removePost(@Path("post") postID: String,
                    @RequestHeader token: String,)
 
+     */
 
     // ProjectParticipantsController
     @GET("/OnlineDatabase"+"/addUser/{id}")
