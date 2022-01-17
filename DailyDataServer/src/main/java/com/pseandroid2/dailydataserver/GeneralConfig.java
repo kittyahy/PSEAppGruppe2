@@ -1,6 +1,6 @@
 package com.pseandroid2.dailydataserver;
 
-import com.pseandroid2.dailydataserver.onlineproject.AccessToProjectInterceptor;
+import com.pseandroid2.dailydataserver.onlineDatabase.AccessToProjectInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

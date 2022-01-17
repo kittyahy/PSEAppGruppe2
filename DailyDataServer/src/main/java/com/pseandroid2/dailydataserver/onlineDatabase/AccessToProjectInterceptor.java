@@ -1,4 +1,4 @@
-package com.pseandroid2.dailydataserver.onlineproject;
+package com.pseandroid2.dailydataserver.onlineDatabase;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;

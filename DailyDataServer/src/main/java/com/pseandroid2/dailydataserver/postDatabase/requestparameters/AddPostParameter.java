@@ -1,4 +1,4 @@
-package com.pseandroid2.dailydataserver.posts.requestparameters;
+package com.pseandroid2.dailydataserver.postDatabase.requestparameters;
 
 import com.pseandroid2.dailydataserver.RequestParameter;
 

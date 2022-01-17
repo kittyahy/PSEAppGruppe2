@@ -1,4 +1,4 @@
-package com.pseandroid2.dailydataserver.onlineproject.requestParameters.deltaController;
+package com.pseandroid2.dailydataserver.onlineDatabase.requestParameters.deltaController;
 
 import com.pseandroid2.dailydataserver.RequestParameter;
 

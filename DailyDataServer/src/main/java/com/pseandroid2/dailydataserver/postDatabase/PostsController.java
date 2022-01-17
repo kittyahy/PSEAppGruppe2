@@ -1,4 +1,4 @@
-package com.pseandroid2.dailydataserver.posts;
+package com.pseandroid2.dailydataserver.postDatabase;
 
 import org.springframework.web.bind.annotation.*;
 

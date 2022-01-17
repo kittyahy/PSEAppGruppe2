@@ -1,4 +1,4 @@
-package com.pseandroid2.dailydataserver.onlineproject.requestParameters.fetchRequestController;
+package com.pseandroid2.dailydataserver.onlineDatabase.requestParameters.fetchRequestController;
 
 import com.pseandroid2.dailydataserver.RequestParameter;
 
