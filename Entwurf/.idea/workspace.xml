@@ -4,18 +4,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bf7f9265-29d2-44aa-8259-c44e3e4dd2a1" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../DailyDataServer/src/main/java/com/pseandroid2/dailydataserver/RequestParameter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DailyDataServer/src/main/java/com/pseandroid2/dailydataserver/RequestParameter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DailyDataServer/src/main/java/com/pseandroid2/dailydataserver/onlineproject/requestParameters/deltaController/ProvideOldDataParameter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DailyDataServer/src/main/java/com/pseandroid2/dailydataserver/onlineproject/requestParameters/deltaController/ProvideOldDataParameter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DailyDataServer/src/main/java/com/pseandroid2/dailydataserver/onlineproject/requestParameters/deltaController/SaveDeltaParameter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DailyDataServer/src/main/java/com/pseandroid2/dailydataserver/onlineproject/requestParameters/deltaController/SaveDeltaParameter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DailyDataServer/src/main/java/com/pseandroid2/dailydataserver/onlineproject/requestParameters/fetchRequestController/DemandOldDataParameter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DailyDataServer/src/main/java/com/pseandroid2/dailydataserver/onlineproject/requestParameters/fetchRequestController/DemandOldDataParameter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DailyDataServer/src/main/java/com/pseandroid2/dailydataserver/onlineproject/requestParameters/projectParticipantsController/RemoveUserParameter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DailyDataServer/src/main/java/com/pseandroid2/dailydataserver/onlineproject/requestParameters/projectParticipantsController/RemoveUserParameter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DailyDataServer/src/main/java/com/pseandroid2/dailydataserver/posts/PostsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DailyDataServer/src/main/java/com/pseandroid2/dailydataserver/posts/PostsController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DailyDataServer/src/main/java/com/pseandroid2/dailydataserver/posts/requestparameters/AddPostParameter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DailyDataServer/src/main/java/com/pseandroid2/dailydataserver/posts/requestparameters/AddPostParameter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DailyDataServer/src/main/java/com/pseandroid2/dailydataserver/requestBodyLogic/BodyServletRequestWrapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DailyDataServer/src/main/java/com/pseandroid2/dailydataserver/requestBodyLogic/BodyServletRequestWrapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DailyDataServer/src/main/java/com/pseandroid2/dailydataserver/requestBodyLogic/CachedBodyServletInputStream.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DailyDataServer/src/main/java/com/pseandroid2/dailydataserver/requestBodyLogic/CachedBodyServletInputStream.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DailyDataServer/src/main/java/com/pseandroid2/dailydataserver/requestBodyLogic/ConstantBodyFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DailyDataServer/src/main/java/com/pseandroid2/dailydataserver/requestBodyLogic/ConstantBodyFilter.java" afterDir="false" />
-    </list>
+    <list default="true" id="bf7f9265-29d2-44aa-8259-c44e3e4dd2a1" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
