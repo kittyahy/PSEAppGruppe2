@@ -51,14 +51,15 @@ interface ServerEndpoints
 
     // ProjectParticipantsController
     @GET("/OnlineDatabase"+"/addUser/{id}")
-    fun addUser(@Path("id") projectId: Long, @RequestHeader token: String, @RequestAttribute user: String): Boolean
+    fun addUser(@Path("id") projectId: Long,
+                @Body param: RequestParameter): Boolean
 
     @DELETE("/OnlineDatabase"+"/removeUser/{id}")
     fun removeUser(@Path("id") projectId: Long,
-                   @RequestHeader token: String, @RequestParam userToRemove: String): Boolean
+                   @Body param: RequestParameter): Boolean
 
     @POST("/OnlineDatabase"+"/newProject")
-    fun addProject(@RequestHeader token: String, @RequestAttribute user: String): Long
+    fun addProject(@Body param: RequestParameter): Long
 
 
     // DeltaController
@@ -67,25 +68,23 @@ interface ServerEndpoints
                   @Body saveDeltaParameter: SaveDeltaParameter)
 
     @GET("/OnlineDatabase/Delta"+"/get/{projectId}")
-    fun getDelta(@Path("projectID") projectId: Long, @RequestHeader token: String): MutableList<Delta>
+    fun getDelta(@Path("projectID") projectId: Long,
+                 @Body requestParameter: RequestParameter): MutableList<Delta>
 
     @POST("/OnlineDatabase/Delta"+"/provide/{projectId}")
     fun provideOldData(@Path(value = "projectID") projectId: Long,
-                       @RequestParam command: String,
-                       @RequestParam forUser: String, @RequestParam initialAdded: LocalDateTime,
-                       @RequestParam initialAddedBy: String, @RequestParam wasAdmin: Boolean,
-                       @RequestAttribute user: String, @RequestHeader token: String)
+                       @Body params: ProvideOldDataParameter)
 
     @GET("/OnlineDatabase/Delta"+"/time")
-    fun getRemoveTime(@RequestHeader token: String)
+    fun getRemoveTime(@Body param: RequestParameter)
 
 
     // FetchRequestController
     @GET("/OnlineDatabase/request"+"/need/{id}")
     fun demandOldData(@Path("id") projectID: Long,
-                      @RequestAttribute user: String, @RequestHeader token: String?, @RequestParam requestInfo: String?)
+                      @Body param: DemandOldDataParameter)
 
     @GET("/OnlineDatabase/request"+"/provide/{id}")
     fun getFetchRequest(@Path("id") projectId: Long,
-                        @RequestAttribute user: String, @RequestHeader token: String): List<FetchRequest>
+                        @Body param: RequestParameter): List<ProjectParticipants>
 }
