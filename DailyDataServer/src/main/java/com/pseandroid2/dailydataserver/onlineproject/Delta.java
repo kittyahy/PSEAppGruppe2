@@ -1,31 +1,62 @@
 package com.pseandroid2.dailydataserver.onlineproject;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.Table;
-import java.sql.Date;
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.Set;
 
 
 /**
- *  downloadedBy funktioniert so nicht.
+ * #TODO JavaDoc
  */
 @Entity
 @Table(name= "Delta_Table")
 @IdClass(DeltaID.class)
 public class Delta {
-    private @Id Date addedToServer; //mit idClass
+    private @Id
+    LocalDateTime addedToServer; //mit idClass
     private @Id String user;
     private String projectCommand;
     private long project;
     private String requestedBy;
     private boolean isAdmin;
 
-    public Date getAddedToServer() {
+    @OneToMany
+    private Set<ProjectParticipants> downloadedBy;
+
+    public Delta(LocalDateTime addedToServer, String user, String projectCommand, long project) {
+        this.addedToServer = addedToServer;
+        this.user = user;
+        this.projectCommand = projectCommand;
+        this.project = project;
+    }
+
+    public Delta() {
+
+    }
+
+    public Delta(LocalDateTime addedToServer, String user, String projectCommand, long project, String requestedBy, boolean isAdmin) {
+        this.addedToServer = addedToServer;
+        this.user = user;
+        this.projectCommand = projectCommand;
+        this.project = project;
+        this.requestedBy = requestedBy;
+        this.isAdmin = isAdmin;
+    }
+
+    public Set<ProjectParticipants> getDownloadedBy() {
+        return downloadedBy;
+    }
+
+    public void setDownloadedBy(Set<ProjectParticipants> downloadedBy) {
+        this.downloadedBy = downloadedBy;
+    }
+
+
+    public LocalDateTime getAddedToServer() {
         return addedToServer;
     }
 
-    public void setAddedToServer(Date addedToServer) {
+    public void setAddedToServer(LocalDateTime addedToServer) {
         this.addedToServer = addedToServer;
     }
 

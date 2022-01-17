@@ -5,9 +5,7 @@ import com.pseandroid2.dailydataserver.onlineproject.requestParameters.deltaCont
 import com.pseandroid2.dailydataserver.onlineproject.requestParameters.deltaController.SaveDeltaParameter;
 import org.springframework.web.bind.annotation.*;
 
-
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -60,8 +58,8 @@ public class DeltaController {
      * @return time, after which a delta gets deleted.
      */
     @GetMapping("/time")
-    public Date getRemoveTime(@RequestBody RequestParameter param) {
-        return new Date(); //wahrscheinlich ändert sich das nochmal. ich muss irgendwie an eine feste Zeitspanne kommen. d.h ggf. long oder so
+    public long getRemoveTime(@RequestBody RequestParameter param) {
+        return 0; //wahrscheinlich ändert sich das nochmal. ich muss irgendwie an eine feste Zeitspanne kommen. d.h ggf. long oder so
 
     }
 }

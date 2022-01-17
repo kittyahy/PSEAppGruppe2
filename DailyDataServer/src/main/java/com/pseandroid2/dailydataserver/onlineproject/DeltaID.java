@@ -1,18 +1,18 @@
 package com.pseandroid2.dailydataserver.onlineproject;
 
-import javax.persistence.IdClass;
 import java.io.Serializable;
-import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
-
-
+/**
+ * #TODO JavaDoc
+ */
 public class DeltaID  implements Serializable {
-    private Date addedToServer;
+    private LocalDateTime addedToServer;
     private String user;
 
     public DeltaID(){}
 
-    public DeltaID(Date addedToServer, String user){
+    public DeltaID(LocalDateTime addedToServer, String user){
         this.addedToServer = addedToServer;
         this.user = user;
     }

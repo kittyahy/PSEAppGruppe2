@@ -2,13 +2,18 @@ package com.pseandroid2.dailydataserver.onlineproject;
 
 import com.pseandroid2.dailydataserver.RequestParameter;
 import com.pseandroid2.dailydataserver.onlineproject.requestParameters.projectParticipantsController.RemoveUserParameter;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * All interactions with usermanagement happens here. Provides functions to add and remove users and create new projects.
  * #TODO Testen, JavaDoc
  */
-
 @RestController
 @RequestMapping("/OnlineDatabase")
 public class ProjectParticipantsController {

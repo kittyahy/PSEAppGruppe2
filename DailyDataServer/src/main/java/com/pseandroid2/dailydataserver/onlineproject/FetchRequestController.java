@@ -35,8 +35,8 @@ public class FetchRequestController {
      */
 
     @GetMapping("/provide/{id}")
-    public List<FetchRequest> getFetchRequests(@RequestAttribute String user, @PathVariable("id") long projectId, @RequestBody RequestParameter param) {
+    public List<ProjectParticipants> getFetchRequests(@RequestAttribute String user, @PathVariable("id") long projectId, @RequestBody RequestParameter param) {
 
-        return new ArrayList<FetchRequest>();
+        return new ArrayList<ProjectParticipants>();
     }
 }
