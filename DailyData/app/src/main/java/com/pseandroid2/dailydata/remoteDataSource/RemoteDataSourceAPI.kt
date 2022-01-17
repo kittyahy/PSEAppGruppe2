@@ -40,25 +40,25 @@ class RemoteDataSourceAPI {
 // -----------------------------FireBase-------------------------------
     // -----------------------------UserAccount-------------------------------
     /**
-     * @param eMail: Die E-Mail des zu registrierenden Nutzenden
-     * @param password: Das Passwort des zu registrierenden Nutzenden
-     * @param type: Worüber die Registrierung stattfinden soll (standartmäßig EMail)
+     * @param eMail: The email of the user that should be registered
+     * @param password: The password of the user that should be registered
+     * @param type: Through which method should the user be register (eg email)
      */
     fun registerUser(eMail: String, password: String, type: SignInTypes) : FirebaseReturnOptions {
         return userAccount.registerUser(eMail, password, type)
     }
 
     /**
-     * @param eMail: Die E-Mail des anzumeldenden Nutzenden
-     * @param password: Das Passwort des anzumeldenden Nutzenden
-     * @param type: Worüber die Anmeldung stattfinden soll (EMail. Falls implementiert auch Google, ...)
+     * @param eMail: The email of the user that should be signed in
+     * @param password: The password of the user that should be signed in
+     * @param type: Through which method should the user be signed in (eg email)
      */
     fun signInUser(eMail: String, password: String, type: SignInTypes) : FirebaseReturnOptions {
         return userAccount.signInUser(eMail, password, type)
     }
 
     /**
-     * @return FirebaseReturnOptions: Der Erfolgstatus der Anfrage
+     * @return FirebaseReturnOptions: The success status of the request
      */
     fun signOut() : FirebaseReturnOptions {
         return userAccount.signOut()
@@ -66,37 +66,38 @@ class RemoteDataSourceAPI {
 
     // -----------------------------UserDetails-------------------------------
     /**
-     * @return String: Die Firebase_ID des angemeldeten Nutzenden. Wenn kein Nutzender angemeldet ist wird "" zurückgegeben
+     * @return String: The firebase ID of the signed in user. If no user is signed in return ""
      */
     fun getUserID(): String {
         return userAccount.getUserID()
     }
 
     /**
-     * @return String: Der Nutzername des angemeldeten Nutzenden. Wenn kein Nutzender angemeldet ist wird "" zurückgegeben
+     * @return String: The username of the signed in user. If no user is signed in return ""
      */
     fun getUserName(): String {
         return userAccount.getUserName()
     }
 
     /**
-     * @return String: Die EMail des angemeldeten Nutzenden, falls vorhanden. Wenn kein Nutzender angemeldet ist wird "" zurückgegeben
+     * @return String: The email of the signed in user (if existing). If no user is signed in return ""
      */
     fun getUserEMail(): String {
         return userAccount.getUserEMail()
     }
 
     /**
-     * @return String: Die Url des Nutzerfoto des angemeldeten Nutzenden, falls vorhanden. Wenn kein Nutzender angemeldet ist wird "" zurückgegeben
+     * @return String: The photoURL of the signed in user (if existing). If no user is signed in return ""
      */
     fun getUserPhotoUrl(): String {
         return userAccount.getUserPhotoUrl()
     }
 
-    /** // TODO: vllt das hier verbergen und Token nicht an Repository weitergeben
-     * @return String: Das FirebaseToken des angemeldeten Nutzenden, falls vorhanden. Wenn kein Nutzender angemeldet ist wird "" zurückgegeben
-     */
+
     // -----------------------------Authentification-------------------------------
+    /** // TODO: vllt das hier verbergen und Token nicht an Repository weitergeben
+     * @return String: The token of the signed in user. If no user is signed in return ""
+     */
     fun getToken(): String {
         return userAccount.getToken()
     }
@@ -104,7 +105,7 @@ class RemoteDataSourceAPI {
 // -----------------------------ServerAccess-------------------------------
     // -----------------------------GreetingController-------------------------------
     /**
-     * @return Boolean: Ist eine Serververbindung möglich wird true ausgegeben, sonst false
+     * @return Boolean: If a server connection possible return true, else return false
      */
     fun connectionToServerPossible(): Boolean {
         return serverManager.greet()
@@ -114,7 +115,7 @@ class RemoteDataSourceAPI {
 
     // -----------------------------PostsController-------------------------------
     /**
-     * @return Collection<String>: Die Vorschau der Posts auf dem Server (als JSONs)
+     * @return Collection<String>: The previews of the posts (as JSONs)
      */
     fun getAllPostPreview(): Collection<String> {
         // TODO: Implement Method
@@ -123,8 +124,8 @@ class RemoteDataSourceAPI {
     }
 
     /**
-     * @param fromPost: Die Id des gesuchten Posts
-     * @return Collection<String>: Gibt den zur ID entsprechenden detaillierten Post als JSON aus
+     * @param fromPost: The id from the searched post
+     * @return Collection<String>: Returns the detailed post belonging to the post id
      */
     fun getPostDetail(fromPost: Int): Collection<String> {
         // TODO: Implement Method
@@ -133,8 +134,8 @@ class RemoteDataSourceAPI {
     }
 
     /**
-     * @param fromPost: Der Post vom dem das ProjectTemplate heruntergeladen werden soll
-     * @return String - Das angefragte ProjectTemplate als JSON Datei
+     * @param fromPost: The post from which the project template should be downloaded
+     * @return String - The requested project template as JSON
      */
     fun getProjectTemplate(fromPost: Int): String { // TODO: Es existiert kein JSON Rückgabewert, lass dir was neues einfallen
         // TODO: Implement Method
@@ -142,10 +143,11 @@ class RemoteDataSourceAPI {
         return "";
     }
 
-    /**
-     * @param fromPost: Der Post vom dem das ProjectTemplate heruntergeladen werden soll
-     * @param templateNumber: Welches GraphTemplate von dem Post heruntergeladen werden soll
-     * @return String - Das angefragte GraphTemplate als JSON Datei
+    /** Downloads one graph template that is contained by a post
+     *
+     * @param fromPost: The post from which the graph templates should be downloaded
+     * @param templateNumber: Which graph template should be downloaded from the post
+     * @return String - The requested graph template as JSON
      */
     fun getGraphTemplate(fromPost: Int, templateNumber: Int): String {
         // TODO: Implement Method
@@ -155,11 +157,11 @@ class RemoteDataSourceAPI {
 
     // Wish-Kriterium
     /**
-     * @param postPreview: Der Post der hinzugefügt werden soll als JSON
-     * @param projectTemplate: Das zum Post gehörende ProjectTemplate als JSON
-     * @param Collection<String>: Die zum Post gehörenden GraphTemplates als JSON
+     * @param postPreview: The preview of the post that should be added
+     * @param projectTemplate: The project template that belongs to the post as JSON
+     * @param Collection<String>: The graph templates that belong to the post as JSON
      */
-    fun addPost(postPreview: String, user: String, projectTemplate: String, graphTemplate: Collection<String>) {
+    fun addPost(postPreview: String, projectTemplate: String, graphTemplate: Collection<String>) {
         // TODO: Implement Method
 
         return;
@@ -167,10 +169,9 @@ class RemoteDataSourceAPI {
 
     // Wish-Kriterium
     /**
-     * @param postID: Die ID des zu entfernenden Posts
-     * @param user:  Die ID vom Nutzenden, der den Post vom Server löschen möchte
+     * @param postID: The id of the post that should be removed from the server
      */
-    fun removePost(postID: Long, user: String) {
+    fun removePost(postID: Long) {
         // TODO: Implement Method
 
         return;
@@ -178,8 +179,8 @@ class RemoteDataSourceAPI {
 
     // -----------------------------ProjectParticipantsController-------------------------------
     /**
-     * @param userToAdd: Die ID vom Nutzenden, der einem Projekt hinzugefügt werden soll
-     * @param projectID: Die ID vom Projekt, zu dem der Nutzende hinzugefügt werden soll
+     * @param userToAdd: The id of the user that should be added to the project
+     * @param projectID: The id of the project to which the user is to be added
      */
     fun addUser(userToAdd: String, projectID: Long): Boolean{
         // TODO: Implement Method
@@ -188,8 +189,8 @@ class RemoteDataSourceAPI {
     }
 
     /**
-     * @param userToRemove: Die ID vom Nutzenden, der vom Online-Projekt entfernt werden soll
-     * @param projectID: Die ID vom Projekt, von dem der Nutzende entfernt werden soll
+     * @param userToRemove: The id of the user that sould be removed from the project
+     * @param projectID: The id of the project from which the user should be removed
      */
     fun removeUser(userToRemove: String, projectID: Long): Boolean{
         // TODO: Implement Method
@@ -198,7 +199,7 @@ class RemoteDataSourceAPI {
     }
 
     /**
-     * @return LONG: Gibt die ID des erstellten OnlineProjekts wieder. Bei Fehler wird -1 ausgegeben
+     * @return LONG: Returns the id of the created project. Returns -1 if an error occured
      */
     fun addProject(): Long{
         // TODO: Implement Method
@@ -208,9 +209,9 @@ class RemoteDataSourceAPI {
 
     // -----------------------------DeltaController-------------------------------
     /**
-     * @param projectID: Die ID des Projekts, zu welchem die ProjectCommands hochgeladen werden sollen
-     * @param projectCommands: Die ProjectCommands die an den Server gesendet werden sollen als JSONs
-     * @return Collection<String> ist eine Collection von JSON Dateien, die erfolgreich an den Server übertragen worden konnten // TODO: ändere dies im Entwurfsdokument
+     * @param projectID: The id of the project to which the project command should be added
+     * @param projectCommands: The project commands that should be send to the server (as JSON)
+     * @return Collection<String>: The successfully uploaded project commands (as JSONs) // TODO: ändere dies im Entwurfsdokument
      */
     fun sendCommandsToServer(projectID: Long, projectCommands: Collection<String>): Collection<String> {
         // TODO: Implement Method
@@ -219,7 +220,7 @@ class RemoteDataSourceAPI {
     }
 
     /**
-     * @param projectID: Die ID von dem Projekt, dessen FetchRequests man in die FetchRequestQueue laden will
+     * @param projectID: The id of the project whose deltas (fetchRequests) you want to load into the FetchRequestQueue
      */
     fun getDeltasFromServer(projectID: Long): Unit {
         // TODO: Implement Method
@@ -228,11 +229,11 @@ class RemoteDataSourceAPI {
     }
 
     /**
-     * @param projectCommand: Der ProjectCommand, der auf den Server hochgeladen werden soll als JSON
-     * @param forUser: Die ID des Nutzenden, dessen FetchRequest man beantworten möchte
+     * @param projectCommand: The projectCommand that should be uploaded to the server (as JSON)
+     * @param forUser: The id of the user whose fetch request is answered
      * @param initialAddedDate: // TODO
-     * @param projectID: Die Projekt ID, zu dem man den ProjectCommand hochladen möchte
-     * @param wasAdmin: War der Nutzende zum Zeitpunkt, als der ProjectCommand erstellt wurde, ein Projekt-Administrator des Projektes
+     * @param projectID: The id of the project belonging to the project command
+     * @param wasAdmin: Was the user a project administrator when the command was created
      */
     fun provideOldData(projectCommand: String, forUser: String, initialAddedDate: LocalDateTime, initialAddedBy: String, projectID: Long, wasAdmin: Boolean) {
         // TODO: Implement Method
@@ -241,7 +242,7 @@ class RemoteDataSourceAPI {
     }
 
     /**
-     * @param LocalDateTime: Gibt die Zeit an, wie lange ein ProjectCommand auf dem Server sein kann, bevor dieser vom Server gelöscht wird
+     * @param LocalDateTime: The time how long an project command can remain on the server until it gets deleted by the server
      */
     fun getRemoveTime(): LocalDateTime {
         // TODO: Implement Method0
@@ -251,8 +252,8 @@ class RemoteDataSourceAPI {
 
     // -----------------------------FetchRequestController-------------------------------
     /**
-     * @param projectID: Die ID des Projekts, zu dem die RequestInfo hochgeladen werden soll
-     * @param requestInfo: Die RequestInfo als JSON
+     * @param projectID: The id of the project to which the fetch request should be uploaded
+     * @param requestInfo: The fetch request as JSON
      */
     fun demandOldData(projectID: Long, requestInfo: String) {
         // TODO: Implement Method
@@ -261,7 +262,7 @@ class RemoteDataSourceAPI {
     }
 
     /**
-     * @param projectID: Die ID des Projekts, von dem alle FetchRequests geholt werden sollen
+     * @param projectID: The id of the project from which the fetch requests should be downloaded
      */
     fun getFetchRequests(projectID: Long){ // TODO: Ausgabe ist im Entwurfsheft Collection<FetchRequest>
         // TODO: Implement Method
@@ -271,42 +272,42 @@ class RemoteDataSourceAPI {
 
     // -----------------------------ObserverLogic-------------------------------
     /**
-     * @param observer: Der Observer, der zur FetchRequestQueue hinzugefügt werden soll
+     * @param observer: The observer that should be added to the FetchRequestQueue
      */
     fun addObserverToFetchRequestQueue(observer: FetchRequestQueueObserver) {
         serverManager.addObserverToFetchRequestQueue(observer)
     }
 
     /**
-     * @param observer: Der Observer, der von der FetchRequestQueue entfernt werden soll
+     * @param observer: The observer that should be removed from the FetchRequestQueue
      */
     fun unregisterObserverFromFetchRequestQueue(observer: FetchRequestQueueObserver) {
         serverManager.unregisterObserverFromFetchRequestQueue(observer)
     }
 
     /**
-     * @return INT: Die Länge der FetchRequestQueue
+     * @return INT: The length of the FetchRequestQueue
      */
     fun getFetchRequestQueueLength(): Int {
         return serverManager.getFetchRequestQueueLength()
     }
 
     /**
-     * @param observer: Der Observer, der zur ProjectCommandQueue hinzugefügt werden soll
+     * @param observer: The observer that should be added to the ProjectCommandQueue
      */
     fun addObserverToProjectCommandQueue(observer: ProjectCommandQueueObserver) {
         serverManager.addObserverToProjectCommandQueue(observer)
     }
 
     /**
-     * @param observer: Der Observer, der von der ProjectCommandQueue entfernt werden soll
+     * @param observer: The observer that should be removed from the ProjectCommandQueue
      */
     fun unregisterObserverFromProjectCommandQueue(observer: ProjectCommandQueueObserver) {
         serverManager.unregisterObserverFromProjectCommandQueue(observer)
     }
 
     /**
-     * @return INT: Die Länge der ProjectCommandQueue
+     * @return INT: The length of the ProjectCommandQueue
      */
     fun getProjectCommandQueueLength(): Int {
         return serverManager.getProjectCommandQueueLength()
