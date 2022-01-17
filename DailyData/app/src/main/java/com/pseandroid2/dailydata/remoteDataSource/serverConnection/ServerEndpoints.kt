@@ -1,12 +1,20 @@
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection
 
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandInfo
+
 import retrofit2.Call
+import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
+
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.DemandOldDataParameter
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.ProvideOldDataParameter
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.RemoveUserParameter
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.RequestParameter
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.SaveDeltaParameter
 
 interface ServerEndpoints
 {
@@ -56,7 +64,7 @@ interface ServerEndpoints
     // DeltaController
     @POST("/OnlineDatabase/Delta"+"/save/{projectId}")
     fun saveDelta(@Path("projectId") projectId: ProjectCommandInfo,
-                  Command: String, @RequestHeader token: String)
+                  @Body saveDeltaParameter: SaveDeltaParameter)
 
     @GET("/OnlineDatabase/Delta"+"/get/{projectId}")
     fun getDelta(@Path("projectID") projectId: Long, @RequestHeader token: String): MutableList<Delta>
@@ -64,7 +72,7 @@ interface ServerEndpoints
     @POST("/OnlineDatabase/Delta"+"/provide/{projectId}")
     fun provideOldData(@Path(value = "projectID") projectId: Long,
                        @RequestParam command: String,
-                       @RequestParam forUser: String, @RequestParam initialAdded: Date,
+                       @RequestParam forUser: String, @RequestParam initialAdded: LocalDateTime,
                        @RequestParam initialAddedBy: String, @RequestParam wasAdmin: Boolean,
                        @RequestAttribute user: String, @RequestHeader token: String)
 
