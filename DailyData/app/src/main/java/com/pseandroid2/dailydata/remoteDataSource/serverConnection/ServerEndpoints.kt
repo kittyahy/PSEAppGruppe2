@@ -10,11 +10,10 @@ import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.Delta
-import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.ProjectParticipants
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
 
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.DemandOldDataParameter
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.ProvideOldDataParameter
-import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.RemoveUserParameter
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.RequestParameter
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.SaveDeltaParameter
 
@@ -88,5 +87,5 @@ interface ServerEndpoints
 
     @GET("/OnlineDatabase/request"+"/provide/{id}")
     fun getFetchRequest(@Path("id") projectId: Long,
-                        @Body param: RequestParameter): List<ProjectParticipants>
+                        @Body param: RequestParameter): List<FetchRequest>
 }

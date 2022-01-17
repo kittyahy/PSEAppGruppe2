@@ -92,7 +92,12 @@ class RESTAPI {
 
         val greetingCall = server.greet()
 
+        if (greetingCall.s)
+
         val greeting: String = greetingCall.execute().body() ?: ""
+
+        //TODO: VLlt als flow
+
 
         if (greeting == "hello") {
             return true
