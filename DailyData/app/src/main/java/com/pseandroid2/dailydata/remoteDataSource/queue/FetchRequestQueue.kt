@@ -76,7 +76,7 @@ class FetchRequestQueue {
     }
 
     /**
-     * Benachrichtige alle registrierte Observer der FetchRequest Queue
+     * Notifies all registered observers of the FetchRequestQueue
      */
     private fun notifyObservers() {
         observers.forEach {

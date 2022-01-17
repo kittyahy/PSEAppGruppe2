@@ -22,7 +22,7 @@ package com.pseandroid2.dailydata.remoteDataSource.queue
 
 interface FetchRequestQueueObserver {
     /**
-     * Wird von der FetchRequestQueue aufgerufen, wenn neue Elemente in die Queue eingefügt werden
+     * Will be called if an element is added to the queue
      */
     fun update()
 }

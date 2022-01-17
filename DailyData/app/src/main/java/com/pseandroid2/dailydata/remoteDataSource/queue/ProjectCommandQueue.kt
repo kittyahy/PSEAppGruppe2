@@ -76,7 +76,7 @@ class ProjectCommandQueue {
     }
 
     /**
-     * Benachrichtige alle registrierte Observer der FetchRequest Queue
+     * Notifies all registered observers of the ProjectCommandQueue
      */
     private fun notifyObservers() {
         observers.forEach {
