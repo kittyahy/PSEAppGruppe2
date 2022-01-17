@@ -18,7 +18,7 @@
 
 */
 
-package com.pseandroid2.dailydata.ui.project.creation
+package com.pseandroid2.dailydata.ui.project.data.settings
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
@@ -40,13 +40,19 @@ import com.pseandroid2.dailydata.ui.composables.ListInput
 import com.pseandroid2.dailydata.ui.composables.SaveButton
 import com.pseandroid2.dailydata.ui.composables.TextInput
 import com.pseandroid2.dailydata.ui.composables.WallpaperElement
+import com.pseandroid2.dailydata.ui.project.creation.ButtonDialog
+import com.pseandroid2.dailydata.ui.project.creation.GraphDialog
+import com.pseandroid2.dailydata.ui.project.creation.NotificationDialog
+import com.pseandroid2.dailydata.ui.project.creation.ProjectCreationEvent
+import com.pseandroid2.dailydata.ui.project.creation.TableDialog
+import com.pseandroid2.dailydata.ui.project.creation.WallpaperDialog
 import com.pseandroid2.dailydata.util.ui.DataType
 import kotlinx.coroutines.flow.collect
 
 @Composable
-fun ProjectCreationScreen(
+fun ProjectDataSettingsScreen(
     onNavigate: (UiEvent.Navigate) -> Unit,
-    viewModel: ProjectCreationScreenViewModel = hiltViewModel()
+    viewModel: ProjectDataSettingsScreenViewModel = hiltViewModel()
 ) {
 
     val scrollState = rememberScrollState()
@@ -140,7 +146,8 @@ fun ProjectCreationScreen(
                             name = name,
                             columnId = viewModel.table.filter { it.dataType == DataType.WHOLE_NUMBER }[column].id,
                             value = value.toInt()
-                        ))
+                        )
+                    )
                     viewModel.onEvent(ProjectCreationEvent.OnShowButtonsDialog(false))
                 }
             )
