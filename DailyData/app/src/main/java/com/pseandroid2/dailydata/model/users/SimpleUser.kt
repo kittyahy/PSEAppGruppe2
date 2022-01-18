@@ -18,7 +18,7 @@
 
 */
 
-package com.pseandroid2.dailydata.model
+package com.pseandroid2.dailydata.model.users
 
 class SimpleUser(id: String, name: String) : User {
     var userID: String = id

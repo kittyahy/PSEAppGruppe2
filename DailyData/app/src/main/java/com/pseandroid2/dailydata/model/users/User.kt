@@ -18,7 +18,7 @@
 
 */
 
-package com.pseandroid2.dailydata.model
+package com.pseandroid2.dailydata.model.users
 
 interface User {
 
