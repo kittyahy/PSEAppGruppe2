@@ -23,6 +23,8 @@ package com.pseandroid2.dailydata.remoteDataSource.serverConnection
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerEndpoints
 import com.pseandroid2.dailydata.model.GraphTemplate
 import com.pseandroid2.dailydata.model.ProjectTemplate
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.Delta
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
 import java.time.LocalDateTime
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -163,9 +165,9 @@ class RESTAPI {
         return false
     }
 
-    fun getDelta(projectID: Long, authToken: String): Collection<String> {
+    fun getDelta(projectID: Long, authToken: String): Collection<Delta> {
         // TODO: Implement Method
-        return mutableListOf("")
+        return mutableListOf<Delta>()
     }
 
     fun providedOldData(projectCommand: String, forUser: String, initialAdded: LocalDateTime, initialAddedBy: String, projectID: Long, wasAdmin: Boolean, authToken: String) {
@@ -173,20 +175,19 @@ class RESTAPI {
         return
     }
 
-    // TODO: Wahrscheinlich ist das hier nicht LocalDateTime -> Überprüfen
     fun getRemoveTime(authToken: String): LocalDateTime {
         // TODO: Implement Method
         return LocalDateTime.parse("0001-01-01T00:00")
     }
 
     //------------------------------------- FetchRequestController -------------------------------------
-    fun demandOldData(userID: String, projectID: Long, requestInfo: String, authToken: String) {
+    fun demandOldData(projectID: Long, requestInfo: String, authToken: String) {
         // TODO: Implement Method
         return
     }
 
-    fun getFetchRequests(userID: String, projectID: Long, authToken: String): Collection<String> {
+    fun getFetchRequests(projectID: Long, authToken: String): Collection<FetchRequest> {
         // TODO: Implement Method
-        return mutableListOf("")
+        return mutableListOf<FetchRequest>()
     }
 }

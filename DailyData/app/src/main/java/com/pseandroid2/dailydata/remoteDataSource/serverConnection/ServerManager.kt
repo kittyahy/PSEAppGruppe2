@@ -22,8 +22,11 @@ package com.pseandroid2.dailydata.remoteDataSource.serverConnection
 
 import com.pseandroid2.dailydata.remoteDataSource.queue.FetchRequestQueue
 import com.pseandroid2.dailydata.remoteDataSource.queue.FetchRequestQueueObserver
+import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandInfo
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueue
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueueObserver
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.Delta
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
 import java.time.LocalDateTime
 
 class ServerManager {
@@ -152,12 +155,12 @@ class ServerManager {
      * @param projectID: The id of the project whose deltas (fetchRequests) you want to load into the FetchRequestQueue
      */
     fun getDeltasFromServer(projectID: Long, authToken: String): Unit {
-        // TODO: Implement Method
-
-        val receivedDeltas: Collection<String> = restAPI.getDelta(projectID, authToken)
-        
-
-        return
+        val receivedProjectCommands: Collection<Delta> = restAPI.getDelta(projectID, authToken)
+        receivedProjectCommands.forEach {
+            val queueElement: ProjectCommandInfo = ProjectCommandInfo(wentOnline = it.addedToServer,
+                commandByUser =  it.user, isProjectAdmin = it.isAdmin, projectCommand = it.projectCommand)
+            projectCommandQueue.addProjectCommand(queueElement)
+        }
     }
 
     /**
@@ -167,19 +170,15 @@ class ServerManager {
      * @param projectID: The id of the project belonging to the project command
      * @param wasAdmin: Was the user a project administrator when the command was created
      */
-    fun provideOldData(projectCommand: String, forUser: String, initialAddedDate: LocalDateTime, initialAddedBy: String, projectID: Long, wasAdmin: Boolean) {
-        // TODO: Implement Method
-
-        return;
+    fun provideOldData(projectCommand: String, forUser: String, initialAddedDate: LocalDateTime, initialAddedBy: String, projectID: Long, wasAdmin: Boolean, authToken: String) {
+        return restAPI.providedOldData(projectCommand, forUser, initialAddedDate, initialAddedBy, projectID, wasAdmin, authToken)
     }
 
     /**
      * @param LocalDateTime: The time how long an project command can remain on the server until it gets deleted by the server
      */
-    fun getRemoveTime(): LocalDateTime {
-        // TODO: Implement Method0
-
-        return LocalDateTime.parse("0001-01-01T00:00")
+    fun getRemoveTime(authToken: String): LocalDateTime {
+        return restAPI.getRemoveTime(authToken)
     }
 
     // ----------------------------------FetchRequestController-------------------------------
@@ -187,19 +186,18 @@ class ServerManager {
      * @param projectID: The id of the project to which the fetch request should be uploaded
      * @param requestInfo: The fetch request as JSON
      */
-    fun demandOldData(projectID: Long, requestInfo: String) {
-        // TODO: Implement Method
-
-        return;
+    fun demandOldData(projectID: Long, requestInfo: String, authToken: String) {
+        return restAPI.demandOldData(projectID, requestInfo, authToken)
     }
 
     /**
      * @param projectID: The id of the project from which the fetch requests should be downloaded
      */
-    fun getFetchRequests(projectID: Long){ // TODO: Ausgabe ist im Entwurfsheft Collection<FetchRequest>
-        // TODO: Implement Method
-
-        return;
+    fun getFetchRequests(projectID: Long, authToken: String){ // TODO: Ausgabe ist im Entwurfsheft Collection<FetchRequest>
+        val receivedFetchRequests: Collection<FetchRequest> = restAPI.getFetchRequests(projectID, authToken)
+        receivedFetchRequests.forEach { // TODO: maybe do this in parallel :)
+            fetchRequestQueue.addFetchRequest(it.requestInfo)
+        }
     }
 
 

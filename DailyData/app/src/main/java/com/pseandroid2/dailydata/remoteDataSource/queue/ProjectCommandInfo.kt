@@ -9,7 +9,7 @@ import java.time.LocalDateTime
  * @param projectCommand: The project command as JSON
  */
 data class ProjectCommandInfo(val wentOnline: LocalDateTime = java.time.LocalDateTime.parse("0001-01-01T00:00"),
-                              val serverRemoveTime: LocalDateTime = java.time.LocalDateTime.parse("0001-01-01T00:00"),
+                              //val serverRemoveTime: LocalDateTime = java.time.LocalDateTime.parse("0001-01-01T00:00"), // TODO Aus entwurf wahrscheinlich entfernen
                               val commandByUser: String = "",
                               val isProjectAdmin: Boolean = false,
                               val projectCommand: String = "")
