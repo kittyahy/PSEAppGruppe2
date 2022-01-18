@@ -16,20 +16,17 @@ class FirebaseManagerTest_GetAuthToken {
         var returnParameter1 =  fm.signOut()
         Assert.assertEquals("", fm.getToken())
         Assert.assertEquals(FirebaseReturnOptions.SINGED_OUT, returnParameter1)
-        Assert.assertEquals(null, fm.getUser())
 
         // SignIn User
         var email = "test@student.kit.edu"
         var password = "PSEistsuper"
         val returnParameter2 = fm.signInWithEmailAndPassword(email, password)
         Assert.assertEquals(FirebaseReturnOptions.SINGED_IN, returnParameter2)
-        Assert.assertNotEquals(null, fm.getUser())
         Assert.assertNotEquals("", fm.getToken())
 
         // SignOut Logged in User
         var returnParameter3 =  fm.signOut()
         Assert.assertEquals(FirebaseReturnOptions.SINGED_OUT, returnParameter3)
-        Assert.assertEquals(null, fm.getUser())
         Assert.assertEquals("", fm.getToken())
     }
 }

@@ -21,12 +21,12 @@ class FirebaseManagerTest_GetEmail {
         val returnParameter = fm.signInWithEmailAndPassword(email, password)
 
         Assert.assertEquals(FirebaseReturnOptions.SINGED_IN, returnParameter)
-        Assert.assertNotEquals(null, fm.getUser())
+        Assert.assertNotEquals("", fm.getUserID())
         Assert.assertEquals("4hpJh32YaAWrAYoVvo047q7Ey183", fm.getUserID())
         Assert.assertEquals("test@student.kit.edu", fm.getUserEMail())
 
         fm.signOut()
-        Assert.assertEquals(null, fm.getUser())
+        Assert.assertEquals("", fm.getUserID())
         Assert.assertEquals("", fm.getUserEMail())
     }
 }

@@ -21,7 +21,7 @@ class FirebaseManagerTest_SignInWhileUserIsAlreadySignedIn_SignInWithEmailAndPas
         // Erster SignIn erfolgt
         val returnParameter1 = fm.signInWithEmailAndPassword(email1, password1)
         Assert.assertEquals(FirebaseReturnOptions.SINGED_IN, returnParameter1)
-        Assert.assertNotEquals(null, fm.getUser())
+        Assert.assertNotEquals("", fm.getUserID())
         Assert.assertEquals("4hpJh32YaAWrAYoVvo047q7Ey183", fm.getUserID())
 
         // Zweiter SignIn soll erfolgen
@@ -31,6 +31,6 @@ class FirebaseManagerTest_SignInWhileUserIsAlreadySignedIn_SignInWithEmailAndPas
         Assert.assertEquals("a5sYrdnd1EX2TtkJAEGGMHqebUq2", fm.getUserID())
 
         fm.signOut()
-        Assert.assertEquals(null, fm.getUser())
+        Assert.assertEquals("", fm.getUserID())
     }
 }

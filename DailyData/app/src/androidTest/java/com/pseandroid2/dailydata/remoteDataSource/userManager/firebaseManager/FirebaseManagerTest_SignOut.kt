@@ -15,18 +15,18 @@ class FirebaseManagerTest_SignOut {
         // SignOut when no User is Connected
         var returnParameter1 =  fm.signOut()
         Assert.assertEquals(FirebaseReturnOptions.SINGED_OUT, returnParameter1)
-        Assert.assertEquals(null, fm.getUser())
+        Assert.assertEquals("", fm.getUserID())
 
         // SignIn User
         var email = "test@student.kit.edu"
         var password = "PSEistsuper"
         val returnParameter2 = fm.signInWithEmailAndPassword(email, password)
         Assert.assertEquals(FirebaseReturnOptions.SINGED_IN, returnParameter2)
-        Assert.assertNotEquals(null, fm.getUser())
+        Assert.assertNotEquals("", fm.getUserID())
 
         // SignOut Logged in User
         var returnParameter3 =  fm.signOut()
         Assert.assertEquals(FirebaseReturnOptions.SINGED_OUT, returnParameter3)
-        Assert.assertEquals(null, fm.getUser())
+        Assert.assertEquals("", fm.getUserID())
     }
 }
