@@ -32,7 +32,11 @@ import java.io.InputStreamReader;
 
 
 /**
- * #TODO official Test, JavaDoc
+ * #TODO official Test
+ */
+
+/**
+ * Wrapper for the RequestBody to read it multible times.
  */
 public class BodyServletRequestWrapper extends HttpServletRequestWrapper {
 

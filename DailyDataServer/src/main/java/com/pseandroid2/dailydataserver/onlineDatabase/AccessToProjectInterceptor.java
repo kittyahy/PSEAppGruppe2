@@ -28,6 +28,14 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * #TODO javadoc,Test, implemetierung
  */
+
+/**
+ * Interceptor. Checks if the user may access to the given project.
+ *
+ * if not, rejects the request and the response is empty.
+ *
+ * Gets called before all methods, which depends on an existing project and want's to change it.
+ */
 @Component
 public class AccessToProjectInterceptor implements HandlerInterceptor {
 

@@ -24,8 +24,33 @@ import com.pseandroid2.dailydataserver.RequestParameter;
 /**
  * #TODO Testen, JavaDoc
  */
+/**
+ * The parameters for {@link com.pseandroid2.dailydataserver.onlineDatabase.FetchRequestController#demandOldData(String, long, DemandOldDataParameter) demandOldData()}
+ */
 public class DemandOldDataParameter extends RequestParameter {
     private String requestInfo;
+
+    /***
+     * The parameters for demandOldData. Constructor.
+     *
+     * @param token       the token, to verify the user (provided by the client)
+     * @param requestInfo the request, which is usefully for another user. Contains information for recommended Delta (provided by the client)
+     */
+    public DemandOldDataParameter(String token, String requestInfo) {
+        super(token);
+        this.requestInfo = requestInfo;
+    }
+
+    /**
+     * getters and setters
+     */
+    public String getRequestInfo() {
+        return requestInfo;
+    }
+
+    public void setRequestInfo(String requestInfo) {
+        this.requestInfo = requestInfo;
+    }
 
     @Override
     public String toString() {
@@ -34,21 +59,5 @@ public class DemandOldDataParameter extends RequestParameter {
                 "} " + super.toString();
     }
 
-    /***
-     *
-     * @param token       the token, to verify the user, provided by the client
-     * @param requestInfo the request, which is usefull for another user. Contains information for recommended Delta, provided by the client
-     */
-    public DemandOldDataParameter(String token, String requestInfo) {
-        super(token);
-        this.requestInfo = requestInfo;
-    }
 
-    public String getRequestInfo() {
-        return requestInfo;
-    }
-
-    public void setRequestInfo(String requestInfo) {
-        this.requestInfo = requestInfo;
-    }
 }

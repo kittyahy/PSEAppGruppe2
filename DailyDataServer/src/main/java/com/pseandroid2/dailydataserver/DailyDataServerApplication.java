@@ -22,9 +22,17 @@ package com.pseandroid2.dailydataserver;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+/**
+ * Entrypoint of the Application
+ */
 @SpringBootApplication
 public class DailyDataServerApplication {
 
+    /**
+     * starts the application
+     * starts spring boot
+     * @param args default arguments. going to be empty.
+     */
     public static void main(String[] args) {
         SpringApplication.run(DailyDataServerApplication.class, args);
     }

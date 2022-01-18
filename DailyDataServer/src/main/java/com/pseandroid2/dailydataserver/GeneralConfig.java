@@ -25,6 +25,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+/**
+ * configurations for the Interceptors.
+ * This is the point, where Spring know which request should be intercepted.
+ */
 @Component
 public class GeneralConfig implements WebMvcConfigurer {
 

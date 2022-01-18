@@ -27,6 +27,10 @@ import java.util.List;
 /**
  * #TODO Testen, JavaDoc
  */
+
+/**
+ * The parameters for {@link com.pseandroid2.dailydataserver.postDatabase.PostsController#addPost(AddPostParameter) addPost()}
+ */
 public class AddPostParameter extends RequestParameter {
 
     private String postPreview;
@@ -34,10 +38,12 @@ public class AddPostParameter extends RequestParameter {
     private List<String> graphTemplates;
 
     /**
-     * @param token           the token, to verify the user, provided by the client
-     * @param postPreview     the postPreview for the post, provided by the client
-     * @param projectTemplate the projectTemplate, provided by the client
-     * @param graphTemplates  all graphTemplates, provided by the client
+     * The parameters for addPost. Constructor.
+     *
+     * @param token           the token, to verify the user (provided by the client)
+     * @param postPreview     the postPreview for the post (provided by the client)
+     * @param projectTemplate the projectTemplate (provided by the client)
+     * @param graphTemplates  all graphTemplates (provided by the client)
      */
     public AddPostParameter(String token, String postPreview, String projectTemplate, List<String> graphTemplates) {
         super(token);
@@ -46,6 +52,9 @@ public class AddPostParameter extends RequestParameter {
         this.graphTemplates.addAll(graphTemplates);
     }
 
+    /**
+     * getters and setters
+     */
 
     public String getPostPreview() {
         return postPreview;
@@ -63,6 +72,9 @@ public class AddPostParameter extends RequestParameter {
         this.projectTemplate = projectTemplate;
     }
 
+    /**
+     * @return a copy of the list
+     */
     public List<String> getGraphTemplates() {
         List<String> list = new ArrayList<>();
         list.addAll(graphTemplates);

@@ -20,15 +20,28 @@
 package com.pseandroid2.dailydataserver;
 
 /**
- * #TODO Testen, JavaDoc
+ * #TODO Testen
+ */
+
+/**
+ * The Parameters for all Request, which need authentication.
+ *
+ *
  */
 public  class RequestParameter {
     private String token;
 
+    /**
+     * Constructor: needs the token for the authentication.
+     * @param token for firebase to authenticate
+     */
   public  RequestParameter(String token){
       this.token = token;
   }
 
+    /**
+     * getters and setters
+     */
 
     public String getToken() {
         return token;

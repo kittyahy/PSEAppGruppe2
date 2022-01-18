@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.RestController;
  * Controller to know if the server is available.
  * The client doesn't need to log in for access the controller
  *
- * Has a succeeded Unit test
  */
 @RestController
 public class GreetingController {
@@ -40,7 +39,7 @@ public class GreetingController {
     /**
      * Returns a String with length, longer than 0, to make sure the server is available.
      *
-     * @return greeting
+     * @return greeting to signalise, the server is reachable.
      */
     @GetMapping("/greet")
     public String greets() {

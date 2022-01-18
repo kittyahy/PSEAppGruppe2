@@ -26,8 +26,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * only skalaton
  * #TODO javadoc,Test, implemetierung
+ */
+
+/**
+ * Authenticates the user and adds the user id to the RequestAttributes.
+ * Most of the requests get interrupted by this Interceptor.
+ *
+ * The authentication works with firebase. The user name ist the uid from firebase.
  */
 @Component
 public class LoginInterceptor implements HandlerInterceptor {

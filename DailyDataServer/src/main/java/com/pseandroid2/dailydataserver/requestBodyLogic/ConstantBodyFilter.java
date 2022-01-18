@@ -32,7 +32,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * #TODO official Test, JavaDoc
+ * #TODO official Test
+ */
+
+/**
+ * Filter to "replace" the body with a reusable body object
+ * This filter is the first filter and every request goes through this filter.
  */
 @Component
 @Order(value = Ordered.HIGHEST_PRECEDENCE)
