@@ -17,23 +17,35 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
-package com.pseandroid2.dailydataserver;
+package com.pseandroid2.dailydataserver.onlineDatabase.requestParameters.deltaController;
 
-import org.springframework.stereotype.Component;
+import com.pseandroid2.dailydataserver.RequestParameter;
 
 /**
- * Logic for greeting
+ * #TODO Testen, JavaDoc
  */
-@Component
-public class ServerGreetings {
+public class SaveDeltaParameter extends RequestParameter {
+    private String command;
 
-    /**
-     * returns a greeting String, with length > 0.
-     *
-     * @return the recommended String
-     */
-    public String greeting(){
-        return "Hello";
+    public String getCommand() {
+        return command;
     }
-}
 
+    public void setCommand(String command) {
+        this.command = command;
+    }
+
+    public SaveDeltaParameter(String token, String command) {
+        super(token);
+        this.command = command;
+    }
+
+    @Override
+    public String toString() {
+        return "SaveDeltaParameter{" +
+                "command='" + command + '\'' +
+                "} " + super.toString();
+    }
+
+
+}

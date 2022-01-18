@@ -17,23 +17,38 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
-package com.pseandroid2.dailydataserver;
+package com.pseandroid2.dailydataserver.onlineDatabase.requestParameters.projectParticipantsController;
 
-import org.springframework.stereotype.Component;
+import com.pseandroid2.dailydataserver.RequestParameter;
 
 /**
- * Logic for greeting
+ * #TODO Testen, JavaDoc
  */
-@Component
-public class ServerGreetings {
+public class RemoveUserParameter extends RequestParameter {
+    private String userToRemove;
 
     /**
-     * returns a greeting String, with length > 0.
      *
-     * @return the recommended String
+     * @param token
+     * @param userToRemove the user, which should be removed.
      */
-    public String greeting(){
-        return "Hello";
+    public RemoveUserParameter(String token, String userToRemove) {
+        super(token);
+        this.userToRemove = userToRemove;
+    }
+
+    public String getUserToRemove() {
+        return userToRemove;
+    }
+
+    public void setUserToRemove(String userToRemove) {
+        this.userToRemove = userToRemove;
+    }
+
+    @Override
+    public String toString() {
+        return "RemoveUserParameter{" +
+                "userToRemove='" + userToRemove + '\'' +
+                "} " + super.toString();
     }
 }
-
