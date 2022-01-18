@@ -123,12 +123,14 @@ class RESTAPI {
         return ""
     }
 
-    fun addPost (postPreview: String, userID: String, projectTemplate: String, graphTemplate: Collection<String>, authToken: String) {
+    // Wish-criteria
+    fun addPost (postPreview: String, projectTemplate: String, graphTemplate: Collection<String>, authToken: String) {
         // TODO: Implement Method
         return
     }
 
-    fun removePost (postID: Int, userID: String, authToken: String) {
+    // Wish-criteria
+    fun removePost (postID: Int, authToken: String) {
         // TODO: Implement Method
         return
     }
@@ -140,24 +142,28 @@ class RESTAPI {
         return false
     }
 
-    fun removeUser(userToRemove: String, projectID: Long, userID: String, authToken: String): Boolean {
+    fun removeUser(userToRemove: String, projectID: Long, authToken: String): Boolean {
         // TODO: Implement Method
         return false
     }
 
-    fun addProject(userID: String, authToken: String): Long {
+    fun addProject(authToken: String): Long {
         // TODO: Implement Method
         return -1
     }
 
 
     //------------------------------------- Delta Controller -------------------------------------
-    fun saveDelta(projectID: Long, projectCommand: String, userID: String, authToken: String) {
+    /** Uploads a Project Command to the Server
+     *
+     * @return Boolean: True if uploaded successfully, otherwise false
+     */
+    fun saveDelta(projectID: Long, projectCommand: String, authToken: String): Boolean {
         // TODO: Implement Method
-        return
+        return false
     }
 
-    fun getDelta(projectID: Long, userID: String, authToken: String): Collection<String> {
+    fun getDelta(projectID: Long, authToken: String): Collection<String> {
         // TODO: Implement Method
         return mutableListOf("")
     }

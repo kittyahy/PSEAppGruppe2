@@ -155,7 +155,7 @@ class RemoteDataSourceAPI {
         return "";
     }
 
-    // Wish-Kriterium
+    // Wish-criteria
     /**
      * @param postPreview: The preview of the post that should be added
      * @param projectTemplate: The project template that belongs to the post as JSON
@@ -167,11 +167,11 @@ class RemoteDataSourceAPI {
         return;
     }
 
-    // Wish-Kriterium
+    // Wish-criteria
     /**
      * @param postID: The id of the post that should be removed from the server
      */
-    fun removePost(postID: Long) {
+    fun removePost(postID: Int) {
         // TODO: Implement Method
 
         return;

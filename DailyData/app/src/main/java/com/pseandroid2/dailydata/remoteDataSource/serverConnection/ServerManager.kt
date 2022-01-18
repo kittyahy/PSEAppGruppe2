@@ -24,6 +24,7 @@ import com.pseandroid2.dailydata.remoteDataSource.queue.FetchRequestQueue
 import com.pseandroid2.dailydata.remoteDataSource.queue.FetchRequestQueueObserver
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueue
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueueObserver
+import java.time.LocalDateTime
 
 class ServerManager {
     private val restAPI: RESTAPI
@@ -37,6 +38,173 @@ class ServerManager {
         fetchRequestQueue = FetchRequestQueue()
         projectCommandQueue = ProjectCommandQueue()
     }
+
+
+    // ------------------------------ServerLogic--------------------------------
+    // ----------------------------------GreetingController--------------------------------
+    /**
+     * @return Boolean: If a server connection possible return true, else return false
+     */
+    fun greet(): Boolean {
+        return restAPI.greet()
+    }
+
+    // ----------------------------------PostsController-------------------------------
+    /**
+     * @return Collection<String>: The previews of the posts (as JSONs)
+     */
+    fun getAllPostPreview(authToken: String): Collection<String> {
+        return restAPI.getAllPostsPreview(authToken)
+    }
+
+    /**
+     * @param fromPost: The id from the searched post
+     * @return Collection<String>: Returns the detailed post belonging to the post id
+     */
+    fun getPostDetail(fromPost: Int, authToken: String): Collection<String> {
+        return restAPI.getPostDetail(fromPost, authToken)
+    }
+
+    /**
+     * @param fromPost: The post from which the project template should be downloaded
+     * @return String - The requested project template as JSON
+     */
+    fun getProjectTemplate(fromPost: Int, authToken: String): String {
+        return restAPI.getProjectTemplate(fromPost, authToken)
+    }
+
+    /** Downloads one graph template that is contained by a post
+     *
+     * @param fromPost: The post from which the graph templates should be downloaded
+     * @param templateNumber: Which graph template should be downloaded from the post
+     * @return String - The requested graph template as JSON
+     */
+    fun getGraphTemplate(fromPost: Int, templateNumber: Int, authToken: String): String {
+        return restAPI.getGraphTemplate(fromPost, templateNumber, authToken)
+    }
+
+    // Wish-criteria
+    /**
+     * @param postPreview: The preview of the post that should be added
+     * @param projectTemplate: The project template that belongs to the post as JSON
+     * @param Collection<String>: The graph templates that belong to the post as JSON
+     */
+    fun addPost(postPreview: String, projectTemplate: String, graphTemplate: Collection<String>, authToken: String) {
+        return restAPI.addPost(postPreview, projectTemplate, graphTemplate, authToken)
+    }
+
+    // Wish-criteria
+    /**
+     * @param postID: The id of the post that should be removed from the server
+     */
+    fun removePost(postID: Int, authToken: String) {
+        // TODO: Implement Method
+        return restAPI.removePost(postID, authToken)
+    }
+
+    // ----------------------------------ProjectParticipantsController-------------------------------
+    /**
+     * @param userToAdd: The id of the user that should be added to the project
+     * @param projectID: The id of the project to which the user is to be added
+     */
+    fun addUser(userToAdd: String, projectID: Long, authToken: String): Boolean{
+        return restAPI.addUser(userToAdd, projectID, authToken)
+    }
+
+    /**
+     * @param userToRemove: The id of the user that sould be removed from the project
+     * @param projectID: The id of the project from which the user should be removed
+     */
+    fun removeUser(userToRemove: String, projectID: Long, authToken: String): Boolean{
+        return restAPI.removeUser(userToRemove, projectID, authToken)
+    }
+
+    /**
+     * @return LONG: Returns the id of the created project. Returns -1 if an error occured
+     */
+    fun addProject(authToken: String): Long{
+        return restAPI.addProject(authToken)
+    }
+
+    // ----------------------------------DeltaController-------------------------------
+    /**
+     * @param projectID: The id of the project to which the project command should be added
+     * @param projectCommands: The project commands that should be send to the server (as JSON)
+     * @return Collection<String>: The successfully uploaded project commands (as JSONs) // TODO: ändere dies im Entwurfsdokument
+     */
+    fun sendCommandsToServer(projectID: Long, projectCommands: Collection<String>, authToken: String): Collection<String> {
+        val successfullyUploaded: MutableList<String> = mutableListOf("")
+        //TODO: Write proper tests for this
+        projectCommands.forEach { // TODO: Maybe to this in parallel :)
+            val uploadedSuccessfully: Boolean = restAPI.saveDelta(projectID, it, authToken)
+
+            if (uploadedSuccessfully) {
+                successfullyUploaded.add(it)
+            } else {
+                return@forEach // the "break" in java
+            }
+        }
+
+        return successfullyUploaded
+    }
+
+    /**
+     * @param projectID: The id of the project whose deltas (fetchRequests) you want to load into the FetchRequestQueue
+     */
+    fun getDeltasFromServer(projectID: Long, authToken: String): Unit {
+        // TODO: Implement Method
+
+        val receivedDeltas: Collection<String> = restAPI.getDelta(projectID, authToken)
+        
+
+        return
+    }
+
+    /**
+     * @param projectCommand: The projectCommand that should be uploaded to the server (as JSON)
+     * @param forUser: The id of the user whose fetch request is answered
+     * @param initialAddedDate: // TODO
+     * @param projectID: The id of the project belonging to the project command
+     * @param wasAdmin: Was the user a project administrator when the command was created
+     */
+    fun provideOldData(projectCommand: String, forUser: String, initialAddedDate: LocalDateTime, initialAddedBy: String, projectID: Long, wasAdmin: Boolean) {
+        // TODO: Implement Method
+
+        return;
+    }
+
+    /**
+     * @param LocalDateTime: The time how long an project command can remain on the server until it gets deleted by the server
+     */
+    fun getRemoveTime(): LocalDateTime {
+        // TODO: Implement Method0
+
+        return LocalDateTime.parse("0001-01-01T00:00")
+    }
+
+    // ----------------------------------FetchRequestController-------------------------------
+    /**
+     * @param projectID: The id of the project to which the fetch request should be uploaded
+     * @param requestInfo: The fetch request as JSON
+     */
+    fun demandOldData(projectID: Long, requestInfo: String) {
+        // TODO: Implement Method
+
+        return;
+    }
+
+    /**
+     * @param projectID: The id of the project from which the fetch requests should be downloaded
+     */
+    fun getFetchRequests(projectID: Long){ // TODO: Ausgabe ist im Entwurfsheft Collection<FetchRequest>
+        // TODO: Implement Method
+
+        return;
+    }
+
+
+
+
 
 
     // -----------------------------ObserverLogic-------------------------------
@@ -80,14 +248,5 @@ class ServerManager {
      */
     fun getProjectCommandQueueLength(): Int {
         return projectCommandQueue.getQueueLength()
-    }
-
-
-    // ------------------------------ServerLogic--------------------------------
-    /**
-     * @return Boolean: If a server connection possible return true, else return false
-     */
-    fun greet(): Boolean {
-        return restAPI.greet()
     }
 }
