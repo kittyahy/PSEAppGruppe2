@@ -21,7 +21,7 @@
 package com.pseandroid2.dailydata.model.table
 
 import com.google.gson.Gson
-import com.pseandroid2.dailydata.model.User
+import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.model.database.entities.RowEntity
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import java.time.LocalDateTime
@@ -42,7 +42,7 @@ interface Table {
 
     fun getColumn(col: Int): List<Any>
 
-    fun addColumn(type: Class<Any>)
+    fun <I : Any> addColumn(type: Class<I>, default: I)
 
     fun deleteColumn(col: Int)
 
@@ -55,6 +55,10 @@ interface TableLayout {
     fun getColumnType(col: Int): Class<Any>
 
     fun getUIElements(col: Int): List<UIElement>
+
+    fun <I : Any> addColumn(type: Class<I>)
+
+    fun deleteColumn(col: Int)
 
     fun toJSON(): String
 
@@ -71,6 +75,10 @@ interface Row {
     fun getMetaData(): RowMetaData
 
     fun getSize(): Int
+
+    fun createCell(value: Any)
+
+    fun deleteCell(col: Int)
 
 }
 
