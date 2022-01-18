@@ -18,9 +18,12 @@
 
 */
 
-package com.pseandroid2.dailydata.model
+package com.pseandroid2.dailydata.model.project
 
 import android.graphics.drawable.Drawable
+import com.pseandroid2.dailydata.model.Graph
+import com.pseandroid2.dailydata.model.Settings
+import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.model.notifications.Notification
 import com.pseandroid2.dailydata.model.table.Table
 import com.pseandroid2.dailydata.model.table.TableLayout
@@ -57,8 +60,7 @@ interface Project {
 
 interface ProjectSkeleton {
 
-    fun getID(): Int
-    fun setID(id: Int)
+    var id: Int
 
     fun getOnlineId(): Long
 
