@@ -1,24 +1,16 @@
 package com.pseandroid2.dailydata.repository.viewModelInterface.communicationClasses.flows
 
-import com.pseandroid2.dailydata.DailyDataApp
-import com.pseandroid2.dailydata.model.database.daos.ProjectDataDAO
 import com.pseandroid2.dailydata.model.database.entities.ProjectData
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import io.mockk.every
-import io.mockk.mockk
+import com.pseandroid2.dailydata.repository.viewModelInterface.communicationClasses.ProjectPreview
 import junit.framework.TestCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import javax.inject.Singleton
 
 class ProjectPreviewFlowTest : TestCase() {
 
@@ -29,17 +21,27 @@ class ProjectPreviewFlowTest : TestCase() {
     @After
     public override fun tearDown() {}
 
+
+    @InternalCoroutinesApi
     @ExperimentalCoroutinesApi
     @Test
     fun testGetProjectPreviewFlow() = runTest(){
-        val projectPreviewFlow = ProjectPreviewFlow()
+        val list = ArrayList<ProjectData>()
+        val projectDataFlow = MutableSharedFlow<List<ProjectData>>()
+        val projectPreviewFlow = ProjectPreviewFlow(projectDataFlow)
         val flow = projectPreviewFlow.getProjectPreviewFlow()
         launch {
-            flow.collect{ it ->}
+            flow.collect{ it -> println(it.size)}
+        }
+        launch {
+            for(i in 1..5){
+                list.add(ProjectData(i, "TestName", "TestDescription", i.toLong(), "TestWallpaper" ))
+                projectDataFlow.emit(list)
+            }
         }
     }
 
-    @Module
+    /*@Module
     @InstallIn(DailyDataApp::class)
     object AppDataBaseTestModule {
         @Singleton
@@ -65,6 +67,6 @@ class ProjectPreviewFlowTest : TestCase() {
 
             return projectDataDAO
         }
-    }
+    }*/
 
 }
