@@ -41,37 +41,42 @@ class ServerManager {
 
     // -----------------------------ObserverLogic-------------------------------
     /**
-     * @param observer: Der Observer, der zur FetchRequestQueue hinzugefügt werden soll
+     * @param observer: The observer that should be added to the FetchRequestQueue
      */
     fun addObserverToFetchRequestQueue(observer: FetchRequestQueueObserver) {
         fetchRequestQueue.registerObserver(observer)
     }
+
     /**
-     * @param observer: Der Observer, der von der FetchRequestQueue entfernt werden soll
+     * @param observer: The observer that should be removed from the FetchRequestQueue
      */
     fun unregisterObserverFromFetchRequestQueue(observer: FetchRequestQueueObserver) {
         fetchRequestQueue.unregisterObserver(observer)
     }
+
     /**
-     * @return INT: Die Länge der FetchRequestQueue
+     * @return INT: The length of the FetchRequestQueue
      */
     fun getFetchRequestQueueLength(): Int {
         return fetchRequestQueue.getQueueLength()
     }
+
     /**
-     * @param observer: Der Observer, der zur ProjectCommandQueue hinzugefügt werden soll
+     * @param observer: The observer that should be added to the ProjectCommandQueue
      */
     fun addObserverToProjectCommandQueue(observer: ProjectCommandQueueObserver) {
         projectCommandQueue.registerObserver(observer)
     }
+
     /**
-     * @param observer: Der Observer, der von der ProjectCommandQueue entfernt werden soll
+     * @param observer: The observer that should be removed from the ProjectCommandQueue
      */
     fun unregisterObserverFromProjectCommandQueue(observer: ProjectCommandQueueObserver) {
         projectCommandQueue.unregisterObserver(observer)
     }
+
     /**
-     * @return INT: Die Länge der ProjectCommandQueue
+     * @return INT: The length of the ProjectCommandQueue
      */
     fun getProjectCommandQueueLength(): Int {
         return projectCommandQueue.getQueueLength()
@@ -79,6 +84,9 @@ class ServerManager {
 
 
     // ------------------------------ServerLogic--------------------------------
+    /**
+     * @return Boolean: If a server connection possible return true, else return false
+     */
     fun greet(): Boolean {
         return restAPI.greet()
     }

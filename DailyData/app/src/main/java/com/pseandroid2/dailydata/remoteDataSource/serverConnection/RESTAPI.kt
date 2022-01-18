@@ -80,24 +80,16 @@ class RESTAPI {
         // https://dev.to/paulodhiambo/kotlin-and-retrofit-network-calls-2353
         // Synchrone Calls: https://futurestud.io/tutorials/retrofit-synchronous-and-asynchronous-requests
     }
-
-    // In keiner Methode muss die UserID des Nutzenden, welcher den Command sendet, mitgegeben werden, da diese durch dass Firebase authToken ablesbar ist
+    // Note: There is no need to send the User ID of the current user to the server, as this can be read from the Firebase authToken
 
     //------------------------------------- Greetings Controller -------------------------------------
     /**
-     * @return Boolean: true, wenn der Server erfolgreich erreicht werden konnte. Sonst false
+     * @return Boolean: Returns true, if the server could be successfully reached. Otherwise return false
      */
     fun greet(): Boolean {
-        var relativeURL: String = greetingController+greets
-
         val greetingCall = server.greet()
 
-        if (greetingCall.s)
-
         val greeting: String = greetingCall.execute().body() ?: ""
-
-        //TODO: VLlt als flow
-
 
         if (greeting == "hello") {
             return true
@@ -109,9 +101,7 @@ class RESTAPI {
     //------------------------------------- Posts Controller -------------------------------------
     fun getAllPostsPreview(authToken: String): Collection<String> {
         // TODO: Implement Method
-        var relativeURL: String = postsController+getAllPostsPreview
 
-        // TODO:
         //@GET(relativeURL)
         //fun fetchPosts(@Header(authToken) token: String): Call<StringRequest>
 
@@ -120,36 +110,26 @@ class RESTAPI {
 
     fun getPostDetail(fromPost: Int, authToken: String): Collection<String> {
         // TODO: Implement Method
-        var relativeURL: String = postsController+getPostDetail
-
         return mutableListOf("")
     }
 
     fun getProjectTemplate(fromPost: Int, authToken: String): String {
         // TODO: Implement Method
-        var relativeURL: String = postsController+getProjectTemplate
-
         return ""
     }
 
     fun getGraphTemplate(fromPost: Int, templateNumber: Int, authToken: String): String {
         // TODO: Implement Method
-        var relativeURL: String = postsController+getGraphTemplate
-
         return ""
     }
 
     fun addPost (postPreview: String, userID: String, projectTemplate: String, graphTemplate: Collection<String>, authToken: String) {
         // TODO: Implement Method
-        var relativeURL: String = postsController+addPost
-
         return
     }
 
     fun removePost (postID: Int, userID: String, authToken: String) {
         // TODO: Implement Method
-        var relativeURL: String = postsController+removePost
-
         return
     }
 
@@ -157,22 +137,16 @@ class RESTAPI {
     //------------------------------------- ProjectParticipantsController -------------------------------------
     fun addUser(userID: String, projectId: Long, authToken: String): Boolean {
         // TODO: Implement Method
-        var relativeURL: String = projectParticipantsController+addUser
-
         return false
     }
 
     fun removeUser(userToRemove: String, projectID: Long, userID: String, authToken: String): Boolean {
         // TODO: Implement Method
-        var relativeURL: String = projectParticipantsController+removeUser
-
         return false
     }
 
     fun addProject(userID: String, authToken: String): Long {
         // TODO: Implement Method
-        var relativeURL: String = projectParticipantsController+addProject
-
         return -1
     }
 
@@ -180,43 +154,33 @@ class RESTAPI {
     //------------------------------------- Delta Controller -------------------------------------
     fun saveDelta(projectID: Long, projectCommand: String, userID: String, authToken: String) {
         // TODO: Implement Method
-        var relativeURL: String = deltaController+saveDelta
-
         return
     }
 
     fun getDelta(projectID: Long, userID: String, authToken: String): Collection<String> {
         // TODO: Implement Method
-        var relativeURL: String = deltaController+getDelta
-
         return mutableListOf("")
     }
 
     fun providedOldData(projectCommand: String, forUser: String, initialAdded: LocalDateTime, initialAddedBy: String, projectID: Long, wasAdmin: Boolean, authToken: String) {
         // TODO: Implement Method
-        var relativeURL: String = deltaController+providedOldData
-
         return
     }
 
     // TODO: Wahrscheinlich ist das hier nicht LocalDateTime -> Überprüfen
     fun getRemoveTime(authToken: String): LocalDateTime {
         // TODO: Implement Method
-        var relativeURL: String = deltaController+getRemoveTime
-
         return LocalDateTime.parse("0001-01-01T00:00")
     }
 
     //------------------------------------- FetchRequestController -------------------------------------
     fun demandOldData(userID: String, projectID: Long, requestInfo: String, authToken: String) {
         // TODO: Implement Method
-        var relativeURL: String = fetchRequestController+demandOldData
         return
     }
 
     fun getFetchRequests(userID: String, projectID: Long, authToken: String): Collection<String> {
         // TODO: Implement Method
-        var relativeURL: String = fetchRequestController+getFetchRequests
         return mutableListOf("")
     }
 }

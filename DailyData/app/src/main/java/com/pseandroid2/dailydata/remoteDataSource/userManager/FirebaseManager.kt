@@ -45,7 +45,7 @@ class FirebaseManager {
     }
 
     /**
-     * Erzeugt ein neues Firebase Authentifizierungs-Token
+     * Creates a new firebase authentication Token
      */
     private fun refreshIdToken() {
         val user: FirebaseUser? = auth.currentUser // TODO continue here
@@ -76,8 +76,8 @@ class FirebaseManager {
     }
 
     /**
-     * @param eMail: Die E-Mail des zu registrierenden Nutzenden
-     * @param password: Das Passwort des zu registrierenden Nutzenden
+     * @param eMail: The email of the user that should be registered
+     * @param password: The password of the user that should be registered
      */
     fun registerUserWithEmailAndPassword(email: String, password: String): FirebaseReturnOptions {
         if (email == "" || password == "") {
@@ -107,8 +107,8 @@ class FirebaseManager {
     }
 
     /**
-     * @param eMail: Die E-Mail des anzumeldenden Nutzenden
-     * @param password: Das Passwort des anzumeldenden Nutzenden
+     * @param eMail: The email of the user that should be signed in
+     * @param password: The password of the user that should be signed in
      */
     fun signInWithEmailAndPassword(email: String, password: String): FirebaseReturnOptions { // TODO: Baue Tests, sodass valide Eingabe Parameter da sind (email und password valide und != 0)
         if (email == "" || password == "") {
@@ -137,7 +137,7 @@ class FirebaseManager {
     }
 
     /**
-     * @return FirebaseReturnOptions: Der Erfolgstatus der Anfrage
+     * @return FirebaseReturnOptions: The success status of the request
      */
     fun signOut(): FirebaseReturnOptions {
         auth.signOut()
@@ -148,19 +148,8 @@ class FirebaseManager {
     }
 
     /**
-     * @return String: Die Firebase_ID des angemeldeten Nutzenden. Wenn kein Nutzender angemeldet ist wird "" zurückgegeben
+     * @return String: The firebase ID of the signed in user. If no user is signed in return ""
      */
-    fun getUser(): FirebaseUser? {
-        return auth.currentUser
-    }
-
-    /**
-     * @return String: Das FirebaseToken des angemeldeten Nutzenden, falls vorhanden. Wenn kein Nutzender angemeldet ist wird "" zurückgegeben
-     */
-    fun getToken(): String{
-        return idToken
-    }
-
     fun getUserID(): String {
         if (auth.currentUser == null) {
             return ""
@@ -169,10 +158,10 @@ class FirebaseManager {
     }
 
     /**
-     * @return String: Der Nutzername des angemeldeten Nutzenden. Wenn kein Nutzender angemeldet ist wird "" zurückgegeben
+     * @return String: The username of the signed in user. If no user is signed in return ""
      */
     fun getUserName(): String {
-        val user = getUser()
+        val user = auth.currentUser
         if (user == null || user.displayName == null) {
             return ""
         }
@@ -180,10 +169,10 @@ class FirebaseManager {
     }
 
     /**
-     * @return String: Die EMail des angemeldeten Nutzenden, falls vorhanden. Wenn kein Nutzender angemeldet ist wird "" zurückgegeben
+     * @return String: The email of the signed in user (if existing). If no user is signed in return ""
      */
     fun getUserEMail(): String {
-        val user = getUser()
+        val user = auth.currentUser
         if (user == null || user.email == null) {
             return ""
         }
@@ -191,13 +180,20 @@ class FirebaseManager {
     }
 
     /**
-     * @return String: Die Url des Nutzerfoto des angemeldeten Nutzenden, falls vorhanden. Wenn kein Nutzender angemeldet ist wird "" zurückgegeben
+     * @return String: The photoURL of the signed in user (if existing). If no user is signed in return ""
      */
     fun getUserPhotoUrl(): String {
-        val user = getUser()
+        val user = auth.currentUser
         if (user == null || user.photoUrl == null) {
             return ""
         }
         return user.photoUrl.toString() // TODO, prüfe ob das richtig ist
+    }
+
+    /**
+     * @return String: The token of the signed in user. If no user is signed in return ""
+     */
+    fun getToken(): String{
+        return idToken
     }
 }

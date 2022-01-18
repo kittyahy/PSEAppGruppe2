@@ -1,6 +1,7 @@
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection
 
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandInfo
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.AddPostParameter
 
 import retrofit2.Call
 import retrofit2.http.Body
@@ -26,31 +27,28 @@ interface ServerEndpoints
     fun greet(): Call<String>
 
 
-    /*
     // Post Controller
     @GET("/Posts"+"/allPreview")
-    fun getAllPostPreview(@Header String token): List<String>
+    fun getAllPostPreview(@Body param: RequestParameter): List<String>
 
     @GET("/Posts"+"/detail/{post}")
     fun getPostDetail(@Path("post") fromPost: Int,
-                      @RequestHeader token: String): List<String>
+                      @Body param: RequestParameter): List<String>
 
     @GET("/Posts"+"/{post}/projectTemplate")
     fun getProjectTemplate(@Path("post") fromPost: Int,
-                           @RequestHeader token: String): String
+                           @Body param: RequestParameter): String
 
     @GET("/Posts"+"/{post}/{template}")
     fun getGraphTemplate(@Path("post") fromPost: Int, @Path("template") templateNumber: Int,
-                         @RequestHeader token: String)
+                         @Body param: RequestParameter)
 
     @POST("/Posts"+"/add")
-    fun addPost(@RequestHeader token: String, @RequestParam postPreview: String, @RequestParam projectTemplate: String, @RequestParam graphTemplates: List<String>)
+    fun addPost(@Body params: AddPostParameter)
 
     @DELETE("/Posts"+"/remove/{post}")
     fun removePost(@Path("post") postID: String,
-                   @RequestHeader token: String,)
-
-     */
+                   @Body param: RequestParameter)
 
     // ProjectParticipantsController
     @GET("/OnlineDatabase"+"/addUser/{id}")
