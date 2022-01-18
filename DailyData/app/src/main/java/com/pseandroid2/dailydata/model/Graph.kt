@@ -21,6 +21,8 @@
 package com.pseandroid2.dailydata.model
 
 import android.graphics.drawable.Drawable
+import com.pseandroid2.dailydata.model.project.Project
+import com.pseandroid2.dailydata.model.users.User
 
 interface Graph {
     var id: Int
@@ -35,7 +37,7 @@ interface Graph {
 
     fun getType(): GraphType
 
-    fun getCalculationFunction(): Project.DataTransformation<Any>
+    fun getCalculationFunction(): Project.DataTransformation<out Any, out Any>
 
 }
 
