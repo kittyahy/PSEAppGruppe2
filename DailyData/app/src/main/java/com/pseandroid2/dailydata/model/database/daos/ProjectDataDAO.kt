@@ -24,11 +24,11 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import com.pseandroid2.dailydata.model.User
 import com.pseandroid2.dailydata.model.database.entities.MissingSlotEntity
 import com.pseandroid2.dailydata.model.database.entities.ProjectData
 import com.pseandroid2.dailydata.model.database.entities.ProjectEntity
 import com.pseandroid2.dailydata.model.database.entities.ProjectUserMap
+import com.pseandroid2.dailydata.model.users.User
 import kotlinx.coroutines.flow.Flow
 
 @Dao

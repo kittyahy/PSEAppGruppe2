@@ -22,17 +22,16 @@ package com.pseandroid2.dailydata.model.database.daos
 
 
 import androidx.room.withTransaction
-import com.google.gson.Gson
 import com.pseandroid2.dailydata.model.Graph
-import com.pseandroid2.dailydata.model.Project
-import com.pseandroid2.dailydata.model.ProjectSkeleton
-import com.pseandroid2.dailydata.model.ProjectTemplate
-import com.pseandroid2.dailydata.model.User
+import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.model.database.entities.ProjectEntity
 import com.pseandroid2.dailydata.model.database.entities.ProjectSkeletonEntity
 import com.pseandroid2.dailydata.model.database.entities.ProjectTemplateEntity
 import com.pseandroid2.dailydata.model.notifications.Notification
+import com.pseandroid2.dailydata.model.project.Project
+import com.pseandroid2.dailydata.model.project.ProjectSkeleton
+import com.pseandroid2.dailydata.model.project.ProjectTemplate
 import com.pseandroid2.dailydata.model.table.TableLayout
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.util.SortedIntListUtil
@@ -61,7 +60,7 @@ class ProjectCDManager private constructor(
      */
     suspend fun insertProject(project: Project): Project = db.withTransaction() {
         val newID: Int = insertProjectEntity(project)
-        project.getProjectSkeleton().setID(newID)
+        project.getProjectSkeleton().id = newID
 
         for (graph: Graph in project.getProjectSkeleton().getGraphs()) {
             val newGraphId: Int = graphManager.insertGraph(newID, graph)
@@ -95,7 +94,8 @@ class ProjectCDManager private constructor(
      * @param project The project that is to be deleted
      */
     suspend fun deleteProject(project: Project) = db.withTransaction {
-        val id = project.getProjectSkeleton().getID()
+        val id = project.getProjectSkeleton().id
+        @Suppress("Deprecation")
         graphDAO.deleteAllGraphs(id)
 
         notifDAO.deleteAllNotifications(id)
@@ -125,7 +125,7 @@ class ProjectCDManager private constructor(
      * @param template The template that is to be deleted
      */
     suspend fun deleteProjectTemplate(template: ProjectTemplate) {
-        templateDAO.deleteProjectTemplateById(template.getProjectSkeleton().getID())
+        templateDAO.deleteProjectTemplateById(template.getProjectSkeleton().id)
     }
 
     private fun isTemplate(id: Int): Boolean {
