@@ -22,9 +22,9 @@ package com.pseandroid2.dailydata.model.database
 
 import androidx.room.TypeConverter
 import com.pseandroid2.dailydata.model.GraphType
-import com.pseandroid2.dailydata.model.Project
 import com.pseandroid2.dailydata.model.uielements.UIElementType
-import com.pseandroid2.dailydata.model.User
+import com.pseandroid2.dailydata.model.users.User
+import com.pseandroid2.dailydata.model.project.Project
 import java.time.LocalDateTime
 
 class DateTimeConversion {
@@ -53,12 +53,12 @@ class UserConversion {
 
 class TransformationConversion {
     @TypeConverter
-    fun traFoToString(transformation: Project.DataTransformation<Any>): String {
+    fun traFoToString(transformation: Project.DataTransformation<out Any, out Any>): String {
         return ""
     }
 
     @TypeConverter
-    fun stringToTraFo(trafoString: String): Project.DataTransformation<Any> {
+    fun stringToTraFo(trafoString: String): Project.DataTransformation<out Any, out Any> {
         TODO()
     }
 }
