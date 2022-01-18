@@ -24,6 +24,7 @@ import android.graphics.drawable.Drawable
 import com.pseandroid2.dailydata.model.notifications.Notification
 import com.pseandroid2.dailydata.model.table.Table
 import com.pseandroid2.dailydata.model.table.TableLayout
+import com.pseandroid2.dailydata.model.transformation.TransformationFunction
 
 /**
  * Contains all data of one specific Project
@@ -43,9 +44,12 @@ interface Project {
 
     fun getUsers(): Collection<User>
 
-    abstract class DataTransformation<O>(private val table: Table) {
+    abstract class DataTransformation<O : Any, D : Any>(
+        private val table: Table,
+        private val function: TransformationFunction<O, out Any, D>
+    ) {
 
-        abstract fun recalculate(): List<Any>
+        abstract fun recalculate(): List<D>
 
     }
 
