@@ -17,23 +17,38 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
-package com.pseandroid2.dailydataserver;
+package com.pseandroid2.dailydataserver.onlineDatabase;
 
-import org.springframework.stereotype.Component;
+import java.io.Serializable;
+import java.util.Objects;
 
 /**
- * Logic for greeting
+ * #TODO JavaDoc
  */
-@Component
-public class ServerGreetings {
 
-    /**
-     * returns a greeting String, with length > 0.
-     *
-     * @return the recommended String
-     */
-    public String greeting(){
-        return "Hello";
+public class ProjectParticipantsID implements Serializable {
+    private String user;
+    private long project;
+
+
+    public ProjectParticipantsID(String user, long project) {
+        this.user = user;
+        this.project = project;
+    }
+
+    public ProjectParticipantsID() {
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if (this == o) return true;
+        if (o== null || this.getClass()!= o.getClass()) return false;
+        ProjectParticipantsID proPaId =(ProjectParticipantsID) o;
+        return user.equals(proPaId.user) && proPaId.project == project;
+    }
+
+    @Override
+    public int hashCode(){
+        return Objects.hash(project,user);
     }
 }
-

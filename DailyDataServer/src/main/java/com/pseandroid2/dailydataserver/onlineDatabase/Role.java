@@ -17,23 +17,14 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
-package com.pseandroid2.dailydataserver;
-
-import org.springframework.stereotype.Component;
+package com.pseandroid2.dailydataserver.onlineDatabase;
 
 /**
- * Logic for greeting
+ * #TODO JavaDoc
  */
-@Component
-public class ServerGreetings {
 
-    /**
-     * returns a greeting String, with length > 0.
-     *
-     * @return the recommended String
-     */
-    public String greeting(){
-        return "Hello";
-    }
+public enum Role {
+
+    PARTICIPANT,
+    ADMIN
 }
-

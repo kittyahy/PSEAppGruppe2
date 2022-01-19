@@ -19,21 +19,24 @@
 */
 package com.pseandroid2.dailydataserver;
 
+import com.pseandroid2.dailydataserver.onlineDatabase.AccessToProjectInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-/**
- * Logic for greeting
- */
 @Component
-public class ServerGreetings {
+public class GeneralConfig implements WebMvcConfigurer {
 
-    /**
-     * returns a greeting String, with length > 0.
-     *
-     * @return the recommended String
-     */
-    public String greeting(){
-        return "Hello";
+    @Autowired
+    private LoginInterceptor loginInterceptor;
+
+    @Autowired
+    private AccessToProjectInterceptor accessToProjectInterceptor;
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry){
+        registry.addInterceptor(loginInterceptor).excludePathPatterns("/greet");
+        registry.addInterceptor(accessToProjectInterceptor).addPathPatterns("/OnlineDatabase/*").excludePathPatterns("/OnlineDatabase/Delta/time");
     }
 }
-

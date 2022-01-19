@@ -17,23 +17,24 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
-package com.pseandroid2.dailydataserver;
+package com.pseandroid2.dailydataserver.onlineDatabase;
 
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
- * Logic for greeting
+ * #TODO javadoc,Test, implemetierung
  */
 @Component
-public class ServerGreetings {
+public class AccessToProjectInterceptor implements HandlerInterceptor {
 
-    /**
-     * returns a greeting String, with length > 0.
-     *
-     * @return the recommended String
-     */
-    public String greeting(){
-        return "Hello";
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        return HandlerInterceptor.super.preHandle(request, response, handler);
+
+        //has to check, if the user can access the project.
     }
 }
-
