@@ -27,9 +27,9 @@ import androidx.compose.ui.graphics.painter.Painter
 data class TableColumn(val id : Int, val name: String, val unit : String, val dataType : DataType)
 data class TableButton(val id : Int, val name: String, val column : TableColumn, val value : Int)
 data class Notification(val message : String, val time : String)
-data class Row(var elements : List<String>)
-data class Data(var columns: List<String>, var rows: List<Row>)
+data class TableRow(var elements : List<String>)
 
+data class ProjectMember(val id : Int, val name : String)
 data class GraphTemplate(val title : String, val image : Int)
 data class ProjectTemplate(val title : String, val image : Int, val graphTemplates: List<GraphTemplate>)
 
@@ -49,10 +49,10 @@ enum class DataType(val representation : String) {
 
 }
 
-enum class Wallpapers(val value : Color) {
-    ORANGE(Color(0xFFF57C00)),
-    GREEN(Color(0xFF388E3C)),
-    BLUE(Color(0xFF2196F3))
+enum class Wallpapers(val value : Color, val representation: String) {
+    ORANGE(Color(0xFFF57C00), "Orange"),
+    GREEN(Color(0xFF388E3C), "Green"),
+    BLUE(Color(0xFF2196F3), "Blue")
 }
 
 enum class Graphs(val representation: String) {

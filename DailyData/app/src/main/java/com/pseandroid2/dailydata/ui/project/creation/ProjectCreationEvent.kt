@@ -49,4 +49,8 @@ sealed class ProjectCreationEvent {
     data class OnShowNotificationDialog(val isOpen : Boolean) : ProjectCreationEvent()
     data class OnShowGraphDialog(val isOpen : Boolean) : ProjectCreationEvent()
 
+    data class OnShowBackDialog(val isOpen : Boolean) : ProjectCreationEvent()
+
+    object OnNavigateBack : ProjectCreationEvent()
+
 }
