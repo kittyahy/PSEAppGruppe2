@@ -20,16 +20,14 @@
 
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection
 
-import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerEndpoints
-import com.pseandroid2.dailydata.model.GraphTemplate
-import com.pseandroid2.dailydata.model.ProjectTemplate
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.AddPostParameter
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.RequestParameter
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.Delta
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
+import retrofit2.Call
 import java.time.LocalDateTime
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Header
 
 class RESTAPI {
     private var baseUrl: String = "http://myserver.com/server/" // TODO: Die URL unseres Servers verwenden
@@ -75,7 +73,7 @@ class RESTAPI {
             .build();
             //.create(ServerEndpoints)
 
-        server = retrofit.create(ServerEndpoints::class.java)
+        server = retrofit.create(ServerEndpoints::class.java) // TODO: Wahrscheinlich ist das .java hier falsch
 
         // Create Services // TODO mal schauen, ob ich das brauche
         // https://square.github.io/retrofit/
@@ -84,12 +82,16 @@ class RESTAPI {
     }
     // Note: There is no need to send the User ID of the current user to the server, as this can be read from the Firebase authToken
 
+    // TODO: Bei alles Tests prüfen wie man nach Fehlern sucht
+
+
+
     //------------------------------------- Greetings Controller -------------------------------------
     /**
      * @return Boolean: Returns true, if the server could be successfully reached. Otherwise return false
      */
     fun greet(): Boolean {
-        val greetingCall = server.greet()
+        val greetingCall: Call<String> = server.greet()
 
         val greeting: String = greetingCall.execute().body() ?: ""
 
@@ -102,45 +104,58 @@ class RESTAPI {
 
     //------------------------------------- Posts Controller -------------------------------------
     fun getAllPostsPreview(authToken: String): Collection<String> {
-        // TODO: Implement Method
+        val param: RequestParameter = RequestParameter(token = authToken)
+        val call: Call<List<String>> = server.getAllPostPreview(param)
 
-        //@GET(relativeURL)
-        //fun fetchPosts(@Header(authToken) token: String): Call<StringRequest>
-
-        return mutableListOf("")
+        return call.execute().body() ?: emptyList()
     }
 
     fun getPostDetail(fromPost: Int, authToken: String): Collection<String> {
-        // TODO: Implement Method
-        return mutableListOf("")
+        val params: RequestParameter = RequestParameter(token = authToken)
+        val call: Call<List<String>> = server.getPostDetail(fromPost, params)
+
+        return call.execute().body() ?: emptyList()
     }
 
     fun getProjectTemplate(fromPost: Int, authToken: String): String {
-        // TODO: Implement Method
-        return ""
+        val params: RequestParameter = RequestParameter(token = authToken)
+        val call: Call<String> = server.getProjectTemplate(fromPost, params)
+
+        return call.execute().body() ?: ""
     }
 
     fun getGraphTemplate(fromPost: Int, templateNumber: Int, authToken: String): String {
-        // TODO: Implement Method
-        return ""
+        val params: RequestParameter = RequestParameter(token = authToken)
+        val call: Call<String> = server.getGraphTemplate(fromPost, templateNumber, params)
+
+        return call.execute().body() ?: ""
     }
 
     // Wish-criteria
     fun addPost (postPreview: String, projectTemplate: String, graphTemplate: Collection<String>, authToken: String) {
-        // TODO: Implement Method
-        return
+        val params: AddPostParameter = AddPostParameter(authToken, postPreview, projectTemplate, graphTemplate)
+        val call: Call<Unit> = server.addPost(params)
+
+        call.execute().body()
     }
 
     // Wish-criteria
     fun removePost (postID: Int, authToken: String) {
-        // TODO: Implement Method
-        return
+        val param: RequestParameter = RequestParameter(token = authToken)
+        val call: Call<Unit> = server.removePost(postID, param)
+
+        call.execute().body()
     }
 
 
     //------------------------------------- ProjectParticipantsController -------------------------------------
     fun addUser(userID: String, projectId: Long, authToken: String): Boolean {
-        // TODO: Implement Method
+        val params: RequestParameter = RequestParameter(token = authToken)
+    //TODO: IMPLEMENT
+
+    //val call: Call<String> = server.addUser(userID, )
+
+        //return call.execute().body() ?: false
         return false
     }
 

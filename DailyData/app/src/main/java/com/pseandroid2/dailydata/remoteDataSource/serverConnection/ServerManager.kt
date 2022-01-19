@@ -102,7 +102,6 @@ class ServerManager @Inject constructor(private val restapi: RESTAPI) {
      * @param postID: The id of the post that should be removed from the server
      */
     fun removePost(postID: Int, authToken: String) {
-        // TODO: Implement Method
         return restAPI.removePost(postID, authToken)
     }
 
@@ -144,7 +143,7 @@ class ServerManager @Inject constructor(private val restapi: RESTAPI) {
         runBlocking { // this: CoroutineScope TODO: Test if this is ok
             projectCommands.forEach { // Calls saveDelta in parallel
                 // Send each project command in parallel
-                val job = launch { // TODO: Vllt ohne Lifecycle Scope
+                val job = launch {
                     val uploadedSuccessfully: Boolean = restAPI.saveDelta(projectID, it, authToken)
 
                     if (uploadedSuccessfully) {

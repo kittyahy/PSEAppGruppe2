@@ -22,6 +22,7 @@ interface ServerEndpoints
 {
     //TODO: Alle URLs sind noch Platzhalter, bis wir endgültige vom Server bekommen
     //TODO: Prüfe ob Rückgabe typen nullable sein können
+
     // Greeting Controller
     @GET("greet")
     fun greet(): Call<String>
@@ -29,63 +30,63 @@ interface ServerEndpoints
 
     // Post Controller
     @GET("/Posts"+"/allPreview")
-    fun getAllPostPreview(@Body param: RequestParameter): List<String>
+    fun getAllPostPreview(@Body param: RequestParameter): Call<List<String>>
 
     @GET("/Posts"+"/detail/{post}")
     fun getPostDetail(@Path("post") fromPost: Int,
-                      @Body param: RequestParameter): List<String>
+                      @Body param: RequestParameter): Call<List<String>>
 
     @GET("/Posts"+"/{post}/projectTemplate")
     fun getProjectTemplate(@Path("post") fromPost: Int,
-                           @Body param: RequestParameter): String
+                           @Body param: RequestParameter): Call<String>
 
     @GET("/Posts"+"/{post}/{template}")
     fun getGraphTemplate(@Path("post") fromPost: Int, @Path("template") templateNumber: Int,
-                         @Body param: RequestParameter)
+                         @Body param: RequestParameter): Call<String>
 
     @POST("/Posts"+"/add")
-    fun addPost(@Body params: AddPostParameter)
+    fun addPost(@Body params: AddPostParameter): Call<Unit>
 
     @DELETE("/Posts"+"/remove/{post}")
-    fun removePost(@Path("post") postID: String,
-                   @Body param: RequestParameter)
+    fun removePost(@Path("post") postID: Int,
+                   @Body param: RequestParameter): Call<Unit>
 
     // ProjectParticipantsController
     @GET("/OnlineDatabase"+"/addUser/{id}")
     fun addUser(@Path("id") projectId: Long,
-                @Body param: RequestParameter): Boolean
+                @Body param: RequestParameter): Call<Boolean>
 
     @DELETE("/OnlineDatabase"+"/removeUser/{id}")
     fun removeUser(@Path("id") projectId: Long,
-                   @Body param: RequestParameter): Boolean
+                   @Body param: RequestParameter): Call<Boolean>
 
     @POST("/OnlineDatabase"+"/newProject")
-    fun addProject(@Body param: RequestParameter): Long
+    fun addProject(@Body param: RequestParameter): Call<Long>
 
 
     // DeltaController
     @POST("/OnlineDatabase/Delta"+"/save/{projectId}")
     suspend fun saveDelta(@Path("projectId") projectId: ProjectCommandInfo,
-                  @Body saveDeltaParameter: SaveDeltaParameter)
+                  @Body saveDeltaParameter: SaveDeltaParameter): Call<Unit>
 
     @GET("/OnlineDatabase/Delta"+"/get/{projectId}")
     fun getDelta(@Path("projectID") projectId: Long,
-                 @Body requestParameter: RequestParameter): MutableList<Delta>
+                 @Body requestParameter: RequestParameter): Call<MutableList<Delta>>
 
     @POST("/OnlineDatabase/Delta"+"/provide/{projectId}")
-    suspend fun provideOldData(@Path(value = "projectID") projectId: Long,
-                       @Body params: ProvideOldDataParameter)
+    fun provideOldData(@Path(value = "projectID") projectId: Long,
+                       @Body params: ProvideOldDataParameter): Call<Unit>
 
     @GET("/OnlineDatabase/Delta"+"/time")
-    fun getRemoveTime(@Body param: RequestParameter)
+    fun getRemoveTime(@Body param: RequestParameter): Call<Unit>
 
 
     // FetchRequestController
     @GET("/OnlineDatabase/request"+"/need/{id}")
     fun demandOldData(@Path("id") projectID: Long,
-                      @Body param: DemandOldDataParameter)
+                      @Body param: DemandOldDataParameter): Call<Unit>
 
     @GET("/OnlineDatabase/request"+"/provide/{id}")
     fun getFetchRequest(@Path("id") projectId: Long,
-                        @Body param: RequestParameter): List<FetchRequest>
+                        @Body param: RequestParameter): Call<List<FetchRequest>>
 }
