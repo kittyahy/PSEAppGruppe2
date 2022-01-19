@@ -35,12 +35,10 @@ class FirebaseManager {
 
     private var idToken: String = ""
 
-    private lateinit var auth: FirebaseAuth
+    // Initialize Firebase Auth
+    private var auth: FirebaseAuth = Firebase.auth
 
     init {
-        // Initialize Firebase Auth
-        auth = Firebase.auth
-
         refreshIdToken()
     }
 

@@ -27,6 +27,7 @@ import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueue
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueueObserver
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.Delta
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
+import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
 
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.joinAll
@@ -34,19 +35,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 import java.time.LocalDateTime
+import javax.inject.Inject
 
-class ServerManager {
-    private val restAPI: RESTAPI
+class ServerManager @Inject constructor(private val restapi: RESTAPI) {
+    private val restAPI: RESTAPI = restapi
 
-    private val fetchRequestQueue: FetchRequestQueue
-    private val projectCommandQueue: ProjectCommandQueue
-
-    init {
-        restAPI = RESTAPI()
-
-        fetchRequestQueue = FetchRequestQueue()
-        projectCommandQueue = ProjectCommandQueue()
-    }
+    private val fetchRequestQueue: FetchRequestQueue = FetchRequestQueue()
+    private val projectCommandQueue: ProjectCommandQueue = ProjectCommandQueue()
 
 
     // ------------------------------ServerLogic--------------------------------

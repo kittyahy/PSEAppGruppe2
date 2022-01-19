@@ -27,15 +27,11 @@ import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOpti
 import com.pseandroid2.dailydata.remoteDataSource.userManager.SignInTypes
 import com.pseandroid2.dailydata.remoteDataSource.userManager.UserAccount
 import java.time.LocalDateTime
+import javax.inject.Inject
 
-class RemoteDataSourceAPI {
-    private val userAccount: UserAccount
-    private val serverManager: ServerManager
-
-    init {
-        userAccount = UserAccount()
-        serverManager = ServerManager()
-    }
+class RemoteDataSourceAPI @Inject constructor(private val uAccount: UserAccount, private val sManager: ServerManager)  {
+    private val userAccount: UserAccount = uAccount
+    private val serverManager: ServerManager = sManager
 
 // -----------------------------FireBase-------------------------------
     // -----------------------------UserAccount-------------------------------
@@ -109,8 +105,6 @@ class RemoteDataSourceAPI {
      */
     fun connectionToServerPossible(): Boolean {
         return serverManager.greet()
-
-        return false;
     }
 
     // -----------------------------PostsController-------------------------------
@@ -118,9 +112,8 @@ class RemoteDataSourceAPI {
      * @return Collection<String>: The previews of the posts (as JSONs)
      */
     fun getAllPostPreview(): Collection<String> {
-        // TODO: Implement Method
-
-        return mutableListOf("");
+        val authToken: String = userAccount.getToken()
+        return serverManager.getAllPostPreview(authToken)
     }
 
     /**
@@ -128,9 +121,8 @@ class RemoteDataSourceAPI {
      * @return Collection<String>: Returns the detailed post belonging to the post id
      */
     fun getPostDetail(fromPost: Int): Collection<String> {
-        // TODO: Implement Method
-
-        return mutableListOf("");
+        val authToken: String = userAccount.getToken()
+        return serverManager.getPostDetail(fromPost, authToken);
     }
 
     /**
@@ -138,9 +130,8 @@ class RemoteDataSourceAPI {
      * @return String - The requested project template as JSON
      */
     fun getProjectTemplate(fromPost: Int): String { // TODO: Es existiert kein JSON Rückgabewert, lass dir was neues einfallen
-        // TODO: Implement Method
-
-        return "";
+        val authToken: String = userAccount.getToken()
+        return serverManager.getProjectTemplate(fromPost, authToken)
     }
 
     /** Downloads one graph template that is contained by a post
@@ -150,9 +141,8 @@ class RemoteDataSourceAPI {
      * @return String - The requested graph template as JSON
      */
     fun getGraphTemplate(fromPost: Int, templateNumber: Int): String {
-        // TODO: Implement Method
-
-        return "";
+        val authToken: String = userAccount.getToken()
+        return serverManager.getGraphTemplate(fromPost, templateNumber, authToken)
     }
 
     // Wish-criteria
@@ -162,9 +152,8 @@ class RemoteDataSourceAPI {
      * @param Collection<String>: The graph templates that belong to the post as JSON
      */
     fun addPost(postPreview: String, projectTemplate: String, graphTemplate: Collection<String>) {
-        // TODO: Implement Method
-
-        return;
+        val authToken: String = userAccount.getToken()
+        return serverManager.addPost(postPreview, projectTemplate, graphTemplate, authToken)
     }
 
     // Wish-criteria
@@ -172,9 +161,8 @@ class RemoteDataSourceAPI {
      * @param postID: The id of the post that should be removed from the server
      */
     fun removePost(postID: Int) {
-        // TODO: Implement Method
-
-        return;
+        val authToken: String = userAccount.getToken()
+        return serverManager.removePost(postID, authToken)
     }
 
     // -----------------------------ProjectParticipantsController-------------------------------
@@ -183,9 +171,8 @@ class RemoteDataSourceAPI {
      * @param projectID: The id of the project to which the user is to be added
      */
     fun addUser(userToAdd: String, projectID: Long): Boolean{
-        // TODO: Implement Method
-
-        return false;
+        val authToken: String = userAccount.getToken()
+        return serverManager.addUser(userToAdd, projectID, authToken)
     }
 
     /**
@@ -193,18 +180,16 @@ class RemoteDataSourceAPI {
      * @param projectID: The id of the project from which the user should be removed
      */
     fun removeUser(userToRemove: String, projectID: Long): Boolean{
-        // TODO: Implement Method
-
-        return false;
+        val authToken: String = userAccount.getToken()
+        return serverManager.removeUser(userToRemove, projectID, authToken)
     }
 
     /**
      * @return LONG: Returns the id of the created project. Returns -1 if an error occured
      */
     fun addProject(): Long{
-        // TODO: Implement Method
-
-        return -1;
+        val authToken: String = userAccount.getToken()
+        return serverManager.addProject(authToken)
     }
 
     // -----------------------------DeltaController-------------------------------
@@ -214,18 +199,16 @@ class RemoteDataSourceAPI {
      * @return Collection<String>: The successfully uploaded project commands (as JSONs) // TODO: ändere dies im Entwurfsdokument
      */
     fun sendCommandsToServer(projectID: Long, projectCommands: Collection<String>): Collection<String> {
-        // TODO: Implement Method
-
-        return mutableListOf("");
+        val authToken: String = userAccount.getToken()
+        return serverManager.sendCommandsToServer(projectID, projectCommands, authToken)
     }
 
     /**
      * @param projectID: The id of the project whose deltas (fetchRequests) you want to load into the FetchRequestQueue
      */
     fun getDeltasFromServer(projectID: Long): Unit {
-        // TODO: Implement Method
-
-        return
+        val authToken: String = userAccount.getToken()
+        return serverManager.getDeltasFromServer(projectID, authToken)
     }
 
     /**
@@ -236,18 +219,16 @@ class RemoteDataSourceAPI {
      * @param wasAdmin: Was the user a project administrator when the command was created
      */
     fun provideOldData(projectCommand: String, forUser: String, initialAddedDate: LocalDateTime, initialAddedBy: String, projectID: Long, wasAdmin: Boolean) {
-        // TODO: Implement Method
-
-        return;
+        val authToken: String = userAccount.getToken()
+        return serverManager.provideOldData(projectCommand, forUser, initialAddedDate, initialAddedBy, projectID, wasAdmin, authToken)
     }
 
     /**
      * @param LocalDateTime: The time how long an project command can remain on the server until it gets deleted by the server
      */
     fun getRemoveTime(): LocalDateTime {
-        // TODO: Implement Method0
-
-        return LocalDateTime.parse("0001-01-01T00:00")
+        val authToken: String = userAccount.getToken()
+        return serverManager.getRemoveTime(authToken)
     }
 
     // -----------------------------FetchRequestController-------------------------------
@@ -256,18 +237,16 @@ class RemoteDataSourceAPI {
      * @param requestInfo: The fetch request as JSON
      */
     fun demandOldData(projectID: Long, requestInfo: String) {
-        // TODO: Implement Method
-
-        return;
+        val authToken: String = userAccount.getToken()
+        return serverManager.demandOldData(projectID, requestInfo, authToken)
     }
 
     /**
      * @param projectID: The id of the project from which the fetch requests should be downloaded
      */
     fun getFetchRequests(projectID: Long){ // TODO: Ausgabe ist im Entwurfsheft Collection<FetchRequest>
-        // TODO: Implement Method
-
-        return;
+        val authToken: String = userAccount.getToken()
+        return serverManager.getFetchRequests(projectID, authToken)
     }
 
     // -----------------------------ObserverLogic-------------------------------

@@ -21,14 +21,11 @@
 package com.pseandroid2.dailydata.remoteDataSource.userManager
 
 import android.util.Log
+import javax.inject.Inject
 
-class UserAccount {
-    private val firebaseManager: FirebaseManager
 
-    init {
-        // Initialize FirebaseManager
-        firebaseManager = FirebaseManager()
-    }
+class UserAccount @Inject constructor(private val fm: FirebaseManager) {
+    private val firebaseManager: FirebaseManager = fm // Get the FirebaseManager via dependency injection
 
     /**
      * @param eMail: The email of the user that should be registered
