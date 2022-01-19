@@ -20,19 +20,19 @@
 
 package com.pseandroid2.dailydata.model.transformation
 
-abstract class TransformationFunction<I : Any, M : Any, O : Any>(
-    private var composition: TransformationFunction<I, out Any, M>? = Identity<I, M>(),
+abstract class TransformationFunction<M : Any, O : Any> protected constructor(
+    private var composition: TransformationFunction<out Any, M>? = Identity<List<Any>, M>(),
     private var functionString: String
 ) {
 
     companion object {
         fun <I : Any> identity() = Identity<I, I>()
 
-        fun <I : Any> sumC(cols: List<Int>) = SumColumns<I>(cols)
+        fun sumC(cols: List<Int>) = SumColumns(cols)
 
-        fun <I : Any> sumS(cols: List<Int>) = SumSingles<I>(cols)
+        fun sumS(cols: List<Int>) = SumSingles(cols)
 
-        fun fromString(functionString: String): TransformationFunction<out Any, out Any, out Any> {
+        fun parse(functionString: String): TransformationFunction<out Any, out Any> {
             var function: String = functionString.substringBefore('(')
             var args: String = function.substringAfter('|', "")
             if (args != "") {
@@ -43,27 +43,30 @@ abstract class TransformationFunction<I : Any, M : Any, O : Any>(
             var inner: String = functionString.substringAfter('(')
             inner = inner.substring(0, inner.length - 2)
 
-            val transform: TransformationFunction<out Any, out Any, out Any> = when (function) {
+            val transform: TransformationFunction<out Any, out Any> = when (function) {
                 "SUMS" -> {
                     val split = args.substring(1, args.length - 2).split(", ")
                     val cols = mutableListOf<Int>()
                     for (string in split) {
                         cols.add(string.toInt())
                     }
-                    SumSingles<Any>(cols)
+                    SumSingles(cols)
                 }
                 else -> {
                     Identity<Any, Any>()
                 }
             }
+            transform.setComposition("")
+            /*
             if (inner != "") {
-                transform.setComposition
+                transform.setComposition(parse(inner))
             }
-            return transform
+            return transform*/
+            TODO()
         }
     }
 
-    fun execute(input: List<I>): List<O> {
+    fun execute(input: List<List<Any>>): List<O> {
         val intermediate = composition?.execute(input)
         @Suppress("Unchecked_Cast")
         return calculate(intermediate ?: input as List<M>)
@@ -73,7 +76,7 @@ abstract class TransformationFunction<I : Any, M : Any, O : Any>(
         return "$functionString(${composition?.toCompleteString() ?: ""})"
     }
 
-    fun setComposition(composeWith: TransformationFunction<I, out Any, M>) {
+    fun setComposition(composeWith: TransformationFunction<out Any, M>) {
         composition = composeWith
     }
 

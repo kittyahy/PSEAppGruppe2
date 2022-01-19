@@ -20,8 +20,8 @@
 
 package com.pseandroid2.dailydata.model.transformation
 
-class SumColumns<I : Any>(private val cols: List<Int>) :
-    TransformationFunction<I, List<Int>, Int>(functionString = "SUMC|col=$cols|") {
+class SumColumns(private val cols: List<Int>) :
+    TransformationFunction<List<Int>, Int>(functionString = "SUMC|col=$cols|") {
     override fun calculate(intermediate: List<List<Int>>): List<Int> {
         val result = mutableListOf<Int>()
         for (i in cols) {
