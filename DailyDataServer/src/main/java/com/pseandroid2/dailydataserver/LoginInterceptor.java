@@ -20,20 +20,25 @@
 package com.pseandroid2.dailydataserver;
 
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
- * Logic for greeting
+ * only skalaton
+ * #TODO javadoc,Test, implemetierung
  */
 @Component
-public class ServerGreetings {
+public class LoginInterceptor implements HandlerInterceptor {
 
-    /**
-     * returns a greeting String, with length > 0.
-     *
-     * @return the recommended String
-     */
-    public String greeting(){
-        return "Hello";
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+
+        // Firebase auth
+        String name = "TODO"; // firebasetoken.getUid();
+        request.setAttribute("name",name);
+        return HandlerInterceptor.super.preHandle(request, response, handler);
+
     }
 }
-

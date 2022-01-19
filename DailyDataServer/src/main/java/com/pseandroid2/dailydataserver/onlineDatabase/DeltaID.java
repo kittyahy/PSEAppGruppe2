@@ -17,23 +17,37 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
-package com.pseandroid2.dailydataserver;
+package com.pseandroid2.dailydataserver.onlineDatabase;
 
-import org.springframework.stereotype.Component;
-
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.Objects;
 /**
- * Logic for greeting
+ * #TODO JavaDoc
  */
-@Component
-public class ServerGreetings {
+public class DeltaID  implements Serializable {
+    private LocalDateTime addedToServer;
+    private String user;
 
-    /**
-     * returns a greeting String, with length > 0.
-     *
-     * @return the recommended String
-     */
-    public String greeting(){
-        return "Hello";
+    public DeltaID(){}
+
+    public DeltaID(LocalDateTime addedToServer, String user){
+        this.addedToServer = addedToServer;
+        this.user = user;
     }
-}
 
+    @Override
+    public boolean equals(Object o){
+        if (this == o) return true;
+        if (o== null || this.getClass()!= o.getClass()) return false;
+        DeltaID deltaID =(DeltaID) o;
+        return addedToServer.equals(deltaID.addedToServer) && user.equals(deltaID.user);
+
+    }
+
+    @Override
+    public int hashCode(){
+        return Objects.hash(addedToServer,user);
+    }
+
+}

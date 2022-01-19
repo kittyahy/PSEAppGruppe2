@@ -7,27 +7,40 @@ Project starts the 3rd of January 2022
 [Implementierungsphase] starts 2022-01-03 and ends 2022-02-04
 [Implementierungsphase] is colored in lightgreen
 [Setup Git Repo] starts 2022-01-06 and ends 2022-01-10
-[Implementierungsplan erstellen] starts 2022-01-10 and lasts 2 days
-[Model Interfaces und Classes] starts 2022-01-03 and ends 2022-01-16
+[Implementierungsplan erstellen] starts 2022-01-10 and lasts 4 days
+[Model Interfaces und Classes] starts 2022-01-03 and ends 2022-01-17
 [Model Interfaces und Classes] is colored in lightblue
 [interface Project] starts 2022-01-03
+[implement Project] starts 13 days after [interface Project]'s end
 [interface Table] starts 2022-01-03
+[implement Table] starts 13 days after [interface Table]'s end
 [interface ProjectSkeleton] starts 2022-01-03
+[implement ProjectSkeleton] starts 13 days after [interface ProjectSkeleton]'s end
 [interface ProjectTemplate] starts 2022-01-03
+[implement ProjectTemplate] starts 13 days after [interface ProjectTemplate]'s end
 [interface Settings] starts 2022-01-03
+[implement Settings] starts 9 days after [interface Settings]'s end
 [interface User] starts 2022-01-03
 [class SimpleUser] starts at [interface User]'s end
 [class UIElement] starts 2022-01-03
 [enum class UIElementType] starts 2022-01-03
 [interface Table] starts 2022-01-03
 [interface TableLayout] starts 2022-01-03
+[implement TableLayout] starts 13 days after [interface TableLayout]'s end
 [interface Row] starts 2022-01-03
 [class ArrayListRow] starts at [interface Row]'s end
 [class RowMetaData] starts 2022-01-03
 [interface Notification] starts 2022-01-03
 [class TimeNotification] starts at [interface Notification]'s end
+[Test interfaces and classes] starts 3 days after [implement Project]'s end
+[Test interfaces and classes] starts 3 days after [implement Table]'s end
+[Test interfaces and classes] starts 3 days after [implement ProjectSkeleton]'s end
+[Test interfaces and classes] starts 3 days after [implement ProjectTemplate]'s end
+[Test interfaces and classes] starts 3 days after [class ArrayListRow]'s end
+[Test interfaces and classes] starts 3 days after [class TimeNotification]'s end
+[Test interfaces and classes] starts 3 days after [class SimpleUser]'s end
 
-[Entities] starts 2022-01-06 and ends 2022-01-11
+[Entities] starts 2022-01-06 and ends 2022-01-9
 [Entities] is colored in lightblue
 [class GraphEntity] starts 2022-01-06 and ends 2022-01-07
 [class GraphTemplateEntity] starts 2022-01-07
@@ -43,15 +56,23 @@ Project starts the 3rd of January 2022
 [class ProjectSettingEntity] starts 2022-01-09
 [class UIElementMap] starts 2022-01-09
 
-[DAOs] starts 2022-01-08 and ends 2022-01-15
+[DAOs] starts 2022-01-08 and ends 2022-01-20
 [DAOs] is colored in lightblue
+[DAO classes] starts 2022-01-08 and lasts 4 days
+[Test DAOs] starts 7 days after [DAO classes]'s end and lasts 2 days
+[Test DAOs] displays on same row as [DAO classes]
 
-[Type Converters] starts 2022-01-05 and ends 2022-01-13
+[Type Converters] starts 2022-01-05 and ends 2022-01-21
 [Type Converters] is colored in lightblue
+[Type Converter Classes] starts 2022-01-05 and lasts 2 days
+[Test Type Converters] starts 14 days after [Type Converter Classes]'s end
+[Test Type Converters] displays on same row as [Type Converter Classes]
 
-[Other Database Tasks] starts 2022-01-03 and ends 2022-01-20
+[Other Database Tasks] starts 2022-01-03 and ends 2022-01-25
 [Other Database Tasks] is colored in lightblue
 [class AppDataBase] starts 2022-01-03
+[Test Database] starts 18 days after [class AppDataBase]'s end and lasts 4 days
+[Test interaction with repo] starts after [Test Database]'s end and lasts 5 days
 
 
 /'Repository====================================================================================='/
@@ -90,10 +111,8 @@ Project starts the 3rd of January 2022
 
         [class ProjectHandler] starts at [CommunicationClasses]'s end
         [class PostHandler] starts at [CommunicationClasses]'s end
-        [class CommandFactory] starts at [CommunicationClasses]'s end
 
     [View Model Interface] ends at [class PostHandler]'s end
-    [View Model Interface] ends at [class CommandFactory]'s end
     [View Model Interface] ends at [CommunicationClasses]'s end
     [View Model Interface] ends at [class ProjectHandler]'s end
 
@@ -181,6 +200,9 @@ Project starts the 3rd of January 2022
             [class OldDataFetcher] starts at [class RequestOldData]'s start
             [class OldDataFetcher] ends at [class CommandUtility]'s end
         [UpToDater] ends at [class OldDataFetcher]'s end
+
+        [class CommandFactory] starts at [Commands]'s end
+    [View Model Interface] ends at [class CommandFactory]'s end
 
     [CommandCenter] ends at [class CommandUtility]'s end
     [CommandCenter] ends at [class CommandInbox]'s end

@@ -17,23 +17,35 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
-package com.pseandroid2.dailydataserver;
+package com.pseandroid2.dailydataserver.postDatabase;
 
-import org.springframework.stereotype.Component;
+import java.io.Serializable;
 
-/**
- * Logic for greeting
- */
-@Component
-public class ServerGreetings {
+public class TemplateId implements Serializable {
+    private Posts post;
+    private int templateNumber;
 
-    /**
-     * returns a greeting String, with length > 0.
-     *
-     * @return the recommended String
-     */
-    public String greeting(){
-        return "Hello";
+    public TemplateId(Posts post, int templateNumber) {
+        this.post = post;
+        this.templateNumber = templateNumber;
+    }
+
+    public TemplateId() {
+    }
+
+    public Posts getPost() {
+        return post;
+    }
+
+    public void setPost(Posts post) {
+        this.post = post;
+    }
+
+    public int getTemplateNumber() {
+        return templateNumber;
+    }
+
+    public void setTemplateNumber(int templateNumber) {
+        this.templateNumber = templateNumber;
     }
 }
-
