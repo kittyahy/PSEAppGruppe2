@@ -49,12 +49,32 @@ interface Project {
 
     fun getUsers(): Collection<User>
 
-    abstract class DataTransformation<O : Any, D : Any> private constructor(
+    fun createTransformationFromString(transformationString: String): DataTransformation<out Any>
+
+    /**
+     * @param D Type of the elements that this DataTransformation will output as DataSets
+     */
+    abstract class DataTransformation<D : Any> private constructor(
         private val table: Table,
-        private val function: TransformationFunction<O, out Any, D>
+        private val function: TransformationFunction<out Any, D>,
+        private vararg val cols: Int
     ) {
 
-        abstract fun recalculate(): List<D>
+        fun recalculate(): List<D> {
+            return function.execute(map(table))
+        }
+
+        fun toFunctionString(): String {
+            return table.getLayout().toJSON() + "|#|" + function.toCompleteString()
+        }
+
+        private fun map(table: Table): List<List<Any>> {
+            val returnList = mutableListOf<List<Any>>()
+            for (i in cols) {
+                returnList.add(table.getColumn(i))
+            }
+            return returnList
+        }
 
     }
 

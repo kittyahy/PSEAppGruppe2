@@ -46,4 +46,8 @@ class SimpleProject(
     override fun isOnline() = isOnline
 
     override fun getUsers() = users.toList()
+
+    override fun createTransformationFromString(transformationString: String): Project.DataTransformation<out Any> {
+        TODO("Not yet implemented")
+    }
 }
