@@ -27,6 +27,12 @@ import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueue
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueueObserver
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.Delta
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
+
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.joinAll
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+
 import java.time.LocalDateTime
 
 class ServerManager {
@@ -138,14 +144,21 @@ class ServerManager {
     fun sendCommandsToServer(projectID: Long, projectCommands: Collection<String>, authToken: String): Collection<String> {
         val successfullyUploaded: MutableList<String> = mutableListOf("")
         //TODO: Write proper tests for this
-        projectCommands.forEach { // TODO: Maybe to this in parallel :)
-            val uploadedSuccessfully: Boolean = restAPI.saveDelta(projectID, it, authToken)
 
-            if (uploadedSuccessfully) {
-                successfullyUploaded.add(it)
-            } else {
-                return@forEach // the "break" in java
+        val jobs: MutableList<Job> = mutableListOf<Job>()
+        runBlocking { // this: CoroutineScope TODO: Test if this is ok
+            projectCommands.forEach { // Calls saveDelta in parallel
+                // Send each project command in parallel
+                val job = launch { // TODO: Vllt ohne Lifecycle Scope
+                    val uploadedSuccessfully: Boolean = restAPI.saveDelta(projectID, it, authToken)
+
+                    if (uploadedSuccessfully) {
+                        successfullyUploaded.add(it)
+                    }
+                }
+                jobs.add(job)
             }
+            jobs.joinAll()
         }
 
         return successfullyUploaded

@@ -65,7 +65,7 @@ interface ServerEndpoints
 
     // DeltaController
     @POST("/OnlineDatabase/Delta"+"/save/{projectId}")
-    fun saveDelta(@Path("projectId") projectId: ProjectCommandInfo,
+    suspend fun saveDelta(@Path("projectId") projectId: ProjectCommandInfo,
                   @Body saveDeltaParameter: SaveDeltaParameter)
 
     @GET("/OnlineDatabase/Delta"+"/get/{projectId}")
@@ -73,7 +73,7 @@ interface ServerEndpoints
                  @Body requestParameter: RequestParameter): MutableList<Delta>
 
     @POST("/OnlineDatabase/Delta"+"/provide/{projectId}")
-    fun provideOldData(@Path(value = "projectID") projectId: Long,
+    suspend fun provideOldData(@Path(value = "projectID") projectId: Long,
                        @Body params: ProvideOldDataParameter)
 
     @GET("/OnlineDatabase/Delta"+"/time")

@@ -160,7 +160,7 @@ class RESTAPI {
      *
      * @return Boolean: True if uploaded successfully, otherwise false
      */
-    fun saveDelta(projectID: Long, projectCommand: String, authToken: String): Boolean {
+    suspend fun saveDelta(projectID: Long, projectCommand: String, authToken: String): Boolean {
         // TODO: Implement Method
         return false
     }

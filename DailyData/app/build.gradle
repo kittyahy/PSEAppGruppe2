@@ -128,4 +128,7 @@ dependencies {
 
     //drop down icon - project creation
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
+
+    //Parallel
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
 }
