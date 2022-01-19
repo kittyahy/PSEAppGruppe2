@@ -31,6 +31,36 @@ abstract class TransformationFunction<I : Any, M : Any, O : Any>(
         fun <I : Any> sumC(cols: List<Int>) = SumColumns<I>(cols)
 
         fun <I : Any> sumS(cols: List<Int>) = SumSingles<I>(cols)
+
+        fun fromString(functionString: String): TransformationFunction<out Any, out Any, out Any> {
+            var function: String = functionString.substringBefore('(')
+            var args: String = function.substringAfter('|', "")
+            if (args != "") {
+                args = args.substring(0, args.length - 2)
+                function = function.substringBefore('|')
+            }
+
+            var inner: String = functionString.substringAfter('(')
+            inner = inner.substring(0, inner.length - 2)
+
+            val transform: TransformationFunction<out Any, out Any, out Any> = when (function) {
+                "SUMS" -> {
+                    val split = args.substring(1, args.length - 2).split(", ")
+                    val cols = mutableListOf<Int>()
+                    for (string in split) {
+                        cols.add(string.toInt())
+                    }
+                    SumSingles<Any>(cols)
+                }
+                else -> {
+                    Identity<Any, Any>()
+                }
+            }
+            if (inner != "") {
+                transform.setComposition
+            }
+            return transform
+        }
     }
 
     fun execute(input: List<I>): List<O> {
