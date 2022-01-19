@@ -88,7 +88,9 @@ fun WallpaperElement(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.Top
     ){
-        Column(modifier = Modifier.size(height).wrapContentSize(Alignment.Center)) {
+        Column(modifier = Modifier
+            .size(height)
+            .wrapContentSize(Alignment.Center)) {
             Box(
                 modifier = Modifier
                     .size((height / 2))
@@ -96,6 +98,30 @@ fun WallpaperElement(
                     .background(color = color)
             )
         }
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(height)
+                .clickable(onClick = onClick),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.Start
+        ) {
+            Text(text = label)
+        }
+    }
+}
+
+@Composable
+fun ButtonElement(
+    icon : ImageVector = ImageVector.vectorResource(R.drawable.blank_icon),
+    label: String,
+    onClick: () -> Unit,
+    height: Dp = 60.dp
+) {
+    InputElement(
+        height = height,
+        icon = icon
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -134,7 +160,7 @@ fun ListInput(
                         modifier = Modifier
                             .size(height)
                             .wrapContentSize(Alignment.Center)
-                            .clickable(onClick = { onClickItem(index) } )
+                            .clickable(onClick = { onClickItem(index) })
                     ) {
                         Icon(
                             imageVector = elementIcon,
@@ -202,7 +228,6 @@ fun EnumDropDownMenu(
     value : String,
     onClick : (Int) -> Unit
 ) {
-
     var expanded by remember { mutableStateOf(false) }
     var textFieldSize by remember { mutableStateOf(Size.Zero)}
     val icon = if (expanded) Icons.Filled.ArrowDropUp else Icons.Filled.ArrowDropDown

@@ -21,6 +21,7 @@
 package com.pseandroid2.dailydata.ui.project.creation
 
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -32,7 +33,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pseandroid2.dailydata.util.ui.UiEvent
 import com.pseandroid2.dailydata.R
@@ -46,6 +46,7 @@ import kotlinx.coroutines.flow.collect
 @Composable
 fun ProjectCreationScreen(
     onNavigate: (UiEvent.Navigate) -> Unit,
+    onPopBackStack : () -> Unit,
     viewModel: ProjectCreationScreenViewModel = hiltViewModel()
 ) {
 
@@ -57,10 +58,25 @@ fun ProjectCreationScreen(
             when(event) {
                 is UiEvent.ShowToast -> Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
                 is UiEvent.Navigate -> onNavigate(event)
-                else -> { }
+                is UiEvent.PopBackStack -> onPopBackStack()
             }
         }
     }
+
+    BackHandler(enabled = true) {
+        viewModel.onEvent(ProjectCreationEvent.OnShowBackDialog(true))
+    }
+    BackDialog(
+        isOpen = viewModel.isBackDialogOpen,
+        onDismissRequest = { viewModel.onEvent(ProjectCreationEvent.OnShowBackDialog(false)) },
+        onOkClick = {
+            viewModel.onEvent(ProjectCreationEvent.OnNavigateBack)
+        },
+        onCancelClick = {
+            viewModel.onEvent(ProjectCreationEvent.OnShowBackDialog(false))
+        }
+    )
+
     Scaffold(
         floatingActionButton = {
             SaveButton(
@@ -74,7 +90,6 @@ fun ProjectCreationScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(0.dp)
                 .verticalScroll(scrollState)
         ) {
             TextInput(
@@ -96,16 +111,8 @@ fun ProjectCreationScreen(
                 isOpen = viewModel.isWallpaperDialogOpen,
                 onDismissRequest = { viewModel.onEvent(ProjectCreationEvent.OnShowWallpaperDialog(false)) },
                 onWallpaperClick = { wallpaper ->
-                    viewModel.onEvent(
-                        ProjectCreationEvent.OnWallpaperChange(
-                            wallpaper.value
-                        )
-                    )
-                    viewModel.onEvent(
-                        ProjectCreationEvent.OnShowWallpaperDialog(
-                            false
-                        )
-                    )
+                    viewModel.onEvent(ProjectCreationEvent.OnWallpaperChange(wallpaper.value))
+                    viewModel.onEvent(ProjectCreationEvent.OnShowWallpaperDialog(false))
                 }
             )
             WallpaperElement(

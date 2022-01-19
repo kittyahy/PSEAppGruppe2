@@ -48,10 +48,8 @@ fun Navigation(navController: NavHostController) {
         startDestination = Routes.PROJECT
     ) {
         composable(Routes.PROJECT) {
+            println("StateLog Navigation    :" + projectNavState.value.toString())
             ProjectScreen(
-                onNavigate = {
-                    navController.navigate(it.route)
-                },
                 navState = projectNavState
             )
         }
@@ -82,10 +80,21 @@ fun ProjectNavigation(
         navController = navController,
         startDestination = startDestination
     ) {
-        composable(Routes.CREATION) {
+        composable(
+            route = Routes.CREATION + "?projectId={projectId}",
+            arguments = listOf(
+                navArgument(name = "projectId") {
+                    type = NavType.IntType
+                    defaultValue = -1;
+                }
+            )
+        ) {
             ProjectCreationScreen(
                 onNavigate = {
                     navController.navigate(it.route)
+                },
+                onPopBackStack = {
+                    navController.popBackStack()
                 }
             )
         }
@@ -108,6 +117,9 @@ fun ProjectNavigation(
             ProjectDataScreen(
                 onNavigate = {
                     navController.navigate(it.route)
+                },
+                onPopBackStack = {
+                    navController.popBackStack()
                 }
             )
         }
@@ -118,3 +130,4 @@ fun navStateSaver(): Saver<MutableState<Bundle>, out Any> = Saver(
     save = { it.value },
     restore = { mutableStateOf(it) }
 )
+

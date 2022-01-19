@@ -1,4 +1,4 @@
-package com.pseandroid2.dailydata.ui.project.data.graph
+package com.pseandroid2.dailydata.ui.server.login
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -13,21 +13,28 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ProjectDataGraphScreenViewModel @Inject constructor() : ViewModel() {
+class LoginScreenViewModel @Inject constructor() : ViewModel() {
 
     private val _uiEvent = MutableSharedFlow<UiEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
 
-    var graphs by mutableStateOf( listOf<GraphLol>())
+    var userEmail by mutableStateOf("")
         private set
-    var isDialogOpen by mutableStateOf(false)
-        private set
-    var dialogIndex by mutableStateOf(-1)
+    var userPassword by mutableStateOf("")
         private set
 
-    fun onEvent(event : ProjectDataGraphScreenEvent) {
+    fun onEvent(event : LoginScreenEvent) {
         when (event) {
-            is ProjectDataGraphScreenEvent.OnShowGraphDialog -> {
+            is LoginScreenEvent.OnEmailChange -> {
+                userEmail = event.email
+            }
+            is LoginScreenEvent.OnPasswordChange -> {
+                userPassword = event.password
+            }
+            is LoginScreenEvent.Login -> {
+
+            }
+            is LoginScreenEvent.LoginGoogle -> {
 
             }
         }
@@ -39,5 +46,3 @@ class ProjectDataGraphScreenViewModel @Inject constructor() : ViewModel() {
         }
     }
 }
-
-data class GraphLol(val image : Int)
