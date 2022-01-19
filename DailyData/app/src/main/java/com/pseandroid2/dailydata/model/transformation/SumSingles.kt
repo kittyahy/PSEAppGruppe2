@@ -20,7 +20,8 @@
 
 package com.pseandroid2.dailydata.model.transformation
 
-class SumSingles<I : Any>(cols: List<Int>) : TransformationFunction<I, Int, Int>(functionString = "SUMS|col=$cols|") {
+class SumSingles<I : Any>(cols: List<Int>) :
+    TransformationFunction<I, Int, Int>(functionString = "SUMS|col=$cols|") {
     override fun calculate(intermediate: List<Int>): List<Int> {
         return listOf(intermediate.sum())
     }
