@@ -7,7 +7,6 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.Delta
@@ -15,8 +14,10 @@ import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns
 
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.DemandOldDataParameter
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.ProvideOldDataParameter
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.RemoveUserParameter
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.RequestParameter
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.SaveDeltaParameter
+import java.time.LocalDateTime
 
 interface ServerEndpoints
 {
@@ -45,11 +46,11 @@ interface ServerEndpoints
                          @Body param: RequestParameter): Call<String>
 
     @POST("/Posts"+"/add")
-    fun addPost(@Body params: AddPostParameter): Call<Unit>
+    fun addPost(@Body params: AddPostParameter): Call<Boolean>
 
     @DELETE("/Posts"+"/remove/{post}")
     fun removePost(@Path("post") postID: Int,
-                   @Body param: RequestParameter): Call<Unit>
+                   @Body param: RequestParameter): Call<Boolean>
 
     // ProjectParticipantsController
     @GET("/OnlineDatabase"+"/addUser/{id}")
@@ -58,7 +59,8 @@ interface ServerEndpoints
 
     @DELETE("/OnlineDatabase"+"/removeUser/{id}")
     fun removeUser(@Path("id") projectId: Long,
-                   @Body param: RequestParameter): Call<Boolean>
+                   @Body param: RemoveUserParameter
+    ): Call<Boolean>
 
     @POST("/OnlineDatabase"+"/newProject")
     fun addProject(@Body param: RequestParameter): Call<Long>
@@ -66,27 +68,27 @@ interface ServerEndpoints
 
     // DeltaController
     @POST("/OnlineDatabase/Delta"+"/save/{projectId}")
-    suspend fun saveDelta(@Path("projectId") projectId: ProjectCommandInfo,
-                  @Body saveDeltaParameter: SaveDeltaParameter): Call<Unit>
+    suspend fun saveDelta(@Path("projectId") projectId: Long,
+                  @Body saveDeltaParameter: SaveDeltaParameter): Call<Boolean>
 
     @GET("/OnlineDatabase/Delta"+"/get/{projectId}")
     fun getDelta(@Path("projectID") projectId: Long,
-                 @Body requestParameter: RequestParameter): Call<MutableList<Delta>>
+                 @Body requestParameter: RequestParameter): Call<Collection<Delta>>
 
     @POST("/OnlineDatabase/Delta"+"/provide/{projectId}")
     fun provideOldData(@Path(value = "projectID") projectId: Long,
-                       @Body params: ProvideOldDataParameter): Call<Unit>
+                       @Body params: ProvideOldDataParameter): Call<Boolean>
 
     @GET("/OnlineDatabase/Delta"+"/time")
-    fun getRemoveTime(@Body param: RequestParameter): Call<Unit>
+    fun getRemoveTime(@Body param: RequestParameter): Call<LocalDateTime>
 
 
     // FetchRequestController
     @GET("/OnlineDatabase/request"+"/need/{id}")
     fun demandOldData(@Path("id") projectID: Long,
-                      @Body param: DemandOldDataParameter): Call<Unit>
+                      @Body param: DemandOldDataParameter): Call<Boolean>
 
     @GET("/OnlineDatabase/request"+"/provide/{id}")
     fun getFetchRequest(@Path("id") projectId: Long,
-                        @Body param: RequestParameter): Call<List<FetchRequest>>
+                        @Body param: RequestParameter): Call<Collection<FetchRequest>>
 }

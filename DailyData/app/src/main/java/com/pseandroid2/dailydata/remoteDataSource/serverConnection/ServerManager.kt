@@ -92,16 +92,18 @@ class ServerManager @Inject constructor(private val restapi: RESTAPI) {
      * @param postPreview: The preview of the post that should be added
      * @param projectTemplate: The project template that belongs to the post as JSON
      * @param Collection<String>: The graph templates that belong to the post as JSON
+     * @return Boolean: Did the server call succeed
      */
-    fun addPost(postPreview: String, projectTemplate: String, graphTemplate: Collection<String>, authToken: String) {
+    fun addPost(postPreview: String, projectTemplate: String, graphTemplate: Collection<String>, authToken: String): Boolean {
         return restAPI.addPost(postPreview, projectTemplate, graphTemplate, authToken)
     }
 
     // Wish-criteria
     /**
      * @param postID: The id of the post that should be removed from the server
+     * @return Boolean: Did the server call succeed
      */
-    fun removePost(postID: Int, authToken: String) {
+    fun removePost(postID: Int, authToken: String): Boolean {
         return restAPI.removePost(postID, authToken)
     }
 
@@ -176,8 +178,9 @@ class ServerManager @Inject constructor(private val restapi: RESTAPI) {
      * @param initialAddedDate: // TODO
      * @param projectID: The id of the project belonging to the project command
      * @param wasAdmin: Was the user a project administrator when the command was created
+     * @return Boolean: Did the server call succeed
      */
-    fun provideOldData(projectCommand: String, forUser: String, initialAddedDate: LocalDateTime, initialAddedBy: String, projectID: Long, wasAdmin: Boolean, authToken: String) {
+    fun provideOldData(projectCommand: String, forUser: String, initialAddedDate: LocalDateTime, initialAddedBy: String, projectID: Long, wasAdmin: Boolean, authToken: String): Boolean {
         return restAPI.providedOldData(projectCommand, forUser, initialAddedDate, initialAddedBy, projectID, wasAdmin, authToken)
     }
 
@@ -192,8 +195,9 @@ class ServerManager @Inject constructor(private val restapi: RESTAPI) {
     /**
      * @param projectID: The id of the project to which the fetch request should be uploaded
      * @param requestInfo: The fetch request as JSON
+     * @return Boolean: Did the server call succeed
      */
-    fun demandOldData(projectID: Long, requestInfo: String, authToken: String) {
+    fun demandOldData(projectID: Long, requestInfo: String, authToken: String): Boolean {
         return restAPI.demandOldData(projectID, requestInfo, authToken)
     }
 

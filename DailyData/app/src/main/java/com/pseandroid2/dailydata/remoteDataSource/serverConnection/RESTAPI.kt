@@ -20,8 +20,13 @@
 
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection
 
+import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandInfo
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.AddPostParameter
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.DemandOldDataParameter
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.ProvideOldDataParameter
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.RemoveUserParameter
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.RequestParameter
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.SaveDeltaParameter
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.Delta
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
 import retrofit2.Call
@@ -132,41 +137,46 @@ class RESTAPI {
     }
 
     // Wish-criteria
-    fun addPost (postPreview: String, projectTemplate: String, graphTemplate: Collection<String>, authToken: String) {
+    fun addPost (postPreview: String, projectTemplate: String, graphTemplate: Collection<String>, authToken: String): Boolean {
         val params: AddPostParameter = AddPostParameter(authToken, postPreview, projectTemplate, graphTemplate)
-        val call: Call<Unit> = server.addPost(params)
+        val call: Call<Boolean> = server.addPost(params)
 
-        call.execute().body()
+        return call.execute().body() ?: false
     }
 
     // Wish-criteria
-    fun removePost (postID: Int, authToken: String) {
+    fun removePost (postID: Int, authToken: String): Boolean {
         val param: RequestParameter = RequestParameter(token = authToken)
-        val call: Call<Unit> = server.removePost(postID, param)
+        val call: Call<Boolean> = server.removePost(postID, param)
 
-        call.execute().body()
+        return call.execute().body() ?: false
     }
 
 
     //------------------------------------- ProjectParticipantsController -------------------------------------
     fun addUser(userID: String, projectId: Long, authToken: String): Boolean {
-        val params: RequestParameter = RequestParameter(token = authToken)
-    //TODO: IMPLEMENT
-
-    //val call: Call<String> = server.addUser(userID, )
+        //TODO: IMPLEMENT
+        val param: RequestParameter = RequestParameter(token = authToken)
+        //val call: Call<String> = server.addUser(userID, )
 
         //return call.execute().body() ?: false
         return false
     }
 
     fun removeUser(userToRemove: String, projectID: Long, authToken: String): Boolean {
-        // TODO: Implement Method
-        return false
+        val params: RemoveUserParameter = RemoveUserParameter(authToken, userToRemove = userToRemove, projectID = projectID)
+
+        val call: Call<Boolean> = server.removeUser(projectID, params)
+
+        return call.execute().body() ?: false
     }
 
     fun addProject(authToken: String): Long {
-        // TODO: Implement Method
-        return -1
+        val param: RequestParameter = RequestParameter(token = authToken)
+
+        val call: Call<Long> = server.addProject(param)
+
+        return call.execute().body() ?: -1
     }
 
 
@@ -176,33 +186,54 @@ class RESTAPI {
      * @return Boolean: True if uploaded successfully, otherwise false
      */
     suspend fun saveDelta(projectID: Long, projectCommand: String, authToken: String): Boolean {
-        // TODO: Implement Method
-        return false
+        val params: SaveDeltaParameter = SaveDeltaParameter(token = authToken, projectCommand)
+
+        val call: Call<Boolean> = server.saveDelta(projectID, params)
+
+        return call.execute().body() ?: false
     }
 
     fun getDelta(projectID: Long, authToken: String): Collection<Delta> {
-        // TODO: Implement Method
-        return mutableListOf<Delta>()
+        val param: RequestParameter = RequestParameter(token = authToken)
+
+        val call: Call<Collection<Delta>> = server.getDelta(projectID, param)
+
+        return call.execute().body() ?: mutableListOf<Delta>()
     }
 
-    fun providedOldData(projectCommand: String, forUser: String, initialAdded: LocalDateTime, initialAddedBy: String, projectID: Long, wasAdmin: Boolean, authToken: String) {
-        // TODO: Implement Method
-        return
+    fun providedOldData(projectCommand: String, forUser: String, initialAdded: LocalDateTime, initialAddedBy: String, projectID: Long, wasAdmin: Boolean, authToken: String): Boolean {
+        val params: ProvideOldDataParameter = ProvideOldDataParameter(authToken, projectCommand, forUser, initialAdded, initialAddedBy, wasAdmin)
+
+        val call: Call<Boolean> = server.provideOldData(projectID, params)
+
+        return call.execute().body() ?: false
     }
 
+    /**
+     * @return LocalDateTime: the requested time how long comments stay on the server before they get deleted. If an error occured returns "0001-01-01T00:00" // TODO Überprüfe grammatik
+     */
     fun getRemoveTime(authToken: String): LocalDateTime {
-        // TODO: Implement Method
-        return LocalDateTime.parse("0001-01-01T00:00")
+        val param: RequestParameter = RequestParameter(authToken)
+
+        val call: Call<LocalDateTime> = server.getRemoveTime(param)
+
+        return call.execute().body() ?: LocalDateTime.parse("0001-01-01T00:00")
     }
 
     //------------------------------------- FetchRequestController -------------------------------------
-    fun demandOldData(projectID: Long, requestInfo: String, authToken: String) {
-        // TODO: Implement Method
-        return
+    fun demandOldData(projectID: Long, requestInfo: String, authToken: String): Boolean {
+        val params: DemandOldDataParameter = DemandOldDataParameter(token = authToken, requestInfo)
+
+        val call: Call<Boolean> = server.demandOldData(projectID, params)
+
+        return call.execute().body() ?: false
     }
 
     fun getFetchRequests(projectID: Long, authToken: String): Collection<FetchRequest> {
-        // TODO: Implement Method
-        return mutableListOf<FetchRequest>()
+        val param: RequestParameter = RequestParameter(authToken)
+
+        val call: Call<Collection<FetchRequest>> = server.getFetchRequest(projectID, param)
+
+        return call.execute().body() ?: emptyList()
     }
 }

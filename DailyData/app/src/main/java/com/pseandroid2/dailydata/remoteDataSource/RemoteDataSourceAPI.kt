@@ -150,8 +150,9 @@ class RemoteDataSourceAPI @Inject constructor(private val uAccount: UserAccount,
      * @param postPreview: The preview of the post that should be added
      * @param projectTemplate: The project template that belongs to the post as JSON
      * @param Collection<String>: The graph templates that belong to the post as JSON
+     * @return Boolean: Did the server call succeed
      */
-    fun addPost(postPreview: String, projectTemplate: String, graphTemplate: Collection<String>) {
+    fun addPost(postPreview: String, projectTemplate: String, graphTemplate: Collection<String>): Boolean {
         val authToken: String = userAccount.getToken()
         return serverManager.addPost(postPreview, projectTemplate, graphTemplate, authToken)
     }
@@ -159,8 +160,9 @@ class RemoteDataSourceAPI @Inject constructor(private val uAccount: UserAccount,
     // Wish-criteria
     /**
      * @param postID: The id of the post that should be removed from the server
+     * @return Boolean: Did the server call succeed
      */
-    fun removePost(postID: Int) {
+    fun removePost(postID: Int): Boolean {
         val authToken: String = userAccount.getToken()
         return serverManager.removePost(postID, authToken)
     }
@@ -217,8 +219,9 @@ class RemoteDataSourceAPI @Inject constructor(private val uAccount: UserAccount,
      * @param initialAddedDate: // TODO
      * @param projectID: The id of the project belonging to the project command
      * @param wasAdmin: Was the user a project administrator when the command was created
+     * @return Boolean: Did the server call succeed
      */
-    fun provideOldData(projectCommand: String, forUser: String, initialAddedDate: LocalDateTime, initialAddedBy: String, projectID: Long, wasAdmin: Boolean) {
+    fun provideOldData(projectCommand: String, forUser: String, initialAddedDate: LocalDateTime, initialAddedBy: String, projectID: Long, wasAdmin: Boolean): Boolean {
         val authToken: String = userAccount.getToken()
         return serverManager.provideOldData(projectCommand, forUser, initialAddedDate, initialAddedBy, projectID, wasAdmin, authToken)
     }
@@ -235,8 +238,9 @@ class RemoteDataSourceAPI @Inject constructor(private val uAccount: UserAccount,
     /**
      * @param projectID: The id of the project to which the fetch request should be uploaded
      * @param requestInfo: The fetch request as JSON
+     * @return Boolean: Did the server call succeed
      */
-    fun demandOldData(projectID: Long, requestInfo: String) {
+    fun demandOldData(projectID: Long, requestInfo: String): Boolean {
         val authToken: String = userAccount.getToken()
         return serverManager.demandOldData(projectID, requestInfo, authToken)
     }
