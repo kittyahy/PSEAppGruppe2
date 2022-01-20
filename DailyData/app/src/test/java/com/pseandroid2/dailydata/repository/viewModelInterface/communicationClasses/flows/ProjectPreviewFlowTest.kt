@@ -1,13 +1,15 @@
 package com.pseandroid2.dailydata.repository.viewModelInterface.communicationClasses.flows
 
 import com.pseandroid2.dailydata.model.database.entities.ProjectData
-import com.pseandroid2.dailydata.repository.viewModelInterface.communicationClasses.ProjectPreview
 import junit.framework.TestCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.takeWhile
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -30,7 +32,7 @@ class ProjectPreviewFlowTest : TestCase() {
         val projectDataFlow = MutableSharedFlow<List<ProjectData>>()
         val projectPreviewFlow = ProjectPreviewFlow(projectDataFlow)
         val flow = projectPreviewFlow.getProjectPreviewFlow()
-        launch {
+        val  collectorJob = launch {
             flow.collect{ it -> println(it.size)}
         }
         launch {
@@ -38,6 +40,7 @@ class ProjectPreviewFlowTest : TestCase() {
                 list.add(ProjectData(i, "TestName", "TestDescription", i.toLong(), "TestWallpaper" ))
                 projectDataFlow.emit(list)
             }
+            collectorJob.cancel()
         }
     }
 

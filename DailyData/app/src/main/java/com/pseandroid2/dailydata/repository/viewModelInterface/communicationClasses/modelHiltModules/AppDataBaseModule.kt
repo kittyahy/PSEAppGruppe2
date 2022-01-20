@@ -11,10 +11,10 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 
-@Module
-@InstallIn(DailyDataApp::class)
+//@Module
+//@InstallIn(DailyDataApp::class)
 object AppDataBaseModule {
-    private val app: DailyDataApp
+/*    private val app: DailyDataApp
         get() {
             TODO()
         }
@@ -43,5 +43,5 @@ object AppDataBaseModule {
     @Provides
     fun provideUiElementDAO(): UIElementDAO {
         return  appDataBase.uiElementDAO()
-    }
+    }*/
 }
