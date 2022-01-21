@@ -17,18 +17,28 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
+package com.pseandroid2.dailydataserver;
 
-package com.pseandroid2.dailydata.ui.project
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
 
-import androidx.lifecycle.ViewModel
-import com.pseandroid2.dailydata.di.Repository
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-@HiltViewModel
-class ProjectScreenViewModel @Inject constructor(
-    private val repository: Repository
-) : ViewModel() {
+/**
+ * only skalaton
+ * #TODO javadoc,Test, implemetierung
+ */
+@Component
+public class LoginInterceptor implements HandlerInterceptor {
 
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
+        // Firebase auth
+        String name = "TODO"; // firebasetoken.getUid();
+        request.setAttribute("name",name);
+        return HandlerInterceptor.super.preHandle(request, response, handler);
+
+    }
 }
