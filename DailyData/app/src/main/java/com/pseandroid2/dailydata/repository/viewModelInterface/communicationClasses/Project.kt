@@ -2,17 +2,17 @@ package com.pseandroid2.dailydata.repository.viewModelInterface.communicationCla
 
 import android.graphics.drawable.Drawable
 
-data class Project(
-    override val id: Long,
-    val isOnlineProject: Boolean,
-    val isAdmin: Boolean,
-    val title: String,
-    val description: String,
-    val wallpaper: String,
-    val table: List<Column>,
-    val data: List<Row>,
-    val buttons: List<Button>,
-    val notifications: List<Notification>,
-    val graphs: List<Graph>,
-    val members: List<Member>
+class Project(
+    override val id: Long = 0,
+    val isOnlineProject: Boolean = false,
+    val isAdmin: Boolean = false,
+    val title: String = "title missing",
+    val description: String= "description missing",
+    val wallpaper: String = "wallpaper missing",
+    val table: List<Column> = ArrayList<Column>(),
+    val data: List<Row> = ArrayList<Row>(),
+    val buttons: List<Button> = ArrayList<Button>(),
+    val notifications: List<Notification> = ArrayList<Notification>(),
+    val graphs: List<Graph> = ArrayList<Graph>(),
+    val members: List<Member> = ArrayList<Member>()
 ): Identifiable
