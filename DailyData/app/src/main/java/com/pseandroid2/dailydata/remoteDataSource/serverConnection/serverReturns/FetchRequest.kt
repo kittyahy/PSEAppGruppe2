@@ -1,3 +1,6 @@
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns
 
-data class FetchRequest(val id: Int, val user: String, val project: Long, val requestInfo: String)
+data class FetchRequest(val id: Int = -1,
+                        val user: String = "",
+                        val project: Long = -1,
+                        val requestInfo: String = "")

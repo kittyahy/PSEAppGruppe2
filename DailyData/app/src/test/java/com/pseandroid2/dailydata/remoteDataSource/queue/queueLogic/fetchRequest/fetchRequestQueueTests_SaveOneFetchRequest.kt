@@ -21,6 +21,7 @@
 package com.pseandroid2.dailydata.remoteDataSource.queue.queueLogic.fetchRequest
 
 import com.pseandroid2.dailydata.remoteDataSource.queue.FetchRequestQueue
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
 
 import org.junit.Assert
 import org.junit.Test
@@ -30,7 +31,7 @@ class fetchRequestQueueTests_SaveOneFetchRequest {
     fun saveOneFetchRequest() {
         val fetchRequestQueue = FetchRequestQueue()
 
-        val fetchRequest = "fetchRequest: 1"
+        var fetchRequest = FetchRequest(requestInfo = "Fetch Request: 1")
 
         Assert.assertEquals(fetchRequestQueue.getQueueLength(), 0)
 

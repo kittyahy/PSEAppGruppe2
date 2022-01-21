@@ -22,9 +22,9 @@ package com.pseandroid2.dailydata.remoteDataSource
 
 import com.pseandroid2.dailydata.remoteDataSource.queue.FetchRequestQueueObserver
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandInfo
-import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueue
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueueObserver
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
 import com.pseandroid2.dailydata.remoteDataSource.userManager.SignInTypes
 import com.pseandroid2.dailydata.remoteDataSource.userManager.UserAccount
@@ -286,10 +286,9 @@ class RemoteDataSourceAPI @Inject constructor(private val uAccount: UserAccount,
     }
 
     /**
-     * @return String: Returns a fetchRequest as JSON if there is one in the queue. (Returns "" if the queue is empty)
+     * @return String: Returns a fetchRequest as JSON if there is one in the queue. (Returns null if the queue is empty)
      */
-    fun getFetchRequestFromQueue(): String {
-        // TODO: Implement Method
+    fun getFetchRequestFromQueue(): FetchRequest? {
         return serverManager.getFetchRequestFromQueue()
     }
 

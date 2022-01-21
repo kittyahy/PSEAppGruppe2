@@ -23,6 +23,11 @@ package com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverManage
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandInfo
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.Delta
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
+import io.mockk.coEvery
+import io.mockk.every
+import io.mockk.mockk
 import org.junit.Assert
 import org.junit.Test
 import org.mockito.Mock
@@ -39,66 +44,66 @@ internal class ServerManagerTests_RESTAPICorrectlyLinked {
     fun restAPILinked() {
         var postPreviewList: List<String> = listOf("PostPreview")
         var postDetailList: List<String> = listOf("PostDetail")
-        var deltaList: List<ProjectCommandInfo> = listOf(ProjectCommandInfo())
-        var fetchRequestList: List<String> = listOf("FetchRequest")
+        var deltaList: Collection<Delta> = listOf(Delta())
+        var fetchRequestList: Collection<FetchRequest> = listOf(FetchRequest())
 
-        var restAPI: RESTAPI = mock<RESTAPI>()
-        every { restAPI.greet() } return true
-        every { restAPI.getAllPostsPreview()} return postPreviewList
-        every { restAPI.getPostDetail()} return postDetailList
-        every { restAPI.getProjectTemplate()} return "ProjectTemplate"
-        every { restAPI.getGraphTemplate()} return "GraphTemplate"
-        every { restAPI.addPost()} return true
-        every { restAPI.removePost()} return true
-        every { restAPI.addUser()} return true
-        every { restAPI.removeUser()} return true
-        every { restAPI.addProject()} return 0
-        every { restAPI.saveDelta() } return true
-        every { restAPI.getDelta() } return deltaList
-        every { restAPI.providedOldData } return true
-        every { restAPI.getRemoveTime() } return LocalDateTime.parse("0001-01-01T00:00")
-        every { restAPI.demandOldData() } return true
-        every { restAPI.getFetchRequests() } return fetchRequestList
+        var restAPI: RESTAPI = mockk<RESTAPI>()
+        every { restAPI.greet() } returns true
+
+        every { restAPI.getAllPostsPreview("")} returns postPreviewList
+        every { restAPI.getPostDetail(1,"")} returns postDetailList
+        every { restAPI.getProjectTemplate(1, "")} returns "ProjectTemplate"
+        every { restAPI.getGraphTemplate(1, 1, "")} returns "GraphTemplate"
+        every { restAPI.addPost("", "", emptyList(), "")} returns true
+        every { restAPI.removePost(1, "")} returns true
+        every { restAPI.addUser(1, "")} returns true
+        every { restAPI.removeUser("", 1, "")} returns true
+        every { restAPI.addProject("")} returns 0
+        coEvery { restAPI.saveDelta(1, "", "") } returns true // use coEvery for mockking suspend functions
+        every { restAPI.getDelta(1, "") } returns deltaList
+        every { restAPI.providedOldData("", "", LocalDateTime.parse("0001-01-01T00:00"), "", 1, false, "") } returns true
+        every { restAPI.getRemoveTime("") } returns LocalDateTime.parse("0001-01-01T00:00")
+        every { restAPI.demandOldData(1, "", "") } returns true
+        every { restAPI.getFetchRequests(1, "") } returns fetchRequestList
 
         // Create ServerManager with mocked RestAPI
         val serverManager = ServerManager(restAPI)
-        val authToken = "";
 
         // Test if serverManager returns the expected outputs
         Assert.assertTrue(serverManager.greet())
 
-        Assert.assertEquals("PostPreview", serverManager.getAllPostPreview(authToken).elementAt(0))
+        Assert.assertEquals("PostPreview", serverManager.getAllPostPreview("").elementAt(0))
 
-        Assert.assertEquals("PostDetail", serverManager.getPostDetail(1, authToken).elementAt(0))
+        Assert.assertEquals("PostDetail", serverManager.getPostDetail(1, "").elementAt(0))
 
-        Assert.assertEquals("ProjectTemplate", serverManager.getProjectTemplate(1, authToken))
+        Assert.assertEquals("ProjectTemplate", serverManager.getProjectTemplate(1, ""))
 
-        Assert.assertEquals("GraphTemplate", serverManager.getGraphTemplate(1, 1, authToken))
+        Assert.assertEquals("GraphTemplate", serverManager.getGraphTemplate(1, 1, ""))
 
-        Assert.assertTrue(serverManager.addPost("", "", listOf(""), authToken))
+        Assert.assertTrue(serverManager.addPost("", "", listOf(""), ""))
 
-        Assert.assertTrue(serverManager.removePost(1, authToken))
+        Assert.assertTrue(serverManager.removePost(1, ""))
 
-        Assert.assertTrue(serverManager.addUser("", 1, authToken))
+        Assert.assertTrue(serverManager.addUser("", 1, ""))
 
-        Assert.assertTrue(serverManager.removeUser("", 1, authToken))
+        Assert.assertTrue(serverManager.removeUser("", 1, ""))
 
-        Assert.assertEquals(0, serverManager.addProject(authToken))
+        Assert.assertEquals(0, serverManager.addProject(""))
 
-        Assert.assertEquals("command1", serverManager.sendCommandsToServer(1, listOf("command1"), authToken).elementAt(0))
+        Assert.assertEquals("command1", serverManager.sendCommandsToServer(1, listOf("command1"), "").elementAt(0))
 
         // Test if projectCommand lands in the projectCommandQueue
-        serverManager.getDeltasFromServer(1, authToken)
-        Assert.assertEquals(deltaList.get(0), serverManager.getProjectCommandFromQueue())
+        serverManager.getDeltasFromServer(1, "")
+        Assert.assertEquals(deltaList.elementAt(0), serverManager.getProjectCommandFromQueue())
 
-        Assert.assertTrue(serverManager.provideOldData("ProjectCommand", "", LocalDateTime.parse("0001-01-01T00:00"), "", 1, false, authToken))
+        Assert.assertTrue(serverManager.provideOldData("ProjectCommand", "", LocalDateTime.parse("0001-01-01T00:00"), "", 1, false, ""))
 
-        Assert.assertEquals(LocalDateTime.parse("0001-01-01T00:00"), serverManager.getRemoveTime(authToken))
+        Assert.assertEquals(LocalDateTime.parse("0001-01-01T00:00"), serverManager.getRemoveTime(""))
 
-        Assert.assertEquals(true, serverManager.demandOldData(1, "", authToken))
+        Assert.assertEquals(true, serverManager.demandOldData(1, "", ""))
 
         // Test if fetchRequests lands in the fetchRequestQueue
-        serverManager.getFetchRequests(1, authToken)
+        serverManager.getFetchRequests(1, "")
         Assert.assertEquals("FetchRequest", serverManager.getFetchRequestFromQueue())
     }
 }

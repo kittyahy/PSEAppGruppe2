@@ -22,34 +22,31 @@ package com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverManage
 
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandInfo
 import com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.UpdatedByObserver_ForTesting
-import com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.projectCommand.ProjectCommandQueueObserver_ForTesting
+import com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.fetchRequest.FetchRequestQueueObserver_ForTesting
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.Delta
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Assert
 import org.junit.Test
-import org.mockito.Mockito.mock
-import java.time.LocalDateTime
 
-internal class ServerManagerTests_ProjectCommandQueueCorrectlyLinked {
-
-
-
+internal class ServerManagerTests_FetchRequest2QueueCorrectlyLinked {
 
     @Test
-    fun projectCommandQueueLinked() {
+    fun fetchRequestQueueLinked() {
         // Create mocked restAPI
-        val deltaList: Collection<Delta> = listOf(Delta(project = 1), Delta(project = 2), Delta(project = 3))
+        val fetchRequestList: Collection<FetchRequest> = listOf(FetchRequest(project = 1), FetchRequest(project = 2), FetchRequest(project = 3))
 
         var restAPI: RESTAPI = mockk<RESTAPI>()
-        every { restAPI.getDelta(1, "") } returns deltaList
+        every { restAPI.getFetchRequests(1, "") } returns fetchRequestList
+
 
 
         // Create TestQueues
         var toUpdate = UpdatedByObserver_ForTesting()
-        var projectCommandObserver = ProjectCommandQueueObserver_ForTesting(toUpdate)
+        var fetchRequestObserver = FetchRequestQueueObserver_ForTesting(toUpdate)
 
         // Create ServerManager with mocked RestAPI
         val serverManager = ServerManager(restAPI)
@@ -57,32 +54,33 @@ internal class ServerManagerTests_ProjectCommandQueueCorrectlyLinked {
         Assert.assertEquals(0, toUpdate.getUpdated())
 
         // Add Observer to queues
-        serverManager.addObserverToProjectCommandQueue(projectCommandObserver)
+        serverManager.addObserverToProjectCommandQueue(fetchRequestObserver)
 
         // Fill Queues
-        serverManager.getDeltasFromServer(1, "") // Fills ProjectCommandQueue with projectCommandInfo Objects
-        Assert.assertEquals(deltaList.size, toUpdate.getUpdated())
+        serverManager.getFetchRequests(1, "") // Fills ProjectCommandQueue with projectCommandInfo Objects
+        Assert.assertEquals(fetchRequestList.size, toUpdate.getUpdated())
 
-        Assert.assertEquals(deltaList.size, serverManager.getProjectCommandQueueLength())
+        Assert.assertEquals(fetchRequestList.size, serverManager.getFetchRequestQueueLength())
 
-        val projectCommands: MutableList<ProjectCommandInfo> = mutableListOf()
 
-        // Convert deltas into ProjectCommandObjects
-        for (i in deltaList.indices) {
-            val delta: Delta = deltaList.elementAt(i)
+        // Convert fetchRequests into Strings
+        val fetchRequestStrings: MutableList<String> = mutableListOf()
+        for (i in fetchRequestList.indices) {
+            val delta: Delta = fetchRequestList.elementAt(i).requestInfo
             val projectCommand = ProjectCommandInfo(delta.addedToServer, delta.user, delta.isAdmin, delta.projectCommand)
             projectCommands.add(projectCommand)
         }
 
         // Check if Queue is correctly linked
-        for (i in deltaList.indices) {
-            val projectCommandFromQueue = serverManager.getProjectCommandFromQueue()
-            Assert.assertTrue(projectCommands.remove(projectCommandFromQueue))
-            Assert.assertEquals(deltaList.size - i - 1, serverManager.getProjectCommandQueueLength())
+
+        for (i in fetchRequestList.indices) {
+            val fetchRequestFromQueue: String = serverManager.getFetchRequestFromQueue()
+            Assert.assertTrue(fetchRequestStrings.remove(fetchRequestFromQueue))
+            Assert.assertEquals(fetchRequestList.size - i - 1, serverManager.getFetchRequestQueueLength())
         }
 
         // Unregister Observer
-        serverManager.unregisterObserverFromProjectCommandQueue(projectCommandObserver)
+        serverManager.unregisterObserverFromFetchRequestQueue(fetchRequestObserver)
 
         // Fill Queues
         serverManager.getDeltasFromServer(1, "") // Fills ProjectCommandQueue with projectCommandList

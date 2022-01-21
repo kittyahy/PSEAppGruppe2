@@ -35,7 +35,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class RESTAPI {
-    private var baseUrl: String = "http://myserver.com/server/" // TODO: Die URL unseres Servers verwenden
+    private var baseUrl: String = "http://261ee33a-ba27-4828-b5df-f5f8718defe8.ka.bw-cloud-instance.org:8080" // TODO: Die URL unseres Servers verwenden
 
     private var retrofit: Retrofit
     private val server: ServerEndpoints

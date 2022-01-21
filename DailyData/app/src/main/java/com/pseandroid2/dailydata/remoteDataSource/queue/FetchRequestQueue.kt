@@ -20,32 +20,31 @@
 
 package com.pseandroid2.dailydata.remoteDataSource.queue
 
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
+
 class FetchRequestQueue {
-    private val fetchRequests: MutableList<String> = mutableListOf<String>() // Speichert JSONs von FetchRequests
+    private val fetchRequests: MutableList<FetchRequest> = mutableListOf<FetchRequest>()
     private val observers: MutableList<FetchRequestQueueObserver> = mutableListOf<FetchRequestQueueObserver>()
 
     // Queue Logic
     /**
      * @return String: Gibt eine FetchRequest aus der Queue aus (und entfernt diese aus der Queue)
-     *                              Ist keine FetchRequest mehr in der Queue enthalten wird "" ausgegeben
+     *                              Ist keine FetchRequest mehr in der Queue enthalten wird null ausgegeben
      */
-    fun getFetchRequest(): String {
+    fun getFetchRequest(): FetchRequest? {
         if (fetchRequests.isNotEmpty()) {
             return fetchRequests.removeAt(0)
         }
-        return ""
+        return null
     }
 
     /**
-     * @param fetchRequest: Die FetchRequest, die in die Queue hinzugefügt werden soll als
+     * @param fetchRequest: Die FetchRequest, die in die Queue hinzugefügt werden soll
      */
-    fun addFetchRequest(fetchRequest: String) {
-        if (fetchRequest != "") {
-            // TODO: Teste, ob der String schon in der Queue vorhanden ist (find element) und füge es gegebenfalls nicht hinzu
-            if (!fetchRequests.contains(fetchRequest)) {
-                fetchRequests.add(fetchRequest)
-                notifyObservers()
-            }
+    fun addFetchRequest(fetchRequest: FetchRequest) {
+        if (!fetchRequests.contains(fetchRequest)) {
+            fetchRequests.add(fetchRequest)
+            notifyObservers()
         }
     }
 

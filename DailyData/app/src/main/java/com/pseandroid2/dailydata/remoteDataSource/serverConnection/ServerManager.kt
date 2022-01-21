@@ -27,7 +27,6 @@ import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueue
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueueObserver
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.Delta
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
-import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
 
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.joinAll
@@ -113,7 +112,7 @@ class ServerManager @Inject constructor(private val restapi: RESTAPI) {
      * @param projectID: The id of the project to which the user is to be added
      */
     fun addUser(userToAdd: String, projectID: Long, authToken: String): Boolean{
-        return restAPI.addUser(userToAdd, projectID, authToken)
+        return restAPI.addUser(projectID, authToken)
     }
 
     /**
@@ -166,6 +165,7 @@ class ServerManager @Inject constructor(private val restapi: RESTAPI) {
     fun getDeltasFromServer(projectID: Long, authToken: String): Unit {
         val receivedProjectCommands: Collection<Delta> = restAPI.getDelta(projectID, authToken)
         receivedProjectCommands.forEach {
+            // Transform Delta into an Project Command
             val queueElement: ProjectCommandInfo = ProjectCommandInfo(wentOnline = it.addedToServer,
                 commandByUser =  it.user, isProjectAdmin = it.isAdmin, projectCommand = it.projectCommand)
             projectCommandQueue.addProjectCommand(queueElement)
@@ -204,10 +204,10 @@ class ServerManager @Inject constructor(private val restapi: RESTAPI) {
     /**
      * @param projectID: The id of the project from which the fetch requests should be downloaded
      */
-    fun getFetchRequests(projectID: Long, authToken: String){ // TODO: Ausgabe ist im Entwurfsheft Collection<FetchRequest>
+    fun getFetchRequests(projectID: Long, authToken: String) { // TODO: Ausgabe ist im Entwurfsheft Collection<FetchRequest>
         val receivedFetchRequests: Collection<FetchRequest> = restAPI.getFetchRequests(projectID, authToken)
-        receivedFetchRequests.forEach { // TODO: maybe do this in parallel :)
-            fetchRequestQueue.addFetchRequest(it.requestInfo)
+        receivedFetchRequests.forEach {
+            fetchRequestQueue.addFetchRequest(it)
         }
     }
 
@@ -249,9 +249,9 @@ class ServerManager @Inject constructor(private val restapi: RESTAPI) {
     }
 
     /**
-     * @return String: Returns a fetchRequest as JSON if there is one in the queue. (Returns "" if the queue is empty)
+     * @return String: Returns a fetchRequest as JSON if there is one in the queue. (Returns null if the queue is empty)
      */
-    fun getFetchRequestFromQueue(): String {
+    fun getFetchRequestFromQueue(): FetchRequest? {
         return fetchRequestQueue.getFetchRequest()
     }
 

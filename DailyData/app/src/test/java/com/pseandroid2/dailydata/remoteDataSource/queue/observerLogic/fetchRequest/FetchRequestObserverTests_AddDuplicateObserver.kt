@@ -22,6 +22,7 @@ package com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.fetchRequ
 
 import com.pseandroid2.dailydata.remoteDataSource.queue.FetchRequestQueue
 import com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.UpdatedByObserver_ForTesting
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
 import org.junit.Assert
 import org.junit.Test
 
@@ -41,15 +42,15 @@ class FetchRequestObserverTests_AddDuplicateObserver {
         // Prüfe ob update() bei Observer ausgeführt wird
         Assert.assertEquals(toUpdate.isUpdated(), false)
         Assert.assertEquals(fetchRequestQueue.getQueueLength(), 0)
-        var fetchRequest = "Fetch Request: 1"
-        fetchRequestQueue.addFetchRequest(fetchRequest)
+        var fetchRequest1 = FetchRequest(requestInfo = "Fetch Request: 1")
+        fetchRequestQueue.addFetchRequest(fetchRequest1)
         Assert.assertEquals(fetchRequestQueue.getQueueLength(), 1)
         Assert.assertEquals(toUpdate.getUpdated(), 1)
 
 
         // Dies sollte nun den Controller entfernen: -> Update sollte nicht nochmal ausgeführt werden
         fetchRequestQueue.unregisterObserver(observer)
-        var fetchRequest2 = "Fetch Request: 2"
+        var fetchRequest2 = FetchRequest(requestInfo = "Fetch Request: 2")
         fetchRequestQueue.addFetchRequest(fetchRequest2)
         Assert.assertEquals(1, toUpdate.getUpdated())
     }
