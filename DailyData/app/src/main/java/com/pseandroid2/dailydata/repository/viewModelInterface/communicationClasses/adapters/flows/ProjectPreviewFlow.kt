@@ -27,7 +27,7 @@ class ProjectPreviewFlow (val flow: Flow<List<ProjectData>>){
         flow.collect { list ->
             val listProjectPreview = ArrayList<ProjectPreview>()
             for (data:ProjectData in list) {
-                val projectPreview = ProjectPreview(data.id.toLong(), data.name, data.wallpaper)
+                val projectPreview = ProjectPreview(data)
                 listProjectPreview.add(projectPreview)
             }
             sharedFlow.emit(listProjectPreview)
