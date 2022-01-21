@@ -71,6 +71,7 @@ class ProjectFlow (
     }
 
     override fun provide(i: Void): Project {
-        TODO("Not yet implemented")
+        //unreachable code, because it is never used by overwritten adapt fun
+        return Project()
     }
 }
