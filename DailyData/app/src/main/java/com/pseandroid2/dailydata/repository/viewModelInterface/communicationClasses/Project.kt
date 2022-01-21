@@ -8,7 +8,7 @@ data class Project(
     val isAdmin: Boolean,
     val title: String,
     val description: String,
-    val wallpaper: Drawable,
+    val wallpaper: String,
     val table: List<Column>,
     val data: List<Row>,
     val buttons: List<Button>,

@@ -1,16 +1,14 @@
-package com.pseandroid2.dailydata.repository.viewModelInterface.communicationClasses.flows
+package com.pseandroid2.dailydata.repository.viewModelInterface.communicationClasses.adapters.flows
 
 import com.pseandroid2.dailydata.model.database.entities.ProjectData
 import junit.framework.TestCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.takeWhile
 import org.junit.After
 import org.junit.Before
 import org.junit.Test

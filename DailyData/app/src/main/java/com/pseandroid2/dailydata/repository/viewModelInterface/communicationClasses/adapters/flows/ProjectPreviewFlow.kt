@@ -1,4 +1,4 @@
-package com.pseandroid2.dailydata.repository.viewModelInterface.communicationClasses.flows
+package com.pseandroid2.dailydata.repository.viewModelInterface.communicationClasses.adapters.flows
 
 
 import com.pseandroid2.dailydata.model.database.entities.ProjectData
