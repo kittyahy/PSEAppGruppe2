@@ -48,17 +48,11 @@ class RESTAPI {
             //.create(ServerEndpoints)
 
         server = retrofit.create(ServerEndpoints::class.java) // TODO: Wahrscheinlich ist das .java hier falsch
-
-        // Create Services // TODO mal schauen, ob ich das brauche
-        // https://square.github.io/retrofit/
-        // https://dev.to/paulodhiambo/kotlin-and-retrofit-network-calls-2353
-        // Synchrone Calls: https://futurestud.io/tutorials/retrofit-synchronous-and-asynchronous-requests
     }
+
     // Note: There is no need to send the User ID of the current user to the server, as this can be read from the Firebase authToken
 
     // TODO: Bei alles Tests prüfen wie man nach Fehlern sucht
-
-
 
     //------------------------------------- Greetings Controller -------------------------------------
     /**
@@ -154,13 +148,12 @@ class RESTAPI {
      * @param userToAdd: The id of the user that should be added to the project
      * @param projectID: The id of the project to which the user is to be added
      */
-    fun addUser(userID: String, projectId: Long, authToken: String): Boolean {
+    fun addUser(projectId: Long, authToken: String): Boolean {
         //TODO: IMPLEMENT
         val param: RequestParameter = RequestParameter(token = authToken)
-        //val call: Call<String> = server.addUser(userID, )
+        val call: Call<Boolean> = server.addUser(projectId, param)
 
-        //return call.execute().body() ?: false
-        return false
+        return call.execute().body() ?: false
     }
 
     /**
@@ -205,7 +198,7 @@ class RESTAPI {
 
         val call: Call<Collection<Delta>> = server.getDelta(projectID, param)
 
-        return call.execute().body() ?: mutableListOf<Delta>()
+        return call.execute().body() ?: mutableListOf()
     }
 
     fun providedOldData(projectCommand: String, forUser: String, initialAdded: LocalDateTime, initialAddedBy: String, projectID: Long, wasAdmin: Boolean, authToken: String): Boolean {

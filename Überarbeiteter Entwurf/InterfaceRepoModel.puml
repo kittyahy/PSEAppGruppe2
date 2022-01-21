@@ -1,0 +1,205 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+
+package Repository {
+  
+    interface Table <<interface>> {
+        +getCell(Integer, Integer): Any
+        +getLayout(): TableLayout
+        +getSize(): Integer
+        ..Row Operations..
+        +getRow(Integer): Row
+        +addRow(Row) throws IllegalTypeException
+        +deleteRow(Integer)
+        ..Column Operations..
+        +getColumn(Integer): List<Any>
+        +addColumn(Class<Any>)
+        +deleteColumn(Integer)
+    }
+    note right of Table::getLayout()
+        Deep Copy, Operations on
+        TableLayout have to be
+        executed on the Table Object
+    end note
+
+    interface Row <<interface>> {
+        +getAll(): List<Any>
+        +getCell(Integer): Any
+        +setCell(Integer, Any) throws IllegalTypeException
+        +getMetaData(Integer): RowMetaData
+        +getSize(): Integer
+    }
+
+    interface Project <<interface>> {
+        +getProjectSkeleton(): ProjectSkeleton
+        +getTable(): Table
+        +getAdmin(): User
+        +isOnline(): Boolean
+        +getOnlineId(): Integer
+        +setAdmin(User)
+        +getUsers(): Collection<Users>
+        +addUser(User)
+        +removeUser(User)
+        +createGraph()
+    }
+  
+    'Nested Class: You need an object of a class Implementing Project in Order to create
+    'a DataTransformation
+    class Project::DataTransformation<O> {
+        -function: TransformationFunction<O, Any>
+        -table: Table
+        -mapFromTable(): O
+        +recalculate(): List<Any>
+    }
+
+    class TransformationFunction<I, O> {
+        ~Constructor(function: (I) -> O, functionString: String)
+        +execute(input: I): List<Any>
+        +toString(input: String): String
+        +setComposition(composition: Project::DataTransformation<O, Any>)
+        -function: (I) -> O
+        -composition: Project::DataTransformation?
+        -functionString: String
+    }
+
+    note top
+        <b>Nested Class</b>
+        Decorator Pattern:
+        <i>execute(data)</i> returns composition.execute(function(data))
+        <i>toString(previous)</i> returns functionString + "(" + previous + ")"
+    end note
+
+    class TransformationFactory {
+        +createSum(): TransformationFunction<List<Integer>, Integer>
+    }
+
+    TransformationFunction -[hidden]-> TransformationFactory
+
+    note right of TransformationFunction::Constructor
+        Should only be used by TransformationFactory
+    end note
+
+    interface ProjectSkeleton <<interface>> {
+        +getID(): Integer
+        +getName(): String
+        +getDescription(): String
+        +getWallpaper(): Drawable
+        +getGraphs(): Collection<Graph>
+        +getProjectSettings(): Settings
+        +getNotifications(): Collection<Notification>
+        +setName(String)
+        +setDescription(String)
+        +setWallpaper(path: String)
+    }
+
+    interface Graph <<interface>> {
+        'Does this always recompute the DataSets? If not how does it decide when to recompute?
+        +getDataSets(): Collection<Collection<Any>>
+        +getCustomizing(): Settings
+        +getImage(): Drawable?
+        +getPath(): String?
+        +getType(): GraphType
+        +getCalculationFunction(): DataTransformation
+        +setCalculationFunction(DataTransformation)
+    }
+
+    interface Settings <<interface>> {
+        +getAllSettings(): Map<String, String>
+        +getSetting(String): String throws SettingNotFoundException
+        +setSetting(String, String) throws SettingNotFoundException
+    }
+
+    interface Notification <<interface>> {
+        +getMessage(): String
+        +sendNow(vararg Any): Boolean throws IllegalContextException
+        +toString(): String
+        +{static}fromString(notifStr: String, message: String): Notification
+    }
+    note left of Notification::toString()
+        should serialize both the type
+        of the notification as well as
+        any parameters the implementation
+        uses
+    end note
+  
+    interface ProjectTemplate <<interface>> {
+        +getProjectSkeleton(): ProjectSkeleton
+        +getTableLayout(): Collection<Class<Any>>
+        +getCreator(): User
+    }
+
+    interface GraphTemplate <<interface>> {
+        +getName(): String
+        +getDescription(): String
+        +getCustomizing(): Settings
+        +getType(): GraphType
+        +getCreator(): User
+    }
+
+    interface Post <<interface>> {
+        +getContent(): Content
+        +getName(): String
+        +getDescription(): String
+    }
+
+    interface Content <<interface>> {
+
+    }
+
+    interface TableLayout <<interface>> {
+        +size(): Integer
+        +getColumnType(Integer): Class<Any>
+        +getUIElement(Integer): UIElementType
+        +setUIElement(Integer, UIElementType)
+        ~addColumn(Class<Any>)
+        ~deleteColumn(Integer)
+    }
+
+    class RowMetaData <<data>> {
+        +Constructor(DateTime, User)
+        +getCreationDate(): DateTime
+        +getPublishDate(): DateTime
+        +getCreator(): User
+        -createdOn: DateTime
+        -publishedOn: DateTime
+        -createdBy: User
+    }
+
+    enum UIElementType <<enum>> {
+        BUTTON,
+        NUMBER_FIELD,
+        DATE_TIME_PICKER
+    }
+
+    enum GraphType <<enum>> {
+        PIE_CHART,
+        LINE_CHART
+    }
+
+    enum MigrationOperation <<enum>> {
+        ADD_COL,
+        DELETE_COL,
+        RENAME_COL
+    }
+}
+
+Notification -[hidden]-> Table
+Repository ----[hidden]-> WeißNochNichtWoDasLiegt
+
+package WeißNochNichtWoDasLiegt {
+
+    class User <<data>> {
+        id: String
+        name: String
+    }
+}
+
+
+
+@enduml

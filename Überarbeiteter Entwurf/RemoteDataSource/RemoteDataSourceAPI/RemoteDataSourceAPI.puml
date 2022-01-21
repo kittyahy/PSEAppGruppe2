@@ -1,0 +1,56 @@
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+
+class RemoteDataSourceAPI <<fassade>> {
+	- userAccount: UserAccount 
+	- serverManager: ServerManager 
+	----
+	..Firebase..
+	..UserAccount..
+	+ registerUser(String eMail, String passwort): int 
+	+ signInUser(String eMail, String passwort): int
+	+ signOut(): int
+	..UserDetails..
+	+ getUserID(): String
+	+ getUserName(): String
+	+ getUserEMail(): String
+	+ getUserPhotoUrl(): String
+	..Authentification..
+	+ getToken(): String 
+	..ServerAccess..
+	..GreetingController..
+	+ connectionToServerPossible(): bool
+    '
+	..PostsController..
+    + getAllPostPreview(): Collection(String)
+    + getPostDetail(fromPost: int): Collection(String)
+    + getProjectTemplate(fromPost: int): JSON
+    + getGraphTemplate(fromPost: int,templateNumber: int): JSON
+    + addPost(postPreview: JSON, user: String, projectTemplate: JSON, graphTemplate: List(JSON))
+    + removePost(postID, user: String)    
+    '
+	..ProjectParticipantsController..
+    + addUser(user: String, projectID: long): boolean
+    + removeUser(userToRemove: String, projectID: long, user: String): boolean
+    + addProject(user:String): long
+    '
+	..DeltaController..
+    + sendCommandsToServer(projectID: long, projectCommands: Collection<JSON>, user: String): Collection<JSON>
+    + getDeltasFromServer(projectID: long, user: String):Collection(<Delta>)
+	+ provideOldData(projectCommand: JSON, forUser: String, initialAdded: Date, initialAddedBy: String, projectID: long, wasAdmin: boolean)
+    + getRemoveTime(): Date
+    '
+	..FetchRequestController..
+    + demandOldData(user: String, projectID: long, requestInfo: JSON)
+    + getFetchRequests(user: String, projectID: long): Collection(<FetchRequest>)
+    '
+	..ObserverLogic..
+    + addObserverToFetchRequestQueue(observer: FetchRequestQueueObserver)
+    + unregisterObserverFromFetchRequestQueue(observer: FetchRequestQueueObserver)
+    + addObserverToProjectCommandQueue(observer: ProjectCommandQueueObserver)
+    + unregisterObserverFromProjectCommandQueue(observer: ProjectCommandQueueObserver)
+}
