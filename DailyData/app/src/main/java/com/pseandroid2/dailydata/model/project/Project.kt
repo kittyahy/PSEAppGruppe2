@@ -21,7 +21,6 @@
 package com.pseandroid2.dailydata.model.project
 
 import android.graphics.drawable.Drawable
-import androidx.compose.runtime.Composable
 import com.pseandroid2.dailydata.model.Graph
 import com.pseandroid2.dailydata.model.Settings
 import com.pseandroid2.dailydata.model.users.User
@@ -29,7 +28,6 @@ import com.pseandroid2.dailydata.model.notifications.Notification
 import com.pseandroid2.dailydata.model.table.Table
 import com.pseandroid2.dailydata.model.table.TableLayout
 import com.pseandroid2.dailydata.model.transformation.TransformationFunction
-import kotlin.reflect.KClass
 
 /**
  * Contains all data of one specific Project

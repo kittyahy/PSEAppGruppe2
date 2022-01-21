@@ -20,8 +20,28 @@
 
 package com.pseandroid2.dailydata.model.transformation
 
-abstract class TransformationFunction<M : Any, O : Any> protected constructor(
-    private var composition: TransformationFunction<out Any, M>? = Identity<List<Any>, M>(),
+import java.util.Stack
+
+class Test<I : Any, O : Any> {
+
+    companion object {
+        setTestStatic()
+    }
+
+    var myTest: Test<out Any, I>? = null
+
+    fun setTest(test: Test<out Any, I>) {
+        myTest = test
+    }
+
+    fun test() {
+        setTest(Test<O, I>())
+    }
+}
+
+@Deprecated("Use Expression instead")
+abstract class TransformationFunction_Depr<M : Any, O : Any> protected constructor(
+    private var composition: TransformationFunction_Depr<out Any, M>? = Identity<List<Any>, M>(),
     private var functionString: String
 ) {
 
@@ -32,7 +52,7 @@ abstract class TransformationFunction<M : Any, O : Any> protected constructor(
 
         fun sumS(cols: List<Int>) = SumSingles(cols)
 
-        fun parse(functionString: String): TransformationFunction<out Any, out Any> {
+        fun parse(functionString: String): TransformationFunction_Depr<out Any, out Any> {
             var function: String = functionString.substringBefore('(')
             var args: String = function.substringAfter('|', "")
             if (args != "") {
@@ -43,7 +63,7 @@ abstract class TransformationFunction<M : Any, O : Any> protected constructor(
             var inner: String = functionString.substringAfter('(')
             inner = inner.substring(0, inner.length - 2)
 
-            val transform: TransformationFunction<out Any, out Any> = when (function) {
+            val transform: TransformationFunction_Depr<out Any, out Any> = when (function) {
                 "SUMS" -> {
                     val split = args.substring(1, args.length - 2).split(", ")
                     val cols = mutableListOf<Int>()
@@ -76,7 +96,7 @@ abstract class TransformationFunction<M : Any, O : Any> protected constructor(
         return "$functionString(${composition?.toCompleteString() ?: ""})"
     }
 
-    fun setComposition(composeWith: TransformationFunction<out Any, M>) {
+    fun setComposition(composeWith: TransformationFunction_Depr<out Any, M>) {
         composition = composeWith
     }
 
