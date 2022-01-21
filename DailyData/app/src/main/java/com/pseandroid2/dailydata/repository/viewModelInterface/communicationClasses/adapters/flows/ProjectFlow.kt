@@ -59,17 +59,18 @@ class ProjectFlow(
         val emptyFlow = MutableSharedFlow<Project>()
         emptyFlow.emit(emptyProject)
         emptyFlow.combine(graphFlow) { project, graphList ->
-            project.graphs = graphList
+            TODO()//project.graphs = graphList
         }
-        sharedFlow.emit(listProjectPreview)
+        sharedFlow//TODO .emit(listProjectPreview)
     }
     private fun modelGraphListToVMGraphList(graphEntityList: List<com.pseandroid2.dailydata.model.Graph>): List<Graph> {
         val vMGraphList = ArrayList<Graph>()
         for (graphEntity: com.pseandroid2.dailydata.model.Graph in graphEntityList) {
             if (graphEntity.getType() == GraphType.LINE_CHART) {
-                val graph = LineChart(graphEntity.id.toLong(), )
+                val graph = TODO()//Todo LineChart(graphEntity.id.toLong(), )
             }
 
         }
+        return vMGraphList
     }
 }

@@ -11,26 +11,10 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @InternalCoroutinesApi
-class ProjectPreviewFlow (val flow: Flow<List<ProjectData>>){
-    private val sharedFlow = MutableSharedFlow<List<ProjectPreview>>()
-    init {
-        GlobalScope.launch {
-            adapt()
-        }
+class ProjectPreviewFlow(flow: Flow<List<ProjectData>>) : FlowAdapter<ProjectData, ProjectPreview> (flow){
+    override fun provide(i: ProjectData): ProjectPreview {
+        return ProjectPreview(i)
     }
 
-    fun getProjectPreviewFlow(): Flow<List<ProjectPreview>> {
-        return sharedFlow
-    }
-    @InternalCoroutinesApi
-    suspend fun adapt() {
-        flow.collect { list ->
-            val listProjectPreview = ArrayList<ProjectPreview>()
-            for (data:ProjectData in list) {
-                val projectPreview = ProjectPreview(data)
-                listProjectPreview.add(projectPreview)
-            }
-            sharedFlow.emit(listProjectPreview)
-        }
-    }
+
 }

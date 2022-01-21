@@ -30,7 +30,7 @@ class ProjectPreviewFlowTest : TestCase() {
         val list = ArrayList<ProjectData>()
         val projectDataFlow = MutableSharedFlow<List<ProjectData>>()
         val projectPreviewFlow = ProjectPreviewFlow(projectDataFlow)
-        val flow = projectPreviewFlow.getProjectPreviewFlow()
+        val flow = projectPreviewFlow.getFlow()
         val emissionsCount = 5
         launch {
             flow.collect {
