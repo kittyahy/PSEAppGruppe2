@@ -37,37 +37,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 class RESTAPI {
     private var baseUrl: String = "http://myserver.com/server/" // TODO: Die URL unseres Servers verwenden
 
-    // Greetings Controller
-    private val greetingController: String = ""
-    private val greets: String = ""
-
-    // Posts Controller
-    private val postsController: String = ""
-    private val getAllPostsPreview: String = ""
-    private val getPostDetail: String = ""
-    private val getProjectTemplate: String = ""
-    private val getGraphTemplate: String = ""
-    private val addPost: String = ""
-    private val removePost: String = ""
-
-    // ProjectParticipantsController
-    private val projectParticipantsController: String = ""
-    private val addUser: String = ""
-    private val removeUser: String = ""
-    private val addProject: String = ""
-
-    // Delta Controller
-    private val deltaController: String = ""
-    private val saveDelta: String = ""
-    private val getDelta: String = ""
-    private val providedOldData: String = ""
-    private val getRemoveTime: String = ""
-
-    // FetchRequestController
-    private val fetchRequestController: String = ""
-    private val demandOldData: String = ""
-    private val getFetchRequests: String = ""
-
     private var retrofit: Retrofit
     private val server: ServerEndpoints
 
@@ -100,7 +69,7 @@ class RESTAPI {
 
         val greeting: String = greetingCall.execute().body() ?: ""
 
-        if (greeting == "hello") {
+        if (greeting == "Hello") {
             return true
         }
         return false
@@ -108,6 +77,9 @@ class RESTAPI {
 
 
     //------------------------------------- Posts Controller -------------------------------------
+    /**
+     * @return Collection<String>: The previews of the posts (as JSONs)
+     */
     fun getAllPostsPreview(authToken: String): Collection<String> {
         val param: RequestParameter = RequestParameter(token = authToken)
         val call: Call<List<String>> = server.getAllPostPreview(param)
@@ -115,6 +87,10 @@ class RESTAPI {
         return call.execute().body() ?: emptyList()
     }
 
+    /**
+     * @param fromPost: The id from the searched post
+     * @return Collection<String>: Returns the detailed post belonging to the post id
+     */
     fun getPostDetail(fromPost: Int, authToken: String): Collection<String> {
         val params: RequestParameter = RequestParameter(token = authToken)
         val call: Call<List<String>> = server.getPostDetail(fromPost, params)
@@ -122,6 +98,10 @@ class RESTAPI {
         return call.execute().body() ?: emptyList()
     }
 
+    /**
+     * @param fromPost: The post from which the project template should be downloaded
+     * @return String - The requested project template as JSON
+     */
     fun getProjectTemplate(fromPost: Int, authToken: String): String {
         val params: RequestParameter = RequestParameter(token = authToken)
         val call: Call<String> = server.getProjectTemplate(fromPost, params)
@@ -129,6 +109,12 @@ class RESTAPI {
         return call.execute().body() ?: ""
     }
 
+    /** Downloads one graph template that is contained by a post
+     *
+     * @param fromPost: The post from which the graph templates should be downloaded
+     * @param templateNumber: Which graph template should be downloaded from the post
+     * @return String - The requested graph template as JSON
+     */
     fun getGraphTemplate(fromPost: Int, templateNumber: Int, authToken: String): String {
         val params: RequestParameter = RequestParameter(token = authToken)
         val call: Call<String> = server.getGraphTemplate(fromPost, templateNumber, params)
@@ -137,6 +123,12 @@ class RESTAPI {
     }
 
     // Wish-criteria
+    /**
+     * @param postPreview: The preview of the post that should be added
+     * @param projectTemplate: The project template that belongs to the post as JSON
+     * @param Collection<String>: The graph templates that belong to the post as JSON
+     * @return Boolean: Did the server call succeed
+     */
     fun addPost (postPreview: String, projectTemplate: String, graphTemplate: Collection<String>, authToken: String): Boolean {
         val params: AddPostParameter = AddPostParameter(authToken, postPreview, projectTemplate, graphTemplate)
         val call: Call<Boolean> = server.addPost(params)
@@ -145,6 +137,10 @@ class RESTAPI {
     }
 
     // Wish-criteria
+    /**
+     * @param postID: The id of the post that should be removed from the server
+     * @return Boolean: Did the server call succeed
+     */
     fun removePost (postID: Int, authToken: String): Boolean {
         val param: RequestParameter = RequestParameter(token = authToken)
         val call: Call<Boolean> = server.removePost(postID, param)
@@ -154,6 +150,10 @@ class RESTAPI {
 
 
     //------------------------------------- ProjectParticipantsController -------------------------------------
+    /**
+     * @param userToAdd: The id of the user that should be added to the project
+     * @param projectID: The id of the project to which the user is to be added
+     */
     fun addUser(userID: String, projectId: Long, authToken: String): Boolean {
         //TODO: IMPLEMENT
         val param: RequestParameter = RequestParameter(token = authToken)
@@ -163,6 +163,10 @@ class RESTAPI {
         return false
     }
 
+    /**
+     * @param userToRemove: The id of the user that sould be removed from the project
+     * @param projectID: The id of the project from which the user should be removed
+     */
     fun removeUser(userToRemove: String, projectID: Long, authToken: String): Boolean {
         val params: RemoveUserParameter = RemoveUserParameter(authToken, userToRemove = userToRemove, projectID = projectID)
 
@@ -171,6 +175,9 @@ class RESTAPI {
         return call.execute().body() ?: false
     }
 
+    /**
+     * @return LONG: Returns the id of the created project. Returns -1 if an error occured
+     */
     fun addProject(authToken: String): Long {
         val param: RequestParameter = RequestParameter(token = authToken)
 

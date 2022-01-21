@@ -211,11 +211,6 @@ class ServerManager @Inject constructor(private val restapi: RESTAPI) {
         }
     }
 
-
-
-
-
-
     // -----------------------------ObserverLogic-------------------------------
     /**
      * @param observer: The observer that should be added to the FetchRequestQueue
@@ -232,13 +227,6 @@ class ServerManager @Inject constructor(private val restapi: RESTAPI) {
     }
 
     /**
-     * @return INT: The length of the FetchRequestQueue
-     */
-    fun getFetchRequestQueueLength(): Int {
-        return fetchRequestQueue.getQueueLength()
-    }
-
-    /**
      * @param observer: The observer that should be added to the ProjectCommandQueue
      */
     fun addObserverToProjectCommandQueue(observer: ProjectCommandQueueObserver) {
@@ -252,10 +240,32 @@ class ServerManager @Inject constructor(private val restapi: RESTAPI) {
         projectCommandQueue.unregisterObserver(observer)
     }
 
+    // QueueLogic
+    /**
+     * @return INT: The length of the FetchRequestQueue
+     */
+    fun getFetchRequestQueueLength(): Int {
+        return fetchRequestQueue.getQueueLength()
+    }
+
+    /**
+     * @return String: Returns a fetchRequest as JSON if there is one in the queue. (Returns "" if the queue is empty)
+     */
+    fun getFetchRequestFromQueue(): String {
+        return fetchRequestQueue.getFetchRequest()
+    }
+
     /**
      * @return INT: The length of the ProjectCommandQueue
      */
     fun getProjectCommandQueueLength(): Int {
         return projectCommandQueue.getQueueLength()
+    }
+
+    /**
+     * @return ProjectCommandInfo: Returns a projectCommand as a ProjectCommandInfo Object if there is one in the queue. (Returns null if the queue is empty)
+     */
+    fun getProjectCommandFromQueue(): ProjectCommandInfo? {
+        return projectCommandQueue.getProjectCommand()
     }
 }

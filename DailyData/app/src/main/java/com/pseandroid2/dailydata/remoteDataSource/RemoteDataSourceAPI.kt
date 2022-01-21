@@ -21,6 +21,8 @@
 package com.pseandroid2.dailydata.remoteDataSource
 
 import com.pseandroid2.dailydata.remoteDataSource.queue.FetchRequestQueueObserver
+import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandInfo
+import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueue
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueueObserver
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
@@ -87,15 +89,6 @@ class RemoteDataSourceAPI @Inject constructor(private val uAccount: UserAccount,
      */
     fun getUserPhotoUrl(): String {
         return userAccount.getUserPhotoUrl()
-    }
-
-
-    // -----------------------------Authentification-------------------------------
-    /** // TODO: vllt das hier verbergen und Token nicht an Repository weitergeben
-     * @return String: The token of the signed in user. If no user is signed in return ""
-     */
-    fun getToken(): String {
-        return userAccount.getToken()
     }
 
 // -----------------------------ServerAccess-------------------------------
@@ -171,8 +164,9 @@ class RemoteDataSourceAPI @Inject constructor(private val uAccount: UserAccount,
     /**
      * @param userToAdd: The id of the user that should be added to the project
      * @param projectID: The id of the project to which the user is to be added
+     * @return Boolean: Did the server call succeed
      */
-    fun addUser(userToAdd: String, projectID: Long): Boolean{
+    fun addUser(userToAdd: String, projectID: Long): Boolean {
         val authToken: String = userAccount.getToken()
         return serverManager.addUser(userToAdd, projectID, authToken)
     }
@@ -180,6 +174,7 @@ class RemoteDataSourceAPI @Inject constructor(private val uAccount: UserAccount,
     /**
      * @param userToRemove: The id of the user that sould be removed from the project
      * @param projectID: The id of the project from which the user should be removed
+     * @return Boolean: Did the server call succeed
      */
     fun removeUser(userToRemove: String, projectID: Long): Boolean{
         val authToken: String = userAccount.getToken()
@@ -269,13 +264,6 @@ class RemoteDataSourceAPI @Inject constructor(private val uAccount: UserAccount,
     }
 
     /**
-     * @return INT: The length of the FetchRequestQueue
-     */
-    fun getFetchRequestQueueLength(): Int {
-        return serverManager.getFetchRequestQueueLength()
-    }
-
-    /**
      * @param observer: The observer that should be added to the ProjectCommandQueue
      */
     fun addObserverToProjectCommandQueue(observer: ProjectCommandQueueObserver) {
@@ -289,10 +277,33 @@ class RemoteDataSourceAPI @Inject constructor(private val uAccount: UserAccount,
         serverManager.unregisterObserverFromProjectCommandQueue(observer)
     }
 
+    // QueueLogic
+    /**
+     * @return INT: The length of the FetchRequestQueue
+     */
+    fun getFetchRequestQueueLength(): Int {
+        return serverManager.getFetchRequestQueueLength()
+    }
+
+    /**
+     * @return String: Returns a fetchRequest as JSON if there is one in the queue. (Returns "" if the queue is empty)
+     */
+    fun getFetchRequestFromQueue(): String {
+        // TODO: Implement Method
+        return serverManager.getFetchRequestFromQueue()
+    }
+
     /**
      * @return INT: The length of the ProjectCommandQueue
      */
     fun getProjectCommandQueueLength(): Int {
         return serverManager.getProjectCommandQueueLength()
+    }
+
+    /**
+     * @return ProjectCommandInfo: Returns a projectCommand as a ProjectCommandInfo Object if there is one in the queue. (Returns null if the queue is empty)
+     */
+    fun getProjectCommandFromQueue(): ProjectCommandInfo? {
+        return serverManager.getProjectCommandFromQueue()
     }
 }
