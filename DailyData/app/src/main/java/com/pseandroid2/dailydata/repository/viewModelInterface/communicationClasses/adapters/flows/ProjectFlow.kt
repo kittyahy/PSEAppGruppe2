@@ -17,10 +17,10 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 @InternalCoroutinesApi
-class ProjectFlow(
+class ProjectFlow (
     private val appDataBase: AppDataBase,
     private val projectId: Int
-) {
+) : FlowAdapter<Void, Project>(MutableSharedFlow()) {
     private lateinit var sharedFlow: Flow<Project>
     private val buttonFlow : Flow<List<Button>> = ButtonFlow(appDataBase.uiElementDAO().getUIElements(projectId)).getFlow()
     private val graphFlow : Flow<List<Graph>> = GraphFlow(appDataBase.graphDAO().getGraphEntityForProjects(projectId)).getFlow()
@@ -41,7 +41,7 @@ class ProjectFlow(
     }
 
     @InternalCoroutinesApi
-    suspend fun adapt() {
+    override suspend fun adapt() {
         val emptyProject = Project()
         val emptyFlow = MutableSharedFlow<Project>()
         emptyFlow.emit(emptyProject)
@@ -68,5 +68,9 @@ class ProjectFlow(
             project.data = rowList
             project
         }
+    }
+
+    override fun provide(i: Void): Project {
+        TODO("Not yet implemented")
     }
 }

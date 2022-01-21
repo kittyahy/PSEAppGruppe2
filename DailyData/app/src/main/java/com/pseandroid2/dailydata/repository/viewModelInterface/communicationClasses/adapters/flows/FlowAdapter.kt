@@ -21,7 +21,7 @@ abstract class FlowAdapter <I, O> (val flow: Flow<List<I>>){
         return sharedFlow
     }
     @InternalCoroutinesApi
-    suspend fun adapt() {
+    open suspend fun adapt() {
         flow.collect { list ->
             val listO = ArrayList<O>()
             for (i: I in list) {
