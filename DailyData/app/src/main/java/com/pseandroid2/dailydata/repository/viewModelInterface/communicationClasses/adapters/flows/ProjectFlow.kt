@@ -21,7 +21,7 @@ class ProjectFlow(
     private val appDataBase: AppDataBase,
     private val projectId: Int
 ) {
-    private val sharedFlow = MutableSharedFlow<Project>()
+    private lateinit var sharedFlow: Flow<Project>
     private val buttonFlow : Flow<List<Button>> = ButtonFlow(appDataBase.uiElementDAO().getUIElements(projectId)).getFlow()
     private val graphFlow : Flow<List<Graph>> = GraphFlow(appDataBase.graphDAO().getGraphEntityForProjects(projectId)).getFlow()
     private val memberFlow : Flow<List<Member>> = MemberFlow(TODO()).getFlow()
@@ -45,9 +45,28 @@ class ProjectFlow(
         val emptyProject = Project()
         val emptyFlow = MutableSharedFlow<Project>()
         emptyFlow.emit(emptyProject)
-        emptyFlow.combine(buttonFlow) { project, graphList ->
-            TODO()//project.graphs = graphList
+        sharedFlow= emptyFlow.combine(buttonFlow) { project, buttonList ->
+            project.buttons = buttonList
+            project
+        }.combine(graphFlow) { project, graphList ->
+            project.graphs = graphList
+            project
+        }.combine(memberFlow) { project, memberList ->
+            project.members = memberList
+            project
+        }.combine(notificationFlow) { project, notificationList ->
+            project.notifications = notificationList
+            project
+        }.combine(projectDataFlow) { project, projectData ->
+            projectData!! //Todo überprüfen, ob man diese Assertion hier so verwenden darf
+            project.update(projectData)
+            project
+        }.combine(settingsFlow) { project, settingsMap ->
+            //Todo project.update(settingsMap)
+            project
+        }.combine(rowFlow) { project, rowList ->
+            project.data = rowList
+            project
         }
-        sharedFlow//TODO .emit(listProjectPreview)
     }
 }

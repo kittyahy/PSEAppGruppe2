@@ -5,18 +5,18 @@ import com.pseandroid2.dailydata.model.database.entities.GraphEntity
 import com.pseandroid2.dailydata.model.database.entities.ProjectData
 
 class Project(
-    override val id: Long = 0,
-    val isOnlineProject: Boolean = false,
-    val isAdmin: Boolean = false,
-    val title: String = "title missing",
-    val description: String= "description missing",
-    val wallpaper: String = "wallpaper missing",
-    val table: List<Column> = ArrayList<Column>(),
-    val data: List<Row> = ArrayList<Row>(),
-    val buttons: List<Button> = ArrayList<Button>(),
-    val notifications: List<Notification> = ArrayList<Notification>(),
-    val graphs: List<Graph> = ArrayList<Graph>(),
-    val members: List<Member> = ArrayList<Member>()
+    override var id: Long = 0,
+    var isOnlineProject: Boolean = false,
+    var isAdmin: Boolean = false,
+    var title: String = "title missing",
+    var description: String= "description missing",
+    var wallpaper: String = "wallpaper missing",
+    var table: List<Column> = ArrayList<Column>(),
+    var data: List<Row> = ArrayList<Row>(),
+    var buttons: List<Button> = ArrayList<Button>(),
+    var notifications: List<Notification> = ArrayList<Notification>(),
+    var graphs: List<Graph> = ArrayList<Graph>(),
+    var members: List<Member> = ArrayList<Member>()
 ): Identifiable {
     fun update(graphEntity: GraphEntity){
         TODO("not yet implemented")
