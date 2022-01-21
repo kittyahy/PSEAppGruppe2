@@ -20,19 +20,18 @@
 
 package com.pseandroid2.dailydata.model.transformation
 
-import kotlin.reflect.KClass
+class IntSum(cols: List<Int>) : Sum<Int>(cols) {
+    override var functionString = "SUM|col=$cols;INT"
 
-abstract class Sum<N : Number>(private val cols: List<Int>) :
-    TransformationFunction<N>(functionString = "SUM|col=$cols") {
-    override fun execute(input: List<List<Any>>): List<N> {
-        val result = mutableListOf<N>()
-        for (i in cols) {
-            if (i < input.size) {
-                result.add(unsafeSum(input[i]))
+    override fun unsafeSum(list: List<Any>): Int {
+        var sum: Int = 0
+        for (element in list) {
+            if (element is Int) {
+                sum += element as Int
+            } else {
+                throw NumberFormatException("Couldn't convert $element to Int")
             }
         }
-        return result
+        return sum
     }
-
-    abstract fun unsafeSum(list: List<Any>): N
 }

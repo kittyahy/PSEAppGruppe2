@@ -20,85 +20,58 @@
 
 package com.pseandroid2.dailydata.model.transformation
 
-import java.util.Stack
-
-class Test<I : Any, O : Any> {
-
-    companion object {
-        setTestStatic()
-    }
-
-    var myTest: Test<out Any, I>? = null
-
-    fun setTest(test: Test<out Any, I>) {
-        myTest = test
-    }
-
-    fun test() {
-        setTest(Test<O, I>())
-    }
-}
-
-@Deprecated("Use Expression instead")
-abstract class TransformationFunction_Depr<M : Any, O : Any> protected constructor(
-    private var composition: TransformationFunction_Depr<out Any, M>? = Identity<List<Any>, M>(),
-    private var functionString: String
+abstract class TransformationFunction<O : Any> protected constructor(
+    protected open var functionString: String
 ) {
 
     companion object {
-        fun <I : Any> identity() = Identity<I, I>()
+        const val SUM_ID = "SUM"
 
-        fun sumC(cols: List<Int>) = SumColumns(cols)
+        fun identity() = Identity()
 
-        fun sumS(cols: List<Int>) = SumSingles(cols)
+        fun integerSum(cols: List<Int>) = IntSum(cols)
 
-        fun parse(functionString: String): TransformationFunction_Depr<out Any, out Any> {
-            var function: String = functionString.substringBefore('(')
+        fun parse(functionString: String): TransformationFunction<out Any> {
+            var function: String = functionString.substringBefore('|')
             var args: String = function.substringAfter('|', "")
+
+            //No need to change stuff if there are no arguments
             if (args != "") {
                 args = args.substring(0, args.length - 2)
                 function = function.substringBefore('|')
             }
 
-            var inner: String = functionString.substringAfter('(')
-            inner = inner.substring(0, inner.length - 2)
-
-            val transform: TransformationFunction_Depr<out Any, out Any> = when (function) {
-                "SUMS" -> {
-                    val split = args.substring(1, args.length - 2).split(", ")
+            val transform: TransformationFunction<out Any> = when (function) {
+                "SUM" -> {
+                    val split = args.split(";")
+                    val colStrings = split[0].substring(1, args.length - 2).split(", ")
                     val cols = mutableListOf<Int>()
-                    for (string in split) {
+                    for (string in colStrings) {
                         cols.add(string.toInt())
                     }
-                    SumSingles(cols)
+                    when (split[1]) {
+                        "INT" -> IntSum(cols)
+                        else -> throw IllegalArgumentException("No such Sum function: ${split[1]}")
+                    }
                 }
-                else -> {
-                    Identity<Any, Any>()
+                "ID" -> {
+                    if (args != "") {
+                        throw IllegalArgumentException(
+                            "No Constructor for Identity function found with arguments $args"
+                        )
+                    } else {
+                        Identity()
+                    }
                 }
+                else -> throw IllegalArgumentException("No such function: $function")
             }
-            transform.setComposition("")
-            /*
-            if (inner != "") {
-                transform.setComposition(parse(inner))
-            }
-            return transform*/
-            TODO()
+            return transform
         }
     }
 
-    fun execute(input: List<List<Any>>): List<O> {
-        val intermediate = composition?.execute(input)
-        @Suppress("Unchecked_Cast")
-        return calculate(intermediate ?: input as List<M>)
-    }
+    abstract fun execute(input: List<List<Any>>): List<O>
 
-    open fun toCompleteString(): String {
-        return "$functionString(${composition?.toCompleteString() ?: ""})"
+    fun toCompleteString(): String {
+        return functionString
     }
-
-    fun setComposition(composeWith: TransformationFunction_Depr<out Any, M>) {
-        composition = composeWith
-    }
-
-    abstract fun calculate(intermediate: List<M>): List<O>
 }

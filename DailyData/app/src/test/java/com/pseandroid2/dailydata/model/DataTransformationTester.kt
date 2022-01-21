@@ -20,8 +20,7 @@
 
 package com.pseandroid2.dailydata.model
 
-import com.pseandroid2.dailydata.model.transformation.SumColumns
-import com.pseandroid2.dailydata.model.transformation.SumSingles
+import com.pseandroid2.dailydata.model.transformation.Sum
 import com.pseandroid2.dailydata.model.transformation.TransformationFunction
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
@@ -30,7 +29,7 @@ import org.junit.Test
 
 class DataTransformationTester {
     private lateinit var transformChaining: SumSingles<List<Int>>
-    private lateinit var transformSimple: SumColumns<List<Int>>
+    private lateinit var transformSimple: Sum<List<Int>>
     private val testSet1 = listOf(listOf(2, 3))
     private val testSet2 = listOf(
         listOf(2, 3, -1), listOf(9, 21, -20), listOf(234, 92, -10000), listOf(3)

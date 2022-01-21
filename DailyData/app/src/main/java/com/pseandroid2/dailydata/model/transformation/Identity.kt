@@ -20,11 +20,10 @@
 
 package com.pseandroid2.dailydata.model.transformation
 
-class Identity<I : Any, M : Any>() :
-    TransformationFunction<I, M>(null, "id") {
+class Identity() :
+    TransformationFunction<List<Any>>("ID") {
 
-    override fun calculate(intermediate: List<I>): List<M> {
-        @Suppress("Unchecked_Cast")
-        return intermediate as List<M>
+    override fun execute(input: List<List<Any>>): List<List<Any>> {
+        return input
     }
 }
