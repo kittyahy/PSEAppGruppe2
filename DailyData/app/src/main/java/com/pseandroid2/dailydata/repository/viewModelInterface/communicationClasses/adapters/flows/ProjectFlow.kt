@@ -2,10 +2,9 @@ package com.pseandroid2.dailydata.repository.viewModelInterface.communicationCla
 
 import com.pseandroid2.dailydata.model.GraphType
 import com.pseandroid2.dailydata.model.database.AppDataBase
+import com.pseandroid2.dailydata.model.database.entities.ProjectData
 import com.pseandroid2.dailydata.repository.viewModelInterface.communicationClasses.Button
-import com.pseandroid2.dailydata.repository.viewModelInterface.communicationClasses.Column
 import com.pseandroid2.dailydata.repository.viewModelInterface.communicationClasses.Graph
-import com.pseandroid2.dailydata.repository.viewModelInterface.communicationClasses.LineChart
 import com.pseandroid2.dailydata.repository.viewModelInterface.communicationClasses.Member
 import com.pseandroid2.dailydata.repository.viewModelInterface.communicationClasses.Notification
 import com.pseandroid2.dailydata.repository.viewModelInterface.communicationClasses.Project
@@ -23,12 +22,13 @@ class ProjectFlow(
     private val projectId: Int
 ) {
     private val sharedFlow = MutableSharedFlow<Project>()
-    private val graphFlow = appDataBase.graphDAO().getGraphEntityForProjects(projectId)
-    private val notificationFlow = appDataBase.notificationsDAO().getNotificationEntities(projectId)
-    private val projectDataFlow = appDataBase.projectDataDAO().getProjectData(projectId)
+    private val buttonFlow : Flow<List<Button>> = ButtonFlow(appDataBase.uiElementDAO().getUIElements(projectId)).getFlow()
+    private val graphFlow : Flow<List<Graph>> = GraphFlow(appDataBase.graphDAO().getGraphEntityForProjects(projectId)).getFlow()
+    private val memberFlow : Flow<List<Member>> = MemberFlow(TODO()).getFlow()
+    private val notificationFlow : Flow<List<Notification>> = NotificationFlow(appDataBase.notificationsDAO().getNotificationEntities(projectId)).getFlow()
+    private val projectDataFlow : Flow<ProjectData?> = appDataBase.projectDataDAO().getProjectData(projectId)
     private val settingsFlow: Flow<Map<String, String>> = TODO()
-    private val tableContentFlow = appDataBase.tableContentDAO().getRowsById(projectId)
-    private val uIElementFlow = appDataBase.uiElementDAO().getUIElements(projectId)
+    private val rowFlow : Flow<List<Row>> = RowFlow(appDataBase.tableContentDAO().getRowsById(projectId)).getFlow()
 
     init {
         GlobalScope.launch {
@@ -36,41 +36,18 @@ class ProjectFlow(
         }
     }
 
-    fun getProjectPreviewFlow(): Flow<Project> {
+    fun getProjectFlow(): Flow<Project> {
         return sharedFlow
     }
 
     @InternalCoroutinesApi
     suspend fun adapt() {
-        val emptyProject = Project(
-            projectId.toLong(),
-            false,
-            false,
-            "title missing",
-            "description missing",
-            "wallpaper missing",
-            ArrayList<Column>(),
-            ArrayList<Row>(),
-            ArrayList<Button>(),
-            ArrayList<Notification>(),
-            ArrayList<Graph>(),
-            ArrayList<Member>()
-        )
+        val emptyProject = Project()
         val emptyFlow = MutableSharedFlow<Project>()
         emptyFlow.emit(emptyProject)
-        emptyFlow.combine(graphFlow) { project, graphList ->
+        emptyFlow.combine(buttonFlow) { project, graphList ->
             TODO()//project.graphs = graphList
         }
         sharedFlow//TODO .emit(listProjectPreview)
-    }
-    private fun modelGraphListToVMGraphList(graphEntityList: List<com.pseandroid2.dailydata.model.Graph>): List<Graph> {
-        val vMGraphList = ArrayList<Graph>()
-        for (graphEntity: com.pseandroid2.dailydata.model.Graph in graphEntityList) {
-            if (graphEntity.getType() == GraphType.LINE_CHART) {
-                val graph = TODO()//Todo LineChart(graphEntity.id.toLong(), )
-            }
-
-        }
-        return vMGraphList
     }
 }
