@@ -20,7 +20,6 @@
 
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverManager
 
-import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandInfo
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.Delta
@@ -29,25 +28,25 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Test
-import org.mockito.Mock
-import org.mockito.Mockito
-import org.mockito.Mockito.mock
 import java.time.LocalDateTime
 
 internal class ServerManagerTests_RESTAPICorrectlyLinked {
 
+    private var postPreviewList: List<String> = listOf("PostPreview")
+    private var postDetailList: List<String> = listOf("PostDetail")
+    private var deltaList: Collection<Delta> = listOf(Delta())
+    private var fetchRequestList: Collection<FetchRequest> = listOf(FetchRequest())
 
+    private lateinit var restAPI: RESTAPI
 
+    private lateinit var serverManager: ServerManager
 
-    @Test
-    fun restAPILinked() {
-        var postPreviewList: List<String> = listOf("PostPreview")
-        var postDetailList: List<String> = listOf("PostDetail")
-        var deltaList: Collection<Delta> = listOf(Delta())
-        var fetchRequestList: Collection<FetchRequest> = listOf(FetchRequest())
+    @Before
+    fun setup() {
 
-        var restAPI: RESTAPI = mockk<RESTAPI>()
+        restAPI = mockk<RESTAPI>()
         every { restAPI.greet() } returns true
 
         every { restAPI.getAllPostsPreview("")} returns postPreviewList
@@ -67,8 +66,12 @@ internal class ServerManagerTests_RESTAPICorrectlyLinked {
         every { restAPI.getFetchRequests(1, "") } returns fetchRequestList
 
         // Create ServerManager with mocked RestAPI
-        val serverManager = ServerManager(restAPI)
+        serverManager = ServerManager(restAPI)
+    }
 
+
+    @Test
+    fun restAPILinked() {
         // Test if serverManager returns the expected outputs
         Assert.assertTrue(serverManager.greet())
 
@@ -80,7 +83,7 @@ internal class ServerManagerTests_RESTAPICorrectlyLinked {
 
         Assert.assertEquals("GraphTemplate", serverManager.getGraphTemplate(1, 1, ""))
 
-        Assert.assertTrue(serverManager.addPost("", "", listOf(""), ""))
+        Assert.assertTrue(serverManager.addPost("", "", emptyList(), ""))
 
         Assert.assertTrue(serverManager.removePost(1, ""))
 
@@ -90,7 +93,7 @@ internal class ServerManagerTests_RESTAPICorrectlyLinked {
 
         Assert.assertEquals(0, serverManager.addProject(""))
 
-        Assert.assertEquals("command1", serverManager.sendCommandsToServer(1, listOf("command1"), "").elementAt(0))
+        Assert.assertEquals("command1", serverManager.sendCommandsToServer(1, listOf(""), "").elementAt(0))
 
         // Test if projectCommand lands in the projectCommandQueue
         serverManager.getDeltasFromServer(1, "")

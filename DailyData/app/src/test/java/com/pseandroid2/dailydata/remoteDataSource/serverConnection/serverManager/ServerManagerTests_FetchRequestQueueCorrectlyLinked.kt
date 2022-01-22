@@ -20,33 +20,35 @@
 
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverManager
 
-import com.pseandroid2.dailydata.remoteDataSource.queue.FetchRequestQueueObserver
-import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandInfo
 import com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.UpdatedByObserver_ForTesting
 import com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.fetchRequest.FetchRequestQueueObserver_ForTesting
-import com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.projectCommand.ProjectCommandQueueObserver_ForTesting
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
+import io.mockk.every
+import io.mockk.mockk
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Test
-import org.mockito.Mock
-import org.mockito.Mockito
-import org.mockito.Mockito.mock
-import java.time.LocalDateTime
 
 internal class ServerManagerTests_FetchRequestQueueCorrectlyLinked {
 
+    @Before
+    fun setup() {
 
-
+    }
 
     @Test
-    fun queuesLinked() {
+    fun fetchRequestQueueLinked() {
         // Create mocked restAPI
-        var fetchRequestList: MutableList<String> = mutableListOf("FetchRequest", "FetchRequest2") // List with size=2
+        Assert.assertTrue(false)
 
-        var restAPI: RESTAPI = mock<RESTAPI>()
-        every { restAPI.getFetchRequests() } return fetchRequestList
+        val fetchRequestList: MutableList<FetchRequest> = mutableListOf(FetchRequest(project = 1), FetchRequest(project = 2), FetchRequest(project = 3))
 
+
+
+        var restAPI: RESTAPI = mockk<RESTAPI>()
+        every { restAPI.getFetchRequests(1, "") } returns fetchRequestList
 
         // Create TestQueues
         var toUpdate = UpdatedByObserver_ForTesting()
@@ -59,26 +61,28 @@ internal class ServerManagerTests_FetchRequestQueueCorrectlyLinked {
 
         // Add Observer to queues
         serverManager.addObserverToFetchRequestQueue(fetchRequestObserver)
-        Assert.assertEquals(0, toUpdate.getUpdated())
 
         // Fill Queues
-        serverManager.getFetchRequests(1, "") // Fills FetchRequestQueue with fetchRequestList
+        serverManager.getFetchRequests(1, "") // Fills ProjectCommandQueue with projectCommandInfo Objects
+        val fetchRequestListSize = fetchRequestList.size
+        Assert.assertEquals(fetchRequestListSize, toUpdate.getUpdated())
 
-        // Check if FetchRequestQueue is correctly linked
-        Assert.assertEquals(2, serverManager.getFetchRequestQueueLength())
-        Assert.assertEquals("FetchRequest", serverManager.getFetchRequestFromQueue())
-        Assert.assertEquals(1, serverManager.getFetchRequestQueueLength())
-        Assert.assertEquals("FetchRequest2", serverManager.getFetchRequestFromQueue())
-        Assert.assertEquals(0, serverManager.getFetchRequestQueueLength())
+        Assert.assertEquals(fetchRequestListSize, serverManager.getFetchRequestQueueLength())
 
-        Assert.assertEquals(2, toUpdate.getUpdated()) // Should be updated 2 times from the fetchRequestObserver
+
+        // Check if Queue is correctly linked
+        for (i in 0 until fetchRequestListSize) {
+            val fetchRequestFromQueue: FetchRequest? = serverManager.getFetchRequestFromQueue()
+            Assert.assertTrue(fetchRequestList.remove(fetchRequestFromQueue))
+            Assert.assertEquals(fetchRequestList.size - i - 1, serverManager.getFetchRequestQueueLength())
+        }
 
         // Unregister Observer
         serverManager.unregisterObserverFromFetchRequestQueue(fetchRequestObserver)
 
         // Fill Queues
-        serverManager.getFetchRequests(1, "") // Fills FetchRequestQueue with fetchRequestList
+        serverManager.getFetchRequests(1, "")  // Fills ProjectCommandQueue with projectCommandList
 
-        Assert.assertEquals(2, toUpdate.getUpdated()) // Should not update because no observer is linked
+        Assert.assertEquals(fetchRequestListSize, toUpdate.getUpdated()) // Should not update because no observer is linked
     }
 }
