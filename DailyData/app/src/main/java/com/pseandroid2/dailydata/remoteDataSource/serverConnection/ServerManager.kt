@@ -138,7 +138,7 @@ class ServerManager @Inject constructor(private val restapi: RESTAPI) {
      * @return Collection<String>: The successfully uploaded project commands (as JSONs) // TODO: ändere dies im Entwurfsdokument
      */
     fun sendCommandsToServer(projectID: Long, projectCommands: Collection<String>, authToken: String): Collection<String> {
-        val successfullyUploaded: MutableList<String> = mutableListOf("")
+        val successfullyUploaded: MutableList<String> = mutableListOf()
         //TODO: Write proper tests for this
 
         val jobs: MutableList<Job> = mutableListOf<Job>()

@@ -67,21 +67,10 @@ class RESTAPI {
      * @return Boolean: Returns true, if the server could be successfully reached. Otherwise return false
      */
     fun greet(): Boolean {
-
-        Log.d("greet", "TESTDEBUG")
-
         val greetingCall: Call<String> = server.greet()
 
         val response: Response<String> = greetingCall.execute()
         val body: String = response.body() ?: ""
-
-        Log.d("greet", "TESTDEBUG2")
-
-        /*
-        val greeting: String = server.greet() ?: ""
-        */
-
-        Log.d("greet", body)
 
         if (body == "Hello") {
             return true
