@@ -33,9 +33,20 @@ import org.junit.Test
 
 internal class ServerManagerTests_FetchRequestQueueCorrectlyLinked {
 
+    private var fetchRequestList: MutableList<FetchRequest> = mutableListOf(FetchRequest(project = 1), FetchRequest(project = 2), FetchRequest(project = 3))
+    private lateinit var restAPI: RESTAPI
+    private lateinit var serverManager: ServerManager
+
+    // Create Observer
+    private val toUpdate = UpdatedByObserver_ForTesting()
+    private val fetchRequestObserver = FetchRequestQueueObserver_ForTesting(toUpdate)
+
     @Before
     fun setup() {
-
+        restAPI = mockk<RESTAPI>()
+        every { restAPI.getFetchRequests(1, "") } returns fetchRequestList
+        // Create ServerManager with mocked RestAPI
+        serverManager = ServerManager(restAPI)
     }
 
     @Test
@@ -43,19 +54,6 @@ internal class ServerManagerTests_FetchRequestQueueCorrectlyLinked {
         // Create mocked restAPI
         Assert.assertTrue(false)
 
-        val fetchRequestList: MutableList<FetchRequest> = mutableListOf(FetchRequest(project = 1), FetchRequest(project = 2), FetchRequest(project = 3))
-
-
-
-        var restAPI: RESTAPI = mockk<RESTAPI>()
-        every { restAPI.getFetchRequests(1, "") } returns fetchRequestList
-
-        // Create TestQueues
-        var toUpdate = UpdatedByObserver_ForTesting()
-        var fetchRequestObserver = FetchRequestQueueObserver_ForTesting(toUpdate)
-
-        // Create ServerManager with mocked RestAPI
-        val serverManager = ServerManager(restAPI)
 
         Assert.assertEquals(0, toUpdate.getUpdated())
 

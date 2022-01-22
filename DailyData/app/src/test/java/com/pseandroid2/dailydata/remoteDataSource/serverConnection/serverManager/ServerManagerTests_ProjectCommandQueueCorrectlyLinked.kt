@@ -33,9 +33,6 @@ import org.junit.Test
 
 internal class ServerManagerTests_ProjectCommandQueueCorrectlyLinked {
 
-
-
-
     @Test
     fun projectCommandQueueLinked() {
         // Create mocked restAPI

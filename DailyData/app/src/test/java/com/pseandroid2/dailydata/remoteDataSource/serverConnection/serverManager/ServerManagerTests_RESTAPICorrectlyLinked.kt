@@ -45,7 +45,6 @@ internal class ServerManagerTests_RESTAPICorrectlyLinked {
 
     @Before
     fun setup() {
-
         restAPI = mockk<RESTAPI>()
         every { restAPI.greet() } returns true
 

@@ -20,6 +20,7 @@
 
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection
 
+import android.util.Log
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandInfo
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.AddPostParameter
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.DemandOldDataParameter
@@ -30,25 +31,32 @@ import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParamet
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.Delta
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
 import retrofit2.Call
+import retrofit2.Response
 import java.time.LocalDateTime
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import com.google.gson.GsonBuilder
+
+import com.google.gson.Gson
+
+
+
 
 class RESTAPI {
-    private var baseUrl: String = "http://261ee33a-ba27-4828-b5df-f5f8718defe8.ka.bw-cloud-instance.org:8080" // TODO: Die URL unseres Servers verwenden
+    private var baseUrl: String = "http://261ee33a-ba27-4828-b5df-f5f8718defe8.ka.bw-cloud-instance.org:8080" // The URL from our server
 
-    private var retrofit: Retrofit
-    private val server: ServerEndpoints
+    private val gson: Gson = GsonBuilder()
+        .setLenient()
+        .create()
 
-    init {
-        retrofit = Retrofit.Builder()
-            .baseUrl(baseUrl)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build();
-            //.create(ServerEndpoints)
+    private var retrofit: Retrofit = Retrofit.Builder()
+        .baseUrl(baseUrl)
+        .addConverterFactory(GsonConverterFactory.create(gson))
+        .build()
 
-        server = retrofit.create(ServerEndpoints::class.java) // TODO: Wahrscheinlich ist das .java hier falsch
-    }
+    private val server: ServerEndpoints = retrofit.create(ServerEndpoints::class.java)
+
+
 
     // Note: There is no need to send the User ID of the current user to the server, as this can be read from the Firebase authToken
 
@@ -59,11 +67,23 @@ class RESTAPI {
      * @return Boolean: Returns true, if the server could be successfully reached. Otherwise return false
      */
     fun greet(): Boolean {
+
+        Log.d("greet", "TESTDEBUG")
+
         val greetingCall: Call<String> = server.greet()
 
-        val greeting: String = greetingCall.execute().body() ?: ""
+        val response: Response<String> = greetingCall.execute()
+        val body: String = response.body() ?: ""
 
-        if (greeting == "Hello") {
+        Log.d("greet", "TESTDEBUG2")
+
+        /*
+        val greeting: String = server.greet() ?: ""
+        */
+
+        Log.d("greet", body)
+
+        if (body == "Hello") {
             return true
         }
         return false

@@ -12,6 +12,6 @@ class RESTAPITests_Greet {
     fun greet() {
         var restAPI: RESTAPI = RESTAPI()
 
-        Assert.assertEquals(true, restAPI.greet())
+        Assert.assertTrue(restAPI.greet())
     }
 }
