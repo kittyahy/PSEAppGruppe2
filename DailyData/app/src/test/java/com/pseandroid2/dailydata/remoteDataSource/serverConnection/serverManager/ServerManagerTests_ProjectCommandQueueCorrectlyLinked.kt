@@ -70,10 +70,11 @@ internal class ServerManagerTests_ProjectCommandQueueCorrectlyLinked {
         }
 
         // Check if Queue is correctly linked
-        for (i in deltaList.indices) {
+        val deltaListSize = deltaList.size
+        for (i in 1..deltaListSize) {
             val projectCommandFromQueue = serverManager.getProjectCommandFromQueue()
             Assert.assertTrue(projectCommands.remove(projectCommandFromQueue))
-            Assert.assertEquals(deltaList.size - i - 1, serverManager.getProjectCommandQueueLength())
+            Assert.assertEquals(deltaListSize - i, serverManager.getProjectCommandQueueLength())
         }
 
         // Unregister Observer
@@ -82,6 +83,6 @@ internal class ServerManagerTests_ProjectCommandQueueCorrectlyLinked {
         // Fill Queues
         serverManager.getDeltasFromServer(1, "") // Fills ProjectCommandQueue with projectCommandList
 
-        Assert.assertEquals(1, toUpdate.getUpdated()) // Should not update because no observer is linked
+        Assert.assertEquals(deltaListSize, toUpdate.getUpdated()) // Should not update because no observer is linked
     }
 }

@@ -51,10 +51,6 @@ internal class ServerManagerTests_FetchRequestQueueCorrectlyLinked {
 
     @Test
     fun fetchRequestQueueLinked() {
-        // Create mocked restAPI
-        Assert.assertTrue(false)
-
-
         Assert.assertEquals(0, toUpdate.getUpdated())
 
         // Add Observer to queues
@@ -69,10 +65,10 @@ internal class ServerManagerTests_FetchRequestQueueCorrectlyLinked {
 
 
         // Check if Queue is correctly linked
-        for (i in 0 until fetchRequestListSize) {
+        for (i in 1..fetchRequestListSize) {
             val fetchRequestFromQueue: FetchRequest? = serverManager.getFetchRequestFromQueue()
             Assert.assertTrue(fetchRequestList.remove(fetchRequestFromQueue))
-            Assert.assertEquals(fetchRequestList.size - i - 1, serverManager.getFetchRequestQueueLength())
+            Assert.assertEquals(fetchRequestListSize - i, serverManager.getFetchRequestQueueLength())
         }
 
         // Unregister Observer
