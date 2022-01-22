@@ -88,7 +88,7 @@ internal class ServerManagerTests_RESTAPICorrectlyLinked {
 
         Assert.assertTrue(serverManager.removePost(1, ""))
 
-        Assert.assertTrue(serverManager.addUser("", 1, ""))
+        Assert.assertTrue(serverManager.addUser(1, ""))
 
         Assert.assertTrue(serverManager.removeUser("", 1, ""))
 

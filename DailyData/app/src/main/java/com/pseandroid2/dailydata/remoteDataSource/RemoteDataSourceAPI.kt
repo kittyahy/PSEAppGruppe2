@@ -162,13 +162,12 @@ class RemoteDataSourceAPI @Inject constructor(private val uAccount: UserAccount,
 
     // -----------------------------ProjectParticipantsController-------------------------------
     /**
-     * @param userToAdd: The id of the user that should be added to the project
      * @param projectID: The id of the project to which the user is to be added
      * @return Boolean: Did the server call succeed
      */
-    fun addUser(userToAdd: String, projectID: Long): Boolean {
+    fun addUser(projectID: Long): Boolean {
         val authToken: String = userAccount.getToken()
-        return serverManager.addUser(userToAdd, projectID, authToken)
+        return serverManager.addUser(projectID, authToken)
     }
 
     /**

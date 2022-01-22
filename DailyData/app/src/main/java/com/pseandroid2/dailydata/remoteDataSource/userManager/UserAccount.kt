@@ -82,7 +82,7 @@ class UserAccount @Inject constructor(private val fm: FirebaseManager) {
      * @return String: The email of the signed in user (if existing). If no user is signed in return ""
      */
     fun getUserEMail(): String {
-        return getUserEMail()
+        return firebaseManager.getUserEMail()
     }
 
     /**

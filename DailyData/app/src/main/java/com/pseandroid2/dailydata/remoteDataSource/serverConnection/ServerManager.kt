@@ -37,7 +37,7 @@ import kotlinx.coroutines.runBlocking
 import java.time.LocalDateTime
 import javax.inject.Inject
 
-class ServerManager @Inject constructor(private val restapi: RESTAPI) {
+class ServerManager @Inject constructor(restapi: RESTAPI) {
     private val restAPI: RESTAPI = restapi
 
     private val fetchRequestQueue: FetchRequestQueue = FetchRequestQueue()
@@ -109,10 +109,9 @@ class ServerManager @Inject constructor(private val restapi: RESTAPI) {
 
     // ----------------------------------ProjectParticipantsController-------------------------------
     /**
-     * @param userToAdd: The id of the user that should be added to the project
      * @param projectID: The id of the project to which the user is to be added
      */
-    fun addUser(userToAdd: String, projectID: Long, authToken: String): Boolean{
+    fun addUser(projectID: Long, authToken: String): Boolean{
         return restAPI.addUser(projectID, authToken)
     }
 

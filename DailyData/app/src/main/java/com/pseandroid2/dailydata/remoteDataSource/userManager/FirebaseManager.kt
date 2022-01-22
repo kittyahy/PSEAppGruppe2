@@ -20,16 +20,16 @@
 
 package com.pseandroid2.dailydata.remoteDataSource.userManager
 
+import android.provider.Settings.Global.getString
 import android.util.Log
-import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
 import com.google.firebase.auth.GetTokenResult
-
-
+import com.pseandroid2.dailydata.R
 
 class FirebaseManager {
 
@@ -163,7 +163,7 @@ class FirebaseManager {
         if (user == null || user.displayName == null) {
             return ""
         }
-        return user.displayName.toString() // TODO, prüfe ob das richtig ist
+        return user.displayName?:""
     }
 
     /**
@@ -174,7 +174,7 @@ class FirebaseManager {
         if (user == null || user.email == null) {
             return ""
         }
-        return user.email.toString() // TODO, prüfe ob das richtig ist
+        return user.email?:""
     }
 
     /**
@@ -185,7 +185,7 @@ class FirebaseManager {
         if (user == null || user.photoUrl == null) {
             return ""
         }
-        return user.photoUrl.toString() // TODO, prüfe ob das richtig ist
+        return user.photoUrl.toString() // Converts Uri to String
     }
 
     /**
