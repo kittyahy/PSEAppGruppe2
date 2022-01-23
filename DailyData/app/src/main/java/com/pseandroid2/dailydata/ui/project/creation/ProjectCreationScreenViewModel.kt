@@ -24,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pseandroid2.dailydata.util.ui.UiEvent
@@ -42,7 +43,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProjectCreationScreenViewModel @Inject constructor(
-    private val repository: Repository
+    private val repository: Repository,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val _uiEvent = MutableSharedFlow<UiEvent>()
@@ -73,6 +75,18 @@ class ProjectCreationScreenViewModel @Inject constructor(
         private set
     var isGraphDialogOpen by mutableStateOf(false)
         private set
+
+    var isBackDialogOpen by mutableStateOf(false)
+        private set
+
+    init {
+        val todoId = savedStateHandle.get<Int>("projectId")!!
+        if(todoId != -1) {
+            viewModelScope.launch {
+                //set template values
+            }
+        }
+    }
 
     fun onEvent(event: ProjectCreationEvent) {
         when (event) {
@@ -143,6 +157,7 @@ class ProjectCreationScreenViewModel @Inject constructor(
                     table.isEmpty() -> sendUiEvent(UiEvent.ShowToast("Please Enter a column"))
                     else            -> {
                         var id = 0 //id = repository.createProject(...)
+                        sendUiEvent(UiEvent.PopBackStack )
                         sendUiEvent(UiEvent.Navigate(Routes.DATA + "?projectId=$id"))
                     }
                 }
@@ -166,6 +181,12 @@ class ProjectCreationScreenViewModel @Inject constructor(
             }
             is ProjectCreationEvent.OnShowGraphDialog -> {
                 isGraphDialogOpen = event.isOpen
+            }
+            is ProjectCreationEvent.OnShowBackDialog -> {
+                isBackDialogOpen = event.isOpen
+            }
+            is ProjectCreationEvent.OnNavigateBack -> {
+                sendUiEvent(UiEvent.PopBackStack)
             }
         }
     }

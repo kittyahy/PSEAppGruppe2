@@ -20,6 +20,9 @@
 
 package com.pseandroid2.dailydata.ui.project.overview
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pseandroid2.dailydata.util.ui.UiEvent
@@ -39,6 +42,12 @@ class ProjectOverviewViewModel @Inject constructor(
     val projects : Flow<List<String>> = flow {
         emptyList<String>()
     }
+    val templates : Flow<List<String>> = flow {
+        emptyList<String>()
+    }
+
+    var isTemplateDialogOpen by mutableStateOf(false)
+        private set
 
     private val _uiEvent = MutableSharedFlow<UiEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
@@ -48,8 +57,16 @@ class ProjectOverviewViewModel @Inject constructor(
             is ProjectOverviewEvent.OnNewProjectClick -> {
                 sendUiEvent(UiEvent.Navigate(Routes.CREATION))
             }
+            is ProjectOverviewEvent.OnTemplateProjectClick -> {
+                isTemplateDialogOpen = event.isOpen
+            }
             is ProjectOverviewEvent.OnProjectClick -> {
                 sendUiEvent(UiEvent.Navigate(Routes.DATA + "?projectId=${event.id}" ))
+            }
+            is ProjectOverviewEvent.OnTemplateClick -> {
+                //id = repository.createProjectByTemplate(templates[event.index])
+                var id = -1
+                sendUiEvent(UiEvent.Navigate(Routes.CREATION + "?projectId=${id}" ))
             }
         }
     }
