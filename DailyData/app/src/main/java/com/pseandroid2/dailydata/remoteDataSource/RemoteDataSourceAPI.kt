@@ -25,6 +25,8 @@ import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandInfo
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueueObserver
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.PostPreview
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.TemplateDetail
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
 import com.pseandroid2.dailydata.remoteDataSource.userManager.SignInTypes
 import com.pseandroid2.dailydata.remoteDataSource.userManager.UserAccount
@@ -102,18 +104,18 @@ class RemoteDataSourceAPI @Inject constructor(private val uAccount: UserAccount,
 
     // -----------------------------PostsController-------------------------------
     /**
-     * @return Collection<String>: The previews of the posts (as JSONs)
+     * @return Collection<PostPreview>: The previews of the posts
      */
-    fun getAllPostPreview(): Collection<String> {
+    fun getAllPostPreview(): Collection<PostPreview> {
         val authToken: String = userAccount.getToken()
         return serverManager.getAllPostPreview(authToken)
     }
 
     /**
      * @param fromPost: The id from the searched post
-     * @return Collection<String>: Returns the detailed post belonging to the post id
+     * @return Collection<TemplateDetail>: Returns the detailed post belonging to the post id
      */
-    fun getPostDetail(fromPost: Int): Collection<String> {
+    fun getPostDetail(fromPost: Int): Collection<TemplateDetail> {
         val authToken: String = userAccount.getToken()
         return serverManager.getPostDetail(fromPost, authToken);
     }

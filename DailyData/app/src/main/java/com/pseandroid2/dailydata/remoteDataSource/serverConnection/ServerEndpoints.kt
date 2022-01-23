@@ -17,6 +17,8 @@ import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParamet
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.RemoveUserParameter
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.RequestParameter
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.SaveDeltaParameter
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.PostPreview
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.TemplateDetail
 import java.time.LocalDateTime
 
 interface ServerEndpoints
@@ -31,11 +33,11 @@ interface ServerEndpoints
 
     // Post Controller
     @GET("/Posts"+"/allPreview")
-    fun getAllPostPreview(@Body param: RequestParameter): Call<List<String>>
+    fun getAllPostPreview(@Body param: RequestParameter): Call<List<PostPreview>>
 
     @GET("/Posts"+"/detail/{post}")
     fun getPostDetail(@Path("post") fromPost: Int,
-                      @Body param: RequestParameter): Call<List<String>>
+                      @Body param: RequestParameter): Call<List<TemplateDetail>>
 
     @GET("/Posts"+"/{post}/projectTemplate")
     fun getProjectTemplate(@Path("post") fromPost: Int,

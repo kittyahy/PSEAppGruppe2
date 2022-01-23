@@ -26,6 +26,8 @@ import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.Delta
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.PostPreview
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.TemplateDetail
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -36,8 +38,8 @@ import java.time.LocalDateTime
 
 internal class ServerManagerTests_RESTAPICorrectlyLinked {
 
-    private var postPreviewList: List<String> = listOf("PostPreview")
-    private var postDetailList: List<String> = listOf("PostDetail")
+    private var postPreviewList: List<PostPreview> = listOf(PostPreview())
+    private var postDetailList: List<TemplateDetail> = listOf(TemplateDetail(id = 1))
     private var deltaList: Collection<Delta> = listOf(Delta(projectCommand = "ProjectCommand"))
     private var fetchRequestList: Collection<FetchRequest> = listOf(FetchRequest(requestInfo = "FetchRequest"))
 
@@ -76,9 +78,9 @@ internal class ServerManagerTests_RESTAPICorrectlyLinked {
         // Test if serverManager returns the expected outputs
         Assert.assertTrue(serverManager.greet())
 
-        Assert.assertEquals("PostPreview", serverManager.getAllPostPreview("").elementAt(0))
+        Assert.assertEquals(postPreviewList.elementAt(0), serverManager.getAllPostPreview("").elementAt(0))
 
-        Assert.assertEquals("PostDetail", serverManager.getPostDetail(1, "").elementAt(0))
+        Assert.assertEquals(postDetailList.elementAt(0), serverManager.getPostDetail(1, "").elementAt(0))
 
         Assert.assertEquals("ProjectTemplate", serverManager.getProjectTemplate(1, ""))
 

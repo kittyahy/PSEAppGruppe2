@@ -6,6 +6,8 @@ import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.Delta
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.PostPreview
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.TemplateDetail
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
 import com.pseandroid2.dailydata.remoteDataSource.userManager.SignInTypes
@@ -22,8 +24,8 @@ class RDSAPI_CorrectlyLinked {
 
     private lateinit var rdsAPI: RemoteDataSourceAPI
 
-    private var postPreviewList: List<String> = listOf("PostPreview")
-    private var postDetailList: List<String> = listOf("PostDetail")
+    private var postPreviewList: List<PostPreview> = listOf(PostPreview())
+    private var postDetailList: List<TemplateDetail> = listOf(TemplateDetail())
     private var sendCommandsList: Collection<String> = listOf("ProjectCommand")
     private var deltaList: Collection<String> = listOf("Delta")
     private var fetchRequestList: Collection<FetchRequest> = listOf(FetchRequest(requestInfo = "FetchRequest"))

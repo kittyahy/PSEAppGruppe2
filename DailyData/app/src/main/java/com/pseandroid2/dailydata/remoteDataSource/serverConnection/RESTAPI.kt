@@ -38,8 +38,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 import com.google.gson.GsonBuilder
 
 import com.google.gson.Gson
-
-
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.PostPreview
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.TemplateDetail
 
 
 class RESTAPI {
@@ -82,11 +82,11 @@ class RESTAPI {
     //------------------------------------- Posts Controller -------------------------------------
     /**
      * @param authToken: The authentication token
-     * @return Collection<String>: The previews of the posts (as JSONs)
+     * @return Collection<PostPreview>: The previews of the posts
      */
-    fun getAllPostsPreview(authToken: String): Collection<String> {
+    fun getAllPostsPreview(authToken: String): Collection<PostPreview> {
         val param: RequestParameter = RequestParameter(token = authToken)
-        val call: Call<List<String>> = server.getAllPostPreview(param)
+        val call: Call<List<PostPreview>> = server.getAllPostPreview(param)
 
         return call.execute().body() ?: emptyList()
     }
@@ -94,11 +94,11 @@ class RESTAPI {
     /**
      * @param fromPost: The id from the searched post
      * @param authToken: The authentication token
-     * @return Collection<String>: Returns the detailed post belonging to the post id
+     * @return Collection<TemplateDetail>: Returns the detailed post belonging to the post id
      */
-    fun getPostDetail(fromPost: Int, authToken: String): Collection<String> {
+    fun getPostDetail(fromPost: Int, authToken: String): Collection<TemplateDetail> {
         val params: RequestParameter = RequestParameter(token = authToken)
-        val call: Call<List<String>> = server.getPostDetail(fromPost, params)
+        val call: Call<List<TemplateDetail>> = server.getPostDetail(fromPost, params)
 
         return call.execute().body() ?: emptyList()
     }

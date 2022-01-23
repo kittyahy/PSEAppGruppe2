@@ -27,6 +27,9 @@ import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueue
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueueObserver
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.Delta
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.PostPreview
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.TemplateDetail
+import com.pseandroid2.dailydata.util.ui.Template
 
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
@@ -56,18 +59,18 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
     // ----------------------------------PostsController-------------------------------
     /**
      * @param authToken: The authentication token
-     * @return Collection<String>: The previews of the posts (as JSONs)
+     * @return Collection<PostPreview>: The previews of the posts
      */
-    fun getAllPostPreview(authToken: String): Collection<String> {
+    fun getAllPostPreview(authToken: String): Collection<PostPreview> {
         return restAPI.getAllPostsPreview(authToken)
     }
 
     /**
      * @param fromPost: The id from the searched post
      * @param authToken: The authentication token
-     * @return Collection<String>: Returns the detailed post belonging to the post id
+     * @return Collection<TemplateDetail>: Returns the detailed post belonging to the post id
      */
-    fun getPostDetail(fromPost: Int, authToken: String): Collection<String> {
+    fun getPostDetail(fromPost: Int, authToken: String): Collection<TemplateDetail> {
         return restAPI.getPostDetail(fromPost, authToken)
     }
 
