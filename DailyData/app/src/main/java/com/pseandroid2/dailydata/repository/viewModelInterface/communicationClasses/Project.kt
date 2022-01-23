@@ -3,6 +3,7 @@ package com.pseandroid2.dailydata.repository.viewModelInterface.communicationCla
 import android.graphics.drawable.Drawable
 import com.pseandroid2.dailydata.model.database.entities.GraphEntity
 import com.pseandroid2.dailydata.model.database.entities.ProjectData
+import com.pseandroid2.dailydata.repository.commandCenter.commands.IllegalOperationException
 
 class Project(
     override var id: Long = 0,
@@ -60,7 +61,7 @@ class Project(
             column.delete()
         }
         else{
-            throw IllegalOperationException
+            throw IllegalOperationException()
         }
     }
 
@@ -71,5 +72,12 @@ class Project(
     //@throws IllegalOperationException
     override fun delete() {
         TODO("Not yet implemented")
+    }
+    //@throws IllegalOperationException
+    fun setCell (indexRow: Int, indexColumn: Int, content: String) {
+        if (indexRow >= 0 && indexRow < data.size) {
+            data[indexRow].setCell(indexColumn, content)
+        }
+        throw IllegalOperationException()
     }
 }

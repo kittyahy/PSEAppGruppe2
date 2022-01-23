@@ -7,8 +7,14 @@ class Row(
     override fun deleteIsPossible(): Boolean {
         TODO("Not yet implemented")
     }
-
     override fun delete() {
         TODO("Not yet implemented")
+    }
+    //@throws IllegalOperationException
+    fun setCell(indexColumn: Int, content: String) {
+        if (indexColumn >= 0 && indexColumn < elements.size) {
+            TODO()
+        }
+        TODO()
     }
 }
