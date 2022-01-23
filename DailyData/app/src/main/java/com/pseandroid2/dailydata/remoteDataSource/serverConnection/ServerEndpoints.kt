@@ -52,6 +52,7 @@ interface ServerEndpoints
     fun removePost(@Path("post") postID: Int,
                    @Body param: RequestParameter): Call<Boolean>
 
+
     // ProjectParticipantsController
     @GET("/OnlineDatabase"+"/addUser/{id}")
     fun addUser(@Path("id") projectId: Long,
