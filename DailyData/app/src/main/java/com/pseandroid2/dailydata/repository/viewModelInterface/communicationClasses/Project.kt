@@ -47,6 +47,9 @@ class Project(
         if (row in data) {
             row.delete()
         }
+        else {
+            throw IllegalOperationException()
+        }
     }
     fun addColumnIsPossible(): Boolean {
         TODO()
@@ -79,5 +82,16 @@ class Project(
             data[indexRow].setCell(indexColumn, content)
         }
         throw IllegalOperationException()
+    }
+    fun addMemberIsPossible(){
+        TODO()
+    }
+    fun addMember (member: Member) {
+        if (member in members && members.size > 1) {
+            TODO()
+        }
+        else {
+            throw IllegalOperationException()
+        }
     }
 }
