@@ -112,4 +112,7 @@ dependencies {
 
     //drop down icon - project creation
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
+
+    //Mockk
+    testImplementation "io.mockk:mockk:1.9.3"
 }

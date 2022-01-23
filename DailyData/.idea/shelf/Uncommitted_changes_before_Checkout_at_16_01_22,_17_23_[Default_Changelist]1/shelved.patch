@@ -1,0 +1,27 @@
+Index: app/src/main/java/com/pseandroid2/dailydata/repository/viewModelInterface/communicationClasses/modelHiltModules/ProjectDataDAOModule.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.pseandroid2.dailydata.repository.viewModelInterface.communicationClasses.modelHiltModules\n\nclass ProjectDataDAOModule {\n}
+===================================================================
+diff --git a/app/src/main/java/com/pseandroid2/dailydata/repository/viewModelInterface/communicationClasses/modelHiltModules/ProjectDataDAOModule.kt b/app/src/main/java/com/pseandroid2/dailydata/repository/viewModelInterface/communicationClasses/modelHiltModules/ProjectDataDAOModule.kt
+--- a/app/src/main/java/com/pseandroid2/dailydata/repository/viewModelInterface/communicationClasses/modelHiltModules/ProjectDataDAOModule.kt	
++++ b/app/src/main/java/com/pseandroid2/dailydata/repository/viewModelInterface/communicationClasses/modelHiltModules/ProjectDataDAOModule.kt	
+@@ -1,4 +1,17 @@
+ package com.pseandroid2.dailydata.repository.viewModelInterface.communicationClasses.modelHiltModules
+ 
++import android.app.Application
++import com.pseandroid2.dailydata.model.database.entities.ProjectData
++import dagger.Module
++import dagger.Provides
++import dagger.hilt.InstallIn
++import kotlinx.coroutines.flow.Flow
++
++@Module
++@InstallIn(Application::class)
+ class ProjectDataDAOModule {
++    @Provides
++    fun provide(): Flow<List<ProjectData>> {
++        return TODO()
++    }
+ }
+\ No newline at end of file

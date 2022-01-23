@@ -1,9 +1,11 @@
 package com.pseandroid2.dailydata.repository.viewModelInterface.communicationClasses
 
-import android.graphics.drawable.Drawable
+import com.pseandroid2.dailydata.model.database.entities.ProjectData
 
-data class ProjectPreview(
+class ProjectPreview(
     override val id: Long,
     val name: String,
-    val image: Drawable
-): Identifiable
+    val image: String
+): Identifiable {
+    constructor(projectData: ProjectData) : this(projectData.id.toLong(), projectData.name, projectData.wallpaper)
+}
