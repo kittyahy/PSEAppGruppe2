@@ -87,10 +87,22 @@ class Project(
         TODO()
     }
     fun addMember (member: Member) {
-        if (member in members && members.size > 1) {
+        //Todo If bedingung schöner machen, keine Magic numbers und aussagekräftigere Exceptions werfen
+        if (member !in members && members.size < 25 && isOnlineProject) {
             TODO()
         }
         else {
+            throw IllegalOperationException()
+        }
+    }
+    fun deleteMemberIsPossible() {
+        TODO()
+    }
+    fun deleteMember(member: Member) {
+        if (member in members && members.size > 1) {
+            TODO()
+        }
+        else{
             throw IllegalOperationException()
         }
     }
