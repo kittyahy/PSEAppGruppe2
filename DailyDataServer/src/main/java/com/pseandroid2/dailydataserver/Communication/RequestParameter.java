@@ -17,7 +17,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
-package com.pseandroid2.dailydataserver.Communication.requestBodyLogic;
+package com.pseandroid2.dailydataserver.Communication;
 
 /**
  * #TODO Testen
@@ -54,7 +54,7 @@ public  class RequestParameter {
     @Override
     public String toString() {
         return "RequestParameter{" +
-                "token='" + token + '\'' +
+                "token='" + token  +
                 '}';
     }
 }

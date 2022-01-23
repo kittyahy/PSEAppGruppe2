@@ -51,11 +51,12 @@ public class LoginInterceptor implements HandlerInterceptor {
         //aus dem Body herausparsen, was der Token ist: ganz ungetestet:
         //ich hab jetzt mal eifnach aus dem wissen heraus agiert, dass der token immer ganz vorne steht..., kann man sicher hüscher machen
 
-        //idee: body: "token: 12234 , info1: irgendwelcheInfo, info2: 24"
-        String[] bodyParts = body.split(",");//idee: ["token: 12234"]["info1: irgendwelcheInfo"]["info2: 24"]
-        String[] tokenParts = bodyParts[0].split(":"); //idee: ["token"][" 12234"]
+        //Ich hoffe, dass der Token mit token= eingeleitet wird, und nach dem Token eine } kommt....
+        int indexofTokenstart = body.indexOf("token=")+6;
+        String splitted = body.substring(indexofTokenstart);
+        int indexOfTokenEnd =  splitted.indexOf("}");
+        String firebaseToken = splitted.substring(0,indexOfTokenEnd).trim();
 
-        String firebaseToken = tokenParts[1].trim();//idee: firebaseToken = "12234";
         // Firebase auth
         String name = "TODO"; // firebasetoken.getUid(); Bitte austauschen, sobald firebase steht.
         request.setAttribute("user", name);

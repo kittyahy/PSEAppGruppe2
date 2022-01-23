@@ -19,6 +19,9 @@
 */
 package com.pseandroid2.dailydataserver.postDatabase;
 
+import lombok.Setter;
+
+import javax.persistence.Access;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;

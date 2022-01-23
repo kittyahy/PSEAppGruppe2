@@ -19,7 +19,7 @@
 */
 package com.pseandroid2.dailydataserver.onlineDatabase;
 
-import com.pseandroid2.dailydataserver.Communication.requestBodyLogic.RequestParameter;
+import com.pseandroid2.dailydataserver.Communication.RequestParameter;
 import com.pseandroid2.dailydataserver.onlineDatabase.requestParameters.fetchRequestController.DemandOldDataParameter;
 import org.springframework.web.bind.annotation.*;
 

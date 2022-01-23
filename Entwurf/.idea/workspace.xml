@@ -5,9 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bf7f9265-29d2-44aa-8259-c44e3e4dd2a1" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../DailyDataServer/src/main/java/com/pseandroid2/dailydataserver/onlineDatabase/Delta.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DailyDataServer/src/main/java/com/pseandroid2/dailydataserver/onlineDatabase/Delta.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DailyDataServer/src/main/java/com/pseandroid2/dailydataserver/onlineDatabase/DeltaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DailyDataServer/src/main/java/com/pseandroid2/dailydataserver/onlineDatabase/DeltaController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../DailyDataServer/src/main/java/com/pseandroid2/dailydataserver/postDatabase/PostsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DailyDataServer/src/main/java/com/pseandroid2/dailydataserver/postDatabase/PostsController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DailyDataServer/src/main/java/com/pseandroid2/dailydataserver/postDatabase/PostService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DailyDataServer/src/main/java/com/pseandroid2/dailydataserver/postDatabase/PostService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DailyDataServer/src/main/java/com/pseandroid2/dailydataserver/postDatabase/Posts.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DailyDataServer/src/main/java/com/pseandroid2/dailydataserver/postDatabase/Posts.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
