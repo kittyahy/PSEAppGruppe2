@@ -17,21 +17,21 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
-package com.pseandroid2.dailydataserver.postDatabase;
+package com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface TemplateRepository extends JpaRepository<Template, TemplateId> {
-    List<Template> findByPost(int post);
+public interface ProjectParticipantsRepository extends JpaRepository<ProjectParticipants,ProjectParticipantsID> {
+    long countByProject(long project);
 
-    @Query("select t from Template t where t.post = ?1 and t.isProjectTemplate = true")
-    Template findByPostAndIsProjectTemplateIsTrue(int postID);
+    List<ProjectParticipants> findByProjectOrderByNumberOfJoinAsc(long project);
 
-    void deleteByPost(int post);
 
+    List<ProjectParticipants> findByProject(long projectId);
+
+    ProjectParticipants findByProjectAndRoleIs(long project, Role role);
 }

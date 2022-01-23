@@ -37,6 +37,11 @@ import java.util.List;
 @RequestMapping("/OnlineDatabase")
 public class ProjectParticipantsController {
 
+    private final ProjectParticipantService service;
+    public ProjectParticipantsController(ProjectParticipantService ppService) {
+        this.service = ppService;
+    }
+
     /**
      * Adds a user to a project.
      *
@@ -47,7 +52,7 @@ public class ProjectParticipantsController {
      */
     @PostMapping("/addUser/{id}")
     public boolean addUser(@RequestAttribute String user, @PathVariable("id") long projectId, @RequestBody RequestParameter param) {
-        return true;
+        return service.addUser(user,projectId);
     }
 
     /**
@@ -62,7 +67,10 @@ public class ProjectParticipantsController {
      */
     @DeleteMapping("/removeUser/{id}")
     public boolean removeUser(@RequestAttribute String user, @PathVariable("id") long projectId, @RequestBody RemoveUserParameter params) {
-        return true;
+        if(user.equals(params.getUserToRemove())){
+            return service.leaveProject(user,projectId);
+        }
+        return service.removeOtherUser( user,  projectId,  params.getUserToRemove());
     }
 
     /**
@@ -74,7 +82,7 @@ public class ProjectParticipantsController {
      */
     @PostMapping("/newProject")
     public long addProject(@RequestAttribute String user, @RequestBody RequestParameter param) {
-        return 0;
+        return service.addProject(user);
     }
 
     /**
@@ -87,7 +95,7 @@ public class ProjectParticipantsController {
      */
     @GetMapping("/{id}/participants")
     public List<String> getParticipants(@RequestAttribute String user, @PathVariable("id") long projectId, @RequestBody RequestParameter param){
-        return new ArrayList<>();
+        return service.getParticipants(projectId);
     }
 
     /**
@@ -100,7 +108,7 @@ public class ProjectParticipantsController {
      */
     @GetMapping("/{id}/admin")
     public String getAdmin(@RequestAttribute String user, @PathVariable("id") long projectId, @RequestBody RequestParameter param){
-        return "";
+        return service.getAdmin(projectId);
     }
 }
 

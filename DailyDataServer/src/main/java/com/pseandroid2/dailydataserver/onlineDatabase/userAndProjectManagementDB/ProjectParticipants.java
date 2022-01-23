@@ -17,7 +17,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
-package com.pseandroid2.dailydataserver.onlineDatabase;
+package com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -91,5 +91,15 @@ public class ProjectParticipants {
     @Override
     public int hashCode() {
         return Objects.hash(user, project);
+    }
+
+    @Override
+    public String toString() {
+        return "ProjectParticipants{" +
+                "user='" + user + '\'' +
+                ", project=" + project +
+                ", role=" + role +
+                ", numberOfJoin=" + numberOfJoin +
+                '}';
     }
 }

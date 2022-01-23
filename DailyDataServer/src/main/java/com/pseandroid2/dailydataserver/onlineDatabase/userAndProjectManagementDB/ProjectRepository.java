@@ -17,38 +17,12 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
-package com.pseandroid2.dailydataserver.onlineDatabase;
+package com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB;
 
-import java.io.Serializable;
-import java.util.Objects;
+import com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB.Project;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-/**
- * #TODO JavaDoc
- */
-
-public class ProjectParticipantsID implements Serializable {
-    private String user;
-    private long project;
-
-
-    public ProjectParticipantsID(String user, long project) {
-        this.user = user;
-        this.project = project;
-    }
-
-    public ProjectParticipantsID() {
-    }
-
-    @Override
-    public boolean equals(Object o){
-        if (this == o) return true;
-        if (o== null || this.getClass()!= o.getClass()) return false;
-        ProjectParticipantsID proPaId =(ProjectParticipantsID) o;
-        return user.equals(proPaId.user) && proPaId.project == project;
-    }
-
-    @Override
-    public int hashCode(){
-        return Objects.hash(project,user);
-    }
+@Repository
+public interface ProjectRepository extends JpaRepository<Project,Long> {
 }

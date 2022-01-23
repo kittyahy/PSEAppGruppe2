@@ -17,21 +17,13 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
-package com.pseandroid2.dailydataserver.postDatabase;
+package com.pseandroid2.dailydataserver.onlineDatabase.DeltaDB;
 
+import com.pseandroid2.dailydataserver.onlineDatabase.DeltaDB.Delta;
+import com.pseandroid2.dailydataserver.onlineDatabase.DeltaDB.DeltaID;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
-public interface TemplateRepository extends JpaRepository<Template, TemplateId> {
-    List<Template> findByPost(int post);
-
-    @Query("select t from Template t where t.post = ?1 and t.isProjectTemplate = true")
-    Template findByPostAndIsProjectTemplateIsTrue(int postID);
-
-    void deleteByPost(int post);
-
+public interface DeltaRepository extends JpaRepository<Delta, DeltaID> {
 }

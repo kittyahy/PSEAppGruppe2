@@ -1,4 +1,3 @@
-package com.pseandroid2.dailydataserver.onlineDatabase.requestParameters.deltaController;
 /*
 
     DailyData is an android app to easily create diagrams from data one has collected
@@ -18,6 +17,8 @@ package com.pseandroid2.dailydataserver.onlineDatabase.requestParameters.deltaCo
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
+package com.pseandroid2.dailydataserver.onlineDatabase.requestParameters.deltaController;
+
 import com.pseandroid2.dailydataserver.Communication.RequestParameter;
 
 import java.sql.Date;
