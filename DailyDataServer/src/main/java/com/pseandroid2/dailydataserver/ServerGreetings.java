@@ -32,7 +32,7 @@ public class ServerGreetings {
      *
      * @return the recommended String
      */
-    public String greeting(){
+    public String greeting() {
         return "Hello";
     }
 }

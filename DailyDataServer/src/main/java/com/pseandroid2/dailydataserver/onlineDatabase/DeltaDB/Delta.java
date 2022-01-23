@@ -31,12 +31,13 @@ import java.util.Set;
  * #TODO JavaDoc
  */
 @Entity
-@Table(name= "Delta_Table")
+@Table(name = "Delta_Table")
 @IdClass(DeltaID.class)
 public class Delta {
     private @Id
     LocalDateTime addedToServer;
-    private @Id String user;
+    private @Id
+    String user;
     private String projectCommand;
     private long project;
     private String requestedBy;

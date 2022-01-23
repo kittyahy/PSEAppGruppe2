@@ -107,7 +107,7 @@ public class DeltaController {
      */
     @PostMapping("/provide/{id}")
     public boolean provideOldData(@PathVariable("id") long projectId, @RequestAttribute String user,
-                               @RequestBody ProvideOldDataParameter params) {
+                                  @RequestBody ProvideOldDataParameter params) {
         /*
         - aufräumen
         - platz checken:

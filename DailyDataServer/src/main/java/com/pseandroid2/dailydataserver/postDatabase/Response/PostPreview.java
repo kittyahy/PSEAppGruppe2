@@ -24,8 +24,7 @@ public class PostPreview {
     private String preview;
 
 
-
-    public PostPreview(int id, String templateDetail){
+    public PostPreview(int id, String templateDetail) {
         this.id = id;
         this.preview = templateDetail;
     }

@@ -35,8 +35,8 @@ import java.util.List;
 public class AddPostParameter extends RequestParameter {
 
     private String postPreview;
-    private Pair<String,String> projectTemplate;
-    private List<Pair<String,String>> graphTemplates;
+    private Pair<String, String> projectTemplate;
+    private List<Pair<String, String>> graphTemplates;
 
     /**
      * The parameters for addPost. Constructor.
@@ -46,7 +46,7 @@ public class AddPostParameter extends RequestParameter {
      * @param projectTemplate the projectTemplate (provided by the client)
      * @param graphTemplates  all graphTemplates (provided by the client)
      */
-    public AddPostParameter(String token, String postPreview, Pair<String,String> projectTemplate, List<Pair<String,String>> graphTemplates) {
+    public AddPostParameter(String token, String postPreview, Pair<String, String> projectTemplate, List<Pair<String, String>> graphTemplates) {
         super(token);
         this.postPreview = postPreview;
         this.projectTemplate = projectTemplate;
@@ -66,7 +66,7 @@ public class AddPostParameter extends RequestParameter {
         this.postPreview = postPreview;
     }
 
-    public Pair<String,String> getProjectTemplate() {
+    public Pair<String, String> getProjectTemplate() {
         return projectTemplate;
     }
 
@@ -77,13 +77,13 @@ public class AddPostParameter extends RequestParameter {
     /**
      * @return a copy of the list
      */
-    public List<Pair<String,String>> getGraphTemplates() {
-        List<Pair<String,String>> list = new ArrayList<>();
+    public List<Pair<String, String>> getGraphTemplates() {
+        List<Pair<String, String>> list = new ArrayList<>();
         list.addAll(graphTemplates);
         return list;
     }
 
-    public void setGraphTemplates(List<Pair<String,String>> graphTemplates) {
+    public void setGraphTemplates(List<Pair<String, String>> graphTemplates) {
         this.graphTemplates.addAll(graphTemplates);
     }
 

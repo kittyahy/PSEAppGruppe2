@@ -52,7 +52,7 @@ public class ProjectParticipantService {
             if (ppRepo.countByProject(projectId) == 1) {
                 projectRepo.deleteById(projectId);
             } else {
-                List<ProjectParticipants>  projectParticipantsList = ppRepo.findByProjectOrderByNumberOfJoinAsc(projectId);
+                List<ProjectParticipants> projectParticipantsList = ppRepo.findByProjectOrderByNumberOfJoinAsc(projectId);
                 projectParticipantsList.get(0).setRole(Role.ADMIN);
             }
         }
@@ -75,13 +75,13 @@ public class ProjectParticipantService {
     public List<String> getParticipants(long projectId) {
         List<ProjectParticipants> participantsList = ppRepo.findByProject(projectId);
         List<String> participantName = new ArrayList<>();
-        for(ProjectParticipants participant : participantsList){
+        for (ProjectParticipants participant : participantsList) {
             participantName.add(participant.getUser());
         }
         return participantName;
     }
 
     public String getAdmin(long projectId) {
-        return ppRepo.findByProjectAndRoleIs(projectId,Role.ADMIN).getUser();
+        return ppRepo.findByProjectAndRoleIs(projectId, Role.ADMIN).getUser();
     }
 }

@@ -25,19 +25,18 @@ package com.pseandroid2.dailydataserver.Communication;
 
 /**
  * The Parameters for all Request, which need authentication.
- *
- *
  */
-public  class RequestParameter {
+public class RequestParameter {
     private String token;
 
     /**
      * Constructor: needs the token for the authentication.
+     *
      * @param token for firebase to authenticate
      */
-  public  RequestParameter(String token){
-      this.token = token;
-  }
+    public RequestParameter(String token) {
+        this.token = token;
+    }
 
     /**
      * getters and setters
@@ -54,7 +53,7 @@ public  class RequestParameter {
     @Override
     public String toString() {
         return "RequestParameter{" +
-                "token='" + token  +
+                "token='" + token +
                 '}';
     }
 }

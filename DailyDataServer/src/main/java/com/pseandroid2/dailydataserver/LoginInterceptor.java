@@ -52,10 +52,10 @@ public class LoginInterceptor implements HandlerInterceptor {
         //ich hab jetzt mal eifnach aus dem wissen heraus agiert, dass der token immer ganz vorne steht..., kann man sicher hüscher machen
 
         //Ich hoffe, dass der Token mit token= eingeleitet wird, und nach dem Token eine } kommt....
-        int indexofTokenstart = body.indexOf("token")+6;
+        int indexofTokenstart = body.indexOf("token") + 6;
         String splitted = body.substring(indexofTokenstart);
-        int indexOfTokenEnd =  splitted.indexOf("}");
-        String firebaseToken = splitted.substring(0,indexOfTokenEnd).trim();
+        int indexOfTokenEnd = splitted.indexOf("}");
+        String firebaseToken = splitted.substring(0, indexOfTokenEnd).trim();
 
         // Firebase auth
         String name = "TODO"; // firebasetoken.getUid(); Bitte austauschen, sobald firebase steht.

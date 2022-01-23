@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * Controller to know if the server is available.
  * The client doesn't need to log in for access the controller
- *
  */
 @RestController
 public class GreetingController {

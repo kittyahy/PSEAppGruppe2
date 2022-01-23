@@ -29,7 +29,7 @@ import java.util.List;
 public interface TemplateRepository extends JpaRepository<Template, TemplateId> {
     List<Template> findByPost(int post);
 
-    @Query("select t from Template t where t.post = ?1 and t.isProjectTemplate = true")
+    @Query(value = "select t from Template t where t.post = ?1 and t.isProjectTemplate = true")
     Template findByPostAndIsProjectTemplateIsTrue(int postID);
 
     void deleteByPost(int post);

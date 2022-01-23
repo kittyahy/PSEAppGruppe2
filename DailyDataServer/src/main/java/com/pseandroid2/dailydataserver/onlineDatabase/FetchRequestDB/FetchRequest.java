@@ -49,10 +49,12 @@ import java.util.Objects;
  * #TODO JavaDoc
  */
 @Entity
-@Table(name="FetchRequest_Table")
+@Table(name = "FetchRequest_Table")
 public class FetchRequest {
 
-    private @Id @GeneratedValue int id;
+    private @Id
+    @GeneratedValue
+    int id;
     private String user;
     private long project;
     private String requestInfo;

@@ -29,11 +29,13 @@ import java.util.Objects;
  * #TODO JavaDoc
  */
 @Entity
-@Table(name="ProjectParticipants_Table")
+@Table(name = "ProjectParticipants_Table")
 @IdClass(ProjectParticipantsID.class)
 public class ProjectParticipants {
-    private @Id String user;
-    private @Id long project;
+    private @Id
+    String user;
+    private @Id
+    long project;
     private Role role;
     private int numberOfJoin;
 

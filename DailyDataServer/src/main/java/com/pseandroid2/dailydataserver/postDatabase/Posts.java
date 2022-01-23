@@ -19,18 +19,17 @@
 */
 package com.pseandroid2.dailydataserver.postDatabase;
 
-import lombok.Setter;
 
-import javax.persistence.Access;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name="Post_Table")
+@Table(name = "Post_Table")
 public class Posts {
-    private @Id int postId;
+    private @Id
+    int postId;
     private String postPreview;
     private String createdBy;
 
@@ -51,7 +50,7 @@ public class Posts {
         return templateIds;
     }
 
-    public void increaseTemplateIds(){
+    public void increaseTemplateIds() {
         templateIds++;
     }
 

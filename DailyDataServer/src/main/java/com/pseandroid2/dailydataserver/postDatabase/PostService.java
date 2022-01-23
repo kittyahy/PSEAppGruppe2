@@ -95,12 +95,12 @@ public class PostService {
     }
 
     public String getGraphTemplate(int postId, int tempNr) {
-        Template tem =  tempRepo.findById(new TemplateId(postId, tempNr)).get();
+        Template tem = tempRepo.findById(new TemplateId(postId, tempNr)).get();
         return tem.getTemplateInitial();
     }
 
-    public boolean removePost(int postId, String user){
-        if(!user.equals(postRepo.findById(postId).get().getCreatedBy())){
+    public boolean removePost(int postId, String user) {
+        if (!user.equals(postRepo.findById(postId).get().getCreatedBy())) {
             return false;
         }
         tempRepo.deleteByPost(postId);

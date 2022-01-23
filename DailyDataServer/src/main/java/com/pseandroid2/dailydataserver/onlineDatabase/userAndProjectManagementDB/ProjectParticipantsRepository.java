@@ -25,7 +25,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ProjectParticipantsRepository extends JpaRepository<ProjectParticipants,ProjectParticipantsID> {
+public interface ProjectParticipantsRepository extends JpaRepository<ProjectParticipants, ProjectParticipantsID> {
     long countByProject(long project);
 
     List<ProjectParticipants> findByProjectOrderByNumberOfJoinAsc(long project);

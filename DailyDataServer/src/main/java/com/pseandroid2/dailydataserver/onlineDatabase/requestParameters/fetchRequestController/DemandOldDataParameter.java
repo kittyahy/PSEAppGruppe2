@@ -24,6 +24,7 @@ import com.pseandroid2.dailydataserver.Communication.RequestParameter;
 /**
  * #TODO Testen, JavaDoc
  */
+
 /**
  * The parameters for {@link com.pseandroid2.dailydataserver.onlineDatabase.FetchRequestController#demandOldData(String, long, DemandOldDataParameter) demandOldData()}
  */

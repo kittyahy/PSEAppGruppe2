@@ -47,7 +47,7 @@ public class PostsController {
     private PostService service;
 
 
-    public PostsController(PostService service){
+    public PostsController(PostService service) {
         this.service = service;
     }
 
@@ -72,7 +72,7 @@ public class PostsController {
     @GetMapping("/detail/{post}")
     public List<TemplateDetail> getPostDetail(@PathVariable("post") int fromPost, @RequestBody RequestParameter param) {
 
-        return  service.getTemplateDetailsAndID(fromPost);
+        return service.getTemplateDetailsAndID(fromPost);
     }
 
     /**
@@ -97,7 +97,7 @@ public class PostsController {
      */
     @GetMapping("/{post}/{template}")
     public String getGraphTemplate(@PathVariable("post") int fromPost, @PathVariable("template") int templateNumber, @RequestBody RequestParameter param) {
-        return service.getGraphTemplate(fromPost,templateNumber);
+        return service.getGraphTemplate(fromPost, templateNumber);
     }
 
     /**
@@ -107,13 +107,13 @@ public class PostsController {
      * @return the postID of the new post or 0 if the user has to much posts and can't add a new one.
      */
     @PostMapping("/add")
-    public int addPost(@RequestAttribute String user,@RequestBody AddPostParameter params) {
+    public int addPost(@RequestAttribute String user, @RequestBody AddPostParameter params) {
 
-       if(service.checkPostAmount(user)) {
-           return 0;
-       }else {
-           return service.addPost(params.getPostPreview(), params.getProjectTemplate(), params.getGraphTemplates(), user);
-       }
+        if (service.checkPostAmount(user)) {
+            return 0;
+        } else {
+            return service.addPost(params.getPostPreview(), params.getProjectTemplate(), params.getGraphTemplates(), user);
+        }
     }
 
     /**

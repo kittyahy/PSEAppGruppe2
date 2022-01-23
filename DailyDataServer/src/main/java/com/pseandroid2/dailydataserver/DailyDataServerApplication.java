@@ -31,6 +31,7 @@ public class DailyDataServerApplication {
     /**
      * starts the application
      * starts spring boot
+     *
      * @param args default arguments. going to be empty.
      */
     public static void main(String[] args) {

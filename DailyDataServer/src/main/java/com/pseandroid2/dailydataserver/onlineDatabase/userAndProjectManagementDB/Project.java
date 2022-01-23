@@ -24,9 +24,10 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-@Table(name ="Project_Table")
+@Table(name = "Project_Table")
 public class Project {
-    private @Id long projectId;
+    private @Id
+    long projectId;
     private LocalDateTime lastUpdated;
     private int participantId;
 
@@ -44,9 +45,10 @@ public class Project {
         return participantId;
     }
 
-    public void addParticipant(){
+    public void addParticipant() {
         participantId++;
     }
+
     public long getProjectId() {
         return projectId;
     }

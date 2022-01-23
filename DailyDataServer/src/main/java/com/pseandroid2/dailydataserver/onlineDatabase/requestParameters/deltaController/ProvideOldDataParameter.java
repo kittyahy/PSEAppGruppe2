@@ -28,7 +28,7 @@ import java.sql.Date;
  */
 
 /**
- * The parameters for {@link com.pseandroid2.dailydataserver.onlineDatabase.DeltaController#provideOldData(long,String,ProvideOldDataParameter) provideOldData}
+ * The parameters for {@link com.pseandroid2.dailydataserver.onlineDatabase.DeltaController#provideOldData(long, String, ProvideOldDataParameter) provideOldData}
  */
 public class ProvideOldDataParameter extends RequestParameter {
     private String command;
@@ -46,7 +46,7 @@ public class ProvideOldDataParameter extends RequestParameter {
      */
     public ProvideOldDataParameter(String token, String command, String forUser, Date initialAdded, String initialAddedBy, boolean wasAdmin) {
         super(token);
-        this.command =command;
+        this.command = command;
         this.forUser = forUser;
         this.initialAdded = initialAdded;
         this.initialAddedBy = initialAddedBy;

@@ -19,8 +19,6 @@
 */
 package com.pseandroid2.dailydataserver.onlineDatabase.DeltaDB;
 
-import com.pseandroid2.dailydataserver.onlineDatabase.DeltaDB.Delta;
-import com.pseandroid2.dailydataserver.onlineDatabase.DeltaDB.DeltaID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
