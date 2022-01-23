@@ -31,8 +31,14 @@ class Project(
     fun update(settings: Nothing){
         TODO("not yet implemented")
     }
+    fun addRowIsPossible(): Boolean {
+        TODO()
+    }
     //@throws IllegalOperationException
     fun addRow(row: Row) {
+        TODO()
+    }
+    fun deleteRowIsPossible(): Boolean {
         TODO()
     }
     //@throws IllegalOperationException
@@ -40,6 +46,9 @@ class Project(
         if (row in data) {
             row.delete()
         }
+    }
+    fun addColumnIsPossible(): Boolean {
+        TODO()
     }
     //@throws IllegalOperationException
     fun addColumn(column: Column) {
@@ -49,6 +58,9 @@ class Project(
     fun deleteColumn(column: Column) {
         if (column in table) {
             column.delete()
+        }
+        else{
+            throw IllegalOperationException
         }
     }
 
