@@ -31,4 +31,24 @@ class Project(
     fun update(settings: Nothing){
         TODO("not yet implemented")
     }
+    //@throws IllegalOperationException
+    fun addRow(row: Row) {
+        TODO()
+    }
+    //@throws IllegalOperationException
+    fun deleteRow(row: Row) {
+        if (row in data) {
+            row.delete()
+        }
+    }
+    //@throws IllegalOperationException
+    fun addColumn(column: Column) {
+        TODO()
+    }
+    //@throws IllegalOperationException
+    fun deleteColumn(column: Column) {
+        if (column in table) {
+            column.delete()
+        }
+    }
 }

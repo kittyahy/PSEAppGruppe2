@@ -2,4 +2,6 @@ package com.pseandroid2.dailydata.repository.viewModelInterface.communicationCla
 
 interface Identifiable {
     val id: Long
+    //@throws IllegalOperationException
+    fun delete()
 }
