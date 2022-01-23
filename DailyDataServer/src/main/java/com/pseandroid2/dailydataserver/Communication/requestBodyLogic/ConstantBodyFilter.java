@@ -17,7 +17,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
-package com.pseandroid2.dailydataserver.requestBodyLogic;
+package com.pseandroid2.dailydataserver.Communication.requestBodyLogic;
 
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -32,7 +32,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * #TODO official Test, JavaDoc
+ * #TODO official Test
+ */
+
+/**
+ * Filter to "replace" the body with a reusable body object
+ * This filter is the first filter and every request goes through this filter.
  */
 @Component
 @Order(value = Ordered.HIGHEST_PRECEDENCE)
@@ -43,6 +48,6 @@ public class ConstantBodyFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         BodyServletRequestWrapper bodyRequest = new BodyServletRequestWrapper(request);
-        filterChain.doFilter(bodyRequest,response);
+        filterChain.doFilter(bodyRequest, response);
     }
 }

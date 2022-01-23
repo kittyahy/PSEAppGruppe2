@@ -17,37 +17,38 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
-package com.pseandroid2.dailydataserver.onlineDatabase;
+package com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Objects;
+
 /**
  * #TODO JavaDoc
  */
-public class DeltaID  implements Serializable {
-    private LocalDateTime addedToServer;
+
+public class ProjectParticipantsID implements Serializable {
     private String user;
+    private long project;
 
-    public DeltaID(){}
 
-    public DeltaID(LocalDateTime addedToServer, String user){
-        this.addedToServer = addedToServer;
+    public ProjectParticipantsID(String user, long project) {
         this.user = user;
+        this.project = project;
+    }
+
+    public ProjectParticipantsID() {
     }
 
     @Override
-    public boolean equals(Object o){
+    public boolean equals(Object o) {
         if (this == o) return true;
-        if (o== null || this.getClass()!= o.getClass()) return false;
-        DeltaID deltaID =(DeltaID) o;
-        return addedToServer.equals(deltaID.addedToServer) && user.equals(deltaID.user);
-
+        if (o == null || this.getClass() != o.getClass()) return false;
+        ProjectParticipantsID proPaId = (ProjectParticipantsID) o;
+        return user.equals(proPaId.user) && proPaId.project == project;
     }
 
     @Override
-    public int hashCode(){
-        return Objects.hash(addedToServer,user);
+    public int hashCode() {
+        return Objects.hash(project, user);
     }
-
 }

@@ -17,32 +17,39 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
-package com.pseandroid2.dailydataserver;
+package com.pseandroid2.dailydataserver.postDatabase.Response;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+public class PostPreview {
+    private int id;
+    private String preview;
 
-/**
- * Controller to know if the server is available.
- * The client doesn't need to log in for access the controller
- */
-@RestController
-public class GreetingController {
 
-    private ServerGreetings serverGreetings;
-
-    public GreetingController() {
-        this.serverGreetings = new ServerGreetings();
+    public PostPreview(int id, String templateDetail) {
+        this.id = id;
+        this.preview = templateDetail;
     }
 
-    /**
-     * Returns a String with length, longer than 0, to make sure the server is available.
-     *
-     * @return greeting to signalise, the server is reachable.
-     */
-    @GetMapping("/greet")
-    public String greets() {
-        return serverGreetings.greeting();
+    public int getId() {
+        return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getPreview() {
+        return preview;
+    }
+
+    public void setPreview(String preview) {
+        this.preview = preview;
+    }
+
+    @Override
+    public String toString() {
+        return "PostPreview{" +
+                "id=" + id +
+                ", preview='" + preview + '\'' +
+                '}';
+    }
 }

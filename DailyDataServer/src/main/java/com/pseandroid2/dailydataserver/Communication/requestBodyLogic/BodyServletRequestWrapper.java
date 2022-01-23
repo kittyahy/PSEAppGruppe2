@@ -17,7 +17,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
-package com.pseandroid2.dailydataserver.requestBodyLogic;
+package com.pseandroid2.dailydataserver.Communication.requestBodyLogic;
 
 import org.springframework.util.StreamUtils;
 
@@ -32,13 +32,17 @@ import java.io.InputStreamReader;
 
 
 /**
- * #TODO official Test, JavaDoc
+ * #TODO official Test
+ */
+
+/**
+ * Wrapper for the RequestBody to read it multible times.
  */
 public class BodyServletRequestWrapper extends HttpServletRequestWrapper {
 
     private byte[] body;
 
-    public BodyServletRequestWrapper(HttpServletRequest request) throws IOException{
+    public BodyServletRequestWrapper(HttpServletRequest request) throws IOException {
         super(request);
 
         InputStream requestInputStream = request.getInputStream();
@@ -46,12 +50,12 @@ public class BodyServletRequestWrapper extends HttpServletRequestWrapper {
     }
 
     @Override
-    public ServletInputStream getInputStream() throws IOException{
+    public ServletInputStream getInputStream() throws IOException {
         return new CachedBodyServletInputStream(this.body);
     }
 
     @Override
-    public BufferedReader getReader() throws IOException{
+    public BufferedReader getReader() throws IOException {
         ByteArrayInputStream byteInputStream = new ByteArrayInputStream(this.body);
 
         return new BufferedReader(new InputStreamReader(byteInputStream));

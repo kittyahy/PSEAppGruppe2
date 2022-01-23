@@ -19,22 +19,46 @@
 */
 package com.pseandroid2.dailydataserver.onlineDatabase;
 
+import com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB.ProjectParticipantsID;
+import com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB.ProjectParticipantsRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.HandlerMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 /**
  * #TODO javadoc,Test, implemetierung
  */
+
+/**
+ * Interceptor. Checks if the user may access to the given project.
+ * <p>
+ * if not, rejects the request and the response is empty.
+ * <p>
+ * Gets called before all methods, which depends on an existing project and want's to change it.
+ */
 @Component
 public class AccessToProjectInterceptor implements HandlerInterceptor {
+    private ProjectParticipantsRepository repo;
+
+    public AccessToProjectInterceptor(ProjectParticipantsRepository repo) {
+        this.repo = repo;
+    }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        String user = (String) request.getAttribute("user");
+        Map pathVariables = (Map) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
+        long projectId = (long) pathVariables.get("id");
+
+        if (!repo.existsById(new ProjectParticipantsID(user, projectId))) {
+            return false;
+        }
         return HandlerInterceptor.super.preHandle(request, response, handler);
 
-        //has to check, if the user can access the project.
+
     }
 }

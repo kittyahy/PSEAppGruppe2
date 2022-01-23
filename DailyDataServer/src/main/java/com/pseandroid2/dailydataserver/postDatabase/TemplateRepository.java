@@ -17,38 +17,21 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
-package com.pseandroid2.dailydataserver.onlineDatabase;
+package com.pseandroid2.dailydataserver.postDatabase;
 
-import java.io.Serializable;
-import java.util.Objects;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
-/**
- * #TODO JavaDoc
- */
+import java.util.List;
 
-public class ProjectParticipantsID implements Serializable {
-    private String user;
-    private long project;
+@Repository
+public interface TemplateRepository extends JpaRepository<Template, TemplateId> {
+    List<Template> findByPost(int post);
 
+    @Query(value = "select t from Template t where t.post = ?1 and t.isProjectTemplate = true")
+    Template findByPostAndIsProjectTemplateIsTrue(int postID);
 
-    public ProjectParticipantsID(String user, long project) {
-        this.user = user;
-        this.project = project;
-    }
+    void deleteByPost(int post);
 
-    public ProjectParticipantsID() {
-    }
-
-    @Override
-    public boolean equals(Object o){
-        if (this == o) return true;
-        if (o== null || this.getClass()!= o.getClass()) return false;
-        ProjectParticipantsID proPaId =(ProjectParticipantsID) o;
-        return user.equals(proPaId.user) && proPaId.project == project;
-    }
-
-    @Override
-    public int hashCode(){
-        return Objects.hash(project,user);
-    }
 }

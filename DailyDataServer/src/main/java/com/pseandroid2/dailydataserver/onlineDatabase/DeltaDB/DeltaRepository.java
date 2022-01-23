@@ -17,31 +17,11 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
-package com.pseandroid2.dailydataserver;
+package com.pseandroid2.dailydataserver.onlineDatabase.DeltaDB;
 
-/**
- * #TODO Testen, JavaDoc
- */
-public  class RequestParameter {
-    private String token;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-  public  RequestParameter(String token){
-      this.token = token;
-  }
-
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    @Override
-    public String toString() {
-        return "RequestParameter{" +
-                "token='" + token + '\'' +
-                '}';
-    }
+@Repository
+public interface DeltaRepository extends JpaRepository<Delta, DeltaID> {
 }

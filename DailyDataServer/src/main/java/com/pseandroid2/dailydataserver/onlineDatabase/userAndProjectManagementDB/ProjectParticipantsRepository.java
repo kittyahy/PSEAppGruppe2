@@ -17,32 +17,21 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
-package com.pseandroid2.dailydataserver;
+package com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-/**
- * Controller to know if the server is available.
- * The client doesn't need to log in for access the controller
- */
-@RestController
-public class GreetingController {
+import java.util.List;
 
-    private ServerGreetings serverGreetings;
+@Repository
+public interface ProjectParticipantsRepository extends JpaRepository<ProjectParticipants, ProjectParticipantsID> {
+    long countByProject(long project);
 
-    public GreetingController() {
-        this.serverGreetings = new ServerGreetings();
-    }
+    List<ProjectParticipants> findByProjectOrderByNumberOfJoinAsc(long project);
 
-    /**
-     * Returns a String with length, longer than 0, to make sure the server is available.
-     *
-     * @return greeting to signalise, the server is reachable.
-     */
-    @GetMapping("/greet")
-    public String greets() {
-        return serverGreetings.greeting();
-    }
 
+    List<ProjectParticipants> findByProject(long projectId);
+
+    ProjectParticipants findByProjectAndRoleIs(long project, Role role);
 }

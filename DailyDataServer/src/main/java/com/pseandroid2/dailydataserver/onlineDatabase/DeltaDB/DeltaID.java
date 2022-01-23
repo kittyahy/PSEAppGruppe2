@@ -17,32 +17,39 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
-package com.pseandroid2.dailydataserver;
+package com.pseandroid2.dailydataserver.onlineDatabase.DeltaDB;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
- * Controller to know if the server is available.
- * The client doesn't need to log in for access the controller
+ * #TODO JavaDoc
  */
-@RestController
-public class GreetingController {
+public class DeltaID implements Serializable {
+    private LocalDateTime addedToServer;
+    private String user;
 
-    private ServerGreetings serverGreetings;
-
-    public GreetingController() {
-        this.serverGreetings = new ServerGreetings();
+    public DeltaID() {
     }
 
-    /**
-     * Returns a String with length, longer than 0, to make sure the server is available.
-     *
-     * @return greeting to signalise, the server is reachable.
-     */
-    @GetMapping("/greet")
-    public String greets() {
-        return serverGreetings.greeting();
+    public DeltaID(LocalDateTime addedToServer, String user) {
+        this.addedToServer = addedToServer;
+        this.user = user;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || this.getClass() != o.getClass()) return false;
+        DeltaID deltaID = (DeltaID) o;
+        return addedToServer.equals(deltaID.addedToServer) && user.equals(deltaID.user);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(addedToServer, user);
     }
 
 }

@@ -17,32 +17,43 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
-package com.pseandroid2.dailydataserver;
-
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+package com.pseandroid2.dailydataserver.Communication;
 
 /**
- * Controller to know if the server is available.
- * The client doesn't need to log in for access the controller
+ * #TODO Testen
  */
-@RestController
-public class GreetingController {
 
-    private ServerGreetings serverGreetings;
+/**
+ * The Parameters for all Request, which need authentication.
+ */
+public class RequestParameter {
+    private String token;
 
-    public GreetingController() {
-        this.serverGreetings = new ServerGreetings();
+    /**
+     * Constructor: needs the token for the authentication.
+     *
+     * @param token for firebase to authenticate
+     */
+    public RequestParameter(String token) {
+        this.token = token;
     }
 
     /**
-     * Returns a String with length, longer than 0, to make sure the server is available.
-     *
-     * @return greeting to signalise, the server is reachable.
+     * getters and setters
      */
-    @GetMapping("/greet")
-    public String greets() {
-        return serverGreetings.greeting();
+
+    public String getToken() {
+        return token;
     }
 
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    @Override
+    public String toString() {
+        return "RequestParameter{" +
+                "token='" + token +
+                '}';
+    }
 }

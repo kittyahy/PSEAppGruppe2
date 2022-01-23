@@ -17,10 +17,13 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
-package com.pseandroid2.dailydataserver.onlineDatabase;
+package com.pseandroid2.dailydataserver.onlineDatabase.DeltaDB;
+
+import com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB.ProjectParticipants;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Set;
 
 
@@ -28,12 +31,13 @@ import java.util.Set;
  * #TODO JavaDoc
  */
 @Entity
-@Table(name= "Delta_Table")
+@Table(name = "Delta_Table")
 @IdClass(DeltaID.class)
 public class Delta {
     private @Id
-    LocalDateTime addedToServer; //mit idClass
-    private @Id String user;
+    LocalDateTime addedToServer;
+    private @Id
+    String user;
     private String projectCommand;
     private long project;
     private String requestedBy;
@@ -117,5 +121,30 @@ public class Delta {
 
     public void setAdmin(boolean admin) {
         isAdmin = admin;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Delta delta = (Delta) o;
+        return addedToServer.equals(delta.addedToServer) && user.equals(delta.user);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(addedToServer, user);
+    }
+
+    @Override
+    public String toString() {
+        return "Delta{" +
+                "addedToServer=" + addedToServer +
+                ", user='" + user + '\'' +
+                ", projectCommand='" + projectCommand + '\'' +
+                ", project=" + project +
+                ", requestedBy='" + requestedBy + '\'' +
+                ", isAdmin=" + isAdmin +
+                '}';
     }
 }

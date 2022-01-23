@@ -17,7 +17,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
-package com.pseandroid2.dailydataserver.requestBodyLogic;
+package com.pseandroid2.dailydataserver.Communication.requestBodyLogic;
 
 import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
@@ -27,11 +27,21 @@ import java.io.InputStream;
 
 
 /**
- * #TODO official Test, JavaDoc
+ * #TODO official Test
+ */
+
+/**
+ * Used to read the body input stream, which comes from the Client.
+ * Saves the inputStream to reuse it.
  */
 public class CachedBodyServletInputStream extends ServletInputStream {
     private InputStream bodyInputStream;
 
+    /**
+     * Constructor
+     *
+     * @param body the bytearray which is going to be an InputStream
+     */
     public CachedBodyServletInputStream(byte[] body) {
         this.bodyInputStream = new ByteArrayInputStream(body);
     }

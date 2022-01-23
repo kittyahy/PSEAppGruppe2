@@ -1,4 +1,3 @@
-package com.pseandroid2.dailydataserver.onlineDatabase.requestParameters.deltaController;
 /*
 
     DailyData is an android app to easily create diagrams from data one has collected
@@ -18,12 +17,18 @@ package com.pseandroid2.dailydataserver.onlineDatabase.requestParameters.deltaCo
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
-import com.pseandroid2.dailydataserver.RequestParameter;
+package com.pseandroid2.dailydataserver.onlineDatabase.requestParameters.deltaController;
+
+import com.pseandroid2.dailydataserver.Communication.RequestParameter;
 
 import java.sql.Date;
 
 /**
- * #TODO Testen, JavaDoc
+ * #TODO Testen
+ */
+
+/**
+ * The parameters for {@link com.pseandroid2.dailydataserver.onlineDatabase.DeltaController#provideOldData(long, String, ProvideOldDataParameter) provideOldData}
  */
 public class ProvideOldDataParameter extends RequestParameter {
     private String command;
@@ -33,20 +38,25 @@ public class ProvideOldDataParameter extends RequestParameter {
     private boolean wasAdmin;
 
     /**
-     * @param command        the command for the delta, provided by the client
-     * @param forUser        which User needs the delta, Uid, provided by the client
-     * @param initialAdded   when was the Delta initially added, provided by the client
-     * @param initialAddedBy who added the Delta initially, provided by the client
-     * @param wasAdmin       was the person at this time admin, provided by the client
+     * @param command        the command for the delta (provided by the client)
+     * @param forUser        which User needs the delta, Uid, (provided by the client)
+     * @param initialAdded   when was the Delta initially added (provided by the client)
+     * @param initialAddedBy who added the Delta initially (provided by the client)
+     * @param wasAdmin       was the person at this time admin (provided by the client)
      */
     public ProvideOldDataParameter(String token, String command, String forUser, Date initialAdded, String initialAddedBy, boolean wasAdmin) {
         super(token);
-        this.command =command;
+        this.command = command;
         this.forUser = forUser;
         this.initialAdded = initialAdded;
         this.initialAddedBy = initialAddedBy;
         this.wasAdmin = wasAdmin;
     }
+
+    /**
+     * getters and setters
+     */
+
     public String getCommand() {
         return command;
     }
