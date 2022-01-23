@@ -1,5 +1,6 @@
 package com.pseandroid2.dailydata.repository.viewModelInterface.communicationClasses
 
+import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import com.pseandroid2.dailydata.model.database.entities.GraphEntity
 import com.pseandroid2.dailydata.model.database.entities.ProjectData
@@ -105,5 +106,36 @@ class Project(
         else{
             throw IllegalOperationException()
         }
+    }
+    fun setAdminPossible() {
+        TODO()
+    }
+    fun setAdmin(member: Member){
+        TODO()
+    }
+    fun setWallpaper(image: Bitmap) {
+        TODO()
+    }
+    fun setNotification(notification: Notification) {
+        TODO()
+    }
+    fun deleteNotification(notification: Notification) {
+        notification.delete()
+    }
+    fun setName(name: String) {
+        TODO()
+    }
+    @JvmName("setDescription1")
+    fun setDescription(description: String) {
+        TODO()
+    }
+    fun publishIsPossible() {
+        TODO()
+    }
+    fun publish() {
+        TODO()
+    }
+    fun setButton(button: Button) {
+        TODO()
     }
 }
