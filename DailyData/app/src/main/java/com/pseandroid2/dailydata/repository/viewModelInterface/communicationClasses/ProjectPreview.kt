@@ -8,4 +8,12 @@ class ProjectPreview(
     val image: String
 ): Identifiable {
     constructor(projectData: ProjectData) : this(projectData.id.toLong(), projectData.name, projectData.wallpaper)
+    //@throws IllegalOperationException
+    override fun delete() {
+        TODO("Not yet implemented")
+    }
+
+    override fun deleteIsPossible(): Boolean {
+        TODO("Not yet implemented")
+    }
 }

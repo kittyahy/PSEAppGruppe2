@@ -51,4 +51,13 @@ class Project(
             column.delete()
         }
     }
+
+    override fun deleteIsPossible(): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    //@throws IllegalOperationException
+    override fun delete() {
+        TODO("Not yet implemented")
+    }
 }

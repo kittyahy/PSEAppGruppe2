@@ -2,8 +2,17 @@ package com.pseandroid2.dailydata.repository.viewModelInterface.communicationCla
 
 import java.time.LocalDateTime
 
-data class Notification(
+class Notification(
     override val id: Long,
     val message: String,
     val time: LocalDateTime
-): Identifiable
+): Identifiable {
+    override fun deleteIsPossible(): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    //@throws IllegalOperationException
+    override fun delete() {
+        TODO("Not yet implemented")
+    }
+}
