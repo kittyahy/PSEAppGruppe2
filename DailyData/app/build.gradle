@@ -59,6 +59,11 @@ android {
     lintOptions {
         abortOnError false
     }
+
+
+    defaultConfig {
+        multiDexEnabled true
+    }
 }
 dependencies {
 
@@ -135,4 +140,7 @@ dependencies {
 
     //Parallel
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
+
+
+    implementation 'com.android.support:multidex:2.0.1'
 }
