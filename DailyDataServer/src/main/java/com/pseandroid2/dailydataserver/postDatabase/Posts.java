@@ -20,7 +20,6 @@
 package com.pseandroid2.dailydataserver.postDatabase;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Objects;
@@ -28,19 +27,29 @@ import java.util.Objects;
 @Entity
 @Table(name="Post_Table")
 public class Posts {
-    private @Id
-    @GeneratedValue int postId;
+    private @Id int postId;
     private String postPreview;
     private String createdBy;
+
+    private int templateIds;
 
     public Posts(int postId, String postPreview, String createdBy) {
         this.postId = postId;
         this.postPreview = postPreview;
         this.createdBy = createdBy;
+        templateIds = 0;
     }
 
     public Posts() {
 
+    }
+
+    public int getTemplateIds() {
+        return templateIds;
+    }
+
+    public void increaseTemplateIds(){
+        templateIds++;
     }
 
     public int getPostId() {

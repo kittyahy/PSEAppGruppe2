@@ -19,11 +19,19 @@
 */
 package com.pseandroid2.dailydataserver.postDatabase;
 
-import com.pseandroid2.dailydataserver.RequestParameter;
+import com.pseandroid2.dailydataserver.Communication.requestBodyLogic.RequestParameter;
+import com.pseandroid2.dailydataserver.postDatabase.Response.PostPreview;
+import com.pseandroid2.dailydataserver.postDatabase.Response.TemplateDetail;
 import com.pseandroid2.dailydataserver.postDatabase.requestparameters.AddPostParameter;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 /**
  * #TODO Testen
@@ -36,6 +44,13 @@ import java.util.List;
 @RequestMapping("/Posts")
 public class PostsController {
 
+    private PostService service;
+
+
+    public PostsController(PostService service){
+        this.service = service;
+    }
+
     /**
      * Provides all PostsPreviews with their PostIds.
      *
@@ -43,22 +58,21 @@ public class PostsController {
      * @return a list with all PostPreview and the Post ids.
      */
     @GetMapping("/allPreview")
-    public List<String> getAllPostPreview(@RequestBody RequestParameter param) {
-
-        return new ArrayList<String>();
+    public List<PostPreview> getAllPostPreview(@RequestBody RequestParameter param) {
+        return service.getAllPostPreview();
     }
 
     /**
-     * Provides all Templates from fromPost. Returns the identifier and the DetailView from a template
+     * Provides all Templates detail view from fromPost. Returns the identifier and the DetailView from a template
      *
      * @param fromPost declares from which post the postDetail is recommended (provided by the client)
      * @param param    the data, for authenticate the user. {@link RequestParameter} specifies this parameter.
      * @return a list of all template detailViews with TemplateNumber together, each as String.
      */
     @GetMapping("/detail/{post}")
-    public List<String> getPostDetail(@PathVariable("post") int fromPost, @RequestBody RequestParameter param) {
+    public List<TemplateDetail> getPostDetail(@PathVariable("post") int fromPost, @RequestBody RequestParameter param) {
 
-        return new ArrayList<String>();
+        return  service.getTemplateDetailsAndID(fromPost);
     }
 
     /**
@@ -70,7 +84,7 @@ public class PostsController {
      */
     @GetMapping("/{post}/projectTemplate")
     public String getProjectTemplate(@PathVariable("post") int fromPost, @RequestBody RequestParameter param) {
-        return "TODO";
+        return service.getProjectTemplate(fromPost);
     }
 
     /**
@@ -83,18 +97,23 @@ public class PostsController {
      */
     @GetMapping("/{post}/{template}")
     public String getGraphTemplate(@PathVariable("post") int fromPost, @PathVariable("template") int templateNumber, @RequestBody RequestParameter param) {
-        return "TODO";
+        return service.getGraphTemplate(fromPost,templateNumber);
     }
 
     /**
-     * adds a new Post.
+     * adds a new Post. If there is more than 5 from the same user, have to delete the oldest one.
      *
      * @param params the data, which are recommended to add a new post. {@link AddPostParameter} specifies this parameter.
-     * @return the postID of the new post.
+     * @return the postID of the new post or 0 if the user has to much posts and can't add a new one.
      */
     @PostMapping("/add")
-    public int addPost(@RequestBody AddPostParameter params) {
-        return 0;
+    public int addPost(@RequestAttribute String user,@RequestBody AddPostParameter params) {
+
+       if(service.checkPostAmount(user)) {
+           return 0;
+       }else {
+           return service.addPost(params.getPostPreview(), params.getProjectTemplate(), params.getGraphTemplates(), user);
+       }
     }
 
     /**
@@ -107,7 +126,7 @@ public class PostsController {
      */
     @DeleteMapping("/remove/{post}")
     public boolean removePost(@RequestAttribute String user, @PathVariable("post") int postID, @RequestBody RequestParameter param) {
-        return true;
+        return service.removePost(postID, user);
     }
 
 

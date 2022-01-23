@@ -32,7 +32,7 @@ import java.util.Set;
 @IdClass(DeltaID.class)
 public class Delta {
     private @Id
-    LocalDateTime addedToServer; //mit idClass
+    LocalDateTime addedToServer;
     private @Id String user;
     private String projectCommand;
     private long project;

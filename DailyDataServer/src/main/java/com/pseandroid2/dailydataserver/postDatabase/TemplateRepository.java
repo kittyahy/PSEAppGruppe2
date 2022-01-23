@@ -17,44 +17,24 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
-package com.pseandroid2.dailydataserver;
+package com.pseandroid2.dailydataserver.postDatabase;
 
-/**
- * #TODO Testen
- */
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
-/**
- * The Parameters for all Request, which need authentication.
- *
- *
- */
-public  class RequestParameter {
-    private String token;
+import java.util.List;
 
-    /**
-     * Constructor: needs the token for the authentication.
-     * @param token for firebase to authenticate
-     */
-  public  RequestParameter(String token){
-      this.token = token;
-  }
+@Repository
+public interface TemplateRepository extends JpaRepository<Template, TemplateId> {
+    List<Template> findByPost(int post);
 
-    /**
-     * getters and setters
-     */
+    @Query("select t from Template t where t.post = ?1 and t.isProjectTemplate = true")
+    Template findByPostAndIsProjectTemplateIsTrue(int postID);
 
-    public String getToken() {
-        return token;
-    }
+    boolean deleteByPost(int post);
 
-    public void setToken(String token) {
-        this.token = token;
-    }
 
-    @Override
-    public String toString() {
-        return "RequestParameter{" +
-                "token='" + token + '\'' +
-                '}';
-    }
+
+
 }

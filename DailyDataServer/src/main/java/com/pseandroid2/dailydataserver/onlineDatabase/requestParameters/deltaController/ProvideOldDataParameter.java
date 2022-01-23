@@ -18,7 +18,7 @@ package com.pseandroid2.dailydataserver.onlineDatabase.requestParameters.deltaCo
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
-import com.pseandroid2.dailydataserver.RequestParameter;
+import com.pseandroid2.dailydataserver.Communication.requestBodyLogic.RequestParameter;
 
 import java.sql.Date;
 

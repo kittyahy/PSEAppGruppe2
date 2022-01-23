@@ -17,7 +17,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
-package com.pseandroid2.dailydataserver.requestBodyLogic;
+package com.pseandroid2.dailydataserver.Communication.requestBodyLogic;
 
 import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;

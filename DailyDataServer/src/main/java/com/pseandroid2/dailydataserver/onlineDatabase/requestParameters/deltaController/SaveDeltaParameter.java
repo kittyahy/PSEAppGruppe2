@@ -19,7 +19,7 @@
 */
 package com.pseandroid2.dailydataserver.onlineDatabase.requestParameters.deltaController;
 
-import com.pseandroid2.dailydataserver.RequestParameter;
+import com.pseandroid2.dailydataserver.Communication.requestBodyLogic.RequestParameter;
 
 /**
  * #TODO Testen

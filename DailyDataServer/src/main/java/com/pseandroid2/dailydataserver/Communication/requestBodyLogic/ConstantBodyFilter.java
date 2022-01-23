@@ -17,7 +17,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
-package com.pseandroid2.dailydataserver.requestBodyLogic;
+package com.pseandroid2.dailydataserver.Communication.requestBodyLogic;
 
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;

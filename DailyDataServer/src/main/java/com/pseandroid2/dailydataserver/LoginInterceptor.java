@@ -20,10 +20,12 @@
 package com.pseandroid2.dailydataserver;
 
 import org.springframework.stereotype.Component;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.InputStream;
 
 /**
  * #TODO javadoc,Test, implemetierung
@@ -32,7 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Authenticates the user and adds the user id to the RequestAttributes.
  * Most of the requests get interrupted by this Interceptor.
- *
+ * <p>
  * The authentication works with firebase. The user name ist the uid from firebase.
  */
 @Component
@@ -41,9 +43,22 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
+        //so halb getestet, ich hoffe, dass es funktioniert..
+        InputStream inputStream = request.getInputStream();
+        byte[] byteBody = StreamUtils.copyToByteArray(inputStream);
+        String body = new String(byteBody); //müsste den body auslesen
+
+        //aus dem Body herausparsen, was der Token ist: ganz ungetestet:
+        //ich hab jetzt mal eifnach aus dem wissen heraus agiert, dass der token immer ganz vorne steht..., kann man sicher hüscher machen
+
+        //idee: body: "token: 12234 , info1: irgendwelcheInfo, info2: 24"
+        String[] bodyParts = body.split(",");//idee: ["token: 12234"]["info1: irgendwelcheInfo"]["info2: 24"]
+        String[] tokenParts = bodyParts[0].split(":"); //idee: ["token"][" 12234"]
+
+        String firebaseToken = tokenParts[1].trim();//idee: firebaseToken = "12234";
         // Firebase auth
-        String name = "TODO"; // firebasetoken.getUid();
-        request.setAttribute("name",name);
+        String name = "TODO"; // firebasetoken.getUid(); Bitte austauschen, sobald firebase steht.
+        request.setAttribute("user", name);
         return HandlerInterceptor.super.preHandle(request, response, handler);
 
     }
