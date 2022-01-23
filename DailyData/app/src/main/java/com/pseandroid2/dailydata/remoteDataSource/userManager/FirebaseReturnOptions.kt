@@ -34,5 +34,5 @@ enum class FirebaseReturnOptions (val success: Boolean){
     SINGED_OUT(true),
     WRONG_INPUT_PARAMETERS(false),
 
-    NOT_PROCCESSED(false) // If the method returned while the firebase request wasn't ready (Timeout)
+    TIMEOUT(false) // Firebase took to long to process the request
 }
