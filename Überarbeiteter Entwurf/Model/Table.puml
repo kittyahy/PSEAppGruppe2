@@ -1,0 +1,90 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+skinparam nodesep 80
+skinparam ranksep 60
+hide circle
+
+interface Repository::Table<<interface>> {
+    +getCell(Integer, Integer): Any
+    +getLayout(): TableLayout
+    +getSize(): Integer
+    ..Row Operations..
+    +getRow(Integer): Row
+    +addRow(Row) throws IllegalTypeException
+    +deleteRow(Integer)
+    ..Column Operations..
+    +getColumn(Integer): List<Any>
+    +addColumn(Class<Any>)
+    +deleteColumn(Integer)
+}
+
+interface Repository::Row <<Interface>> {
+    +getAll(): List<Any>
+    +getCell(Integer): Any
+    +setCell(Integer, Any) throws IllegalTypeException
+    +getMetaData(Integer): RowMetaData
+    +getSize(): Integer
+}
+
+class TableDispatcher {
+    +registerObserver(TableObserver)
+    ~callback: (List<Row>) -> Unit
+}
+
+note right of TableDispatcher
+    Observer Pattern
+end note
+
+Any "1..n" --* "1" Repository::Row  : consists of <
+
+interface Repository::TableLayout <<interface>> {
+    +size(): Integer
+    +getColumnType(Integer): Class<Any>
+    +getUIElement(Integer): UIElementType
+    +setUIElement(Integer, UIElementType)
+    ~addColumn(Class<Any>)
+    ~deleteColumn(Integer)
+}
+
+class ProjectTable {
+    +Constructor(TableLayout)
+    +setRowDispatcher(TableDispatcher)
+}
+
+Repository::Table "1" *- "0..n" Repository::Row : contains >
+Repository::Table "1" --> "1" Repository::TableLayout : has >
+ProjectTable ..|> Repository::Table
+TableDispatcher "1" -- "1" ProjectTable : distributes changes in >
+
+class ArrayListRow implements Repository::Row {
+    +Constructor(RowMetaData)
+}
+
+class ArrayListLayout implements Repository::TableLayout {
+    -types: ArrayList<Class<Any>>
+    -uiElements: ArrayList<UIElementType>
+}
+
+class RowMetaData <<data>> {
+    +Constructor(DateTime, User)
+    +getCreationDate(): DateTime
+    +getCreator(): User
+    -createdOn: DateTime
+    -createdBy: User
+}
+
+Repository::Row "1" -> "1" RowMetaData
+
+enum UIElementType <<enum>>{
+    BUTTON,
+    NUMBER_FIELD,
+    DATE_TIME_PICKER
+}
+
+ArrayListRow -[hidden]-> UIElementType
+
+@enduml

@@ -1,0 +1,26 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+Alice -> LoginInterceptor: request
+deactivate Alice
+activate LoginInterceptor
+note over LoginInterceptor: The LoginInterceptor interrupts \nthe connection between \nAlice and Controller
+LoginInterceptor -> Firebase: preHandle
+activate Firebase
+Firebase --> LoginInterceptor:Validation
+deactivate
+alt login succeded
+LoginInterceptor --> Alice: accepted
+
+ref over LoginInterceptor,Controller,Alice: the request going to be executed. Every other sequence diagram takes place at this point.
+else login failed
+LoginInterceptor --> Alice!!: rejected
+end else
+
+
+@enduml

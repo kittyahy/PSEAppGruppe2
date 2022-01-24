@@ -1,0 +1,24 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+title Insert User
+
+participant "projDAO: ProjectDataDAO" as pDAO
+participant "userMap: ProjectUserMap" as user
+
+[-> pDAO : addUser(id, User)
+activate pDAO
+pDAO -> user** : <<create>> (id, User)
+pDAO -> pDAO : insertUserMap(userMap)
+activate pDAO
+pDAO --> pDAO
+deactivate pDAO
+pDAO -->[
+deactivate pDAO
+
+@enduml

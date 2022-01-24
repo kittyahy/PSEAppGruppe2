@@ -1,0 +1,44 @@
+Index: app/src/main/java/com/pseandroid2/dailydata/repository/viewModelInterface/ProjectHandler.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.pseandroid2.dailydata.repository.viewModelInterface\n\nimport com.pseandroid2.dailydata.repository.viewModelInterface.communicationClasses.ProjectPreview\n\nclass ProjectHandler {\n    val projectPreviews: Collection<ProjectPreview> = TODO()\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/pseandroid2/dailydata/repository/viewModelInterface/ProjectHandler.kt b/app/src/main/java/com/pseandroid2/dailydata/repository/viewModelInterface/ProjectHandler.kt
+--- a/app/src/main/java/com/pseandroid2/dailydata/repository/viewModelInterface/ProjectHandler.kt	
++++ b/app/src/main/java/com/pseandroid2/dailydata/repository/viewModelInterface/ProjectHandler.kt	
+@@ -1,7 +1,31 @@
+ package com.pseandroid2.dailydata.repository.viewModelInterface
+ 
++import com.pseandroid2.dailydata.model.database.entities.ProjectData
+ import com.pseandroid2.dailydata.repository.viewModelInterface.communicationClasses.ProjectPreview
++import kotlinx.coroutines.flow.Flow
++import kotlinx.coroutines.flow.SharedFlow
++import kotlinx.coroutines.flow.shareIn
++import kotlinx.coroutines.flow.transform
++import javax.inject.Inject
+ 
+ class ProjectHandler {
+-    val projectPreviews: Collection<ProjectPreview> = TODO()
++    @Inject lateinit var projectPreviews: Flow<Collection<ProjectData>>
++    @JvmName("getProjectPreviews1")
++    fun getProjectPreviews(): Flow<Collection<ProjectPreview>> {
++        return projectPreviews.transform<Collection<ProjectData>, Collection<ProjectPreview>> {
++                value: Collection<ProjectData> ->
++            run {
++                val previewList = ArrayList<ProjectPreview>()
++                value.forEach { it ->
++                    previewList.add(
++                        ProjectPreview(
++                            (it.id as Long),
++                            it.name,
++                            it.wallpaper
++                        )
++                    )
++                }
++            }
++        }
++    }
+ }
+\ No newline at end of file

@@ -1,0 +1,78 @@
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+package UserManager{
+' Kuemmert sich um die Google Anmeldung in Firebase
+' -> Gibt User_Id und Token bei angemeldeten User aus
+class UserAccount {
+	- firebaseManager: FirebaseManager 
+	- user: FirebaseUser 
+	- observer: Collection(<UserManagerObserver>)
+	
+	' Speichert alle Werte vom angemeldetem User. Wie Name, ID, ...
+
+
+	+ registerUser(eMail: String, passwort: String): int 
+	+ signInUser(eMail: String, passwort: String): int
+	+ signOut(): int
+	
+	- updateCurrentUser(): void
+	
+	+getUserID(): String
+	' returns null, when no User connected
+	' direkt von user ablesbar
+	+getUserName(): String
+	+getUserEMail(): String
+	+getUserPhotoUrl(): String
+
+	+ getToken(): String
+	'..Observer Logic..
+	'+ registerUserAccountObserver(observer: UserAccountObserver)
+	'+ unregisterUserAccountObserver(observer: UserAccountObserver)
+	'+ notifyUserAccountObservers()
+}
+
+'class UserAccountObserver<<interface>><<observer>> {
+'	+ update()
+'}
+
+
+'UserAccount *-- UserAccountObserver
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+' Die Connection zu Firebase von der App aus
+class FirebaseManager {
+	' Um alle Firebase Anmelde und Authentifizierung methoden aufzurufen:
+	-auth: FirebaseAuth
+
+	-instantiateFirebaseAuth(): auth
+
+	+registerUser(eMail: String, passwort: String): int
+	+signInUser(eMail: String, passwort: String): int
+	+signOut()
+
+	+getUser(): FirebaseUser
+	+getToken(): String 
+	' auf Firebase mit aufrufen
+}
+
+
+' Firebase conntection
+UserAccount "1" *-- "1" FirebaseManager: contains
+}

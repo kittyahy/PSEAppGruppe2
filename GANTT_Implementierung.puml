@@ -7,27 +7,40 @@ Project starts the 3rd of January 2022
 [Implementierungsphase] starts 2022-01-03 and ends 2022-02-04
 [Implementierungsphase] is colored in lightgreen
 [Setup Git Repo] starts 2022-01-06 and ends 2022-01-10
-[Implementierungsplan erstellen] starts 2022-01-10 and lasts 2 days
-[Model Interfaces und Classes] starts 2022-01-03 and ends 2022-01-16
+[Implementierungsplan erstellen] starts 2022-01-10 and lasts 4 days
+[Model Interfaces und Classes] starts 2022-01-03 and ends 2022-01-17
 [Model Interfaces und Classes] is colored in lightblue
 [interface Project] starts 2022-01-03
+[implement Project] starts 13 days after [interface Project]'s end
 [interface Table] starts 2022-01-03
+[implement Table] starts 13 days after [interface Table]'s end
 [interface ProjectSkeleton] starts 2022-01-03
+[implement ProjectSkeleton] starts 13 days after [interface ProjectSkeleton]'s end
 [interface ProjectTemplate] starts 2022-01-03
+[implement ProjectTemplate] starts 13 days after [interface ProjectTemplate]'s end
 [interface Settings] starts 2022-01-03
+[implement Settings] starts 9 days after [interface Settings]'s end
 [interface User] starts 2022-01-03
 [class SimpleUser] starts at [interface User]'s end
 [class UIElement] starts 2022-01-03
 [enum class UIElementType] starts 2022-01-03
 [interface Table] starts 2022-01-03
 [interface TableLayout] starts 2022-01-03
+[implement TableLayout] starts 13 days after [interface TableLayout]'s end
 [interface Row] starts 2022-01-03
 [class ArrayListRow] starts at [interface Row]'s end
 [class RowMetaData] starts 2022-01-03
 [interface Notification] starts 2022-01-03
 [class TimeNotification] starts at [interface Notification]'s end
+[Test interfaces and classes] starts 3 days after [implement Project]'s end
+[Test interfaces and classes] starts 3 days after [implement Table]'s end
+[Test interfaces and classes] starts 3 days after [implement ProjectSkeleton]'s end
+[Test interfaces and classes] starts 3 days after [implement ProjectTemplate]'s end
+[Test interfaces and classes] starts 3 days after [class ArrayListRow]'s end
+[Test interfaces and classes] starts 3 days after [class TimeNotification]'s end
+[Test interfaces and classes] starts 3 days after [class SimpleUser]'s end
 
-[Entities] starts 2022-01-06 and ends 2022-01-11
+[Entities] starts 2022-01-06 and ends 2022-01-9
 [Entities] is colored in lightblue
 [class GraphEntity] starts 2022-01-06 and ends 2022-01-07
 [class GraphTemplateEntity] starts 2022-01-07
@@ -43,15 +56,314 @@ Project starts the 3rd of January 2022
 [class ProjectSettingEntity] starts 2022-01-09
 [class UIElementMap] starts 2022-01-09
 
-[DAOs] starts 2022-01-08 and ends 2022-01-15
+[DAOs] starts 2022-01-08 and ends 2022-01-20
 [DAOs] is colored in lightblue
+[DAO classes] starts 2022-01-08 and lasts 4 days
+[Test DAOs] starts 7 days after [DAO classes]'s end and lasts 2 days
+[Test DAOs] displays on same row as [DAO classes]
 
-[Type Converters] starts 2022-01-05 and ends 2022-01-13
+[Type Converters] starts 2022-01-05 and ends 2022-01-21
 [Type Converters] is colored in lightblue
+[Type Converter Classes] starts 2022-01-05 and lasts 2 days
+[Test Type Converters] starts 14 days after [Type Converter Classes]'s end
+[Test Type Converters] displays on same row as [Type Converter Classes]
 
-[Other Database Tasks] starts 2022-01-03 and ends 2022-01-20
+[Other Database Tasks] starts 2022-01-03 and ends 2022-01-25
 [Other Database Tasks] is colored in lightblue
 [class AppDataBase] starts 2022-01-03
+[Test Database] starts 18 days after [class AppDataBase]'s end and lasts 4 days
+[Test interaction with repo] starts after [Test Database]'s end and lasts 5 days
+
+
+/'Repository====================================================================================='/
+
+[Repository Interfaces und Classes] starts 2022-01-13
+[Repository Interfaces und Classes] is colored in lightblue
+
+    [View Model Interface] starts 2022-01-13
+    [View Model Interface] is colored in lightblue
+        [CommunicationClasses] starts 2022-01-13
+        [CommunicationClasses] is colored in lightblue
+            [class DataType] starts 2022-01-13 and ends 2022-01-13
+            [class DotSize] starts 2022-01-13 and ends 2022-01-13
+            [class LineType] starts 2022-01-13 and ends 2022-01-13
+            [class Time] starts 2022-01-13 and ends 2022-01-13
+            [class Notification] starts at [class Time]'s end
+            [class Member] starts 2022-01-13 and ends 2022-01-13
+            [class Row] starts 2022-01-13 and ends 2022-01-13
+            [class Button] starts 2022-01-13 and ends 2022-01-13
+            [class Column] starts at [class DataType]'s end
+            [class Graph] starts 2022-01-13 and ends 2022-01-13
+            [class LineChart] starts at [class Graph]'s end
+            [class LineChart] starts at 2022-01-16
+                [class LineChart] starts at [class DotSize]'s end
+                [class LineChart] starts at [class LineType]'s end
+                [class LineChart] starts at [class Column]'s end
+            [class PieChart] starts at [class Graph]'s end
+            [class ProjectPreview] starts 2022-01-13 and ends 2022-01-13
+            [class Project] starts at [class Button]'s end
+                [class Project] starts at [class Notification]'s end
+                [class Project] starts at [class Member]'s end
+                [class Project] starts at [class PieChart]'s end
+                [class Project] starts at [class LineChart]'s end
+                [class Project] starts at [class Row]'s end
+        [CommunicationClasses] ends at [class Project]'s end
+
+        [class ProjectHandler] starts at [CommunicationClasses]'s end
+        [class PostHandler] starts at [CommunicationClasses]'s end
+
+    [View Model Interface] ends at [class PostHandler]'s end
+    [View Model Interface] ends at [CommunicationClasses]'s end
+    [View Model Interface] ends at [class ProjectHandler]'s end
+
+    [CommandCenter] starts at [View Model Interface]'s end
+    [CommandCenter] is colored in lightblue
+
+        [Commands] starts at [CommandCenter]'s start
+        [Commands] is colored in lightblue
+            [class IllegalOperationException] starts at [Commands]'s start
+            [class ProjectCommand] starts at [class IllegalOperationException]'s end
+            [class CommandWrapper] starts at [class ProjectCommand]'s end
+            [class AddRow] starts at [class ProjectCommand]'s end
+            [class DeleteRow] starts at [class ProjectCommand]'s end
+            [class DeleteColumn] starts at [class ProjectCommand]'s end
+            [class AddColumn] starts at [class ProjectCommand]'s end
+            [class SetCell] starts at [class ProjectCommand]'s end
+            [class SetAdmin] starts at [class ProjectCommand]'s end
+            [class AddUser] starts at [class ProjectCommand]'s end
+            [class RemoveUser] starts at [class ProjectCommand]'s end
+            [class CreateGraph] starts at [class ProjectCommand]'s end
+            [class SetCalculationFunction] starts at [class ProjectCommand]'s end
+            [class SetTransformationFunctionCompostition] starts at [class ProjectCommand]'s end
+            [class SetSetting] starts at [class ProjectCommand]'s end
+            [class SetProjectName] starts at [class ProjectCommand]'s end
+            [class SetProjectDesign] starts at [class ProjectCommand]'s end
+            [class SetWallpaper] starts at [class ProjectCommand]'s end
+            [class SetNotification] starts at [class ProjectCommand]'s end
+            [class DeleteNotification] starts at [class ProjectCommand]'s end
+            [class SetUIElement] starts at [class ProjectCommand]'s end
+            [class RequestOldData] starts at [class ProjectCommand]'s end
+            [class SetIsOnlineProject] starts at [class ProjectCommand]'s end
+            [class CreateProject] starts at [class ProjectCommand]'s end
+
+            [class CommandWrapper] lasts 3 days
+            [class AddRow] lasts 3 days
+            [class DeleteRow] lasts 3 days
+            [class DeleteColumn] lasts 3 days
+            [class AddColumn] lasts 3 days
+            [class SetCell] lasts 3 days
+            [class SetAdmin] lasts 3 days
+            [class AddUser] lasts 3 days
+            [class RemoveUser] lasts 3 days
+            [class CreateGraph] lasts 3 days
+            [class SetCalculationFunction] lasts 3 days
+            [class SetTransformationFunctionCompostition] lasts 3 days
+            [class SetSetting] lasts 3 days
+            [class SetProjectName] lasts 3 days
+            [class SetProjectDesign] lasts 3 days
+            [class SetWallpaper] lasts 3 days
+            [class SetNotification] lasts 3 days
+            [class DeleteNotification] lasts 3 days
+            [class SetUIElement] lasts 3 days
+            [class RequestOldData] lasts 3 days
+            [class SetIsOnlineProject] lasts 3 days
+            [class CreateProject] lasts 3 days
+
+
+        [Commands] ends at [class CreateProject]'s end
+        [Commands] ends at [class AddRow]'s end
+        [Commands] ends at [class DeleteColumn]'s end
+        [Commands] ends at [class DeleteRow]'s end
+        [Commands] ends at [class AddColumn]'s end
+        [Commands] ends at [class SetCell]'s end
+        [Commands] ends at [class SetAdmin]'s end
+        [Commands] ends at [class AddUser]'s end
+        [Commands] ends at [class RemoveUser]'s end
+        [Commands] ends at [class CreateGraph]'s end
+        [Commands] ends at [class SetCalculationFunction]'s end
+        [Commands] ends at [class SetTransformationFunctionCompostition]'s end
+        [Commands] ends at [class SetSetting]'s end
+        [Commands] ends at [class SetProjectName]'s end
+        [Commands] ends at [class SetProjectDesign]'s end
+        [Commands] ends at [class SetWallpaper]'s end
+        [Commands] ends at [class SetNotification]'s end
+        [Commands] ends at [class SetUIElement]'s end
+        [Commands] ends at [class RequestOldData]'s end
+        [Commands] ends at [class SetIsOnlineProject]'s end
+
+        [class CommandUtility] starts at [Commands]'s end
+        [class CommandInbox] starts at [Commands]'s end
+
+
+        [UpToDater] starts at [class RequestOldData]'s end
+        [UpToDater] is colored in lightblue
+            [class OldDataFetcher] starts at [class RequestOldData]'s start
+            [class OldDataFetcher] ends at [class CommandUtility]'s end
+        [UpToDater] ends at [class OldDataFetcher]'s end
+
+        [class CommandFactory] starts at [Commands]'s end
+    [View Model Interface] ends at [class CommandFactory]'s end
+
+    [CommandCenter] ends at [class CommandUtility]'s end
+    [CommandCenter] ends at [class CommandInbox]'s end
+    [CommandCenter] ends at [UpToDater]'s end
+[Repository Interfaces und Classes] ends at [CommandCenter]'s end
+
+'----------------------Server---------------------------------------------------'
+[class ServerApplication] starts at 2022-01-07 and ends at 2022-01-07
+[class ServerGreetings] starts at 2022-01-07 and ends at 2022-01-07
+[class GreetingController] starts at 2022-01-07 and ends at 2022-01-07
+[testing GreetingController] starts at [class GreetingController]'s end
+
+[Defining Controller Skeletons] starts 2022-01-11
+[Defining Controller Skeletons] is colored in lightblue
+[class DeltaController] starts 2022-01-12 and ends 2022-01-13
+[class ProjectParticipantsController] starts 2022-01-13
+[class FetchRequestController] starts 2022-01-13
+[class PostsController] starts 2022-01-13
+[Defining Controller Skeletons] ends at [class PostsController]'s end
+[Defining Controller Skeletons] ends at [class DeltaController]'s end
+[Defining Controller Skeletons] ends at [class FetchRequestController]'s end
+[Defining Controller Skeletons] ends at [class ProjectParticipantsController]'s end
+
+
+
+[Defining skeletons for Online Database] starts at 2022-01-16
+
+
+ [Defining skeletons for Online Database] is colored in lightblue and lasts 3 days
+[class Delta] starts at [Defining skeletons for Online Database]'s start
+
+[class ProjectParticipants] starts at [Defining skeletons for Online Database]'s start
+[class FetchRequest] starts at [Defining skeletons for Online Database]'s start
+[class DeltaRepository] starts at [Defining skeletons for Online Database]'s start
+[class ProjectParticipantsRepository] starts at [Defining skeletons for Online Database]'s start
+[class FetchRequestRepository] starts at [Defining skeletons for Online Database]'s start
+[class DeltaService] starts at [Defining skeletons for Online Database]'s start
+[class ProjectParticipantsService] starts at [Defining skeletons for Online Database]'s start
+[class FetchRequestService] starts at [Defining skeletons for Online Database]'s start
+[Defining skeletons for Online Database] ends at [class Delta]'s end
+[Defining skeletons for Online Database] ends at [class ProjectParticipants]'s end
+[Defining skeletons for Online Database] ends at [class FetchRequest]'s end
+[Defining skeletons for Online Database] ends at [class DeltaRepository]'s end
+[Defining skeletons for Online Database] ends at [class ProjectParticipantsRepository]'s end
+[Defining skeletons for Online Database] ends at [class FetchRequestRepository]'s end
+[Defining skeletons for Online Database] ends at [class DeltaService]'s end
+[Defining skeletons for Online Database] ends at [class ProjectParticipantsService]'s end
+[Defining skeletons for Online Database] ends at [class FetchRequestService]'s end
+
+
+[Defining skeletons for PostDatabase] starts at 2022-01-19
+[Defining skeletons for PostDatabase] is colored in lightblue and lasts 3 days
+[class Template] starts at [Defining skeletons for PostDatabase]'s start
+[class Posts] starts at [Defining skeletons for PostDatabase]'s start
+[class PostService] starts at [Defining skeletons for PostDatabase]'s start
+[class PostsRepository] starts at [Defining skeletons for PostDatabase]'s start
+[class TemplatesRepository] starts at [Defining skeletons for PostDatabase]'s start
+[Defining skeletons for PostDatabase] ends at [class Template]'s end
+[Defining skeletons for PostDatabase] ends at [class Posts]'s end
+[Defining skeletons for PostDatabase] ends at [class PostService]'s end
+[Defining skeletons for PostDatabase] ends at [class PostsRepository]'s end
+[Defining skeletons for PostDatabase] ends at [class TemplatesRepository]'s end
+
+[Defining Interceptor Skeletons] starts at 2022-01-20 and is colored in lightblue
+
+[class LoginInterceptor] starts at [Defining Interceptor Skeletons]'s start
+[class AccessToProjectInterceptor] starts at [Defining Interceptor Skeletons]'s start
+[class GeneralConfig] starts at [Defining Interceptor Skeletons]'s start
+
+[Defining Interceptor Skeletons] ends at [class LoginInterceptor]'s end
+[Defining Interceptor Skeletons] ends at [class AccessToProjectInterceptor]'s end
+[Defining Interceptor Skeletons] ends at [class GeneralConfig]'s end
+
+[setup Firebase for Server] starts at 2022-01-17
+[setup Server] starts at 2022-01-18
+
+[implement LoginInterceptor] starts at [setup Firebase for Server]'s end
+[implement AccessToProjectInterceptor] starts at [Defining Interceptor Skeletons]'s end
+[implement GeneralConfig] starts at [implement LoginInterceptor]'s end
+[implement GeneralConfig] starts at [implement AccessToProjectInterceptor]'s end
+[implement PostDatabase] starts at [Defining skeletons for PostDatabase]'s end and starts at 2022-01-23 and lasts 4 days
+[implement Online Database] starts at [Defining skeletons for Online Database]'s end  and starts at 2022-01-23 and lasts 4 days
+
+'<<<<<<< HEAD
+
+[RDS] starts 2022-01-04 and ends 2022-01-28
+[RDS] is colored in lightblue
+[class RemoteDataSourceAPI] starts 2022-01-04 and ends 2022-01-4
+
+[RDS Queues] starts 2022-01-05 and ends 2022-01-06
+[RDS Queues] is colored in lightblue
+[class FetchRequestQueue] starts 2022-01-05 and ends 2022-01-06
+[class FetchRequestQueueObserver] starts 2022-01-05 and ends 2022-01-06
+[class ProjectCommandQueue] starts 2022-01-05 and ends 2022-01-06
+[class ProjectCommandQueueObserver] starts 2022-01-05 and ends 2022-01-06
+
+[RDS UserManger] starts 2022-01-07 and ends 2022-01-14
+[RDS UserManger] is colored in lightblue
+[class UserAccout] starts 2022-01-07 and ends 2022-01-08
+[class FirebaseManager] starts 2022-01-09 and ends 2022-01-14
+
+[RDS ServerConnection] starts 2022-01-19 and ends 2022-01-28
+[RDS ServerConnection] is colored in lightblue
+[class ServerManager] starts 2022-01-19 and ends 2022-01-19
+[class RESTAPI] starts 2022-01-20 and ends 2022-01-28
+
+--View--
+
+[Util Classes]      starts at 2022-01-04 and lasts 2 day and is colored in LightBlue
+[Column]            starts at [Util Classes]'s start and lasts 1 day
+[Row]               starts at [Util Classes]'s start and lasts 1 day
+[Table]             starts at [Util Classes]'s start and lasts 1 day
+[IncButton]         starts at [Util Classes]'s start and lasts 1 day
+[Notification]      starts at [Util Classes]'s start and lasts 1 day
+[GraphTemplate]     starts at [Util Classes]'s start and lasts 1 day
+[ProjectTemplate]   starts at [Util Classes]'s start and lasts 1 day
+[Post]              starts at [Util Classes]'s start and lasts 1 day
+[DataType]          starts at [Util Classes]'s start and lasts 1 day
+[Wallpapers]        starts at [Util Classes]'s start and lasts 1 day
+[Graphs]            starts at [Util Classes]'s start and lasts 1 day
+[Routes]            starts at [Graphs]'s end and lasts 1 day
+[UiEvent]           starts at [Graphs]'s end and lasts 1 day
+
+[Navigation]            starts at 2022-01-06 and lasts 2 day and is colored in LightBlue
+[TopNavigationBar]      starts at [Navigation]'s start and lasts 1 day
+[BottomNavigationBar]   starts at [TopNavigationBar]'s end and lasts 1 day
+
+[Screens]                   starts at 2022-01-10 and lasts 18 day and is colored in LightBlue
+[ProjectScreen]             starts at [Screens]'s start and lasts 1 day
+[ProjectOverviewScreen]     starts at [ProjectScreen]'s end and lasts 1 day
+[ProjectCreationScreen]     starts at [ProjectOverviewScreen]'s end and lasts 3 day
+[ProjectDataScreen]         starts at 2022-01-17 and lasts 1 day
+[ProjectDataGraphScreen]    starts at [ProjectDataScreen]'s end and lasts 1 day
+[ProjectDataInputScreen]    starts at [ProjectDataGraphScreen]'s end and lasts 2 day
+[ProjectDataSettingsScreen] starts at [ProjectDataInputScreen]'s end and lasts 1 day
+
+[TemplateScreen] starts at 2022-01-24 and lasts 2 day
+
+[ServerScreen]      starts at [TemplateScreen]'s start and lasts 2 day
+[ServerLoginScreen] starts at [ServerScreen]'s end and lasts 2 day
+[LinkScreen]        starts at [ServerLoginScreen]'s start and lasts 2 day
+
+--ViewModel--
+
+
+[NavigationViewModel]            starts at [Navigation]'s start and lasts 2 day
+
+[ProjectScreenViewModel]             starts at [Screens]'s start and lasts 1 day
+[ProjectOverviewScreenViewModel]     starts at [ProjectScreen]'s end and lasts 1 day
+[ProjectCreationScreenViewModel]     starts at [ProjectOverviewScreen]'s end and lasts 3 day
+[ProjectDataScreenViewModel]         starts at 2022-01-17 and lasts 1 day
+[ProjectDataGraphScreenViewModel]    starts at [ProjectDataScreen]'s end and lasts 1 day
+[ProjectDataInputScreenViewModel]    starts at [ProjectDataGraphScreen]'s end and lasts 2 day
+[ProjectDataSettingsScreenViewModel] starts at [ProjectDataInputScreen]'s end and lasts 1 day
+
+[TemplateScreenViewModel] starts at 2022-01-24 and lasts 2 day
+
+[ServerScreenViewModel]      starts at [TemplateScreen]'s start and lasts 2 day
+[ServerLoginScreenViewModel] starts at [ServerScreen]'s end and lasts 2 day
+[LinkScreenViewModel]        starts at [ServerLoginScreen]'s start and lasts 2 day
+'>>>>>>> 47f1b5245657e5286213d4d2a834946682176fca
 
 legend
     Aufgaben, die vor dem 10. Januar 2022 abgeschlossen sind,

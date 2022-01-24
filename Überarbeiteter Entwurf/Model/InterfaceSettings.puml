@@ -1,0 +1,14 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+interface Settings <<interface>> {
+        +getAllSettings(): Map<String, String>
+        +getSetting(String): String throws SettingNotFoundException
+    }
+
+@enduml

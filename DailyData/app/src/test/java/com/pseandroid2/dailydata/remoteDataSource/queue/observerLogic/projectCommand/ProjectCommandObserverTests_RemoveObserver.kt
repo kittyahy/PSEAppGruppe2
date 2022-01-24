@@ -20,10 +20,12 @@
 
 package com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.projectCommand
 
+import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandInfo
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueue
 import com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.UpdatedByObserver_ForTesting
 import org.junit.Assert
 import org.junit.Test
+import java.time.LocalDateTime
 
 class ProjectCommandObserverTests_RemoveObserver {
     @Test
@@ -39,15 +41,15 @@ class ProjectCommandObserverTests_RemoveObserver {
         // Prüfe ob update() bei Observer ausgeführt wird
         Assert.assertEquals(toUpdate.isUpdated(), false)
         Assert.assertEquals(projectCommandQueue.getQueueLength(), 0)
-        var projectCommand = "Project Command: 1"
-        projectCommandQueue.addProjectCommand(projectCommand)
+        var projectCommand1: ProjectCommandInfo = ProjectCommandInfo(projectCommand = "1")
+        projectCommandQueue.addProjectCommand(projectCommand1)
         Assert.assertEquals(projectCommandQueue.getQueueLength(), 1)
         Assert.assertEquals(toUpdate.getUpdated(), 1)
 
 
         projectCommandQueue.unregisterObserver(observer)
-        var projectCommand2 = "Project Command: 2"
-        projectCommandQueue.addProjectCommand(projectCommand)
+        var projectCommand2: ProjectCommandInfo = ProjectCommandInfo(projectCommand = "2")
+        projectCommandQueue.addProjectCommand(projectCommand2)
 
         Assert.assertEquals(toUpdate.getUpdated(), 1)
     }

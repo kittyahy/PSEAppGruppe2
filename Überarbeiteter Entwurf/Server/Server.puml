@@ -1,0 +1,73 @@
+
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+skinparam {
+Linetype ortho
+}
+
+
+package Spring{
+class HandlerInterceptorAdapter{}
+class WebMvcConfigurerAdapter{}
+class JpaRepository{}
+}
+
+package Server
+{
+
+GreetingController ..> ServerGreetings: uses
+
+!include OnlineDatabase.puml
+!include PostDatabase.puml
+
+ LoginInterceptor --  GeneralConfig
+  AccessToProjectInterceptor - GeneralConfig
+
+
+    class ServerApplication <<SpringBootApplication>>{
+        main(this:ServerApplication,args:String[])
+    }
+    class GeneralConfig extends WebMvcConfigurerAdapter{
+        addInterceptor()
+    }
+    class LoginInterceptor extends HandlerInterceptorAdapter {
+        preHandle():boolean
+    }
+
+
+ class ServerGreetings{
+  +greeting():String
+ }
+
+ class GreetingController{
+ + greets():String
+ }
+
+  class Tupel <T,U> {
+      - first: T
+      - second: U
+  }
+}
+
+Tupel .. DeltaRepository : uses <
+Tupel .. ProjectParticipantsRepository : uses <
+
+package Firebase {
+}
+LoginInterceptor ... Firebase : uses >
+
+OnlineDatabase -[hidden]up----> PostDatabase
+Firebase  -[hidden]-> LoginInterceptor
+GreetingController -[hidden]left---> PostDatabase
+ServerApplication  -[hidden]left-> GreetingController
+WebMvcConfigurerAdapter -[hidden]-> HandlerInterceptorAdapter
+        Server -[hidden]left--> Spring
+
+
+
+@enduml
