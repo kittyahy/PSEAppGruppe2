@@ -1,20 +1,11 @@
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI
 
-import android.util.Log
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
-import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.AddPostParameter
-import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.RequestParameter
-import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.PostPreview
 import org.junit.Assert
 import org.junit.Test
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
 import org.junit.Before
-import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.DELETE
-import retrofit2.http.POST
-import retrofit2.http.Path
 
 class RESTAPITests_PostsController {
     private var restAPI: RESTAPI = RESTAPI()

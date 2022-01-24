@@ -10,4 +10,4 @@ import java.time.LocalDateTime
  * @param initialAddedBy: The ID of the user who initially uploaded this command to the server
  * @param wasAdmin: Was the user who initially uploaded this project command to the server an admin
  */
-data class ProvideOldDataParameter(val token: String, val command: String, val forUser: String, val initialAdded: LocalDateTime, val initialAddedBy: String, val wasAdmin: Boolean)
+data class ProvideOldDataParameter(val command: String, val forUser: String, val initialAdded: LocalDateTime, val initialAddedBy: String, val wasAdmin: Boolean)

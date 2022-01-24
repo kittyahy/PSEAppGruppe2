@@ -20,13 +20,10 @@
 
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection
 
-import android.util.Log
-import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandInfo
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.AddPostParameter
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.DemandOldDataParameter
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.ProvideOldDataParameter
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.RemoveUserParameter
-import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.RequestParameter
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.SaveDeltaParameter
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.Delta
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
@@ -85,8 +82,7 @@ class RESTAPI {
      * @return Collection<PostPreview>: The previews of the posts
      */
     fun getAllPostsPreview(authToken: String): Collection<PostPreview> {
-        val param: RequestParameter = RequestParameter(token = authToken)
-        val call: Call<List<PostPreview>> = server.getAllPostPreview(param)
+        val call: Call<List<PostPreview>> = server.getAllPostPreview(authToken)
 
         return call.execute().body() ?: emptyList()
     }
@@ -97,8 +93,7 @@ class RESTAPI {
      * @return Collection<TemplateDetail>: Returns the detailed post belonging to the post id
      */
     fun getPostDetail(fromPost: Int, authToken: String): Collection<TemplateDetail> {
-        val params: RequestParameter = RequestParameter(token = authToken)
-        val call: Call<List<TemplateDetail>> = server.getPostDetail(fromPost, params)
+        val call: Call<List<TemplateDetail>> = server.getPostDetail(authToken, fromPost)
 
         return call.execute().body() ?: emptyList()
     }
@@ -109,8 +104,7 @@ class RESTAPI {
      * @return String - The requested project template as JSON
      */
     fun getProjectTemplate(fromPost: Int, authToken: String): String {
-        val params: RequestParameter = RequestParameter(token = authToken)
-        val call: Call<String> = server.getProjectTemplate(fromPost, params)
+        val call: Call<String> = server.getProjectTemplate(authToken, fromPost)
 
         return call.execute().body() ?: ""
     }
@@ -123,8 +117,7 @@ class RESTAPI {
      * @return String - The requested graph template as JSON
      */
     fun getGraphTemplate(fromPost: Int, templateNumber: Int, authToken: String): String {
-        val params: RequestParameter = RequestParameter(token = authToken)
-        val call: Call<String> = server.getGraphTemplate(fromPost, templateNumber, params)
+        val call: Call<String> = server.getGraphTemplate(authToken, fromPost, templateNumber)
 
         return call.execute().body() ?: ""
     }
@@ -138,8 +131,8 @@ class RESTAPI {
      * @return Int: The PostID of the new post. -1 if the call didn't succeed
      */
     fun addPost (postPreview: String, projectTemplate: String, graphTemplate: Collection<String>, authToken: String): Int {
-        val params: AddPostParameter = AddPostParameter(authToken, postPreview, projectTemplate, graphTemplate)
-        val call: Call<Int> = server.addPost(params)
+        val params: AddPostParameter = AddPostParameter(postPreview, projectTemplate, graphTemplate)
+        val call: Call<Int> = server.addPost(authToken, params)
 
         return call.execute().body() ?: -1
     }
@@ -151,8 +144,7 @@ class RESTAPI {
      * @return Boolean: Did the server call succeed
      */
     fun removePost (postID: Int, authToken: String): Boolean {
-        val param: RequestParameter = RequestParameter(token = authToken)
-        val call: Call<Boolean> = server.removePost(postID, param)
+        val call: Call<Boolean> = server.removePost(authToken, postID)
 
         return call.execute().body() ?: false
     }
@@ -165,9 +157,7 @@ class RESTAPI {
      * @return Boolean: Did the server call succeed
      */
     fun addUser(projectId: Long, authToken: String): Boolean {
-        //TODO: IMPLEMENT
-        val param: RequestParameter = RequestParameter(token = authToken)
-        val call: Call<Boolean> = server.addUser(projectId, param)
+        val call: Call<Boolean> = server.addUser(authToken, projectId)
 
         return call.execute().body() ?: false
     }
@@ -179,9 +169,9 @@ class RESTAPI {
      * @return Boolean: Did the server call succeed
      */
     fun removeUser(userToRemove: String, projectID: Long, authToken: String): Boolean {
-        val params: RemoveUserParameter = RemoveUserParameter(authToken, userToRemove = userToRemove, projectID = projectID)
+        val params: RemoveUserParameter = RemoveUserParameter(userToRemove = userToRemove, projectID = projectID)
 
-        val call: Call<Boolean> = server.removeUser(projectID, params)
+        val call: Call<Boolean> = server.removeUser(authToken, projectID, params)
 
         return call.execute().body() ?: false
     }
@@ -191,9 +181,7 @@ class RESTAPI {
      * @return LONG: Returns the id of the created project. Returns -1 if an error occured
      */
     fun addProject(authToken: String): Long {
-        val param: RequestParameter = RequestParameter(token = authToken)
-
-        val call: Call<Long> = server.addProject(param)
+        val call: Call<Long> = server.addProject(authToken)
 
         return call.execute().body() ?: -1
     }
@@ -207,9 +195,9 @@ class RESTAPI {
      * @return Boolean: True if uploaded successfully, otherwise false
      */
     suspend fun saveDelta(projectID: Long, projectCommand: String, authToken: String): Boolean {
-        val params: SaveDeltaParameter = SaveDeltaParameter(token = authToken, projectCommand)
+        val params: SaveDeltaParameter = SaveDeltaParameter(projectCommand)
 
-        val call: Call<Boolean> = server.saveDelta(projectID, params)
+        val call: Call<Boolean> = server.saveDelta(authToken, projectID, params)
 
         return call.execute().body() ?: false
     }
@@ -219,9 +207,7 @@ class RESTAPI {
      * @param authToken: The authentication token
      */
     fun getDelta(projectID: Long, authToken: String): Collection<Delta> {
-        val param: RequestParameter = RequestParameter(token = authToken)
-
-        val call: Call<Collection<Delta>> = server.getDelta(projectID, param)
+        val call: Call<Collection<Delta>> = server.getDelta(authToken, projectID)
 
         return call.execute().body() ?: mutableListOf()
     }
@@ -236,9 +222,9 @@ class RESTAPI {
      * @return Boolean: Did the server call succeed
      */
     fun providedOldData(projectCommand: String, forUser: String, initialAdded: LocalDateTime, initialAddedBy: String, projectID: Long, wasAdmin: Boolean, authToken: String): Boolean {
-        val params: ProvideOldDataParameter = ProvideOldDataParameter(authToken, projectCommand, forUser, initialAdded, initialAddedBy, wasAdmin)
+        val params: ProvideOldDataParameter = ProvideOldDataParameter(projectCommand, forUser, initialAdded, initialAddedBy, wasAdmin)
 
-        val call: Call<Boolean> = server.provideOldData(projectID, params)
+        val call: Call<Boolean> = server.provideOldData(authToken, projectID, params)
 
         return call.execute().body() ?: false
     }
@@ -248,9 +234,7 @@ class RESTAPI {
      * @return LocalDateTime: the requested time how long comments stay on the server before they get deleted. If an error occured returns "0001-01-01T00:00" // TODO Überprüfe grammatik
      */
     fun getRemoveTime(authToken: String): LocalDateTime {
-        val param: RequestParameter = RequestParameter(authToken)
-
-        val call: Call<LocalDateTime> = server.getRemoveTime(param)
+        val call: Call<LocalDateTime> = server.getRemoveTime(authToken)
 
         return call.execute().body() ?: LocalDateTime.parse("0001-01-01T00:00")
     }
@@ -263,9 +247,9 @@ class RESTAPI {
      * @return Boolean: Did the server call succeed
      */
     fun demandOldData(projectID: Long, requestInfo: String, authToken: String): Boolean {
-        val params: DemandOldDataParameter = DemandOldDataParameter(token = authToken, requestInfo)
+        val params: DemandOldDataParameter = DemandOldDataParameter(requestInfo)
 
-        val call: Call<Boolean> = server.demandOldData(projectID, params)
+        val call: Call<Boolean> = server.demandOldData(authToken, projectID, params)
 
         return call.execute().body() ?: false
     }
@@ -275,9 +259,7 @@ class RESTAPI {
      * @param authToken: The authentication token
      */
     fun getFetchRequests(projectID: Long, authToken: String): Collection<FetchRequest> {
-        val param: RequestParameter = RequestParameter(authToken)
-
-        val call: Call<Collection<FetchRequest>> = server.getFetchRequest(projectID, param)
+        val call: Call<Collection<FetchRequest>> = server.getFetchRequest(authToken, projectID)
 
         return call.execute().body() ?: emptyList()
     }

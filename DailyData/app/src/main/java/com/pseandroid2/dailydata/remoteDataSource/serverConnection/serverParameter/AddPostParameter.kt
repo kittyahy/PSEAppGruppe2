@@ -6,4 +6,4 @@ package com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParame
  * @param projectTemplate: The project template as JSON
  * @param graphTemplate: The graph templates as Collection of JSONs
  */
-data class AddPostParameter(val token: String, val postPreview: String, val projectTemplate: String, val graphTemplate: Collection<String>)
+data class AddPostParameter(val postPreview: String, val projectTemplate: String, val graphTemplate: Collection<String>)
