@@ -19,7 +19,6 @@
 */
 package com.pseandroid2.dailydataserver.postDatabase.requestparameters;
 
-import com.pseandroid2.dailydataserver.Communication.RequestParameter;
 import org.springframework.data.util.Pair;
 
 import java.util.ArrayList;
@@ -29,10 +28,8 @@ import java.util.List;
  * #TODO Testen, JavaDoc
  */
 
-/**
- * The parameters for {@link com.pseandroid2.dailydataserver.postDatabase.PostsController#addPost(AddPostParameter) addPost()}
- */
-public class AddPostParameter extends RequestParameter {
+
+public class AddPostParameter {
 
     private String postPreview;
     private Pair<String, String> projectTemplate;
@@ -47,7 +44,6 @@ public class AddPostParameter extends RequestParameter {
      * @param graphTemplates  all graphTemplates (provided by the client)
      */
     public AddPostParameter(String token, String postPreview, Pair<String, String> projectTemplate, List<Pair<String, String>> graphTemplates) {
-        super(token);
         this.postPreview = postPreview;
         this.projectTemplate = projectTemplate;
         this.graphTemplates = new ArrayList<>();
@@ -93,6 +89,6 @@ public class AddPostParameter extends RequestParameter {
                 "postPreview='" + postPreview + '\'' +
                 ", projectTemplate='" + projectTemplate + '\'' +
                 ", graphTemplates=" + graphTemplates.toString() +
-                "} " + super.toString();
+                "} ";
     }
 }

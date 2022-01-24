@@ -103,7 +103,10 @@ public class PostService {
         if (!user.equals(postRepo.findById(postId).get().getCreatedBy())) {
             return false;
         }
-        tempRepo.deleteByPost(postId);
+        System.out.println(user+" "+ postRepo.findById(postId).get().getCreatedBy());
+
+        List<Template> listToDelete = tempRepo.findByPost(postId);
+        tempRepo.deleteAll(listToDelete);
         postRepo.deleteById(postId);
         return true;
     }
