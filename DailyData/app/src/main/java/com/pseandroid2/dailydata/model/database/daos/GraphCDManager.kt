@@ -21,35 +21,95 @@
 package com.pseandroid2.dailydata.model.database.daos
 
 import com.pseandroid2.dailydata.model.Graph
-import com.pseandroid2.dailydata.model.database.AppDataBase
+import com.pseandroid2.dailydata.model.GraphTemplate
+import com.pseandroid2.dailydata.model.database.entities.GraphEntity
+import com.pseandroid2.dailydata.model.database.entities.GraphTemplateEntity
 import com.pseandroid2.dailydata.util.SortedIntListUtil
 import java.util.SortedSet
 import java.util.TreeSet
 
-class GraphCDManager private constructor() {
+class GraphCDManager(
+    private val graphDAO: GraphDAO,
+    private val templateDAO: TemplateDAO,
+    private val settingsDAO: SettingsDAO
+) {
+    companion object {
+        const val TEMPLATE_SETTINGS_PROJ_ID = -1
+    }
 
-    private val existingIds: MutableMap<Int, out SortedSet<Int>> = mutableMapOf<Int, TreeSet<Int>>()
+    private val existingGraphIds: MutableMap<Int, TreeSet<Int>> =
+        mutableMapOf<Int, TreeSet<Int>>()
+    private val existingTemplateIds: TreeSet<Int> = sortedSetOf()
 
     suspend fun insertGraph(projectId: Int, graph: Graph): Int {
-        //TODO
-        return 0
+        val newId = insertGraphEntity(projectId, graph)
+        for (setting in graph.getCustomizing()) {
+            settingsDAO.createGraphSetting(projectId, newId, setting.first, setting.second)
+        }
+        return newId
     }
 
     suspend fun deleteGraph(projectId: Int, id: Int) {
-        //TODO
+        settingsDAO.deleteAllGraphSettings(projectId, id)
+    }
+
+    suspend fun insertGraphTemplate(graphTemplate: GraphTemplate): Int {
+        val newId = insertGraphTemplateEntity(graphTemplate)
+        for (setting in graphTemplate.getCustomizing()) {
+            settingsDAO.createGraphSetting(
+                TEMPLATE_SETTINGS_PROJ_ID,
+                newId,
+                setting.first,
+                setting.second
+            )
+        }
+        return newId
     }
 
     private suspend fun insertGraphEntity(projectId: Int, graph: Graph): Int {
-        //TODO
-        return 0
+        val newId = getNextGraphId(projectId)
+        @Suppress("Deprecation")
+        graphDAO.insertGraph(
+            GraphEntity(
+                newId,
+                projectId,
+                graph.getCalculationFunction(),
+                graph.getType(),
+                graph.getPath() ?: ""
+            )
+        )
+        return newId
     }
 
-    private fun getNextId(projectId: Int): Int {
+    private suspend fun insertGraphTemplateEntity(graphTemplate: GraphTemplate): Int {
+        val newId = getNextTemplateId()
+        @Suppress("Deprecation")
+        templateDAO.insertGraphTemplate(
+            GraphTemplateEntity(
+                newId,
+                graphTemplate.getName(),
+                graphTemplate.getDescription(),
+                graphTemplate.getType(),
+                graphTemplate.getCreator(),
+                graphTemplate.getOnlineId()
+            )
+        )
+        return newId
+    }
+
+    private fun getNextGraphId(projectId: Int): Int {
+        if (existingGraphIds[projectId] == null) {
+            existingGraphIds[projectId] = TreeSet<Int>()
+        }
         //Get the List of existing Ids for the project
-        val list: List<Int> = ArrayList(existingIds[projectId] ?: sortedSetOf())
+        val list: List<Int> = ArrayList(existingGraphIds[projectId]!!)
 
         //Get the next missing id
         return SortedIntListUtil.getFirstMissingInt(list)
+    }
+
+    private fun getNextTemplateId(): Int {
+        return SortedIntListUtil.getFirstMissingInt(ArrayList(existingTemplateIds))
     }
 
 }
