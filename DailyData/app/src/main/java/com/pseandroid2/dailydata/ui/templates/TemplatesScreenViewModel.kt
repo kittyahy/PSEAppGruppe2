@@ -46,6 +46,8 @@ class TemplatesScreenViewModel @Inject constructor() : ViewModel() {
     private val _uiEvent = MutableSharedFlow<UiEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
 
+    var tabs by mutableStateOf( listOf<TemplateTabs>())
+        private set
     var tab by mutableStateOf(0)
         private set
     var graphTemplates by mutableStateOf( listOf<GraphTemplate>() )
@@ -54,6 +56,7 @@ class TemplatesScreenViewModel @Inject constructor() : ViewModel() {
         private set
 
     init {
+        tabs = TemplateTabs.values().toList()
         graphTemplates = listOf(
             GraphTemplate(title = "Title 1", image = R.drawable.chart),
             GraphTemplate(title = "Title 2", image = R.drawable.chart),
@@ -98,7 +101,21 @@ class TemplatesScreenViewModel @Inject constructor() : ViewModel() {
     }
 
     fun onEvent(event : TemplatesScreenEvent) {
-
+        when (event) {
+            is TemplatesScreenEvent.OnTabChange -> {
+                tab = event.index
+            }
+            is TemplatesScreenEvent.OnGraphTemplateDelete -> {
+                var mutable = graphTemplates.toMutableList()
+                mutable.removeAt(index = event.index)
+                graphTemplates = mutable.toList()
+            }
+            is TemplatesScreenEvent.OnProjectTemplateDelete -> {
+                var mutable = projectTemplates.toMutableList()
+                mutable.removeAt(index = event.index)
+                projectTemplates = mutable.toList()
+            }
+        }
     }
 
     private fun sendUiEvent(event : UiEvent) {
@@ -106,4 +123,8 @@ class TemplatesScreenViewModel @Inject constructor() : ViewModel() {
             _uiEvent.emit(event)
         }
     }
+}
+
+enum class TemplateTabs(val representation : String) {
+    GRAPHS("Graphs"), PROJECTS("Projects")
 }

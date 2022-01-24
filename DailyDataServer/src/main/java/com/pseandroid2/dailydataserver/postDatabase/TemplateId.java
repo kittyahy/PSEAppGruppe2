@@ -20,24 +20,25 @@
 package com.pseandroid2.dailydataserver.postDatabase;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class TemplateId implements Serializable {
-    private Posts post;
+    private int post;
     private int templateNumber;
 
-    public TemplateId(Posts post, int templateNumber) {
-        this.post = post;
+    public TemplateId(int postID, int templateNumber) {
+        this.post = postID;
         this.templateNumber = templateNumber;
     }
 
     public TemplateId() {
     }
 
-    public Posts getPost() {
+    public int getPost() {
         return post;
     }
 
-    public void setPost(Posts post) {
+    public void setPost(int post) {
         this.post = post;
     }
 
@@ -47,5 +48,18 @@ public class TemplateId implements Serializable {
 
     public void setTemplateNumber(int templateNumber) {
         this.templateNumber = templateNumber;
+    }
+  
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TemplateId that = (TemplateId) o;
+        return post == that.post && templateNumber == that.templateNumber;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(post, templateNumber);
     }
 }

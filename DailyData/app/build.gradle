@@ -140,7 +140,9 @@ dependencies {
 
     //Parallel
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
-
-
+    
+    //Mockk
+    testImplementation "io.mockk:mockk:1.9.3"
+    
     implementation 'com.android.support:multidex:2.0.1'
 }
