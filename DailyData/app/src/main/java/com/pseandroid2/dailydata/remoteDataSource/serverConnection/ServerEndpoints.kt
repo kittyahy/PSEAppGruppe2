@@ -48,7 +48,7 @@ interface ServerEndpoints
                          @Body param: RequestParameter): Call<String>
 
     @POST("/Posts"+"/add")
-    fun addPost(@Body params: AddPostParameter): Call<Boolean>
+    fun addPost(@Body params: AddPostParameter): Call<Int>
 
     @DELETE("/Posts"+"/remove/{post}")
     fun removePost(@Path("post") postID: Int,

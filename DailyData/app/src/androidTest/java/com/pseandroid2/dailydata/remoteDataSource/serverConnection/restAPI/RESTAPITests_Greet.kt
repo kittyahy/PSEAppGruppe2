@@ -1,4 +1,4 @@
-package com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverMananger
+package com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI
 
 import android.util.Log
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI

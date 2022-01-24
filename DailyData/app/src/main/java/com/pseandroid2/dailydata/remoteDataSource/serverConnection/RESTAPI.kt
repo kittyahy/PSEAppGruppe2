@@ -135,13 +135,13 @@ class RESTAPI {
      * @param projectTemplate: The project template that belongs to the post as JSON
      * @param Collection<String>: The graph templates that belong to the post as JSON
      * @param authToken: The authentication token
-     * @return Boolean: Did the server call succeed
+     * @return Int: The PostID of the new post. -1 if the call didn't succeed
      */
-    fun addPost (postPreview: String, projectTemplate: String, graphTemplate: Collection<String>, authToken: String): Boolean {
+    fun addPost (postPreview: String, projectTemplate: String, graphTemplate: Collection<String>, authToken: String): Int {
         val params: AddPostParameter = AddPostParameter(authToken, postPreview, projectTemplate, graphTemplate)
-        val call: Call<Boolean> = server.addPost(params)
+        val call: Call<Int> = server.addPost(params)
 
-        return call.execute().body() ?: false
+        return call.execute().body() ?: -1
     }
 
     // Wish-criteria

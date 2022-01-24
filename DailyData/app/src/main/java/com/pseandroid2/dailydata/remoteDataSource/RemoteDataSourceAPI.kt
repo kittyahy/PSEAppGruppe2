@@ -145,9 +145,9 @@ class RemoteDataSourceAPI @Inject constructor(private val uAccount: UserAccount,
      * @param postPreview: The preview of the post that should be added
      * @param projectTemplate: The project template that belongs to the post as JSON
      * @param Collection<String>: The graph templates that belong to the post as JSON
-     * @return Boolean: Did the server call succeed
+     * @return Int: The PostID of the new post. -1 if the call didn't succeed
      */
-    fun addPost(postPreview: String, projectTemplate: String, graphTemplate: Collection<String>): Boolean {
+    fun addPost(postPreview: String, projectTemplate: String, graphTemplate: Collection<String>): Int {
         val authToken: String = userAccount.getToken()
         return serverManager.addPost(postPreview, projectTemplate, graphTemplate, authToken)
     }

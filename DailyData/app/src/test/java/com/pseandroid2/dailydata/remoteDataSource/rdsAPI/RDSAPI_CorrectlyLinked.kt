@@ -40,7 +40,7 @@ class RDSAPI_CorrectlyLinked {
         every { serverManager.getPostDetail(1,"")} returns postDetailList
         every { serverManager.getProjectTemplate(1, "")} returns "ProjectTemplate"
         every { serverManager.getGraphTemplate(1, 1, "")} returns "GraphTemplate"
-        every { serverManager.addPost("", "", emptyList(), "")} returns true
+        every { serverManager.addPost("", "", emptyList(), "")} returns 1
         every { serverManager.removePost(1, "")} returns true
         every { serverManager.addUser(1, "")} returns true
         every { serverManager.removeUser("", 1, "")} returns true
@@ -73,7 +73,7 @@ class RDSAPI_CorrectlyLinked {
         Assert.assertEquals(postDetailList.elementAt(0), rdsAPI.getPostDetail(1).elementAt(0))
         Assert.assertEquals("ProjectTemplate", rdsAPI.getProjectTemplate(1))
         Assert.assertEquals("GraphTemplate", rdsAPI.getGraphTemplate(1, 1))
-        Assert.assertTrue(rdsAPI.addPost("", "", emptyList()))
+        Assert.assertEquals(1, rdsAPI.addPost("", "", emptyList()))
         Assert.assertTrue(rdsAPI.removePost(1))
         Assert.assertTrue(rdsAPI.addUser(1))
         Assert.assertTrue(rdsAPI.removeUser("", 1))
