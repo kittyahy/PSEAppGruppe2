@@ -1,0 +1,69 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+title Zeile zur Tabelle hinzufügen
+
+participant "ADD_ROW: ProjectCommand" as addCommand
+participant "data: ProjectCommandData" as data
+participant "dao: TableContentDAO" as DAO
+participant "row: Row" as row
+participant "meta: RowMetaData" as meta
+participant "GSON" as gson
+
+[-> addCommand : execute(data)
+activate addCommand
+'TODO: Don't really know how this looks. Still subject to change
+addCommand -> data : row = getRow()
+activate data
+data --> addCommand
+deactivate data
+addCommand -> data : id = getProjectId()
+activate data
+data --> addCommand
+deactivate data
+addCommand -> DAO : insertRow(row, id)
+activate DAO
+DAO -> DAO : ent = buildRowEntity(row, id)
+activate DAO
+DAO -> row : rowMeta = getMetaData()
+activate row
+row --> DAO
+deactivate row
+DAO -> meta : createdOn = getCreationDate()
+activate meta
+meta --> DAO
+deactivate meta
+DAO -> meta : createdBy = getCreator()
+activate meta
+meta --> DAO
+deactivate meta
+DAO -> row : content = getAll()
+activate row
+row --> DAO
+deactivate row
+DAO -> gson : values = content.toJSON()
+activate gson
+gson --> DAO
+deactivate gson
+DAO -> "ent: RowEntity" as ent ** : <<create>> (id, createdOn, createdBy, values)
+DAO --> DAO
+deactivate DAO
+DAO -> DAO : insertRowEntity(ent)
+activate DAO
+DAO --> DAO
+deactivate DAO
+DAO --> addCommand
+deactivate DAO
+addCommand -->[
+deactivate addCommand
+
+
+
+
+
+@enduml

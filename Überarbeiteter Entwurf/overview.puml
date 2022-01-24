@@ -1,0 +1,55 @@
+@startuml
+'https://plantuml.com/class-diagram
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+skinparam Linetype ortho
+
+package viewModel {
+
+'!include view/ViewModel.puml
+'!include view/objects.puml
+
+}
+!include Repository/Repository.puml
+package model {
+
+!include Model/OverviewRoomElements.puml
+!include Model/Entities.puml
+!include Model/DAOs.puml
+package DAOs{
+!include Model/CDManager.puml
+
+}
+!include Model/OverviewInterfaceRepo.puml
+!include Model/InterfaceGraph.puml
+!include Model/InterfaceGraphTemplate.puml
+!include Model/InterfaceNotification.puml
+!include Model/InterfaceProject.puml
+!include Model/InterfaceProjectTemplate.puml
+!include Model/InterfaceRow.puml
+!include Model/InterfaceSettings.puml
+!include Model/InterfaceSkeleton.puml
+!include Model/InterfaceTable.puml
+!include Model/InterfaceTableLayout.puml
+!include Model/InterfaceUser.puml
+!include Model/DataClassRowMetaData.puml
+!include Model/ClassDataTransformation.puml
+!include Model/DataStuff.puml
+package TypeConverters{
+!include Model/Typeconverter.puml
+}
+}
+package Firebase {
+class FirebaseAPI{
+}
+}
+!include RemoteDataSource/RemoteDataSource.puml
+'!include Server/Server.puml
+
+
+
+
+@enduml

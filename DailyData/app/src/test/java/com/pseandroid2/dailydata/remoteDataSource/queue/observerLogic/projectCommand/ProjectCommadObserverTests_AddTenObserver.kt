@@ -20,10 +20,12 @@
 
 package com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.projectCommand
 
+import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandInfo
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueue
 import com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.UpdatedByObserver_ForTesting
 import org.junit.Assert
 import org.junit.Test
+import java.time.LocalDateTime
 
 class ProjectCommadObserverTests_AddTenObserver {
     @Test
@@ -50,7 +52,7 @@ class ProjectCommadObserverTests_AddTenObserver {
         }
 
         Assert.assertEquals(projectCommandQueue.getQueueLength(), 0)
-        var projectCommand = "Project Command: 1"
+        var projectCommand = ProjectCommandInfo()
         projectCommandQueue.addProjectCommand(projectCommand)
         Assert.assertEquals(projectCommandQueue.getQueueLength(), 1)
 

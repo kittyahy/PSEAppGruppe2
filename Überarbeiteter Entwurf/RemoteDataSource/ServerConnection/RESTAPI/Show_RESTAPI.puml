@@ -1,0 +1,6 @@
+@startuml RESTAPI
+
+!include RESTAPI.puml!RESTAPI
+
+
+@enduml

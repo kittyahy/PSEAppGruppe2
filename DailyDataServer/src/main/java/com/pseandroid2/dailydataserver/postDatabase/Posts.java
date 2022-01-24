@@ -19,7 +19,6 @@
 */
 package com.pseandroid2.dailydataserver.postDatabase;
 
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;

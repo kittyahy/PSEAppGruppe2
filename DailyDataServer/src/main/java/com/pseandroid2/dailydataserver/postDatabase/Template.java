@@ -105,7 +105,7 @@ public class Template {
     public void setDetailView(String detailView) {
         this.detailView = detailView;
     }
-
+  
     @Override
     public String toString() {
         return "Template{" +

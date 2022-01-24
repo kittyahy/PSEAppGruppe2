@@ -1,0 +1,35 @@
+@startuml
+
+left to right direction
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+class DateTimeConversion {
+        DateTimeToLong(DateTime): Long
+        LongToDateTime(Long): DateTime
+    }
+
+    class UserConversion {
+        UserToString(User): String
+        StringToUser(String): User
+    }
+
+    class UIElementTypeConversion {
+        UIElementToString(UIElementType): String
+        StringToUIElement(String): UIElementType
+    }
+
+    class TransformationConversion {
+        TraFoToString(Project::DataTransformation): String
+        StringToTraFo(String): Project::DataTransformation
+    }
+
+    class GraphTypeConversion {
+        GraphTypeToString(GraphType): String
+        StringToGraphType(String): GraphType
+    }
+
+@enduml

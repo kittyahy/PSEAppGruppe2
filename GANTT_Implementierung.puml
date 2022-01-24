@@ -286,6 +286,29 @@ Project starts the 3rd of January 2022
 [implement PostDatabase] starts at [Defining skeletons for PostDatabase]'s end and starts at 2022-01-23 and lasts 4 days
 [implement Online Database] starts at [Defining skeletons for Online Database]'s end  and starts at 2022-01-23 and lasts 4 days
 
+'<<<<<<< HEAD
+
+[RDS] starts 2022-01-04 and ends 2022-01-28
+[RDS] is colored in lightblue
+[class RemoteDataSourceAPI] starts 2022-01-04 and ends 2022-01-4
+
+[RDS Queues] starts 2022-01-05 and ends 2022-01-06
+[RDS Queues] is colored in lightblue
+[class FetchRequestQueue] starts 2022-01-05 and ends 2022-01-06
+[class FetchRequestQueueObserver] starts 2022-01-05 and ends 2022-01-06
+[class ProjectCommandQueue] starts 2022-01-05 and ends 2022-01-06
+[class ProjectCommandQueueObserver] starts 2022-01-05 and ends 2022-01-06
+
+[RDS UserManger] starts 2022-01-07 and ends 2022-01-14
+[RDS UserManger] is colored in lightblue
+[class UserAccout] starts 2022-01-07 and ends 2022-01-08
+[class FirebaseManager] starts 2022-01-09 and ends 2022-01-14
+
+[RDS ServerConnection] starts 2022-01-19 and ends 2022-01-28
+[RDS ServerConnection] is colored in lightblue
+[class ServerManager] starts 2022-01-19 and ends 2022-01-19
+[class RESTAPI] starts 2022-01-20 and ends 2022-01-28
+
 --View--
 
 [Util Classes]      starts at 2022-01-04 and lasts 2 day and is colored in LightBlue
@@ -340,6 +363,7 @@ Project starts the 3rd of January 2022
 [ServerScreenViewModel]      starts at [TemplateScreen]'s start and lasts 2 day
 [ServerLoginScreenViewModel] starts at [ServerScreen]'s end and lasts 2 day
 [LinkScreenViewModel]        starts at [ServerLoginScreen]'s start and lasts 2 day
+'>>>>>>> 47f1b5245657e5286213d4d2a834946682176fca
 
 legend
     Aufgaben, die vor dem 10. Januar 2022 abgeschlossen sind,

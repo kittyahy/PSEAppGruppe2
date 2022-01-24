@@ -1,0 +1,36 @@
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+class RESTAPI {
+    -networkLocation : String
+    -greetingController : String
+    -postsController : String
+    -projectParticipantsController : String
+    -deltaController : String
+    -oldDataController : String
+    ----
+    ..GreetingController..
+    + greets(): String
+    ..PostsController..
+    + getAllPostPreview(AuthToken: String): Collection(String)
+    + getPostDetail(fromPost: int, AuthToken: String): Collection(String)
+    + getProjectTemplate(fromPost: int, AuthToken: String): JSON
+    + getGraphTemplate(fromPost: int,templateNumber: int, AuthToken: String): JSON
+    + addPost(postPreview: JSON, user: String, projectTemplate: JSON, graphTemplate: List(JSON), AuthToken: String)
+    + removePost(postID: long, user: String, AuthToken: String)
+    ..ProjectParticipantsController..
+    + addUser(user: String, projectID: long, AuthToken: String): boolean
+    + removeUser(userToRemove: String, projectID: long, user: String, AuthToken: String): boolean
+    + addProject(user:String, AuthToken: String): long
+    ..DeltaController..
+    + saveDelta(projectID: long, projectCommand: JSON, user: String, AuthToken: String)
+    + getDelta(projectID: long, user: String, AuthToken: String): Collection(<Delta>)
+    + provideOldData(projectCommand: JSON, forUser: String, initialAdded: Date, initialAddedBy: String, projectID: long, wasAdmin: boolean, AuthToken: String)
+    + getRemoveTime(AuthToken: String): Date
+    ..FetchRequestController..
+    + demandOldData(user: String, projectID: long, requestInfo: JSON, AuthToken: String)
+    + getFetchRequests(user: String, projectID: long, AuthToken: String): Collection(<FetchRequest>)
+    }

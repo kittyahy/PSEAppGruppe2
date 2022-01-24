@@ -1,0 +1,353 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+
+
+skinparam lineType ortho
+skinparam groupInheritance 22
+
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+skinparam Linetype ortho
+
+hide circle
+
+package Gson {}
+package Kotlin{
+class Throwable {
+}
+}
+
+package Repository {
+'=================================================================================================='
+'Overleaf
+package ViewModelInterface {
+    'Overleaf deprecated
+    class "PostHandler" as repoPostHandler <<singleton>> {
+        +getPostPreviews(): Collection<Post>
+        +getPostDetail(id: String): PostDetail
+        'teplate downloaden via postid
+        +getProjectTemplate(id: String): void
+        'teplate downloaden via postid + index des graph temlates im Post
+        +getGraphTemplate((id: String, index: int): void
+    }
+    class "CommandFactory" as repoCommandFactory <<singleton>> {
+        +operationPossible(): FlowShared<Map<String, Boolean>>
+        +addRow(projectID: ProjectID, index: int, content: List<Any>)
+     }
+    'Overleaf
+    class "ProjectHandler" as repoProjectHandler {
+        -projectPreviews: Collection<ProjectPreview>
+        +getProjectPreviews(): SharedFlow<Collection<ProjectPreview>>
+        +getProjectByID(id: int):SharedFlow<Project>
+    }
+    package CommunicationClasses {
+    class "Column" as repoColumn {
+            id : GZ
+            name : String
+            unit : String
+            datatype : DataType
+
+        }
+
+        class "Button" as repoButton{
+            id : GZ
+            name : String
+            columnId : GZ
+            value : GZ
+        }
+
+        class "Notification" as repoNotification {
+            id : GZ
+            message : String
+            time : Time
+        }
+
+        class "Time" as repoTime {
+            hour : GZ
+            minute : GZ
+            second : GZ
+        }
+
+        class "Member" as repoMember {
+            id : GZ
+            name : String
+        }
+
+        class "ProjectPreview" as repoProjectPreview {
+            id : GZ
+            name : String
+            image : Image
+        }
+
+        class "Graph" as repoGraph {
+            id : GZ
+            image : Image
+        }
+
+        class "LineChart" as LineChart {
+            dotSize : DotSize
+            dotColor : Color
+            lineType : LineType
+            mappingVertical : List<Column>
+            mappingHorizontal : Column
+        }
+
+        enum "DotSize" as repoDotSize <<Enum>> {
+            SMALL
+            MEDIUM
+            BIG
+        }
+
+        enum "LineType" as repoLineType <<Enum>> {
+            DOTTED
+            NONE
+            CONTINUOUS
+        }
+
+        class "PieChart" as repoPieChart {
+            color : List<Color>
+            mapping : List<Column>
+            showPercentages : Boolean
+        }
+
+
+        enum "DataType" as repoDataType <<Enum>> {
+            WHOLE_NUMBER
+            FLOATING_POINT_NUMBER
+            TIME
+            STRING
+        }
+
+        class "Project" as repoProject {
+            id : GZ
+            isOnlineProject : Boolean
+            isAdmin : Boolean
+            title : String
+            description : String
+            wallpaper : Image
+            table : List<Column>
+            data : List<Row>
+            buttons : List<Button>
+            notifications : List<Notification>
+            graphs : List<Graph>
+            members : List<Member>
+        }
+
+        class "Row" as repoRow {
+            id : GZ
+            elements : List<String>
+
+            getId() : GZ
+            getElements() : List<String>
+            setId(id : GZ)
+            setElements(elements : List<String>)
+        }
+
+        repoGraph <|-- repoLineChart
+        repoGraph <|-- repoPieChart
+
+        repoProject ..> repoColumn
+        repoProject ..> repoRow
+        repoProject ..> repoGraph
+        repoProject ..> repoButton
+        repoProject ..> repoMember
+        repoProject ..> repoNotification
+
+        repoLineChart ..> repoLineType
+        repoLineChart ..> repoDotSize
+        repoLineChart ..> repoColumn
+
+        repoPieChart ..> repoColumn
+
+        repoNotification ..> repoTime
+
+        repoColumn ..> repoDataType
+    }
+
+}
+
+'=================================================================================================='
+  'Overleaf deprecated
+  package CommandCenter {
+    'Overleaf deprecated
+    class "CommandInbox" as repoCommandInbox {
+        -commandQueue: List<ProjectCommand>
+        +addFromJson(commandWrapperJson: String) throws JsonSyntaxException
+    }
+    'Overleaf deprecated
+     class "CommandUtility" as CommandUtility <<static>> {
+        +{static} setServerInfo(ProjectCommand, serverInfo: ServerInfo):ProjectCommand
+        +{static} toNewCommand(ProjectCommand): ProjectCommand
+     }
+   '-----------------------------------------------------------------------------------------------'
+     'Overleaf deprecated
+     package UpToDater {
+           'Wenn ich einmal länger als 72h am Stück offline war merke ich mir diese Intervalle
+           'dann Frage ich jemanden auf dem Server an, der in diesen 72h keine Blindspots hat
+           'Overleaf
+           class "OldDataFetcher" as repoOldDataFetcher {
+           +from: DateTime
+           +to: DateTime
+           +from: ProjectID
+           'null == daten nicht vorhanden
+           +getOldData(): List<OldData>
+           }
+     }
+   '-----------------------------------------------------------------------------------------------'
+   package Commands {
+
+   abstract class "ProjectCommand" as repoProjectCommand <<abstract>>{
+       +projectID: ProjectID
+       +OnlineProjectID: OnlineProjectID?
+       {field}+wentOnline: DateTime?
+       {field}+serverRemoveTime: DateTime?
+       +commandByUser: String?
+       +isProjectAdmin: boolean?
+
+       {abstract}+execute() throws IllegalOperationException
+   }
+
+   <>PLACEHOLDER
+
+   class AddRow {
+      +index: Int
+      +content: List<Any>
+
+      +execute()
+   }
+   class DeleteRow {
+      +index: Int
+      +execute()
+   }
+   class DeleteColumn {
+      +index: Int
+      +execute()
+   }
+   class AddColumn {
+      +index(): Int
+      +type: DataType
+      +execute()
+   }
+   class SetCell {
+      +indexColumn: Int
+      +indexRow: Int
+      +execute()
+   }
+   class SetAdmin {
+      +UserID: String
+      +execute()
+   }
+   class AddUser {
+      +UserID: String
+      +execute()
+   }
+
+   class RemoveUser {
+      +UserID: String
+      +execute()
+   }
+   class CreateGraph {
+      'TODO Felder'
+      +execute()
+   }
+   class SetCalculationFunction {
+      'TODO Felder'
+      +execute()
+   }
+   class SetTransformationFunctionComposition {
+      'TODO Felder'
+      +execute()
+   }
+   class SetSetting {
+      +name: String
+      +value: String
+      +execute()
+   }
+   class SetProjectName {
+      +value: String
+      +execute()
+   }
+   class SetProjectDescription {
+      +value: String
+      +execute()
+   }
+   class SetWallpaper {
+      +value: Drawable
+      +execute()
+   }
+   class SetNotification {
+      'TODO: Felder'
+      +execute()
+   }
+   class DeleteNotification {
+      +notificationID: String
+      +execute()
+   }
+   class SetUIElement {
+      'TODO: Felder'
+      +execute()
+   }
+   class RequestOldData {
+      +from: DateTime
+      +to: DateTime
+      +execute()
+   }
+   class SetIsOnlineProject {
+      +value: boolean
+      +execute()
+   }
+   class CreateProject {
+      +execute()
+   }
+   class CommandWrapper {
+   +commandCanonicalName: String
+   +commandJson: String
+
+   +Constructor(command: ProjectCommand)
+   +toJson(): String
+   +unwrap(): ProjectCommand
+   -jsonFromCommand(ProjectCommand): String
+   }
+
+   'Overleaf
+   class IllegalOperationException {
+       }
+
+   }
+  }
+
+  CommandWrapper .> Gson: <<uses>>
+  IllegalOperationException .> Throwable: <<implements>>
+
+
+  together {
+
+    PLACEHOLDER ^-- AddColumn
+    PLACEHOLDER ^-- AddRow
+    PLACEHOLDER ^-- DeleteRow
+    PLACEHOLDER ^-- DeleteColumn
+    PLACEHOLDER ^-- SetCell
+    PLACEHOLDER ^-- SetAdmin
+    PLACEHOLDER ^-- AddUser
+    PLACEHOLDER ^--- RemoveUser
+    PLACEHOLDER ^--- CreateGraph
+    PLACEHOLDER ^--- SetCalculationFunction
+    PLACEHOLDER ^--- SetTransformationFunctionComposition
+    PLACEHOLDER ^--- SetSetting
+    PLACEHOLDER ^--- SetProjectName
+    PLACEHOLDER ^--- SetProjectDescription
+    PLACEHOLDER ^---- SetWallpaper
+    PLACEHOLDER ^---- SetNotification
+    PLACEHOLDER ^---- DeleteNotification
+    PLACEHOLDER ^---- SetUIElement
+    PLACEHOLDER ^---- RequestOldData
+    PLACEHOLDER ^---- CreateProject
+    PLACEHOLDER ^---- SetIsOnlineProject
+
+  }
+
+}
+
+@enduml

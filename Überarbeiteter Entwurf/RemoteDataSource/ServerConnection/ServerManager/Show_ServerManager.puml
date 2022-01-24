@@ -1,0 +1,21 @@
+@startuml ServerManager
+
+!include ServerManager.puml!ServerManager
+
+note left of ServerManager::needOldData
+    Fetches ProjectCommandFetchRequests from the Server 
+    and puts them into the FetchRequestQueue
+end note
+
+note left of ServerManager::getDeltasFromServer
+    Fetches Deltas from the Server 
+    Transforms them into ProjectCommandInfo-Object
+    Puts ProjectCommandInfo-Objects into the ProjectCommandQueue
+end note
+
+note left of ServerManager::provideOldData
+    Calls for each JSON in DeltasToUpload the 
+    provideOldData() function in the REST API
+end note
+
+@enduml

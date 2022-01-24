@@ -18,28 +18,12 @@
 
 */
 
-package com.pseandroid2.dailydata.remoteDataSource.queue.queueLogic.fetchRequest
+package com.example.pse.util.ui
 
-import com.pseandroid2.dailydata.remoteDataSource.queue.FetchRequestQueue
-import org.junit.Assert
-import org.junit.Test
+import androidx.compose.ui.graphics.Color
 
-class fetchRequestQueueTests_SaveEmptyString {
-    @Test
-    fun saveOneFetchRequest() {
-        val fetchRequestQueue = FetchRequestQueue()
-
-        val fetchRequest = ""
-
-        Assert.assertEquals(fetchRequestQueue.getQueueLength(), 0)
-
-        fetchRequestQueue.addFetchRequest(fetchRequest)
-
-        Assert.assertEquals(fetchRequestQueue.getQueueLength(), 0)
-
-        val returnedFetchRequest = fetchRequestQueue.getFetchRequest()
-
-        Assert.assertEquals(fetchRequest, returnedFetchRequest)
-        Assert.assertEquals(fetchRequestQueue.getQueueLength(), 0)
-    }
+enum class Wallpapers(val value : Color) {
+    ORANGE(Color(0xFFF57C00)),
+    GREEN(Color(0xFF388E3C)),
+    BLUE(Color(0xFF2196F3))
 }

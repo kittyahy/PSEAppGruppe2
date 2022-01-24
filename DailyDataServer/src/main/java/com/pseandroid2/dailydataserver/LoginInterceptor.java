@@ -42,7 +42,6 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-
         //so halb getestet, ich hoffe, dass es funktioniert..
         InputStream inputStream = request.getInputStream();
         byte[] byteBody = StreamUtils.copyToByteArray(inputStream);

@@ -33,7 +33,7 @@ class fetchRequestQueueTests_GetFromEmptyQueue {
 
         val returnedFetchRequest = fetchRequestQueue.getFetchRequest()
 
-        Assert.assertEquals(returnedFetchRequest,"")
+        Assert.assertEquals(returnedFetchRequest,null)
 
         Assert.assertEquals(fetchRequestQueue.getQueueLength(), 0)
     }
