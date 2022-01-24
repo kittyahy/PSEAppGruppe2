@@ -21,6 +21,7 @@ package com.pseandroid2.dailydataserver.onlineDatabase;
 
 import com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB.ProjectParticipantsID;
 import com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB.ProjectParticipantsRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.HandlerMapping;
@@ -42,9 +43,11 @@ import java.util.Map;
  */
 @Component
 public class AccessToProjectInterceptor implements HandlerInterceptor {
+
+    @Autowired
     private ProjectParticipantsRepository repo;
 
-    public AccessToProjectInterceptor(ProjectParticipantsRepository repo) {
+    public AccessToProjectInterceptor(ProjectParticipantsRepository repo) { //muss nicht übergeben werden.
         this.repo = repo;
     }
 

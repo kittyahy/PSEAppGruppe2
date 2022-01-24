@@ -11,7 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-/*@WebMvcTest(controllers = GreetingController.class)
+@WebMvcTest(controllers = GreetingController.class)
 public class GreetingControllerTest {
 
     @Autowired
@@ -26,4 +26,4 @@ public class GreetingControllerTest {
 
         mock.perform(get("/")).andExpect(jsonPath("", Matchers.equalTo("Hello")));
     }
-}*/
+}

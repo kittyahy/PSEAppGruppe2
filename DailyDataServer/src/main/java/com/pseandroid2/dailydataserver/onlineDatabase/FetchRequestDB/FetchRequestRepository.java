@@ -22,6 +22,14 @@ package com.pseandroid2.dailydataserver.onlineDatabase.FetchRequestDB;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface FetchRequestRepository extends JpaRepository<FetchRequest, Integer> {
+    @Override
+    FetchRequest getById(Integer integer);
+
+    @Override
+    Optional<FetchRequest> findById(Integer integer);
+
 }

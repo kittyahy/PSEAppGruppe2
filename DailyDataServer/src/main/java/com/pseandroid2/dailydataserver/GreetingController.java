@@ -19,14 +19,15 @@
 */
 package com.pseandroid2.dailydataserver;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Controller to know if the server is available.
  * The client doesn't need to log in for access the controller
  */
 @RestController
+@CrossOrigin(origins= "http://localhost:8080")
+@RequestMapping(path = "/")
 public class GreetingController {
 
     private ServerGreetings serverGreetings;
