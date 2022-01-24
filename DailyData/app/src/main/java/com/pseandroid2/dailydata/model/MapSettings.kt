@@ -34,9 +34,7 @@ class MapSettings(settings: Map<String, String>) : Settings {
         return settings[key] ?: throw SettingNotFoundException()
     }
 
-    override fun iterator(): Iterator<Pair<String, String>> {
-        return MapSettingsIterator(this)
-    }
+    override fun iterator(): Iterator<Pair<String, String>> = MapSettingsIterator(this)
 }
 
 class MapSettingsIterator(settings: MapSettings) : Iterator<Pair<String, String>> {
