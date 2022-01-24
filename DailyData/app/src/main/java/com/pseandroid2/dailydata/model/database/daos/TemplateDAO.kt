@@ -24,21 +24,46 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import com.pseandroid2.dailydata.model.database.entities.GraphTemplateData
 import com.pseandroid2.dailydata.model.database.entities.GraphTemplateEntity
+import com.pseandroid2.dailydata.model.database.entities.ProjectTemplateData
 import com.pseandroid2.dailydata.model.database.entities.ProjectTemplateEntity
+import com.pseandroid2.dailydata.model.table.TableLayout
+import com.pseandroid2.dailydata.model.users.User
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 @Dao
 abstract class TemplateDAO {
+    fun getAllProjectTemplateData(): Flow<List<ProjectTemplateData>> {
+        @Suppress("Deprecation")
+        return mapToProjectTemplateData(getAllProjectTemplateEntities())
+    }
 
-    @Query("SELECT * FROM projectTemplate")
-    abstract suspend fun getAllProjectTemplateData(): Flow<List<ProjectTemplateEntity>>
+    fun getProjectTemplateData(vararg ids: Int): Flow<List<ProjectTemplateData>> {
+        @Suppress("Deprecation")
+        return mapToProjectTemplateData(getProjectTemplateEntities(*ids))
+    }
 
-    @Query("SELECT * FROM projectTemplate WHERE id in (:ids)")
-    abstract suspend fun getProjectTemplateData(vararg ids: Int): Flow<List<ProjectTemplateEntity>>
+    fun getProjectTemplateDataByCreator(creator: User): Flow<List<ProjectTemplateData>> {
+        @Suppress("Deprecation")
+        return mapToProjectTemplateData(getProjectTemplateEntityByCreator(creator))
+    }
 
-    @Query("SELECT * FROM projectTemplate WHERE createdBy = :creator")
-    abstract suspend fun getProjectTemplateByCreator(creator: String): Flow<List<ProjectTemplateEntity>>
+    fun getAllGraphTemplateData(): Flow<List<GraphTemplateData>> {
+        @Suppress("Deprecation")
+        return mapToGraphTemplateData(getAllGraphTemplateEntities())
+    }
+
+    fun getGraphTemplateData(vararg ids: Int): Flow<List<GraphTemplateData>> {
+        @Suppress("Deprecation")
+        return mapToGraphTemplateData(getGraphTemplateEntities(*ids))
+    }
+
+    fun getGraphTemplateDataByCreator(creator: User): Flow<List<GraphTemplateData>> {
+        @Suppress("Deprecation")
+        return mapToGraphTemplateData(getGraphTemplateEntitiesByCreator(creator))
+    }
 
     @Query("UPDATE projectTemplate SET name = :name WHERE id = :id")
     abstract suspend fun setProjectTemplateName(id: Int, name: String)
@@ -49,12 +74,6 @@ abstract class TemplateDAO {
     @Query("UPDATE projectTemplate SET wallpaper = :wallpaper WHERE id = :id")
     abstract suspend fun setProjectTemplateWallpaper(id: Int, wallpaper: String)
 
-    @Query("SELECT * FROM graphTemplate")
-    abstract suspend fun getAllGraphTemplateData(): Flow<List<GraphTemplateEntity>>
-
-    @Query("SELECT * FROM graphTemplate WHERE createdBy = :creator")
-    abstract suspend fun getGraphTemplateByCreator(creator: String): Flow<List<GraphTemplateEntity>>
-
     @Query("UPDATE graphTemplate SET name = :name WHERE id = :id")
     abstract suspend fun setGraphTemplateName(id: Int, name: String)
 
@@ -62,18 +81,112 @@ abstract class TemplateDAO {
     abstract suspend fun setGraphTemplateDescription(id: Int, desc: String)
 
     /*========================SHOULD ONLY BE CALLED FROM INSIDE THE MODEL=========================*/
+    @Deprecated("Should only be used from inside the Model. Use ProjectCDManager.insertProjectTemplate instead")
     @Insert
     abstract suspend fun insertProjectTemplate(project: ProjectTemplateEntity)
 
+    @Deprecated("Should only be used from inside the Model. Use ProjectCDManager.deleteProjectTemplate instead")
     @Delete
     abstract suspend fun deleteProjectTemplate(project: ProjectTemplateEntity)
 
+    @Deprecated("Should only be used from inside the Model. Use ProjectCDManager.deleteProjectTemplate instead")
     @Query("DELETE FROM projectTemplate WHERE id = :id")
     abstract suspend fun deleteProjectTemplateById(id: Int)
 
+    @Deprecated("Should only be used from inside the Model. Use GraphCDManager.insertGraphTemplate instead")
     @Insert
     abstract suspend fun insertGraphTemplate(graph: GraphTemplateEntity)
 
+    @Deprecated("Should only be used from inside the Model. Use GraphCDManager.deleteGraphTemplate instead")
     @Delete
     abstract suspend fun deleteGraphTemplate(graph: GraphTemplateEntity)
+
+    @Deprecated("Should only be used from inside the Model. Use GraphCDManager.deleteGraphTemplate instead")
+    @Query("DELETE FROM graphTemplate WHERE id = :id")
+    abstract suspend fun deleteGraphTemplateById(id: Int)
+
+    @Deprecated(
+        "Should only be used from inside the model. Use getAllProjectTemplateData() instead",
+        ReplaceWith("getAllProjectTemplateData()")
+    )
+    @Query("SELECT * FROM projectTemplate")
+    abstract fun getAllProjectTemplateEntities(): Flow<List<ProjectTemplateEntity>>
+
+    @Deprecated(
+        "Should only be used from inside the model. Use getProjectTemplateData() instead",
+        ReplaceWith("getProjectTemplateData()")
+    )
+    @Query("SELECT * FROM projectTemplate WHERE id in (:ids)")
+    abstract fun getProjectTemplateEntities(vararg ids: Int): Flow<List<ProjectTemplateEntity>>
+
+    @Deprecated(
+        "Should only be used from inside the model. Use getProjectTemplateData() instead",
+        ReplaceWith("getProjectTemplateDataByCreator()")
+    )
+    @Query("SELECT * FROM projectTemplate WHERE createdBy = :creator")
+    abstract fun getProjectTemplateEntityByCreator(creator: User)
+            : Flow<List<ProjectTemplateEntity>>
+
+    @Deprecated(
+        "Should only be used from inside the model. Use getProjectTemplateData() instead",
+        ReplaceWith("getAllGraphTemplateData()")
+    )
+    @Query("SELECT * FROM graphTemplate")
+    abstract fun getAllGraphTemplateEntities(): Flow<List<GraphTemplateEntity>>
+
+    @Deprecated(
+        "Should only be used from inside the model. Use getProjectTemplateData() instead",
+        ReplaceWith("getGraphTemplateData()")
+    )
+    @Query("SELECT * FROM graphTemplate WHERE id IN (:ids)")
+    abstract fun getGraphTemplateEntities(vararg ids: Int): Flow<List<GraphTemplateEntity>>
+
+    @Deprecated(
+        "Should only be used from inside the model. Use getProjectTemplateData() instead",
+        ReplaceWith("getGraphTemplateDataByCreator()")
+    )
+    @Query("SELECT * FROM graphTemplate WHERE createdBy = :creator")
+    abstract fun getGraphTemplateEntitiesByCreator(creator: User)
+            : Flow<List<GraphTemplateEntity>>
+
+    private fun mapToProjectTemplateData(flow: Flow<List<ProjectTemplateEntity>>)
+            : Flow<List<ProjectTemplateData>> {
+        return flow.map { list ->
+            val dataList = mutableListOf<ProjectTemplateData>()
+            for (template in list) {
+                val skeleton = template.skeleton
+                dataList.add(
+                    ProjectTemplateData(
+                        skeleton.id,
+                        skeleton.name,
+                        skeleton.description,
+                        skeleton.onlineId,
+                        skeleton.wallpaper,
+                        template.createdBy,
+                        TableLayout.fromJSON(skeleton.layout)
+                    )
+                )
+            }
+            dataList.toList()
+        }
+    }
+
+    private fun mapToGraphTemplateData(flow: Flow<List<GraphTemplateEntity>>)
+            : Flow<List<GraphTemplateData>> {
+        return flow.map { list ->
+            val dataList = mutableListOf<GraphTemplateData>()
+            for (template in list) {
+                dataList.add(
+                    GraphTemplateData(
+                        template.id,
+                        template.name,
+                        template.description,
+                        template.type,
+                        template.createdBy
+                    )
+                )
+            }
+            dataList.toList()
+        }
+    }
 }
