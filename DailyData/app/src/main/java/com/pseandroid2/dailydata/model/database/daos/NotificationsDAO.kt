@@ -59,7 +59,7 @@ abstract class NotificationsDAO {
         return id
     }
 
-    @Query("DELETE ")
+    @Query("DELETE FROM notification WHERE projectId = :projectId AND id IN (:ids)")
     abstract suspend fun deleteNotification(projectId: Int, vararg ids: Int)
 
     @Query(
