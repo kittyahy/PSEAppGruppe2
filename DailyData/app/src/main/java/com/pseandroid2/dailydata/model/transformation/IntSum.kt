@@ -21,13 +21,14 @@
 package com.pseandroid2.dailydata.model.transformation
 
 class IntSum(cols: List<Int>) : Sum<Int>(cols) {
-    override var functionString = "SUM|col=$cols;INT"
+
+    override var functionString = "$SUM_ID|col=$cols;type=${Sum.TYPE_INT}"
 
     override fun unsafeSum(list: List<Any>): Int {
         var sum: Int = 0
         for (element in list) {
             if (element is Int) {
-                sum += element as Int
+                sum += element
             } else {
                 throw NumberFormatException("Couldn't convert $element to Int")
             }

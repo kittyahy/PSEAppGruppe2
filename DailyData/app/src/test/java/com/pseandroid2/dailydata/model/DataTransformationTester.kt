@@ -20,6 +20,8 @@
 
 package com.pseandroid2.dailydata.model
 
+import com.pseandroid2.dailydata.model.transformation.Identity
+import com.pseandroid2.dailydata.model.transformation.IntSum
 import com.pseandroid2.dailydata.model.transformation.Sum
 import com.pseandroid2.dailydata.model.transformation.TransformationFunction
 import org.junit.Assert.assertEquals
@@ -28,8 +30,9 @@ import org.junit.Before
 import org.junit.Test
 
 class DataTransformationTester {
-    private lateinit var transformChaining: SumSingles<List<Int>>
-    private lateinit var transformSimple: Sum<List<Int>>
+    private lateinit var transform1: Sum<Int>
+    private lateinit var transform2: Sum<Int>
+    private lateinit var transformId: Identity
     private val testSet1 = listOf(listOf(2, 3))
     private val testSet2 = listOf(
         listOf(2, 3, -1), listOf(9, 21, -20), listOf(234, 92, -10000), listOf(3)
@@ -37,37 +40,53 @@ class DataTransformationTester {
 
     @Before
     fun setup() {
-        transformChaining = TransformationFunction.sumS<List<Int>>(listOf<Int>(0, 2))
-        transformChaining.setComposition(
-            TransformationFunction.sumC<List<Int>>(listOf(0, 1, 3))
-        )
-        transformSimple = TransformationFunction.sumC<List<Int>>(listOf<Int>(0))
+        transform1 = IntSum(listOf(0))
+        transform2 = IntSum(listOf(0, 1, 3))
+        transformId = Identity()
     }
 
     @Test
     fun testSimpleTransform() {
-        val result1 = transformSimple.execute(testSet1)
-        val result2 = transformSimple.execute(testSet2)
+        val result1 = transform1.execute(testSet1)
+        val result2 = transform2.execute(testSet2)
+        val result3 = transformId.execute(testSet2)
 
         assertNotEquals(0, result1.size)
         assertEquals(5, result1[0])
-        assertEquals(4, result2[0])
-    }
+        assertEquals(3, result2.size)
+        val cols = listOf(0, 1, 3)
+        for (i in 0..2) {
+            assertEquals(testSet2[cols[i]].sum(), result2[i])
+        }
 
-    @Test
-    fun testChaining() {
-        val result = transformChaining.execute(testSet2)
-
-        assertEquals(1, result.size)
-        assertEquals(17, result[0])
+        for (i in testSet2.indices) {
+            for (j in testSet2[i].indices) {
+                assertEquals(testSet2[i][j], result3[i][j])
+            }
+        }
     }
 
     @Test
     fun testToText() {
-        assertEquals("SUMC|col=[0]|(id())", transformSimple.toCompleteString())
         assertEquals(
-            "SUMS|col=[0, 2]|(SUMC|col=[0, 1, 3]|(id()))",
-            transformChaining.toCompleteString()
+            "${TransformationFunction.SUM_ID}|col=[0];type=INT",
+            transform1.toCompleteString()
+        )
+        assertEquals(
+            "${TransformationFunction.SUM_ID}|col=[0, 1, 3];type=INT",
+            transform2.toCompleteString()
+        )
+    }
+
+    @Test
+    fun testFromText() {
+        assertEquals(
+            transform1.execute(testSet1)[0],
+            TransformationFunction.parse(transform1.toCompleteString()).execute(testSet1)[0]
+        )
+        assertEquals(
+            transform2.execute(testSet1)[0],
+            TransformationFunction.parse(transform2.toCompleteString()).execute(testSet1)[0]
         )
     }
 }

@@ -54,7 +54,7 @@ interface Project {
      */
     abstract class DataTransformation<D : Any> private constructor(
         private val table: Table,
-        private val function: TransformationFunction<out Any, D>,
+        private val function: TransformationFunction<D>,
         private vararg val cols: Int
     ) {
 

@@ -26,6 +26,7 @@ abstract class TransformationFunction<O : Any> protected constructor(
 
     companion object {
         const val SUM_ID = "SUM"
+        const val IDENTITY_ID = "ID"
 
         fun identity() = Identity()
 
@@ -33,28 +34,29 @@ abstract class TransformationFunction<O : Any> protected constructor(
 
         fun parse(functionString: String): TransformationFunction<out Any> {
             var function: String = functionString.substringBefore('|')
-            var args: String = function.substringAfter('|', "")
+            var args: String = functionString.substringAfter('|', "")
 
             //No need to change stuff if there are no arguments
             if (args != "") {
-                args = args.substring(0, args.length - 2)
+                args = args.substring(0, args.length)
                 function = function.substringBefore('|')
             }
 
             val transform: TransformationFunction<out Any> = when (function) {
-                "SUM" -> {
+                SUM_ID -> {
                     val split = args.split(";")
-                    val colStrings = split[0].substring(1, args.length - 2).split(", ")
+                    val argCols = split[0].substringAfter('=', "")
+                    val colStrings = argCols.substring(1, argCols.length - 1).split(", ")
                     val cols = mutableListOf<Int>()
                     for (string in colStrings) {
                         cols.add(string.toInt())
                     }
-                    when (split[1]) {
-                        "INT" -> IntSum(cols)
+                    when (split[1].substringAfter('=', "")) {
+                        Sum.TYPE_INT -> IntSum(cols)
                         else -> throw IllegalArgumentException("No such Sum function: ${split[1]}")
                     }
                 }
-                "ID" -> {
+                IDENTITY_ID -> {
                     if (args != "") {
                         throw IllegalArgumentException(
                             "No Constructor for Identity function found with arguments $args"

@@ -21,7 +21,7 @@
 package com.pseandroid2.dailydata.model.transformation
 
 class Identity() :
-    TransformationFunction<List<Any>>("ID") {
+    TransformationFunction<List<Any>>(IDENTITY_ID) {
 
     override fun execute(input: List<List<Any>>): List<List<Any>> {
         return input
