@@ -59,15 +59,14 @@ abstract class NotificationsDAO {
         return id
     }
 
-    suspend fun deleteNotification(projectId: Int, notification: Notification) {
-
-    }
+    @Query("DELETE ")
+    abstract suspend fun deleteNotification(projectId: Int, vararg ids: Int)
 
     @Query(
         "UPDATE notification SET message = :message " +
                 "WHERE projectId = :projectId AND id = :id"
     )
-    abstract suspend fun setNotificationMessage(projectId: Int, id: Integer, message: String)
+    abstract suspend fun setNotificationMessage(projectId: Int, id: Int, message: String)
 
     /*========================SHOULD ONLY BE CALLED FROM INSIDE THE MODEL=========================*/
     @Query("SELECT * FROM notification WHERE projectId = :projectId")
