@@ -3,17 +3,17 @@ package com.pseandroid2.dailydata.repository.commandCenter.commands
 import java.time.LocalDateTime
 
 abstract class ProjectCommand (
-    projectID: Int,
-    onlineProjectID: Long?,
-    wentOnline: LocalDateTime?,
-    serverRemoveTime: LocalDateTime?,
-    commandByUser: String?,
-    isProjectAdmin: Boolean?
+    var projectID: Int,
+    var onlineProjectID: Long? = null,
+    var wentOnline: LocalDateTime? = null,
+    var serverRemoveTime: LocalDateTime? = null,
+    var commandByUser: String? = null,
+    var isProjectAdmin: Boolean? = null
 ){
-    fun execute() {
+    open fun execute() {
         TODO()
     }
-    fun publish() {
+    open fun publish() {
         TODO()
     }
     abstract fun individualExecution()
