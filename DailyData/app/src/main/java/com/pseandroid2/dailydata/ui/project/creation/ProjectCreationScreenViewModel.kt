@@ -24,10 +24,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pseandroid2.dailydata.util.ui.UiEvent
 import com.pseandroid2.dailydata.di.Repository
+import com.pseandroid2.dailydata.util.ui.DataType
+import com.pseandroid2.dailydata.util.ui.Graphs
+import com.pseandroid2.dailydata.util.ui.Notification
 import com.pseandroid2.dailydata.util.ui.Routes
 import com.pseandroid2.dailydata.util.ui.TableButton
 import com.pseandroid2.dailydata.util.ui.TableColumn
@@ -39,7 +43,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProjectCreationScreenViewModel @Inject constructor(
-    private val repository: Repository
+    private val repository: Repository,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val _uiEvent = MutableSharedFlow<UiEvent>()
@@ -55,6 +60,10 @@ class ProjectCreationScreenViewModel @Inject constructor(
         private set
     var buttons by mutableStateOf( listOf<TableButton>() )
         private set
+    var notifications by mutableStateOf( listOf<Notification>() )
+        private set
+    var graphs by mutableStateOf( listOf<Graphs>() )
+        private set
 
     var isWallpaperDialogOpen by mutableStateOf(false)
         private set
@@ -66,6 +75,18 @@ class ProjectCreationScreenViewModel @Inject constructor(
         private set
     var isGraphDialogOpen by mutableStateOf(false)
         private set
+
+    var isBackDialogOpen by mutableStateOf(false)
+        private set
+
+    init {
+        val todoId = savedStateHandle.get<Int>("projectId")!!
+        if(todoId != -1) {
+            viewModelScope.launch {
+                //set template values
+            }
+        }
+    }
 
     fun onEvent(event: ProjectCreationEvent) {
         when (event) {
@@ -110,11 +131,38 @@ class ProjectCreationScreenViewModel @Inject constructor(
                 mutable.removeAt(index = event.index)
                 buttons = mutable.toList()
             }
-
-            is ProjectCreationEvent.OnSaveClick -> {
-                TODO("Collect project data and send to repository")
-                sendUiEvent(UiEvent.Navigate(Routes.DATA))
+            is ProjectCreationEvent.OnNotificationAdd -> {
+                var mutable = notifications.toMutableList()
+                mutable.add(Notification(message = event.message, time = event.time))
+                notifications = mutable.toList()
             }
+            is ProjectCreationEvent.OnNotificationRemove -> {
+                var mutable = notifications.toMutableList()
+                mutable.removeAt(index = event.index)
+                notifications = mutable.toList()
+            }
+            is ProjectCreationEvent.OnGraphAdd -> {
+                var mutable = graphs.toMutableList()
+                mutable.add(event.graph)
+                graphs = mutable.toList()
+            }
+            is ProjectCreationEvent.OnGraphRemove -> {
+                var mutable = graphs.toMutableList()
+                mutable.removeAt(index = event.index)
+                graphs = mutable.toList()
+            }
+            is ProjectCreationEvent.OnSaveClick -> {
+                when {
+                    title.isBlank() -> sendUiEvent(UiEvent.ShowToast("Please Enter a title"))
+                    table.isEmpty() -> sendUiEvent(UiEvent.ShowToast("Please Enter a column"))
+                    else            -> {
+                        var id = 0 //id = repository.createProject(...)
+                        sendUiEvent(UiEvent.PopBackStack )
+                        sendUiEvent(UiEvent.Navigate(Routes.DATA + "?projectId=$id"))
+                    }
+                }
+            }
+
             is ProjectCreationEvent.OnShowWallpaperDialog -> {
                 isWallpaperDialogOpen = event.isOpen
             }
@@ -122,13 +170,23 @@ class ProjectCreationScreenViewModel @Inject constructor(
                 isTableDialogOpen = event.isOpen
             }
             is ProjectCreationEvent.OnShowButtonsDialog -> {
-                isButtonsDialogOpen = event.isOpen
+                if(event.isOpen && table.none { it.dataType == DataType.WHOLE_NUMBER }) {
+                    sendUiEvent(UiEvent.ShowToast("Please Enter a compatible column first"))
+                } else {
+                    isButtonsDialogOpen = event.isOpen
+                }
             }
             is ProjectCreationEvent.OnShowNotificationDialog -> {
                 isNotificationDialogOpen = event.isOpen
             }
             is ProjectCreationEvent.OnShowGraphDialog -> {
                 isGraphDialogOpen = event.isOpen
+            }
+            is ProjectCreationEvent.OnShowBackDialog -> {
+                isBackDialogOpen = event.isOpen
+            }
+            is ProjectCreationEvent.OnNavigateBack -> {
+                sendUiEvent(UiEvent.PopBackStack)
             }
         }
     }

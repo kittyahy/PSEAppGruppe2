@@ -20,45 +20,63 @@
 
 package com.pseandroid2.dailydata.remoteDataSource.queue
 
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
+
 class FetchRequestQueue {
-    private val fetchRequests: MutableList<String> = mutableListOf<String>() // Speichert JSONs von FetchRequests
+    private val fetchRequests: MutableList<FetchRequest> = mutableListOf<FetchRequest>()
     private val observers: MutableList<FetchRequestQueueObserver> = mutableListOf<FetchRequestQueueObserver>()
 
     // Queue Logic
-    fun getFetchRequest(): String {
+    /**
+     * @return String: Gibt eine FetchRequest aus der Queue aus (und entfernt diese aus der Queue)
+     *                              Ist keine FetchRequest mehr in der Queue enthalten wird null ausgegeben
+     */
+    fun getFetchRequest(): FetchRequest? {
         if (fetchRequests.isNotEmpty()) {
             return fetchRequests.removeAt(0)
         }
-        return ""
+        return null
     }
 
-    fun addFetchRequest(fetchRequest: String) {
-        if (fetchRequest != "") {
-            // TODO: Teste, ob der String schon in der Queue vorhanden ist (find element) und füge es gegebenfalls nicht hinzu
-            if (!fetchRequests.contains(fetchRequest)) {
-                fetchRequests.add(fetchRequest)
-                notifyObservers()
-            }
+    /**
+     * @param fetchRequest: Die FetchRequest, die in die Queue hinzugefügt werden soll
+     */
+    fun addFetchRequest(fetchRequest: FetchRequest) {
+        if (!fetchRequests.contains(fetchRequest)) {
+            fetchRequests.add(fetchRequest)
+            notifyObservers()
         }
     }
 
+    /**
+     * @return Int: Die Länge der FetchRequestQueue
+     */
     fun getQueueLength(): Int {
         return fetchRequests.size
     }
 
     // Observer Logic
+    /**
+     * @param observer: Der Observer, der zur FetchRequestQueue hinzugefügt werden soll
+     */
     fun registerObserver(observer: FetchRequestQueueObserver) {
         if (!observers.contains(observer)) {
             observers.add(observer)
         }
     }
 
+    /**
+     * @param observer: Der Observer, der von der FetchRequestQueue entfernt werden soll
+     */
     fun unregisterObserver(observer: FetchRequestQueueObserver) {
         while (observers.contains(observer)) {
             observers.remove(observer)
         }
     }
 
+    /**
+     * Notifies all registered observers of the FetchRequestQueue
+     */
     private fun notifyObservers() {
         observers.forEach {
             if (it == null) { // TODO: Prüfe, ob das nicht doch relevant ist (Wenn Observer gelöscht wird)
