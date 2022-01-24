@@ -38,7 +38,7 @@ import com.pseandroid2.dailydata.util.SortedIntListUtil
 import java.util.SortedSet
 import java.util.TreeSet
 
-class ProjectCDManager private constructor(
+class ProjectCDManager (
     private val projectDAO: ProjectDataDAO,
     private val templateDAO: TemplateDAO,
     private val uiDAO: UIElementDAO,
@@ -114,8 +114,9 @@ class ProjectCDManager private constructor(
      */
     suspend fun insertProjectTemplate(template: ProjectTemplate): Int {
         val newId = getNextId()
-        val skeleton = createSkeleton(template.getProjectSkeleton(), template.getTableLayout())
-        val ent = ProjectTemplateEntity(newId, skeleton, template.getCreator())
+        val skeleton =
+            createSkeleton(newId, template.getProjectSkeleton(), template.getTableLayout())
+        val ent = ProjectTemplateEntity(skeleton, template.getCreator())
         templateDAO.insertProjectTemplate(ent)
         return newId
     }
@@ -134,6 +135,7 @@ class ProjectCDManager private constructor(
     }
 
     private fun createSkeleton(
+        id: Int,
         skeleton: ProjectSkeleton,
         layout: TableLayout
     ): ProjectSkeletonEntity {
@@ -141,15 +143,15 @@ class ProjectCDManager private constructor(
         val desc: String = skeleton.getDescription()
         val wallpaper: String = skeleton.getWallpaperPath()
         val onlineId: Long = skeleton.getOnlineId()
-        return ProjectSkeletonEntity(name, desc, wallpaper, layout.toJSON(), onlineId)
+        return ProjectSkeletonEntity(id, name, desc, wallpaper, layout.toJSON(), onlineId)
     }
 
     private suspend fun insertProjectEntity(project: Project): Int {
-        val skeleton: ProjectSkeletonEntity =
-            createSkeleton(project.getProjectSkeleton(), project.getTable().getLayout())
-        val admin: User = project.getAdmin()
         val id = getNextId()
-        val entity = ProjectEntity(id, skeleton, admin)
+        val skeleton: ProjectSkeletonEntity =
+            createSkeleton(id, project.getProjectSkeleton(), project.getTable().getLayout())
+        val admin: User = project.getAdmin()
+        val entity = ProjectEntity(skeleton, admin)
 
         projectDAO.insertProjectEntity(entity)
 
