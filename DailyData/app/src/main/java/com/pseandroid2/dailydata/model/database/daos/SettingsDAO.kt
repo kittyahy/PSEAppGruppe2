@@ -35,21 +35,21 @@ import java.util.TreeMap
 
 @Dao
 abstract class SettingsDAO {
-    suspend fun getProjectSettings(projectId: Int): Flow<Settings> {
+    fun getProjectSettings(projectId: Int): Flow<Settings> {
         return getProjectSettingEntities(projectId).map {
             val map: MutableMap<String, String> = TreeMap()
             for (setting: ProjectSettingEntity in it) {
-                map[setting.key] = setting.value
+                map[setting.settingKey] = setting.value
             }
             MapSettings(map)
         }
     }
 
-    suspend fun getGraphSettings(projectId: Int, graphId: Int): Flow<Settings> {
+    fun getGraphSettings(projectId: Int, graphId: Int): Flow<Settings> {
         return getGraphSettingEntities(projectId, graphId).map {
             val map: MutableMap<String, String> = TreeMap()
             for (setting: GraphSettingEntity in it) {
-                map[setting.key] = setting.value
+                map[setting.settingKey] = setting.value
             }
             MapSettings(map)
         }
@@ -71,13 +71,17 @@ abstract class SettingsDAO {
         insertGraphSettingsEntity(GraphSettingEntity(projectId, graphId, key, value))
     }
 
-    suspend fun deleteProjectSetting(projectId: Int, key: String) {
-        deleteProjectSettingEntity(ProjectSettingEntity(projectId, key, ""))
-    }
+    @Query("DELETE FROM projectSetting WHERE projectId = :projectId AND settingKey = :key")
+    abstract suspend fun deleteProjectSetting(projectId: Int, key: String)
 
-    suspend fun deleteGraphSetting(projectId: Int, graphId: Int, key: String) {
-        deleteGraphSettingEntity(GraphSettingEntity(projectId, graphId, key, ""))
-    }
+    @Query("DELETE FROM projectSetting WHERE projectId = :projectId")
+    abstract suspend fun deleteAllProjectSettings(projectId: Int)
+
+    @Query("DELETE FROM graphSetting WHERE projectId = :projectId AND graphId = :graphId AND settingKey = :key")
+    abstract suspend fun deleteGraphSetting(projectId: Int, graphId: Int, key: String)
+
+    @Query("DELETE FROM graphSetting WHERE projectId = :projectId AND graphId = :graphId")
+    abstract suspend fun deleteAllGraphSettings(projectId: Int, graphId: Int)
 
     /*========================SHOULD ONLY BE CALLED FROM INSIDE THE MODEL=========================*/
     @Query("SELECT * FROM projectSetting WHERE projectId = :projectId")
