@@ -24,21 +24,31 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import com.pseandroid2.dailydata.model.Graph
+import com.pseandroid2.dailydata.model.database.entities.GraphData
 import com.pseandroid2.dailydata.model.database.entities.GraphEntity
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 @Dao
 abstract class GraphDAO {
-    @Query("SELECT * FROM graph WHERE projectId IN (:ids)")
-    abstract fun getGraphEntityForProjects(vararg ids: Int): Flow<List<GraphEntity>>
+    @Query("SELECT id, dataTransformation, type, path FROM graph WHERE projectId = :id")
+    abstract fun getGraphDataForProject(id: Int): Flow<List<GraphData>>
 
     @Query("UPDATE graph SET path = :path WHERE projectId = :projectId AND id = :id")
-    abstract fun changePath(projectId: Int, id: Int, path: String)
+    abstract suspend fun changePath(projectId: Int, id: Int, path: String)
 
     /*========================SHOULD ONLY BE CALLED FROM INSIDE THE MODEL=========================*/
-    @Insert
-    abstract fun insertGraph(graph: GraphEntity)
 
+    @Deprecated("This method should only be used from within the model, use GraphCDManager.insertGraph instead")
+    @Insert
+    abstract suspend fun insertGraph(graph: GraphEntity)
+
+    @Deprecated("This method should only be used from within the model, use GraphCDManager.deleteGraph instead")
     @Delete
-    abstract fun deleteGraph(graph: GraphEntity)
+    abstract suspend fun deleteGraph(graph: GraphEntity)
+
+    @Deprecated("This method should only be used from within the model")
+    @Query("DELETE FROM graph WHERE projectId = :projectId")
+    abstract suspend fun deleteAllGraphs(projectId: Int)
 }

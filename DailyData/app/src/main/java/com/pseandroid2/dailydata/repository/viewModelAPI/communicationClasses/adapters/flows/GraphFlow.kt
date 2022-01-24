@@ -20,14 +20,15 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows
 
+import com.pseandroid2.dailydata.model.database.entities.GraphData
 import com.pseandroid2.dailydata.model.database.entities.GraphEntity
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 
 @InternalCoroutinesApi
-class GraphFlow(flow: Flow<List<GraphEntity>>) : FlowAdapter<GraphEntity, Graph>(flow) {
-    override fun provide(i: GraphEntity): Graph {
+class GraphFlow(flow: Flow<List<GraphData>>) : FlowAdapter<GraphData, Graph>(flow) {
+    override fun provide(i: GraphData): Graph {
         TODO("Not yet implemented")
     }
 }

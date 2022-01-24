@@ -42,7 +42,7 @@ class ProjectFlow (
 ) : FlowAdapter<Void, Project>(MutableSharedFlow()) {
     private lateinit var sharedFlow: Flow<Project>
     private val buttonFlow : Flow<List<Button>> = ButtonFlow(appDataBase.uiElementDAO().getUIElements(projectId)).getFlow()
-    private val graphFlow : Flow<List<Graph>> = GraphFlow(appDataBase.graphDAO().getGraphEntityForProjects(projectId)).getFlow()
+    private val graphFlow : Flow<List<Graph>> = GraphFlow(appDataBase.graphDAO().getGraphDataForProject(projectId)).getFlow()
     private val memberFlow : Flow<List<Member>> = MemberFlow(TODO()).getFlow()
     private val notificationFlow : Flow<List<Notification>> = NotificationFlow(appDataBase.notificationsDAO().getNotificationEntities(projectId)).getFlow()
     private val projectDataFlow : Flow<ProjectData?> = appDataBase.projectDataDAO().getProjectData(projectId)

@@ -20,10 +20,11 @@
 
 package com.pseandroid2.dailydata.model
 
-interface Settings {
+interface Settings : Iterable<Pair<String, String>> {
 
-    public fun getAllSettings(): Map<String, String>
+    @Deprecated("Should not be used outside the model. Use get or iterate over Settings directly")
+    fun getAllSettings(): Map<String, String>
 
-    public fun getSetting(key: String): String
+    operator fun get(key: String): String
 
 }

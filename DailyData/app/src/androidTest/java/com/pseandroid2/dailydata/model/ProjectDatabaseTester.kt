@@ -28,6 +28,7 @@ import com.pseandroid2.dailydata.model.database.daos.ProjectDataDAO
 import com.pseandroid2.dailydata.model.database.entities.ProjectData
 import com.pseandroid2.dailydata.model.database.entities.ProjectEntity
 import com.pseandroid2.dailydata.model.database.entities.ProjectSkeletonEntity
+import com.pseandroid2.dailydata.model.users.SimpleUser
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.first
@@ -58,10 +59,8 @@ class ProjectDatabaseTester {
 
         projectDAO.insertProjectEntity(
             ProjectEntity(
-                1,
-                ProjectSkeletonEntity("Test", "", "", ""),
-                SimpleUser("", ""),
-                1
+                ProjectSkeletonEntity(1, "Test", "", "", "", 1),
+                SimpleUser("", "")
             )
         )
 
@@ -92,10 +91,8 @@ class ProjectDatabaseTester {
         for (i in 0 until noProjects) {
             projectDAO.insertProjectEntity(
                 ProjectEntity(
-                    i,
-                    ProjectSkeletonEntity("Test$i", "", "", ""),
-                    user,
-                    i.toLong()
+                    ProjectSkeletonEntity(i, "Test$i", "", "", "", i.toLong()),
+                    user
                 )
             )
         }
@@ -117,10 +114,8 @@ class ProjectDatabaseTester {
             runTest {
                 projectDAO.insertProjectEntity(
                     ProjectEntity(
-                        1,
-                        ProjectSkeletonEntity("Test", "", "", ""),
-                        SimpleUser("", ""),
-                        1
+                        ProjectSkeletonEntity(1, "Test", "", "", "", 1),
+                        SimpleUser("", "")
                     )
                 )
 
@@ -133,7 +128,10 @@ class ProjectDatabaseTester {
     @ExperimentalCoroutinesApi
     @Test
     fun testRemoveProject() = runTest {
-        val ent = ProjectEntity(1, ProjectSkeletonEntity("Test", "", "", ""), SimpleUser("", ""), 1)
+        val ent = ProjectEntity(
+            ProjectSkeletonEntity(1, "Test", "", "", "", 1),
+            SimpleUser("", "")
+        )
         projectDAO.insertProjectEntity(ent)
         assertEquals(ProjectData(1, "Test", "", 1, ""), projectDAO.getProjectData(1).first()!!)
         projectDAO.deleteProjectEntity(ent)

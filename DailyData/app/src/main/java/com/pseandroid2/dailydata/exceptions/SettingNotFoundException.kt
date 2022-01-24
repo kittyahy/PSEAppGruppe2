@@ -18,12 +18,9 @@
 
 */
 
-package com.pseandroid2.dailydata.model
+package com.pseandroid2.dailydata.exceptions
 
-interface User {
-
-    public fun getId(): String
-
-    public fun getName(): String
-
+class SettingNotFoundException(message: String? = null, cause: Throwable? = null) :
+    Exception(message, cause) {
+    constructor(cause: Throwable) : this(null, cause)
 }
