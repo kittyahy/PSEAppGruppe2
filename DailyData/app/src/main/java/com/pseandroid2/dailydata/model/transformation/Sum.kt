@@ -18,17 +18,25 @@
 
 */
 
-package com.pseandroid2.dailydata.model.database.entities
+package com.pseandroid2.dailydata.model.transformation
 
-import androidx.room.Entity
-import com.pseandroid2.dailydata.model.GraphType
-import com.pseandroid2.dailydata.model.project.Project
+import kotlin.reflect.KClass
 
-@Entity(tableName = "graph", primaryKeys = ["id", "projectId"])
-data class GraphEntity(
-    val id: Int,
-    val projectId: Int,
-    val dataTransformation: Project.DataTransformation<out Any>,
-    val type: GraphType,
-    val path: String
-)
+abstract class Sum<N : Number>(private val cols: List<Int>) :
+    TransformationFunction<N>(functionString = "$SUM_ID|col=$cols") {
+    companion object {
+        const val TYPE_INT = "INT"
+    }
+
+    override fun execute(input: List<List<Any>>): List<N> {
+        val result = mutableListOf<N>()
+        for (i in cols) {
+            if (i < input.size) {
+                result.add(unsafeSum(input[i]))
+            }
+        }
+        return result
+    }
+
+    abstract fun unsafeSum(list: List<Any>): N
+}

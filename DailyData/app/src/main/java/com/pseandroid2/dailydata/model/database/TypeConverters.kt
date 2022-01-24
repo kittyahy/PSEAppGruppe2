@@ -22,43 +22,52 @@ package com.pseandroid2.dailydata.model.database
 
 import androidx.room.TypeConverter
 import com.pseandroid2.dailydata.model.GraphType
-import com.pseandroid2.dailydata.model.Project
+import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.uielements.UIElementType
-import com.pseandroid2.dailydata.model.User
+import com.pseandroid2.dailydata.model.users.SimpleUser
+import com.pseandroid2.dailydata.model.users.User
+import java.time.Instant
 import java.time.LocalDateTime
+import java.time.ZoneId
 
 class DateTimeConversion {
     @TypeConverter
     fun dateTimeToLong(dateTime: LocalDateTime): Long {
-        return 0
+        return dateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
     }
 
     @TypeConverter
     fun longToDateTime(longDate: Long): LocalDateTime {
-        return LocalDateTime.now()
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(longDate), ZoneId.systemDefault())
     }
 }
 
 class UserConversion {
     @TypeConverter
     fun userToString(user: User): String {
-        return ""
+        return user.getId() + "|" + user.getName()
     }
 
     @TypeConverter
     fun stringToUser(userString: String): User {
-        TODO()
+        val split = userString.split('|')
+        if (split.size != 2) {
+            throw IllegalArgumentException(
+                "User String must be composited of an ID and a Name, delimited by a |"
+            )
+        }
+        return SimpleUser(split[0], split[1])
     }
 }
 
 class TransformationConversion {
     @TypeConverter
-    fun traFoToString(transformation: Project.DataTransformation<Any>): String {
-        return ""
+    fun traFoToString(transformation: Project.DataTransformation<out Any>): String {
+        return transformation.toFunctionString()
     }
 
     @TypeConverter
-    fun stringToTraFo(trafoString: String): Project.DataTransformation<Any> {
+    fun stringToTraFo(trafoString: String): Project.DataTransformation<out Any> {
         TODO()
     }
 }

@@ -21,12 +21,10 @@
 package com.pseandroid2.dailydata.model.table
 
 import com.google.gson.Gson
-import com.pseandroid2.dailydata.model.table.Row
-import com.pseandroid2.dailydata.model.table.RowMetaData
 import com.pseandroid2.dailydata.model.database.entities.RowEntity
 
 class ArrayListRow(
-    private val values: List<Any>,
+    private val values: MutableList<Any>,
     var rowMetaData: RowMetaData
 ) : Row {
 
@@ -35,7 +33,7 @@ class ArrayListRow(
             val metaData: RowMetaData =
                 RowMetaData(entity.createdOn, entity.publishedOnServer, entity.createdBy)
             val values = getValuesFromJSON(entity.values)
-            return ArrayListRow(values, metaData)
+            return ArrayListRow(values.toMutableList(), metaData)
         }
 
         private fun getValuesFromJSON(json: String): List<Any> {
@@ -46,10 +44,15 @@ class ArrayListRow(
     }
 
     override fun getAll(): List<Any> {
-        return values
+        return values.toList()
     }
 
+    @Deprecated("Use get operator for better Readability")
     override fun getCell(col: Int): Any {
+        return values[col]
+    }
+
+    operator fun get(col: Int): Any {
         return values[col]
     }
 
@@ -60,4 +63,16 @@ class ArrayListRow(
     override fun getSize(): Int {
         return values.size
     }
+
+    override fun createCell(value: Any) {
+        values.add(value)
+    }
+
+    override fun deleteCell(col: Int) {
+        values.removeAt(col)
+    }
+}
+
+fun Row.toArrayListRow(): ArrayListRow {
+    return ArrayListRow(this.getAll().toMutableList(), this.getMetaData())
 }

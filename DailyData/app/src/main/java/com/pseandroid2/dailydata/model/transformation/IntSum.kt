@@ -18,17 +18,21 @@
 
 */
 
-package com.pseandroid2.dailydata.model
+package com.pseandroid2.dailydata.model.transformation
 
-class SimpleUser(id: String, name: String) : User {
-    var userID: String = id
-    var userName: String = name
+class IntSum(cols: List<Int>) : Sum<Int>(cols) {
 
-    override fun getId(): String {
-        return userID
-    }
+    override var functionString = "$SUM_ID|col=$cols;type=${Sum.TYPE_INT}"
 
-    override fun getName(): String {
-        return userName
+    override fun unsafeSum(list: List<Any>): Int {
+        var sum: Int = 0
+        for (element in list) {
+            if (element is Int) {
+                sum += element
+            } else {
+                throw NumberFormatException("Couldn't convert $element to Int")
+            }
+        }
+        return sum
     }
 }

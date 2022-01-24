@@ -18,17 +18,22 @@
 
 */
 
-package com.pseandroid2.dailydata.model.database.entities
+package com.pseandroid2.dailydata.model.users
 
-import androidx.room.Entity
-import com.pseandroid2.dailydata.model.GraphType
-import com.pseandroid2.dailydata.model.project.Project
+import java.lang.NullPointerException
 
-@Entity(tableName = "graph", primaryKeys = ["id", "projectId"])
-data class GraphEntity(
-    val id: Int,
-    val projectId: Int,
-    val dataTransformation: Project.DataTransformation<out Any>,
-    val type: GraphType,
-    val path: String
-)
+class NullUser : User {
+    companion object {
+        const val NPE_STRING =
+            "This User has not been set (perhaps you tried to get an admin " +
+                    "from a non-online project?)"
+    }
+
+    override fun getId(): String {
+        throw NullPointerException(NPE_STRING)
+    }
+
+    override fun getName(): String {
+        throw NullPointerException(NPE_STRING)
+    }
+}

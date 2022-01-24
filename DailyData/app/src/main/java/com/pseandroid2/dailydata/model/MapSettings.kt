@@ -20,47 +20,33 @@
 
 package com.pseandroid2.dailydata.model
 
-import android.graphics.drawable.Drawable
-import com.pseandroid2.dailydata.model.project.Project
-import com.pseandroid2.dailydata.model.users.User
+import com.pseandroid2.dailydata.exceptions.SettingNotFoundException
 
-interface Graph {
-    var id: Int
+class MapSettings(settings: Map<String, String>) : Settings {
+    private val settings = settings.toMutableMap()
 
-    fun getDataSets(): List<List<Any>>
+    @Suppress("OverridingDeprecatedMember")
+    override fun getAllSettings(): Map<String, String> {
+        return settings.toMap()
+    }
 
-    fun getCustomizing(): Settings
+    override fun get(key: String): String {
+        return settings[key] ?: throw SettingNotFoundException()
+    }
 
-    fun getImage(): Drawable?
-
-    fun getPath(): String?
-
-    fun getType(): GraphType
-
-    fun getCalculationFunction(): Project.DataTransformation<out Any>
-
+    override fun iterator(): Iterator<Pair<String, String>> = MapSettingsIterator(this)
 }
 
-interface GraphTemplate {
-    val id: Int
+class MapSettingsIterator(settings: MapSettings) : Iterator<Pair<String, String>> {
+    @Suppress("Deprecation")
+    val iterator = settings.getAllSettings().iterator()
 
-    fun getName(): String
+    override fun hasNext(): Boolean {
+        return iterator.hasNext()
+    }
 
-    fun getDescription(): String
-
-    fun getCustomizing(): Settings
-
-    fun getType(): GraphType
-
-    fun getCreator(): User
-
-    fun getOnlineId(): Long
-
-}
-
-enum class GraphType {
-
-    LINE_CHART,
-    PIE_CHART
+    override fun next(): Pair<String, String> {
+        return iterator.next().toPair()
+    }
 
 }
