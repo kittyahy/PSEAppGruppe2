@@ -57,11 +57,8 @@ abstract class UIElementDAO {
         return id
     }
 
-    suspend fun removeUIElements(projectId: Int, vararg ids: Int) {
-        for (id: Int in ids) {
-            removeUIElementMap(UIElementMap(projectId, id, 0, "", ""))
-        }
-    }
+    @Query("DELETE FROM uiElement WHERE projectId = :projectId AND id IN (:ids)")
+    abstract suspend fun removeUIElements(projectId: Int, vararg ids: Int)
 
     @Query("UPDATE uiElement SET state = :state WHERE projectId = :projectId AND id = :id")
     abstract suspend fun changeUIElementState(projectId: Int, id: Int, state: String)
