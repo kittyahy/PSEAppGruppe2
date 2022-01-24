@@ -17,29 +17,14 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
+package com.pseandroid2.dailydataserver.onlineDatabase;
 
-package com.pseandroid2.dailydata.remoteDataSource.queue.queueLogic.projectCommand
+/**
+ * #TODO JavaDoc
+ */
 
-import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueue
-import org.junit.Assert
-import org.junit.Test
+public enum Role {
 
-class projectCommandQueueTests_SaveEmptyString {
-    @Test
-    fun saveOneProjectCommand() {
-        val projectCommandQueue = ProjectCommandQueue()
-
-        val projectCommand = ""
-
-        Assert.assertEquals(projectCommandQueue.getQueueLength(), 0)
-
-        projectCommandQueue.addProjectCommand(projectCommand)
-
-        Assert.assertEquals(projectCommandQueue.getQueueLength(), 0)
-
-        val returnedProjectCommand = projectCommandQueue.getProjectCommand()
-
-        Assert.assertEquals(projectCommand, returnedProjectCommand)
-        Assert.assertEquals(projectCommandQueue.getQueueLength(), 0)
-    }
+    PARTICIPANT,
+    ADMIN
 }

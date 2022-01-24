@@ -111,5 +111,3 @@ public class ProjectParticipantsController {
         return service.getAdmin(projectId);
     }
 }
-
-

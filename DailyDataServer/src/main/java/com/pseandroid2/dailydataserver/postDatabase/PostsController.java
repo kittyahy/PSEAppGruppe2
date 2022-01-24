@@ -128,6 +128,4 @@ public class PostsController {
     public boolean removePost(@RequestAttribute String user, @PathVariable("post") int postID, @RequestBody RequestParameter param) {
         return service.removePost(postID, user);
     }
-
-
 }

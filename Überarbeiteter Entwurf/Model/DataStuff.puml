@@ -1,0 +1,46 @@
+@startuml
+
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+class ProjectSkeletonEntity {
+        name: String
+        description: String
+        wallpaper: String
+        layout: String
+    }
+class ProjectData {
+    id: Integer
+    name: String
+    description: String
+    onlineId: Boolean
+    wallpaper: String
+}
+enum UIElementType <<enum>> {
+        BUTTON,
+        NUMBER_FIELD,
+        DATE_TIME_PICKER
+    }
+
+    enum GraphType <<enum>> {
+        PIE_CHART,
+        LINE_CHART
+    }
+
+    enum MigrationOperation <<enum>> {
+        ADD_COL,
+        DELETE_COL,
+        RENAME_COL
+    }
+
+    GraphType -[hidden] ProjectSkeletonEntity
+    GraphType -[hidden]- UIElementType
+    UIElementType -[hidden]- MigrationOperation
+    ProjectSkeletonEntity -[hidden]- ProjectData
+
+
+@enduml

@@ -1,0 +1,67 @@
+@startuml
+'https://plantuml.com/class-diagram
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+skinparam {
+Linetype ortho
+}
+package PostDatabase{
+    PostsController -- PostsRepository : postRepo <
+    PostsController -- TemplatesRepository : templateRepo <
+
+    class Posts <<Entity>>{
+        {primaryKey} PostID: int
+        PostPreview: JSON
+        CreatedBy: String
+    }
+'extends JpaRepository
+    interface PostsRepository <PostDatabase,int> {}
+
+    class PostsController {
+        - postRepo: PostsRepository
+        - templateRepo: TemplatesRepository
+
+        + getAllPostPreview():Collection(String)
+        + getPostDetail(fromPost: int):Collection(String)
+        + getProjectTemplate(fromPost: int): JSON
+        + getGraphTemplate(fromPost: int,templateNumber: int): JSON
+        + addPost(postPreview: JSON, user: String, projectTemplate: JSON, graphTemplate: List(JSON))
+        + removePost(postID, user: String):boolean
+    }
+
+    note right of PostsController::getAllPostPreview{
+        postRepo.getAll().getPostPreview()
+        postRepo.getAll().getPostID()
+        //Each to string
+    }
+
+    note right of PostsController::getPostDetail{
+        templateRepo.get(fromPost).getTemplateNumber()
+        templateRepo.get(fromPost).getDetailView()
+    }
+
+    note right of PostsController::addPost{
+            postRepo.add()
+            templateRepo.add()
+        }
+
+
+    class Template <<Entity>>{
+        {primaryKey} PostID: int
+        {primaryKey} TemplateNumber: int
+        templateInital: JSON
+        isProjectTemplate: boolean
+        detailView: JSON
+    }
+    ' extends JpaRepository
+    interface TemplatesRepository <Template, Tupel(int,int)> {
+        getToPost(postID: int): Collection(Template)
+    }
+
+  }
+
+
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+Repository -> RemoteDataSourceAPI: create
+RemoteDataSourceAPI --> UserAccount: create
+UserAccount --> FirebaseManager: create
+RemoteDataSourceAPI --> CommandConverter: create
+RemoteDataSourceAPI --> ServerManager: create
+ServerManager --> RESTAPI: create
+@enduml

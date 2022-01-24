@@ -1,0 +1,110 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+skinparam {
+Linetype ortho
+}
+hide circle
+
+package OnlineDatabase{
+
+
+    DeltaController -- DeltaRepository : repo <
+    FetchRequestRepository --down FetchRequestController : repo >
+    ProjectParticipantsRepository .. DeltaRepository: uses <
+    ProjectParticipants ..> Role : use
+    AccessToProjectInterceptor ..down> ProjectParticipantsRepository
+    ProjectParticipantsController - ProjectParticipantsRepository : repo <
+    DeltaController ---up FetchRequestRepository : forOldData <
+
+
+/''/
+    class AccessToProjectInterceptor extends HandlerInterceptorAdapter {
+        preHandle(): boolean
+
+    }
+
+    note left of  AccessToProjectInterceptor::preHandle
+        used before any call in OnlineDatabase
+         except addUser at ProjectParticipantsController
+         and removeTime in DeltaController
+    end note
+
+
+
+    class FetchRequest<<Entity>>{
+        {primaryKey}: ID: int
+        user: String
+        project: long
+        requestInfo: JSON
+    }
+    class FetchRequestController{
+        + demandOldData(user: String, project: long, requestInfo: JSON)
+        + getFetchRequests(user: String, project: long):Collection(<FetchRequest>)
+    }
+
+    interface FetchRequestRepository<FetchRequest, String>{
+     gotOldData(project:long, user: String)
+     getRequests(project: long): Collection(FetchRequest)
+    }
+
+    class Delta <<Entity>> {
+        {primaryKey}: AddedToServer: Date
+        {primaryKey}: User: String
+        projectCommand: JSON
+        downloadedBy: String[23]
+        project: long
+        requestedBy: String
+        isAdmin: boolean
+    }
+    class DeltaController{
+        + saveDelta(project: long, projectCommand: JSON, user: String)
+        + getDelta(project: long, user: String):Collection(<Delta>)
+        + provideOldData(projectCommand: JSON, forUser: String, initialAdded: Date, initialAddedBy: String, project: long, wasAdmin: boolean)
+        + getRemoveTime():Date
+    }
+/''/
+    interface DeltaRepository <Delta, Tupel(Date, String)> extends JpaRepository {
+    - removeTime: Date
+    deleteOldData()
+    deleteDownloadedData(requestedBy: String, project: long)
+    getRemoveTime():Date
+    }
+
+/''/
+    interface ProjectParticipantsRepository <ProjectParticipants,Tupel(String, int)> extends JpaRepository{
+         participates(user: String, project: long): boolean
+         isAdmin(user: String, project: long): boolean
+         getAmountOfParticipants(project: long): int
+         getAdmin(project: long): String
+    }
+
+    class ProjectParticipantsController{
+        - projectID: long
+         + addUser(user: String, project: long):boolean
+         + removeUser(userToRemove: String, project: long, user: String): boolean
+
+
+         + addProject(user:String): long
+    }
+    class ProjectParticipants <<Entity>>{
+        {primaryKey} user: String
+        {primaryKey} project: long
+        role: Role
+        NumberOfJoin: int
+    }
+    enum Role<<Enummeration>>{
+        Participant
+        Admin
+    }
+
+    Role -[hidden]right-> AccessToProjectInterceptor
+    FetchRequestRepository -[hidden]down--> DeltaController
+    FetchRequest -[hidden]up-> ProjectParticipantsRepository
+
+
+}
+@enduml

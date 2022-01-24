@@ -58,7 +58,5 @@ public class AccessToProjectInterceptor implements HandlerInterceptor {
             return false;
         }
         return HandlerInterceptor.super.preHandle(request, response, handler);
-
-
     }
 }
