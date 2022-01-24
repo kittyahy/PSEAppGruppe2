@@ -20,6 +20,8 @@
 
 package com.pseandroid2.dailydata.model.table
 
+import kotlin.reflect.KClass
+
 class ArrayListTable(private var layout: TableLayout) : Table {
     private val table: MutableList<ArrayListRow> = mutableListOf()
     override fun getCell(row: Int, col: Int) = table[row][col]
@@ -52,8 +54,8 @@ class ArrayListTable(private var layout: TableLayout) : Table {
         return result
     }
 
-    override fun <I : Any> addColumn(type: Class<I>, default: I) {
-        layout.addColumn(type)
+    override fun addColumn(typeString: String, default: Any) {
+        layout.addColumn(typeString)
         for (row in table) {
             row.createCell(default)
         }
