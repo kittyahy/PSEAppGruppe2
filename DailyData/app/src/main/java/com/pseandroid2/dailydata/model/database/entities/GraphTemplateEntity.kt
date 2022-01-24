@@ -32,5 +32,5 @@ data class GraphTemplateEntity(
     val description: String,
     val type: GraphType,
     val createdBy: User,
-    val onlineId: String
+    val onlineId: Long
 )
