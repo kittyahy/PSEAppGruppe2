@@ -37,11 +37,12 @@ interface Graph {
 
     fun getType(): GraphType
 
-    fun getCalculationFunction(): Project.DataTransformation<out Any, out Any>
+    fun getCalculationFunction(): Project.DataTransformation<out Any>
 
 }
 
 interface GraphTemplate {
+    val id: Int
 
     fun getName(): String
 
@@ -52,6 +53,8 @@ interface GraphTemplate {
     fun getType(): GraphType
 
     fun getCreator(): User
+
+    fun getOnlineId(): Long
 
 }
 
