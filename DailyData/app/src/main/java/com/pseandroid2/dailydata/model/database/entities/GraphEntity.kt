@@ -28,7 +28,7 @@ import com.pseandroid2.dailydata.model.project.Project
 data class GraphEntity(
     val id: Int,
     val projectId: Int,
-    val dataTransformation: Project.DataTransformation<out Any, out Any>,
+    val dataTransformation: Project.DataTransformation<out Any>,
     val type: GraphType,
     val path: String
 )
