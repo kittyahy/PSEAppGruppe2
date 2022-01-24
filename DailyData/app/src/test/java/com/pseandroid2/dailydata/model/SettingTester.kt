@@ -18,17 +18,26 @@
 
 */
 
-package com.pseandroid2.dailydata.model.database.entities
+package com.pseandroid2.dailydata.model
 
-import androidx.room.Entity
-import com.pseandroid2.dailydata.model.GraphType
-import com.pseandroid2.dailydata.model.project.Project
+import com.pseandroid2.dailydata.exceptions.SettingNotFoundException
+import org.junit.Assert
+import org.junit.Test
 
-@Entity(tableName = "graph", primaryKeys = ["id", "projectId"])
-data class GraphEntity(
-    val id: Int,
-    val projectId: Int,
-    val dataTransformation: Project.DataTransformation<out Any>,
-    val type: GraphType,
-    val path: String
-)
+class SettingTester {
+
+    @Test
+    fun checkMapSettings() {
+        val map =
+            mutableMapOf<String, String>(Pair("Test1", "3"), Pair("Test2", "5"), Pair("Test3", "0"))
+        val settings = MapSettings(map)
+
+        Assert.assertEquals("3", settings["Test1"])
+        Assert.assertEquals("5", settings["Test2"])
+        Assert.assertEquals("0", settings["Test3"])
+        Assert.assertThrows(SettingNotFoundException::class.java) {
+            settings["Some non-existent key"]
+        }
+    }
+
+}

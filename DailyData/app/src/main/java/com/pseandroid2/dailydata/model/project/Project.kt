@@ -18,12 +18,16 @@
 
 */
 
-package com.pseandroid2.dailydata.model
+package com.pseandroid2.dailydata.model.project
 
 import android.graphics.drawable.Drawable
+import com.pseandroid2.dailydata.model.Graph
+import com.pseandroid2.dailydata.model.Settings
+import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.model.notifications.Notification
 import com.pseandroid2.dailydata.model.table.Table
 import com.pseandroid2.dailydata.model.table.TableLayout
+import com.pseandroid2.dailydata.model.transformation.TransformationFunction
 
 /**
  * Contains all data of one specific Project
@@ -41,13 +45,34 @@ interface Project {
 
     fun isOnline(): Boolean
 
-    fun getOnlineId(): Long
-
     fun getUsers(): Collection<User>
 
-    abstract class DataTransformation<O>(private val table: Table) {
+    fun createTransformationFromString(transformationString: String): DataTransformation<out Any>
 
-        abstract fun recalculate(): List<Any>
+    /**
+     * @param D Type of the elements that this DataTransformation will output as DataSets
+     */
+    abstract class DataTransformation<D : Any> private constructor(
+        private val table: Table,
+        private val function: TransformationFunction<D>,
+        private vararg val cols: Int
+    ) {
+
+        fun recalculate(): List<D> {
+            return function.execute(map(table))
+        }
+
+        fun toFunctionString(): String {
+            return table.getLayout().toJSON() + "|#|" + function.toCompleteString()
+        }
+
+        private fun map(table: Table): List<List<Any>> {
+            val returnList = mutableListOf<List<Any>>()
+            for (i in cols) {
+                returnList.add(table.getColumn(i))
+            }
+            return returnList
+        }
 
     }
 
@@ -55,8 +80,9 @@ interface Project {
 
 interface ProjectSkeleton {
 
-    fun getID(): Int
-    fun setID(id: Int)
+    var id: Int
+
+    fun getOnlineId(): Long
 
     fun getName(): String
 

@@ -18,17 +18,12 @@
 
 */
 
-package com.pseandroid2.dailydata.model.database.entities
+package com.pseandroid2.dailydata.model.transformation
 
-import androidx.room.Entity
-import com.pseandroid2.dailydata.model.GraphType
-import com.pseandroid2.dailydata.model.project.Project
+class Identity() :
+    TransformationFunction<List<Any>>(IDENTITY_ID) {
 
-@Entity(tableName = "graph", primaryKeys = ["id", "projectId"])
-data class GraphEntity(
-    val id: Int,
-    val projectId: Int,
-    val dataTransformation: Project.DataTransformation<out Any>,
-    val type: GraphType,
-    val path: String
-)
+    override fun execute(input: List<List<Any>>): List<List<Any>> {
+        return input
+    }
+}
