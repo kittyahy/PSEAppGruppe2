@@ -23,16 +23,11 @@ package com.pseandroid2.dailydata.ui.templates
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pseandroid2.dailydata.R
-import com.pseandroid2.dailydata.model.Graph
-import com.pseandroid2.dailydata.model.Project
 import com.pseandroid2.dailydata.util.ui.GraphTemplate
 import com.pseandroid2.dailydata.util.ui.ProjectTemplate
-import com.pseandroid2.dailydata.util.ui.TableButton
-import com.pseandroid2.dailydata.util.ui.TableColumn
 import com.pseandroid2.dailydata.util.ui.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
