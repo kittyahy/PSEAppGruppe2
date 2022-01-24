@@ -23,6 +23,7 @@ package com.pseandroid2.dailydata.model.project
 import android.graphics.drawable.Drawable
 import com.pseandroid2.dailydata.model.Graph
 import com.pseandroid2.dailydata.model.Settings
+import com.pseandroid2.dailydata.model.database.entities.ProjectSkeletonEntity
 import com.pseandroid2.dailydata.model.notifications.Notification
 
 class SimpleSkeleton(
@@ -35,6 +36,7 @@ class SimpleSkeleton(
     private val settings: Settings,
     private val notifications: List<Notification>
 ) : ProjectSkeleton {
+
     override fun getOnlineId() = onlineId
 
     override fun getName() = name
