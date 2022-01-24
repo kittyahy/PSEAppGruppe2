@@ -57,10 +57,13 @@ public class LoginInterceptor implements HandlerInterceptor {
         int indexOfTokenEnd = splitted.indexOf("}");
         String firebaseToken = splitted.substring(0, indexOfTokenEnd).trim();
 
-        // Firebase auth
-        String name = "TODO"; // firebasetoken.getUid(); Bitte austauschen, sobald firebase steht.
-        request.setAttribute("user", name);
-        return HandlerInterceptor.super.preHandle(request, response, handler);
+        // Firebase token authentication
+        FirebaseManager firebaseManager = new FirebaseManager();
+        String userID = firebaseManager.getUserIDFromToken(firebaseToken);
 
+        // Update attribute with the computed UserID
+        request.setAttribute("name", userID);
+
+        return HandlerInterceptor.super.preHandle(request, response, handler);
     }
 }
