@@ -9,6 +9,7 @@
 /.idea/assetWizardSettings.xml
 /.idea/inspectionProfiles/Project_Default.xml
 /.idea/deploymentTargetDropDown.xml
+/.idea/shelf/*.xml
 /.idea/shelf/
 .DS_Store
 /build
