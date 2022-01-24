@@ -19,8 +19,7 @@
 */
 package com.pseandroid2.dailydataserver.onlineDatabase.requestParameters.projectParticipantsController;
 
-import com.pseandroid2.dailydataserver.RequestParameter;
-
+import com.pseandroid2.dailydataserver.Communication.RequestParameter;
 /**
  * #TODO Testen
  */

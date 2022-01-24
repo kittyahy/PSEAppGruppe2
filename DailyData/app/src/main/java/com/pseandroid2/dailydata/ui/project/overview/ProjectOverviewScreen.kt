@@ -20,8 +20,11 @@
 
 package com.pseandroid2.dailydata.ui.project.overview
 
-import android.media.Image
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -29,11 +32,18 @@ import androidx.compose.material.icons.filled.List
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.pseandroid2.dailydata.ui.project.creation.AppDialog
 import com.pseandroid2.dailydata.util.ui.UiEvent
 import kotlinx.coroutines.flow.collect
 
@@ -43,25 +53,32 @@ fun ProjectOverviewScreen(
     viewModel: ProjectOverviewViewModel = hiltViewModel()
 ) {
 
-    val projects = viewModel.projects.collectAsState(initial = emptyList())
+    val projects by viewModel.projects.collectAsState(initial = emptyList())
 
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->
             when(event) {
                 is UiEvent.Navigate -> onNavigate(event)
-                is UiEvent.PopBackStack -> {
-
-                }
+                else -> { }
             }
         }
     }
 
+    ProjectTemplateDialog(
+        isOpen = viewModel.isTemplateDialogOpen,
+        onDismissRequest = { viewModel.onEvent(ProjectOverviewEvent.OnTemplateProjectClick(isOpen = false)) },
+        templates = listOf("Template 1", "Template 2", "Template 3"),
+        onClick = {
+            viewModel.onEvent(ProjectOverviewEvent.OnTemplateClick(index = it))
+            viewModel.onEvent(ProjectOverviewEvent.OnTemplateProjectClick(isOpen = false))
+        }
+    )
     Column(
         modifier = Modifier
             .padding(10.dp)
-            .fillMaxWidth()
-            .fillMaxHeight(),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(18.dp, alignment = Alignment.Top),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         ProjectRepresentationButton(
             text = "Add new Project",
@@ -71,49 +88,88 @@ fun ProjectOverviewScreen(
             }
         )
 
-        for(project in projects.value) {
+        ProjectRepresentationButton(
+            text = "Project from Template",
+            icon = Icons.Default.Add,
+            onClick = {
+                viewModel.onEvent(ProjectOverviewEvent.OnTemplateProjectClick(isOpen = true))
+            }
+        )
+
+        for(project in projects) {
             ProjectRepresentationButton(
                 text = "Project 1",
-                onClick = {                                         //project.id
-                    viewModel.onEvent(ProjectOverviewEvent.OnProjectClick(1))
+                onClick = {
+                    viewModel.onEvent(ProjectOverviewEvent.OnProjectClick(id = 1))
                 }
             )
         }
-        ProjectRepresentationButton(
-            text = "Project 1",
-            onClick = {
-                viewModel.onEvent(ProjectOverviewEvent.OnProjectClick(1))
+    }
+}
+
+@Composable
+fun ProjectTemplateDialog(
+    isOpen : Boolean,
+    onDismissRequest : () -> Unit,
+    templates : List<String>,
+    onClick: (Int) -> Unit
+) {
+    AppDialog(isOpen = isOpen, onDismissRequest = onDismissRequest) {
+        LazyColumn(
+            modifier = Modifier
+                .sizeIn(
+                    minHeight = 0.dp,
+                    maxHeight = 1000.dp,
+                    minWidth = 0.dp,
+                    maxWidth = 200.dp
+                )
+                .padding(8.dp)
+        ) {
+            itemsIndexed(templates) { index, template ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(60.dp)
+                        .clickable { onClick(index) },
+                    contentAlignment = Alignment.CenterStart
+
+                ) {
+                    Text(text = template)
+                }
+                if (index < templates.lastIndex)
+                    Divider()
             }
-        )
+        }
     }
 }
 
 @Composable
 fun ProjectRepresentationButton(
     text: String,
-    background: Image? = null,
     icon : ImageVector = Icons.Default.List,
     onClick : () -> Unit
 ) {
-    Button(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(5.dp),
-        colors = ButtonDefaults.buttonColors(
-            backgroundColor = MaterialTheme.colors.primary,
-            contentColor = MaterialTheme.colors.onPrimary
-        ),
-        onClick = onClick
+    OutlinedButton(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = onClick,
+        border = BorderStroke(width = 1.dp, SolidColor(MaterialTheme.colors.primary)),
+        shape = RectangleShape,
+        contentPadding = PaddingValues(16.dp)
     ) {
         Row (
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = text, fontSize = 18.sp)
+            Text(
+                text = text, 
+                fontSize = 20.sp
+            )
             Icon(
+                modifier = Modifier.size(30.dp),
                 imageVector = icon,
                 contentDescription = "",
-                tint = MaterialTheme.colors.onPrimary
+                tint = MaterialTheme.colors.primaryVariant
             )
         }
     }

@@ -143,4 +143,7 @@ dependencies {
 
 
     implementation 'com.android.support:multidex:2.0.1'
+    
+    //Mockk
+    testImplementation "io.mockk:mockk:1.9.3"
 }
