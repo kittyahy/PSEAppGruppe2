@@ -44,11 +44,11 @@ public class PreLoad {
 
         AddPostParameter params = new AddPostParameter("token tm", "die postpreview", projectTmpl, list);
         return args -> {
-         /*  log.info("Preloading: " + service.addPost("die PostPreview", projectTmpl, list, "Ella"));
+           log.info("Preloading: " + service.addPost("die PostPreview", projectTmpl, list, "Ella"));
             log.info("getAllPostPreview" + service.getAllPostPreview());
             log.info("getDetailDingsi" + service.getTemplateDetailsAndID(1));
             log.info("getProjectTemplate" + service.getProjectTemplate(1));
-            log.info("getTepmlate  " + service.getGraphTemplate(1, 2));*/
+            log.info("getTepmlate  " + service.getGraphTemplate(1, 2));
         };
     }
 }

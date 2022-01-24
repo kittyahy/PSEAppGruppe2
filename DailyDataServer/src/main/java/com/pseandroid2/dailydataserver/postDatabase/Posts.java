@@ -27,8 +27,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "Post_Table")
 public class Posts {
-    private @Id
-    int postId;
+    private @Id int postId;
     private String postPreview;
     private String createdBy;
 

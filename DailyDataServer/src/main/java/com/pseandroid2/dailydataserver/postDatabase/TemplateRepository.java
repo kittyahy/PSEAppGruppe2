@@ -20,7 +20,9 @@
 package com.pseandroid2.dailydataserver.postDatabase;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -31,7 +33,4 @@ public interface TemplateRepository extends JpaRepository<Template, TemplateId> 
 
     @Query(value = "select t from Template t where t.post = ?1 and t.isProjectTemplate = true")
     Template findByPostAndIsProjectTemplateIsTrue(int postID);
-
-    void deleteByPost(int post);
-
 }
