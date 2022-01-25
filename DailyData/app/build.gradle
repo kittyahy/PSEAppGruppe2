@@ -145,4 +145,7 @@ dependencies {
     testImplementation "io.mockk:mockk:1.9.3"
     
     implementation 'com.android.support:multidex:2.0.1'
+
+    //MPAndroidCharts
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 }
