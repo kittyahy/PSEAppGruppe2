@@ -1,0 +1,22 @@
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+package ServerConnection {
+    
+    !include ServerManager/ServerManager.puml!ServerManager
+
+
+
+    ' Ruft die Funktionen des Servers auf
+    !include RESTAPI/RESTAPI.puml!RESTAPI
+
+
+    ServerManager "1" *-down- "1" RESTAPI: contains
+}
+
+
+
+

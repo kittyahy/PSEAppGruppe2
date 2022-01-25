@@ -26,8 +26,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * only skalaton
  * #TODO javadoc,Test, implemetierung
+ */
+
+/**
+ * Authenticates the user and adds the user id to the RequestAttributes.
+ * Most of the requests get interrupted by this Interceptor.
+ * <p>
+ * The authentication works with firebase. The user name ist the uid from firebase.
  */
 @Component
 public class LoginInterceptor implements HandlerInterceptor {
@@ -35,9 +41,11 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
+        String token = request.getHeader("token"); //da der Token jetzt in den Header kommt.
         // Firebase auth
-        String name = "TODO"; // firebasetoken.getUid();
-        request.setAttribute("name",name);
+
+        String name = "Ella"; // firebasetoken.getUid(); Bitte austauschen, sobald firebase steht.
+        request.setAttribute("user", name);
         return HandlerInterceptor.super.preHandle(request, response, handler);
 
     }

@@ -1,0 +1,57 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+title Insert Graph Entity
+
+participant "graphCD: GraphCDManager" as cd
+participant "graph: Graph" as graph
+participant "ent: GraphEntity" as ent
+participant "graphDAO: GraphDAO" as gDAO
+participant "customizing: Settings" as customizing
+participant "settingsDAO: SettingsDAO" as sDAO
+
+[-> cd : insertGraph(id, graph)
+activate cd
+cd -> cd : graphId = insertGraphEntity(id, graph)
+activate cd
+cd -> graph : type = getType()
+activate graph
+graph --> cd
+deactivate graph
+cd -> graph : transform = getCalculationFunction()
+activate graph
+graph --> cd
+deactivate graph
+cd -> graph : path = getPath()
+activate graph
+graph -> cd
+deactivate graph
+cd -> ent** : <<create>> (graphId, id, transform, type, path)
+cd -> gDAO : insertGraph(ent)
+activate gDAO
+gDAO --> cd
+deactivate gDAO
+cd --> cd
+deactivate cd
+cd -> graph : customizing = getCustomizing()
+activate graph
+graph --> cd
+deactivate graph
+cd -> customizing : settings = getAllSettings()
+activate customizing
+customizing --> cd
+deactivate customizing
+loop foreach <key, value> in settings
+    cd -> sDAO : createSetting(graphId, key, value)
+    activate sDAO
+    sDAO --> cd
+    deactivate sDAO
+end
+cd -->[ : graphId
+
+@enduml

@@ -1,0 +1,121 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+ '@Entity(primaryKeys=["projectId", "createdOn", "createdBy"])
+    class RowEntity {
+        projectId: Integer
+        createdOn: DateTime
+        createdBy: User
+        values: String
+        publishedOnServer: DateTime
+    }
+
+    '@Entity
+    class ProjectEntity {
+        'PrimaryKey
+        id: Integer
+        '@Embedded
+        skeleton: ProjectSkeletonEntity
+        admin: User
+        onlineId: String
+    }
+
+    '@Entity
+    class ProjectTemplateEntity {
+        id: Integer
+        '@Embedded
+        skeleton: ProjectSkeletonEntity
+        createdBy: User
+    }
+
+    '@Entity(primaryKey=["id", "projectId"])
+    class GraphEntity {
+        id: Integer
+        projectId: Integer
+        dataTransformation: Project::DataTransformation
+        type: GraphType
+        path: String
+    }
+
+    '@Entity
+    class GraphTemplateEntity {
+        '@PrimaryKey
+        id: Integer
+        name: String
+        description: String
+        type: GraphType
+        createdBy: String
+    }
+
+    '@Entity(primaryKey=["projectId", "name"])
+    class ProjectSettingEntity {
+        projectId: Integer
+        name: String
+        value: String
+    }
+
+    '@Entity(primaryKey=["graphId", "name"])
+    class GraphSettingEntity {
+        graphId: Integer
+        name: String
+        value: String
+    }
+
+    '@Entity(primaryKey=["projectId", "user"])
+    class ProjectUserMap {
+        projectId: Integer
+        user: User
+    }
+
+    '@Entity(primaryKey=["projectId", "id"])
+    class UIElementMap {
+        projectId: Integer
+        id: Integer
+        columnId: Integer
+        type: String
+        state: String
+    }
+
+    '@Entity(primaryKey=["projectId", "id"])
+    class NotificationEntity {
+        projectId: Integer
+        id: Integer
+        params: String
+        message: String
+    }
+
+    '@Entity(primaryKey=["projectId", "version"])
+    class MigrationEntity {
+        projectId: Integer
+        version: Integer
+        type: MigrationOperation
+        columnId: Integer
+        parameter: String
+        publishedOnServer: DateTime
+    }
+
+    '@Entity(primaryKey=["projectId", "from", "until"])
+    class MissingSlotEntity {
+        projectId: Integer
+        from: DateTime
+        until: DateTime
+    }
+
+    RowEntity -[hidden] ProjectEntity
+    ProjectEntity -[hidden] UIElementMap
+    RowEntity -[hidden]- ProjectUserMap
+    ProjectEntity -[hidden]- GraphEntity
+    UIElementMap -[hidden]- GraphSettingEntity
+    ProjectUserMap -[hidden]- MigrationEntity
+    GraphEntity -[hidden]- NotificationEntity
+    GraphSettingEntity -[hidden]- GraphTemplateEntity
+    MigrationEntity -[hidden]- MissingSlotEntity
+    NotificationEntity -[hidden]- ProjectTemplateEntity
+    GraphTemplateEntity -[hidden]- ProjectSettingEntity
+
+@enduml

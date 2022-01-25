@@ -21,27 +21,21 @@
 package com.pseandroid2.dailydata.model
 
 import android.content.Context
-import android.util.Log
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import com.google.gson.Gson
 import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.model.database.daos.ProjectDataDAO
 import com.pseandroid2.dailydata.model.database.entities.ProjectData
 import com.pseandroid2.dailydata.model.database.entities.ProjectEntity
 import com.pseandroid2.dailydata.model.database.entities.ProjectSkeletonEntity
+import com.pseandroid2.dailydata.model.users.SimpleUser
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThrows
 import org.junit.Assert.assertNull
-import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Test
 import java.lang.NullPointerException
@@ -65,10 +59,8 @@ class ProjectDatabaseTester {
 
         projectDAO.insertProjectEntity(
             ProjectEntity(
-                1,
-                ProjectSkeletonEntity("Test", "", "", ""),
-                SimpleUser("", ""),
-                1
+                ProjectSkeletonEntity(1, "Test", "", "", "", 1),
+                SimpleUser("", "")
             )
         )
 
@@ -99,10 +91,8 @@ class ProjectDatabaseTester {
         for (i in 0 until noProjects) {
             projectDAO.insertProjectEntity(
                 ProjectEntity(
-                    i,
-                    ProjectSkeletonEntity("Test$i", "", "", ""),
-                    user,
-                    i.toLong()
+                    ProjectSkeletonEntity(i, "Test$i", "", "", "", i.toLong()),
+                    user
                 )
             )
         }
@@ -124,10 +114,8 @@ class ProjectDatabaseTester {
             runTest {
                 projectDAO.insertProjectEntity(
                     ProjectEntity(
-                        1,
-                        ProjectSkeletonEntity("Test", "", "", ""),
-                        SimpleUser("", ""),
-                        1
+                        ProjectSkeletonEntity(1, "Test", "", "", "", 1),
+                        SimpleUser("", "")
                     )
                 )
 
@@ -140,7 +128,10 @@ class ProjectDatabaseTester {
     @ExperimentalCoroutinesApi
     @Test
     fun testRemoveProject() = runTest {
-        val ent = ProjectEntity(1, ProjectSkeletonEntity("Test", "", "", ""), SimpleUser("", ""), 1)
+        val ent = ProjectEntity(
+            ProjectSkeletonEntity(1, "Test", "", "", "", 1),
+            SimpleUser("", "")
+        )
         projectDAO.insertProjectEntity(ent)
         assertEquals(ProjectData(1, "Test", "", 1, ""), projectDAO.getProjectData(1).first()!!)
         projectDAO.deleteProjectEntity(ent)

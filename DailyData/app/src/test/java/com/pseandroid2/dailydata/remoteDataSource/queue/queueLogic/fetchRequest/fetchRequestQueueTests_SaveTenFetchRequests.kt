@@ -21,6 +21,7 @@
 package com.pseandroid2.dailydata.remoteDataSource.queue.queueLogic.fetchRequest
 
 import com.pseandroid2.dailydata.remoteDataSource.queue.FetchRequestQueue
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
 import org.junit.Assert
 import org.junit.Test
 
@@ -28,11 +29,12 @@ class fetchRequestQueueTests_SaveTenFetchRequests {
     @Test
     fun saveOneFetchRequest() {
         val fetchRequestQueue = FetchRequestQueue()
+        val fetchRequests: MutableList<FetchRequest> = mutableListOf()
 
-        val fetchRequests: MutableList<String> = mutableListOf<String>()
         for (idx in 1..10) {
-            fetchRequests.add("fetchRequest$idx")
-            fetchRequestQueue.addFetchRequest("fetchRequest$idx")
+            var fetchRequest1 = FetchRequest(requestInfo = "Fetch Request: $idx")
+            fetchRequests.add(fetchRequest1)
+            fetchRequestQueue.addFetchRequest(fetchRequest1)
         }
 
         Assert.assertEquals(fetchRequestQueue.getQueueLength(), 10)

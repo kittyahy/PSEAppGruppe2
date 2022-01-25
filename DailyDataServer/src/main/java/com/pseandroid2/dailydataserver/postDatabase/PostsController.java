@@ -19,78 +19,93 @@
 */
 package com.pseandroid2.dailydataserver.postDatabase;
 
-import com.pseandroid2.dailydataserver.RequestParameter;
+import com.pseandroid2.dailydataserver.postDatabase.Response.PostPreview;
+import com.pseandroid2.dailydataserver.postDatabase.Response.TemplateDetail;
 import com.pseandroid2.dailydataserver.postDatabase.requestparameters.AddPostParameter;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
+/**
+ * #TODO Testen
+ */
 
 /**
  * Interface for all interaction for Posts
- * /**
- *  * #TODO Testen, JavaDoc
- *  */
-
+ */
 @RestController
 @RequestMapping("/Posts")
 public class PostsController {
 
-    /**
-     * Provides all PostsPreviews with their PostIds.
-     *
-     * @param token the token, to verify the user, provided by the client
-     * @return a list with all PostPreview and the Post ids.
-     */
-    @GetMapping("/allPreview")
-    public List<String> getAllPostPreview(@RequestHeader String token) {
+    private PostService service;
 
-        return new ArrayList<String>();
+
+    public PostsController(PostService service) {
+        this.service = service;
     }
 
     /**
-     * Provides all Templates from fromPost. Returns the identifier and the DetailView from a template
+     * Provides all PostsPreviews with their PostIds.
      *
-     * @param fromPost declares from which post the postDetail is recommended, provided by the client
+     * @param token the data, for authenticate the user.
+     * @return a list with all PostPreview and the Post ids.
+     */
+    @GetMapping("/allPreview")
+    public List<PostPreview> getAllPostPreview(@RequestHeader String token) {
+        return service.getAllPostPreview();
+    }
+
+    /**
+     * Provides all Templates detail view from fromPost. Returns the identifier and the DetailView from a template
+     *
+     * @param fromPost declares from which post the postDetail is recommended (provided by the client)
+     * @param token    the data, for authenticate the user.
      * @return a list of all template detailViews with TemplateNumber together, each as String.
      */
     @GetMapping("/detail/{post}")
-    public List<String> getPostDetail( @PathVariable("post") int fromPost, @RequestBody RequestParameter param) {
+    public List<TemplateDetail> getPostDetail(@PathVariable("post") int fromPost, @RequestHeader String token) {
 
-        return new ArrayList<String>();
+        return service.getTemplateDetailsAndID(fromPost);
     }
 
     /**
      * Provides the projectTemplate from the post fromPost
      *
-     * @param fromPost declares from which post the projectTemplate is recommended, provided by the client.
+     * @param fromPost declares from which post the projectTemplate is recommended (provided by the client)
+     * @param token    the data, for authenticate the user. .
      * @return the projectTemplate as JSON
      */
     @GetMapping("/{post}/projectTemplate")
-    public String getProjectTemplate( @PathVariable("post") int fromPost, @RequestBody RequestParameter param) {
-        return "TODO";
+    public String getProjectTemplate(@PathVariable("post") int fromPost, @RequestHeader String token) {
+        return service.getProjectTemplate(fromPost);
     }
 
     /**
      * Provides a specified GraphTemplate.
      *
-     * @param fromPost       declares from which project the graph template is recommended, provided by the client
-     * @param templateNumber declares which template is recommended, provided by the client.
+     * @param fromPost       declares from which project the graph template is recommended (provided by the client)
+     * @param templateNumber declares which template is recommended (provided by the client)
+     * @param token          the data, for authenticate the user.
      * @return the GrapgTemplate as JSON
      */
     @GetMapping("/{post}/{template}")
-    public String getGraphTemplate( @PathVariable("post") int fromPost, @PathVariable("template") int templateNumber, @RequestBody RequestParameter param) {
-        return "TODO";
+    public String getGraphTemplate(@PathVariable("post") int fromPost, @PathVariable("template") int templateNumber, @RequestHeader String token) {
+        return service.getGraphTemplate(fromPost, templateNumber);
     }
 
     /**
-     * adds a new Post.
+     * adds a new Post. If there is more than 5 from the same user, have to delete the oldest one.
      *
-     * @return the postID of the new post.
+     * @param params the data, which are recommended to add a new post. {@link AddPostParameter} specifies this parameter.
+     * @return the postID of the new post or 0 if the user has to much posts and can't add a new one.
      */
     @PostMapping("/add")
-    public int addPost(@RequestBody AddPostParameter params) {
-        return 0;
+    public int addPost(@RequestAttribute String user, @RequestBody AddPostParameter params, @RequestHeader String token ) {
+
+        if (service.checkPostAmount(user)) {
+            return 0;
+        } else {
+            return service.addPost(params.getPostPreview(), params.getProjectTemplate(), params.getGraphTemplates(), user);
+        }
     }
 
     /**
@@ -98,12 +113,11 @@ public class PostsController {
      *
      * @param user   the user, who wants to remove a post. Generated by the client.
      * @param postID which Post should be removed.
+     * @param token  the data, for authenticate the user.
      * @return if the post could be removed.
      */
     @DeleteMapping("/remove/{post}")
-    public boolean removePost(@RequestAttribute String user, @PathVariable("post") int postID, @RequestBody RequestParameter param) {
-        return true;
+    public boolean removePost(@RequestAttribute String user, @PathVariable("post") int postID, @RequestHeader String token) {
+        return service.removePost(postID, user);
     }
-
-
 }

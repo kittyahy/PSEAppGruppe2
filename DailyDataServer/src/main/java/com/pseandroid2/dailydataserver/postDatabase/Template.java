@@ -19,25 +19,27 @@
 */
 package com.pseandroid2.dailydataserver.postDatabase;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.Table;
 import java.util.Objects;
 
 /**
  * Wie kommt man an die Templateid's?
  */
 @Entity
-@Table(name="Template_Table")
+@Table(name = "Template_Table")
 @IdClass(TemplateId.class)
 public class Template {
 
-    @ManyToOne
-    private @Id Posts post;
+    private @Id int post;
     private @Id int templateNumber;
     private String templateInitial;
     private boolean isProjectTemplate;
     private String detailView;
 
-    public Template(Posts post, int templateNumber, String templateInitial, boolean isProjectTemplate, String detailView) {
+    public Template(int post, int templateNumber, String templateInitial, boolean isProjectTemplate, String detailView) {
         this.post = post;
         this.templateNumber = templateNumber;
         this.templateInitial = templateInitial;
@@ -54,7 +56,7 @@ public class Template {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Template template = (Template) o;
-        return templateNumber == template.templateNumber && post.equals(template.post);
+        return templateNumber == template.templateNumber && post == template.post;
     }
 
     @Override
@@ -62,11 +64,11 @@ public class Template {
         return Objects.hash(post, templateNumber);
     }
 
-    public Posts getPost() {
+    public int getPost() {
         return post;
     }
 
-    public void setPost(Posts post) {
+    public void setPost(int post) {
         this.post = post;
     }
 
@@ -100,5 +102,16 @@ public class Template {
 
     public void setDetailView(String detailView) {
         this.detailView = detailView;
+    }
+  
+    @Override
+    public String toString() {
+        return "Template{" +
+                "post=" + post +
+                ", templateNumber=" + templateNumber +
+                ", templateInitial='" + templateInitial + '\'' +
+                ", isProjectTemplate=" + isProjectTemplate +
+                ", detailView='" + detailView + '\'' +
+                '}';
     }
 }
