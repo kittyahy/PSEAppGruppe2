@@ -31,59 +31,59 @@ interface ServerEndpoints
 
 
     // Post Controller
-    @GET("/Posts"+"/allPreview")
+    @GET("Posts"+"/allPreview")
     fun getAllPostPreview(@Header("token") token: String): Call<List<PostPreview>>
 
-    @GET("/Posts"+"/detail/{post}")
+    @GET("Posts"+"/detail/{post}")
     fun getPostDetail(@Header("token") token: String, @Path("post") fromPost: Int): Call<List<TemplateDetail>>
 
-    @GET("/Posts"+"/{post}/projectTemplate")
+    @GET("Posts"+"/{post}/projectTemplate")
     fun getProjectTemplate(@Header("token") token: String, @Path("post") fromPost: Int): Call<String>
 
-    @GET("/Posts"+"/{post}/{template}")
+    @GET("Posts"+"/{post}/{template}")
     fun getGraphTemplate(@Header("token") token: String, @Path("post") fromPost: Int,
                          @Path("template") templateNumber: Int): Call<String>
 
-    @POST("/Posts"+"/add")
+    @POST("Posts"+"/add")
     fun addPost(@Header("token") token: String, @Body params: AddPostParameter): Call<Int>
 
-    @DELETE("/Posts"+"/remove/{post}")
+    @DELETE("Posts"+"/remove/{post}")
     fun removePost(@Header("token") token: String, @Path("post") postID: Int): Call<Boolean>
 
 
     // ProjectParticipantsController
-    @GET("/OnlineDatabase"+"/addUser/{id}")
+    @GET("OnlineDatabase"+"/addUser/{id}")
     fun addUser(@Header("token") token: String, @Path("id") projectId: Long): Call<Boolean>
 
-    @DELETE("/OnlineDatabase"+"/removeUser/{id}")
+    @DELETE("OnlineDatabase"+"/removeUser/{id}")
     fun removeUser(@Header("token") token: String, @Path("id") projectId: Long,
         params: RemoveUserParameter): Call<Boolean>
 
-    @POST("/OnlineDatabase"+"/newProject")
+    @POST("OnlineDatabase"+"/newProject")
     fun addProject(@Header("token") token: String): Call<Long>
 
 
     // DeltaController
-    @POST("/OnlineDatabase/Delta"+"/save/{projectId}")
+    @POST("OnlineDatabase/Delta"+"/save/{projectId}")
     suspend fun saveDelta(@Header("token") token: String, @Path("projectId") projectId: Long,
                   @Body saveDeltaParameter: SaveDeltaParameter): Call<Boolean>
 
-    @GET("/OnlineDatabase/Delta"+"/get/{projectId}")
+    @GET("OnlineDatabase/Delta"+"/get/{projectId}")
     fun getDelta(@Header("token") token: String, @Path("projectID") projectId: Long): Call<Collection<Delta>>
 
-    @POST("/OnlineDatabase/Delta"+"/provide/{projectId}")
+    @POST("OnlineDatabase/Delta"+"/provide/{projectId}")
     fun provideOldData(@Header("token") token: String, @Path(value = "projectID") projectId: Long,
                        @Body params: ProvideOldDataParameter): Call<Boolean>
 
-    @GET("/OnlineDatabase/Delta"+"/time")
+    @GET("OnlineDatabase/Delta"+"/time")
     fun getRemoveTime(@Header("token") token: String): Call<LocalDateTime>
 
 
     // FetchRequestController
-    @POST("/OnlineDatabase/request"+"/need/{id}")
+    @POST("OnlineDatabase/request"+"/need/{id}")
     fun demandOldData(@Header("token") token: String, @Path("id") projectID: Long,
         params: DemandOldDataParameter): Call<Boolean>
 
-    @GET("/OnlineDatabase/request"+"/provide/{id}")
+    @GET("OnlineDatabase/request"+"/provide/{id}")
     fun getFetchRequest(@Header("token") token: String, @Path("id") projectId: Long): Call<Collection<FetchRequest>>
 }

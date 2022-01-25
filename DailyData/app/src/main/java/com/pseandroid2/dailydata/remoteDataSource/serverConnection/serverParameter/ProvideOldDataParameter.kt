@@ -3,7 +3,6 @@ package com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParame
 import java.time.LocalDateTime
 
 /**
- * @param token: The authentication token
  * @param command: The delta as JSON
  * @param forUser: The UserID of the user that needs the delta
  * @param initialAdded: The time when this delta was uploaded

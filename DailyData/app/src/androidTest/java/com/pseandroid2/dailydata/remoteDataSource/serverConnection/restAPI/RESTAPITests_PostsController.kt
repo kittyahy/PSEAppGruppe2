@@ -1,6 +1,7 @@
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI
 
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.PostPreview
 import org.junit.Assert
 import org.junit.Test
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
@@ -24,22 +25,25 @@ class RESTAPITests_PostsController {
 
     @Test
     fun getAllPostsPreviewIsNotEmpty() {
-         // TODO REWORK TEST: Cant pass body through @get and @delete
-        /*
-        var postPreviews: MutableList<PostPreview> = (restAPI.getAllPostsPreview(authToken) as MutableList<PostPreview>)
-        Assert.assertNotEquals(0, postPreviews.size)
+        var postPreviews = restAPI.getAllPostsPreview(authToken)
+
+        Assert.assertNotEquals(0, postPreviews)
+        var postPreviewsList: MutableList<PostPreview>
+        if (postPreviews.size > 0) {
+            postPreviewsList = postPreviews as MutableList<PostPreview>
+            Assert.assertNotEquals(0, postPreviewsList.size)
+        }
+
         Assert.assertNotEquals(null, postPreviews.elementAt(0))
-         */
+
     }
 
     @Test
     fun addAndRemovePost() {
-        /* // TODO: Change addPost return parameter to Integer
         val postID: Int = restAPI.addPost("post preview", "project template",
             listOf("graph template"), authToken)
         Assert.assertNotEquals(-1, postID)
 
         Assert.assertTrue(restAPI.removePost(postID, authToken))
-        */
     }
 }
