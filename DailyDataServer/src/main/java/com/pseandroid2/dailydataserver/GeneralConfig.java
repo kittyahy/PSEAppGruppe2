@@ -43,4 +43,15 @@ public class GeneralConfig implements WebMvcConfigurer {
         registry.addInterceptor(loginInterceptor).excludePathPatterns("/greet");
         registry.addInterceptor(accessToProjectInterceptor).addPathPatterns("/OnlineDatabase/**").excludePathPatterns("/OnlineDatabase/Delta/time");
     }
+
+    //Firebase initalisieren
+    // FIREBASE_DATABASE_URL braucht eigentlich eine richtige URL, aber wie und woher etc...?
+   /* @Primary
+    @Bean
+    public void firebaseInit() throws IOException{
+        FirebaseOptions options = new FirebaseOptions.Builder().setCredentials(GoogleCredentials.getApplicationDefault()).setDatabaseUrl("FIREBASE_DATABASE_URL").build();
+        if (FirebaseApp.getApps().isEmpty()){
+            FirebaseApp.initializeApp(options);
+        }
+    }*/
 }

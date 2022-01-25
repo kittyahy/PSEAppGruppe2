@@ -20,6 +20,7 @@
 package com.pseandroid2.dailydataserver;
 
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -43,6 +44,20 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         String token = request.getHeader("token"); //da der Token jetzt in den Header kommt.
         // Firebase auth
+
+/*
+        String token = null;
+        String auth
+                = request.getHeader("Authorization");
+
+        // System.out.println(auth);
+        if(StringUtils.hasText(auth)&&auth.startsWith("Bearer ")){
+            token = auth.substring(7);
+        }
+//       FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(token);
+        //System.out.println(decodedToken.getUid());
+        // return decodedToken.getUid();
+*/
 
         String name = "Ella"; // firebasetoken.getUid(); Bitte austauschen, sobald firebase steht.
         request.setAttribute("user", name);
