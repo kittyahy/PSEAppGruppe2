@@ -19,26 +19,21 @@
 */
 package com.pseandroid2.dailydataserver.onlineDatabase.requestParameters.projectParticipantsController;
 
-import com.pseandroid2.dailydataserver.Communication.RequestParameter;
-
 /**
  * #TODO Testen
  */
 
 /**
- * The parameters for {@link com.pseandroid2.dailydataserver.onlineDatabase.ProjectParticipantsController#removeUser(String, long, RemoveUserParameter), removeUser()}
  */
-public class RemoveUserParameter extends RequestParameter {
+public class RemoveUserParameter  {
     private String userToRemove;
 
     /**
      * The parameters for demandOldData. Constructor.
      *
-     * @param token        the token, to verify the user (provided by the client)
      * @param userToRemove the user, which should be removed.
      */
-    public RemoveUserParameter(String token, String userToRemove) {
-        super(token);
+    public RemoveUserParameter( String userToRemove) {
         this.userToRemove = userToRemove;
     }
 
@@ -57,6 +52,6 @@ public class RemoveUserParameter extends RequestParameter {
     public String toString() {
         return "RemoveUserParameter{" +
                 "userToRemove='" + userToRemove + '\'' +
-                "} " + super.toString();
+                "} ";
     }
 }

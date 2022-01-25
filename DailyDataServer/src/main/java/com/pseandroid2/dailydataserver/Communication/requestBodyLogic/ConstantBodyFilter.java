@@ -39,7 +39,7 @@ import java.io.IOException;
  * Filter to "replace" the body with a reusable body object
  * This filter is the first filter and every request goes through this filter.
  */
-@Component
+/*@Component
 @Order(value = Ordered.HIGHEST_PRECEDENCE)
 @WebFilter(urlPatterns = ("/*"))
 public class ConstantBodyFilter extends OncePerRequestFilter {
@@ -47,7 +47,7 @@ public class ConstantBodyFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        BodyServletRequestWrapper bodyRequest = new BodyServletRequestWrapper(request);
-        filterChain.doFilter(bodyRequest, response);
+     //   BodyServletRequestWrapper bodyRequest = new BodyServletRequestWrapper(request);
+       // filterChain.doFilter(bodyRequest, response);
     }
-}
+}*/

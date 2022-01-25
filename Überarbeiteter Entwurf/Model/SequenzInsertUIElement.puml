@@ -1,0 +1,29 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+title Insert UI Element
+
+participant "uiDAO: UIElementDAO" as uiDAO
+participant "ent: UIElementMap" as ent
+
+[-> uiDAO : insertUIElement(projId, colId, type, state)
+activate uiDAO
+uiDAO -> uiDAO : id = getNextId(projId)
+activate uiDAO
+uiDAO --> uiDAO
+deactivate uiDAO
+uiDAO -> ent** : <<create>> (projId, id, colId, type, state)
+uiDAO -> uiDAO : insertUIEntity(ent)
+activate uiDAO
+uiDAO --> uiDAO
+deactivate uiDAO
+uiDAO -->[ : id
+deactivate uiDAO
+
+
+@enduml

@@ -25,7 +25,7 @@ import org.junit.Test
 
 internal class ExampleUnitTestRemoteDataSource {
     @Test
-    fun RandomTest() {
+    fun randomTest() {
         Assert.assertEquals(4, 2 + 2)
     }
 }

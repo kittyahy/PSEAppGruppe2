@@ -21,6 +21,7 @@
 package com.pseandroid2.dailydata.remoteDataSource.queue.queueLogic.fetchRequest
 
 import com.pseandroid2.dailydata.remoteDataSource.queue.FetchRequestQueue
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
 import org.junit.Assert
 import org.junit.Test
 
@@ -29,8 +30,8 @@ class fetchRequestQueueTests_SaveRedundandFetchRequest {
     fun saveOneFetchRequest() {
         val fetchRequestQueue = FetchRequestQueue()
 
-        val fetchRequest1 = "fetchRequest: 1"
-        val fetchRequest2 = "fetchRequest: 2"
+        var fetchRequest1 = FetchRequest(requestInfo = "Fetch Request: 1")
+        var fetchRequest2 = FetchRequest(requestInfo = "Fetch Request: 2")
 
         Assert.assertEquals(fetchRequestQueue.getQueueLength(), 0)
 

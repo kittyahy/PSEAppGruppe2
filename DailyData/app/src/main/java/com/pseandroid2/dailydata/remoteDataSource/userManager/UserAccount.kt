@@ -21,15 +21,17 @@
 package com.pseandroid2.dailydata.remoteDataSource.userManager
 
 import android.util.Log
+import javax.inject.Inject
 
-class UserAccount {
-    private val firebaseManager: FirebaseManager
 
-    init {
-        // Initialize FirebaseManager
-        firebaseManager = FirebaseManager()
-    }
+class UserAccount @Inject constructor(private val fm: FirebaseManager) {
+    private val firebaseManager: FirebaseManager = fm // Get the FirebaseManager via dependency injection
 
+    /**
+     * @param eMail: The email of the user that should be registered
+     * @param password: The password of the user that should be registered
+     * @param type: Through which method should the user be register (eg email)
+     */
     fun registerUser(eMail: String, password: String, type: SignInTypes): FirebaseReturnOptions {
         // Hier können dann später, falls mehere Anmeldemöglichkeiten zur Verfüngung stehen, die jeweils ausgewählte Anmeldemöglichkeit ausgewählt werden
         when(type)
@@ -40,6 +42,11 @@ class UserAccount {
         return FirebaseReturnOptions.REGISTRATION_FAILED
     }
 
+    /**
+     * @param eMail: The email of the user that should be signed in
+     * @param password: The password of the user that should be signed in
+     * @param type: Through which method should the user be signed in (eg email)
+     */
     fun signInUser(eMail: String, password: String, type: SignInTypes): FirebaseReturnOptions {
         // Hier können dann später, falls mehere Anmeldemöglichkeiten zur Verfüngung stehen, die jeweils ausgewählte Anmeldemöglichkeit ausgewählt werden
         when(type)
@@ -50,40 +57,44 @@ class UserAccount {
         return FirebaseReturnOptions.REGISTRATION_FAILED
     }
 
+    /**
+     * @return FirebaseReturnOptions: The success status of the request
+     */
     fun signOut(): FirebaseReturnOptions {
         return firebaseManager.signOut()
     }
 
-
+    /**
+     * @return String: The firebase ID of the signed in user. If no user is signed in return ""
+     */
     fun getUserID(): String {
-        val user = firebaseManager.getUser() ?: return ""
-        return user.uid
+        return firebaseManager.getUserID()
     }
 
+    /**
+     * @return String: The username of the signed in user. If no user is signed in return ""
+     */
     fun getUserName(): String {
-        val user = firebaseManager.getUser()
-        if (user == null || user.displayName == null) {
-            return ""
-        }
-        return user.displayName.toString() // TODO, prüfe ob das richtig ist
+        return firebaseManager.getUserName()
     }
 
+    /**
+     * @return String: The email of the signed in user (if existing). If no user is signed in return ""
+     */
     fun getUserEMail(): String {
-        val user = firebaseManager.getUser()
-        if (user == null || user.email == null) {
-            return ""
-        }
-        return user.email.toString() // TODO, prüfe ob das richtig ist
+        return firebaseManager.getUserEMail()
     }
 
+    /**
+     * @return String: The photoURL of the signed in user (if existing). If no user is signed in return ""
+     */
     fun getUserPhotoUrl(): String {
-        val user = firebaseManager.getUser()
-        if (user == null || user.photoUrl == null) {
-            return ""
-        }
-        return user.photoUrl.toString() // TODO, prüfe ob das richtig ist
+        return firebaseManager.getUserPhotoUrl()
     }
 
+    /**
+     * @return String: The token of the signed in user. If no user is signed in return ""
+     */
     fun getToken(): String {
         return firebaseManager.getToken()
     }

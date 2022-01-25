@@ -1,0 +1,27 @@
+@startuml Methode_ErfolgreicherAufrufVonSendCommandsToServer
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+    activate RemoteDataSourceAPI 
+UserAccount <- RemoteDataSourceAPI: getToken()
+    activate UserAccount 
+UserAccount -> RemoteDataSourceAPI: return authToken
+RemoteDataSourceAPI -> ServerManager: sendCommandsToServer(long, projectCommands, user, authToken)
+    activate ServerManager
+loop n times
+    ServerManager -> RESTAPI: saveDelta(projectID, projectCommand, user, authToken)
+        activate ServerManager #DDDDDD
+        activate RESTAPI 
+    RESTAPI ->  Server: saveDelta(projectID, projectCommand, user)
+        activate Server 
+    Server -> RESTAPI: return null
+        deactivate Server
+    RESTAPI -> ServerManager: return null
+        deactivate RESTAPI
+        deactivate ServerManager
+end
+ServerManager -> RemoteDataSourceAPI: return null
+@enduml

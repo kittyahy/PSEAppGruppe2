@@ -4,20 +4,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pseandroid2.dailydataserver.postDatabase.PostService;
 import com.pseandroid2.dailydataserver.postDatabase.PostsController;
-import com.pseandroid2.dailydataserver.postDatabase.requestparameters.AddPostParameter;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.util.Pair;
+
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.ArrayList;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = PostsController.class)
