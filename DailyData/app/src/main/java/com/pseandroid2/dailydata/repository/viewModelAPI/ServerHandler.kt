@@ -44,4 +44,8 @@ class ServerHandler (appDataBase: AppDataBase){
     fun isServerCurrentlyReachable() : Boolean {
         return TODO()
     }
+    fun joinOnlineProject(onlineID: Long) : Int {
+        return TODO()
+    }
+    //TODO Online Anmeldung
 }

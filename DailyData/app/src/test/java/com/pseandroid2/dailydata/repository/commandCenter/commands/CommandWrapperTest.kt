@@ -18,11 +18,8 @@ class CommandWrapperTest : TestCase() {
 }
 
 class TestCommand(projectID: Int) : ProjectCommand(projectID) {
-    override fun individualExecution() {
-        projectID *= 2
-    }
 
     override fun execute() {
-        individualExecution()
+        projectID *= 2
     }
 }

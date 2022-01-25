@@ -44,13 +44,12 @@ class QueueTest : TestCase() {
         while(QueueTestCommand.content != expected) {
         }
         assertEquals(expected, QueueTestCommand.content)
+        println(QueueTestCommand.content)
         QueueTestCommand.content = ""
     }
 }
 class QueueTestCommand(private val concat:String) : ProjectCommand(3) {
     companion object {var content: String = ""}
-    override fun individualExecution() {
-    }
 
     override fun publish() {
         content += concat
