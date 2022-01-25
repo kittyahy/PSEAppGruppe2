@@ -20,6 +20,7 @@
 
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection
 
+import android.util.Log
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.AddPostParameter
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.DemandOldDataParameter
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.ProvideOldDataParameter
@@ -132,6 +133,7 @@ class RESTAPI {
      */// TODO Überarbeite JAVADOC
     fun addPost (postPreview: String, projectTemplate: Pair<String, String>, graphTemplate: Collection<Pair<String, String>>, authToken: String): Int {
         val params: AddPostParameter = AddPostParameter(postPreview, projectTemplate, graphTemplate)
+        Log.d("addPost", gson.toJson(params))
         val call: Call<Int> = server.addPost(authToken, params)
 
         return call.execute().body() ?: -1

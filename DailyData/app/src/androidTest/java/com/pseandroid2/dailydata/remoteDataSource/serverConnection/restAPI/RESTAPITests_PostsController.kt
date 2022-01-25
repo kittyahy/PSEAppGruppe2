@@ -29,7 +29,7 @@ class RESTAPITests_PostsController {
 
         Assert.assertNotEquals(0, postPreviews)
         var postPreviewsList: MutableList<PostPreview>
-        if (postPreviews.size > 0) {
+        if (postPreviews.isNotEmpty()) {
             postPreviewsList = postPreviews as MutableList<PostPreview>
             Assert.assertNotEquals(0, postPreviewsList.size)
         }
@@ -40,11 +40,9 @@ class RESTAPITests_PostsController {
 
     @Test
     fun addAndRemovePost() {
-        /*
         val postID: Int = restAPI.addPost("", Pair("", ""), listOf(Pair("", "")), authToken)
         Assert.assertNotEquals(-1, postID)
 
         Assert.assertTrue(restAPI.removePost(postID, authToken))
-        */
     }
 }
