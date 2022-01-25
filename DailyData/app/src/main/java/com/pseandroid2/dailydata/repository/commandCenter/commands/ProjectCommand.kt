@@ -16,5 +16,4 @@ abstract class ProjectCommand (
     open fun publish() {
         TODO()
     }
-    abstract fun individualExecution()
 }
