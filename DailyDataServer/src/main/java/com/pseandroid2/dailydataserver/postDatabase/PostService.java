@@ -80,7 +80,7 @@ public class PostService {
 
     public List<TemplateDetail> getTemplateDetailsAndID(int post) {
         Posts recommendedPost = postRepo.findById(post).get();
-        //#TODO sanatiy check
+        //#TODO sanctity check
 
         List<Template> templatesFromPost = new ArrayList<>(tempRepo.findByPost(recommendedPost.getPostId()));
         List<TemplateDetail> detailList = new ArrayList<>();
@@ -103,7 +103,8 @@ public class PostService {
         if (!user.equals(postRepo.findById(postId).get().getCreatedBy())) {
             return false;
         }
-        tempRepo.deleteByPost(postId);
+        List<Template> listToDelete = tempRepo.findByPost(postId);
+        tempRepo.deleteAll(listToDelete);
         postRepo.deleteById(postId);
         return true;
     }

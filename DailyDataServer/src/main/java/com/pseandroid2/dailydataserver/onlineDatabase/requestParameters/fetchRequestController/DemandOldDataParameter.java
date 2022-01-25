@@ -19,15 +19,11 @@
 */
 package com.pseandroid2.dailydataserver.onlineDatabase.requestParameters.fetchRequestController;
 
-import com.pseandroid2.dailydataserver.Communication.RequestParameter;
-
 /**
  * #TODO Testen, JavaDoc
  */
-/**
- * The parameters for {@link com.pseandroid2.dailydataserver.onlineDatabase.FetchRequestController#demandOldData(String, long, DemandOldDataParameter) demandOldData()}
- */
-public class DemandOldDataParameter extends RequestParameter {
+
+public class DemandOldDataParameter {
     private String requestInfo;
 
     /***
@@ -36,8 +32,7 @@ public class DemandOldDataParameter extends RequestParameter {
      * @param token       the token, to verify the user (provided by the client)
      * @param requestInfo the request, which is usefully for another user. Contains information for recommended Delta (provided by the client)
      */
-    public DemandOldDataParameter(String token, String requestInfo) {
-        super(token);
+    public DemandOldDataParameter( String requestInfo) {
         this.requestInfo = requestInfo;
     }
 
@@ -56,6 +51,6 @@ public class DemandOldDataParameter extends RequestParameter {
     public String toString() {
         return "DemandOldData{" +
                 "requestInfo='" + requestInfo + '\'' +
-                "} " + super.toString();
+                "} " ;
     }
 }
