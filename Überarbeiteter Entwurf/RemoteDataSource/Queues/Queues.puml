@@ -1,0 +1,75 @@
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+skinparam Linetype ortho
+
+package Queues{
+
+package ProjectCommandQueue {
+
+class ProjectCommandQueue {
+    - projectCommands: List<JSON>
+    - projectCommandQueueObserver: List<ProjectCommandQueueObserver>
+    ..QueueLogic..
+    + getProjectCommand(): ProjectCommandInfo
+    + addProjectCommand(projectCommand: ProjectCommandInfo)
+    ..ObserverLogic..
+    + registerObserver(toObserve: ProjectCommandQueueObserver)
+    + unregisterObserver(toStopObeserving: ProjectCommandQueueObserver)
+    - notifyObservers()
+}
+
+class ProjectCommandQueueObserver <<interface>><<observer>>{
+    + update()
+}
+
+
+ProjectCommandQueue "m" *-up- "n" ProjectCommandQueueObserver
+}
+
+
+
+
+package FetchRequestQueue {
+' Store the fetchRequests for the ProjectCommands
+class FetchRequestQueue {
+    - fetchRequests: List<JSON>
+    - observer: List<FetchRequestQueueObserver>
+    ..QueueLogic..
+    + getFetchRequest(): JSON
+    + addFetchRequest(fetchRequest: JSON)
+    ..ObserverLogic..
+    + registerObserver(FetchRequestsQueueObserver)
+    + unregisterObserver(FetchRequestsQueueObserver)
+    - notifyObservers()
+}
+
+class FetchRequestsQueueObserver <<interface>><<observer>>{
+    + update()
+}
+
+
+FetchRequestQueue "m" *-up- "n" FetchRequestsQueueObserver 
+
+}
+
+
+
+
+}
+
+class ProjectCommandInfo <<dataclass>> {
+    - wentOnline : int 
+    - serverRemoveTime: int
+    - commandByUser: String
+    - isProjectAdmin: boolean
+
+    - projectCommand: JSON
+    getWentOnline(): int
+    getServerRemoveTime(): int
+    getCommandByUser(): String
+    getIsProjectAdmin(): boolean
+    getProjectCommand(): JSON
+}

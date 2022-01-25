@@ -19,14 +19,19 @@
 */
 package com.pseandroid2.dailydataserver;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.pseandroid2.dailydataserver.postDatabase.requestparameters.AddPostParameter;
+import org.springframework.data.util.Pair;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 
 /**
  * Controller to know if the server is available.
  * The client doesn't need to log in for access the controller
  */
 @RestController
+@CrossOrigin(origins= "http://localhost:8080")
+@RequestMapping(path = "/")
 public class GreetingController {
 
     private ServerGreetings serverGreetings;
@@ -43,6 +48,19 @@ public class GreetingController {
     @GetMapping("/greet")
     public String greets() {
         return serverGreetings.greeting();
+    }
+
+    @GetMapping("/test")
+    public AddPostParameter test(){
+        Pair<String, String> projectTmpl = Pair.of("projectTemplate", "project Detail View");
+        Pair<String, String> graphTmp1 = Pair.of("graphTemplate1", "graphtemplate Detail View 1");
+        Pair<String, String> graphTmp2 = Pair.of("graphTemplate2", "graphtemplate Detail View 2");
+        ArrayList<Pair<String, String>> list = new ArrayList<>();
+        list.add(graphTmp1);
+        list.add(graphTmp2);
+
+        AddPostParameter params = new AddPostParameter("token tm", "die postpreview", projectTmpl, list);
+        return params;
     }
 
 }

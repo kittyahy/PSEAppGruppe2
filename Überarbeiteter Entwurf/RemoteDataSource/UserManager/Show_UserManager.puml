@@ -1,0 +1,60 @@
+@startuml UserManager
+
+!include UserManager.puml!UserManager
+
+note right of UserAccount::registerUser
+	firebaseManager.RegisterUser(String eMail, String passwort)
+end note
+note right of UserAccount::signInUser
+	firebaseManager.SignInUser(String eMail, String passwort)
+	user = Firebase.getCurrentUserInformations()
+end note
+note right of UserAccount::signOut
+	firebaseManager.SignOut()
+	user = null
+end note
+note right of UserAccount::updateCurrentUser
+	FirebaseUser user = firebaseManager.getUser()
+end note
+note right of UserAccount::getUserID()
+	return user.uid
+end note
+note right of UserAccount::getUserName()
+	return user.displayName
+end note
+note right of UserAccount::getUserEMail()
+	return user.email
+end note
+note right of UserAccount::getUserPhotoUrl()
+	return user.photoUrl
+end note
+note right of UserAccount::getToken()
+	return firebaseManager.getToken()
+end note
+
+
+
+
+note right of FirebaseManager::instantiateFirebaseAuth()
+	FirebaseAuth auth = Firebase.auth
+end note
+note right of FirebaseManager::registerUser
+	auth.createUserWithEmailAndPassword(email, passwort)
+end note
+note right of FirebaseManager::signInUser
+	auth.signInWithEmailAndPassword(email, password)
+end note
+note right of FirebaseManager::signOut
+	auth.signOut()
+end note
+note right of FirebaseManager::getUser
+	return auth.currentUser()
+end note
+note right of FirebaseManager::getToken
+	return auth.GetToken()
+end note
+
+
+
+
+@enduml

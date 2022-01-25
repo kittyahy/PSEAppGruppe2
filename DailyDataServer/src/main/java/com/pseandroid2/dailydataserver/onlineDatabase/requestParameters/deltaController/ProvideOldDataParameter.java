@@ -19,18 +19,14 @@
 */
 package com.pseandroid2.dailydataserver.onlineDatabase.requestParameters.deltaController;
 
-import com.pseandroid2.dailydataserver.Communication.RequestParameter;
-
 import java.sql.Date;
 
 /**
  * #TODO Testen
  */
 
-/**
- * The parameters for {@link com.pseandroid2.dailydataserver.onlineDatabase.DeltaController#provideOldData(long, String, ProvideOldDataParameter) provideOldData}
- */
-public class ProvideOldDataParameter extends RequestParameter {
+
+public class ProvideOldDataParameter {
     private String command;
     private String forUser;
     private Date initialAdded;
@@ -44,8 +40,7 @@ public class ProvideOldDataParameter extends RequestParameter {
      * @param initialAddedBy who added the Delta initially (provided by the client)
      * @param wasAdmin       was the person at this time admin (provided by the client)
      */
-    public ProvideOldDataParameter(String token, String command, String forUser, Date initialAdded, String initialAddedBy, boolean wasAdmin) {
-        super(token);
+    public ProvideOldDataParameter( String command, String forUser, Date initialAdded, String initialAddedBy, boolean wasAdmin) {
         this.command = command;
         this.forUser = forUser;
         this.initialAdded = initialAdded;
@@ -106,6 +101,6 @@ public class ProvideOldDataParameter extends RequestParameter {
                 ", initialAdded=" + initialAdded +
                 ", initialAddedBy='" + initialAddedBy + '\'' +
                 ", wasAdmin=" + wasAdmin +
-                "} " + super.toString();
+                "} " ;
     }
 }

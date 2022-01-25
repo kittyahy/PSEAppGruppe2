@@ -1,0 +1,66 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+participant Alice
+participant Bob
+
+activate Alice
+
+ref over Alice: requestToAProjectValidation
+Alice -> FetchRequestController: demandOldData()
+activate FetchRequestController
+FetchRequestController -> FetchRequestRepository : add(user: String, project:long,requestInfo: String)
+deactivate FetchRequestController
+activate FetchRequestRepository
+FetchRequestRepository -> "AliceRequest: FetchRequest" as AliceRequest **: create
+deactivate FetchRequestController
+deactivate FetchRequestRepository
+deactivate Alice
+
+activate Bob
+ref over Bob: requestToAProjectValidation
+Bob -> FetchRequestController: getFetchRequest(user:String,project:long)
+activate FetchRequestController
+FetchRequestController -> FetchRequestRepository:getRequests(project: long)
+activate FetchRequestRepository
+FetchRequestRepository --> AliceRequest
+note over AliceRequest: selected by FetchRequestRepository
+AliceRequest --> FetchRequestRepository
+FetchRequestRepository --> FetchRequestController: AliceRequest and maybe more
+deactivate FetchRequestRepository
+FetchRequestController -->Bob: Collection<FetchRequest>
+
+ref over Bob: requestToAProjectValidation
+Bob -> DeltaController: provideOldData(delta, forUser, initialAdded, initalAddedBy,  project, wasAdmin)
+activate DeltaController
+DeltaController --> DeltaRepository: deleteDelta
+activate DeltaRepository
+DeltaController -> DeltaRepository: createDelta(delta, initialAdded, initialAddedBy, project, wasAdmin,forUser)
+deactivate DeltaRepository
+deactivate DeltaController
+deactivate Bob
+
+activate Alice
+ref over Alice: requestToAProjectValidation
+Alice -> DeltaController: getDelta
+activate DeltaController
+DeltaController ->DeltaRepository: getDelta(project, user)
+activate DeltaRepository
+DeltaRepository --> DeltaController: Collection<Delta>
+opt Collection<Delta> contains old Delta
+DeltaController -> FetchRequestRepository:gotOldData(user,project)
+end opt
+DeltaController --> DeltaRepository: deleteOldDelta()
+DeltaController --> DeltaRepository: deleteDownloadedData(requestedBy, project)
+deactivate DeltaRepository
+DeltaController --> Alice: Collection<Delta> (old and new Delta)
+deactivate DeltaController
+deactivate Alice
+
+
+
+@enduml

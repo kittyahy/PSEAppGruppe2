@@ -40,9 +40,9 @@ public class Delta {
     String user;
     private String projectCommand;
     private long project;
-    private String requestedBy;
     private boolean isAdmin;
 
+    private String requestedBy;
     @OneToMany
     private Set<ProjectParticipants> downloadedBy;
 

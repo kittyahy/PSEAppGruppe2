@@ -24,11 +24,11 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import com.pseandroid2.dailydata.model.User
 import com.pseandroid2.dailydata.model.database.entities.MissingSlotEntity
 import com.pseandroid2.dailydata.model.database.entities.ProjectData
 import com.pseandroid2.dailydata.model.database.entities.ProjectEntity
 import com.pseandroid2.dailydata.model.database.entities.ProjectUserMap
+import com.pseandroid2.dailydata.model.users.User
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -92,9 +92,15 @@ abstract class ProjectDataDAO {
     @Delete
     abstract suspend fun deleteProjectEntity(entity: ProjectEntity)
 
+    @Query("DELETE FROM project WHERE id = :id")
+    abstract suspend fun deleteProjectEntityById(id: Int)
+
     @Insert
     abstract suspend fun insertProjectUserMap(userMap: ProjectUserMap)
 
     @Delete
     abstract suspend fun deleteProjectUserMap(userMap: ProjectUserMap)
+
+    @Query("DELETE FROM user WHERE projectId = :projectId")
+    abstract suspend fun deleteAllUsers(projectId: Int)
 }

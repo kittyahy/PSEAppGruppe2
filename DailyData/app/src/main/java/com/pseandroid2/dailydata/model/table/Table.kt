@@ -21,10 +21,11 @@
 package com.pseandroid2.dailydata.model.table
 
 import com.google.gson.Gson
-import com.pseandroid2.dailydata.model.User
+import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.model.database.entities.RowEntity
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import java.time.LocalDateTime
+import kotlin.reflect.KClass
 
 interface Table {
 
@@ -42,23 +43,34 @@ interface Table {
 
     fun getColumn(col: Int): List<Any>
 
-    fun addColumn(type: Class<Any>)
+    fun addColumn(typeString: String, default: Any)
 
     fun deleteColumn(col: Int)
 
 }
 
-interface TableLayout {
+interface TableLayout : Iterable<Pair<KClass<out Any>, List<UIElement>>> {
+
+    companion object {
+        @JvmStatic
+        fun fromJSON(json: String): TableLayout {
+            return ArrayListLayout(json)
+        }
+    }
 
     fun getSize(): Int
 
-    fun getColumnType(col: Int): Class<Any>
+    fun getColumnType(col: Int): KClass<out Any>
 
     fun getUIElements(col: Int): List<UIElement>
 
-    fun toJSON(): String
+    operator fun get(col: Int): Pair<KClass<out Any>, List<UIElement>>
 
-    fun fromJSON(json: String): TableLayout
+    fun addColumn(typeString: String)
+
+    fun deleteColumn(col: Int)
+
+    fun toJSON(): String
 
 }
 
@@ -71,6 +83,10 @@ interface Row {
     fun getMetaData(): RowMetaData
 
     fun getSize(): Int
+
+    fun createCell(value: Any)
+
+    fun deleteCell(col: Int)
 
 }
 

@@ -21,207 +21,289 @@
 package com.pseandroid2.dailydata.remoteDataSource
 
 import com.pseandroid2.dailydata.remoteDataSource.queue.FetchRequestQueueObserver
+import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandInfo
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueueObserver
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.PostPreview
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.TemplateDetail
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
 import com.pseandroid2.dailydata.remoteDataSource.userManager.SignInTypes
 import com.pseandroid2.dailydata.remoteDataSource.userManager.UserAccount
 import java.time.LocalDateTime
+import javax.inject.Inject
 
-class RemoteDataSourceAPI {
-    private val userAccount: UserAccount
-    private val serverManager: ServerManager
-
-    init {
-        userAccount = UserAccount()
-        serverManager = ServerManager()
-    }
+class RemoteDataSourceAPI @Inject constructor(private val uAccount: UserAccount, private val sManager: ServerManager)  {
+    private val userAccount: UserAccount = uAccount
+    private val serverManager: ServerManager = sManager
 
 // -----------------------------FireBase-------------------------------
     // -----------------------------UserAccount-------------------------------
-
+    /**
+     * @param eMail: The email of the user that should be registered
+     * @param password: The password of the user that should be registered
+     * @param type: Through which method should the user be register (eg email)
+     */
     fun registerUser(eMail: String, password: String, type: SignInTypes) : FirebaseReturnOptions {
         return userAccount.registerUser(eMail, password, type)
     }
 
+    /**
+     * @param eMail: The email of the user that should be signed in
+     * @param password: The password of the user that should be signed in
+     * @param type: Through which method should the user be signed in (eg email)
+     */
     fun signInUser(eMail: String, password: String, type: SignInTypes) : FirebaseReturnOptions {
         return userAccount.signInUser(eMail, password, type)
     }
 
+    /**
+     * @return FirebaseReturnOptions: The success status of the request
+     */
     fun signOut() : FirebaseReturnOptions {
         return userAccount.signOut()
     }
 
     // -----------------------------UserDetails-------------------------------
+    /**
+     * @return String: The firebase ID of the signed in user. If no user is signed in return ""
+     */
     fun getUserID(): String {
         return userAccount.getUserID()
     }
 
+    /**
+     * @return String: The username of the signed in user. If no user is signed in return ""
+     */
     fun getUserName(): String {
         return userAccount.getUserName()
     }
 
+    /**
+     * @return String: The email of the signed in user (if existing). If no user is signed in return ""
+     */
     fun getUserEMail(): String {
         return userAccount.getUserEMail()
     }
 
+    /**
+     * @return String: The photoURL of the signed in user (if existing). If no user is signed in return ""
+     */
     fun getUserPhotoUrl(): String {
         return userAccount.getUserPhotoUrl()
     }
 
-    // -----------------------------Authentification-------------------------------
-    fun getToken(): String {
-        return userAccount.getToken()
-    }
-
 // -----------------------------ServerAccess-------------------------------
     // -----------------------------GreetingController-------------------------------
+    /**
+     * @return Boolean: If a server connection possible return true, else return false
+     */
     fun connectionToServerPossible(): Boolean {
-        // TODO: Implement Method
-
-        return false;
+        return serverManager.greet()
     }
 
     // -----------------------------PostsController-------------------------------
-    fun getAllPostPreview(): Collection<String> {
-        // TODO: Implement Method
-
-        return mutableListOf("");
-    }
-
-    fun getPostDetail(fromPost: Int): Collection<String> {
-        // TODO: Implement Method
-
-        return mutableListOf("");
+    /**
+     * @return Collection<PostPreview>: The previews of the posts
+     */
+    fun getAllPostPreview(): Collection<PostPreview> {
+        val authToken: String = userAccount.getToken()
+        return serverManager.getAllPostPreview(authToken)
     }
 
     /**
-     * @return String - Das ProjectTemplate als JSON Datei
+     * @param fromPost: The id from the searched post
+     * @return Collection<TemplateDetail>: Returns the detailed post belonging to the post id
+     */
+    fun getPostDetail(fromPost: Int): Collection<TemplateDetail> {
+        val authToken: String = userAccount.getToken()
+        return serverManager.getPostDetail(fromPost, authToken);
+    }
+
+    /**
+     * @param fromPost: The post from which the project template should be downloaded
+     * @return String - The requested project template as JSON
      */
     fun getProjectTemplate(fromPost: Int): String { // TODO: Es existiert kein JSON Rückgabewert, lass dir was neues einfallen
-        // TODO: Implement Method
-
-        return "";
+        val authToken: String = userAccount.getToken()
+        return serverManager.getProjectTemplate(fromPost, authToken)
     }
 
-    /**
-     * @return String - Das GraphTemplate als JSON Datei
+    /** Downloads one graph template that is contained by a post
+     *
+     * @param fromPost: The post from which the graph templates should be downloaded
+     * @param templateNumber: Which graph template should be downloaded from the post
+     * @return String - The requested graph template as JSON
      */
     fun getGraphTemplate(fromPost: Int, templateNumber: Int): String {
-        // TODO: Implement Method
-
-        return "";
+        val authToken: String = userAccount.getToken()
+        return serverManager.getGraphTemplate(fromPost, templateNumber, authToken)
     }
 
-    // Wish-Kriterium
+    // Wish-criteria
     /**
-     * @param postPreview:String ist eine JSON Dateie
-     * @param projectTemplate:String ist eine JSON Dateie
-     * @param Collection<String> ist eine Collection von JSON Dateien
+     * @param postPreview: The preview of the post that should be added
+     * @param projectTemplate: The project template that belongs to the post as JSON
+     * @param Collection<String>: The graph templates that belong to the post as JSON
+     * @return Int: The PostID of the new post. -1 if the call didn't succeed
      */
-    fun addPost(postPreview: String, user: String, projectTemplate: String, graphTemplate: Collection<String>) {
-        // TODO: Implement Method
-
-        return;
+    fun addPost(postPreview: String, projectTemplate: String, graphTemplate: Collection<String>): Int {
+        val authToken: String = userAccount.getToken()
+        return serverManager.addPost(postPreview, projectTemplate, graphTemplate, authToken)
     }
 
-    fun removePost(postID: Long, user: String) {
-        // TODO: Implement Method
-
-        return;
+    // Wish-criteria
+    /**
+     * @param postID: The id of the post that should be removed from the server
+     * @return Boolean: Did the server call succeed
+     */
+    fun removePost(postID: Int): Boolean {
+        val authToken: String = userAccount.getToken()
+        return serverManager.removePost(postID, authToken)
     }
 
     // -----------------------------ProjectParticipantsController-------------------------------
-    fun addUser(userToAdd: String, projectID: Long): Boolean{
-        // TODO: Implement Method
-
-        return false;
+    /**
+     * @param projectID: The id of the project to which the user is to be added
+     * @return Boolean: Did the server call succeed
+     */
+    fun addUser(projectID: Long): Boolean {
+        val authToken: String = userAccount.getToken()
+        return serverManager.addUser(projectID, authToken)
     }
 
-    fun removeUser(userToRemove: String, projectID: Long, user: String): Boolean{
-        // TODO: Implement Method
-
-        return false;
+    /**
+     * @param userToRemove: The id of the user that sould be removed from the project
+     * @param projectID: The id of the project from which the user should be removed
+     * @return Boolean: Did the server call succeed
+     */
+    fun removeUser(userToRemove: String, projectID: Long): Boolean{
+        val authToken: String = userAccount.getToken()
+        return serverManager.removeUser(userToRemove, projectID, authToken)
     }
 
-    // gibt ProjectID zurück
-    fun addProject(user: String): Long{
-        // TODO: Implement Method
-
-        return -1;
+    /**
+     * @return LONG: Returns the id of the created project. Returns -1 if an error occured
+     */
+    fun addProject(): Long{
+        val authToken: String = userAccount.getToken()
+        return serverManager.addProject(authToken)
     }
 
     // -----------------------------DeltaController-------------------------------
     /**
-     * @param projectCommands:Collection<String> ist eine Collection von JSON Dateien
-     * @return Collection<String> ist eine Collection von JSON Dateien, die nicht erfolgreich übertragen worden konnten // TODO: Vllt die returnen, die erfolgreich übertragen worden konnten
+     * @param projectID: The id of the project to which the project command should be added
+     * @param projectCommands: The project commands that should be send to the server (as JSON)
+     * @return Collection<String>: The successfully uploaded project commands (as JSONs) // TODO: ändere dies im Entwurfsdokument
      */
-    fun sendCommandsToServer(projectID: Long, projectCommands: Collection<String>, user: String): Collection<String> {
-        // TODO: Implement Method
-
-        return mutableListOf("");
+    fun sendCommandsToServer(projectID: Long, projectCommands: Collection<String>): Collection<String> {
+        val authToken: String = userAccount.getToken()
+        return serverManager.sendCommandsToServer(projectID, projectCommands, authToken)
     }
 
     /**
-     * @return Collection<String> ist eine Collection von JSON Dateien
+     * @param projectID: The id of the project whose deltas (fetchRequests) you want to load into the FetchRequestQueue
      */
-    fun getDeltasFromServer(projectID: Long, user: String): Collection<String> {
-        // TODO: Implement Method
-
-        return mutableListOf("");
+    fun getDeltasFromServer(projectID: Long): Unit {
+        val authToken: String = userAccount.getToken()
+        return serverManager.getDeltasFromServer(projectID, authToken)
     }
 
     /**
-     * @param projectCommand:String ist eine JSON Dateien
+     * @param projectCommand: The projectCommand that should be uploaded to the server (as JSON)
+     * @param forUser: The id of the user whose fetch request is answered
+     * @param initialAddedDate: // TODO
+     * @param projectID: The id of the project belonging to the project command
+     * @param wasAdmin: Was the user a project administrator when the command was created
+     * @return Boolean: Did the server call succeed
      */
-    fun provideOldData(projectCommand: String, forUser: String, initialAddedDate: LocalDateTime, initialAddedBy: String, projectID: Long, wasAdmin: Boolean) {
-        // TODO: Implement Method
-
-        return;
+    fun provideOldData(projectCommand: String, forUser: String, initialAddedDate: LocalDateTime, initialAddedBy: String, projectID: Long, wasAdmin: Boolean): Boolean {
+        val authToken: String = userAccount.getToken()
+        return serverManager.provideOldData(projectCommand, forUser, initialAddedDate, initialAddedBy, projectID, wasAdmin, authToken)
     }
 
+    /**
+     * @return LocalDateTime: The time how long an project command can remain on the server until it gets deleted by the server
+     */
     fun getRemoveTime(): LocalDateTime {
-        // TODO: Implement Method0
-
-        return LocalDateTime.parse("0000-00-00 00:00");
+        val authToken: String = userAccount.getToken()
+        return serverManager.getRemoveTime(authToken)
     }
 
-    // -----------------------------FetchController-------------------------------
+    // -----------------------------FetchRequestController-------------------------------
     /**
-     * @param requestInfo:String ist eine JSON Datei
+     * @param projectID: The id of the project to which the fetch request should be uploaded
+     * @param requestInfo: The fetch request as JSON
+     * @return Boolean: Did the server call succeed
      */
-    fun demandOldData(user: String, projectID: Long, requestInfo: String) {
-        // TODO: Implement Method
-
-        return;
+    fun demandOldData(projectID: Long, requestInfo: String): Boolean {
+        val authToken: String = userAccount.getToken()
+        return serverManager.demandOldData(projectID, requestInfo, authToken)
     }
 
-    fun getFetchRequests(user: String, projectID: Long){ // TODO: Ausgabe ist im Entwurfsheft Collection<FetchRequest>
-        // TODO: Implement Method
-
-        return;
+    /**
+     * @param projectID: The id of the project from which the fetch requests should be downloaded
+     */
+    fun getFetchRequests(projectID: Long){ // TODO: Ausgabe ist im Entwurfsheft Collection<FetchRequest>
+        val authToken: String = userAccount.getToken()
+        return serverManager.getFetchRequests(projectID, authToken)
     }
 
     // -----------------------------ObserverLogic-------------------------------
+    /**
+     * @param observer: The observer that should be added to the FetchRequestQueue
+     */
     fun addObserverToFetchRequestQueue(observer: FetchRequestQueueObserver) {
         serverManager.addObserverToFetchRequestQueue(observer)
     }
+
+    /**
+     * @param observer: The observer that should be removed from the FetchRequestQueue
+     */
     fun unregisterObserverFromFetchRequestQueue(observer: FetchRequestQueueObserver) {
         serverManager.unregisterObserverFromFetchRequestQueue(observer)
     }
 
-    fun getFetchRequestQueueLength(): Int {
-        return serverManager.getFetchRequestQueueLength()
-    }
-
+    /**
+     * @param observer: The observer that should be added to the ProjectCommandQueue
+     */
     fun addObserverToProjectCommandQueue(observer: ProjectCommandQueueObserver) {
         serverManager.addObserverToProjectCommandQueue(observer)
     }
+
+    /**
+     * @param observer: The observer that should be removed from the ProjectCommandQueue
+     */
     fun unregisterObserverFromProjectCommandQueue(observer: ProjectCommandQueueObserver) {
         serverManager.unregisterObserverFromProjectCommandQueue(observer)
     }
 
+    // QueueLogic
+    /**
+     * @return INT: The length of the FetchRequestQueue
+     */
+    fun getFetchRequestQueueLength(): Int {
+        return serverManager.getFetchRequestQueueLength()
+    }
+
+    /**
+     * @return String: Returns a fetchRequest as JSON if there is one in the queue. (Returns null if the queue is empty)
+     */
+    fun getFetchRequestFromQueue(): FetchRequest? {
+        return serverManager.getFetchRequestFromQueue()
+    }
+
+    /**
+     * @return INT: The length of the ProjectCommandQueue
+     */
     fun getProjectCommandQueueLength(): Int {
         return serverManager.getProjectCommandQueueLength()
+    }
+
+    /**
+     * @return ProjectCommandInfo: Returns a projectCommand as a ProjectCommandInfo Object if there is one in the queue. (Returns null if the queue is empty)
+     */
+    fun getProjectCommandFromQueue(): ProjectCommandInfo? {
+        return serverManager.getProjectCommandFromQueue()
     }
 }

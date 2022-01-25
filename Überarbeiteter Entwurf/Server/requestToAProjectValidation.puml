@@ -1,0 +1,32 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+participant Alice
+
+activate Alice
+
+ref over Alice: LoginValidation
+Alice -> AccessToProjectInterceptor: requestForAProject
+activate AccessToProjectInterceptor
+note over AccessToProjectInterceptor: The AccessToProjectInterceptor interrupts \nthe connection between \nAlice and Controller
+AccessToProjectInterceptor -> ProjectParticipantsRepository: participates(user:String, project: long)
+activate ProjectParticipantsRepository
+alt the user participates
+ProjectParticipantsRepository --> AccessToProjectInterceptor : true
+ref over Alice,AccessToProjectInterceptor,Controller: requestForAProject can be executed
+else the user doesn't participate
+ProjectParticipantsRepository --> AccessToProjectInterceptor : false
+deactivate ProjectParticipantsRepository
+AccessToProjectInterceptor --> Alice!!: rejected
+deactivate AccessToProjectInterceptor
+end else
+deactivate Alice
+
+
+@enduml

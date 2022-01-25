@@ -22,6 +22,7 @@ package com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.fetchRequ
 
 import com.pseandroid2.dailydata.remoteDataSource.queue.FetchRequestQueue
 import com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.UpdatedByObserver_ForTesting
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
 import org.junit.Assert
 import org.junit.Test
 
@@ -39,7 +40,7 @@ class FetchRequestObserverTests_AddOneObserver {
         // Prüfe ob update() bei Observer ausgeführt wird
         Assert.assertEquals(toUpdate.isUpdated(), false)
         Assert.assertEquals(fetchRequestQueue.getQueueLength(), 0)
-        var fetchRequest = "Fetch Request: 1"
+        var fetchRequest = FetchRequest(requestInfo = "Fetch Request: 1")
         fetchRequestQueue.addFetchRequest(fetchRequest)
         Assert.assertEquals(fetchRequestQueue.getQueueLength(), 1)
         Assert.assertEquals(toUpdate.isUpdated(), true)
