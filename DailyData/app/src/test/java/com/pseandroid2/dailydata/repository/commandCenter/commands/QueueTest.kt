@@ -11,11 +11,13 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
-class PublishQueueTest : TestCase() {
-    lateinit var publishQueue: PublishQueue
+class QueueTest : TestCase() {
+    lateinit var remoteDataSourceAPI: RemoteDataSourceAPI
     @Before
     public override fun setUp() {
         super.setUp()
+        remoteDataSourceAPI = mockk<RemoteDataSourceAPI>()
+        every {remoteDataSourceAPI.connectionToServerPossible()} returns true
     }
     @After
     public override fun tearDown() {}
@@ -24,23 +26,25 @@ class PublishQueueTest : TestCase() {
     @InternalCoroutinesApi
     @ExperimentalCoroutinesApi
     @Test
-    fun testGetProjectPreviewFlow() = runTest(){
-        val expected = "Rindfleischettikettierungsüberwachungsaufgabenübertragungsgesetz"
+    fun testStringPublishQueue() = runTest(){
+        queueStringTest("Rindfleischettikettierungsüberwachungsaufgabenübertragungsgesetz", PublishQueue(remoteDataSourceAPI))
+    }
+    @Test
+    fun testStringExecuteQueue() = runTest() {
+        queueStringTest("Ein belegtes Brot mit Schinken", ExecuteQueue(remoteDataSourceAPI))
+    }
+    private suspend fun queueStringTest(expected: String, publishQueue: CommandQueue) {
         val myCommandList = ArrayList<QueueTestCommand>()
         for (i in 1..expected.length) {
             myCommandList.add(QueueTestCommand(expected.substring(i-1,i)))
         }
-        val remoteDataSourceAPI = mockk<RemoteDataSourceAPI>()
-        every {remoteDataSourceAPI.connectionToServerPossible()} returns true
-        publishQueue = PublishQueue(remoteDataSourceAPI)
         for(myCommand in myCommandList) {
             publishQueue.add(myCommand)
         }
-        val oldContent = QueueTestCommand.content
         while(QueueTestCommand.content != expected) {
         }
         assertEquals(expected, QueueTestCommand.content)
-        println(QueueTestCommand.content)
+        QueueTestCommand.content = ""
     }
 }
 class QueueTestCommand(private val concat:String) : ProjectCommand(3) {
@@ -50,5 +54,8 @@ class QueueTestCommand(private val concat:String) : ProjectCommand(3) {
 
     override fun publish() {
         content += concat
+    }
+    override fun execute() {
+        publish()
     }
 }
