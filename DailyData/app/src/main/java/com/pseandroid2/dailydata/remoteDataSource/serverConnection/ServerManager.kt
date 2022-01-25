@@ -101,8 +101,8 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param Collection<String>: The graph templates that belong to the post as JSON
      * @param authToken: The authentication token
      * @return Int: The PostID of the new post. -1 if the call didn't succeed
-     */
-    fun addPost(postPreview: String, projectTemplate: String, graphTemplate: Collection<String>, authToken: String): Int {
+     */// TODO Überarbeite JAVADOC
+    fun addPost(postPreview: String, projectTemplate: Pair<String, String>, graphTemplate: Collection<Pair<String, String>>, authToken: String): Int {
         return restAPI.addPost(postPreview, projectTemplate, graphTemplate, authToken)
     }
 

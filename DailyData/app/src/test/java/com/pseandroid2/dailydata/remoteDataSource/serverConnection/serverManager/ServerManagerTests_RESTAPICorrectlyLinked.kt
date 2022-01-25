@@ -56,7 +56,7 @@ internal class ServerManagerTests_RESTAPICorrectlyLinked {
         every { restAPI.getPostDetail(1,"")} returns postDetailList
         every { restAPI.getProjectTemplate(1, "")} returns "ProjectTemplate"
         every { restAPI.getGraphTemplate(1, 1, "")} returns "GraphTemplate"
-        every { restAPI.addPost("", "", emptyList(), "")} returns 1
+        every { restAPI.addPost("", projectTemplate =  Pair("", ""), graphTemplate = listOf(Pair("", "")), "")} returns 1
         every { restAPI.removePost(1, "")} returns true
         every { restAPI.addUser(1, "")} returns true
         every { restAPI.removeUser("", 1, "")} returns true
@@ -86,7 +86,7 @@ internal class ServerManagerTests_RESTAPICorrectlyLinked {
 
         Assert.assertEquals("GraphTemplate", serverManager.getGraphTemplate(1, 1, ""))
 
-        Assert.assertEquals(1, serverManager.addPost("", "", emptyList(), ""))
+        Assert.assertEquals(1, serverManager.addPost("", projectTemplate =  Pair("", ""), graphTemplate = listOf(Pair("", "")), ""))
 
         Assert.assertTrue(serverManager.removePost(1, ""))
 

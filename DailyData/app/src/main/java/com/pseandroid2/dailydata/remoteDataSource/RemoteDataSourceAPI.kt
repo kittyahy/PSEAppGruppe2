@@ -146,8 +146,8 @@ class RemoteDataSourceAPI @Inject constructor(private val uAccount: UserAccount,
      * @param projectTemplate: The project template that belongs to the post as JSON
      * @param Collection<String>: The graph templates that belong to the post as JSON
      * @return Int: The PostID of the new post. -1 if the call didn't succeed
-     */
-    fun addPost(postPreview: String, projectTemplate: String, graphTemplate: Collection<String>): Int {
+     */// TODO Überarbeite JAVADOC
+    fun addPost(postPreview: String, projectTemplate: Pair<String, String>, graphTemplate: Collection<Pair<String, String>>): Int {
         val authToken: String = userAccount.getToken()
         return serverManager.addPost(postPreview, projectTemplate, graphTemplate, authToken)
     }
@@ -167,7 +167,7 @@ class RemoteDataSourceAPI @Inject constructor(private val uAccount: UserAccount,
      * @param projectID: The id of the project to which the user is to be added
      * @return Boolean: Did the server call succeed
      */
-    fun addUser(projectID: Long): Boolean {
+    fun joinProject(projectID: Long): Boolean {
         val authToken: String = userAccount.getToken()
         return serverManager.addUser(projectID, authToken)
     }
@@ -191,7 +191,8 @@ class RemoteDataSourceAPI @Inject constructor(private val uAccount: UserAccount,
     }
 
     // -----------------------------DeltaController-------------------------------
-    /**
+    /** Sends newly added project commands to the server
+     *
      * @param projectID: The id of the project to which the project command should be added
      * @param projectCommands: The project commands that should be send to the server (as JSON)
      * @return Collection<String>: The successfully uploaded project commands (as JSONs) // TODO: ändere dies im Entwurfsdokument
@@ -202,9 +203,9 @@ class RemoteDataSourceAPI @Inject constructor(private val uAccount: UserAccount,
     }
 
     /**
-     * @param projectID: The id of the project whose deltas (fetchRequests) you want to load into the FetchRequestQueue
+     * @param projectID: The id of the project whose deltas (projectCommands) you want to load into the ProjectCommandQueue
      */
-    fun getDeltasFromServer(projectID: Long): Unit {
+    fun getProjectCommandsFromServer(projectID: Long): Unit {
         val authToken: String = userAccount.getToken()
         return serverManager.getDeltasFromServer(projectID, authToken)
     }

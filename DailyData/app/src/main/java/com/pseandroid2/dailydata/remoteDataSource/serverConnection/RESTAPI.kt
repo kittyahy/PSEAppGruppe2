@@ -129,8 +129,8 @@ class RESTAPI {
      * @param Collection<String>: The graph templates that belong to the post as JSON
      * @param authToken: The authentication token
      * @return Int: The PostID of the new post. -1 if the call didn't succeed
-     */
-    fun addPost (postPreview: String, projectTemplate: String, graphTemplate: Collection<String>, authToken: String): Int {
+     */// TODO Überarbeite JAVADOC
+    fun addPost (postPreview: String, projectTemplate: Pair<String, String>, graphTemplate: Collection<Pair<String, String>>, authToken: String): Int {
         val params: AddPostParameter = AddPostParameter(postPreview, projectTemplate, graphTemplate)
         val call: Call<Int> = server.addPost(authToken, params)
 
