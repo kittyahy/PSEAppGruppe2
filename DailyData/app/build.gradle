@@ -67,6 +67,7 @@ android {
 }
 dependencies {
 
+    implementation 'androidx.test:rules:1.4.0'
     def roomVersion = "2.4.1"
 
     implementation 'com.google.android.gms:play-services-maps:18.0.2'
@@ -147,5 +148,7 @@ dependencies {
     implementation 'com.android.support:multidex:2.0.1'
 
     //MPAndroidCharts
-    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    implementation 'com.github.PhilJay:MPAndroidChart:3.1.0'
+
+    debugImplementation("androidx.compose.ui:ui-test-manifest:$compose_version")
 }
