@@ -21,8 +21,8 @@
 package com.pseandroid2.dailydata.remoteDataSource.userManager
 
 /**
- * @return true: alles ist wie geplant verlaufen (kein Fehler)
- *         false: etwas ist schief gelaufen
+ * @return true: The operation succeeded as planned - No error happened
+ *         false: something went wrong
  */
 enum class FirebaseReturnOptions (val success: Boolean){
     REGISTERED(true),
@@ -32,6 +32,7 @@ enum class FirebaseReturnOptions (val success: Boolean){
     SINGED_IN(true),
     SIGN_IN_FAILED(false),
     SINGED_OUT(true),
+    WRONG_INPUT_PARAMETERS(false),
 
-    NOT_PROCCESSED(false) // Wenn die Firebaseanfrage noch nicht fertig ist
+    TIMEOUT(false) // Firebase took to long to process the request
 }

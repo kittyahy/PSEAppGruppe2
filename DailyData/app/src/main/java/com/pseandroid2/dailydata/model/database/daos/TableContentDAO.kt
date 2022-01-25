@@ -35,6 +35,7 @@ import kotlinx.coroutines.flow.map
 @Dao
 abstract class TableContentDAO {
     fun getRowsById(id: Int): Flow<List<Row>> {
+        @Suppress("Deprecation")
         return getRowEntitiesById(id).map {
             val list: MutableList<Row> = ArrayList()
             for (entity: RowEntity in it) {
@@ -44,32 +45,51 @@ abstract class TableContentDAO {
         }
     }
 
-    fun insertRow(row: Row, projectId: Int) {
+    suspend fun insertRow(row: Row, projectId: Int) {
+        @Suppress("Deprecation")
         insertRowEntity(row.toRowEntity(projectId))
     }
 
-    fun deleteRows(projectId: Int, vararg rows: Row) {
+    suspend fun deleteRows(projectId: Int, vararg rows: Row) {
         for (row: Row in rows) {
+            @Suppress("Deprecation")
             deleteRowEntities(row.toRowEntity(projectId))
         }
     }
 
-    fun changeRows(projectId: Int, vararg rows: Row) {
+    suspend fun changeRows(projectId: Int, vararg rows: Row) {
         for (row: Row in rows) {
+            @Suppress("Deprecation")
             changeRowEntities(row.toRowEntity(projectId))
         }
     }
 
     /*========================SHOULD ONLY BE CALLED FROM INSIDE THE MODEL=========================*/
+    @Deprecated(
+        "Shouldn't be used outside the Model, use insertRow instead",
+        ReplaceWith("insertRow()")
+    )
     @Insert
-    abstract fun insertRowEntity(row: RowEntity)
+    abstract suspend fun insertRowEntity(row: RowEntity)
 
+    @Deprecated(
+        "Shouldn't be used outside the Model, use getRowsById instead",
+        ReplaceWith("getRowsById()")
+    )
     @Query("SELECT * FROM `row` WHERE projectId = :id")
     abstract fun getRowEntitiesById(id: Int): Flow<List<RowEntity>>
 
+    @Deprecated(
+        "Shouldn't be used outside the Model, use deleteRows instead",
+        ReplaceWith("deleteRows()")
+    )
     @Delete
-    abstract fun deleteRowEntities(vararg rows: RowEntity)
+    abstract suspend fun deleteRowEntities(vararg rows: RowEntity)
 
+    @Deprecated(
+        "Shouldn't be used outside the Model, use changeRows instead",
+        ReplaceWith("changeRows()")
+    )
     @Update
-    abstract fun changeRowEntities(vararg rows: RowEntity)
+    abstract suspend fun changeRowEntities(vararg rows: RowEntity)
 }

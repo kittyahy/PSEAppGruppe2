@@ -23,13 +23,11 @@ package com.pseandroid2.dailydata.model.database.entities
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.pseandroid2.dailydata.model.User
+import com.pseandroid2.dailydata.model.users.User
 
-@Entity(tableName = "project")
+@Entity(tableName = "project", primaryKeys = ["id"])
 data class ProjectEntity(
-    @PrimaryKey val id: Int,
     @Embedded val skeleton: ProjectSkeletonEntity,
-    val admin: User,
-    val onlineId: Long
+    val admin: User
 ) {
 }

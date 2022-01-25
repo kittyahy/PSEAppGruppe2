@@ -20,19 +20,23 @@
 
 package com.pseandroid2.dailydata.remoteDataSource.queue.queueLogic.projectCommand
 
+import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandInfo
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueue
 import org.junit.Assert
 import org.junit.Test
+import java.time.LocalDateTime
 
 class projectCommandQueueTests_SaveTenProjectCommand {
     @Test
     fun saveOneProjectCommand() {
         val projectCommandQueue = ProjectCommandQueue()
 
-        val projectCommands: MutableList<String> = mutableListOf<String>()
+        val projectCommands: MutableList<ProjectCommandInfo> = mutableListOf<ProjectCommandInfo>()
         for (idx in 1..10) {
-            projectCommands.add("projectCommand$idx")
-            projectCommandQueue.addProjectCommand("projectCommand$idx")
+            val projectCommand: ProjectCommandInfo = ProjectCommandInfo(projectCommand = idx.toString())
+
+            projectCommands.add(projectCommand)
+            projectCommandQueue.addProjectCommand(projectCommand)
         }
 
         Assert.assertEquals(projectCommandQueue.getQueueLength(), 10)

@@ -46,7 +46,7 @@ abstract class NotificationsDAO {
         }
     }
 
-    fun insertNotification(projectId: Int, notification: Notification): Int {
+    suspend fun insertNotification(projectId: Int, notification: Notification): Int {
         val id = getNextId(projectId)
         insertNotificationEntity(
             NotificationEntity(
@@ -59,25 +59,27 @@ abstract class NotificationsDAO {
         return id
     }
 
-    fun deleteNotification(projectId: Int, notification: Notification) {
-
-    }
+    @Query("DELETE FROM notification WHERE projectId = :projectId AND id IN (:ids)")
+    abstract suspend fun deleteNotification(projectId: Int, vararg ids: Int)
 
     @Query(
         "UPDATE notification SET message = :message " +
                 "WHERE projectId = :projectId AND id = :id"
     )
-    abstract fun setNotificationMessage(projectId: Int, id: Integer, message: String)
+    abstract suspend fun setNotificationMessage(projectId: Int, id: Int, message: String)
 
     /*========================SHOULD ONLY BE CALLED FROM INSIDE THE MODEL=========================*/
     @Query("SELECT * FROM notification WHERE projectId = :projectId")
     abstract fun getNotificationEntities(projectId: Int): Flow<List<NotificationEntity>>
 
     @Insert
-    abstract fun insertNotificationEntity(notificationEntity: NotificationEntity)
+    abstract suspend fun insertNotificationEntity(notificationEntity: NotificationEntity)
 
     @Delete
-    abstract fun deleteNotificationEntity(notificationEntity: NotificationEntity)
+    abstract suspend fun deleteNotificationEntity(notificationEntity: NotificationEntity)
+
+    @Query("DELETE FROM notification WHERE projectId = :projectId")
+    abstract suspend fun deleteAllNotifications(projectId: Int)
 
     private fun getNextId(projectId: Int): Int {
         //Get the List of existing Ids for the project

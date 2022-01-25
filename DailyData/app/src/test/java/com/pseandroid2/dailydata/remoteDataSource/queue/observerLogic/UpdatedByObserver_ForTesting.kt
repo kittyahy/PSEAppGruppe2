@@ -20,13 +20,17 @@
 
 package com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic
 
+// Eine Hilfsmethode, die das Testen von Observern ermöglicht
 class UpdatedByObserver_ForTesting {
     private var updated: Int = 0
 
     fun update() {
-        ++updated;
+        ++updated
     }
 
+    /**
+     * @return Boolean: True, wenn es schon vom Observer geupdated wurde, sonst false
+     */
     fun isUpdated(): Boolean {
         if (updated == 0) {
             return  false
@@ -34,6 +38,9 @@ class UpdatedByObserver_ForTesting {
         return true
     }
 
+    /**
+     * @return Int: Wie oft dieses Objekt vom Observer geupdated wurde
+     */
     fun getUpdated(): Int {
         return updated
     }

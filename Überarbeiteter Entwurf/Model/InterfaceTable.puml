@@ -1,0 +1,23 @@
+@startuml
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+hide circle
+
+interface Table <<interface>> {
+        +getCell(Integer, Integer): Any
+        +getLayout(): TableLayout
+        +getSize(): Integer
+        ..Row Operations..
+        +getRow(Integer): Row
+        +addRow(Row) throws IllegalTypeException
+        +deleteRow(Integer)
+        ..Column Operations..
+        +getColumn(Integer): List<Any>
+        +addColumn(Class<Any>)
+        +deleteColumn(Integer)
+    }
+
+@enduml

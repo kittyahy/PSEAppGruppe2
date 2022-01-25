@@ -23,7 +23,7 @@ package com.pseandroid2.dailydata.model.database.entities
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.pseandroid2.dailydata.model.GraphType
-import com.pseandroid2.dailydata.model.User
+import com.pseandroid2.dailydata.model.users.User
 
 @Entity(tableName = "graphTemplate")
 data class GraphTemplateEntity(
@@ -32,5 +32,5 @@ data class GraphTemplateEntity(
     val description: String,
     val type: GraphType,
     val createdBy: User,
-    val onlineId: String
+    val onlineId: Long
 )
