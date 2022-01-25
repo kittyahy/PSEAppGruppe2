@@ -97,13 +97,13 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
     // Wish-criteria
     /**
      * @param postPreview: The preview of the post that should be added
-     * @param projectTemplate: The project template that belongs to the post as JSON
-     * @param Collection<String>: The graph templates that belong to the post as JSON
+     * @param projectTemplate: The project template pair as a pair of the project template and the project template preview
+     * @param graphTemplates: The graph templates as Collection of pairs of graph templates as JSONs and the graph template previews
      * @param authToken: The authentication token
-     * @return Int: The PostID of the new post. -1 if the call didn't succeed
-     */// TODO Überarbeite JAVADOC
-    fun addPost(postPreview: String, projectTemplate: Pair<String, String>, graphTemplate: Collection<Pair<String, String>>, authToken: String): Int {
-        return restAPI.addPost(postPreview, projectTemplate, graphTemplate, authToken)
+     * @return Int: The PostID of the new post. -1 if the call didn't succeed, 0 if the user reached his limit of uploaded posts.
+     */
+    fun addPost(postPreview: String, projectTemplate: Pair<String, String>, graphTemplates: Collection<Pair<String, String>>, authToken: String): Int {
+        return restAPI.addPost(postPreview, projectTemplate, graphTemplates, authToken)
     }
 
     // Wish-criteria

@@ -23,19 +23,22 @@ package com.pseandroid2.dailydata.remoteDataSource
 import com.pseandroid2.dailydata.remoteDataSource.queue.FetchRequestQueueObserver
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandInfo
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueueObserver
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.PostPreview
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.TemplateDetail
+import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
 import com.pseandroid2.dailydata.remoteDataSource.userManager.SignInTypes
 import com.pseandroid2.dailydata.remoteDataSource.userManager.UserAccount
 import java.time.LocalDateTime
 import javax.inject.Inject
 
-class RemoteDataSourceAPI @Inject constructor(private val uAccount: UserAccount, private val sManager: ServerManager)  {
-    private val userAccount: UserAccount = uAccount
-    private val serverManager: ServerManager = sManager
+class RemoteDataSourceAPI @Inject constructor(private val uAccount: UserAccount?, private val sManager: ServerManager?)  {
+    // Allows to call the RemoteDataSource also without dependency injection (so that the Repository don't have to know the underlying classes of the RemoteDataSource)
+    private val userAccount: UserAccount = uAccount ?: UserAccount(FirebaseManager())
+    private val serverManager: ServerManager = sManager ?: ServerManager(RESTAPI())
 
 // -----------------------------FireBase-------------------------------
     // -----------------------------UserAccount-------------------------------
@@ -143,13 +146,13 @@ class RemoteDataSourceAPI @Inject constructor(private val uAccount: UserAccount,
     // Wish-criteria
     /**
      * @param postPreview: The preview of the post that should be added
-     * @param projectTemplate: The project template that belongs to the post as JSON
-     * @param Collection<String>: The graph templates that belong to the post as JSON
-     * @return Int: The PostID of the new post. -1 if the call didn't succeed
+     * @param projectTemplate: The project template pair as a pair of the project template and the project template preview
+     * @param graphTemplates: The graph templates as Collection of pairs of graph templates as JSONs and the graph template previews
+     * @return Int: The PostID of the new post. -1 if the call didn't succeed, 0 if the user reached his limit of uploaded posts.
      */// TODO Überarbeite JAVADOC
-    fun addPost(postPreview: String, projectTemplate: Pair<String, String>, graphTemplate: Collection<Pair<String, String>>): Int {
+    fun addPost(postPreview: String, projectTemplate: Pair<String, String>, graphTemplates: Collection<Pair<String, String>>): Int {
         val authToken: String = userAccount.getToken()
-        return serverManager.addPost(postPreview, projectTemplate, graphTemplate, authToken)
+        return serverManager.addPost(postPreview, projectTemplate, graphTemplates, authToken)
     }
 
     // Wish-criteria

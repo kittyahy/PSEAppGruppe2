@@ -6,6 +6,7 @@ import org.junit.Assert
 import org.junit.Test
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
+import com.pseandroid2.dailydata.util.ui.Post
 import org.junit.Before
 
 class RESTAPITests_PostsController {
@@ -40,7 +41,8 @@ class RESTAPITests_PostsController {
 
     @Test
     fun addAndRemovePost() {
-        val postID: Int = restAPI.addPost("", Pair("", ""), listOf(Pair("", "")), authToken)
+        val postID: Int = restAPI.addPost("postPreview", Pair("projectTemplate", "projectTemplatePreview"),
+            listOf(Pair("graphTemplate", "graphTemplatePreview")), authToken)
         Assert.assertNotEquals(-1, postID)
 
         Assert.assertTrue(restAPI.removePost(postID, authToken))
