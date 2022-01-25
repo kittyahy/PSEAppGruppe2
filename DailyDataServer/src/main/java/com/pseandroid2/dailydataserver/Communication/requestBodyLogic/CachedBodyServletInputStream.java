@@ -29,11 +29,11 @@ import java.io.InputStream;
 /**
  * #TODO official Test
  */
-
+/*
 /**
  * Used to read the body input stream, which comes from the Client.
  * Saves the inputStream to reuse it.
- */
+ *
 public class CachedBodyServletInputStream extends ServletInputStream {
     private InputStream bodyInputStream;
 
@@ -41,7 +41,7 @@ public class CachedBodyServletInputStream extends ServletInputStream {
      * Constructor
      *
      * @param body the bytearray which is going to be an InputStream
-     */
+     *
     public CachedBodyServletInputStream(byte[] body) {
         this.bodyInputStream = new ByteArrayInputStream(body);
     }
@@ -72,4 +72,5 @@ public class CachedBodyServletInputStream extends ServletInputStream {
     public int read() throws IOException {
         return bodyInputStream.read();
     }
-}
+
+}*/
