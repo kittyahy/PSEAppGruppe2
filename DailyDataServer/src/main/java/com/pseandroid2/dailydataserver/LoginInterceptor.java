@@ -59,7 +59,12 @@ public class LoginInterceptor implements HandlerInterceptor {
         // return decodedToken.getUid();
 */
 
-        String name = "Ella"; // firebasetoken.getUid(); Bitte austauschen, sobald firebase steht.
+
+        String name = request.getHeader("name"); //zum Testen, falls man verschiedene Leute brauchts
+        if( name == null){
+            name = "";
+        }
+        // firebasetoken.getUid(); Bitte austauschen, sobald firebase steht.
         request.setAttribute("user", name);
         return HandlerInterceptor.super.preHandle(request, response, handler);
 

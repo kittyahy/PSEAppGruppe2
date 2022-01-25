@@ -23,7 +23,6 @@ import com.pseandroid2.dailydataserver.postDatabase.requestparameters.AddPostPar
 import org.springframework.data.util.Pair;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 
 /**
  * Controller to know if the server is available.
