@@ -94,6 +94,7 @@ class ProjectCDManager(
      * @param project The project that is to be deleted
      */
     suspend fun deleteProject(project: Project) = db.withTransaction {
+        @Suppress("Deprecation")
         val id = project.getProjectSkeleton().id
         @Suppress("Deprecation")
         graphDAO.deleteAllGraphs(id)
@@ -114,6 +115,8 @@ class ProjectCDManager(
      */
     suspend fun insertProjectTemplate(template: ProjectTemplate): Int {
         val newId = getNextId()
+
+        @Suppress("Deprecation")
         val skeleton =
             createSkeleton(newId, template.getProjectSkeleton(), template.getTableLayout())
         val ent = ProjectTemplateEntity(skeleton, template.getCreator())
