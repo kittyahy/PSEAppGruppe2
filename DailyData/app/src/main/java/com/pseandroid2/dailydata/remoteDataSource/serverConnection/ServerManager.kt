@@ -29,14 +29,10 @@ import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.PostPreview
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.TemplateDetail
-import com.pseandroid2.dailydata.util.ui.Template
-
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-
 import java.time.LocalDateTime
 import javax.inject.Inject
 
@@ -181,11 +177,11 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param projectID: The id of the project whose deltas (projectCommands) you want to load into the FetchRequestQueue
      * @param authToken: The authentication token
      */
-    fun getDeltasFromServer(projectID: Long, authToken: String): Unit {
+    fun getDeltasFromServer(projectID: Long, authToken: String) {
         val receivedProjectCommands: Collection<Delta> = restAPI.getDelta(projectID, authToken)
         receivedProjectCommands.forEach {
             // Transform Delta into an Project Command
-            val queueElement: ProjectCommandInfo = ProjectCommandInfo(wentOnline = it.addedToServer,
+            val queueElement = ProjectCommandInfo(wentOnline = it.addedToServer,
                 commandByUser =  it.user, isProjectAdmin = it.isAdmin, projectCommand = it.projectCommand)
             projectCommandQueue.addProjectCommand(queueElement)
         }

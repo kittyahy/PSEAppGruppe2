@@ -90,11 +90,13 @@ internal class SendCommandsToServerInParallel {
     @Test
     fun sendTenCommands() {
         var commandsToSend = validCommands.toMutableList()
-        val commandsSend = serverManager.sendCommandsToServer(1, listOf(), "")
+        val commandsSend = serverManager.sendCommandsToServer(1, commandsToSend, "")
+        Assert.assertEquals(10, commandsSend.size)
         commandsSend.forEach() {
-           Assert.assertTrue(commandsToSend.remove(it))
+            Assert.assertTrue(commandsToSend.remove(it))
+            // Log.d("DEBUGParallel", it)
         }
-        Assert.assertTrue(commandsSend.isEmpty())
+        Assert.assertTrue(commandsToSend.isEmpty())
     }
 
     @Test
