@@ -55,8 +55,9 @@ public class AccessToProjectInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String user = (String) request.getAttribute("user");
         Map pathVariables = (Map) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
-        long projectId = (long) pathVariables.get("id");
 
+        String projectIDString = pathVariables.get("id").toString();
+        long projectId = Long.parseLong(projectIDString);
         if (!repo.existsById(new ProjectParticipantsID(user, projectId))) {
             return false;
         }

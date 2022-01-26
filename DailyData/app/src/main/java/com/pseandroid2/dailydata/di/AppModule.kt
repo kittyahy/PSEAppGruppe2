@@ -20,10 +20,15 @@
 
 package com.pseandroid2.dailydata.di
 
+import com.pseandroid2.dailydata.model.database.AppDataBase
+import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
+import com.pseandroid2.dailydata.remoteDataSource.userManager.UserAccount
+import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Inject
 import javax.inject.Singleton
 
 @Module
@@ -34,5 +39,20 @@ object AppModule {
     @Singleton
     fun provideRepository() : Repository {
         return Repository()
+    }
+    @Provides
+    @Singleton
+    fun provideAppDatabase() : AppDataBase {
+        return AppDataBase.getInstance(TODO())
+    }
+    @Provides
+    @Singleton
+    fun provideRemoteDataSourceAPI(): RemoteDataSourceAPI {
+        return RemoteDataSourceAPI(TODO(), TODO())
+    }
+    @Provides
+    @Singleton
+    fun provideRepositoryViewModelAPI(): RepositoryViewModelAPI {
+        return RepositoryViewModelAPI(provideAppDatabase(), provideRemoteDataSourceAPI())
     }
 }
