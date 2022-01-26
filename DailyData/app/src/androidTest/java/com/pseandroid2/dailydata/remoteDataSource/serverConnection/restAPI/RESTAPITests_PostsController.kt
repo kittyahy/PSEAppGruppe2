@@ -51,4 +51,11 @@ class RESTAPITests_PostsController {
         Assert.assertTrue(restAPI.removePost(postID, authToken))
         */
     }
+
+    @Test
+    fun AuthTest() {
+        val postID: Int = restAPI.addPost("post preview", "project template",
+            listOf("graph template"), authToken)
+        restAPI.removePost(postID, authToken)
+    }
 }

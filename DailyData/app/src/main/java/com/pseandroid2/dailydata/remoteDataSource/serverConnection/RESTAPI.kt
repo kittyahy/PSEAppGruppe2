@@ -43,7 +43,8 @@ import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns
 
 
 class RESTAPI {
-    private var baseUrl: String = "http://261ee33a-ba27-4828-b5df-f5f8718defe8.ka.bw-cloud-instance.org:8080" // The URL from our server
+    //private var baseUrl: String = "http://261ee33a-ba27-4828-b5df-f5f8718defe8.ka.bw-cloud-instance.org:8080" // The URL from our server
+    private var baseUrl: String = "http://192.168.178.28:8080" // The URL from our server
 
     private val gson: Gson = GsonBuilder()
         .setLenient()
