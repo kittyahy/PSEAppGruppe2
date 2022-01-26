@@ -6,11 +6,13 @@ import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+@Slf4j
 @Component
 public class FirebaseManager {
     private FirebaseOptions firebaseOptions;
@@ -38,6 +40,7 @@ public class FirebaseManager {
 
         try {
             FirebaseToken firebaseToken = FirebaseAuth.getInstance().verifyIdToken(authToken);
+            log.info(firebaseToken.getEmail());
             return firebaseToken.getUid();
         } catch (FirebaseAuthException e) {
             e.printStackTrace();

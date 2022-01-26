@@ -48,8 +48,8 @@ class RESTAPITests_PostsController {
 
     @Test
     fun AuthTest() {
-        val postID: Int = restAPI.addPost("post preview", "project template",
-            listOf("graph template"), authToken)
+        val postID: Int = restAPI.addPost("postPreviewTest", Pair("projectTemplate", "projectTemplatePreview"),
+            listOf(Pair("graphTemplate", "graphTemplatePreview")), authToken)
         restAPI.removePost(postID, authToken)
     }
 }
