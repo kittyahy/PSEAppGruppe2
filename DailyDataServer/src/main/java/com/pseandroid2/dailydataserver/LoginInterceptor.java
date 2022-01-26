@@ -20,6 +20,7 @@
 package com.pseandroid2.dailydataserver;
 
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -41,13 +42,41 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-    // Firebase token authentication
-    FirebaseManager firebaseManager = new FirebaseManager();
-    String userID = firebaseManager.getUserIDFromToken(firebaseToken);
+        String token = request.getHeader("token"); //da der Token jetzt in den Header kommt.
+        // Firebase auth
 
-    // Update attribute with the computed UserID
-    request.setAttribute("name", userID);
-    
-    return HandlerInterceptor.super.preHandle(request, response, handler);
+        /*
+        String token = null;
+        String auth
+                = request.getHeader("Authorization");
+
+        // System.out.println(auth);
+        if(StringUtils.hasText(auth)&&auth.startsWith("Bearer ")){
+            token = auth.substring(7);
+        }
+        // FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(token);
+        // System.out.println(decodedToken.getUid());
+        // return decodedToken.getUid();
+        */
+
+        /*
+            // Firebase token authentication
+            FirebaseManager firebaseManager = new FirebaseManager();
+            String userID = firebaseManager.getUserIDFromToken(firebaseToken);
+
+            // Update attribute with the computed UserID
+            request.setAttribute("name", userID);
+            
+            return HandlerInterceptor.super.preHandle(request, response, handler);
+        */
+
+        String name = request.getHeader("name"); //zum Testen, falls man verschiedene Leute brauchts
+        if( name == null){
+            name = "";
+        }
+        // firebasetoken.getUid(); Bitte austauschen, sobald firebase steht.
+        request.setAttribute("user", name);
+        return HandlerInterceptor.super.preHandle(request, response, handler);
+
     }
 }

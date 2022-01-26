@@ -22,6 +22,10 @@ package com.pseandroid2.dailydata.repository.viewModelAPI
 
 
 import com.pseandroid2.dailydata.model.database.AppDataBase
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Button
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Column
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Notification
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectFlow
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectPreviewFlow
@@ -33,7 +37,7 @@ class ProjectHandler (val projectPreviewFlow: ProjectPreviewFlow, private val ap
     fun getProjectByID(id: Long) : Flow<Project> {
         return ProjectFlow(appDataBase, id.toInt()).getProjectFlow()
     }
-    fun newProject() : Project{
+    fun newProject(name: String, description: String, wallpaper: Int, table: List<Column>, buttons: List<Button>, notification: List<Notification>, graphs: List<Graph>) : Project{
         return TODO()
     }
 }

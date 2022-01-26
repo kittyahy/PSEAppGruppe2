@@ -37,7 +37,7 @@ import java.io.InputStreamReader;
 
 /**
  * Wrapper for the RequestBody to read it multible times.
- */
+ *
 public class BodyServletRequestWrapper extends HttpServletRequestWrapper {
 
     private byte[] body;
@@ -60,4 +60,4 @@ public class BodyServletRequestWrapper extends HttpServletRequestWrapper {
 
         return new BufferedReader(new InputStreamReader(byteInputStream));
     }
-}
+}*/
