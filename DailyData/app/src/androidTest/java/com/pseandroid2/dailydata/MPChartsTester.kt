@@ -4,16 +4,20 @@ package com.pseandroid2.dailydata
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Environment
 import android.util.Log
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -38,6 +42,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
+import org.junit.Assert.assertEquals
 import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Rule
@@ -54,8 +59,8 @@ class MPChartsTester {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-//    @get:Rule
-//    val permissionsRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE)!!
+    @get:Rule
+    val permissionsRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE)!!
 
     @ExperimentalCoroutinesApi
     @Before
@@ -97,9 +102,18 @@ class MPChartsTester {
 
                 val file = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "Test")
                 if (!file.exists() && !file.mkdirs()) {
-                    Log.e("XXX", "Failed to get directory ${file.absolutePath}")
+                    Log.e("XXX", "Directories don't exist and couldn't be created")
                     fail()
                 }
+                Log.d("XXX", "Path should be: ${file.absolutePath}")
+                Log.d(
+                    "XXX", "Path is: ${Environment.getExternalStorageDirectory().path}${
+                        file.absolutePath.substring(
+                            Environment.getExternalStorageDirectory().path.length,
+                            file.absolutePath.length
+                        )
+                    }"
+                )
 
                 if (ContextCompat.checkSelfPermission(
                         context,
@@ -112,12 +126,39 @@ class MPChartsTester {
                     Log.d("XXX", "dir: ${file.absolutePath}")
                     Log.d("XXX", "width: ${lineChart.width}, height: ${lineChart.height}")
                     Log.d("XXX", "dir2: ${Environment.getExternalStorageDirectory().path}")
-                    val success = lineChart.saveToPath("TestLine", "")
+                    assertEquals(
+                        file.absolutePath,
+                        Environment.getExternalStorageDirectory().path + file.absolutePath.substring(
+                            Environment.getExternalStorageDirectory().path.length,
+                            file.absolutePath.length
+                        )
+                    )
+                    val success = lineChart.saveToPath(
+                        "TestLine",
+                        file.absolutePath.substring(
+                            Environment.getExternalStorageDirectory().path.length,
+                            file.absolutePath.length
+                        )
+                    )
                     Log.d("XXX", "success: $success")
                     if (!success) {
                         fail()
                     }
                 }
+            }
+        }
+    }
+
+    @Test
+    fun testRead() {
+        runBlocking {
+            launch(Dispatchers.Main) {
+                val file = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "Test")
+                val bitmap = BitmapFactory.decodeFile(file.absolutePath + "/TestLine.png")
+                composeTestRule.setContent {
+                    TestComp2(bitmap = bitmap)
+                }
+                delay(10000)
             }
         }
     }
@@ -136,5 +177,13 @@ class MPChartsTester {
                     .height(300.dp)
             )
         }
+    }
+
+    @Composable
+    fun TestComp2(bitmap: Bitmap) {
+        Image(
+            bitmap = bitmap.asImageBitmap(),
+            contentDescription = "Test Bitmap display"
+        )
     }
 }
