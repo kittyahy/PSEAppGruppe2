@@ -1,5 +1,6 @@
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI
 
+import android.util.Log
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.PostPreview
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.TemplateDetail
@@ -11,6 +12,7 @@ import com.pseandroid2.dailydata.util.ui.Post
 import org.junit.AfterClass
 import org.junit.Before
 import java.lang.Exception
+import java.net.IDN
 
 class RESTAPITests_PostsController_PostContent {
 
@@ -30,17 +32,33 @@ class RESTAPITests_PostsController_PostContent {
         Assert.assertEquals(FirebaseReturnOptions.SINGED_IN, fm.signInWithEmailAndPassword(email, password))
         authToken = fm.getToken()
 
-        postID = restAPI.addPost("postPreview", Pair("projectTemplate", "projectTemplatePreview"),
+        postID = restAPI.addPost("postPreview1", Pair("projectTemplate", "projectTemplatePreview"),
             listOf(Pair("graphTemplate", "graphTemplatePreview")), authToken)
+
         Assert.assertNotEquals(-1, postID)
+
+
+        // Set Values in companion object for correct teardown
+        Log.d("Teardown", "Setup")
+        setTeardown(restAPI, postID, authToken)
     }
 
-    /* TODO: Implement
-    @AfterClass
-    fun cleanUp() {
-        Assert.assertTrue(restAPI.removePost(postID, authToken))
+    companion object Teardown{
+        private var restAPI: RESTAPI? = null
+        private var postID: Int = -1
+        private var authToken: String = ""
+
+        fun setTeardown(restapi: RESTAPI, postID: Int, authToken: String) {
+            restAPI = restapi
+            this.postID = postID
+            this.authToken = authToken
+        }
+
+        @AfterClass @JvmStatic fun teardown() {
+            Assert.assertTrue(restAPI!!.removePost(postID, authToken))
+            Log.d("Teardown", "Complete")
+        }
     }
-    */
 
 
     @Test

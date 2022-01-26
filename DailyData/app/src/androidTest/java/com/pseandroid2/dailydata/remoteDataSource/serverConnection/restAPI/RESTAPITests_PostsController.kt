@@ -36,12 +36,11 @@ class RESTAPITests_PostsController {
         }
 
         Assert.assertNotEquals(null, postPreviews.elementAt(0))
-
     }
 
     @Test
     fun addAndRemovePost() {
-        val postID: Int = restAPI.addPost("postPreview", Pair("projectTemplate", "projectTemplatePreview"),
+        val postID: Int = restAPI.addPost("postPreviewTest", Pair("projectTemplate", "projectTemplatePreview"),
             listOf(Pair("graphTemplate", "graphTemplatePreview")), authToken)
         Assert.assertNotEquals(-1, postID)
 
