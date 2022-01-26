@@ -24,13 +24,16 @@ import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.model.table.Table
 import com.pseandroid2.dailydata.model.users.NullUser
 
-class SimpleProject(
+class SimpleProject
+@Deprecated("Directly constructing a project is Deprecated, Use ProjectBuilder instead")
+constructor(
     private val skeleton: ProjectSkeleton,
-    private val table: Table,
-    private val admin: User = NullUser(),
-    private val isOnline: Boolean = false,
-    private val users: List<User>
+    override var table: Table,
+    override var admin: User = NullUser(),
+    override var isOnline: Boolean = false,
+    private val userList: MutableList<User>
 ) : Project {
+
     init {
         if (isOnline && admin is NullUser) {
             throw IllegalArgumentException("Online Projects must have an admin!")
@@ -39,13 +42,10 @@ class SimpleProject(
 
     override fun getProjectSkeleton() = skeleton
 
-    override fun getTable() = table
-
-    override fun getAdmin() = admin
-
-    override fun isOnline() = isOnline
-
-    override fun getUsers() = users.toList()
+    override fun getUsers() = userList.toList()
+    override fun addUsers(users: Collection<User>) {
+        userList.addAll(users)
+    }
 
     override fun createTransformationFromString(transformationString: String): Project.DataTransformation<out Any> {
         TODO("Not yet implemented")
