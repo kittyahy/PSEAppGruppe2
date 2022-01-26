@@ -30,7 +30,7 @@ class Column (
         TODO("Not yet implemented")
     }
 
-    override fun delete() {
+    override suspend fun delete() {
         TODO("Not yet implemented")
     }
 }

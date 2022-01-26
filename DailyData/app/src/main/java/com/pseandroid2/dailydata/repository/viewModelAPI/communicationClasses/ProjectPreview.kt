@@ -29,7 +29,7 @@ class ProjectPreview(
 ): Identifiable {
     constructor(projectData: ProjectData) : this(projectData.id.toLong(), projectData.name, projectData.wallpaper)
     //@throws IllegalOperationException
-    override fun delete() {
+    override suspend fun delete() {
         TODO("Not yet implemented")
     }
 

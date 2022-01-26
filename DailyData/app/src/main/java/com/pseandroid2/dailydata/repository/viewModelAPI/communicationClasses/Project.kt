@@ -93,7 +93,7 @@ class Project(
     }
 
     //@throws IllegalOperationException
-    override fun delete() {
+    override suspend fun delete() {
         TODO("Not yet implemented")
     }
     //@throws IllegalOperationException

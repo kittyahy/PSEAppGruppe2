@@ -24,5 +24,5 @@ interface Identifiable {
     val id: Long
     fun deleteIsPossible(): Boolean
     //@throws IllegalOperationException
-    fun delete()
+    suspend fun delete()
 }

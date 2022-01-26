@@ -27,7 +27,7 @@ class Row(
     override fun deleteIsPossible(): Boolean {
         TODO("Not yet implemented")
     }
-    override fun delete() {
+    override suspend fun delete() {
         TODO("Not yet implemented")
     }
     //@throws IllegalOperationException
