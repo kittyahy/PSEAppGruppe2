@@ -153,9 +153,12 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      */
     fun sendCommandsToServer(projectID: Long, projectCommands: Collection<String>, authToken: String): Collection<String> {
         val successfullyUploaded: MutableList<String> = mutableListOf()
-        //TODO: Write proper tests for this
 
-        val jobs: MutableList<Job> = mutableListOf<Job>()
+        if (projectCommands.isEmpty()){
+            return successfullyUploaded
+        }
+
+        val jobs: MutableList<Job> = mutableListOf()
         runBlocking { // this: CoroutineScope TODO: Test if this is ok
             projectCommands.forEach { // Calls saveDelta in parallel
                 // Send each project command in parallel

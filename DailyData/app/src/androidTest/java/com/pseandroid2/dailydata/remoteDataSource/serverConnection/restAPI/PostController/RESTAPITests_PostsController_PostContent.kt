@@ -1,4 +1,4 @@
-package com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI
+package com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI.PostController
 
 import android.util.Log
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
@@ -8,11 +8,8 @@ import org.junit.Assert
 import org.junit.Test
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
-import com.pseandroid2.dailydata.util.ui.Post
 import org.junit.AfterClass
 import org.junit.Before
-import java.lang.Exception
-import java.net.IDN
 
 class RESTAPITests_PostsController_PostContent {
 
@@ -50,8 +47,8 @@ class RESTAPITests_PostsController_PostContent {
 
         fun setTeardown(restapi: RESTAPI, postID: Int, authToken: String) {
             restAPI = restapi
-            this.postID = postID
-            this.authToken = authToken
+            Teardown.postID = postID
+            Teardown.authToken = authToken
         }
 
         @AfterClass @JvmStatic fun teardown() {
@@ -73,12 +70,19 @@ class RESTAPITests_PostsController_PostContent {
     @Test
     fun getProjectTemplate() {
         val projectTemplate: String = restAPI.getProjectTemplate(postID, authToken)
-        Assert.assertNotEquals("", projectTemplate)
+        Assert.assertEquals("projectTemplate", projectTemplate)
     }
 
     @Test
     fun getGraphTemplate() {
         val graphTemplate: String = restAPI.getGraphTemplate(postID, 1, authToken)
-        Assert.assertNotEquals("", graphTemplate)
+        Assert.assertEquals("graphTemplate", graphTemplate)
+    }
+
+    @Test
+    fun getFromWrongPostID() {
+        Assert.assertEquals(emptyList<TemplateDetail>(), restAPI.getPostDetail(-1, authToken) as List<TemplateDetail>)
+        Assert.assertEquals("", restAPI.getProjectTemplate(-1, authToken))
+        Assert.assertEquals("", restAPI.getGraphTemplate(-1, 1, authToken))
     }
 }

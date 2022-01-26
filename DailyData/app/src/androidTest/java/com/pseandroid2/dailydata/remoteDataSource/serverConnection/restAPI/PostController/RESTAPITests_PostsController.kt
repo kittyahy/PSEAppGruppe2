@@ -1,4 +1,4 @@
-package com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI
+package com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI.PostController
 
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.PostPreview
@@ -6,7 +6,6 @@ import org.junit.Assert
 import org.junit.Test
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
-import com.pseandroid2.dailydata.util.ui.Post
 import org.junit.Before
 
 class RESTAPITests_PostsController {

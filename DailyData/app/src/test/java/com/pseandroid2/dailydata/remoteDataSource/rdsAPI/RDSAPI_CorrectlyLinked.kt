@@ -40,7 +40,7 @@ class RDSAPI_CorrectlyLinked {
         every { serverManager.getPostDetail(1,"")} returns postDetailList
         every { serverManager.getProjectTemplate(1, "")} returns "ProjectTemplate"
         every { serverManager.getGraphTemplate(1, 1, "")} returns "GraphTemplate"
-        every { serverManager.addPost("", projectTemplate =  Pair("", ""), graphTemplate = listOf(Pair("", "")), "")} returns 1
+        every { serverManager.addPost("", projectTemplate =  Pair("", ""), graphTemplates = listOf(Pair("", "")), "")} returns 1
         every { serverManager.removePost(1, "")} returns true
         every { serverManager.addUser(1, "")} returns true
         every { serverManager.removeUser("", 1, "")} returns true
