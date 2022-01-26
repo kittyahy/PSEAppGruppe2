@@ -54,10 +54,10 @@ class QueueTest : TestCase() {
 class QueueTestCommand(private val concat:String) : ProjectCommand(3) {
     companion object {var content: String = ""}
 
-    override fun publish() {
+    override suspend fun publish() {
         content += concat
     }
-    override fun execute() {
+    override suspend fun execute() {
         publish()
     }
 }

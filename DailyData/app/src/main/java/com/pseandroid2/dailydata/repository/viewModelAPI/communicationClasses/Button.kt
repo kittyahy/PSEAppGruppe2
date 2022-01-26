@@ -20,12 +20,22 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
+import com.pseandroid2.dailydata.model.uielements.UIElement
+import com.pseandroid2.dailydata.model.uielements.UIElementType
+
 class Button(
     override val id: Long,
     val name: String,
     val columnId: Long,
     val value: Int
-): Identifiable {
+) : Identifiable {
+    constructor(uiElement: UIElement) : this(
+        uiElement.id.toLong(),
+        TODO(),
+        TODO(),
+        uiElement.state.toInt()
+    )
+
     override fun deleteIsPossible(): Boolean {
         TODO("Not yet implemented")
     }
@@ -33,5 +43,13 @@ class Button(
     //@throws IllegalOperationException
     override fun delete() {
         TODO("Not yet implemented")
+    }
+
+    fun toDBEquivalent(): UIElement {
+        return UIElement(
+            id.toInt(),
+            UIElementType.BUTTON,
+            value.toString()
+        )
     }
 }

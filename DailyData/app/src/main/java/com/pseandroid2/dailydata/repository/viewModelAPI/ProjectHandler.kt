@@ -33,11 +33,23 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 
 @InternalCoroutinesApi
-class ProjectHandler (val projectPreviewFlow: ProjectPreviewFlow, private val appDataBase: AppDataBase){
-    fun getProjectByID(id: Long) : Flow<Project> {
+class ProjectHandler(
+    val projectPreviewFlow: ProjectPreviewFlow,
+    private val appDataBase: AppDataBase
+) {
+    fun getProjectByID(id: Long): Flow<Project> {
         return ProjectFlow(appDataBase, id.toInt()).getProjectFlow()
     }
-    fun newProject(name: String, description: String, wallpaper: Int, table: List<Column>, buttons: List<Button>, notification: List<Notification>, graphs: List<Graph>) : Project{
+
+    fun newProject(
+        name: String,
+        description: String,
+        wallpaper: Int,
+        table: List<Column>,
+        buttons: List<Button>,
+        notification: List<Notification>,
+        graphs: List<Graph>
+    ): Project {
         return TODO()
     }
 }

@@ -19,7 +19,7 @@ class CommandWrapperTest : TestCase() {
 
 class TestCommand(projectID: Int) : ProjectCommand(projectID) {
 
-    override fun execute() {
+    override suspend fun execute() {
         projectID *= 2
     }
 }
