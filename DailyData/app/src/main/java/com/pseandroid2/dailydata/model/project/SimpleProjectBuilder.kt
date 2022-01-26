@@ -31,42 +31,42 @@ class SimpleProjectBuilder : ProjectBuilder<SimpleProject> {
     }
 
     override fun setId(id: Int): ProjectBuilder<SimpleProject> {
-        project.getProjectSkeleton().id = id
+        project.id = id
         return this
     }
 
     override fun setOnlineId(id: Long): ProjectBuilder<SimpleProject> {
-        project.getProjectSkeleton().onlineId = id
+        project.onlineId = id
         return this
     }
 
     override fun setName(name: String): ProjectBuilder<SimpleProject> {
-        project.getProjectSkeleton().name = name
+        project.name = name
         return this
     }
 
     override fun setDescription(desc: String): ProjectBuilder<SimpleProject> {
-        project.getProjectSkeleton().desc = desc
+        project.desc = desc
         return this
     }
 
     override fun setPath(path: String): ProjectBuilder<SimpleProject> {
-        project.getProjectSkeleton().path = path
+        project.path = path
         return this
     }
 
     override fun addGraphs(graphs: List<Graph>): ProjectBuilder<SimpleProject> {
-        project.getProjectSkeleton().addGraphs(graphs)
+        project.addGraphs(graphs)
         return this
     }
 
     override fun addSettings(settings: Settings): ProjectBuilder<SimpleProject> {
-        project.getProjectSkeleton().addProjectSettings(settings)
+        project.addSettings(settings)
         return this
     }
 
     override fun addNotifications(notifications: List<Notification>): ProjectBuilder<SimpleProject> {
-        project.getProjectSkeleton().addNotifications(notifications)
+        project.addNotifications(notifications)
         return this
     }
 

@@ -8,15 +8,11 @@ class SimpleProjectTemplate(
     private val layout: TableLayout,
     private val creator: User
 ) : ProjectTemplate {
-    override fun getProjectSkeleton(): ProjectSkeleton {
-        return skeleton
-    }
+    @Suppress("Deprecation")
+    @Deprecated("Properties of Project should be accessed directly, access via Skeleton is deprecated")
+    override fun getProjectSkeleton() = skeleton
 
-    override fun getTableLayout(): TableLayout {
-        return layout
-    }
+    override fun getTableLayout() = layout
 
-    override fun getCreator(): User {
-        return creator
-    }
+    override fun getCreator() = creator
 }

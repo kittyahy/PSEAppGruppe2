@@ -37,9 +37,67 @@ interface Project {
     /**
      * @return The ProjectSkeleton of this Project
      */
+    @Deprecated("Properties of Project should be accessed directly, access via Skeleton is deprecated")
     fun getProjectSkeleton(): ProjectSkeleton
 
-    fun getId() = getProjectSkeleton().id
+    var id: Int
+        set(value) {
+            @Suppress("Deprecation")
+            getProjectSkeleton().id = value
+        }
+        @Suppress("Deprecation")
+        get() = getProjectSkeleton().id
+
+    var onlineId: Long
+        set(value) {
+            @Suppress("Deprecation")
+            getProjectSkeleton().onlineId = value
+        }
+        @Suppress("Deprecation")
+        get() = getProjectSkeleton().onlineId
+
+    var name: String
+        set(value) {
+            @Suppress("Deprecation")
+            getProjectSkeleton().name = value
+        }
+        @Suppress("Deprecation")
+        get() = getProjectSkeleton().name
+
+    var desc: String
+        set(value) {
+            @Suppress("Deprecation")
+            getProjectSkeleton().desc = value
+        }
+        @Suppress("Deprecation")
+        get() = getProjectSkeleton().desc
+
+    var path: String
+        set(value) {
+            @Suppress("Deprecation")
+            getProjectSkeleton().path = value
+        }
+        @Suppress("Deprecation")
+        get() = getProjectSkeleton().path
+
+    @Suppress("Deprecation")
+    fun getGraphs() = getProjectSkeleton().getGraphs()
+
+    @Suppress("Deprecation")
+    fun addGraphs(graphs: Collection<Graph>) = getProjectSkeleton().addGraphs(graphs)
+
+    @Suppress("Deprecation")
+    fun getSettings() = getProjectSkeleton().getProjectSettings()
+
+    @Suppress("Deprecation")
+    fun addSettings(settings: Settings) = getProjectSkeleton().addProjectSettings(settings)
+
+    @Suppress("Deprecation")
+    fun getNotifications() = getProjectSkeleton().getNotifications()
+
+    @Suppress("Deprecation")
+    fun addNotifications(notifications: Collection<Notification>) =
+        getProjectSkeleton().addNotifications(notifications)
 
     var table: Table
 
@@ -107,8 +165,67 @@ interface ProjectSkeleton {
 }
 
 interface ProjectTemplate {
-
+    @Deprecated("Properties of Project should be accessed directly, access via Skeleton is deprecated")
     fun getProjectSkeleton(): ProjectSkeleton
+
+    var id: Int
+        set(value) {
+            @Suppress("Deprecation")
+            getProjectSkeleton().id = value
+        }
+        @Suppress("Deprecation")
+        get() = getProjectSkeleton().id
+
+    var onlineId: Long
+        set(value) {
+            @Suppress("Deprecation")
+            getProjectSkeleton().onlineId = value
+        }
+        @Suppress("Deprecation")
+        get() = getProjectSkeleton().onlineId
+
+    var name: String
+        set(value) {
+            @Suppress("Deprecation")
+            getProjectSkeleton().name = value
+        }
+        @Suppress("Deprecation")
+        get() = getProjectSkeleton().name
+
+    var desc: String
+        set(value) {
+            @Suppress("Deprecation")
+            getProjectSkeleton().desc = value
+        }
+        @Suppress("Deprecation")
+        get() = getProjectSkeleton().desc
+
+    var path: String
+        set(value) {
+            @Suppress("Deprecation")
+            getProjectSkeleton().path = value
+        }
+        @Suppress("Deprecation")
+        get() = getProjectSkeleton().path
+
+    @Suppress("Deprecation")
+    fun getGraphs() = getProjectSkeleton().getGraphs()
+
+    @Suppress("Deprecation")
+    fun addGraphs(graphs: Collection<Graph>) = getProjectSkeleton().addGraphs(graphs)
+
+    @Suppress("Deprecation")
+    fun getSettings() = getProjectSkeleton().getProjectSettings()
+
+    @Suppress("Deprecation")
+    fun addSettings(settings: Settings) = getProjectSkeleton().addProjectSettings(settings)
+
+    @Suppress("Deprecation")
+    fun getNotifications() = getProjectSkeleton().getNotifications()
+
+    @Suppress("Deprecation")
+    fun addNotifications(notifications: Collection<Notification>) =
+        getProjectSkeleton().addNotifications(notifications)
 
     fun getTableLayout(): TableLayout
 
