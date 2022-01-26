@@ -22,7 +22,7 @@ package com.pseandroid2.dailydata.model
 
 import com.pseandroid2.dailydata.exceptions.SettingNotFoundException
 
-class MapSettings(settings: Map<String, String>) : Settings {
+class MapSettings(settings: Map<String, String> = mapOf()) : Settings {
     private val settings = settings.toMutableMap()
 
     @Suppress("OverridingDeprecatedMember")
@@ -32,6 +32,10 @@ class MapSettings(settings: Map<String, String>) : Settings {
 
     override fun get(key: String): String {
         return settings[key] ?: throw SettingNotFoundException()
+    }
+
+    override fun set(key: String, value: String) {
+        settings[key] = value
     }
 
     override fun iterator(): Iterator<Pair<String, String>> = MapSettingsIterator(this)
