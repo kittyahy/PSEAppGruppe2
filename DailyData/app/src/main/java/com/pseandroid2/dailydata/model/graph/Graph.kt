@@ -20,6 +20,7 @@
 
 package com.pseandroid2.dailydata.model.graph
 
+import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import com.github.mikephil.charting.data.DataSet
 import com.github.mikephil.charting.data.Entry
@@ -34,7 +35,7 @@ interface Graph<T : DataSet<S>, S : Entry> {
 
     fun getCustomizing(): Settings
 
-    fun getImage(): Drawable?
+    fun getImage(): Bitmap?
 
     fun getPath(): String?
 
