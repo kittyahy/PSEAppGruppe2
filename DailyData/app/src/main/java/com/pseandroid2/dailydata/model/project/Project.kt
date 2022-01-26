@@ -39,13 +39,16 @@ interface Project {
      */
     fun getProjectSkeleton(): ProjectSkeleton
 
-    fun getTable(): Table
+    fun getId() = getProjectSkeleton().id
 
-    fun getAdmin(): User
+    var table: Table
 
-    fun isOnline(): Boolean
+    var admin: User
+
+    var isOnline: Boolean
 
     fun getUsers(): Collection<User>
+    fun addUsers(users: Collection<User>)
 
     fun createTransformationFromString(transformationString: String): DataTransformation<out Any>
 
@@ -82,20 +85,24 @@ interface ProjectSkeleton {
 
     var id: Int
 
-    fun getOnlineId(): Long
+    var onlineId: Long
 
-    fun getName(): String
+    var name: String
 
-    fun getDescription(): String
+    var desc: String
 
     fun getWallpaper(): Drawable
-    fun getWallpaperPath(): String
+
+    var path: String
 
     fun getGraphs(): Collection<Graph>
+    fun addGraphs(graphs: Collection<Graph>)
 
     fun getProjectSettings(): Settings
+    fun addProjectSettings(settings: Settings)
 
     fun getNotifications(): Collection<Notification>
+    fun addNotifications(notifications: Collection<Notification>)
 
 }
 
