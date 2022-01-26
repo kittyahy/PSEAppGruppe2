@@ -1,8 +1,8 @@
 package com.pseandroid2.dailydata.model.project
 
 import com.pseandroid2.dailydata.model.Graph
-import com.pseandroid2.dailydata.model.MapSettings
-import com.pseandroid2.dailydata.model.Settings
+import com.pseandroid2.dailydata.model.settings.MapSettings
+import com.pseandroid2.dailydata.model.settings.Settings
 import com.pseandroid2.dailydata.model.notifications.Notification
 import com.pseandroid2.dailydata.model.table.ArrayListLayout
 import com.pseandroid2.dailydata.model.table.ArrayListTable
