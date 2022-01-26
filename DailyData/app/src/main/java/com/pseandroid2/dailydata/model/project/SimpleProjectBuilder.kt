@@ -1,0 +1,104 @@
+package com.pseandroid2.dailydata.model.project
+
+import com.pseandroid2.dailydata.model.Graph
+import com.pseandroid2.dailydata.model.MapSettings
+import com.pseandroid2.dailydata.model.Settings
+import com.pseandroid2.dailydata.model.notifications.Notification
+import com.pseandroid2.dailydata.model.table.ArrayListLayout
+import com.pseandroid2.dailydata.model.table.ArrayListTable
+import com.pseandroid2.dailydata.model.table.Table
+import com.pseandroid2.dailydata.model.users.NullUser
+import com.pseandroid2.dailydata.model.users.User
+import java.lang.IllegalArgumentException
+
+class SimpleProjectBuilder : ProjectBuilder<SimpleProject> {
+    @Suppress("Deprecation")
+    private var project =
+        SimpleProject(
+            SimpleSkeleton(0, 0, "", "", "", mutableListOf(), MapSettings(), mutableListOf()),
+            ArrayListTable(ArrayListLayout()),
+            userList = mutableListOf()
+        )
+
+    override fun reset(id: Int): ProjectBuilder<SimpleProject> {
+        @Suppress("Deprecation")
+        project = SimpleProject(
+            SimpleSkeleton(id, 0, "", "", "", mutableListOf(), MapSettings(), mutableListOf()),
+            ArrayListTable(ArrayListLayout()),
+            userList = mutableListOf()
+        )
+        return this
+    }
+
+    override fun setId(id: Int): ProjectBuilder<SimpleProject> {
+        project.getProjectSkeleton().id = id
+        return this
+    }
+
+    override fun setOnlineId(id: Long): ProjectBuilder<SimpleProject> {
+        project.getProjectSkeleton().onlineId = id
+        return this
+    }
+
+    override fun setName(name: String): ProjectBuilder<SimpleProject> {
+        project.getProjectSkeleton().name = name
+        return this
+    }
+
+    override fun setDescription(desc: String): ProjectBuilder<SimpleProject> {
+        project.getProjectSkeleton().desc = desc
+        return this
+    }
+
+    override fun setPath(path: String): ProjectBuilder<SimpleProject> {
+        project.getProjectSkeleton().path = path
+        return this
+    }
+
+    override fun addGraphs(graphs: List<Graph>): ProjectBuilder<SimpleProject> {
+        project.getProjectSkeleton().addGraphs(graphs)
+        return this
+    }
+
+    override fun addSettings(settings: Settings): ProjectBuilder<SimpleProject> {
+        project.getProjectSkeleton().addProjectSettings(settings)
+        return this
+    }
+
+    override fun addNotifications(notifications: List<Notification>): ProjectBuilder<SimpleProject> {
+        project.getProjectSkeleton().addNotifications(notifications)
+        return this
+    }
+
+    override fun addTable(table: Table): ProjectBuilder<SimpleProject> {
+        project.table = table
+        return this
+    }
+
+    override fun setOnlineProperties(
+        admin: User?,
+        isOnline: Boolean
+    ): ProjectBuilder<SimpleProject> {
+        if (admin != null) {
+            project.isOnline = isOnline
+            project.admin = admin
+        } else {
+            if (isOnline) {
+                throw IllegalArgumentException("Online Projects must have an Admin!")
+            }
+            project.admin = NullUser()
+        }
+        return this
+    }
+
+    override fun addUsers(users: List<User>): ProjectBuilder<SimpleProject> {
+        project.addUsers(users)
+        return this
+    }
+
+    override fun build(): SimpleProject {
+        val ret = project
+        reset(0)
+        return ret
+    }
+}
