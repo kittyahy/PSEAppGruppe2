@@ -18,16 +18,19 @@
 
 */
 
-package com.pseandroid2.dailydata.model
+package com.pseandroid2.dailydata.model.graph
 
 import android.graphics.drawable.Drawable
+import com.github.mikephil.charting.data.DataSet
+import com.github.mikephil.charting.data.Entry
+import com.pseandroid2.dailydata.model.Settings
 import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.users.User
 
-interface Graph {
+interface Graph<T : DataSet<S>, S : Entry> {
     var id: Int
 
-    fun getDataSets(): List<List<Any>>
+    fun getDataSets(): List<T>
 
     fun getCustomizing(): Settings
 
