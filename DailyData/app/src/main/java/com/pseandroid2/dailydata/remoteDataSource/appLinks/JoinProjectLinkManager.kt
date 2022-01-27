@@ -7,8 +7,10 @@ class JoinProjectLinkManager {
     private val hashids = Hashids("dasSicherstePasswortDerWelt", 4)
 
     /**
-     * // TODO
-     *  @return returns the link. If error returns ""
+     *  Creates a link that has the encrypted project id embedded
+     *
+     *  @param postID: The postID that should be embedded into the link
+     *  @return Returns the link. If error returns ""
      */
     fun createLink(postID: Long): String {
         val encodedLong = encodeLong(postID)
@@ -33,6 +35,12 @@ class JoinProjectLinkManager {
         }
     }
 
+    /**
+     * decodes the postID
+     *
+     * @param postIDToDecode: The postID that should be decoded
+     * @return Long: The decoded postID. Returns -1 if an error occurred
+     */
     fun decodePostID(postIDToDecode: String): Long {
         try {
             val decoded = hashids.decode(postIDToDecode)

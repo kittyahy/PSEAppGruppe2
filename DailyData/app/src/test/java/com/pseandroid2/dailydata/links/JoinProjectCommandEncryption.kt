@@ -63,7 +63,7 @@ class JoinProjectCommandEncryption {
 
     @Test
     fun decryptEmptyProjectID() {
-        Assert.assertEquals(-1, joinProjectLinkManager.decodePostID("IchbinUngueltig"))
+        Assert.assertEquals(-1, joinProjectLinkManager.decodePostID(""))
     }
 
     @Test
