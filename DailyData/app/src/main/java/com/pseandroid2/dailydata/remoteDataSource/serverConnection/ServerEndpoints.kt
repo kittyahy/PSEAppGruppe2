@@ -88,7 +88,7 @@ interface ServerEndpoints
     // DeltaController
     @POST("OnlineDatabase/Delta"+"/save/{projectId}")
     suspend fun saveDelta(@Header("token") token: String, @Path("projectId") projectId: Long,
-                  @Body saveDeltaParameter: SaveDeltaParameter): Call<Boolean>
+                  @Body saveDeltaParameter: SaveDeltaParameter): Boolean
 
     @GET("OnlineDatabase/Delta"+"/get/{projectId}")
     fun getDelta(@Header("token") token: String, @Path("projectID") projectId: Long): Call<Collection<Delta>>

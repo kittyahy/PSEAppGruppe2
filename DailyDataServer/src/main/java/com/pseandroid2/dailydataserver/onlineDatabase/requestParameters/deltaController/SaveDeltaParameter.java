@@ -33,7 +33,6 @@ public class SaveDeltaParameter{
     /**
      * The parameters for saveDeltas. Constructor.
      *
-     * @param token   the token to verify the user (provided by the user)
      * @param command the command which should be saved (provided by the user)
      */
     public SaveDeltaParameter(String command) {

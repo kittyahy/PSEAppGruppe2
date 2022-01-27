@@ -22,7 +22,12 @@ package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
 import android.graphics.drawable.Drawable
 
-interface Graph: Identifiable{
-    override val id: Long
-    val image: Drawable
+abstract class Graph: Identifiable{
+    companion object { val availableGraphs: MutableList<String> = ArrayList<String>()}
+    init {
+        availableGraphs.add(typeName)
+    }
+    abstract override val id: Int
+    abstract val image: Drawable
+    abstract val typeName: String
 }

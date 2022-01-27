@@ -49,7 +49,7 @@ class FirebaseManager {
      * Creates a new firebase authentication Token
      */
     private fun refreshIdToken() {
-        val user: FirebaseUser? = auth.currentUser // TODO continue here
+        val user: FirebaseUser? = auth.currentUser
         if (user == null) {
             idToken = ""
             return
@@ -66,14 +66,10 @@ class FirebaseManager {
             if (task.result != null) {
                 idToken = task.result.token ?: ""
             }
-
-            // TODO: Send token to your backend via HTTPS
-            // ...
         } else {
-
-            // TODO: Handle error -> task.getException();
+            Log.e("FirebaseTokenRefresh", "tokenRefreshError")
         }
-        Log.d("FirebaseTokenRefresh", "refreshedToken " + idToken)
+        Log.d("FirebaseTokenRefresh", "refreshedToken $idToken")
     }
 
     /**
@@ -86,6 +82,7 @@ class FirebaseManager {
         }
 
         var returnParameter: FirebaseReturnOptions = FirebaseReturnOptions.TIMEOUT
+
 
         val task = auth.createUserWithEmailAndPassword(email, password);
 

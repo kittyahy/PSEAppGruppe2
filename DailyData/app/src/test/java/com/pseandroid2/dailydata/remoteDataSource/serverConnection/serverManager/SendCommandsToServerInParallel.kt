@@ -94,7 +94,7 @@ internal class SendCommandsToServerInParallel {
         Assert.assertEquals(10, commandsSend.size)
         commandsSend.forEach() {
             Assert.assertTrue(commandsToSend.remove(it))
-            // Log.d("DEBUGParallel", it)
+            Log.d("DEBUGParallel", it)
         }
         Assert.assertTrue(commandsToSend.isEmpty())
     }

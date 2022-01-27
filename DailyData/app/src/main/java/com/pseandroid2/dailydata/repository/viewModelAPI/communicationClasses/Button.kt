@@ -20,18 +20,45 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
+import com.pseandroid2.dailydata.model.uielements.UIElement
+import com.pseandroid2.dailydata.model.uielements.UIElementType
+
 class Button(
-    override val id: Long,
+    override val id: Int,
     val name: String,
-    val columnId: Long,
+    val columnId: Int,
     val value: Int
-): Identifiable {
+) : Identifiable {
+    constructor(uiElement: UIElement, columnId: Int) : this(
+        uiElement.id,
+        TODO(),
+        columnId,
+        uiElement.state.toInt()
+    )
+
     override fun deleteIsPossible(): Boolean {
         TODO("Not yet implemented")
     }
 
     //@throws IllegalOperationException
-    override fun delete() {
+    override suspend fun delete() {
         TODO("Not yet implemented")
+    }
+
+    fun toDBEquivalent(): UIElement {
+        return UIElement(
+            id,
+            UIElementType.BUTTON,
+            value.toString()
+        )
+    }
+    fun increaseValue() {
+        setValue(value + 1)
+    }
+    fun decreaseValue() {
+        setValue(value - 1)
+    }
+    fun setValue(value: Int) {
+        TODO()
     }
 }

@@ -1,6 +1,9 @@
 package com.pseandroid2.dailydata.repository.commandCenter.commands
-
+/*
 import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
+import com.pseandroid2.dailydata.repository.commandCenter.CommandQueue
+import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
+import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
 import io.mockk.every
 import io.mockk.mockk
 import junit.framework.TestCase
@@ -51,10 +54,10 @@ class QueueTest : TestCase() {
 class QueueTestCommand(private val concat:String) : ProjectCommand(3) {
     companion object {var content: String = ""}
 
-    override fun publish() {
+    override suspend fun publish() {
         content += concat
     }
-    override fun execute() {
+    override suspend fun execute() {
         publish()
     }
-}
+}*/ //TODO wieder rein oder ganz raus

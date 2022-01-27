@@ -38,6 +38,8 @@ import com.google.gson.GsonBuilder
 import com.google.gson.Gson
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.PostPreview
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.TemplateDetail
+import kotlinx.coroutines.runBlocking
+import java.util.concurrent.CompletableFuture
 
 /**
  * Carries out all calls to our server
@@ -197,12 +199,10 @@ class RESTAPI {
      * @param authToken: The authentication token
      * @return Boolean: True if uploaded successfully, otherwise false
      */
-    suspend fun saveDelta(projectID: Long, projectCommand: String, authToken: String): Boolean {
+    suspend fun saveDelta(projectID: Long, projectCommand: String, authToken: String):Boolean {
         val params = SaveDeltaParameter(projectCommand)
 
-        val call: Call<Boolean> = server.saveDelta(authToken, projectID, params)
-
-        return call.execute().body() ?: false
+        return server.saveDelta(authToken, projectID, params)
     }
 
     /**
