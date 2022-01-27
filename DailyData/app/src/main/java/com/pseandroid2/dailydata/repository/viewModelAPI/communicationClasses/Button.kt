@@ -29,10 +29,10 @@ class Button(
     val columnId: Long,
     val value: Int
 ) : Identifiable {
-    constructor(uiElement: UIElement) : this(
+    constructor(uiElement: UIElement, columnId: Long) : this(
         uiElement.id.toLong(),
         TODO(),
-        TODO(),
+        columnId,
         uiElement.state.toInt()
     )
 
