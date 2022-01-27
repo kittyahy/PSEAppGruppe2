@@ -22,6 +22,7 @@ package com.pseandroid2.dailydataserver.onlineDatabase;
 import com.pseandroid2.dailydataserver.onlineDatabase.DeltaDB.Delta;
 import com.pseandroid2.dailydataserver.onlineDatabase.requestParameters.deltaController.ProvideOldDataParameter;
 import com.pseandroid2.dailydataserver.onlineDatabase.requestParameters.deltaController.SaveDeltaParameter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -43,6 +44,12 @@ import java.util.List;
 @RequestMapping("/OnlineDatabase/Delta")
 public class DeltaController {
 
+    @Autowired
+    private final DeltaOrganisationService service;
+
+    public DeltaController(DeltaOrganisationService service){
+        this.service = service;
+    }
     /**
      * creates a new delta for a project to save one command.
      *
@@ -54,20 +61,7 @@ public class DeltaController {
     @PostMapping("/save/{id}")
     public boolean saveDelta(@PathVariable("id") long projectId, @RequestAttribute String user,
                              @RequestBody SaveDeltaParameter params) {
-        /*
-        - aufräumen
-        Überprüfungen:
-        - <128 delta hochgeladen
-        - projectCommand < 1 Kb
-        - ist noch genug platz um das delta zu speichern?
-            - wenn nein, wird ein Delta, welches am weitesten zurück liegt gelöscht.
-        Dann:
-        - neues Delta erstellen, dafür:
-        - erstellzeitpunkt generieren
-        - idAdmin aus projectParticipant speichern
-        - delta erstellen
-        */
-        return true;
+        return service.saveDelta(projectId,user, params.getCommand());
     }
 
     /**

@@ -22,6 +22,18 @@ package com.pseandroid2.dailydataserver.onlineDatabase.DeltaDB;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Repository
 public interface DeltaRepository extends JpaRepository<Delta, DeltaID> {
+
+    long countByUserAndAddedToServerIsAfter(String user, LocalDateTime addedToServer);
+
+    List<Delta> findByProjectAndDownloadedBy_UserIsNotAndRequestedByEquals(long project, String user, String requestedBy);
+
+    List<Delta> findByRequestedByAndProject(String requestedBy, long project);
+
+
+
 }

@@ -72,7 +72,7 @@ class ProjectCDManager (
             notif.id = newNotifId
         }
 
-        val layout: TableLayout = project.getTable().getLayout()
+        val layout: TableLayout = project.table.getLayout()
         for (col: Int in 0 until layout.getSize()) {
             for (uiElement: UIElement in layout.getUIElements(col)) {
                 val newUiId: Int = uiDAO.insertUIElement(newID, col, uiElement)
@@ -139,18 +139,18 @@ class ProjectCDManager (
         skeleton: ProjectSkeleton,
         layout: TableLayout
     ): ProjectSkeletonEntity {
-        val name: String = skeleton.getName()
-        val desc: String = skeleton.getDescription()
-        val wallpaper: String = skeleton.getWallpaperPath()
-        val onlineId: Long = skeleton.getOnlineId()
+        val name: String = skeleton.name
+        val desc: String = skeleton.desc
+        val wallpaper: String = skeleton.path
+        val onlineId: Long = skeleton.onlineId
         return ProjectSkeletonEntity(id, name, desc, wallpaper, layout.toJSON(), onlineId)
     }
 
     private suspend fun insertProjectEntity(project: Project): Int {
         val id = getNextId()
         val skeleton: ProjectSkeletonEntity =
-            createSkeleton(id, project.getProjectSkeleton(), project.getTable().getLayout())
-        val admin: User = project.getAdmin()
+            createSkeleton(id, project.getProjectSkeleton(), project.table.getLayout())
+        val admin: User = project.admin
         val entity = ProjectEntity(skeleton, admin)
 
         projectDAO.insertProjectEntity(entity)
