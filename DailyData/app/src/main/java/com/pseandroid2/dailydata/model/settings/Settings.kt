@@ -18,35 +18,15 @@
 
 */
 
-package com.pseandroid2.dailydata.remoteDataSource.userManager.firebaseManager
+package com.pseandroid2.dailydata.model.settings
 
+interface Settings : Iterable<Pair<String, String>> {
 
-import android.util.Log
-import org.junit.Assert
-import org.junit.Test
+    @Deprecated("Should not be used outside the model. Use get or iterate over Settings directly")
+    fun getAllSettings(): Map<String, String>
 
-class RegisterUserWithEmailAndPasswordUnitTest {
+    operator fun get(key: String): String
 
-    @Test
-    fun registerUser() {
-        Assert.assertTrue(true)
+    operator fun set(key: String, value: String)
 
-        Log.d("registration Test1","RegistrationTest 1")
-
-        //var email = "ufjqw@student.kit.edu"
-        //var password = "PSEistsuper"
-
-        // var fm = FirebaseManager()
-
-        Log.d("registration Test1","RegistrationTest 2")
-
-        Assert.assertTrue(true)
-
-        /*
-        val returnParameter = fm.registerUserWithEmailAndPassword(email, password)
-
-        Assert.assertEquals(FirebaseReturnOptions.REGISTERED, returnParameter)
-
-         */
-    }
 }

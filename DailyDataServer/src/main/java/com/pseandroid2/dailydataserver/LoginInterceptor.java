@@ -19,7 +19,10 @@
 */
 package com.pseandroid2.dailydataserver;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,17 +39,22 @@ import javax.servlet.http.HttpServletResponse;
  * The authentication works with firebase. The user name ist the uid from firebase.
  */
 @Component
+@Slf4j
 public class LoginInterceptor implements HandlerInterceptor {
+
+    @Autowired
+    private FirebaseManager firebaseManager;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-
         String token = request.getHeader("token"); //da der Token jetzt in den Header kommt.
-        // Firebase auth
 
-        String name = "Ella"; // firebasetoken.getUid(); Bitte austauschen, sobald firebase steht.
-        request.setAttribute("user", name);
+        // Firebase token authentication
+        String userID = firebaseManager.getUserIDFromToken(token);
+        log.info(userID);
+        // Update attribute with the computed UserID
+        request.setAttribute("name", userID);
+
         return HandlerInterceptor.super.preHandle(request, response, handler);
-
     }
 }

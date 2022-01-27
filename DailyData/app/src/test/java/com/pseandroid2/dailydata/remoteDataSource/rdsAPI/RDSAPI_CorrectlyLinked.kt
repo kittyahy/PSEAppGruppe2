@@ -40,7 +40,7 @@ class RDSAPI_CorrectlyLinked {
         every { serverManager.getPostDetail(1,"")} returns postDetailList
         every { serverManager.getProjectTemplate(1, "")} returns "ProjectTemplate"
         every { serverManager.getGraphTemplate(1, 1, "")} returns "GraphTemplate"
-        every { serverManager.addPost("", "", emptyList(), "")} returns 1
+        every { serverManager.addPost("", projectTemplate =  Pair("", ""), graphTemplates = listOf(Pair("", "")), "")} returns 1
         every { serverManager.removePost(1, "")} returns true
         every { serverManager.addUser(1, "")} returns true
         every { serverManager.removeUser("", 1, "")} returns true
@@ -73,9 +73,9 @@ class RDSAPI_CorrectlyLinked {
         Assert.assertEquals(postDetailList.elementAt(0), rdsAPI.getPostDetail(1).elementAt(0))
         Assert.assertEquals("ProjectTemplate", rdsAPI.getProjectTemplate(1))
         Assert.assertEquals("GraphTemplate", rdsAPI.getGraphTemplate(1, 1))
-        Assert.assertEquals(1, rdsAPI.addPost("", "", emptyList()))
+        Assert.assertEquals(1, rdsAPI.addPost("", Pair("", ""), listOf(Pair("", ""))))
         Assert.assertTrue(rdsAPI.removePost(1))
-        Assert.assertTrue(rdsAPI.addUser(1))
+        Assert.assertTrue(rdsAPI.joinProject(1))
         Assert.assertTrue(rdsAPI.removeUser("", 1))
         Assert.assertEquals(0, rdsAPI.addProject())
         Assert.assertEquals(sendCommandsList.elementAt(0), rdsAPI.sendCommandsToServer(1, emptyList()).elementAt(0))

@@ -1,20 +1,12 @@
-package com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI
+package com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI.PostController
 
-import android.util.Log
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
-import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.AddPostParameter
-import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.RequestParameter
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.PostPreview
 import org.junit.Assert
 import org.junit.Test
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
 import org.junit.Before
-import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.DELETE
-import retrofit2.http.POST
-import retrofit2.http.Path
 
 class RESTAPITests_PostsController {
     private var restAPI: RESTAPI = RESTAPI()
@@ -33,22 +25,24 @@ class RESTAPITests_PostsController {
 
     @Test
     fun getAllPostsPreviewIsNotEmpty() {
-         // TODO REWORK TEST: Cant pass body through @get and @delete
-        /*
-        var postPreviews: MutableList<PostPreview> = (restAPI.getAllPostsPreview(authToken) as MutableList<PostPreview>)
-        Assert.assertNotEquals(0, postPreviews.size)
+        var postPreviews = restAPI.getAllPostsPreview(authToken)
+
+        Assert.assertNotEquals(0, postPreviews)
+        var postPreviewsList: MutableList<PostPreview>
+        if (postPreviews.isNotEmpty()) {
+            postPreviewsList = postPreviews as MutableList<PostPreview>
+            Assert.assertNotEquals(0, postPreviewsList.size)
+        }
+
         Assert.assertNotEquals(null, postPreviews.elementAt(0))
-         */
     }
 
     @Test
     fun addAndRemovePost() {
-        /* // TODO: Change addPost return parameter to Integer
-        val postID: Int = restAPI.addPost("post preview", "project template",
-            listOf("graph template"), authToken)
+        val postID: Int = restAPI.addPost("postPreviewTest", Pair("projectTemplate", "projectTemplatePreview"),
+            listOf(Pair("graphTemplate", "graphTemplatePreview")), authToken)
         Assert.assertNotEquals(-1, postID)
 
         Assert.assertTrue(restAPI.removePost(postID, authToken))
-        */
     }
 }

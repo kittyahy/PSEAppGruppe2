@@ -28,20 +28,33 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Pr
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class ServerHandler (appDataBase: AppDataBase){
-    fun getPostPreviews() : Flow<List<Post>> {
+class ServerHandler(appDataBase: AppDataBase) {
+    fun getPostPreviews(): Flow<List<Post>> {
         return MutableStateFlow(ArrayList<Post>()) // TODO Implementierung
     }
-    fun getPostDetail(id: Long): PostDetail {
+
+    fun getPostDetail(id: Int): PostDetail {
         return TODO()
     }
-    fun getProjectTemplate(id: Long): ProjectTemplate {
+
+    fun getProjectTemplate(id: Int): ProjectTemplate {
         return TODO()
     }
-    fun getGraphTemplate(id: Long, index: Int) : GraphTemplate {
+
+    fun getGraphTemplate(id: Int, index: Int): GraphTemplate {
         return TODO()
     }
-    fun isServerCurrentlyReachable() : Boolean {
+
+    fun isServerCurrentlyReachable(): Boolean {
         return TODO()
     }
+
+    fun login(username: String, password: String) {
+        TODO()
+    }
+
+    fun signUp(username: String, password: String) {
+        TODO()
+    }
+
 }
