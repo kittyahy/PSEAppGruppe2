@@ -59,7 +59,6 @@ public class PostsController {
      * Provides all Templates detail view from fromPost. Returns the identifier and the DetailView from a template
      *
      * @param fromPost declares from which post the postDetail is recommended (provided by the client)
-     * @param token    the data, for authenticate the user.
      * @return a list of all template detailViews with TemplateNumber together, each as String.
      */
     @GetMapping("/detail/{post}")
@@ -77,6 +76,7 @@ public class PostsController {
     @GetMapping("/{post}/projectTemplate")
     public String getProjectTemplate(@PathVariable("post") int fromPost) {
         return service.getProjectTemplate(fromPost);
+        //checkt nicht, ob es das gibt
     }
 
     /**
@@ -89,6 +89,8 @@ public class PostsController {
     @GetMapping("/{post}/{template}")
     public String getGraphTemplate(@PathVariable("post") int fromPost, @PathVariable("template") int templateNumber) {
         return service.getGraphTemplate(fromPost, templateNumber);
+        //checkt nicht, ob es das gibt
+
     }
 
     /**
