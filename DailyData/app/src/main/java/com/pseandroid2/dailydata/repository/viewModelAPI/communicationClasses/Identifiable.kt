@@ -21,8 +21,8 @@
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
 interface Identifiable {
-    val id: Long
+    val id: Int
     fun deleteIsPossible(): Boolean
     //@throws IllegalOperationException
-    fun delete()
+    suspend fun delete()
 }
