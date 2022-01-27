@@ -38,7 +38,7 @@ import com.pseandroid2.dailydata.util.SortedIntListUtil
 import java.util.SortedSet
 import java.util.TreeSet
 
-class ProjectCDManager (
+class ProjectCDManager(
     private val projectDAO: ProjectDataDAO,
     private val templateDAO: TemplateDAO,
     private val uiDAO: UIElementDAO,
@@ -60,14 +60,14 @@ class ProjectCDManager (
      */
     suspend fun insertProject(project: Project): Project = db.withTransaction() {
         val newID: Int = insertProjectEntity(project)
-        project.getProjectSkeleton().id = newID
+        project.id = newID
 
-        for (graph: Graph in project.getProjectSkeleton().getGraphs()) {
+        for (graph: Graph in project.getGraphs()) {
             val newGraphId: Int = graphManager.insertGraph(newID, graph)
             graph.id = newGraphId
         }
 
-        for (notif: Notification in project.getProjectSkeleton().getNotifications()) {
+        for (notif: Notification in project.getNotifications()) {
             val newNotifId: Int = notifDAO.insertNotification(newID, notif)
             notif.id = newNotifId
         }
@@ -94,6 +94,7 @@ class ProjectCDManager (
      * @param project The project that is to be deleted
      */
     suspend fun deleteProject(project: Project) = db.withTransaction {
+        @Suppress("Deprecation")
         val id = project.getProjectSkeleton().id
         @Suppress("Deprecation")
         graphDAO.deleteAllGraphs(id)
@@ -114,9 +115,12 @@ class ProjectCDManager (
      */
     suspend fun insertProjectTemplate(template: ProjectTemplate): Int {
         val newId = getNextId()
+
+        @Suppress("Deprecation")
         val skeleton =
             createSkeleton(newId, template.getProjectSkeleton(), template.getTableLayout())
         val ent = ProjectTemplateEntity(skeleton, template.getCreator())
+        @Suppress("Deprecation")
         templateDAO.insertProjectTemplate(ent)
         return newId
     }
@@ -126,6 +130,7 @@ class ProjectCDManager (
      * @param template The template that is to be deleted
      */
     suspend fun deleteProjectTemplate(template: ProjectTemplate) {
+        @Suppress("Deprecation")
         templateDAO.deleteProjectTemplateById(template.getProjectSkeleton().id)
     }
 
@@ -148,6 +153,8 @@ class ProjectCDManager (
 
     private suspend fun insertProjectEntity(project: Project): Int {
         val id = getNextId()
+
+        @Suppress("Deprecation")
         val skeleton: ProjectSkeletonEntity =
             createSkeleton(id, project.getProjectSkeleton(), project.table.getLayout())
         val admin: User = project.admin

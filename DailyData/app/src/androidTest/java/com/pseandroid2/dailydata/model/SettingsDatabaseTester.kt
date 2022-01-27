@@ -25,6 +25,7 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.model.database.daos.SettingsDAO
+import com.pseandroid2.dailydata.model.settings.MapSettings
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.first
