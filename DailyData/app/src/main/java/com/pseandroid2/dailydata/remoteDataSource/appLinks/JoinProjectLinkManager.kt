@@ -1,4 +1,5 @@
 package com.pseandroid2.dailydata.remoteDataSource.appLinks
+import android.util.Log
 import com.pseandroid2.dailydata.remoteDataSource.appLinks.Hashids
 
 class JoinProjectLinkManager {
@@ -33,12 +34,20 @@ class JoinProjectLinkManager {
     }
 
     fun decodePostID(postIDToDecode: String): Long {
-        val decoded = hashids.decode(postIDToDecode)
-        if (decoded.isNotEmpty()) {
-            if (decoded.elementAt(0) != null) {
+        try {
+            val decoded = hashids.decode(postIDToDecode)
+            if (decoded.isNotEmpty()) {
                 return decoded.elementAt(0)
             }
+        } catch (ex: Exception) {
+            when (ex) {
+                is NoSuchElementException, is ArrayIndexOutOfBoundsException -> {
+                    Log.e("JoinProjectLinkError","There is no project ID that belongs to the input")
+                }
+                else -> throw ex
+            }
         }
+
         return -1
     }
 }

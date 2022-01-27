@@ -60,4 +60,14 @@ class JoinProjectCommandEncryption {
         // Check if the links stay the same with the same projectID
         Assert.assertEquals(joinProjectLinkManager.createLink(1), joinProjectLinkManager.createLink(1))
     }
+
+    @Test
+    fun decryptEmptyProjectID() {
+        Assert.assertEquals(-1, joinProjectLinkManager.decodePostID("IchbinUngueltig"))
+    }
+
+    @Test
+    fun decryptInvalidProjectID() {
+        Assert.assertEquals(-1, joinProjectLinkManager.decodePostID("IchbinUngueltig"))
+    }
 }
