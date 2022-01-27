@@ -57,7 +57,7 @@ class MainActivity : ComponentActivity() {
     }
 
     /**
-     * Checks if the app was started by an dynamic link.
+     * Checks if the app was started by a dynamic link.
      * If it was started by an correct link it will call openJoinProjectScreen()
      */
     private fun joinProjectLink() {
