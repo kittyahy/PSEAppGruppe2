@@ -99,7 +99,7 @@ internal class ServerManagerTests_RESTAPICorrectlyLinked {
         Assert.assertEquals("command1", serverManager.sendCommandsToServer(1, projectCommands=listOf("command1"), "").elementAt(0))
 
         // Test if projectCommand lands in the projectCommandQueue
-        serverManager.getDeltasFromServer(1, "")
+        serverManager.getProjectCommandsFromServer(1, "")
         val delta: Delta = deltaList.elementAt(0)
         val projectCommandInfoInList: ProjectCommandInfo = ProjectCommandInfo(delta.addedToServer, delta.user, delta.isAdmin, delta.projectCommand)
         Assert.assertEquals(projectCommandInfoInList, serverManager.getProjectCommandFromQueue())

@@ -35,6 +35,9 @@ import com.pseandroid2.dailydata.remoteDataSource.userManager.UserAccount
 import java.time.LocalDateTime
 import javax.inject.Inject
 
+/**
+ * This class allows the repository to use all the required server (and firebase) sided features
+ */
 class RemoteDataSourceAPI @Inject constructor(private val uAccount: UserAccount?, private val sManager: ServerManager?)  {
     // Allows to call the RemoteDataSource also without dependency injection (so that the Repository don't have to know the underlying classes of the RemoteDataSource)
     private val userAccount: UserAccount = uAccount ?: UserAccount(FirebaseManager())
@@ -127,7 +130,7 @@ class RemoteDataSourceAPI @Inject constructor(private val uAccount: UserAccount?
      * @param fromPost: The post from which the project template should be downloaded
      * @return String - The requested project template as JSON
      */
-    fun getProjectTemplate(fromPost: Int): String { // TODO: Es existiert kein JSON Rückgabewert, lass dir was neues einfallen
+    fun getProjectTemplate(fromPost: Int): String {
         val authToken: String = userAccount.getToken()
         return serverManager.getProjectTemplate(fromPost, authToken)
     }
@@ -210,13 +213,13 @@ class RemoteDataSourceAPI @Inject constructor(private val uAccount: UserAccount?
      */
     fun getProjectCommandsFromServer(projectID: Long): Unit {
         val authToken: String = userAccount.getToken()
-        return serverManager.getDeltasFromServer(projectID, authToken)
+        return serverManager.getProjectCommandsFromServer(projectID, authToken)
     }
 
     /**
      * @param projectCommand: The projectCommand that should be uploaded to the server (as JSON)
      * @param forUser: The id of the user whose fetch request is answered
-     * @param initialAddedDate: // TODO
+     * @param initialAddedDate: When the project command was send to the server
      * @param projectID: The id of the project belonging to the project command
      * @param wasAdmin: Was the user a project administrator when the command was created
      * @return Boolean: Did the server call succeed
@@ -248,7 +251,7 @@ class RemoteDataSourceAPI @Inject constructor(private val uAccount: UserAccount?
     /**
      * @param projectID: The id of the project from which the fetch requests should be downloaded
      */
-    fun getFetchRequests(projectID: Long){ // TODO: Ausgabe ist im Entwurfsheft Collection<FetchRequest>
+    fun getFetchRequests(projectID: Long){
         val authToken: String = userAccount.getToken()
         return serverManager.getFetchRequests(projectID, authToken)
     }

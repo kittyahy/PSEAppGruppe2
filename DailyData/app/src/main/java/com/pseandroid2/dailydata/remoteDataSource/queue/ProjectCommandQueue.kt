@@ -20,9 +20,12 @@
 
 package com.pseandroid2.dailydata.remoteDataSource.queue
 
+/**
+ * A queue for project commands which are received from the server
+ */
 class ProjectCommandQueue {
-    private val projectCommands: MutableList<ProjectCommandInfo> = mutableListOf<ProjectCommandInfo>() // Speichert JSONs von FetchRequests
-    private val observers: MutableList<ProjectCommandQueueObserver> = mutableListOf<ProjectCommandQueueObserver>()
+    private val projectCommands: MutableList<ProjectCommandInfo> = mutableListOf()
+    private val observers: MutableList<ProjectCommandQueueObserver> = mutableListOf()
 
     // Queue Logic
     /**
@@ -40,11 +43,6 @@ class ProjectCommandQueue {
      * @param projectCommand: Der ProjectCommand, der in die Queue hinzugefügt werden soll
      */
     fun addProjectCommand(projectCommand: ProjectCommandInfo) {
-                // TODO: Teste, ob der String schon in der Queue vorhanden ist (find element) und füge es gegebenfalls nicht hinzu
-                /* //TODO Wenn Projectcommands eindeutig per ID unterscheidbar sind, kann man zuerst den Vergleich durchführen
-                if (!projectCommands.contains(projectCommand)) {
-                projectCommands.add(projectCommand)
-                 */
         projectCommands.add(projectCommand)
         notifyObservers()
     }
@@ -80,11 +78,7 @@ class ProjectCommandQueue {
      */
     private fun notifyObservers() {
         observers.forEach {
-            if (it == null) { // TODO: Prüfe, ob das nicht doch relevant ist (Wenn Observer gelöscht wird)
-                observers.remove(it)
-            } else {
-                it.update()
-            }
+            it.update()
         }
     }
 }
