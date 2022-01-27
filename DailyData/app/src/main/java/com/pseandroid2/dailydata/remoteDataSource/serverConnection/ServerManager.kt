@@ -29,14 +29,10 @@ import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.PostPreview
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.TemplateDetail
-import com.pseandroid2.dailydata.util.ui.Template
-
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-
 import java.time.LocalDateTime
 import javax.inject.Inject
 
@@ -97,13 +93,13 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
     // Wish-criteria
     /**
      * @param postPreview: The preview of the post that should be added
-     * @param projectTemplate: The project template that belongs to the post as JSON
-     * @param Collection<String>: The graph templates that belong to the post as JSON
+     * @param projectTemplate: The project template pair as a pair of the project template and the project template preview
+     * @param graphTemplates: The graph templates as Collection of pairs of graph templates as JSONs and the graph template previews
      * @param authToken: The authentication token
-     * @return Int: The PostID of the new post. -1 if the call didn't succeed
+     * @return Int: The PostID of the new post. -1 if the call didn't succeed, 0 if the user reached his limit of uploaded posts.
      */
-    fun addPost(postPreview: String, projectTemplate: String, graphTemplate: Collection<String>, authToken: String): Int {
-        return restAPI.addPost(postPreview, projectTemplate, graphTemplate, authToken)
+    fun addPost(postPreview: String, projectTemplate: Pair<String, String>, graphTemplates: Collection<Pair<String, String>>, authToken: String): Int {
+        return restAPI.addPost(postPreview, projectTemplate, graphTemplates, authToken)
     }
 
     // Wish-criteria
@@ -153,9 +149,12 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      */
     fun sendCommandsToServer(projectID: Long, projectCommands: Collection<String>, authToken: String): Collection<String> {
         val successfullyUploaded: MutableList<String> = mutableListOf()
-        //TODO: Write proper tests for this
 
-        val jobs: MutableList<Job> = mutableListOf<Job>()
+        if (projectCommands.isEmpty()){
+            return successfullyUploaded
+        }
+
+        val jobs: MutableList<Job> = mutableListOf()
         runBlocking { // this: CoroutineScope TODO: Test if this is ok
             projectCommands.forEach { // Calls saveDelta in parallel
                 // Send each project command in parallel
@@ -178,11 +177,11 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param projectID: The id of the project whose deltas (projectCommands) you want to load into the FetchRequestQueue
      * @param authToken: The authentication token
      */
-    fun getDeltasFromServer(projectID: Long, authToken: String): Unit {
+    fun getDeltasFromServer(projectID: Long, authToken: String) {
         val receivedProjectCommands: Collection<Delta> = restAPI.getDelta(projectID, authToken)
         receivedProjectCommands.forEach {
             // Transform Delta into an Project Command
-            val queueElement: ProjectCommandInfo = ProjectCommandInfo(wentOnline = it.addedToServer,
+            val queueElement = ProjectCommandInfo(wentOnline = it.addedToServer,
                 commandByUser =  it.user, isProjectAdmin = it.isAdmin, projectCommand = it.projectCommand)
             projectCommandQueue.addProjectCommand(queueElement)
         }
