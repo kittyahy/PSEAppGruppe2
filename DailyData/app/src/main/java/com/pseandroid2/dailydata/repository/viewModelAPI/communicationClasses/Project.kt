@@ -24,13 +24,16 @@ import android.graphics.Bitmap
 import com.pseandroid2.dailydata.model.database.entities.GraphEntity
 import com.pseandroid2.dailydata.model.database.entities.ProjectData
 import com.pseandroid2.dailydata.repository.commandCenter.commands.IllegalOperationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class Project(
     override var id: Long = 0,
     var isOnlineProject: Boolean = false,
     var isAdmin: Boolean = false,
     var title: String = "title missing",
-    var description: String= "description missing",
+    var description: String = "description missing",
     var wallpaper: String = "wallpaper missing",
     var table: List<Column> = ArrayList<Column>(),
     var data: List<Row> = ArrayList<Row>(),
@@ -38,52 +41,61 @@ class Project(
     var notifications: List<Notification> = ArrayList<Notification>(),
     var graphs: List<Graph> = ArrayList<Graph>(),
     var members: List<Member> = ArrayList<Member>()
-): Identifiable {
-    fun update(graphEntity: GraphEntity){
+) : Identifiable {
+    val scope = CoroutineScope(Dispatchers.IO)
+    fun update(graphEntity: GraphEntity) {
         TODO("not yet implemented")
     }
-    fun update(notification: com.pseandroid2.dailydata.model.notifications.Notification){
+
+    fun update(notification: com.pseandroid2.dailydata.model.notifications.Notification) {
         TODO("not yet implemented")
     }
-    fun update(projectData: ProjectData){
+
+    fun update(projectData: ProjectData) {
         TODO("not yet implemented")
     }
+
     //Todo nothing mit typ für settings ersetzen
-    fun update(settings: Nothing){
+    fun update(settings: Nothing) {
         TODO("not yet implemented")
     }
+
     fun addRowIsPossible(): Boolean {
         TODO()
     }
+
     //@throws IllegalOperationException
     fun addRow(row: Row) {
         TODO()
     }
+
     fun deleteRowIsPossible(): Boolean {
         TODO()
     }
+
     //@throws IllegalOperationException
     fun deleteRow(row: Row) {
         if (row in data) {
-            row.delete()
-        }
-        else {
+            scope.launch { row.delete() }
+        } else {
             throw IllegalOperationException()
         }
     }
+
     fun addColumnIsPossible(): Boolean {
         TODO()
     }
+
     //@throws IllegalOperationException
     fun addColumn(column: Column) {
         TODO()
     }
+
     //@throws IllegalOperationException
     fun deleteColumn(column: Column) {
         if (column in table) {
-            column.delete()
-        }
-        else{
+            scope.launch { column.delete() }
+        } else {
             throw IllegalOperationException()
         }
     }
@@ -96,64 +108,77 @@ class Project(
     override suspend fun delete() {
         TODO("Not yet implemented")
     }
+
     //@throws IllegalOperationException
-    fun setCell (indexRow: Int, indexColumn: Int, content: String) {
+    fun setCell(indexRow: Int, indexColumn: Int, content: String) {
         if (indexRow >= 0 && indexRow < data.size) {
             data[indexRow].setCell(indexColumn, content)
         }
         throw IllegalOperationException()
     }
-    fun addMemberIsPossible(){
+
+    fun addMemberIsPossible() {
         TODO()
     }
-    fun addMember (member: Member) {
+
+    fun addMember(member: Member) {
         //Todo If bedingung schöner machen, keine Magic numbers und aussagekräftigere Exceptions werfen
         if (member !in members && members.size < 25 && isOnlineProject) {
             TODO()
-        }
-        else {
+        } else {
             throw IllegalOperationException()
         }
     }
+
     fun deleteMemberIsPossible() {
         TODO()
     }
+
     fun deleteMember(member: Member) {
         if (member in members && members.size > 1) {
             TODO()
-        }
-        else{
+        } else {
             throw IllegalOperationException()
         }
     }
+
     fun setAdminPossible() {
         TODO()
     }
-    fun setAdmin(member: Member){
+
+    fun setAdmin(member: Member) {
         TODO()
     }
+
     fun setWallpaper(image: Bitmap) {
         TODO()
     }
+
     fun setNotification(notification: Notification) {
         TODO()
     }
+
     fun deleteNotification(notification: Notification) {
-        notification.delete()
+        scope.launch { notification.delete() }
     }
+
     fun setName(name: String) {
         TODO()
     }
+
     @JvmName("setDescription1")
     fun setDescription(description: String) {
         TODO()
     }
+
     fun publishIsPossible() {
         TODO()
     }
+
     fun publish() {
         TODO()
     }
+
     fun setButton(button: Button) {
         TODO()
     }
