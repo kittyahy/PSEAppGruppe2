@@ -20,7 +20,9 @@
 
 package com.pseandroid2.dailydata
 
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
@@ -33,6 +35,8 @@ import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.dynamiclinks.ktx.dynamicLinks
+import com.google.firebase.ktx.Firebase
 import com.pseandroid2.dailydata.ui.theme.DailyDataTheme
 import com.pseandroid2.dailydata.ui.composables.BottomNavItem
 import com.pseandroid2.dailydata.ui.composables.BottomNavigationBar
@@ -49,6 +53,43 @@ class MainActivity : ComponentActivity() {
                 Main()
             }
         }
+        joinProjectLink()
+    }
+
+    /**
+     * Checks if the app was started by an dynamic link.
+     * If it was started by an correct link it will call openJoinProjectScreen()
+     */
+    private fun joinProjectLink() {
+        val dynamicLink = Firebase.dynamicLinks.getDynamicLink(intent).addOnSuccessListener(this) { pendingDynamicLinkData ->
+            // Get deep link from result (may be null if no link is found)
+            var deepLink: Uri? = null
+            if (pendingDynamicLinkData != null) {
+                deepLink = pendingDynamicLinkData.link
+            }
+
+            if (deepLink != null) {
+                // get projectID from link
+                var projectIDString: String = deepLink.getQueryParameter("projectid") ?: "-1" // -1 is an invalid projectID
+                val projectID: Long? = projectIDString.toLongOrNull();
+
+                // open join project screen when project id is valid
+                if (projectID != null && projectID > 0) {
+                    openJoinProjectScreen(projectID)
+                }
+            } else {
+                Log.d("Link", "no projectID in link")
+            }
+
+        } .addOnFailureListener(this) { e -> Log.w("DynamicLink", "getDynamicLink:onFailure", e) }
+    }
+
+    /**
+     * Loads the the screen where user can join a project
+     */
+    private fun openJoinProjectScreen(projectID: Long) {
+        // TODO: Implement this method
+        Log.d("Link", "open join project screen with project id: $projectID")
     }
 }
 
@@ -89,3 +130,4 @@ fun Main() {
         }
     }
 }
+

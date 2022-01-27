@@ -86,6 +86,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.firebase:firebase-dynamic-links-ktx'
+
     testImplementation 'junit:junit:4.13.2'
     testImplementation "androidx.room:room-testing:$roomVersion" //Room Testing
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0" //Coroutines Testing
