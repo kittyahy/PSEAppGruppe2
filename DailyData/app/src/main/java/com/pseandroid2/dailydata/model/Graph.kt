@@ -22,6 +22,7 @@ package com.pseandroid2.dailydata.model
 
 import android.graphics.drawable.Drawable
 import com.pseandroid2.dailydata.model.project.Project
+import com.pseandroid2.dailydata.model.settings.Settings
 import com.pseandroid2.dailydata.model.users.User
 
 interface Graph {

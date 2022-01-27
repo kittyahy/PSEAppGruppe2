@@ -21,6 +21,7 @@
 package com.pseandroid2.dailydata.model
 
 import com.pseandroid2.dailydata.exceptions.SettingNotFoundException
+import com.pseandroid2.dailydata.model.settings.MapSettings
 import org.junit.Assert
 import org.junit.Test
 

@@ -18,7 +18,7 @@
 
 */
 
-package com.pseandroid2.dailydata.model
+package com.pseandroid2.dailydata.model.settings
 
 interface Settings : Iterable<Pair<String, String>> {
 
