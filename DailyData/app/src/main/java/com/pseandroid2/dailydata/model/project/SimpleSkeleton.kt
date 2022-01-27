@@ -28,30 +28,33 @@ import com.pseandroid2.dailydata.model.notifications.Notification
 
 class SimpleSkeleton(
     override var id: Int,
-    private val onlineId: Long,
-    private val name: String,
-    private val description: String,
-    private val wallpaperPath: String,
-    private val graphs: List<Graph>,
-    private val settings: Settings,
-    private val notifications: List<Notification>
+    override var onlineId: Long,
+    override var name: String,
+    override var desc: String,
+    override var path: String,
+    private val graphList: MutableList<Graph>,
+    private var skeletonSettings: Settings,
+    private val notificationList: MutableList<Notification>
 ) : ProjectSkeleton {
-
-    override fun getOnlineId() = onlineId
-
-    override fun getName() = name
-
-    override fun getDescription() = description
 
     override fun getWallpaper(): Drawable {
         TODO("Figure out how to obtain pictures from disk")
     }
 
-    override fun getWallpaperPath() = wallpaperPath
+    override fun getGraphs() = graphList
+    override fun addGraphs(graphs: Collection<Graph>) {
+        graphList.addAll(graphs)
+    }
 
-    override fun getGraphs() = graphs
+    override fun getProjectSettings() = skeletonSettings
+    override fun addProjectSettings(settings: Settings) {
+        for (setting in settings) {
+            skeletonSettings[setting.first] = setting.second
+        }
+    }
 
-    override fun getProjectSettings() = settings
-
-    override fun getNotifications() = notifications
+    override fun getNotifications() = notificationList
+    override fun addNotifications(notifications: Collection<Notification>) {
+        notificationList.addAll(notifications)
+    }
 }
