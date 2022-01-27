@@ -1,9 +1,10 @@
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter
 
 /**
- * @param token: The authentication token
  * @param postPreview: The preview of the post as JSON
- * @param projectTemplate: The project template as JSON
- * @param graphTemplate: The graph templates as Collection of JSONs
+ * @param projectTemplate: The project template as a pair of the project template and the project template preview
+ * @param graphTemplates: The graph templates as Collection of pairs of graph templates as JSONs and the graph template previews
  */
-data class AddPostParameter(val token: String, val postPreview: String, val projectTemplate: String, val graphTemplate: Collection<String>)
+
+data class AddPostParameter(val postPreview: String = "", var projectTemplate: Pair<String, String> = Pair("", ""),
+                            val graphTemplates: Collection<Pair<String, String>> = listOf(Pair("", "")))
