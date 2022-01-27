@@ -29,12 +29,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class Project(
-    override var id: Long = 0,
+    override var id: Int = 0,
     var isOnlineProject: Boolean = false,
     var isAdmin: Boolean = false,
     var title: String = "title missing",
     var description: String = "description missing",
-    var wallpaper: String = "wallpaper missing",
+    var wallpaper: Int = 0,
     var table: List<Column> = ArrayList<Column>(),
     var data: List<Row> = ArrayList<Row>(),
     var buttons: List<Button> = ArrayList<Button>(),
@@ -117,7 +117,7 @@ class Project(
         throw IllegalOperationException()
     }
 
-    fun addMemberIsPossible() {
+    fun addMemberIsPossible() : Boolean {
         TODO()
     }
 
@@ -129,8 +129,15 @@ class Project(
             throw IllegalOperationException()
         }
     }
+    
+    fun leaveOnlineProjectPossible() : Boolean {
+        return isOnlineProject
+    }
+    fun leaveOnlineProject() {
+        TODO()
+    }
 
-    fun deleteMemberIsPossible() {
+    fun deleteMemberIsPossible() : Boolean {
         TODO()
     }
 
@@ -142,7 +149,7 @@ class Project(
         }
     }
 
-    fun setAdminPossible() {
+    fun setAdminPossible() : Boolean {
         TODO()
     }
 
@@ -171,7 +178,7 @@ class Project(
         TODO()
     }
 
-    fun publishIsPossible() {
+    fun publishIsPossible() : Boolean {
         TODO()
     }
 

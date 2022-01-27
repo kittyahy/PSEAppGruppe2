@@ -1,5 +1,6 @@
 package com.pseandroid2.dailydata.repository.commandCenter
 
+import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
 import com.pseandroid2.dailydata.repository.commandCenter.commands.ProjectCommand
 import kotlinx.coroutines.delay
@@ -7,7 +8,8 @@ import java.time.Duration
 import java.time.LocalDateTime
 import java.time.temporal.TemporalAmount
 
-class PublishQueue(remoteDataSourceAPI: RemoteDataSourceAPI) : CommandQueue(remoteDataSourceAPI) {
+class PublishQueue(appDataBase: AppDataBase, remoteDataSourceAPI: RemoteDataSourceAPI) :
+    CommandQueue(appDataBase, remoteDataSourceAPI) {
 
     private var lastServerConnection: LocalDateTime = LocalDateTime.MIN
     private var serverConnectionTolerance: TemporalAmount = Duration.ZERO.plusMinutes(5)

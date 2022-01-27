@@ -21,7 +21,7 @@
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
 class ProjectTemplate : Identifiable{
-    override val id: Long
+    override val id: Int
         get() = TODO("Not yet implemented")
 
     override fun deleteIsPossible(): Boolean {

@@ -1,25 +1,35 @@
 package com.pseandroid2.dailydata.repository.commandCenter.commands
 
+import com.pseandroid2.dailydata.model.database.AppDataBase
+import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
+import io.mockk.mockk
 import junit.framework.TestCase
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class CommandWrapperTest : TestCase() {
 
 
+    @ExperimentalCoroutinesApi
     @Test
-    fun testCommandWrapper() {
+    fun testCommandWrapper() = runTest(){
         val id: Int = 42
         val testCommand = TestCommand(id)
         val json = CommandWrapper(testCommand).toJson()
         val command : ProjectCommand = CommandWrapper.fromJson(json)
-        command.execute()
+        command.execute(mockk<AppDataBase>(), mockk<RemoteDataSourceAPI>())
         assertEquals(id * 2, command.projectID)
     }
 }
 
-class TestCommand(projectID: Int) : ProjectCommand(projectID) {
+class TestCommand(projectID: Int) : ProjectCommand( projectID) {
 
-    override suspend fun execute() {
-        projectID *= 2
+    override suspend fun execute(
+        appDataBase: AppDataBase,
+        remoteDataSourceAPI: RemoteDataSourceAPI
+    ) {
+        projectID = projectID?.times(2)
     }
 }

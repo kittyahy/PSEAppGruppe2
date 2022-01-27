@@ -24,13 +24,15 @@ import android.graphics.Color
 import android.graphics.drawable.Drawable
 
 class LineChart(
-    override val id: Long,
+    override val id: Int,
     override val image: Drawable,
     val dotSize: DotSize,
     val dotColor: Color,
     val lineType: LineType,
     val mappingVertical: List<Column>
-): Graph {
+): Graph() {
+    override val typeName: String = "Line Chart" //TODO() Magic String
+
     override fun deleteIsPossible(): Boolean {
         TODO("Not yet implemented")
     }

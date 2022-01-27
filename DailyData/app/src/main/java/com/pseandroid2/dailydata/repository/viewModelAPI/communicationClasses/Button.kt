@@ -24,13 +24,13 @@ import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.model.uielements.UIElementType
 
 class Button(
-    override val id: Long,
+    override val id: Int,
     val name: String,
-    val columnId: Long,
+    val columnId: Int,
     val value: Int
 ) : Identifiable {
-    constructor(uiElement: UIElement, columnId: Long) : this(
-        uiElement.id.toLong(),
+    constructor(uiElement: UIElement, columnId: Int) : this(
+        uiElement.id,
         TODO(),
         columnId,
         uiElement.state.toInt()
@@ -47,9 +47,18 @@ class Button(
 
     fun toDBEquivalent(): UIElement {
         return UIElement(
-            id.toInt(),
+            id,
             UIElementType.BUTTON,
             value.toString()
         )
+    }
+    fun increaseValue() {
+        setValue(value + 1)
+    }
+    fun decreaseValue() {
+        setValue(value - 1)
+    }
+    fun setValue(value: Int) {
+        TODO()
     }
 }

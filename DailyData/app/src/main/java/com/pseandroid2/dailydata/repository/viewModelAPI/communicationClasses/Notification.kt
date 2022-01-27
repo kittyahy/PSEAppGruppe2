@@ -22,21 +22,21 @@ package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
 import com.pseandroid2.dailydata.model.database.daos.NotificationsDAO
 import com.pseandroid2.dailydata.model.notifications.TimeNotification
-import java.time.LocalDateTime
+import java.time.LocalTime
 
 class Notification(
-    override val id: Long,
+    override val id: Int,
     val message: String,
-    val time: LocalDateTime,
+    val time: LocalTime,
     val notificationsDAO: NotificationsDAO,
-    val projectID: Long
+    val projectID: Int
 ) : Identifiable {
     constructor(
         timeNotification: TimeNotification,
         notificationsDAO: NotificationsDAO,
-        projectID: Long
+        projectID: Int
     ) : this(
-        timeNotification.id.toLong(),
+        timeNotification.id,
         timeNotification.getMessage(),
         TODO(), //timeNotification.send
         notificationsDAO,
@@ -49,10 +49,10 @@ class Notification(
 
     //@throws IllegalOperationException
     override suspend fun delete() {
-        notificationsDAO.deleteNotification(projectID.toInt(), id.toInt())
+        notificationsDAO.deleteNotification(projectID, id)
     }
 
     fun toDBEquivalent(): TimeNotification {
-        return TimeNotification(message, time.toLocalTime(), id.toInt())
+        return TimeNotification(message, time, id)
     }
 }

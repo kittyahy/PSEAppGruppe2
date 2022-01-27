@@ -5,8 +5,6 @@ import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
 import java.time.LocalDateTime
 
 abstract class ProjectCommand (
-    val appDataBase: AppDataBase,
-    val remoteDataSourceAPI: RemoteDataSourceAPI,
     var projectID: Int? = null,
     var onlineProjectID: Long? = null,
     var wentOnline: LocalDateTime? = null,
@@ -14,7 +12,7 @@ abstract class ProjectCommand (
     var commandByUser: String? = null,
     var isProjectAdmin: Boolean? = null
 ){
-    open suspend fun execute() {
+    open suspend fun execute(appDataBase: AppDataBase, remoteDataSourceAPI: RemoteDataSourceAPI) {
         TODO()
     }
     open suspend fun publish() {

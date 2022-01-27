@@ -6,18 +6,18 @@ import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
 
 class CreateProject (commandByUser: String,
-                     appDataBase: AppDataBase,
                      private val projectCDManager: ProjectCDManager, //TODO Arne fragen, dass dieses feld auch über appDataBase zugänglich ist
-                     remoteDataSourceAPI: RemoteDataSourceAPI)
+)
     : ProjectCommand(
-    appDataBase,
-    remoteDataSourceAPI,
     commandByUser = commandByUser,
     isProjectAdmin = true) {
-    override suspend fun execute() {
+    override suspend fun execute(
+        appDataBase: AppDataBase,
+        remoteDataSourceAPI: RemoteDataSourceAPI
+    ) {
         val project: Project = TODO() //Arne fragen
         projectCDManager.insertProject(project)
-        super.execute()
+        super.execute(appDataBase, remoteDataSourceAPI)
     }
 
     override suspend fun publish() {

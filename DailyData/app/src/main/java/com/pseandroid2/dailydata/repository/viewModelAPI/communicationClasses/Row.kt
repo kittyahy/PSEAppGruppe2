@@ -21,7 +21,7 @@
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
 class Row(
-    override val id: Long,
+    override val id: Int,
     val elements: List<String>
 ): Identifiable {
     override fun deleteIsPossible(): Boolean {

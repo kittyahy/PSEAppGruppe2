@@ -1,5 +1,6 @@
 package com.pseandroid2.dailydata.repository.commandCenter
 
+import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
 import com.pseandroid2.dailydata.repository.commandCenter.commands.ProjectCommand
 import kotlinx.coroutines.GlobalScope
@@ -8,7 +9,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
 abstract class CommandQueue
-    (val remoteDataSourceAPI: RemoteDataSourceAPI) {
+    (val appDataBase: AppDataBase, val remoteDataSourceAPI: RemoteDataSourceAPI) {
     private var commandQueue: MutableList<ProjectCommand> = ArrayList<ProjectCommand>()
     private val mutex = Mutex()
     init {
