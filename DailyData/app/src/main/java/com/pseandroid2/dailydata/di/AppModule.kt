@@ -22,6 +22,9 @@ package com.pseandroid2.dailydata.di
 
 import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
+import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.UserAccount
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import dagger.Module
@@ -48,7 +51,9 @@ object AppModule {
     @Provides
     @Singleton
     fun provideRemoteDataSourceAPI(): RemoteDataSourceAPI {
-        return RemoteDataSourceAPI(TODO(), TODO())
+        return RemoteDataSourceAPI(
+            UserAccount(FirebaseManager()),
+            ServerManager(RESTAPI()))
     }
     @Provides
     @Singleton
