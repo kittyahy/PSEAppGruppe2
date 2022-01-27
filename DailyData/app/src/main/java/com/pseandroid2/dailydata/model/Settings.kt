@@ -27,4 +27,6 @@ interface Settings : Iterable<Pair<String, String>> {
 
     operator fun get(key: String): String
 
+    operator fun set(key: String, value: String)
+
 }
