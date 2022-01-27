@@ -23,6 +23,7 @@ import com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -46,31 +47,52 @@ public class Delta {
     @OneToMany
     private Set<ProjectParticipants> downloadedBy;
 
-    public Delta(LocalDateTime addedToServer, String user, String projectCommand, long project) {
+    /**
+     * new Delta
+     */
+    public Delta(String user,String projectCommand, long project, boolean isAdmin){
+        addedToServer = LocalDateTime.now();
+        this.user = user;
+        this.projectCommand = projectCommand;
+        this.project = project;
+        this.isAdmin = isAdmin;
+        requestedBy ="";
+        downloadedBy = new HashSet<>();
+    }
+    /**
+     * Old data
+     * @param addedToServer
+     * @param user
+     * @param projectCommand
+     * @param project
+     * @param isAdmin
+     * @param requestedBy
+     */
+    public Delta(LocalDateTime addedToServer, String user, String projectCommand, long project, boolean isAdmin, String requestedBy) {
         this.addedToServer = addedToServer;
         this.user = user;
         this.projectCommand = projectCommand;
         this.project = project;
+        this.isAdmin = isAdmin;
+        this.requestedBy = requestedBy;
     }
+
+
 
     public Delta() {
 
-    }
-
-    public Delta(LocalDateTime addedToServer, String user, String projectCommand, long project, String requestedBy, boolean isAdmin) {
-        this.addedToServer = addedToServer;
-        this.user = user;
-        this.projectCommand = projectCommand;
-        this.project = project;
-        this.requestedBy = requestedBy;
-        this.isAdmin = isAdmin;
     }
 
     public Set<ProjectParticipants> getDownloadedBy() {
         return downloadedBy;
     }
 
-    public void setDownloadedBy(Set<ProjectParticipants> downloadedBy) {
+    public void addDownloadedBy(ProjectParticipants participant) {
+        downloadedBy.add(participant);
+
+    }
+
+    public void setDownloadedBy(Set<ProjectParticipants> downloadedBy){
         this.downloadedBy = downloadedBy;
     }
 
