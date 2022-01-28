@@ -23,10 +23,13 @@ public class DeltaOrganisationService {
     private final DeltaRepository deltaRepo;
 
     @Autowired
+    private final FetchRequestService fetchRequestService;
+    @Autowired
     private final ProjectParticipantsRepository ppRepo;
 
-    public DeltaOrganisationService(DeltaRepository deltaRepo, ProjectParticipantsRepository ppRepo) {
+    public DeltaOrganisationService(DeltaRepository deltaRepo, FetchRequestService fetchRequestService, ProjectParticipantsRepository ppRepo) {
         this.deltaRepo = deltaRepo;
+        this.fetchRequestService = fetchRequestService;
         this.ppRepo = ppRepo;
     }
 
@@ -61,11 +64,10 @@ public class DeltaOrganisationService {
     public List<Delta> getOldDelta(long projectID, String user) {
         List<Delta> oldDelta = deltaRepo.findByRequestedByAndProject(user, projectID);
         deltaRepo.deleteAll(oldDelta);
-
+        fetchRequestService.deleteFetchRequest(projectID,user);
         return oldDelta;
     }
 
-    //#TODO fetch requests müssen noch gelöscht werden
     public boolean addOldDelta(long projectID, String initialAddedBy, String requestedBy, String command, LocalDateTime initialAddedToServer, boolean wasAdmin) {
         removeOutDatedDeltas();
         deltaRepo.save(new Delta(initialAddedToServer, initialAddedBy, command, projectID, wasAdmin, requestedBy));

@@ -29,7 +29,6 @@ public class DemandOldDataParameter {
     /***
      * The parameters for demandOldData. Constructor.
      *
-     * @param token       the token, to verify the user (provided by the client)
      * @param requestInfo the request, which is usefully for another user. Contains information for recommended Delta (provided by the client)
      */
     public DemandOldDataParameter( String requestInfo) {
