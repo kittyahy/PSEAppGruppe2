@@ -38,7 +38,7 @@ abstract class Graph: Identifiable, Convertible<Graph>{
         return TODO()
     }
 
-    override fun addYourself(builder: ProjectBuilder<Project>) {
+    override fun addYourself(builder: ProjectBuilder<out Project>) {
         builder.addGraphs(listOf(toDBEquivalent()))
     }
 }

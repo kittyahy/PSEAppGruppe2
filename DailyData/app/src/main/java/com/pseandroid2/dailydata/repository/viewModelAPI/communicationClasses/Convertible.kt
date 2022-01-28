@@ -5,5 +5,5 @@ import com.pseandroid2.dailydata.model.project.ProjectBuilder
 
 interface Convertible<T> {
     fun toDBEquivalent(): T
-    fun addYourself(builder: ProjectBuilder<Project>)
+    fun addYourself(builder: ProjectBuilder<out Project>)
 }

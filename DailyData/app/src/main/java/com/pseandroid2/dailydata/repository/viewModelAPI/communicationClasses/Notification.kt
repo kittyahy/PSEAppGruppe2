@@ -59,7 +59,7 @@ class Notification(
         return TimeNotification(message, time, id)
     }
 
-    override fun addYourself(builder: ProjectBuilder<Project>) {
+    override fun addYourself(builder: ProjectBuilder<out Project>) {
         builder.addNotifications(listOf(toDBEquivalent()))
     }
 }
