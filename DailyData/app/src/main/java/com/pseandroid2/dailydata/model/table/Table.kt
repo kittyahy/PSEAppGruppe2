@@ -24,6 +24,7 @@ import com.google.gson.Gson
 import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.model.database.entities.RowEntity
 import com.pseandroid2.dailydata.model.uielements.UIElement
+import com.pseandroid2.dailydata.model.users.NullUser
 import java.time.LocalDateTime
 import kotlin.reflect.KClass
 
@@ -103,7 +104,7 @@ fun Row.toRowEntity(projectId: Int): RowEntity {
 }
 
 data class RowMetaData(
-    val createdOn: LocalDateTime,
-    var publishedOn: LocalDateTime,
-    val createdBy: User
+    val createdOn: LocalDateTime = LocalDateTime.now(),
+    var publishedOn: LocalDateTime = LocalDateTime.now(),
+    val createdBy: User = NullUser()
 )
