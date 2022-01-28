@@ -22,13 +22,13 @@ class LayoutTester {
                 mutableListOf(
                     Pair(
                         String::class.getSerializableClassName(),
-                        mutableListOf(UIElement(0, UIElementType.BUTTON, "0"))
+                        mutableListOf(UIElement(0, UIElementType.BUTTON, "Test", "0"))
                     ),
                     Pair(
                         String::class.getSerializableClassName(),
                         mutableListOf(
-                            UIElement(1, UIElementType.BUTTON, "0.0"),
-                            UIElement(2, UIElementType.NUMBER_FIELD, "0.1")
+                            UIElement(1, UIElementType.BUTTON, "Test", "0.0"),
+                            UIElement(2, UIElementType.NUMBER_FIELD, "Test", "0.1")
                         )
                     )
                 )
