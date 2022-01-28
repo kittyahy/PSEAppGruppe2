@@ -32,7 +32,7 @@ class SimpleSkeleton(
     override var name: String,
     override var desc: String,
     override var path: String,
-    override var color: Color,
+    override var color: Int,
     private val graphList: MutableList<Graph>,
     private var skeletonSettings: Settings,
     private val notificationList: MutableList<Notification>

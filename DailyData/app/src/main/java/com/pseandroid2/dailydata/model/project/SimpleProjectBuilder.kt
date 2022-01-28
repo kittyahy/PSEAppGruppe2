@@ -16,7 +16,17 @@ class SimpleProjectBuilder : ProjectBuilder<SimpleProject> {
     @Suppress("Deprecation")
     private var project =
         SimpleProject(
-            SimpleSkeleton(0, 0, "", "", "", mutableListOf(), MapSettings(), mutableListOf()),
+            SimpleSkeleton(
+                0,
+                0,
+                "",
+                "",
+                "",
+                Color.BLACK,
+                mutableListOf(),
+                MapSettings(),
+                mutableListOf()
+            ),
             ArrayListTable(ArrayListLayout()),
             userList = mutableListOf()
         )
@@ -24,7 +34,17 @@ class SimpleProjectBuilder : ProjectBuilder<SimpleProject> {
     override fun reset(id: Int): ProjectBuilder<SimpleProject> {
         @Suppress("Deprecation")
         project = SimpleProject(
-            SimpleSkeleton(id, 0, "", "", "", mutableListOf(), MapSettings(), mutableListOf()),
+            SimpleSkeleton(
+                id,
+                0,
+                "",
+                "",
+                "",
+                Color.BLACK,
+                mutableListOf(),
+                MapSettings(),
+                mutableListOf()
+            ),
             ArrayListTable(ArrayListLayout()),
             userList = mutableListOf()
         )
@@ -56,7 +76,7 @@ class SimpleProjectBuilder : ProjectBuilder<SimpleProject> {
         return this
     }
 
-    override fun setBackground(color: Color): ProjectBuilder<SimpleProject> {
+    override fun setBackground(color: Int): ProjectBuilder<SimpleProject> {
         project.color = color
         return this
     }

@@ -19,7 +19,7 @@ interface ProjectBuilder<P : Project> {
     fun setDescription(desc: String): ProjectBuilder<P>
 
     fun setPath(path: String): ProjectBuilder<P>
-    fun setBackground(color: Color): ProjectBuilder<P>
+    fun setBackground(color: Int): ProjectBuilder<P>
 
     fun addGraphs(graphs: List<Graph>): ProjectBuilder<P>
 

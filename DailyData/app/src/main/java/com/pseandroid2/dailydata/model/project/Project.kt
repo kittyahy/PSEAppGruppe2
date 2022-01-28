@@ -81,7 +81,7 @@ interface Project {
         @Suppress("Deprecation")
         get() = getProjectSkeleton().path
 
-    var color: Color
+    var color: Int
         set(value) {
             @Suppress("Deprecation")
             getProjectSkeleton().color = value
@@ -161,7 +161,7 @@ interface ProjectSkeleton {
     fun getWallpaper(): Drawable
 
     var path: String
-    var color: Color
+    var color: Int
 
     fun getGraphs(): Collection<Graph>
     fun addGraphs(graphs: Collection<Graph>)
@@ -218,7 +218,7 @@ interface ProjectTemplate {
         @Suppress("Deprecation")
         get() = getProjectSkeleton().path
 
-    var color: Color
+    var color: Int
         set(value) {
             @Suppress("Deprecation")
             getProjectSkeleton().color = value
