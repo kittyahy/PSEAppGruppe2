@@ -11,7 +11,6 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Da
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Notification
 import io.mockk.coEvery
-import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -36,7 +35,6 @@ class CreateProjectTest {
         val createProject =
             CreateProject(
                 "user",
-                projectCDManager,
                 testString,
                 "description",
                 0,
@@ -46,7 +44,11 @@ class CreateProjectTest {
                 ArrayList<Graph>()
             )
         coEvery {projectCDManager.insertProject(capture(slot))} returns mockk<SimpleProject>()
-        val task = async {createProject.execute(mockk<AppDataBase>(), mockk<RemoteDataSourceAPI>())}
+        val task = async {createProject.execute(
+            mockk<AppDataBase>(),
+            mockk<RemoteDataSourceAPI>(),
+            projectCDManager,
+        )}
         task.await()
         assertEquals(testString, slot.captured.name)
     }
