@@ -21,7 +21,7 @@ class CreateProject (commandByUser: String,
                      private val buttons: List<Button>, //TODO add
                      private val notification: List<Notification>,
                      private val graphs: List<Graph>
-)
+) //Todo secondary constructor with communicationClasses.project
     : ProjectCommand(
     commandByUser = commandByUser,
     isProjectAdmin = true) {
@@ -38,7 +38,7 @@ class CreateProject (commandByUser: String,
 
         val project: Project = pb.build()
         projectCDManager.insertProject(project)
-        super.execute(appDataBase, remoteDataSourceAPI)
+        //super.execute(appDataBase, remoteDataSourceAPI) Todo rein
     }
 
     override suspend fun publish() {
