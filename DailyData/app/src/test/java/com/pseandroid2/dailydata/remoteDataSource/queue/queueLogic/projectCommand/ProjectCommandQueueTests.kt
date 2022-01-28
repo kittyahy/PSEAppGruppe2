@@ -9,10 +9,9 @@ import org.junit.Test
 
 class ProjectCommandQueueTests {
 
-    var projectCommandQueue = ProjectCommandQueue()
+    private var projectCommandQueue = ProjectCommandQueue()
 
-    var projectCommand1 = ProjectCommandInfo(projectCommand = "Project Command: 1")
-    var projectCommand2 = ProjectCommandInfo(projectCommand = "Project Command: 2")
+    private var projectCommand1 = ProjectCommandInfo(projectCommand = "Project Command: 1")
 
     @Before
     fun setup() {

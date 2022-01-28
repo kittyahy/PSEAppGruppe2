@@ -179,7 +179,7 @@ class RESTAPI {
     /**
      * Removes a user from a project
      *
-     * @param userToRemove: The id of the user that sould be removed from the project
+     * @param userToRemove: The id of the user that should be removed from the project
      * @param projectID: The id of the project from which the user should be removed
      * @param authToken: The authentication token
      * @return Boolean: Did the server call succeed

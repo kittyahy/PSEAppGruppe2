@@ -143,7 +143,7 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
     /**
      * Removes a user from a project
      *
-     * @param userToRemove: The id of the user that sould be removed from the project
+     * @param userToRemove: The id of the user that should be removed from the project
      * @param projectID: The id of the project from which the user should be removed
      * @param authToken: The authentication token
      * @return Did the task succeed?
@@ -156,7 +156,7 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * Creates a new online project on the server and returns the id
      *
      * @param authToken: The authentication token
-     * @return LONG: Returns the id of the created project. Returns -1 if an error occured
+     * @return LONG: Returns the id of the created project. Returns -1 if an error occurred
      */
     fun addProject(authToken: String): Long{
         return restAPI.addProject(authToken)

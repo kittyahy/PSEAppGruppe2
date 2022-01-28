@@ -42,7 +42,7 @@ class UserAccount @Inject constructor(fm: FirebaseManager) {
         when(type)
         {
             SignInTypes.EMAIL -> return firebaseManager.registerUserWithEmailAndPassword(eMail, password)
-            SignInTypes.GOOGLE -> Log.d("SignIn: ", "SignInType not implemented") // TODO: Wenn später noch google Anmeldung hinzugefügt werden sollen
+            SignInTypes.GOOGLE -> Log.d("SignIn: ", "SignInType not implemented") // You could add google registration here, if implemented
         }
         return FirebaseReturnOptions.REGISTRATION_FAILED
     }
@@ -59,7 +59,7 @@ class UserAccount @Inject constructor(fm: FirebaseManager) {
         when(type)
         {
             SignInTypes.EMAIL -> return firebaseManager.signInWithEmailAndPassword(eMail, password)
-            SignInTypes.GOOGLE -> Log.d("SignIn: ", "SignInType not implemented") // TODO: Wenn später noch google Anmeldung hinzugefügt werden sollen
+            SignInTypes.GOOGLE -> Log.d("SignIn: ", "SignInType not implemented") // You could add google sign in here, if implemented
         }
         return FirebaseReturnOptions.REGISTRATION_FAILED
     }

@@ -20,7 +20,6 @@
 
 package com.pseandroid2.dailydata.remoteDataSource.userManager
 
-import android.os.CountDownTimer
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -34,7 +33,6 @@ import com.google.firebase.ktx.Firebase
 class FirebaseManager(timeout: Long?) {
     private var idToken: String = ""
     private val timeoutTime: Long = timeout ?: 20000
-
 
     // Initialize Firebase Auth
     private var auth: FirebaseAuth = Firebase.auth
@@ -60,20 +58,17 @@ class FirebaseManager(timeout: Long?) {
         val task = auth.createUserWithEmailAndPassword(email, password)
 
         while (!task.isComplete) {
-            // TODO: Test Counter
             if(System.currentTimeMillis() - startTime >= timeoutTime) {
                 return returnParameter
             }
         }
 
-        if (task.isSuccessful) {
-            // Sign in success
+        returnParameter = if (task.isSuccessful) {
             Log.d("FireBase: ", "createUserWithEmail:success")
-            returnParameter = FirebaseReturnOptions.REGISTERED
+            FirebaseReturnOptions.REGISTERED
         } else {
-            // If sign in fails
             Log.w("FireBase: ", "createUserWithEmail:failure", task.exception)
-            returnParameter = FirebaseReturnOptions.REGISTRATION_FAILED
+            FirebaseReturnOptions.REGISTRATION_FAILED
         }
         refreshIdToken(true)
 
@@ -92,25 +87,22 @@ class FirebaseManager(timeout: Long?) {
         }
 
         var returnParameter = FirebaseReturnOptions.TIMEOUT
-        var startTime = System.currentTimeMillis()
+        val startTime = System.currentTimeMillis()
 
         val task = auth.signInWithEmailAndPassword(email, password)
 
         while(!task.isComplete) {
-            // TODO: Test timeout
             if (System.currentTimeMillis() - startTime > timeoutTime) {
                 return returnParameter
             }
         }
 
-        if (task.isSuccessful) {
-            // Sign in success
+        returnParameter = if (task.isSuccessful) {
             Log.d("FireBase: ", "signINWithEmail:success")
-            returnParameter = FirebaseReturnOptions.SINGED_IN
+            FirebaseReturnOptions.SINGED_IN
         } else {
-            // If sign in fails
             Log.d("FireBase: ", "signINWithEmail:failure", task.exception)
-            returnParameter = FirebaseReturnOptions.SIGN_IN_FAILED
+            FirebaseReturnOptions.SIGN_IN_FAILED
         }
         refreshIdToken(true)
 
@@ -192,14 +184,13 @@ class FirebaseManager(timeout: Long?) {
     }
 
     /**
-     * Returns a firebase authentication token
+     * Saves a firebase authentication token into the variable idToken
      *
-     * @param forceRefresh: Should the new firebase token be forcefully refreshed
-     * @return //TODO
+     * @param forceRefresh: Should the returned firebase token be forcefully refreshed
      */
     private fun refreshIdToken(forceRefresh: Boolean) {
         val user: FirebaseUser? = auth.currentUser
-        var startTime = System.currentTimeMillis()
+        val startTime = System.currentTimeMillis()
 
         idToken = ""
         if (user == null) {
@@ -210,7 +201,6 @@ class FirebaseManager(timeout: Long?) {
 
 
         while (!task.isComplete) {
-            // TODO Test timeout
             if (System.currentTimeMillis() - startTime > timeoutTime) {
                 return
             }

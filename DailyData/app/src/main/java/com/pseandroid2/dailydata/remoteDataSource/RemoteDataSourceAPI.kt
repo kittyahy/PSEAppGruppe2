@@ -224,7 +224,7 @@ class RemoteDataSourceAPI @Inject constructor(uAccount: UserAccount?, sManager: 
     /**
      * Creates a new online project on the server and returns the id
      *
-     * @return LONG: Returns the id of the created project. Returns -1 if an error occured
+     * @return LONG: Returns the id of the created project. Returns -1 if an error occurred
      */
     fun createNewOnlineProject(): Long{
         val authToken: String = userAccount.getToken()

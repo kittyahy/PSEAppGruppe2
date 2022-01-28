@@ -7,12 +7,12 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
-class fetchRequestQueueTests {
+class FetchRequestQueueTests {
 
-    var fetchRequestQueue = FetchRequestQueue()
+    private var fetchRequestQueue = FetchRequestQueue()
 
-    var fetchRequest1 = FetchRequest(requestInfo = "Fetch Request: 1")
-    var fetchRequest2 = FetchRequest(requestInfo = "Fetch Request: 2")
+    private var fetchRequest1 = FetchRequest(requestInfo = "Fetch Request: 1")
+    private var fetchRequest2 = FetchRequest(requestInfo = "Fetch Request: 2")
 
     @Before
     fun setup() {
