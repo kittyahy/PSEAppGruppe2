@@ -36,6 +36,9 @@ import kotlinx.coroutines.runBlocking
 import java.time.LocalDateTime
 import javax.inject.Inject
 
+/**
+ * Manages all features which are related to our server
+ */
 class ServerManager @Inject constructor(restapi: RESTAPI) {
     private val restAPI: RESTAPI = restapi
 
@@ -177,7 +180,7 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param projectID: The id of the project whose deltas (projectCommands) you want to load into the FetchRequestQueue
      * @param authToken: The authentication token
      */
-    fun getDeltasFromServer(projectID: Long, authToken: String) {
+    fun getProjectCommandsFromServer(projectID: Long, authToken: String) {
         val receivedProjectCommands: Collection<Delta> = restAPI.getDelta(projectID, authToken)
         receivedProjectCommands.forEach {
             // Transform Delta into an Project Command
