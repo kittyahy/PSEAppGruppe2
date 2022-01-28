@@ -29,6 +29,7 @@ class CreateProjectTest {
         stringTest("Donaudampfschiffahrtskapitänsmütze")
 
     }
+    @ExperimentalCoroutinesApi
     private fun stringTest(testString: String) = runTest {
         val projectCDManager = mockk<ProjectCDManager>()
         val slot = slot<Project>()
