@@ -44,4 +44,11 @@ class UpdatedByObserver_ForTesting {
     fun getUpdated(): Int {
         return updated
     }
+
+    /**
+     * resets the update variable
+     */
+    fun resetUpdate() {
+        updated = 0
+    }
 }
