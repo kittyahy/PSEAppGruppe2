@@ -24,7 +24,6 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import com.pseandroid2.dailydata.model.uielements.UIElementType
 import com.pseandroid2.dailydata.model.database.entities.UIElementMap
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.util.SortedIntListUtil
@@ -51,6 +50,7 @@ abstract class UIElementDAO {
                 id,
                 columnId,
                 element.type.toString(),
+                element.name,
                 element.state
             )
         )
@@ -62,6 +62,9 @@ abstract class UIElementDAO {
 
     @Query("UPDATE uiElement SET state = :state WHERE projectId = :projectId AND id = :id")
     abstract suspend fun changeUIElementState(projectId: Int, id: Int, state: String)
+
+    @Query("UPDATE uiElement SET name = :name WHERE projectId = :projectId AND id = :id")
+    abstract suspend fun changeUIElementName(projectId: Int, id: Int, name: String)
 
     /*========================SHOULD ONLY BE CALLED FROM INSIDE THE MODEL=========================*/
     @Delete

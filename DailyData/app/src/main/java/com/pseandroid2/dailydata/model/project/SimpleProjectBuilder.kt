@@ -1,5 +1,6 @@
 package com.pseandroid2.dailydata.model.project
 
+import android.graphics.Color
 import com.pseandroid2.dailydata.model.Graph
 import com.pseandroid2.dailydata.model.settings.MapSettings
 import com.pseandroid2.dailydata.model.settings.Settings
@@ -15,7 +16,17 @@ class SimpleProjectBuilder : ProjectBuilder<SimpleProject> {
     @Suppress("Deprecation")
     private var project =
         SimpleProject(
-            SimpleSkeleton(0, 0, "", "", "", mutableListOf(), MapSettings(), mutableListOf()),
+            SimpleSkeleton(
+                0,
+                0,
+                "",
+                "",
+                "",
+                Color.BLACK,
+                mutableListOf(),
+                MapSettings(),
+                mutableListOf()
+            ),
             ArrayListTable(ArrayListLayout()),
             userList = mutableListOf()
         )
@@ -23,7 +34,17 @@ class SimpleProjectBuilder : ProjectBuilder<SimpleProject> {
     override fun reset(id: Int): ProjectBuilder<SimpleProject> {
         @Suppress("Deprecation")
         project = SimpleProject(
-            SimpleSkeleton(id, 0, "", "", "", mutableListOf(), MapSettings(), mutableListOf()),
+            SimpleSkeleton(
+                id,
+                0,
+                "",
+                "",
+                "",
+                Color.BLACK,
+                mutableListOf(),
+                MapSettings(),
+                mutableListOf()
+            ),
             ArrayListTable(ArrayListLayout()),
             userList = mutableListOf()
         )
@@ -52,6 +73,11 @@ class SimpleProjectBuilder : ProjectBuilder<SimpleProject> {
 
     override fun setPath(path: String): ProjectBuilder<SimpleProject> {
         project.path = path
+        return this
+    }
+
+    override fun setBackground(color: Int): ProjectBuilder<SimpleProject> {
+        project.color = color
         return this
     }
 

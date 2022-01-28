@@ -20,6 +20,7 @@
 
 package com.pseandroid2.dailydata.model.project
 
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import com.pseandroid2.dailydata.model.Graph
 import com.pseandroid2.dailydata.model.settings.Settings
@@ -31,6 +32,7 @@ class SimpleSkeleton(
     override var name: String,
     override var desc: String,
     override var path: String,
+    override var color: Int,
     private val graphList: MutableList<Graph>,
     private var skeletonSettings: Settings,
     private val notificationList: MutableList<Notification>
