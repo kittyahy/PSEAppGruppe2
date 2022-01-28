@@ -1,5 +1,6 @@
 package com.pseandroid2.dailydata.model.project
 
+import android.graphics.Color
 import com.pseandroid2.dailydata.model.Graph
 import com.pseandroid2.dailydata.model.settings.Settings
 import com.pseandroid2.dailydata.model.notifications.Notification
@@ -18,6 +19,7 @@ interface ProjectBuilder<P : Project> {
     fun setDescription(desc: String): ProjectBuilder<P>
 
     fun setPath(path: String): ProjectBuilder<P>
+    fun setBackground(color: Color): ProjectBuilder<P>
 
     fun addGraphs(graphs: List<Graph>): ProjectBuilder<P>
 

@@ -1,5 +1,6 @@
 package com.pseandroid2.dailydata.model.project
 
+import android.graphics.Color
 import com.pseandroid2.dailydata.model.Graph
 import com.pseandroid2.dailydata.model.settings.MapSettings
 import com.pseandroid2.dailydata.model.settings.Settings
@@ -52,6 +53,11 @@ class SimpleProjectBuilder : ProjectBuilder<SimpleProject> {
 
     override fun setPath(path: String): ProjectBuilder<SimpleProject> {
         project.path = path
+        return this
+    }
+
+    override fun setBackground(color: Color): ProjectBuilder<SimpleProject> {
+        project.color = color
         return this
     }
 
