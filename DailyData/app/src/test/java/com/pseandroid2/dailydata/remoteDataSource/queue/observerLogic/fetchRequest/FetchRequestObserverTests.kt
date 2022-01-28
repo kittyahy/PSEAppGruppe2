@@ -9,14 +9,14 @@ import org.junit.Before
 import org.junit.Test
 
 class FetchRequestObserverTests {
-    var fetchRequestQueue = FetchRequestQueue()
+    private var fetchRequestQueue = FetchRequestQueue()
 
-    var toUpdate = UpdatedByObserver_ForTesting()
-    var toUpdateObjects = mutableListOf<UpdatedByObserver_ForTesting>() // for testing multiple observer
+    private var toUpdate = UpdatedByObserver_ForTesting()
+    private var toUpdateObjects = mutableListOf<UpdatedByObserver_ForTesting>() // for testing multiple observer
 
     // Create observer
-    var observer = FetchRequestQueueObserver_ForTesting(toUpdate)
-    val observers: MutableList<FetchRequestQueueObserver_ForTesting> = mutableListOf() // for testing multiple observer
+    private var observer = FetchRequestQueueObserver_ForTesting(toUpdate)
+    private val observers: MutableList<FetchRequestQueueObserver_ForTesting> = mutableListOf() // for testing multiple observer
 
 
     @Before
