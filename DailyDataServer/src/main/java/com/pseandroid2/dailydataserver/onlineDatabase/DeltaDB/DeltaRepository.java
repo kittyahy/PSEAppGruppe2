@@ -28,11 +28,16 @@ import java.util.List;
 @Repository
 public interface DeltaRepository extends JpaRepository<Delta, DeltaID> {
 
+    List<Delta> findByProjectAndRequestedByIs(long project, String requestedBy);
+
     long countByUserAndAddedToServerIsAfter(String user, LocalDateTime addedToServer);
 
-    List<Delta> findByProjectAndDownloadedBy_UserIsNotAndRequestedByEquals(long project, String user, String requestedBy);
+    List<Delta> findByAddedToServerIsBeforeAndRequestedBy(LocalDateTime addedToServer, String requestedBy);
 
-    List<Delta> findByRequestedByAndProject(String requestedBy, long project);
+    List<Delta> findByRequestedByAndProject(String user, long projectID);
+
+
+
 
 
 

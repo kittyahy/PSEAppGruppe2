@@ -23,9 +23,7 @@ import com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -42,10 +40,8 @@ public class Delta {
     private String projectCommand;
     private long project;
     private boolean isAdmin;
-
     private String requestedBy;
-    @OneToMany
-    private Set<ProjectParticipants> downloadedBy;
+
 
     /**
      * new Delta
@@ -57,7 +53,6 @@ public class Delta {
         this.project = project;
         this.isAdmin = isAdmin;
         requestedBy ="";
-        downloadedBy = new HashSet<>();
     }
     /**
      * Old data
@@ -81,19 +76,6 @@ public class Delta {
 
     public Delta() {
 
-    }
-
-    public Set<ProjectParticipants> getDownloadedBy() {
-        return downloadedBy;
-    }
-
-    public void addDownloadedBy(ProjectParticipants participant) {
-        downloadedBy.add(participant);
-
-    }
-
-    public void setDownloadedBy(Set<ProjectParticipants> downloadedBy){
-        this.downloadedBy = downloadedBy;
     }
 
 
@@ -165,8 +147,8 @@ public class Delta {
                 ", user='" + user + '\'' +
                 ", projectCommand='" + projectCommand + '\'' +
                 ", project=" + project +
-                ", requestedBy='" + requestedBy + '\'' +
                 ", isAdmin=" + isAdmin +
+                ", requestedBy='" + requestedBy +
                 '}';
     }
 }

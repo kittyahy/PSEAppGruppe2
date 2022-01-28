@@ -19,17 +19,13 @@
 */
 package com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Objects;
 
 /**
  * #TODO JavaDoc
  */
 @Entity
-@Table(name = "ProjectParticipants_Table")
 @IdClass(ProjectParticipantsID.class)
 public class ProjectParticipants {
     private @Id
@@ -104,4 +100,5 @@ public class ProjectParticipants {
                 ", numberOfJoin=" + numberOfJoin +
                 '}';
     }
+
 }

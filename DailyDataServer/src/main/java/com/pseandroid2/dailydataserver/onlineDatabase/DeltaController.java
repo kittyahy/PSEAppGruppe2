@@ -25,7 +25,6 @@ import com.pseandroid2.dailydataserver.onlineDatabase.requestParameters.deltaCon
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -73,20 +72,11 @@ public class DeltaController {
      */
     @GetMapping("/get/{id}")
     public List<Delta> getDelta(@PathVariable("id") long projectId, @RequestAttribute String user) {
-        /*
-         * - sucht alle deltas heraus, für die gilt:
-         *      - zu dem projekt gehören
-         *      - kein requestedby haben
-         *      - der nutzer nicht, in downloadedby ist
-         * - fügt den client in alle downloadedby hinzu.
-         * - sucht alle deltas heraus, für die gilt:
-         *      - requestedBy ist der user
-         *  - löscht alle Deltas, die requested by user sind
-         * - löscht alle FetchRequests, die:
-         *      - user und projectID haben
-         * - räumt alle Deltas auf  (am besten asynchron...)
-         */
-        return new ArrayList<>();
+
+        List<Delta> newDelta = service.getNewDelta(projectId,user);
+        List<Delta> oldDelta = service.getOldDelta(projectId,user);
+        newDelta.addAll(oldDelta);
+        return newDelta;
     }
 
     /**
@@ -99,13 +89,7 @@ public class DeltaController {
     @PostMapping("/provide/{id}")
     public boolean provideOldData(@PathVariable("id") long projectId, @RequestAttribute String user,
                                   @RequestBody ProvideOldDataParameter params) {
-        /*
-        - aufräumen
-        - platz checken:
-         - Deltas hinzufügen,
-          falls platz nicht reicht, ganz alte löschen
-         */
-        return true;
+        return service.addOldDelta(projectId, params.getInitialAddedBy(), params.getForUser(), params.getCommand(), params.getInitialAdded(), params.isWasAdmin());
     }
 
     /**
@@ -115,9 +99,7 @@ public class DeltaController {
      */
     @GetMapping("/time")
     public long getRemoveTime() {
-        /*
-         * Zeit zurückgeben
-         */
-        return 0;
+
+        return service.getRemoveTimeInMinutes();
     }
 }
