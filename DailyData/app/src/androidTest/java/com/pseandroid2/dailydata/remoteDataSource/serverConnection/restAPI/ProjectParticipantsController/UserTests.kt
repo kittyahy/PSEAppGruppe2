@@ -13,7 +13,7 @@ class UserTests {
     @Before
     fun setup() {
         // Generate valid firebase authentication token
-        val fm = FirebaseManager()
+        val fm = FirebaseManager(null)
         var email = "test@student.kit.edu"
         var password = "PSEistsuper"
 

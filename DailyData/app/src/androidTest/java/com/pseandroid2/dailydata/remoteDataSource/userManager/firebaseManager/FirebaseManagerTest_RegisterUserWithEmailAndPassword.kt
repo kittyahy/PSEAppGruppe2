@@ -15,7 +15,7 @@ class FirebaseManagerTest_RegisterUserWithEmailAndPassword {
         var email = "pseFan@student.kit.edu"
         var password = "mehrSpaßAlsBeiPSEGibtsNicht"
 
-        var fm = FirebaseManager()
+        var fm = FirebaseManager(null)
 
         fm.signOut()
 

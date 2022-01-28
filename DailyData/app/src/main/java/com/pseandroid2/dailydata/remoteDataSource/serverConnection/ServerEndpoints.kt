@@ -44,8 +44,7 @@ import java.time.LocalDateTime
  */
 interface ServerEndpoints
 {
-    //TODO: Alle URLs sind noch Platzhalter, bis wir endgültige vom Server bekommen
-    //TODO: Prüfe ob Rückgabe typen nullable sein können
+    // TODO: Java docs für Methoden im Interface
 
     // Greeting Controller
     @GET("greet")

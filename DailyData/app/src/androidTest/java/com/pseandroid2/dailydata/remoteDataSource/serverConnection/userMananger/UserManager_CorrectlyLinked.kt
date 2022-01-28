@@ -21,7 +21,7 @@ import java.time.LocalDateTime
 
 class UserManager_CorrectlyLinked {
 
-    private val fm: FirebaseManager = FirebaseManager()
+    private val fm: FirebaseManager = FirebaseManager(null)
     private val userAccount = UserAccount(fm)
     private lateinit var mockedFM: FirebaseManager
     private lateinit var mockedUserAccount: UserAccount

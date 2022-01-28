@@ -69,15 +69,15 @@ class RDSAPI_CorrectlyLinked {
     @Test
     fun serverManagerCorrectlyLinked() {
         Assert.assertTrue(rdsAPI.connectionToServerPossible())
-        Assert.assertEquals(postPreviewList.elementAt(0), rdsAPI.getAllPostPreview().elementAt(0))
+        Assert.assertEquals(postPreviewList.elementAt(0), rdsAPI.getPostPreviews().elementAt(0))
         Assert.assertEquals(postDetailList.elementAt(0), rdsAPI.getPostDetail(1).elementAt(0))
         Assert.assertEquals("ProjectTemplate", rdsAPI.getProjectTemplate(1))
         Assert.assertEquals("GraphTemplate", rdsAPI.getGraphTemplate(1, 1))
-        Assert.assertEquals(1, rdsAPI.addPost("", Pair("", ""), listOf(Pair("", ""))))
+        Assert.assertEquals(1, rdsAPI.uploadPost("", Pair("", ""), listOf(Pair("", ""))))
         Assert.assertTrue(rdsAPI.removePost(1))
         Assert.assertTrue(rdsAPI.joinProject(1))
         Assert.assertTrue(rdsAPI.removeUser("", 1))
-        Assert.assertEquals(0, rdsAPI.addProject())
+        Assert.assertEquals(0, rdsAPI.createNewOnlineProject())
         Assert.assertEquals(sendCommandsList.elementAt(0), rdsAPI.sendCommandsToServer(1, emptyList()).elementAt(0))
         Assert.assertTrue(rdsAPI.provideOldData("", "", LocalDateTime.parse("0001-01-01T00:00"), "", 1, false))
         Assert.assertEquals(LocalDateTime.parse("0001-01-01T00:00"), rdsAPI.getRemoveTime())

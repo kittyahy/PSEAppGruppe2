@@ -10,7 +10,7 @@ class FirebaseManagerTest_SignOut {
 
     @Test
     fun registerUser() {
-        var fm = FirebaseManager()
+        var fm = FirebaseManager(null)
 
         // SignOut when no User is Connected
         var returnParameter1 =  fm.signOut()

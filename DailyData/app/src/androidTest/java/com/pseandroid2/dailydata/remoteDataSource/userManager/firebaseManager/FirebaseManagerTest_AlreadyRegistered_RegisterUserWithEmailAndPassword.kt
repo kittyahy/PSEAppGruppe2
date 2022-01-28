@@ -13,7 +13,7 @@ class FirebaseManagerTest_AlreadyRegistered_RegisterUserWithEmailAndPassword {
         var email = "test@student.kit.edu"
         var password = "PSEistsuper"
 
-        var fm = FirebaseManager()
+        var fm = FirebaseManager(null)
 
         val returnParameter = fm.registerUserWithEmailAndPassword(email, password)
 

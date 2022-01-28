@@ -32,7 +32,7 @@ import java.time.LocalDateTime
  * @param requestedBy: The UserID of the user who requested this Delta
  * @param isAdmin: Was the creator of the delta an admin
  */
-data class Delta(val addedToServer: LocalDateTime = java.time.LocalDateTime.parse("0001-01-01T00:00"),
+data class Delta(val addedToServer: LocalDateTime = LocalDateTime.parse("0001-01-01T00:00"),
                  val user: String = "",
                  val projectCommand: String = "",
                  val project: Long = -1,

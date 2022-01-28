@@ -13,7 +13,7 @@ class FirebaseManagerTest_GetEmail {
         var email = "test@student.kit.edu"
         var password = "PSEistsuper"
 
-        var fm = FirebaseManager()
+        var fm = FirebaseManager(null)
 
         fm.signOut()
         Assert.assertEquals("", fm.getUserEMail())

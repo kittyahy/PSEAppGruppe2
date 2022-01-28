@@ -49,6 +49,8 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
     // ------------------------------ServerLogic--------------------------------
     // ----------------------------------GreetingController--------------------------------
     /**
+     * Checks if it possible to connect to our server
+     *
      * @return Boolean: If a server connection possible return true, else return false
      */
     fun greet(): Boolean {
@@ -57,6 +59,8 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
 
     // ----------------------------------PostsController-------------------------------
     /**
+     * Gets post previews from the server
+     *
      * @param authToken: The authentication token
      * @return Collection<PostPreview>: The previews of the posts
      */
@@ -65,6 +69,8 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
     }
 
     /**
+     * Gets the details of a post
+     *
      * @param fromPost: The id from the searched post
      * @param authToken: The authentication token
      * @return Collection<TemplateDetail>: Returns the detailed post belonging to the post id
@@ -74,6 +80,8 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
     }
 
     /**
+     * Gets the project template of a post
+     *
      * @param fromPost: The post from which the project template should be downloaded
      * @param authToken: The authentication token
      * @return String - The requested project template as JSON
@@ -82,7 +90,8 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
         return restAPI.getProjectTemplate(fromPost, authToken)
     }
 
-    /** Downloads one graph template that is contained by a post
+    /**
+     * Downloads one graph template that is contained by a post
      *
      * @param fromPost: The post from which the graph templates should be downloaded
      * @param templateNumber: Which graph template should be downloaded from the post
@@ -95,6 +104,8 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
 
     // Wish-criteria
     /**
+     * Uploads a post to the server
+     *
      * @param postPreview: The preview of the post that should be added
      * @param projectTemplate: The project template pair as a pair of the project template and the project template preview
      * @param graphTemplates: The graph templates as Collection of pairs of graph templates as JSONs and the graph template previews
@@ -107,6 +118,8 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
 
     // Wish-criteria
     /**
+     * Deletes a post from the server
+     *
      * @param postID: The id of the post that should be removed from the server
      * @param authToken: The authentication token
      * @return Boolean: Did the server call succeed
@@ -117,6 +130,8 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
 
     // ----------------------------------ProjectParticipantsController-------------------------------
     /**
+     * Lets the currently signed in user join the project
+     *
      * @param projectID: The id of the project to which the user is to be added
      * @param authToken: The authentication token
      * @return Did the task succeed?
@@ -126,6 +141,8 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
     }
 
     /**
+     * Removes a user from a project
+     *
      * @param userToRemove: The id of the user that sould be removed from the project
      * @param projectID: The id of the project from which the user should be removed
      * @param authToken: The authentication token
@@ -136,6 +153,8 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
     }
 
     /**
+     * Creates a new online project on the server and returns the id
+     *
      * @param authToken: The authentication token
      * @return LONG: Returns the id of the created project. Returns -1 if an error occured
      */
@@ -145,10 +164,12 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
 
     // ----------------------------------DeltaController-------------------------------
     /**
+     * Sends newly added project commands to the server
+     *
      * @param projectID: The id of the project to which the project commands should be uploaded
      * @param projectCommands: The project commands that should be send to the server (as JSON)
      * @param authToken: The authentication token
-     * @return Collection<String>: The successfully uploaded project commands (as JSONs) // TODO: ändere dies im Entwurfsdokument
+     * @return Collection<String>: The successfully uploaded project commands (as JSONs)
      */
     fun sendCommandsToServer(projectID: Long, projectCommands: Collection<String>, authToken: String): Collection<String> {
         val successfullyUploaded: MutableList<String> = mutableListOf()
@@ -158,7 +179,7 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
         }
 
         val jobs: MutableList<Job> = mutableListOf()
-        runBlocking { // this: CoroutineScope TODO: Test if this is ok
+        runBlocking { // this: CoroutineScope
             projectCommands.forEach { // Calls saveDelta in parallel
                 // Send each project command in parallel
                 val job = launch {
@@ -177,6 +198,8 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
     }
 
     /**
+     * Gets the project commands of a project
+     *
      * @param projectID: The id of the project whose deltas (projectCommands) you want to load into the FetchRequestQueue
      * @param authToken: The authentication token
      */
@@ -191,6 +214,8 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
     }
 
     /**
+     * Answers a fetch request
+     *
      * @param projectCommand: The projectCommand that should be uploaded to the server (as JSON)
      * @param forUser: The id of the user whose fetch request is answered
      * @param initialAddedDate: The time when the fetchRequest is uploaded
@@ -204,6 +229,8 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
     }
 
     /**
+     * Gets the remove time from the server
+     *
      * @param authToken: The authentication token
      * @return LocalDateTime: The time how long an project command can remain on the server until it gets deleted by the server
      */
@@ -213,6 +240,8 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
 
     // ----------------------------------FetchRequestController-------------------------------
     /**
+     * Sends a fetch request to the server
+     *
      * @param projectID: The id of the project to which the fetch request should be uploaded
      * @param requestInfo: The fetch request as JSON
      * @param authToken: The authentication token
@@ -223,10 +252,12 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
     }
 
     /**
+     * Fills the FetchRequestQueue with fetch requests from a project
+     *
      * @param projectID: The id of the project from which the fetch requests should be downloaded
      * @param authToken: The authentication token
      */
-    fun getFetchRequests(projectID: Long, authToken: String) { // TODO: Ausgabe ist im Entwurfsheft Collection<FetchRequest>
+    fun getFetchRequests(projectID: Long, authToken: String) {
         val receivedFetchRequests: Collection<FetchRequest> = restAPI.getFetchRequests(projectID, authToken)
         receivedFetchRequests.forEach {
             fetchRequestQueue.addFetchRequest(it)

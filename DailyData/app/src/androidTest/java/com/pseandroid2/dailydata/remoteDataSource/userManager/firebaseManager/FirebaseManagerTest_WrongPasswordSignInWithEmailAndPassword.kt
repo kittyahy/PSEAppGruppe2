@@ -13,7 +13,7 @@ class FirebaseManagerTest_WrongPasswordSignInWithEmailAndPassword {
         var email = "test@student.kit.edu"
         var password = "WrongPassword"
 
-        var fm = FirebaseManager()
+        var fm = FirebaseManager(null)
 
         fm.signOut()
         val returnParameter = fm.signInWithEmailAndPassword(email, password)

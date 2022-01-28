@@ -20,7 +20,8 @@
 
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection
 
-import android.util.Log
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.AddPostParameter
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.DemandOldDataParameter
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.ProvideOldDataParameter
@@ -28,18 +29,13 @@ import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParamet
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.SaveDeltaParameter
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.Delta
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
-import retrofit2.Call
-import retrofit2.Response
-import java.time.LocalDateTime
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import com.google.gson.GsonBuilder
-
-import com.google.gson.Gson
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.PostPreview
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.TemplateDetail
-import kotlinx.coroutines.runBlocking
-import java.util.concurrent.CompletableFuture
+import retrofit2.Call
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.time.LocalDateTime
 
 /**
  * Carries out all calls to our server
@@ -62,10 +58,10 @@ class RESTAPI {
 
     // Note: There is no need to send the User ID of the current user to the server, as this can be read from the Firebase authToken
 
-    // TODO: Bei alles Tests prüfen wie man nach Fehlern sucht
-
     //------------------------------------- Greetings Controller -------------------------------------
     /**
+     * Checks if it possible to connect to our server
+     *
      * @return Boolean: Returns true, if the server could be successfully reached. Otherwise return false
      */
     fun greet(): Boolean {
@@ -83,6 +79,8 @@ class RESTAPI {
 
     //------------------------------------- Posts Controller -------------------------------------
     /**
+     * Gets post previews from the server
+     *
      * @param authToken: The authentication token
      * @return Collection<PostPreview>: The previews of the posts
      */
@@ -93,6 +91,8 @@ class RESTAPI {
     }
 
     /**
+     * Gets the details of a post
+     *
      * @param fromPost: The id from the searched post
      * @param authToken: The authentication token
      * @return Collection<TemplateDetail>: Returns the detailed post belonging to the post id
@@ -104,6 +104,8 @@ class RESTAPI {
     }
 
     /**
+     * Gets the project template of a post
+     *
      * @param fromPost: The post from which the project template should be downloaded
      * @param authToken: The authentication token
      * @return String - The requested project template as JSON
@@ -114,7 +116,8 @@ class RESTAPI {
         return call.execute().body() ?: ""
     }
 
-    /** Downloads one graph template that is contained by a post
+    /**
+     * Downloads one graph template that is contained by a post
      *
      * @param fromPost: The post from which the graph templates should be downloaded
      * @param templateNumber: Which graph template should be downloaded from the post
@@ -129,6 +132,8 @@ class RESTAPI {
 
     // Wish-criteria
     /**
+     * Uploads a post to the server
+     *
      * @param postPreview: The preview of the post that should be added
      * @param projectTemplate: The project template pair as a pair of the project template and the project template preview
      * @param graphTemplates: The graph templates as Collection of pairs of graph templates as JSONs and the graph template previews
@@ -144,6 +149,8 @@ class RESTAPI {
 
     // Wish-criteria
     /**
+     * Deletes a post from the server
+     *
      * @param postID: The id of the post that should be removed from the server
      * @param authToken: The authentication token
      * @return Boolean: Did the server call succeed
@@ -157,6 +164,8 @@ class RESTAPI {
 
     //------------------------------------- ProjectParticipantsController -------------------------------------
     /**
+     * Lets the currently signed in user join the project
+     *
      * @param projectID: The id of the project to which the user is to be added
      * @param authToken: The authentication token
      * @return Boolean: Did the server call succeed
@@ -168,6 +177,8 @@ class RESTAPI {
     }
 
     /**
+     * Removes a user from a project
+     *
      * @param userToRemove: The id of the user that sould be removed from the project
      * @param projectID: The id of the project from which the user should be removed
      * @param authToken: The authentication token
@@ -182,6 +193,8 @@ class RESTAPI {
     }
 
     /**
+     * Creates a new online project on the server and returns the id
+     *
      * @param authToken: The authentication token
      * @return LONG: Returns the id of the created project. Returns -1 if an error occurred
      */
@@ -193,7 +206,9 @@ class RESTAPI {
 
 
     //------------------------------------- Delta Controller -------------------------------------
-    /** Uploads a Project Command to the Server
+    /**
+     * Uploads a Project Command to the Server
+     *
      * @param projectID: The id of the project to which the project command should be uploaded
      * @param projectCommand: The project command that should be send to the server (as JSON)
      * @param authToken: The authentication token
@@ -206,6 +221,8 @@ class RESTAPI {
     }
 
     /**
+     * Gets the project commands of a project
+     *
      * @param projectID: The id of the project whose delta (projectCommands) you want to load into the FetchRequestQueue
      * @param authToken: The authentication token
      */
@@ -216,6 +233,8 @@ class RESTAPI {
     }
 
     /**
+     * Answers a fetch request
+     *
      * @param projectCommand: The projectCommand that should be uploaded to the server (as JSON)
      * @param forUser: The id of the user whose fetch request is answered
      * @param initialAdded: The time when the fetchRequest is uploaded
@@ -233,6 +252,8 @@ class RESTAPI {
     }
 
     /**
+     * Gets the remove time from the server
+     *
      * @param authToken: The authentication token
      * @return LocalDateTime: How long comments stay on the server before they get deleted. If an error occurred returns "0001-01-01T00:00"
      */
@@ -244,6 +265,8 @@ class RESTAPI {
 
     //------------------------------------- FetchRequestController -------------------------------------
     /**
+     * Sends a fetch request to the server
+     *
      * @param projectID: The id of the project to which the fetch request should be uploaded
      * @param requestInfo: The fetch request as JSON
      * @param authToken: The authentication token
@@ -258,6 +281,8 @@ class RESTAPI {
     }
 
     /**
+     * Gets fetch requests from the server
+     *
      * @param projectID: The id of the project from which the fetch requests should be downloaded
      * @param authToken: The authentication token
      */

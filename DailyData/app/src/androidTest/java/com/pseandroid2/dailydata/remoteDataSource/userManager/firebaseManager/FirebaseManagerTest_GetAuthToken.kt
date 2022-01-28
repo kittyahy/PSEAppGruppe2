@@ -10,7 +10,7 @@ class FirebaseManagerTest_GetAuthToken {
 
     @Test
     fun registerUser() {
-        var fm = FirebaseManager()
+        var fm = FirebaseManager(null)
 
         // SignOut
         var returnParameter1 =  fm.signOut()

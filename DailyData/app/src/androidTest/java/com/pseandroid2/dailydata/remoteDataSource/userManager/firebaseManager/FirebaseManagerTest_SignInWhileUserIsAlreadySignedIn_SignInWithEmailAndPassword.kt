@@ -16,7 +16,7 @@ class FirebaseManagerTest_SignInWhileUserIsAlreadySignedIn_SignInWithEmailAndPas
         var email2 = "pseFan@student.kit.edu"
         var password2 = "mehrSpaßAlsBeiPSEGibtsNicht"
 
-        var fm = FirebaseManager()
+        var fm = FirebaseManager(null)
 
         // Erster SignIn erfolgt
         val returnParameter1 = fm.signInWithEmailAndPassword(email1, password1)
