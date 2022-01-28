@@ -55,7 +55,7 @@ internal class ServerManagerTests_ProjectCommandQueueCorrectlyLinked {
         serverManager.addObserverToProjectCommandQueue(projectCommandObserver)
 
         // Fill Queues
-        serverManager.getDeltasFromServer(1, "") // Fills ProjectCommandQueue with projectCommandInfo Objects
+        serverManager.getProjectCommandsFromServer(1, "") // Fills ProjectCommandQueue with projectCommandInfo Objects
         Assert.assertEquals(deltaList.size, toUpdate.getUpdated())
 
         Assert.assertEquals(deltaList.size, serverManager.getProjectCommandQueueLength())
@@ -81,7 +81,7 @@ internal class ServerManagerTests_ProjectCommandQueueCorrectlyLinked {
         serverManager.unregisterObserverFromProjectCommandQueue(projectCommandObserver)
 
         // Fill Queues
-        serverManager.getDeltasFromServer(1, "") // Fills ProjectCommandQueue with projectCommandList
+        serverManager.getProjectCommandsFromServer(1, "") // Fills ProjectCommandQueue with projectCommandList
 
         Assert.assertEquals(deltaListSize, toUpdate.getUpdated()) // Should not update because no observer is linked
     }

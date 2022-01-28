@@ -31,6 +31,9 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.auth.GetTokenResult
 import com.pseandroid2.dailydata.R
 
+/**
+ * Carries out firebase authentication calls and has firebase parameter like the current user of the authentication token
+ */
 class FirebaseManager {
 
     private var idToken: String = ""

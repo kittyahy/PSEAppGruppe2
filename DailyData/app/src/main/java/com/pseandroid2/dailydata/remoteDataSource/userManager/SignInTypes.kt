@@ -20,6 +20,9 @@
 
 package com.pseandroid2.dailydata.remoteDataSource.userManager
 
+/**
+ * The possible sign in types which the user can use to sign in into the app
+ */
 enum class SignInTypes {
     EMAIL,
     GOOGLE
