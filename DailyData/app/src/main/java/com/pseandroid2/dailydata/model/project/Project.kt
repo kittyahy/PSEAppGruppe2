@@ -20,6 +20,7 @@
 
 package com.pseandroid2.dailydata.model.project
 
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import com.pseandroid2.dailydata.model.Graph
 import com.pseandroid2.dailydata.model.settings.Settings
@@ -79,6 +80,14 @@ interface Project {
         }
         @Suppress("Deprecation")
         get() = getProjectSkeleton().path
+
+    var color: Int
+        set(value) {
+            @Suppress("Deprecation")
+            getProjectSkeleton().color = value
+        }
+        @Suppress("Deprecation")
+        get() = getProjectSkeleton().color
 
     @Suppress("Deprecation")
     fun getGraphs() = getProjectSkeleton().getGraphs()
@@ -152,6 +161,7 @@ interface ProjectSkeleton {
     fun getWallpaper(): Drawable
 
     var path: String
+    var color: Int
 
     fun getGraphs(): Collection<Graph>
     fun addGraphs(graphs: Collection<Graph>)
@@ -207,6 +217,14 @@ interface ProjectTemplate {
         }
         @Suppress("Deprecation")
         get() = getProjectSkeleton().path
+
+    var color: Int
+        set(value) {
+            @Suppress("Deprecation")
+            getProjectSkeleton().color = value
+        }
+        @Suppress("Deprecation")
+        get() = getProjectSkeleton().color
 
     @Suppress("Deprecation")
     fun getGraphs() = getProjectSkeleton().getGraphs()

@@ -23,7 +23,9 @@ package com.pseandroid2.dailydata.remoteDataSource.userManager
 import android.util.Log
 import javax.inject.Inject
 
-
+/**
+ * Manages all the user related features
+ */
 class UserAccount @Inject constructor(private val fm: FirebaseManager) {
     private val firebaseManager: FirebaseManager = fm // Get the FirebaseManager via dependency injection
 
