@@ -2,13 +2,10 @@ package com.pseandroid2.dailydata.model.graph
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.drawable.Drawable
-import android.os.Environment
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineDataSet
-import com.pseandroid2.dailydata.model.Settings
+import com.pseandroid2.dailydata.model.settings.Settings
 import com.pseandroid2.dailydata.model.project.Project
-import java.io.File
 
 abstract class LineChart<T : Any>(
     override var id: Int,
@@ -16,6 +13,22 @@ abstract class LineChart<T : Any>(
     private val settings: Settings,
     private val path: String? = null
 ) : Graph<LineDataSet, Entry> {
+    companion object {
+        const val DOT_SIZE_KEY = "DOT SIZE"
+        const val DOT_COLOR_KEY = "DOT COLOR"
+        const val DOT_ENABLE_KEY = "DOT ENABLE"
+
+        const val LINE_STYLE_KEY = "LINE STYLE"
+        const val LINE_COLOR_KEY = "LINE COLOR"
+        const val LINE_STRENGTH_KEY = "LINE STRENGTH"
+
+        const val LINE_STYLE_NONE = "NONE"
+        const val LINE_STYLE_SOLID = "SOLID"
+
+        const val DOT_ENABLE = "ENABLED"
+        const val DOT_DISABLE = "DISABLED"
+    }
+
     override fun getDataSets(): List<LineDataSet> {
         val dataSetMaps = xToFloat(transformation.recalculate())
         val dataSets = mutableListOf<LineDataSet>()
