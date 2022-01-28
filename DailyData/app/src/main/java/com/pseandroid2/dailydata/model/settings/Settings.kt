@@ -18,7 +18,7 @@
 
 */
 
-package com.pseandroid2.dailydata.model
+package com.pseandroid2.dailydata.model.settings
 
 interface Settings : Iterable<Pair<String, String>> {
 
@@ -26,5 +26,7 @@ interface Settings : Iterable<Pair<String, String>> {
     fun getAllSettings(): Map<String, String>
 
     operator fun get(key: String): String
+
+    fun containsKey(key: String): Boolean
 
 }

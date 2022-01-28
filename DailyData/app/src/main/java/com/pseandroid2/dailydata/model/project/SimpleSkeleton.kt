@@ -22,8 +22,7 @@ package com.pseandroid2.dailydata.model.project
 
 import android.graphics.drawable.Drawable
 import com.pseandroid2.dailydata.model.Graph
-import com.pseandroid2.dailydata.model.Settings
-import com.pseandroid2.dailydata.model.database.entities.ProjectSkeletonEntity
+import com.pseandroid2.dailydata.model.settings.Settings
 import com.pseandroid2.dailydata.model.notifications.Notification
 
 class SimpleSkeleton(

@@ -21,10 +21,9 @@
 package com.pseandroid2.dailydata.model.graph
 
 import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import com.github.mikephil.charting.data.DataSet
 import com.github.mikephil.charting.data.Entry
-import com.pseandroid2.dailydata.model.Settings
+import com.pseandroid2.dailydata.model.settings.Settings
 import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.users.User
 
