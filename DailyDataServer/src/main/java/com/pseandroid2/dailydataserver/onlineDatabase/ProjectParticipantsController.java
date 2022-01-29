@@ -77,8 +77,8 @@ public class ProjectParticipantsController {
      * @return the projectId for the new project.
      */
     @PostMapping("/newProject")
-    public long addProject(@RequestAttribute String user,@RequestBody String projectInfo){
-        return service.addProject(user,projectInfo);
+    public long addProject(@RequestAttribute String user,@RequestBody String projectDetails){
+        return service.addProject(user,projectDetails);
     }
 
     /**
