@@ -60,6 +60,8 @@ internal class ServerManagerTests_RESTAPICorrectlyLinked {
         every { restAPI.addUser(1, "")} returns "project details"
         every { restAPI.removeUser("", 1, "")} returns true
         every { restAPI.addProject("", "project details")} returns 0
+        every { restAPI.getProjectParticipants("", 1)} returns listOf("")
+        every { restAPI.getProjectAdmin("", 1)} returns ""
         coEvery { restAPI.saveDelta(1, "command1", "") } returns true // use coEvery for mockking suspend functions
         every { restAPI.getDelta(1, "") } returns deltaList
         every { restAPI.providedOldData("", "", LocalDateTime.parse("0001-01-01T00:00"), "", 1, false, "") } returns true
@@ -94,6 +96,10 @@ internal class ServerManagerTests_RESTAPICorrectlyLinked {
         Assert.assertTrue(serverManager.removeUser("", 1, ""))
 
         Assert.assertEquals(0, serverManager.addProject("", "project details"))
+
+        Assert.assertEquals(listOf(""), serverManager.getProjectParticipants("", 1))
+
+        Assert.assertEquals("", serverManager.getProjectAdmin("", 1))
 
         Assert.assertEquals("command1", serverManager.sendCommandsToServer(1, projectCommands=listOf("command1"), "").elementAt(0))
 

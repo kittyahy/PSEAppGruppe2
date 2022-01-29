@@ -45,8 +45,10 @@ class RDSAPI_CorrectlyLinked {
         every { serverManager.addUser(1, "")} returns "project details"
         every { serverManager.removeUser("", 1, "")} returns true
         every { serverManager.addProject("", "project details")} returns 0
-        every { serverManager.sendCommandsToServer(1, emptyList(), "") } returns sendCommandsList // use coEvery for mockking suspend functions
+        every { serverManager.getProjectParticipants("", 1)} returns listOf("")
+        every { serverManager.getProjectAdmin("", 1)} returns ""
 
+        every { serverManager.sendCommandsToServer(1, emptyList(), "") } returns sendCommandsList // use coEvery for mockking suspend functions
         every { serverManager.provideOldData("", "", LocalDateTime.parse("0001-01-01T00:00"), "", 1, false, "") } returns true
         every { serverManager.getRemoveTime("") } returns LocalDateTime.parse("0001-01-01T00:00")
         every { serverManager.demandOldData(1, "", "") } returns true
@@ -78,6 +80,8 @@ class RDSAPI_CorrectlyLinked {
         Assert.assertEquals("project details", rdsAPI.joinProject(1))
         Assert.assertTrue(rdsAPI.removeUser("", 1))
         Assert.assertEquals(0, rdsAPI.createNewOnlineProject("project details"))
+        Assert.assertEquals(listOf(""), rdsAPI.getProjectParticipants(1))
+        Assert.assertEquals("", rdsAPI.getProjectAdmin(1))
         Assert.assertEquals(sendCommandsList.elementAt(0), rdsAPI.sendCommandsToServer(1, emptyList()).elementAt(0))
         Assert.assertTrue(rdsAPI.provideOldData("", "", LocalDateTime.parse("0001-01-01T00:00"), "", 1, false))
         Assert.assertEquals(LocalDateTime.parse("0001-01-01T00:00"), rdsAPI.getRemoveTime())

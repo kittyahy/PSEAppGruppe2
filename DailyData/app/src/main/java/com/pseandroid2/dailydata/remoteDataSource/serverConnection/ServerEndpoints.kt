@@ -51,6 +51,12 @@ interface ServerEndpoints
     @GET("greet")
     fun greet(): Call<String>
 
+    // Test Controller
+    @GET("/token")
+    fun returnToken(@Header("token") token: String): Call<String>
+
+    @GET("/username")
+    fun returnUserIdFromToken(@Header("token") token: String): Call<String>
 
     // Post Controller
     @GET("Posts"+"/allPreview")
