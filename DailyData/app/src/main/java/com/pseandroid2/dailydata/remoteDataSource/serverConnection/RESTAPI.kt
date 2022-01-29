@@ -164,16 +164,16 @@ class RESTAPI {
 
     //------------------------------------- ProjectParticipantsController -------------------------------------
     /**
-     * Lets the currently signed in user join the project
+     * Lets the currently signed in user join the project and returns the project information
      *
      * @param projectID: The id of the project to which the user is to be added
      * @param authToken: The authentication token
-     * @return Boolean: Did the server call succeed
+     * @return String: Returns the project information as a JSON. (Returns "" on error)
      */
-    fun addUser(projectID: Long, authToken: String): Boolean {
-        val call: Call<Boolean> = server.addUser(authToken, projectID)
+    fun addUser(projectID: Long, authToken: String): String {
+        val call: Call<String> = server.addUser(authToken, projectID)
 
-        return call.execute().body() ?: false
+        return call.execute().body() ?: ""
     }
 
     /**
@@ -185,9 +185,7 @@ class RESTAPI {
      * @return Boolean: Did the server call succeed
      */
     fun removeUser(userToRemove: String, projectID: Long, authToken: String): Boolean {
-        val params = RemoveUserParameter(userToRemove = userToRemove, projectID = projectID)
-
-        val call: Call<Boolean> = server.removeUser(authToken, projectID, params)
+        val call: Call<Boolean> = server.removeUser(authToken, projectID, userToRemove = userToRemove)
 
         return call.execute().body() ?: false
     }
@@ -196,14 +194,40 @@ class RESTAPI {
      * Creates a new online project on the server and returns the id
      *
      * @param authToken: The authentication token
+     * @param projectDetails: The details of a project (project name, project description, table format, ...) as JSON
      * @return LONG: Returns the id of the created project. Returns -1 if an error occurred
      */
-    fun addProject(authToken: String): Long {
-        val call: Call<Long> = server.addProject(authToken)
+    fun addProject(authToken: String, projectDetails: String): Long {
+        val call: Call<Long> = server.addProject(authToken, projectDetails)
 
         return call.execute().body() ?: -1
     }
 
+    /**
+     *  Gets all the project members
+     *
+     *  @param authToken: The authentication token
+     *  @param projectID: The id of the project whose user should be returned
+     *  @return Collection<String>: The participants of the project. Returns empty list on error
+     */
+    fun getProjectParticipants(authToken: String, projectID: Long): Collection<String> {
+        val call: Call<List<String>> = server.getParticipants(authToken, projectID)
+
+        return call.execute().body() ?: listOf()
+    }
+
+    /**
+     * Gets the admin of the project
+     *
+     * @param authToken: The authentication token
+     * @param projectID: The id of the project whose admin should be returned
+     * @return String: The UserID of the admin. Returns "" on error
+     */
+    fun getProjectAdmin(authToken: String, projectID: Long): String{
+        val call: Call<String> = server.getAdmin(authToken, projectID)
+
+        return call.execute().body() ?: ""
+    }
 
     //------------------------------------- Delta Controller -------------------------------------
     /**

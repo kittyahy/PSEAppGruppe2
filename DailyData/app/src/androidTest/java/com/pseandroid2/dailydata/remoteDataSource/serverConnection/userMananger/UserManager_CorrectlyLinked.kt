@@ -1,23 +1,14 @@
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection.userMananger
 
-import android.os.UserManager
-import android.util.Log
-import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
-import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
-import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
-import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.Delta
-import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
 import com.pseandroid2.dailydata.remoteDataSource.userManager.SignInTypes
 import com.pseandroid2.dailydata.remoteDataSource.userManager.UserAccount
-import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import java.time.LocalDateTime
 
 class UserManager_CorrectlyLinked {
 
@@ -35,7 +26,7 @@ class UserManager_CorrectlyLinked {
 
         // mock fm to test if the registration is linked correctly
 
-        mockedFM = mockk<FirebaseManager>()
+        mockedFM = mockk()
         every { mockedFM.registerUserWithEmailAndPassword("", "") } returns FirebaseReturnOptions.REGISTERED
         every { mockedFM.getUserID() } returns "userID"
         every { mockedFM.getUserName() } returns "userName"

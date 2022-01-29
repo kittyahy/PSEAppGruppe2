@@ -37,6 +37,7 @@ import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParamet
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.PostPreview
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.TemplateDetail
 import retrofit2.http.Header
+import retrofit2.http.Query
 import java.time.LocalDateTime
 
 /**
@@ -73,16 +74,22 @@ interface ServerEndpoints
 
 
     // ProjectParticipantsController
-    @GET("OnlineDatabase"+"/addUser/{id}")
-    fun addUser(@Header("token") token: String, @Path("id") projectId: Long): Call<Boolean>
+    @POST("OnlineDatabase"+"/addUser/{id}")
+    fun addUser(@Header("token") token: String, @Path("id") projectId: Long): Call<String>
 
     @DELETE("OnlineDatabase"+"/removeUser/{id}")
     fun removeUser(@Header("token") token: String, @Path("id") projectId: Long,
-        params: RemoveUserParameter): Call<Boolean>
+                    @Query("userToRemove") userToRemove: String): Call<Boolean>
 
     @POST("OnlineDatabase"+"/newProject")
-    fun addProject(@Header("token") token: String): Call<Long>
+    fun addProject(@Header("token") token: String, @Body projectDetails: String): Call<Long>
 
+    // TODO: Create RDSAPI Methods
+    @GET("OnlineDatabase"+"/{id}/participants")
+    fun getParticipants(@Header("token") token: String, @Path("id") projectId: Long): Call<List<String>>
+
+    @GET("OnlineDatabase"+"/{id}/admin")
+    fun getAdmin(@Header("token") token: String, @Path("id") projectId: Long): Call<String>
 
     // DeltaController
     @POST("OnlineDatabase/Delta"+"/save/{projectId}")

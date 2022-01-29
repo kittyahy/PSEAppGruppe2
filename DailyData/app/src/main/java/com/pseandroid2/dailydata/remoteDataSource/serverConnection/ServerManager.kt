@@ -33,6 +33,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import retrofit2.Call
 import java.time.LocalDateTime
 import javax.inject.Inject
 
@@ -130,13 +131,13 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
 
     // ----------------------------------ProjectParticipantsController-------------------------------
     /**
-     * Lets the currently signed in user join the project
+     * Lets the currently signed in user join the project and returns the project information
      *
      * @param projectID: The id of the project to which the user is to be added
      * @param authToken: The authentication token
-     * @return Did the task succeed?
+     * @return String: Returns the project information as a JSON. (Returns "" on error)
      */
-    fun addUser(projectID: Long, authToken: String): Boolean{
+    fun addUser(projectID: Long, authToken: String): String{
         return restAPI.addUser(projectID, authToken)
     }
 
@@ -156,10 +157,33 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * Creates a new online project on the server and returns the id
      *
      * @param authToken: The authentication token
+     * @param projectDetails: The details of a project (project name, project description, table format, ...) as JSON
      * @return LONG: Returns the id of the created project. Returns -1 if an error occurred
      */
-    fun addProject(authToken: String): Long{
-        return restAPI.addProject(authToken)
+    fun addProject(authToken: String, projectDetails: String): Long{
+        return restAPI.addProject(authToken, projectDetails)
+    }
+
+    /**
+     *  Gets all the project members
+     *
+     *  @param authToken: The authentication token
+     *  @param projectID: The id of the project whose user should be returned
+     *  @return Collection<String>: The participants of the project. Returns empty list on error
+     */
+    fun getProjectParticipants(authToken: String, projectID: Long): Collection<String> {
+        return restAPI.getProjectParticipants(authToken, projectID)
+    }
+
+    /**
+     * Gets the admin of the project
+     *
+     * @param authToken: The authentication token
+     * @param projectID: The id of the project whose admin should be returned
+     * @return String: The UserID of the admin. Returns "" on error
+     */
+    fun getProjectAdmin(authToken: String, projectID: Long): String{
+        return restAPI.getProjectAdmin(authToken, projectID)
     }
 
     // ----------------------------------DeltaController-------------------------------

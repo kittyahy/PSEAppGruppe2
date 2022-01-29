@@ -31,12 +31,10 @@ class RESTAPITests_PostsController_PostContent {
 
         postID = restAPI.addPost("postPreview1", Pair("projectTemplate", "projectTemplatePreview"),
             listOf(Pair("graphTemplate", "graphTemplatePreview")), authToken)
-
         Assert.assertNotEquals(-1, postID)
 
 
         // Set Values in companion object for correct teardown
-        Log.d("Teardown", "Setup")
         setTeardown(restAPI, postID, authToken)
     }
 

@@ -42,9 +42,9 @@ class RDSAPI_CorrectlyLinked {
         every { serverManager.getGraphTemplate(1, 1, "")} returns "GraphTemplate"
         every { serverManager.addPost("", projectTemplate =  Pair("", ""), graphTemplates = listOf(Pair("", "")), "")} returns 1
         every { serverManager.removePost(1, "")} returns true
-        every { serverManager.addUser(1, "")} returns true
+        every { serverManager.addUser(1, "")} returns "project details"
         every { serverManager.removeUser("", 1, "")} returns true
-        every { serverManager.addProject("")} returns 0
+        every { serverManager.addProject("", "project details")} returns 0
         every { serverManager.sendCommandsToServer(1, emptyList(), "") } returns sendCommandsList // use coEvery for mockking suspend functions
 
         every { serverManager.provideOldData("", "", LocalDateTime.parse("0001-01-01T00:00"), "", 1, false, "") } returns true
@@ -75,9 +75,9 @@ class RDSAPI_CorrectlyLinked {
         Assert.assertEquals("GraphTemplate", rdsAPI.getGraphTemplate(1, 1))
         Assert.assertEquals(1, rdsAPI.uploadPost("", Pair("", ""), listOf(Pair("", ""))))
         Assert.assertTrue(rdsAPI.removePost(1))
-        Assert.assertTrue(rdsAPI.joinProject(1))
+        Assert.assertEquals("project details", rdsAPI.joinProject(1))
         Assert.assertTrue(rdsAPI.removeUser("", 1))
-        Assert.assertEquals(0, rdsAPI.createNewOnlineProject())
+        Assert.assertEquals(0, rdsAPI.createNewOnlineProject("project details"))
         Assert.assertEquals(sendCommandsList.elementAt(0), rdsAPI.sendCommandsToServer(1, emptyList()).elementAt(0))
         Assert.assertTrue(rdsAPI.provideOldData("", "", LocalDateTime.parse("0001-01-01T00:00"), "", 1, false))
         Assert.assertEquals(LocalDateTime.parse("0001-01-01T00:00"), rdsAPI.getRemoveTime())

@@ -199,12 +199,12 @@ class RemoteDataSourceAPI @Inject constructor(uAccount: UserAccount?, sManager: 
 
     // -----------------------------ProjectParticipantsController-------------------------------
     /**
-     * Lets the currently signed in user join the project
+     * Lets the currently signed in user join the project and returns the project information
      *
      * @param projectID: The id of the project to which the user is to be added
-     * @return Boolean: Did the operation succeed
+     * @return String: Returns the project information as a JSON. (Returns "" on error)
      */
-    fun joinProject(projectID: Long): Boolean {
+    fun joinProject(projectID: Long): String {
         val authToken: String = userAccount.getToken()
         return serverManager.addUser(projectID, authToken)
     }
@@ -224,11 +224,34 @@ class RemoteDataSourceAPI @Inject constructor(uAccount: UserAccount?, sManager: 
     /**
      * Creates a new online project on the server and returns the id
      *
+     * @param projectDetails: The details of a project (project name, project description, table format, ...) as JSON
      * @return LONG: Returns the id of the created project. Returns -1 if an error occurred
      */
-    fun createNewOnlineProject(): Long{
+    fun createNewOnlineProject(projectDetails: String): Long{
         val authToken: String = userAccount.getToken()
-        return serverManager.addProject(authToken)
+        return serverManager.addProject(authToken, projectDetails)
+    }
+
+    /**
+     *  Gets all the project members
+     *
+     *  @param projectID: The id of the project whose user should be returned
+     *  @return Collection<String>: The participants of the project. Returns empty list on error
+     */
+    fun getProjectParticipants(projectID: Long): Collection<String>{
+        val authToken: String = userAccount.getToken()
+        return serverManager.getProjectParticipants(authToken, projectID)
+    }
+
+    /**
+     * Gets the admin of the project
+     *
+     * @param projectID: The id of the project whose admin should be returned
+     * @return String: The UserID of the admin. Returns "" on error
+     */
+    fun getProjectAdmin(projectID: Long): String{
+        val authToken: String = userAccount.getToken()
+        return serverManager.getProjectAdmin(authToken, projectID)
     }
 
     // -----------------------------DeltaController-------------------------------

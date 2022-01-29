@@ -20,7 +20,6 @@
 
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverManager
 
-import android.util.Log
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandInfo
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
@@ -49,7 +48,7 @@ internal class ServerManagerTests_RESTAPICorrectlyLinked {
 
     @Before
     fun setup() {
-        restAPI = mockk<RESTAPI>()
+        restAPI = mockk()
         every { restAPI.greet() } returns true
 
         every { restAPI.getAllPostsPreview("")} returns postPreviewList
@@ -58,9 +57,9 @@ internal class ServerManagerTests_RESTAPICorrectlyLinked {
         every { restAPI.getGraphTemplate(1, 1, "")} returns "GraphTemplate"
         every { restAPI.addPost("", projectTemplate =  Pair("", ""), graphTemplates = listOf(Pair("", "")), "")} returns 1
         every { restAPI.removePost(1, "")} returns true
-        every { restAPI.addUser(1, "")} returns true
+        every { restAPI.addUser(1, "")} returns "project details"
         every { restAPI.removeUser("", 1, "")} returns true
-        every { restAPI.addProject("")} returns 0
+        every { restAPI.addProject("", "project details")} returns 0
         coEvery { restAPI.saveDelta(1, "command1", "") } returns true // use coEvery for mockking suspend functions
         every { restAPI.getDelta(1, "") } returns deltaList
         every { restAPI.providedOldData("", "", LocalDateTime.parse("0001-01-01T00:00"), "", 1, false, "") } returns true
@@ -90,18 +89,18 @@ internal class ServerManagerTests_RESTAPICorrectlyLinked {
 
         Assert.assertTrue(serverManager.removePost(1, ""))
 
-        Assert.assertTrue(serverManager.addUser(1, ""))
+        Assert.assertEquals("project details", serverManager.addUser(1, ""))
 
         Assert.assertTrue(serverManager.removeUser("", 1, ""))
 
-        Assert.assertEquals(0, serverManager.addProject(""))
+        Assert.assertEquals(0, serverManager.addProject("", "project details"))
 
         Assert.assertEquals("command1", serverManager.sendCommandsToServer(1, projectCommands=listOf("command1"), "").elementAt(0))
 
         // Test if projectCommand lands in the projectCommandQueue
         serverManager.getProjectCommandsFromServer(1, "")
         val delta: Delta = deltaList.elementAt(0)
-        val projectCommandInfoInList: ProjectCommandInfo = ProjectCommandInfo(delta.addedToServer, delta.user, delta.isAdmin, delta.projectCommand)
+        val projectCommandInfoInList = ProjectCommandInfo(delta.addedToServer, delta.user, delta.isAdmin, delta.projectCommand)
         Assert.assertEquals(projectCommandInfoInList, serverManager.getProjectCommandFromQueue())
 
         Assert.assertTrue(serverManager.provideOldData("", "", LocalDateTime.parse("0001-01-01T00:00"), "", 1, false, ""))

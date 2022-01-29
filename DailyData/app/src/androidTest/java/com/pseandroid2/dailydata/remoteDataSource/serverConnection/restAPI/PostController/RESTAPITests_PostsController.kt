@@ -25,6 +25,12 @@ class RESTAPITests_PostsController {
 
     @Test
     fun getAllPostsPreviewIsNotEmpty() {
+        // First create a new post, so the post preview is always not empty
+        val postID = restAPI.addPost("postPreview1", Pair("projectTemplate", "projectTemplatePreview"),
+            listOf(Pair("graphTemplate", "graphTemplatePreview")), authToken)
+        Assert.assertNotEquals(-1, postID)
+
+        // Check if post preview is not empty
         var postPreviews = restAPI.getAllPostsPreview(authToken)
 
         Assert.assertNotEquals(0, postPreviews)
@@ -35,6 +41,11 @@ class RESTAPITests_PostsController {
         }
 
         Assert.assertNotEquals(null, postPreviews.elementAt(0))
+
+        // Delete added post
+        if (postID > 0) {
+            Assert.assertTrue(restAPI.removePost(postID, authToken))
+        }
     }
 
     @Test
