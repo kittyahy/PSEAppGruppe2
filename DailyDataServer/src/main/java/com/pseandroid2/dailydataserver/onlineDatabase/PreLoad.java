@@ -37,7 +37,7 @@ public class PreLoad {
 
         LocalDateTime t = LocalDateTime.now();
         return args -> {
-           log.info("New Project: "+ ppservice.addProject("Ella"));
+           log.info("New Project: "+ ppservice.addProject("Ella", "Info"));
            log.info("Add Participant: "+ppservice.addUser("Tom",1));
            log.info("Add Delta: "+ deltaService.saveDelta(1,"Ella","derCommand"));
 

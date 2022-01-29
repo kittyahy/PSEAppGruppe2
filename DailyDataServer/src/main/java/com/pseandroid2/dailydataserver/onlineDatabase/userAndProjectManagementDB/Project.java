@@ -30,16 +30,32 @@ public class Project {
     long projectId;
     private LocalDateTime lastUpdated;
     private int participantId;
+    private String projectInfo;
 
-    public Project(long projectId) {
+
+    public Project(long projectId, String projectInfo) {
         this.projectId = projectId;
         this.lastUpdated = LocalDateTime.now();
         participantId = 1;
+        this.projectInfo = projectInfo;
     }
 
     public Project() {
-
     }
+
+    public void setParticipantId(int participantId) {
+        this.participantId = participantId;
+    }
+
+    public String getProjectInfo() {
+        return projectInfo;
+    }
+
+    public void setProjectInfo(String projectInfo) {
+        this.projectInfo = projectInfo;
+    }
+
+
 
     public int getParticipantId() {
         return participantId;

@@ -21,8 +21,8 @@ public class ProjectParticipantService {
     }
 
 
-    public long addProject(String user) {
-        Project project = new Project(projectIDGenerator);
+    public long addProject(String user, String projectInfo) {
+        Project project = new Project(projectIDGenerator, projectInfo);
         projectIDGenerator++;
         projectRepo.save(project);
         ppRepo.save(new ProjectParticipants(user, project.getProjectId(), Role.ADMIN, project.getParticipantId()));
@@ -30,17 +30,17 @@ public class ProjectParticipantService {
         return project.getProjectId();
     }
 
-    public boolean addUser(String user, long projectID) {
+    public String addUser(String user, long projectID) {
         if (ppRepo.existsById(new ProjectParticipantsID(user, projectID))) {
-            return true;
+            return projectRepo.findById(projectID).get().getProjectInfo();
         } else {
             if (!(ppRepo.countByProject(projectID) < MAX_PARTICIPANTS)) {
-                return false;
+                return "";
             } else {
                 Project project = projectRepo.findById(projectID).get();
                 ppRepo.save(new ProjectParticipants(user, projectID, Role.PARTICIPANT, project.getParticipantId()));
                 project.addParticipant();
-                return true;
+                return project.getProjectInfo() ;
             }
 
         }
