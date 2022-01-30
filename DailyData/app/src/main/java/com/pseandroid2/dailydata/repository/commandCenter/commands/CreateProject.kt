@@ -15,7 +15,7 @@ class CreateProject (commandByUser: String,
                      private val description: String,
                      private val wallpaper: Int,
                      private val table: List<Column>,
-                     private val buttons: List<Button>, //TODO add
+                     private val buttons: List<Button>,
                      private val notification: List<Notification>,
                      private val graphs: List<Graph>
 ) //Todo secondary constructor with communicationClasses.project
@@ -29,7 +29,7 @@ class CreateProject (commandByUser: String,
         val pb = SimpleProjectBuilder()
         pb.setName(name)
         pb.setDescription(description)
-        pb.addTable(Table.extractFrom(table))
+        pb.addTable(Table.extractFrom(table, buttons))
         pb.setBackground(wallpaper)
         graphs.forEach { graph -> graph.addYourself(pb) }
         notification.forEach{ notification -> notification.addYourself(pb)}
