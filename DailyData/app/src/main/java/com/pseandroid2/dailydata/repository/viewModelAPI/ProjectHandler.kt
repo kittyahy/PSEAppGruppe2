@@ -21,18 +21,22 @@
 package com.pseandroid2.dailydata.repository.viewModelAPI
 
 
+
 import com.pseandroid2.dailydata.model.database.AppDataBase
+import com.pseandroid2.dailydata.repository.commandCenter.commands.CreateProject
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Button
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Column
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Notification
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ProjectTemplate
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.GraphTemplateFlow
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectFlow
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectPreviewFlow
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectTemplateFlow
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 
 @InternalCoroutinesApi
@@ -42,6 +46,7 @@ class ProjectHandler(
     val graphTemplateFlow: GraphTemplateFlow,
     private val appDataBase: AppDataBase
 ) {
+    val scope = CoroutineScope(Dispatchers.IO)
     fun getProjectByID(id: Int): Flow<Project> {
         return ProjectFlow(appDataBase, id).getProjectFlow()
     }
@@ -55,6 +60,8 @@ class ProjectHandler(
         notification: List<Notification>,
         graphs: List<Graph>
     ): Project {
+        val createProject = CreateProject("User1", name, description, wallpaper, table, buttons, notification, graphs)
+        val task = scope.async{createProject.execute(appDataBase, TODO(), null)} //TODO() Arne fragen, wie ich an die ProjektID komme
         return TODO()
     }
     fun joinOnlineProject(onlineID: Long): Int {

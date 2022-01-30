@@ -24,6 +24,10 @@ class ArrayListLayout(input: String = "") : TableLayout {
 
     override fun getUIElements(col: Int): List<UIElement> = layout[col].second.toList()
 
+    override fun addUIElements(col: Int, vararg elements: UIElement) {
+        layout[col].second.addAll(elements)
+    }
+
     override fun get(col: Int): Pair<KClass<out Any>, List<UIElement>> {
         val type: KClass<out Any> = Class.forName(layout[col].first).kotlin
         return Pair(type, layout[col].second)
