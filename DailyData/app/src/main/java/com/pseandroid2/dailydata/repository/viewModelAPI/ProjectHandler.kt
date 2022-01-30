@@ -21,8 +21,8 @@
 package com.pseandroid2.dailydata.repository.viewModelAPI
 
 
-
 import com.pseandroid2.dailydata.model.database.AppDataBase
+import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import com.pseandroid2.dailydata.repository.commandCenter.commands.CreateProject
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Button
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Column
@@ -38,20 +38,25 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 @InternalCoroutinesApi
 class ProjectHandler(
     val projectPreviewFlow: ProjectPreviewFlow,
     val projectTemplateFlow: ProjectTemplateFlow,
     val graphTemplateFlow: GraphTemplateFlow,
-    private val appDataBase: AppDataBase
+    private val appDataBase: AppDataBase,
+    private val executeQueue: ExecuteQueue
 ) {
-    val scope = CoroutineScope(Dispatchers.IO)
+    private val scope = CoroutineScope(Dispatchers.IO)
     fun getProjectByID(id: Int): Flow<Project> {
         return ProjectFlow(appDataBase, id).getProjectFlow()
     }
 
-    fun newProject(
+    suspend fun newProjectAsync(
         name: String,
         description: String,
         wallpaper: Int,
@@ -59,15 +64,42 @@ class ProjectHandler(
         buttons: List<Button>,
         notification: List<Notification>,
         graphs: List<Graph>
-    ): Project {
-        val createProject = CreateProject("User1", name, description, wallpaper, table, buttons, notification, graphs)
-        val task = scope.async{createProject.execute(appDataBase, TODO(), null)} //TODO() Arne fragen, wie ich an die ProjektID komme
-        return TODO()
+    ) = scope.async{
+
+        val idFlow = MutableSharedFlow<Int>()
+        val createProject = CreateProject(
+            idFlow,
+            "User1",
+            name,
+            description,
+            wallpaper,
+            table,
+            buttons,
+            notification,
+            graphs
+        )
+            executeQueue.add(createProject)
+            return@async idFlow.first()
+
     }
+
+    suspend fun newProjectAsync(project: Project) = scope.async {
+        return@async newProjectAsync(
+            project.title,
+            project.description,
+            project.wallpaper,
+            project.table,
+            project.buttons,
+            project.notifications,
+            project.graphs
+        )
+    }
+
     fun joinOnlineProject(onlineID: Long): Int {
         return TODO()
     }
-    fun getProjectTemplateByID () {
+
+    fun getProjectTemplateByID() {
         TODO()
     }
 }

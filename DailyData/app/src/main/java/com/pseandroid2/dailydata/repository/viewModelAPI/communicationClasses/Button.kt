@@ -28,7 +28,7 @@ class Button(
     val name: String,
     val columnId: Int,
     val value: Int
-) : Identifiable {
+): Identifiable() {
     constructor(uiElement: UIElement, columnId: Int) : this(
         uiElement.id,
         TODO(),
