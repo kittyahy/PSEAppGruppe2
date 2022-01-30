@@ -9,19 +9,24 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Co
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Notification
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.projectParts.Table
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 
-class CreateProject (commandByUser: String,
-                     private val name: String,
-                     private val description: String,
-                     private val wallpaper: Int,
-                     private val table: List<Column>,
-                     private val buttons: List<Button>,
-                     private val notification: List<Notification>,
-                     private val graphs: List<Graph>
+class CreateProject(
+    private val projectIDReturn: MutableSharedFlow<Int>,
+    commandByUser: String,
+    private val name: String,
+    private val description: String,
+    private val wallpaper: Int,
+    private val table: List<Column>,
+    private val buttons: List<Button>,
+    private val notification: List<Notification>,
+    private val graphs: List<Graph>
 ) //Todo secondary constructor with communicationClasses.project
     : ProjectCommand(
     commandByUser = commandByUser,
-    isProjectAdmin = true) {
+    isProjectAdmin = true
+) {
     override suspend fun execute(
         appDataBase: AppDataBase,
         remoteDataSourceAPI: RemoteDataSourceAPI
@@ -32,10 +37,11 @@ class CreateProject (commandByUser: String,
         pb.addTable(Table.extractFrom(table, buttons))
         pb.setBackground(wallpaper)
         graphs.forEach { graph -> graph.addYourself(pb) }
-        notification.forEach{ notification -> notification.addYourself(pb)}
+        notification.forEach { notification -> notification.addYourself(pb) }
 
         val project: Project = pb.build()
         val prod = appDataBase.projectCDManager().insertProject(project)
+        projectIDReturn.emit(prod.id)
         //super.execute(appDataBase, remoteDataSourceAPI) Todo rein
     }
 

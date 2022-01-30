@@ -38,6 +38,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 @InternalCoroutinesApi
 class ProjectHandler(
@@ -47,12 +51,12 @@ class ProjectHandler(
     private val appDataBase: AppDataBase,
     private val executeQueue: ExecuteQueue
 ) {
-    val scope = CoroutineScope(Dispatchers.IO)
+    private val scope = CoroutineScope(Dispatchers.IO)
     fun getProjectByID(id: Int): Flow<Project> {
         return ProjectFlow(appDataBase, id).getProjectFlow()
     }
 
-    fun newProject(
+    suspend fun newProject(
         name: String,
         description: String,
         wallpaper: Int,
@@ -61,7 +65,10 @@ class ProjectHandler(
         notification: List<Notification>,
         graphs: List<Graph>
     ): Int {
+
+        val idFlow = MutableSharedFlow<Int>()
         val createProject = CreateProject(
+            idFlow,
             "User1",
             name,
             description,
@@ -71,14 +78,15 @@ class ProjectHandler(
             notification,
             graphs
         )
-        val task = scope.async {
+        val id = scope.async {
             executeQueue.add(createProject)
-                }
+            idFlow.first()
+        }
 
-        return TODO()
+        return id.await()
     }
 
-    fun newProject(project: Project): Int {
+    suspend fun newProject(project: Project): Int {
         return newProject(
             project.title,
             project.description,
