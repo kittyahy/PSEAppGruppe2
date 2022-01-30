@@ -52,10 +52,10 @@ interface ServerEndpoints
     fun greet(): Call<String>
 
     // Test Controller
-    @GET("/token")
+    @GET("token")
     fun test(@Header("token") token: String): Call<String>
 
-    @GET("/username")
+    @GET("username")
     fun name(@Header("token") token: String): Call<String>
 
     // Post Controller
@@ -100,7 +100,7 @@ interface ServerEndpoints
     // DeltaController
     @POST("OnlineDatabase/Delta"+"/save/{projectId}")
     suspend fun saveDelta(@Header("token") token: String, @Path("projectId") projectId: Long,
-                  @Body saveDeltaParameter: SaveDeltaParameter): Boolean
+                  @Body command: String): Boolean
 
     @GET("OnlineDatabase/Delta"+"/get/{projectId}")
     fun getDelta(@Header("token") token: String, @Path("projectID") projectId: Long): Call<Collection<Delta>>
@@ -116,7 +116,7 @@ interface ServerEndpoints
     // FetchRequestController
     @POST("OnlineDatabase/request"+"/need/{id}")
     fun demandOldData(@Header("token") token: String, @Path("id") projectID: Long,
-        params: DemandOldDataParameter): Call<Boolean>
+        @Body requestInfo: String): Call<Boolean>
 
     @GET("OnlineDatabase/request"+"/provide/{id}")
     fun getFetchRequest(@Header("token") token: String, @Path("id") projectId: Long): Call<Collection<FetchRequest>>

@@ -264,9 +264,7 @@ class RESTAPI {
      * @return Boolean: True if uploaded successfully, otherwise false
      */
     suspend fun saveDelta(projectID: Long, projectCommand: String, authToken: String):Boolean {
-        val params = SaveDeltaParameter(projectCommand)
-
-        return server.saveDelta(authToken, projectID, params)
+        return server.saveDelta(authToken, projectID, projectCommand)
     }
 
     /**
@@ -322,9 +320,7 @@ class RESTAPI {
      * @return Boolean: Did the server call succeed
      */
     fun demandOldData(projectID: Long, requestInfo: String, authToken: String): Boolean {
-        val params = DemandOldDataParameter(requestInfo)
-
-        val call: Call<Boolean> = server.demandOldData(authToken, projectID, params)
+        val call: Call<Boolean> = server.demandOldData(authToken, projectID, requestInfo)
 
         return call.execute().body() ?: false
     }

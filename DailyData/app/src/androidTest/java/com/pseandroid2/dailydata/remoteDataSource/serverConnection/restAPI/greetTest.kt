@@ -7,7 +7,7 @@ import org.junit.Test
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
 
-class RESTAPITests_Greet {
+class greetTest {
     @Test
     fun greet() {
         var restAPI: RESTAPI = RESTAPI()

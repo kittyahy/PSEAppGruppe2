@@ -1,6 +1,5 @@
-package com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI.ProjectParticipantsController
+package com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI.projectParticipantsController
 
-import android.util.Log
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
@@ -9,7 +8,7 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
-class UserTests {
+class ProjectParticipantsTests {
     private val restAPI: RESTAPI = RESTAPI()
     private val fm = FirebaseManager(null)
 
@@ -92,11 +91,13 @@ class UserTests {
         Assert.assertTrue(participants.remove(userID))
     }
 
+    /** TODO
     @Test
     fun getParticipantsFromNotExistingProject() {
         restAPI.getProjectParticipants(authToken, -1)
         Assert.assertNotEquals(mutableListOf<List<String>>(), restAPI.getProjectParticipants(authToken, -1))
     }
+    */
 
     @Test
     fun getProjectAdmin() {
@@ -143,5 +144,19 @@ class UserTests {
 
         // Remove the last project member (the admin removes himself)
         Assert.assertTrue(restAPI.removeUser(userID, projectID2, authToken))
+    }
+
+    @Test
+    fun userIsNoProjectMember() {
+        Assert.assertNotEquals(mutableListOf<List<String>>(), restAPI.getProjectParticipants(authToken, projectID))
+        Assert.assertNotEquals("", restAPI.getProjectAdmin(authToken, projectID))
+    }
+
+    @Test
+    fun removeUserWhileNotBeingAdmin() {
+        Assert.assertEquals("project details", restAPI.addUser(projectID, authToken2))
+        Assert.assertEquals("project details", restAPI.addUser(projectID, authToken3))
+
+        Assert.assertFalse(restAPI.removeUser(authToken2, projectID, authToken3))
     }
 }

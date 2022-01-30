@@ -1,4 +1,4 @@
-package com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI.PostController
+package com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI.postController
 
 import android.util.Log
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
@@ -11,7 +11,7 @@ import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOpti
 import org.junit.AfterClass
 import org.junit.Before
 
-class RESTAPITests_PostsController_PostContent {
+class PostsControllerPostContentTests {
 
     private var restAPI: RESTAPI = RESTAPI()
     private lateinit var authToken: String
