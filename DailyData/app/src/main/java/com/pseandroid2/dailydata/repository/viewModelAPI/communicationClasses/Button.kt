@@ -20,6 +20,7 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
+import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.model.uielements.UIElementType
 
@@ -28,7 +29,7 @@ class Button(
     val name: String,
     val columnId: Int,
     val value: Int
-) : Identifiable {
+) : Identifiable() {
     constructor(uiElement: UIElement, columnId: Int) : this(
         uiElement.id,
         TODO(),

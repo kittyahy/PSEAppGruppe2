@@ -25,7 +25,7 @@ import com.pseandroid2.dailydata.model.Graph
 import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.project.ProjectBuilder
 
-abstract class Graph: Identifiable, Convertible<Graph>{
+abstract class Graph: Identifiable(), Convertible<Graph>{
     companion object { val availableGraphs: MutableList<String> = ArrayList<String>()}
     init {
         availableGraphs.add(typeName)
