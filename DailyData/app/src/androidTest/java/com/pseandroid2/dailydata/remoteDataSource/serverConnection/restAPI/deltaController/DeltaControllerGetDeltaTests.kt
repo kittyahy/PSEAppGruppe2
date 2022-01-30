@@ -1,7 +1,9 @@
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI.deltaController
 
+import android.util.Log
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.Delta
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
 import org.junit.Assert
@@ -27,7 +29,7 @@ class DeltaControllerGetDeltaTests {
 
     private var serverManager = ServerManager(restAPI)
 
-    private val projectCommand = "projectCommand"
+    private val projectCommandToSend: String = "projectCommand"
 
     @Before
     fun setup() {
@@ -46,26 +48,29 @@ class DeltaControllerGetDeltaTests {
         Assert.assertEquals("project details", restAPI.addUser(projectID, authToken3))
 
         // Save a delta to the server
-        Assert.assertEquals(listOf(projectCommand), serverManager.sendCommandsToServer(projectID, listOf(projectCommand), authToken))
+        Assert.assertEquals(listOf(projectCommandToSend), serverManager.sendCommandsToServer(projectID, listOf(projectCommandToSend), authToken))
     }
 
     @Test
-    fun getDelta() {
-        var downloadedDeltas = restAPI.getDelta(1, authToken) as MutableList
+    fun getDeltaFromServer() {
+        var downloadedDeltas = restAPI.getDelta(projectID, authToken) as MutableList<Delta>
         Assert.assertNotEquals(0, downloadedDeltas.size)
 
         var deltaFound = false
         downloadedDeltas.forEach {
-            if (it.projectCommand == projectCommand) {
+            val command: String = it.projectCommand
+
+            if (command == "projectCommand") {
                 deltaFound = true
             }
         }
+
         Assert.assertTrue(deltaFound)
     }
 
     @Test
     fun getDeltaWhenNoProjectMember() {
-        var downloadedDeltas = restAPI.getDelta(1, authToken2) as MutableList
+        var downloadedDeltas = restAPI.getDelta(projectID, authToken2) as MutableList
         Assert.assertEquals(0, downloadedDeltas.size)
     }
 
@@ -73,25 +78,27 @@ class DeltaControllerGetDeltaTests {
     fun getSameDeltaTwice() {
         // User 3 should try to download the same delta twice
         // Download the deltas for the first time
-        var downloadedDeltas = restAPI.getDelta(1, authToken3) as MutableList
+        var downloadedDeltas = restAPI.getDelta(projectID, authToken3) as MutableList
         Assert.assertNotEquals(0, downloadedDeltas.size)
 
         var deltaFound = false
         downloadedDeltas.forEach {
-            if (it.projectCommand == projectCommand) {
+            if (it.projectCommand == "\"projectCommand\"") {
                 deltaFound = true
             }
         }
         Assert.assertTrue(deltaFound)
 
         // Download deltas again
-        downloadedDeltas = restAPI.getDelta(1, authToken3) as MutableList
+        downloadedDeltas = restAPI.getDelta(projectID, authToken3) as MutableList
         deltaFound = false
         downloadedDeltas.forEach {
-            if (it.projectCommand == projectCommand) {
+            if (it.projectCommand == "\"projectCommand\"") {
                 deltaFound = true
             }
         }
-        Assert.assertFalse(deltaFound)
+        Assert.assertTrue(deltaFound)
     }
+
+    //TODO Tests auskommentieren
 }

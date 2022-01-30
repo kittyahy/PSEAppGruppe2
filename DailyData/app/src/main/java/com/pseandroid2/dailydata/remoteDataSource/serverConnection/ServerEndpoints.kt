@@ -51,13 +51,6 @@ interface ServerEndpoints
     @GET("greet")
     fun greet(): Call<String>
 
-    // Test Controller
-    @GET("token")
-    fun test(@Header("token") token: String): Call<String>
-
-    @GET("username")
-    fun name(@Header("token") token: String): Call<String>
-
     // Post Controller
     @GET("Posts"+"/allPreview")
     fun getAllPostPreview(@Header("token") token: String): Call<List<PostPreview>>
@@ -98,15 +91,15 @@ interface ServerEndpoints
     fun getAdmin(@Header("token") token: String, @Path("id") projectId: Long): Call<String>
 
     // DeltaController
-    @POST("OnlineDatabase/Delta"+"/save/{projectId}")
-    suspend fun saveDelta(@Header("token") token: String, @Path("projectId") projectId: Long,
+    @POST("OnlineDatabase/Delta"+"/save/{id}")
+    suspend fun saveDelta(@Header("token") token: String, @Path("id") projectId: Long,
                   @Body command: String): Boolean
 
-    @GET("OnlineDatabase/Delta"+"/get/{projectId}")
-    fun getDelta(@Header("token") token: String, @Path("projectID") projectId: Long): Call<Collection<Delta>>
+    @GET("OnlineDatabase/Delta"+"/get/{id}")
+    fun getDelta(@Header("token") token: String, @Path("id") projectId: Long): Call<Collection<Delta>>
 
-    @POST("OnlineDatabase/Delta"+"/provide/{projectId}")
-    fun provideOldData(@Header("token") token: String, @Path(value = "projectID") projectId: Long,
+    @POST("OnlineDatabase/Delta"+"/provide/{id}")
+    fun provideOldData(@Header("token") token: String, @Path(value = "id") projectId: Long,
                        @Body params: ProvideOldDataParameter): Call<Boolean>
 
     @GET("OnlineDatabase/Delta"+"/time")

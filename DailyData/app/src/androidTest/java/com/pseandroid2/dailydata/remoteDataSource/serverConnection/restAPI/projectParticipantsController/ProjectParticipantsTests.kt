@@ -159,4 +159,6 @@ class ProjectParticipantsTests {
 
         Assert.assertFalse(restAPI.removeUser(authToken2, projectID, authToken3))
     }
+
+    //TODO Tests auskommentieren
 }

@@ -25,7 +25,10 @@ class DeltaControllerSaveDeltasTests {
         var email = "test@student.kit.edu"
         var password = "PSEistsuper"
 
-        Assert.assertEquals(FirebaseReturnOptions.SINGED_IN, fm.signInWithEmailAndPassword(email, password))
+        Assert.assertEquals(
+            FirebaseReturnOptions.SINGED_IN,
+            fm.signInWithEmailAndPassword(email, password)
+        )
         authToken = fm.getToken()
 
         // Create new project
@@ -33,11 +36,14 @@ class DeltaControllerSaveDeltasTests {
         Assert.assertTrue(projectID > 0)
     }
 
-    /** TODO: We have currently a problem that the server can't handle too many uploaded deltas at a time. When this bug is removed this methods will be integrated again
+    //TODO: We have currently a problem that the server can't handle too many uploaded deltas at a time. When this bug is removed this methods will be integrated again
     @Test
     fun saveDelta() {
         // Save a delta to the server
-        Assert.assertEquals(listOf("projectCommand"), serverManager.sendCommandsToServer(projectID, listOf("projectCommand"), authToken))
+        Assert.assertEquals(
+            listOf("projectCommand"),
+            serverManager.sendCommandsToServer(projectID, listOf("projectCommand"), authToken)
+        )
     }
 
     @Test
@@ -46,7 +52,8 @@ class DeltaControllerSaveDeltasTests {
         for (i in 1..10) {
             projectCommands.add("command$i")
         }
-        val successfullySendCommands = serverManager.sendCommandsToServer(projectID, projectCommands, authToken) as MutableList
+        val successfullySendCommands =
+            serverManager.sendCommandsToServer(projectID, projectCommands, authToken) as MutableList
         projectCommands.forEach {
             Assert.assertTrue(successfullySendCommands.remove(it))
         }
@@ -61,7 +68,11 @@ class DeltaControllerSaveDeltasTests {
         for (i in 1..commandLimit) {
             projectCommands.add("command$i")
         }
-        val successfullySendCommands = serverManager.sendCommandsToServer(projectID2, projectCommands, authToken) as MutableList
+        val successfullySendCommands = serverManager.sendCommandsToServer(
+            projectID2,
+            projectCommands,
+            authToken
+        ) as MutableList
         projectCommands.forEach {
             Assert.assertTrue(successfullySendCommands.remove(it))
         }
@@ -69,6 +80,6 @@ class DeltaControllerSaveDeltasTests {
         val projectCommand = listOf("exceeds the upload limit")
         Assert.assertEquals(projectCommand, projectCommand)
     }
-    */
 
+    //TODO Tests auskommentieren
 }

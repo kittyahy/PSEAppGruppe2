@@ -23,12 +23,10 @@ import java.time.LocalDateTime
 /**
  * A data class whose objects will be stored in the project command queue. Contains additional information to the project command
  *
- * @param wentOnline: When the command was uploaded
  * @param commandByUser: Who uploaded the command
  * @param isProjectAdmin: Was the user who created the command an admin?
  * @param projectCommand: The project command as JSON
  */
-data class ProjectCommandInfo(val wentOnline: LocalDateTime = LocalDateTime.parse("0001-01-01T00:00"),
-                              val commandByUser: String = "",
+data class ProjectCommandInfo(val commandByUser: String = "",
                               val isProjectAdmin: Boolean = false,
                               val projectCommand: String = "")

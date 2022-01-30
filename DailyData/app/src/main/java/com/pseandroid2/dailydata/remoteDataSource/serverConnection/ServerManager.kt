@@ -231,7 +231,7 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
         val receivedProjectCommands: Collection<Delta> = restAPI.getDelta(projectID, authToken)
         receivedProjectCommands.forEach {
             // Transform Delta into an Project Command
-            val queueElement = ProjectCommandInfo(wentOnline = it.addedToServer,
+            val queueElement = ProjectCommandInfo(
                 commandByUser =  it.user, isProjectAdmin = it.isAdmin, projectCommand = it.projectCommand)
             projectCommandQueue.addProjectCommand(queueElement)
         }

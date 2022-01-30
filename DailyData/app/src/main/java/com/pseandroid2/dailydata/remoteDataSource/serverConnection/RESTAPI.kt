@@ -76,32 +76,6 @@ class RESTAPI {
         return false
     }
 
-    //------------------------------------- Tests Controller -------------------------------------
-    /**
-     * Returns the authentication token
-     * (Used to check if the server can extract the firebase token properly from the header)
-     *
-     * @return String: The firebase authentication token
-     */
-    fun getToken(authToken: String): String {
-        val call: Call<String> = server.test(authToken)
-
-        return call.execute().body() ?: ""
-    }
-
-    /**
-     * Returns the userID of the user who belongs to the authentication token
-     * (Used to check if the server can extract the userID of the token)
-     *
-     * @return String: The userID
-     */
-    fun getUserIDFromToken(authToken: String): String {
-        val call: Call<String> = server.name(authToken)
-
-        return call.execute().body() ?: ""
-    }
-
-
     //------------------------------------- Posts Controller -------------------------------------
     /**
      * Gets post previews from the server
@@ -274,9 +248,16 @@ class RESTAPI {
      * @param authToken: The authentication token
      */
     fun getDelta(projectID: Long, authToken: String): Collection<Delta> {
-        val call: Call<Collection<Delta>> = server.getDelta(authToken, projectID)
-
-        return call.execute().body() ?: mutableListOf()
+        val call: Call<Collection<Delta>> = server.getDelta(token = authToken, projectID)
+        /* TODO:
+         * Note: There was an error that project commands always had too many quotation marks. These are removed here
+         */
+        val body = call.execute().body() ?: return mutableListOf()
+        var refactoredDeltas: MutableList<Delta> = mutableListOf()
+        body.forEach {
+            refactoredDeltas.add(Delta(it.user, it.projectCommand.substring( 1, it.projectCommand.length - 1), it.project, it.isAdmin))
+        }
+        return refactoredDeltas
     }
 
     /**
