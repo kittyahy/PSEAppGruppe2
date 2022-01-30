@@ -56,7 +56,7 @@ class ProjectHandler(
         return ProjectFlow(appDataBase, id).getProjectFlow()
     }
 
-    suspend fun newProject(
+    suspend fun newProjectAsync(
         name: String,
         description: String,
         wallpaper: Int,
@@ -64,7 +64,7 @@ class ProjectHandler(
         buttons: List<Button>,
         notification: List<Notification>,
         graphs: List<Graph>
-    ): Int {
+    ) = scope.async{
 
         val idFlow = MutableSharedFlow<Int>()
         val createProject = CreateProject(
@@ -78,16 +78,13 @@ class ProjectHandler(
             notification,
             graphs
         )
-        val id = scope.async {
             executeQueue.add(createProject)
-            idFlow.first()
-        }
+            return@async idFlow.first()
 
-        return id.await()
     }
 
-    suspend fun newProject(project: Project): Int {
-        return newProject(
+    suspend fun newProjectAsync(project: Project) = scope.async {
+        return@async newProjectAsync(
             project.title,
             project.description,
             project.wallpaper,
