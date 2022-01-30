@@ -42,7 +42,20 @@ class CreateProject(
 
         val project: Project = pb.build()
         val prod = appDataBase.projectCDManager().insertProject(project)
+        projectID = prod.id
         projectIDReturn.emit(prod.id)
         super.execute(appDataBase, remoteDataSourceAPI, publishQueue)
+    }
+
+    override suspend fun publish(
+        appDataBase: AppDataBase,
+        remoteDataSourceAPI: RemoteDataSourceAPI,
+        publishQueue: PublishQueue
+    ): Boolean {
+        //ReserveServerSlot
+        onlineProjectID = remoteDataSourceAPI.addProject()
+        //Make Created Project Online Project
+        appDataBase.projectDataDAO().setOnlineID(projectID!!, onlineProjectID!!)
+        return super.publish(appDataBase, remoteDataSourceAPI, publishQueue)
     }
 }

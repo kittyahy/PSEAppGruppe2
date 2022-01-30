@@ -13,16 +13,20 @@ abstract class ProjectCommand (
     var commandByUser: String? = null,
     var isProjectAdmin: Boolean? = null
 ){
+    val cameFromServer = false
     open suspend fun execute(
         appDataBase: AppDataBase,
         remoteDataSourceAPI: RemoteDataSourceAPI,
         publishQueue: PublishQueue
     ) {
-        if (publish()) {
+        if (publish(appDataBase, remoteDataSourceAPI, publishQueue)) {
             publishQueue.add(this)
         }
     }
-    open suspend fun publish(): Boolean {
-        return onlineProjectID != null
+    open suspend fun publish(
+        appDataBase: AppDataBase,
+        remoteDataSourceAPI: RemoteDataSourceAPI,
+        publishQueue: PublishQueue): Boolean {
+        return onlineProjectID != null && !cameFromServer
     }
 }
