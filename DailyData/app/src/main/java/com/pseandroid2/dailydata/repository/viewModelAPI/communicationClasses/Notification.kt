@@ -21,7 +21,10 @@
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
 import com.pseandroid2.dailydata.model.database.daos.NotificationsDAO
+import com.pseandroid2.dailydata.model.notifications.Notification
 import com.pseandroid2.dailydata.model.notifications.TimeNotification
+import com.pseandroid2.dailydata.model.project.Project
+import com.pseandroid2.dailydata.model.project.ProjectBuilder
 import java.time.LocalTime
 
 class Notification(
@@ -30,7 +33,7 @@ class Notification(
     val time: LocalTime,
     val notificationsDAO: NotificationsDAO,
     val projectID: Int
-) : Identifiable {
+) : Identifiable, Convertible<Notification> {
     constructor(
         timeNotification: TimeNotification,
         notificationsDAO: NotificationsDAO,
@@ -52,7 +55,11 @@ class Notification(
         notificationsDAO.deleteNotification(projectID, id)
     }
 
-    fun toDBEquivalent(): TimeNotification {
+    override fun toDBEquivalent(): TimeNotification {
         return TimeNotification(message, time, id)
+    }
+
+    override fun addYourself(builder: ProjectBuilder<out Project>) {
+        builder.addNotifications(listOf(toDBEquivalent()))
     }
 }
