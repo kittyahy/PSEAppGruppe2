@@ -22,8 +22,8 @@ package com.pseandroid2.dailydata.model.users
 
 interface User {
 
-    public fun getId(): String
+    fun getId(): String
 
-    public fun getName(): String
+    fun getName(): String
 
 }
