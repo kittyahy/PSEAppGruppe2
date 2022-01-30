@@ -25,26 +25,23 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.util.ui.UiEvent
-import com.pseandroid2.dailydata.di.Repository
 import com.pseandroid2.dailydata.util.ui.Routes
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@InternalCoroutinesApi
 @HiltViewModel
 class ProjectOverviewViewModel @Inject constructor(
-    private val repository: Repository
+    private val repository: RepositoryViewModelAPI
 ): ViewModel() {
 
-    //repository.getProjects()
-    val projects : Flow<List<String>> = flow {
-        emptyList<String>()
-    }
-    val templates : Flow<List<String>> = flow {
-        emptyList<String>()
-    }
+    val projects = repository.projectHandler.projectPreviewFlow.flow
+    val templates = repository.projectHandler.projectTemplateFlow //TODO("Repository add functionality")
 
     var isTemplateDialogOpen by mutableStateOf(false)
         private set
@@ -64,9 +61,7 @@ class ProjectOverviewViewModel @Inject constructor(
                 sendUiEvent(UiEvent.Navigate(Routes.DATA + "?projectId=${event.id}" ))
             }
             is ProjectOverviewEvent.OnTemplateClick -> {
-                //id = repository.createProjectByTemplate(templates[event.index])
-                var id = -1
-                sendUiEvent(UiEvent.Navigate(Routes.CREATION + "?projectId=${id}" ))
+                sendUiEvent(UiEvent.Navigate(Routes.CREATION + "?projectTemplateId=${event.id}" ))
             }
         }
     }
@@ -76,5 +71,4 @@ class ProjectOverviewViewModel @Inject constructor(
             _uiEvent.emit(event)
         }
     }
-
 }

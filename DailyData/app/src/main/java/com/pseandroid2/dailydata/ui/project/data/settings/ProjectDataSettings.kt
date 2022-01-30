@@ -20,6 +20,9 @@
 
 package com.pseandroid2.dailydata.ui.project.data.settings
 
+import android.annotation.SuppressLint
+import android.content.ClipData
+import android.content.Context
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
@@ -29,37 +32,37 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ExitToApp
-import androidx.compose.material.icons.filled.FullscreenExit
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.AnnotatedString
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pseandroid2.dailydata.util.ui.UiEvent
 import com.pseandroid2.dailydata.R
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
 import com.pseandroid2.dailydata.ui.composables.ButtonElement
 import com.pseandroid2.dailydata.ui.composables.ListInput
 import com.pseandroid2.dailydata.ui.composables.SaveButton
 import com.pseandroid2.dailydata.ui.composables.TextInput
 import com.pseandroid2.dailydata.ui.composables.WallpaperElement
-import com.pseandroid2.dailydata.ui.project.creation.AppDialog
 import com.pseandroid2.dailydata.ui.project.creation.BackDialog
 import com.pseandroid2.dailydata.ui.project.creation.ButtonDialog
 import com.pseandroid2.dailydata.ui.project.creation.GraphDialog
 import com.pseandroid2.dailydata.ui.project.creation.NotificationDialog
 import com.pseandroid2.dailydata.ui.project.creation.TableDialog
 import com.pseandroid2.dailydata.ui.project.creation.WallpaperDialog
-import com.pseandroid2.dailydata.util.ui.DataType
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.InternalCoroutinesApi
 
+@SuppressLint("ServiceCast")
+@InternalCoroutinesApi
 @Composable
 fun ProjectDataSettingsScreen(
+    projectId : Int,
     onNavigate: (UiEvent.Navigate) -> Unit,
     onPopBackStack : () -> Unit,
     viewModel: ProjectDataSettingsScreenViewModel = hiltViewModel()
@@ -68,11 +71,17 @@ fun ProjectDataSettingsScreen(
     val context = LocalContext.current
 
     LaunchedEffect(key1 = true) {
+        viewModel.onEvent(ProjectDataSettingsScreenEvent.OnCreate(projectId = projectId))
         viewModel.uiEvent.collect { event ->
             when(event) {
                 is UiEvent.ShowToast -> Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
                 is UiEvent.Navigate -> onNavigate(event)
                 is UiEvent.PopBackStack -> onPopBackStack()
+                is UiEvent.CopyToClipboard -> {
+                    val clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                    clipboardManager.setText(AnnotatedString(text = event.message))
+                    Toast.makeText(context, "Copied to clipboard", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
@@ -128,22 +137,15 @@ fun ProjectDataSettingsScreen(
                 label = "Change Wallpaper",
                 onClick = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnShowWallpaperDialog(true)) }
             )
-
-            MembersDialog(
-                isOpen = viewModel.isMembersDialogOpen,
-                onDismissRequest = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnShowTableDialog(false)) },
-                name = viewModel.currentEditMember,
-                error = viewModel.currentEditMemberError,
-                onNameChange = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnChangeEditMember(it)) },
-                onClick = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnAddMember) }
-            )
-            ListInput(
-                label = "Add Member",
-                mainIcon = Icons.Default.AccountCircle,
-                onClick = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnShowMemberDialog(true)) },
-                onClickItem = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnMemberRemove(index = it)) },
-                elements = viewModel.members.map { "${it.name} #${it.id}" }
-            )
+            if(viewModel.isAdmin) {
+                ListInput(
+                    label = "Create Link",
+                    mainIcon = Icons.Default.AccountCircle,
+                    onClick = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnCreateLink) },
+                    onClickItem = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnMemberRemove(index = it)) },
+                    elements = viewModel.members.map { "${it.name} #${it.id}" } //TODO("Repository if the user is listed : make function to get user")
+                )
+            }
             Divider()
             TableDialog(
                 isOpen = viewModel.isTableDialogOpen,
@@ -153,13 +155,15 @@ fun ProjectDataSettingsScreen(
                     viewModel.onEvent(ProjectDataSettingsScreenEvent.OnShowTableDialog(false))
                 }
             )
-            ListInput(
-                label = "Add Table Column",
-                mainIcon = ImageVector.vectorResource(id = R.drawable.ic_table),
-                onClick = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnShowTableDialog(true)) },
-                onClickItem = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnTableRemove(index = it)) },
-                elements = viewModel.table.map { "${it.name} in ${it.unit}" }
-            )
+            if(viewModel.isAdmin) {
+                ListInput(
+                    label = "Add Table Column",
+                    mainIcon = ImageVector.vectorResource(id = R.drawable.ic_table),
+                    onClick = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnShowTableDialog(true)) },
+                    onClickItem = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnTableRemove(index = it)) },
+                    elements = viewModel.table.map { "${it.name} in ${it.unit}" }
+                )
+            }
             Divider()
             ButtonDialog(
                 isOpen = viewModel.isButtonsDialogOpen,
@@ -169,7 +173,7 @@ fun ProjectDataSettingsScreen(
                     viewModel.onEvent(
                         ProjectDataSettingsScreenEvent.OnButtonAdd(
                             name = name,
-                            columnId = viewModel.table.filter { it.dataType == DataType.WHOLE_NUMBER }[column].id,
+                            columnId = viewModel.table.filter { it.dataType == DataType.WHOLE_NUMBER }[column].id,  //TODO(vielleicht nochmal ueberarbeiten)
                             value = value.toInt()
                         )
                     )
@@ -181,7 +185,10 @@ fun ProjectDataSettingsScreen(
                 mainIcon = ImageVector.vectorResource(id = R.drawable.ic_button),
                 onClick = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnShowButtonsDialog(true)) },
                 onClickItem = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnButtonRemove(index = it)) },
-                elements = viewModel.buttons.map { "${it.name} in ${it.column.name}" }
+                elements = viewModel.buttons.map { button ->
+                    var columnName = viewModel.table.find { it.id == button.columnId} ?: ""
+                    "${button.name} in ${columnName}"
+                }
             )
             Divider()
             NotificationDialog(
@@ -197,14 +204,14 @@ fun ProjectDataSettingsScreen(
                 mainIcon = Icons.Default.Notifications,
                 onClick = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnShowNotificationDialog(true)) },
                 onClickItem = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnNotificationRemove(index = it)) },
-                elements = viewModel.notifications.map { it.time }
+                elements = viewModel.notifications.map { it.time.toString() }
             )
             Divider()
             GraphDialog(
                 isOpen = viewModel.isGraphDialogOpen,
                 onDismissRequest = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnShowGraphDialog(false)) },
                 onClick = { graph ->
-                    viewModel.onEvent(ProjectDataSettingsScreenEvent.OnGraphAdd(graph))
+                  //  viewModel.onEvent(ProjectDataSettingsScreenEvent.OnGraphAdd(Graph.create(graph))) TODO(Repository create function)
                     viewModel.onEvent(ProjectDataSettingsScreenEvent.OnShowGraphDialog(false))
                 }
             )
@@ -213,7 +220,7 @@ fun ProjectDataSettingsScreen(
                 mainIcon = ImageVector.vectorResource(id = R.drawable.ic_chart),
                 onClick = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnShowGraphDialog(true)) },
                 onClickItem = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnButtonRemove(index = it)) },
-                elements = viewModel.graphs.map { it.representation }
+                elements = viewModel.graphs.map { TODO("it.representation") }
             )
             ButtonElement(
                 icon = Icons.Default.ExitToApp,
@@ -225,66 +232,6 @@ fun ProjectDataSettingsScreen(
                 label = "Delete Project",
                 onClick = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnDeleteProject) }
             )
-        }
-    }
-}
-
-@Composable
-fun MembersDialog(
-    isOpen : Boolean,
-    onDismissRequest : () -> Unit,
-    name : String,
-    error: Boolean,
-    onNameChange : (String) -> Unit,
-    onClick : () -> Unit
-) {
-    AppDialog(isOpen = isOpen, onDismissRequest = onDismissRequest) {
-        Column(
-            modifier = Modifier.width(300.dp)
-        ) {
-            OutlinedTextField(
-                value = name,
-                onValueChange = onNameChange,
-                isError = error
-            )
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                TextButton(onClick = onDismissRequest) {
-                    Text(text = "Cancel")
-                }
-                TextButton(onClick = onClick) {
-                    Text(text = "OK")
-                }
-            }
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun Prev(){
-    Column(
-        modifier = Modifier.width(300.dp)
-    ) {
-        OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = "name",
-            onValueChange = {},
-            isError = true
-        )
-        Spacer(modifier = Modifier.padding(20.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            TextButton(onClick = {}) {
-                Text(text = "Cancel")
-            }
-            TextButton(onClick = {  }) {
-                Text(text = "OK")
-            }
         }
     }
 }

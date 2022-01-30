@@ -40,11 +40,6 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideRepository() : Repository {
-        return Repository()
-    }
-    @Provides
-    @Singleton
     fun provideAppDatabase() : AppDataBase {
         return AppDataBase.getInstance(TODO())
     }

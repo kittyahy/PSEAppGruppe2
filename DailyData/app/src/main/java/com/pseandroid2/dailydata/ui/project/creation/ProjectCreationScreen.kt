@@ -36,13 +36,15 @@ import androidx.compose.ui.res.vectorResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pseandroid2.dailydata.util.ui.UiEvent
 import com.pseandroid2.dailydata.R
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
 import com.pseandroid2.dailydata.ui.composables.ListInput
 import com.pseandroid2.dailydata.ui.composables.SaveButton
 import com.pseandroid2.dailydata.ui.composables.TextInput
 import com.pseandroid2.dailydata.ui.composables.WallpaperElement
-import com.pseandroid2.dailydata.util.ui.DataType
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.InternalCoroutinesApi
 
+@InternalCoroutinesApi
 @Composable
 fun ProjectCreationScreen(
     onNavigate: (UiEvent.Navigate) -> Unit,
@@ -81,9 +83,7 @@ fun ProjectCreationScreen(
         floatingActionButton = {
             SaveButton(
                 text = "Save",
-                onClick = {
-                    viewModel.onEvent(ProjectCreationEvent.OnSaveClick)
-                }
+                onClick = { viewModel.onEvent(ProjectCreationEvent.OnSaveClick) }
             )
         }
     ) {
@@ -156,7 +156,10 @@ fun ProjectCreationScreen(
                 mainIcon = ImageVector.vectorResource(id = R.drawable.ic_button),
                 onClick = { viewModel.onEvent(ProjectCreationEvent.OnShowButtonsDialog(true)) },
                 onClickItem = { viewModel.onEvent(ProjectCreationEvent.OnButtonRemove(index = it)) },
-                elements = viewModel.buttons.map { "${it.name} in ${it.column.name}" }
+                elements = viewModel.buttons.map { button ->
+                    val name = viewModel.table.find { it.id == button.columnId }!!.name
+                    "${button.name} in $name"
+                }
             )
             Divider()
             NotificationDialog(
@@ -172,14 +175,14 @@ fun ProjectCreationScreen(
                 mainIcon = Icons.Default.Notifications,
                 onClick = { viewModel.onEvent(ProjectCreationEvent.OnShowNotificationDialog(true)) },
                 onClickItem = { viewModel.onEvent(ProjectCreationEvent.OnNotificationRemove(index = it)) },
-                elements = viewModel.notifications.map { it.time }
+                elements = viewModel.notifications.map { it.time.toString() }
             )
             Divider()
             GraphDialog(
                 isOpen = viewModel.isGraphDialogOpen,
                 onDismissRequest = { viewModel.onEvent(ProjectCreationEvent.OnShowGraphDialog(false)) },
                 onClick = { graph ->
-                    viewModel.onEvent(ProjectCreationEvent.OnGraphAdd(graph))
+                    //viewModel.onEvent(ProjectCreationEvent.OnGraphAdd(Graph.create(graph))) //TODO("Reository create graph from type")
                     viewModel.onEvent(ProjectCreationEvent.OnShowGraphDialog(false))
                 }
             )
@@ -188,7 +191,7 @@ fun ProjectCreationScreen(
                 mainIcon = ImageVector.vectorResource(id = R.drawable.ic_chart),
                 onClick = { viewModel.onEvent(ProjectCreationEvent.OnShowGraphDialog(true)) },
                 onClickItem = { viewModel.onEvent(ProjectCreationEvent.OnButtonRemove(index = it)) },
-                elements = viewModel.graphs.map { it.representation }
+                elements = viewModel.graphs.map { it.typeName }
             )
         }
     }

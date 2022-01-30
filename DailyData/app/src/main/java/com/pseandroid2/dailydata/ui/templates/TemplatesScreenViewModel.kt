@@ -25,18 +25,22 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.pseandroid2.dailydata.R
-import com.pseandroid2.dailydata.util.ui.GraphTemplate
-import com.pseandroid2.dailydata.util.ui.ProjectTemplate
+import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.GraphTemplate
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ProjectTemplate
 import com.pseandroid2.dailydata.util.ui.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@InternalCoroutinesApi
 @HiltViewModel
-class TemplatesScreenViewModel @Inject constructor() : ViewModel() {
+class TemplatesScreenViewModel @Inject constructor(
+    val repository: RepositoryViewModelAPI
+) : ViewModel() {
 
     private val _uiEvent = MutableSharedFlow<UiEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
@@ -45,54 +49,13 @@ class TemplatesScreenViewModel @Inject constructor() : ViewModel() {
         private set
     var tab by mutableStateOf(0)
         private set
-    var graphTemplates by mutableStateOf( listOf<GraphTemplate>() )
+
+    var graphTemplates = repository.projectHandler.graphTemplateFlow
         private set
-    var projectTemplates by mutableStateOf( listOf<ProjectTemplate>() )
+    var projectTemplates = repository.projectHandler.projectTemplateFlow
         private set
 
     init {
-        tabs = TemplateTabs.values().toList()
-        graphTemplates = listOf(
-            GraphTemplate(title = "Title 1", image = R.drawable.chart),
-            GraphTemplate(title = "Title 2", image = R.drawable.chart),
-            GraphTemplate(title = "Title 3", image = R.drawable.chart),
-            GraphTemplate(title = "Title 4", image = R.drawable.chart),
-            GraphTemplate(title = "Title 5", image = R.drawable.chart),
-            GraphTemplate(title = "Title 6", image = R.drawable.chart),
-            GraphTemplate(title = "Title 7", image = R.drawable.chart),
-            GraphTemplate(title = "Title 8", image = R.drawable.chart),
-            GraphTemplate(title = "Title 9", image = R.drawable.chart),
-            GraphTemplate(title = "Title 10", image = R.drawable.chart),
-            GraphTemplate(title = "Title 11", image = R.drawable.chart),
-            GraphTemplate(title = "Title 12", image = R.drawable.chart),
-            GraphTemplate(title = "Title 13", image = R.drawable.chart),
-            GraphTemplate(title = "Title 14", image = R.drawable.chart),
-            GraphTemplate(title = "Title 15", image = R.drawable.chart),
-            GraphTemplate(title = "Title 16", image = R.drawable.chart),
-        )
-        projectTemplates = listOf(
-            ProjectTemplate(title = "Title 1", image = R.drawable.chart, graphTemplates = listOf(
-                GraphTemplate(title = "Title 1", image = R.drawable.chart),
-                GraphTemplate(title = "Title 2", image = R.drawable.chart)
-            )),
-            ProjectTemplate(title = "Title 2", image = R.drawable.chart, graphTemplates = listOf(
-                GraphTemplate(title = "Title 1", image = R.drawable.chart),
-                GraphTemplate(title = "Title 2", image = R.drawable.chart),
-                GraphTemplate(title = "Title 3", image = R.drawable.chart)
-            )),
-            ProjectTemplate(title = "Title 3", image = R.drawable.chart, graphTemplates = listOf(
-                GraphTemplate(title = "Title 1", image = R.drawable.chart)
-            )),
-            ProjectTemplate(title = "Title 4", image = R.drawable.chart, graphTemplates = listOf(
-                GraphTemplate(title = "Title 1", image = R.drawable.chart),
-                GraphTemplate(title = "Title 2", image = R.drawable.chart),
-                GraphTemplate(title = "Title 3", image = R.drawable.chart)
-            )),
-            ProjectTemplate(title = "Title 5", image = R.drawable.chart, graphTemplates = listOf(
-                GraphTemplate(title = "Title 1", image = R.drawable.chart),
-                GraphTemplate(title = "Title 3", image = R.drawable.chart)
-            ))
-        )
     }
 
     fun onEvent(event : TemplatesScreenEvent) {

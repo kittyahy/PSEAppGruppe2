@@ -20,7 +20,6 @@
 
 package com.pseandroid2.dailydata.ui.templates
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -41,14 +40,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pseandroid2.dailydata.ui.composables.TopNavigationBar
 import com.pseandroid2.dailydata.util.ui.UiEvent
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 
+@InternalCoroutinesApi
 @Composable
 fun TemplatesScreen(
     onNavigate: (UiEvent.Navigate) -> Unit,
@@ -74,6 +74,7 @@ fun TemplatesScreen(
             TemplateTabs.GRAPHS -> {
                 LazyColumn {
                     itemsIndexed(viewModel.graphTemplates) { index, template ->
+                        /*
                         TemplatesCard(
                             title = template.title,
                             image = painterResource(id = template.image),
@@ -81,12 +82,15 @@ fun TemplatesScreen(
                                 viewModel.onEvent(TemplatesScreenEvent.OnGraphTemplateDelete(index))
                             }
                         )
+
+                         */
                     }
                 }
             }
             TemplateTabs.PROJECTS -> {
                 LazyColumn {
                     itemsIndexed(viewModel.projectTemplates) { index, template ->
+                        /*
                         TemplatesCard(
                             title = template.title,
                             image = painterResource(id = template.image),
@@ -94,6 +98,8 @@ fun TemplatesScreen(
                                 viewModel.onEvent(TemplatesScreenEvent.OnProjectTemplateDelete(index))
                             }
                         )
+
+                         */
                     }
                 }
             }

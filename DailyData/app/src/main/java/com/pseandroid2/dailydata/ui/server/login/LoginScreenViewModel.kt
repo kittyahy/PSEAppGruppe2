@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.util.ui.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -13,11 +14,15 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginScreenViewModel @Inject constructor() : ViewModel() {
+class LoginScreenViewModel @Inject constructor(
+    val repository : RepositoryViewModelAPI
+) : ViewModel() {
 
     private val _uiEvent = MutableSharedFlow<UiEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
 
+    var isSignUpDialogOpen by mutableStateOf(false)
+        private set
     var userEmail by mutableStateOf("")
         private set
     var userPassword by mutableStateOf("")
@@ -32,10 +37,17 @@ class LoginScreenViewModel @Inject constructor() : ViewModel() {
                 userPassword = event.password
             }
             is LoginScreenEvent.Login -> {
-
+                TODO("Check if input is valid")
+                repository.serverHandler.login(username = userEmail, password = userPassword)
             }
             is LoginScreenEvent.LoginGoogle -> {
 
+            }
+            is LoginScreenEvent.SignUp -> {
+                TODO("Repository")
+            }
+            is LoginScreenEvent.ShowSignUpDialog -> {
+                isSignUpDialogOpen = event.isOpen
             }
         }
     }

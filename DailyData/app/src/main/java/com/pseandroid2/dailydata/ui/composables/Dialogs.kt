@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.pseandroid2.dailydata.util.ui.ProjectTemplate
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ProjectTemplate
 
 @Composable
 fun ProjectTemplateDialog(
@@ -30,7 +30,7 @@ fun ProjectTemplateDialog(
     onIconClick: (Int) -> Unit,
     template : ProjectTemplate
 ) {
-
+/*
     if(isOpen) {
         Dialog(
             onDismissRequest = onDismissRequest
@@ -71,4 +71,6 @@ fun ProjectTemplateDialog(
             }
         }
     }
+
+ */
 }
