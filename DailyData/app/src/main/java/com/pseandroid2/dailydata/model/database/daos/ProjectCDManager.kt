@@ -42,7 +42,7 @@ class ProjectCDManager(
     private val db: AppDataBase
 ) {
     private val projectDAO: ProjectDataDAO = db.projectDataDAO()
-    private val templateDAO: TemplateDAO = TODO()
+    private val templateDAO: TemplateDAO = db.templateDAO()
     private val uiDAO: UIElementDAO = db.uiElementDAO()
     private val notifDAO: NotificationsDAO = db.notificationsDAO()
     private val graphDAO: GraphDAO = db.graphDAO()

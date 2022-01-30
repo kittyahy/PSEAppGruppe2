@@ -32,6 +32,7 @@ import com.pseandroid2.dailydata.model.database.daos.ProjectCDManager
 import com.pseandroid2.dailydata.model.database.daos.ProjectDataDAO
 import com.pseandroid2.dailydata.model.database.daos.SettingsDAO
 import com.pseandroid2.dailydata.model.database.daos.TableContentDAO
+import com.pseandroid2.dailydata.model.database.daos.TemplateDAO
 import com.pseandroid2.dailydata.model.database.daos.UIElementDAO
 import com.pseandroid2.dailydata.model.database.entities.GraphEntity
 import com.pseandroid2.dailydata.model.database.entities.GraphSettingEntity
@@ -98,4 +99,10 @@ abstract class AppDataBase : RoomDatabase() {
     abstract fun tableContentDAO(): TableContentDAO
 
     abstract fun settingsDAO(): SettingsDAO
+
+    abstract fun templateDAO(): TemplateDAO
+
+    abstract fun graphCDManager(): GraphCDManager
+
+    abstract fun projectCDManager(): ProjectCDManager
 }
