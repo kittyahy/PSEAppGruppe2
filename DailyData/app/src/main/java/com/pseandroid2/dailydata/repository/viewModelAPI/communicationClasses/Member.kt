@@ -23,7 +23,7 @@ package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 class Member(
     override val id: Int,
     val name: String
-): Identifiable() {
+): Identifiable {
     override fun deleteIsPossible(): Boolean {
         TODO("Not yet implemented")
     }

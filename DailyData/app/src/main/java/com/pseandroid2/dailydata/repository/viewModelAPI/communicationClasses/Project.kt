@@ -21,7 +21,6 @@
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
 import android.graphics.Bitmap
-import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.model.database.entities.GraphEntity
 import com.pseandroid2.dailydata.model.database.entities.ProjectData
 import com.pseandroid2.dailydata.repository.commandCenter.commands.IllegalOperationException
@@ -42,7 +41,7 @@ class Project(
     var notifications: List<Notification> = ArrayList<Notification>(),
     var graphs: List<Graph> = ArrayList<Graph>(),
     var members: List<Member> = ArrayList<Member>()
-) : Identifiable() {
+) : Identifiable {
     val scope = CoroutineScope(Dispatchers.IO)
     fun update(graphEntity: GraphEntity) {
         TODO("not yet implemented")
@@ -108,18 +107,6 @@ class Project(
     //@throws IllegalOperationException
     override suspend fun delete() {
         TODO("Not yet implemented")
-    }
-
-    override fun registerWithDB(appDataBase: AppDataBase) {
-        val identifiables = ArrayList<Identifiable>()
-        identifiables.addAll(table)
-        identifiables.addAll(data)
-        identifiables.addAll(buttons)
-        identifiables.addAll(notifications)
-        identifiables.addAll(graphs)
-        identifiables.addAll(members)
-        identifiables.forEach { identifiable -> identifiable.registerWithDB(appDataBase) }
-        super.registerWithDB(appDataBase)
     }
 
     //@throws IllegalOperationException

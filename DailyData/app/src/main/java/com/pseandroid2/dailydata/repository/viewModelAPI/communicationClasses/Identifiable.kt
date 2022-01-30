@@ -20,16 +20,9 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
-import com.pseandroid2.dailydata.model.database.AppDataBase
-
-abstract class Identifiable {
-    abstract val id: Int
-    lateinit var appDataBase: AppDataBase
-    abstract fun deleteIsPossible(): Boolean
+interface Identifiable {
+    val id: Int
+    fun deleteIsPossible(): Boolean
     //@throws IllegalOperationException
-    abstract suspend fun delete()
-
-    open fun registerWithDB(appDataBase: AppDataBase) {
-        this.appDataBase = appDataBase
-    }
+    suspend fun delete()
 }

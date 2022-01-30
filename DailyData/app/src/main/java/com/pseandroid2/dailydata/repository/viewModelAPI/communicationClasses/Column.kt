@@ -25,7 +25,7 @@ class Column (
     val name: String,
     val unit: String,
     val dataType: DataType
-): Identifiable() {
+): Identifiable {
     override fun deleteIsPossible(): Boolean {
         TODO("Not yet implemented")
     }
