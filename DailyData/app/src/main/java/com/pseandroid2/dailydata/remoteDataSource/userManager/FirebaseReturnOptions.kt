@@ -21,6 +21,8 @@
 package com.pseandroid2.dailydata.remoteDataSource.userManager
 
 /**
+ * All return options that firebase calls can return which will be past to upper classes
+ *
  * @return true: The operation succeeded as planned - No error happened
  *         false: something went wrong
  */

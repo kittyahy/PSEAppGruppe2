@@ -41,7 +41,9 @@ import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns
 import kotlinx.coroutines.runBlocking
 import java.util.concurrent.CompletableFuture
 
-
+/**
+ * Carries out all calls to our server
+ */
 class RESTAPI {
     private var baseUrl: String = "http://261ee33a-ba27-4828-b5df-f5f8718defe8.ka.bw-cloud-instance.org:8080" // The URL from our server
 

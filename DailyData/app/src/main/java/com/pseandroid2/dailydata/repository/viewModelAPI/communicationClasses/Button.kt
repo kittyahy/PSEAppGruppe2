@@ -49,6 +49,7 @@ class Button(
         return UIElement(
             id,
             UIElementType.BUTTON,
+            name,
             value.toString()
         )
     }
