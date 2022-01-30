@@ -15,7 +15,7 @@ class PublishQueue(appDataBase: AppDataBase, remoteDataSourceAPI: RemoteDataSour
     private var serverConnectionTolerance: TemporalAmount = Duration.ZERO.plusMinutes(5)
     private val untilRetrySleepForTime: Long = 1000 * 60 * 5
     override suspend fun performCommandAction(command: ProjectCommand) {
-        command.publish()
+        //TODO
     }
 
 
