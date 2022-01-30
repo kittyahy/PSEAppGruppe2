@@ -11,10 +11,10 @@ class Table {
     companion object {
         fun extractFrom(columns: List<Column>, rows: List<Row> = ArrayList<Row>()) : Table{
             val tableLayout: TableLayout = ArrayListLayout()
-            for (column in columns) {
-                tableLayout.addColumn(column.dataType.representation)
-            }
             val table: Table = ArrayListTable(tableLayout)
+            for (column in columns) {
+                table.addColumn(column.dataType.representation, "") //TODO Arne frage ob das Probleme machen könnte
+            }
             for (row in rows) {
                 table.addRow(row.toDBEquivalent())
             }

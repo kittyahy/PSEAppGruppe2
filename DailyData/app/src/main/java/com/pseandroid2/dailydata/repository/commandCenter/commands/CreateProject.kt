@@ -14,7 +14,7 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ad
 class CreateProject (commandByUser: String,
                      private val name: String,
                      private val description: String,
-                     private val wallpaper: Int, //TODO add
+                     private val wallpaper: Int,
                      private val table: List<Column>,
                      private val buttons: List<Button>, //TODO add
                      private val notification: List<Notification>,
@@ -32,6 +32,7 @@ class CreateProject (commandByUser: String,
         pb.setName(name)
         pb.setDescription(description)
         pb.addTable(Table.extractFrom(table))
+        pb.setBackground(wallpaper)
         graphs.forEach { graph -> graph.addYourself(pb) }
         notification.forEach{ notification -> notification.addYourself(pb)}
 
