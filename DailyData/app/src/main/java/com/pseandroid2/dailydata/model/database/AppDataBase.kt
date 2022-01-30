@@ -71,6 +71,9 @@ import com.pseandroid2.dailydata.model.database.entities.UIElementMap
 )
 abstract class AppDataBase : RoomDatabase() {
 
+    private var _graphCDManager: GraphCDManager? = null
+    private var _projectCDManager: ProjectCDManager? = null
+
     companion object {
         private var instance: AppDataBase? = null
 
@@ -101,8 +104,31 @@ abstract class AppDataBase : RoomDatabase() {
     abstract fun settingsDAO(): SettingsDAO
 
     abstract fun templateDAO(): TemplateDAO
-
-    abstract fun graphCDManager(): GraphCDManager
-
-    abstract fun projectCDManager(): ProjectCDManager
+    /**
+     * @throws NullPointerException when database creation fails
+     */
+    fun graphCDManager(): GraphCDManager {
+        if (_graphCDManager == null) {
+            synchronized(this)
+            {
+                _graphCDManager = GraphCDManager(this)
+            }
+        }
+        return _graphCDManager!!
+    }
+    /**
+     * @throws NullPointerException when database creation fails
+     */
+    fun projectCDManager(): ProjectCDManager {
+        if (_graphCDManager == null) {
+            graphCDManager()
+        }
+        if (_projectCDManager == null) {
+            synchronized(this)
+            {
+                _projectCDManager = ProjectCDManager(this)
+            }
+        }
+        return ProjectCDManager(this)
+    }
 }
