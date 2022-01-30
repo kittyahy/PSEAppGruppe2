@@ -20,20 +20,21 @@
 
 package com.pseandroid2.dailydata.model.project
 
-import android.graphics.drawable.Drawable
-import com.pseandroid2.dailydata.model.Graph
-import com.pseandroid2.dailydata.model.settings.Settings
+import android.graphics.Bitmap
+import com.pseandroid2.dailydata.model.graph.Graph
 import com.pseandroid2.dailydata.model.notifications.Notification
+import com.pseandroid2.dailydata.model.settings.MapSettings
+import com.pseandroid2.dailydata.model.settings.Settings
 
 class SimpleSkeleton(
-    override var id: Int,
-    private val onlineId: Long,
-    private val name: String,
-    private val description: String,
-    private val wallpaperPath: String,
-    private val graphs: List<Graph>,
-    private val settings: Settings,
-    private val notifications: List<Notification>
+    override var id: Int = -1,
+    private val onlineId: Long = -1,
+    private val name: String = "",
+    private val description: String = "",
+    private val wallpaperPath: String = "",
+    private val graphs: List<Graph<*, *>> = listOf(),
+    private val settings: Settings = MapSettings(),
+    private val notifications: List<Notification> = listOf()
 ) : ProjectSkeleton {
 
     override fun getOnlineId() = onlineId
@@ -42,7 +43,7 @@ class SimpleSkeleton(
 
     override fun getDescription() = description
 
-    override fun getWallpaper(): Drawable {
+    override fun getWallpaper(): Bitmap {
         TODO("Figure out how to obtain pictures from disk")
     }
 

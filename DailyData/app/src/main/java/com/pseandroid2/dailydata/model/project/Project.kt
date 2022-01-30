@@ -20,14 +20,15 @@
 
 package com.pseandroid2.dailydata.model.project
 
+import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
-import com.pseandroid2.dailydata.model.Graph
-import com.pseandroid2.dailydata.model.settings.Settings
-import com.pseandroid2.dailydata.model.users.User
+import com.pseandroid2.dailydata.model.graph.Graph
 import com.pseandroid2.dailydata.model.notifications.Notification
+import com.pseandroid2.dailydata.model.settings.Settings
 import com.pseandroid2.dailydata.model.table.Table
 import com.pseandroid2.dailydata.model.table.TableLayout
 import com.pseandroid2.dailydata.model.transformation.TransformationFunction
+import com.pseandroid2.dailydata.model.users.User
 
 /**
  * Contains all data of one specific Project
@@ -88,10 +89,10 @@ interface ProjectSkeleton {
 
     fun getDescription(): String
 
-    fun getWallpaper(): Drawable
+    fun getWallpaper(): Bitmap
     fun getWallpaperPath(): String
 
-    fun getGraphs(): Collection<Graph>
+    fun getGraphs(): Collection<Graph<*, *>>
 
     fun getProjectSettings(): Settings
 

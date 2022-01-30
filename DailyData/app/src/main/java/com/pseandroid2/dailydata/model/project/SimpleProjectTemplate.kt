@@ -8,15 +8,9 @@ class SimpleProjectTemplate(
     private val layout: TableLayout,
     private val creator: User
 ) : ProjectTemplate {
-    override fun getProjectSkeleton(): ProjectSkeleton {
-        return skeleton
-    }
+    override fun getProjectSkeleton() = skeleton
 
-    override fun getTableLayout(): TableLayout {
-        return layout
-    }
+    override fun getTableLayout() = layout
 
-    override fun getCreator(): User {
-        return creator
-    }
+    override fun getCreator() = creator
 }
