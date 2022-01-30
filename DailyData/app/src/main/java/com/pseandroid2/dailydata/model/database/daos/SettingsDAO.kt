@@ -25,8 +25,8 @@ import androidx.room.Query
 import androidx.room.Insert
 import androidx.room.Delete
 import androidx.room.Update
-import com.pseandroid2.dailydata.model.Settings
-import com.pseandroid2.dailydata.model.MapSettings
+import com.pseandroid2.dailydata.model.settings.Settings
+import com.pseandroid2.dailydata.model.settings.MapSettings
 import com.pseandroid2.dailydata.model.database.entities.GraphSettingEntity
 import com.pseandroid2.dailydata.model.database.entities.ProjectSettingEntity
 import kotlinx.coroutines.flow.Flow

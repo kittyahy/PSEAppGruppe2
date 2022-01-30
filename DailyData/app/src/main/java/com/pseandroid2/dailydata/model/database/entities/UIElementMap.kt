@@ -28,5 +28,6 @@ data class UIElementMap(
     val id: Int,
     val columnId: Int,
     val type: String,
+    val name: String,
     val state: String
 )

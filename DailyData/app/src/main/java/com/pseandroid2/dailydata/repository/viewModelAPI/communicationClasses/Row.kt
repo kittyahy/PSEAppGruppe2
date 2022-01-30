@@ -20,14 +20,22 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
+import com.pseandroid2.dailydata.model.project.Project
+import com.pseandroid2.dailydata.model.project.ProjectBuilder
+import com.pseandroid2.dailydata.model.table.ArrayListRow
+import com.pseandroid2.dailydata.model.table.Row
+import com.pseandroid2.dailydata.model.table.RowMetaData
+import com.pseandroid2.dailydata.model.users.SimpleUser
+import java.time.LocalDateTime
+
 class Row(
-    override val id: Long,
+    override val id: Int,
     val elements: List<String>
-): Identifiable {
+): Identifiable, Convertible<Row> {
     override fun deleteIsPossible(): Boolean {
         TODO("Not yet implemented")
     }
-    override fun delete() {
+    override suspend fun delete() {
         TODO("Not yet implemented")
     }
     //@throws IllegalOperationException
@@ -36,5 +44,16 @@ class Row(
             TODO()
         }
         TODO()
+    }
+
+    override fun toDBEquivalent(): Row {
+        val rowMetaData = RowMetaData(LocalDateTime.now(), LocalDateTime.MAX, SimpleUser("0", "No One")) //Todo werte fixen
+        val elementList : MutableList<Any> = ArrayList<Any>()
+        elementList.addAll(elements)
+        return ArrayListRow(elementList, rowMetaData)
+    }
+
+    override fun addYourself(builder: ProjectBuilder<out Project>) {
+        TODO("Not yet implemented")
     }
 }

@@ -37,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
+import com.pseandroid2.dailydata.remoteDataSource.appLinks.JoinProjectLinkManager
 import com.pseandroid2.dailydata.ui.theme.DailyDataTheme
 import com.pseandroid2.dailydata.ui.composables.BottomNavItem
 import com.pseandroid2.dailydata.ui.composables.BottomNavigationBar
@@ -46,6 +47,8 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    val joinProjectLinkManager = JoinProjectLinkManager()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -71,10 +74,10 @@ class MainActivity : ComponentActivity() {
             if (deepLink != null) {
                 // get projectID from link
                 var projectIDString: String = deepLink.getQueryParameter("projectid") ?: "-1" // -1 is an invalid projectID
-                val projectID: Long? = projectIDString.toLongOrNull();
+                val projectID: Long = joinProjectLinkManager.decodePostID(projectIDString)
 
                 // open join project screen when project id is valid
-                if (projectID != null && projectID > 0) {
+                if (projectID > 0) {
                     openJoinProjectScreen(projectID)
                 }
             } else {

@@ -35,32 +35,43 @@ import com.pseandroid2.dailydata.remoteDataSource.userManager.UserAccount
 import java.time.LocalDateTime
 import javax.inject.Inject
 
-class RemoteDataSourceAPI @Inject constructor(private val uAccount: UserAccount?, private val sManager: ServerManager?)  {
-    // Allows to call the RemoteDataSource also without dependency injection (so that the Repository don't have to know the underlying classes of the RemoteDataSource)
+/**
+ * This class allows the repository to use all the required server (and firebase) sided features
+ */
+class RemoteDataSourceAPI @Inject constructor(uAccount: UserAccount?, sManager: ServerManager?)  {
     private val userAccount: UserAccount = uAccount ?: UserAccount(FirebaseManager())
     private val serverManager: ServerManager = sManager ?: ServerManager(RESTAPI())
 
 // -----------------------------FireBase-------------------------------
     // -----------------------------UserAccount-------------------------------
     /**
+     * Registers a new user with the requested sign in type.
+     * Note: The registration will also fail, if there already exists an account with the registration parameters
+     *
      * @param eMail: The email of the user that should be registered
      * @param password: The password of the user that should be registered
      * @param type: Through which method should the user be register (eg email)
+     * @return FirebaseReturnOptions: If the registration succeeded or failed
      */
     fun registerUser(eMail: String, password: String, type: SignInTypes) : FirebaseReturnOptions {
         return userAccount.registerUser(eMail, password, type)
     }
 
     /**
+     * Signs in an already existing user with the passed sign in parameters
+     *
      * @param eMail: The email of the user that should be signed in
      * @param password: The password of the user that should be signed in
      * @param type: Through which method should the user be signed in (eg email)
+     * @return FirebaseReturnOptions: If the sign in succeeded or failed
      */
     fun signInUser(eMail: String, password: String, type: SignInTypes) : FirebaseReturnOptions {
         return userAccount.signInUser(eMail, password, type)
     }
 
     /**
+     * Signs out the currently logged in user
+     *
      * @return FirebaseReturnOptions: The success status of the request
      */
     fun signOut() : FirebaseReturnOptions {
@@ -69,6 +80,8 @@ class RemoteDataSourceAPI @Inject constructor(private val uAccount: UserAccount?
 
     // -----------------------------UserDetails-------------------------------
     /**
+     * Get the id of the currently signed in user
+     *
      * @return String: The firebase ID of the signed in user. If no user is signed in return ""
      */
     fun getUserID(): String {
@@ -76,13 +89,17 @@ class RemoteDataSourceAPI @Inject constructor(private val uAccount: UserAccount?
     }
 
     /**
-     * @return String: The username of the signed in user. If no user is signed in return ""
+     * Get the username of the currently signed in user
+     *
+     * @return String: The username of the signed in user (if existing). If no user is signed in return ""
      */
     fun getUserName(): String {
         return userAccount.getUserName()
     }
 
     /**
+     * Get the email of the currently signed in user
+     *
      * @return String: The email of the signed in user (if existing). If no user is signed in return ""
      */
     fun getUserEMail(): String {
@@ -90,6 +107,8 @@ class RemoteDataSourceAPI @Inject constructor(private val uAccount: UserAccount?
     }
 
     /**
+     * Get the user photo url of the currently signed in user
+     *
      * @return String: The photoURL of the signed in user (if existing). If no user is signed in return ""
      */
     fun getUserPhotoUrl(): String {
@@ -99,6 +118,8 @@ class RemoteDataSourceAPI @Inject constructor(private val uAccount: UserAccount?
 // -----------------------------ServerAccess-------------------------------
     // -----------------------------GreetingController-------------------------------
     /**
+     * Checks if it possible to connect to our server
+     *
      * @return Boolean: If a server connection possible return true, else return false
      */
     fun connectionToServerPossible(): Boolean {
@@ -120,14 +141,14 @@ class RemoteDataSourceAPI @Inject constructor(private val uAccount: UserAccount?
      */
     fun getPostDetail(fromPost: Int): Collection<TemplateDetail> {
         val authToken: String = userAccount.getToken()
-        return serverManager.getPostDetail(fromPost, authToken);
+        return serverManager.getPostDetail(fromPost, authToken)
     }
 
     /**
      * @param fromPost: The post from which the project template should be downloaded
      * @return String - The requested project template as JSON
      */
-    fun getProjectTemplate(fromPost: Int): String { // TODO: Es existiert kein JSON Rückgabewert, lass dir was neues einfallen
+    fun getProjectTemplate(fromPost: Int): String {
         val authToken: String = userAccount.getToken()
         return serverManager.getProjectTemplate(fromPost, authToken)
     }
@@ -210,13 +231,13 @@ class RemoteDataSourceAPI @Inject constructor(private val uAccount: UserAccount?
      */
     fun getProjectCommandsFromServer(projectID: Long): Unit {
         val authToken: String = userAccount.getToken()
-        return serverManager.getDeltasFromServer(projectID, authToken)
+        return serverManager.getProjectCommandsFromServer(projectID, authToken)
     }
 
     /**
      * @param projectCommand: The projectCommand that should be uploaded to the server (as JSON)
      * @param forUser: The id of the user whose fetch request is answered
-     * @param initialAddedDate: // TODO
+     * @param initialAddedDate: When the project command was send to the server
      * @param projectID: The id of the project belonging to the project command
      * @param wasAdmin: Was the user a project administrator when the command was created
      * @return Boolean: Did the server call succeed
@@ -248,7 +269,7 @@ class RemoteDataSourceAPI @Inject constructor(private val uAccount: UserAccount?
     /**
      * @param projectID: The id of the project from which the fetch requests should be downloaded
      */
-    fun getFetchRequests(projectID: Long){ // TODO: Ausgabe ist im Entwurfsheft Collection<FetchRequest>
+    fun getFetchRequests(projectID: Long){
         val authToken: String = userAccount.getToken()
         return serverManager.getFetchRequests(projectID, authToken)
     }

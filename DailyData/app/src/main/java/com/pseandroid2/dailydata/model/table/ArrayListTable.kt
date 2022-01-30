@@ -20,9 +20,7 @@
 
 package com.pseandroid2.dailydata.model.table
 
-import kotlin.reflect.KClass
-
-class ArrayListTable(private var layout: TableLayout) : Table {
+class ArrayListTable(private var layout: TableLayout = ArrayListLayout()) : Table {
     private val table: MutableList<ArrayListRow> = mutableListOf()
     override fun getCell(row: Int, col: Int) = table[row][col]
 

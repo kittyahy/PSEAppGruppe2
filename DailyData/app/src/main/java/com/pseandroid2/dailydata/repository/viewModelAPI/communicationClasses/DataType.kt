@@ -20,10 +20,9 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
-enum class DataType {
-    WHOLE_NUMBER,
-    FLOATING_POINT_NUMBER,
-    TIME,
-    STRING
-    //Todo Fields
+enum class DataType (val representation: String, val standardValue: String, val regex: String){
+    WHOLE_NUMBER("Whole Number", "0", "[-]{0,1}[0-9]{1,9}"),
+    FLOATING_POINT_NUMBER("Number with point", "0.0", "/^[-+]?[0-9]+[.]?[0-9]*([eE][-+]?[0-9]+)?\$/"),
+    TIME("Date and Time", "", "/^(2[0-3]|[01][0-9]):?([0-5][0-9]):?([0-5][0-9])(Z|[+-](?:2[0-3]|[01][0-9])(?::?(?:[0-5][0-9]))?)\$/"),
+    STRING("Text","<Put your Text here>", "[^]*" )
 }

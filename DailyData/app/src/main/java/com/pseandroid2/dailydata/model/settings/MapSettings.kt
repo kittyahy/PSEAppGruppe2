@@ -18,14 +18,15 @@
 
 */
 
-package com.pseandroid2.dailydata.model
+package com.pseandroid2.dailydata.model.settings
 
 import com.pseandroid2.dailydata.exceptions.SettingNotFoundException
 
 class MapSettings(settings: Map<String, String> = mapOf()) : Settings {
     private val settings = settings.toMutableMap()
 
-    @Suppress("OverridingDeprecatedMember")
+    @Suppress("Deprecation")
+    @Deprecated("Should not be used outside the model. Use get or iterate over Settings directly")
     override fun getAllSettings(): Map<String, String> {
         return settings.toMap()
     }
