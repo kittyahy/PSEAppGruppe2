@@ -64,6 +64,7 @@ interface TableLayout : Iterable<Pair<KClass<out Any>, List<UIElement>>> {
     fun getColumnType(col: Int): KClass<out Any>
 
     fun getUIElements(col: Int): List<UIElement>
+    fun addUIElements(col: Int, vararg elements: UIElement)
 
     operator fun get(col: Int): Pair<KClass<out Any>, List<UIElement>>
 
