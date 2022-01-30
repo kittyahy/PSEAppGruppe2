@@ -76,6 +76,31 @@ class RESTAPI {
         return false
     }
 
+    //------------------------------------- Tests Controller -------------------------------------
+    /**
+     * Returns the authentication token
+     * (Used to check if the server can extract the firebase token properly from the header)
+     *
+     * @return String: The firebase authentication token
+     */
+    fun getToken(authToken: String): String {
+        val call: Call<String> = server.test(authToken)
+
+        return call.execute().body() ?: ""
+    }
+
+    /**
+     * Returns the userID of the user who belongs to the authentication token
+     * (Used to check if the server can extract the userID of the token)
+     *
+     * @return String: The userID
+     */
+    fun getUserIDFromToken(authToken: String): String {
+        val call: Call<String> = server.name(authToken)
+
+        return call.execute().body() ?: ""
+    }
+
 
     //------------------------------------- Posts Controller -------------------------------------
     /**
