@@ -21,7 +21,6 @@
 package com.pseandroid2.dailydata.repository.viewModelAPI
 
 
-
 import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.repository.commandCenter.commands.CreateProject
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Button
@@ -60,14 +59,43 @@ class ProjectHandler(
         notification: List<Notification>,
         graphs: List<Graph>
     ): Project {
-        val createProject = CreateProject("User1", name, description, wallpaper, table, buttons, notification, graphs)
-        val task = scope.async{createProject.execute(appDataBase, TODO(), null)} //TODO() Arne fragen, wie ich an die ProjektID komme
+        val createProject = CreateProject(
+            "User1",
+            name,
+            description,
+            wallpaper,
+            table,
+            buttons,
+            notification,
+            graphs
+        )
+        val task = scope.async {
+            createProject.execute(
+                appDataBase,
+                TODO(),
+                null
+            )
+        } //TODO() Arne fragen, wie ich an die ProjektID komme
         return TODO()
     }
+
+    fun newProject(project: Project): Project {
+        return newProject(
+            project.title,
+            project.description,
+            project.wallpaper,
+            project.table,
+            project.buttons,
+            project.notifications,
+            project.graphs
+        )
+    }
+
     fun joinOnlineProject(onlineID: Long): Int {
         return TODO()
     }
-    fun getProjectTemplateByID () {
+
+    fun getProjectTemplateByID() {
         TODO()
     }
 }

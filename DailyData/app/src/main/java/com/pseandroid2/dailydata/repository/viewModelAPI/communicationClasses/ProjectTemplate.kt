@@ -32,4 +32,7 @@ class ProjectTemplate : Identifiable{
         TODO("Not yet implemented")
     }
     //TODO Implementierung
+    fun toProject(): Project {
+        TODO()
+    }
 }
