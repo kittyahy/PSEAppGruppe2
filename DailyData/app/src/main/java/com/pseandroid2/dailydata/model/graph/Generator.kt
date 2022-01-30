@@ -16,19 +16,11 @@ import com.pseandroid2.dailydata.model.graph.LineChart.Companion.LINE_STRENGTH_K
 import com.pseandroid2.dailydata.model.graph.LineChart.Companion.LINE_STYLE_KEY
 import com.pseandroid2.dailydata.model.graph.LineChart.Companion.LINE_STYLE_NONE
 import com.pseandroid2.dailydata.model.graph.LineChart.Companion.LINE_STYLE_SOLID
+import com.pseandroid2.dailydata.util.IOUtil
 
-class Generator private constructor() {
-    companion object {
-        const val GRAPH_NAME_KEY = "NAME"
-
-        @JvmStatic
-        private var instance: Generator? = null
-
-        @JvmStatic
-        fun getInstance(): Generator {
-            return instance ?: Generator()
-        }
-    }
+object Generator {
+    const val GRAPH_NAME_KEY = "NAME"
+    const val GRAPH_DIR_NAME = "Charts"
 
     fun generateLineChart(
         data: List<LineDataSet>,
@@ -90,11 +82,11 @@ class Generator private constructor() {
         }
         val lineChart = LineChart(context)
         lineChart.data = LineData(data)
-        saveChart(lineChart, settings[GRAPH_NAME_KEY])
+        saveChart(lineChart, settings[GRAPH_NAME_KEY], context)
         return lineChart
     }
 
     private fun saveChart(chart: Chart<*>, name: String, context: Context) {
-        chart.saveToPath(name, )
+        chart.saveToPath(name, IOUtil.getSDRelativePath(GRAPH_DIR_NAME, context))
     }
 }
