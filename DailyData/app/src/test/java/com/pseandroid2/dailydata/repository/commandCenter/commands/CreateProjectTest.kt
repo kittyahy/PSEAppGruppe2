@@ -30,7 +30,6 @@ class CreateProjectTest {
     }
     @ExperimentalCoroutinesApi
     private fun stringTest(testString: String) = runTest {
-        val projectCDManager = mockk<ProjectCDManager>()
         val slot = slot<Project>()
         val createProject =
             CreateProject(
@@ -43,11 +42,11 @@ class CreateProjectTest {
                 ArrayList<Notification>(),
                 ArrayList<Graph>()
             )
-        coEvery {projectCDManager.insertProject(capture(slot))} returns mockk<SimpleProject>()
+        val appDataBase = mockk<AppDataBase>()
+        coEvery {appDataBase.projectCDManager().insertProject(capture(slot))} returns mockk<SimpleProject>()
         val task = async {createProject.execute(
-            mockk<AppDataBase>(),
+            appDataBase,
             mockk<RemoteDataSourceAPI>(),
-            projectCDManager,
         )}
         task.await()
         assertEquals(testString, slot.captured.name)

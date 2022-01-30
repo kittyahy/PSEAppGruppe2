@@ -25,18 +25,19 @@ import com.pseandroid2.dailydata.model.notifications.Notification
 import com.pseandroid2.dailydata.model.notifications.TimeNotification
 import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.project.ProjectBuilder
+import com.pseandroid2.dailydata.repository.commandCenter.commands.IllegalOperationException
 import java.time.LocalTime
 
 class Notification(
     override val id: Int,
     val message: String,
     val time: LocalTime,
-    val notificationsDAO: NotificationsDAO,
+    private val notificationsDAO: NotificationsDAO? = null,
     val projectID: Int
 ) : Identifiable, Convertible<Notification> {
     constructor(
         timeNotification: TimeNotification,
-        notificationsDAO: NotificationsDAO,
+        notificationsDAO: NotificationsDAO?,
         projectID: Int
     ) : this(
         timeNotification.id,
@@ -52,6 +53,9 @@ class Notification(
 
     //@throws IllegalOperationException
     override suspend fun delete() {
+        if (notificationsDAO == null) {
+            throw IllegalOperationException()
+        }
         notificationsDAO.deleteNotification(projectID, id)
     }
 

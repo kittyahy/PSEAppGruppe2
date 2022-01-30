@@ -23,10 +23,9 @@ class CreateProject (commandByUser: String,
     : ProjectCommand(
     commandByUser = commandByUser,
     isProjectAdmin = true) {
-    suspend fun execute(
+    override suspend fun execute(
         appDataBase: AppDataBase,
-        remoteDataSourceAPI: RemoteDataSourceAPI,
-        projectCDManager: ProjectCDManager?
+        remoteDataSourceAPI: RemoteDataSourceAPI
     ) {
         val pb = SimpleProjectBuilder()
         pb.setName(name)
@@ -37,7 +36,7 @@ class CreateProject (commandByUser: String,
         notification.forEach{ notification -> notification.addYourself(pb)}
 
         val project: Project = pb.build()
-        projectCDManager?.insertProject(project)
+        appDataBase.projectCDManager().insertProject(project)
         //super.execute(appDataBase, remoteDataSourceAPI) Todo rein
     }
 

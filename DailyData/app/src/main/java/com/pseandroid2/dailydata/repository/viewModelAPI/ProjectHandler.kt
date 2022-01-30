@@ -72,8 +72,7 @@ class ProjectHandler(
         val task = scope.async {
             createProject.execute(
                 appDataBase,
-                TODO(),
-                null
+                TODO()
             )
         } //TODO() Arne fragen, wie ich an die ProjektID komme
         return TODO()
