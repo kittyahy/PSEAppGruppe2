@@ -47,17 +47,22 @@ interface Graph<T : DataSet<S>, S : Entry> {
 interface GraphTemplate {
     val id: Int
 
-    fun getName(): String
+    val name: String
 
-    fun getDescription(): String
+    val desc: String
+
+    val path: String
+    val background: Int
+
+    fun getWallpaper(): Bitmap
 
     fun getCustomizing(): Settings
 
-    fun getType(): GraphType
+    val type: GraphType
 
-    fun getCreator(): User
+    val creator: User
 
-    fun getOnlineId(): Long
+    val onlineId: Long
 
 }
 
