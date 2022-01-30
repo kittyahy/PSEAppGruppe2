@@ -41,7 +41,7 @@ public class DeltaID implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || this.getClass() != o.getClass()) return false;
+        if ((o == null) || (this.getClass() != o.getClass())) return false;
         DeltaID deltaID = (DeltaID) o;
         return addedToServer.equals(deltaID.addedToServer) && user.equals(deltaID.user);
 

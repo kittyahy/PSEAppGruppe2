@@ -19,8 +19,6 @@
 */
 package com.pseandroid2.dailydataserver;
 
-import com.pseandroid2.dailydataserver.postDatabase.requestparameters.AddPostParameter;
-import org.springframework.data.util.Pair;
 import org.springframework.web.bind.annotation.*;
 
 

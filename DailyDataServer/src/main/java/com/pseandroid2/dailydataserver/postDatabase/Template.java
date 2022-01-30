@@ -33,8 +33,10 @@ import java.util.Objects;
 @IdClass(TemplateId.class)
 public class Template {
 
-    private @Id int post;
-    private @Id int templateNumber;
+    private @Id
+    int post;
+    private @Id
+    int templateNumber;
     private String templateInitial;
     private boolean isProjectTemplate;
     private String detailView;
@@ -103,7 +105,7 @@ public class Template {
     public void setDetailView(String detailView) {
         this.detailView = detailView;
     }
-  
+
     @Override
     public String toString() {
         return "Template{" +

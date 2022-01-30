@@ -37,8 +37,4 @@ public interface DeltaRepository extends JpaRepository<Delta, DeltaID> {
     List<Delta> findByRequestedByAndProject(String user, long projectID);
 
 
-
-
-
-
 }

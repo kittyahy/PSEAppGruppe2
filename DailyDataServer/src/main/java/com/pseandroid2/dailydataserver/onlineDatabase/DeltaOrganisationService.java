@@ -1,9 +1,31 @@
-package com.pseandroid2.dailydataserver.onlineDatabase;
+/*
 
+    DailyData is an android app to easily create diagrams from data one has collected
+    Copyright (C) 2022  Antonia Heiming, Anton Kadelbach, Arne Kuchenbecker, Merlin Opp, Robin Amman
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+*/
+package com.pseandroid2.dailydataserver.onlineDatabase;
 
 import com.pseandroid2.dailydataserver.onlineDatabase.DeltaDB.Delta;
 import com.pseandroid2.dailydataserver.onlineDatabase.DeltaDB.DeltaRepository;
-import com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB.*;
+import com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB.ProjectParticipants;
+import com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB.ProjectParticipantsID;
+import com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB.ProjectParticipantsRepository;
+import com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB.ProjectRepository;
+import com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,12 +63,12 @@ public class DeltaOrganisationService {
         if (amountOfPosts >= MAX_POSTS_PER_DAY) { //Amount of Post per Day and per User
             return false;
         }
+        System.out.println(projectCommand);
 
         //size of the command
         if (projectCommand.getBytes().length > MAX_COMMAND_SIZE) {
             return false;
         }
-        ;
         ProjectParticipants participant = ppRepo.findById(new ProjectParticipantsID(user, projectID)).get();
         Delta delta = new Delta(user, projectCommand, projectID, (participant.getRole() == Role.ADMIN));
         deltaRepo.save(delta);
@@ -58,7 +80,6 @@ public class DeltaOrganisationService {
     // #TODO Kann nicht: Kontrollieren ob das delta schon heruntergeladen wurde und eintragen, dass der user es heruntergeladen hat.
     public List<Delta> getNewDelta(long projectID, String user) {
         List<Delta> d = deltaRepo.findByRequestedByAndProject("", projectID);
-        System.out.println(d);
         return d;
     }
 
@@ -66,6 +87,7 @@ public class DeltaOrganisationService {
     public List<Delta> getOldDelta(long projectID, String user) {
         List<Delta> oldDelta = deltaRepo.findByRequestedByAndProject(user, projectID);
         deltaRepo.deleteAll(oldDelta);
+        System.out.println(oldDelta);
         fetchRequestService.deleteFetchRequest(projectID, user);
         return oldDelta;
     }
