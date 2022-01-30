@@ -22,8 +22,7 @@ package com.pseandroid2.dailydata.model.database.daos
 
 
 import androidx.room.withTransaction
-import com.pseandroid2.dailydata.model.Graph
-import com.pseandroid2.dailydata.model.users.User
+import com.pseandroid2.dailydata.model.graph.Graph
 import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.model.database.entities.ProjectEntity
 import com.pseandroid2.dailydata.model.database.entities.ProjectSkeletonEntity
@@ -34,11 +33,12 @@ import com.pseandroid2.dailydata.model.project.ProjectSkeleton
 import com.pseandroid2.dailydata.model.project.ProjectTemplate
 import com.pseandroid2.dailydata.model.table.TableLayout
 import com.pseandroid2.dailydata.model.uielements.UIElement
+import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.util.SortedIntListUtil
 import java.util.SortedSet
 import java.util.TreeSet
 
-class ProjectCDManager (
+class ProjectCDManager(
     private val projectDAO: ProjectDataDAO,
     private val templateDAO: TemplateDAO,
     private val uiDAO: UIElementDAO,
@@ -62,7 +62,7 @@ class ProjectCDManager (
         val newID: Int = insertProjectEntity(project)
         project.getProjectSkeleton().id = newID
 
-        for (graph: Graph in project.getProjectSkeleton().getGraphs()) {
+        for (graph: Graph<*, *> in project.getProjectSkeleton().getGraphs()) {
             val newGraphId: Int = graphManager.insertGraph(newID, graph)
             graph.id = newGraphId
         }
@@ -117,6 +117,7 @@ class ProjectCDManager (
         val skeleton =
             createSkeleton(newId, template.getProjectSkeleton(), template.getTableLayout())
         val ent = ProjectTemplateEntity(skeleton, template.getCreator())
+        @Suppress("Deprecation")
         templateDAO.insertProjectTemplate(ent)
         return newId
     }
@@ -126,12 +127,8 @@ class ProjectCDManager (
      * @param template The template that is to be deleted
      */
     suspend fun deleteProjectTemplate(template: ProjectTemplate) {
+        @Suppress("Deprecation")
         templateDAO.deleteProjectTemplateById(template.getProjectSkeleton().id)
-    }
-
-    private fun isTemplate(id: Int): Boolean {
-        TODO("Do we even need this?")
-        return false
     }
 
     private fun createSkeleton(

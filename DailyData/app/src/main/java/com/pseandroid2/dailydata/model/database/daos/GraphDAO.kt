@@ -24,11 +24,9 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import com.pseandroid2.dailydata.model.Graph
 import com.pseandroid2.dailydata.model.database.entities.GraphData
 import com.pseandroid2.dailydata.model.database.entities.GraphEntity
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 @Dao
 abstract class GraphDAO {
