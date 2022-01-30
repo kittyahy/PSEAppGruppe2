@@ -48,10 +48,5 @@ public class GreetingController {
         return serverGreetings.greeting();
     }
 
-    @GetMapping("/test")
-    public String test(@RequestHeader String token){
-
-        return token ;
-    }
 
 }

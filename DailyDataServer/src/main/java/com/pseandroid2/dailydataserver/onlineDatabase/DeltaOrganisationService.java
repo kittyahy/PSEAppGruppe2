@@ -3,10 +3,7 @@ package com.pseandroid2.dailydataserver.onlineDatabase;
 
 import com.pseandroid2.dailydataserver.onlineDatabase.DeltaDB.Delta;
 import com.pseandroid2.dailydataserver.onlineDatabase.DeltaDB.DeltaRepository;
-import com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB.ProjectParticipants;
-import com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB.ProjectParticipantsID;
-import com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB.ProjectParticipantsRepository;
-import com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB.Role;
+import com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,18 +16,22 @@ public class DeltaOrganisationService {
     private static final long MAX_POSTS_PER_DAY = 128;
     private static final int MAX_COMMAND_SIZE = 1000;
     private static final long REMOVE_TIME_DAYS = 3;
+
     @Autowired
     private final DeltaRepository deltaRepo;
-
+    @Autowired
+    private final ProjectRepository projectRepo;
     @Autowired
     private final FetchRequestService fetchRequestService;
     @Autowired
     private final ProjectParticipantsRepository ppRepo;
 
-    public DeltaOrganisationService(DeltaRepository deltaRepo, FetchRequestService fetchRequestService, ProjectParticipantsRepository ppRepo) {
+
+    public DeltaOrganisationService(DeltaRepository deltaRepo, FetchRequestService fetchRequestService, ProjectParticipantsRepository ppRepo, ProjectRepository projectRepo) {
         this.deltaRepo = deltaRepo;
         this.fetchRequestService = fetchRequestService;
         this.ppRepo = ppRepo;
+        this.projectRepo = projectRepo;
     }
 
     //#TODO Kann nicht: downloadedBy
@@ -49,6 +50,7 @@ public class DeltaOrganisationService {
         ProjectParticipants participant = ppRepo.findById(new ProjectParticipantsID(user, projectID)).get();
         Delta delta = new Delta(user, projectCommand, projectID, (participant.getRole() == Role.ADMIN));
         deltaRepo.save(delta);
+        projectRepo.findById(projectID).get().setLastUpdated(LocalDateTime.now());
         return true;
 
     }
@@ -64,13 +66,14 @@ public class DeltaOrganisationService {
     public List<Delta> getOldDelta(long projectID, String user) {
         List<Delta> oldDelta = deltaRepo.findByRequestedByAndProject(user, projectID);
         deltaRepo.deleteAll(oldDelta);
-        fetchRequestService.deleteFetchRequest(projectID,user);
+        fetchRequestService.deleteFetchRequest(projectID, user);
         return oldDelta;
     }
 
     public boolean addOldDelta(long projectID, String initialAddedBy, String requestedBy, String command, LocalDateTime initialAddedToServer, boolean wasAdmin) {
         removeOutDatedDeltas();
         deltaRepo.save(new Delta(initialAddedToServer, initialAddedBy, command, projectID, wasAdmin, requestedBy));
+        projectRepo.findById(projectID).get().setLastUpdated(LocalDateTime.now());
         return true;
     }
 

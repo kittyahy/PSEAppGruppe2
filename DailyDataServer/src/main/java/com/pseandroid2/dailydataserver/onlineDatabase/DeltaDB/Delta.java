@@ -19,7 +19,9 @@
 */
 package com.pseandroid2.dailydataserver.onlineDatabase.DeltaDB;
 
-import com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB.ProjectParticipants;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -31,6 +33,7 @@ import java.util.*;
  */
 @Entity
 @Table(name = "Delta_Table")
+
 @IdClass(DeltaID.class)
 public class Delta {
     private @Id
