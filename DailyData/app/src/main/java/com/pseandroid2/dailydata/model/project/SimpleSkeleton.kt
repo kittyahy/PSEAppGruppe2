@@ -28,30 +28,33 @@ import com.pseandroid2.dailydata.model.settings.Settings
 
 class SimpleSkeleton(
     override var id: Int = -1,
-    private val onlineId: Long = -1,
-    private val name: String = "",
-    private val description: String = "",
-    private val wallpaperPath: String = "",
-    private val graphs: List<Graph<*, *>> = listOf(),
-    private val settings: Settings = MapSettings(),
-    private val notifications: List<Notification> = listOf()
+    override var onlineId: Long = -1,
+    override var name: String = "",
+    override var desc: String = "",
+    override var path: String = "",
+    override var color: Int = -1,
+    private val graphList: MutableList<Graph<*, *>> = mutableListOf(),
+    private var skeletonSettings: Settings = MapSettings(),
+    private val notificationList: MutableList<Notification> = mutableListOf()
 ) : ProjectSkeleton {
-
-    override fun getOnlineId() = onlineId
-
-    override fun getName() = name
-
-    override fun getDescription() = description
-
     override fun getWallpaper(): Bitmap {
-        TODO("Figure out how to obtain pictures from disk")
+        TODO()
     }
 
-    override fun getWallpaperPath() = wallpaperPath
+    override fun getGraphs() = graphList
+    override fun addGraphs(graphs: Collection<Graph<*, *>>) {
+        graphList.addAll(graphs)
+    }
 
-    override fun getGraphs() = graphs
+    override fun getProjectSettings() = skeletonSettings
+    override fun addProjectSettings(settings: Settings) {
+        for (setting in settings) {
+            skeletonSettings[setting.first] = setting.second
+        }
+    }
 
-    override fun getProjectSettings() = settings
-
-    override fun getNotifications() = notifications
+    override fun getNotifications() = notificationList
+    override fun addNotifications(notifications: Collection<Notification>) {
+        notificationList.addAll(notifications)
+    }
 }

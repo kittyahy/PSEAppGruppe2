@@ -29,4 +29,6 @@ interface Settings : Iterable<Pair<String, String>> {
 
     fun containsKey(key: String): Boolean
 
+    operator fun set(key: String, value: String)
+
 }

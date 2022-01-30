@@ -31,6 +31,9 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.auth.GetTokenResult
 import com.pseandroid2.dailydata.R
 
+/**
+ * Carries out firebase authentication calls and has firebase parameter like the current user of the authentication token
+ */
 class FirebaseManager {
 
     private var idToken: String = ""
@@ -46,7 +49,7 @@ class FirebaseManager {
      * Creates a new firebase authentication Token
      */
     private fun refreshIdToken() {
-        val user: FirebaseUser? = auth.currentUser // TODO continue here
+        val user: FirebaseUser? = auth.currentUser
         if (user == null) {
             idToken = ""
             return
@@ -63,14 +66,10 @@ class FirebaseManager {
             if (task.result != null) {
                 idToken = task.result.token ?: ""
             }
-
-            // TODO: Send token to your backend via HTTPS
-            // ...
         } else {
-
-            // TODO: Handle error -> task.getException();
+            Log.e("FirebaseTokenRefresh", "tokenRefreshError")
         }
-        Log.d("FirebaseTokenRefresh", "refreshedToken " + idToken)
+        Log.d("FirebaseTokenRefresh", "refreshedToken $idToken")
     }
 
     /**
@@ -83,6 +82,7 @@ class FirebaseManager {
         }
 
         var returnParameter: FirebaseReturnOptions = FirebaseReturnOptions.TIMEOUT
+
 
         val task = auth.createUserWithEmailAndPassword(email, password);
 

@@ -21,7 +21,7 @@
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
 class Column (
-    override val id: Long,
+    override val id: Int,
     val name: String,
     val unit: String,
     val dataType: DataType
@@ -30,7 +30,7 @@ class Column (
         TODO("Not yet implemented")
     }
 
-    override fun delete() {
+    override suspend fun delete() {
         TODO("Not yet implemented")
     }
 }

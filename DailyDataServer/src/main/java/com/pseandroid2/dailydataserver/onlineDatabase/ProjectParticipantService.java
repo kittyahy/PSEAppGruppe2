@@ -53,7 +53,7 @@ public class ProjectParticipantService {
                 projectRepo.deleteById(projectId);
             } else {
                 List<ProjectParticipants> projectParticipantsList = ppRepo.findByProjectOrderByNumberOfJoinAsc(projectId);
-                projectParticipantsList.get(0).setRole(Role.ADMIN);
+                projectParticipantsList.get(1).setRole(Role.ADMIN);
             }
         }
         ppRepo.deleteById(new ProjectParticipantsID(user, projectId));

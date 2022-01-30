@@ -22,6 +22,9 @@ package com.pseandroid2.dailydata.remoteDataSource.queue
 
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
 
+/**
+ * A queue for project commands which are received from the server
+ */
 class FetchRequestQueue {
     private val fetchRequests: MutableList<FetchRequest> = mutableListOf<FetchRequest>()
     private val observers: MutableList<FetchRequestQueueObserver> = mutableListOf<FetchRequestQueueObserver>()

@@ -21,8 +21,28 @@
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
 import android.graphics.drawable.Drawable
+import com.pseandroid2.dailydata.model.graph.Graph
+import com.pseandroid2.dailydata.model.project.Project
+import com.pseandroid2.dailydata.model.project.ProjectBuilder
 
-interface Graph: Identifiable{
-    override val id: Long
-    val image: Drawable
+abstract class Graph : Identifiable, Convertible<Graph<*, *>> {
+    companion object {
+        val availableGraphs: MutableList<String> = ArrayList<String>()
+    }
+
+    init {
+        availableGraphs.add(typeName)
+    }
+
+    abstract override val id: Int
+    abstract val image: Drawable
+    abstract val typeName: String
+
+    override fun toDBEquivalent(): Graph<*, *> {
+        return TODO()
+    }
+
+    override fun addYourself(builder: ProjectBuilder<out Project>) {
+        builder.addGraphs(listOf(toDBEquivalent()))
+    }
 }

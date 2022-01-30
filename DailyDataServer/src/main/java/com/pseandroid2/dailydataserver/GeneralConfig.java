@@ -41,6 +41,6 @@ public class GeneralConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loginInterceptor).excludePathPatterns("/greet");
-        registry.addInterceptor(accessToProjectInterceptor).addPathPatterns("/OnlineDatabase/**").excludePathPatterns("/OnlineDatabase/Delta/time");
+        registry.addInterceptor(accessToProjectInterceptor).addPathPatterns("/OnlineDatabase/**").excludePathPatterns("/OnlineDatabase/Delta/time","/OnlineDatabase/newProject","/OnlineDatabase/addUser/**");
     }
 }

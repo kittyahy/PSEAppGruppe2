@@ -38,15 +38,84 @@ interface Project {
     /**
      * @return The ProjectSkeleton of this Project
      */
+    @Deprecated("Properties of Project should be accessed directly, access via Skeleton is deprecated")
     fun getProjectSkeleton(): ProjectSkeleton
 
-    fun getTable(): Table
+    var id: Int
+        set(value) {
+            @Suppress("Deprecation")
+            getProjectSkeleton().id = value
+        }
+        @Suppress("Deprecation")
+        get() = getProjectSkeleton().id
 
-    fun getAdmin(): User
+    var onlineId: Long
+        set(value) {
+            @Suppress("Deprecation")
+            getProjectSkeleton().onlineId = value
+        }
+        @Suppress("Deprecation")
+        get() = getProjectSkeleton().onlineId
 
-    fun isOnline(): Boolean
+    var name: String
+        set(value) {
+            @Suppress("Deprecation")
+            getProjectSkeleton().name = value
+        }
+        @Suppress("Deprecation")
+        get() = getProjectSkeleton().name
+
+    var desc: String
+        set(value) {
+            @Suppress("Deprecation")
+            getProjectSkeleton().desc = value
+        }
+        @Suppress("Deprecation")
+        get() = getProjectSkeleton().desc
+
+    var path: String
+        set(value) {
+            @Suppress("Deprecation")
+            getProjectSkeleton().path = value
+        }
+        @Suppress("Deprecation")
+        get() = getProjectSkeleton().path
+
+    var color: Int
+        set(value) {
+            @Suppress("Deprecation")
+            getProjectSkeleton().color = value
+        }
+        @Suppress("Deprecation")
+        get() = getProjectSkeleton().color
+
+    @Suppress("Deprecation")
+    fun getGraphs() = getProjectSkeleton().getGraphs()
+
+    @Suppress("Deprecation")
+    fun addGraphs(graphs: Collection<Graph<*, *>>) = getProjectSkeleton().addGraphs(graphs)
+
+    @Suppress("Deprecation")
+    fun getSettings() = getProjectSkeleton().getProjectSettings()
+
+    @Suppress("Deprecation")
+    fun addSettings(settings: Settings) = getProjectSkeleton().addProjectSettings(settings)
+
+    @Suppress("Deprecation")
+    fun getNotifications() = getProjectSkeleton().getNotifications()
+
+    @Suppress("Deprecation")
+    fun addNotifications(notifications: Collection<Notification>) =
+        getProjectSkeleton().addNotifications(notifications)
+
+    var table: Table
+
+    var admin: User
+
+    var isOnline: Boolean
 
     fun getUsers(): Collection<User>
+    fun addUsers(users: Collection<User>)
 
     fun createTransformationFromString(transformationString: String): DataTransformation<out Any>
 
@@ -83,26 +152,98 @@ interface ProjectSkeleton {
 
     var id: Int
 
-    fun getOnlineId(): Long
+    var onlineId: Long
 
-    fun getName(): String
+    var name: String
 
-    fun getDescription(): String
+    var desc: String
 
     fun getWallpaper(): Bitmap
-    fun getWallpaperPath(): String
+
+    var path: String
+    var color: Int
 
     fun getGraphs(): Collection<Graph<*, *>>
+    fun addGraphs(graphs: Collection<Graph<*, *>>)
 
     fun getProjectSettings(): Settings
+    fun addProjectSettings(settings: Settings)
 
     fun getNotifications(): Collection<Notification>
+    fun addNotifications(notifications: Collection<Notification>)
 
 }
 
 interface ProjectTemplate {
-
+    @Deprecated("Properties of Project should be accessed directly, access via Skeleton is deprecated")
     fun getProjectSkeleton(): ProjectSkeleton
+
+    var id: Int
+        set(value) {
+            @Suppress("Deprecation")
+            getProjectSkeleton().id = value
+        }
+        @Suppress("Deprecation")
+        get() = getProjectSkeleton().id
+
+    var onlineId: Long
+        set(value) {
+            @Suppress("Deprecation")
+            getProjectSkeleton().onlineId = value
+        }
+        @Suppress("Deprecation")
+        get() = getProjectSkeleton().onlineId
+
+    var name: String
+        set(value) {
+            @Suppress("Deprecation")
+            getProjectSkeleton().name = value
+        }
+        @Suppress("Deprecation")
+        get() = getProjectSkeleton().name
+
+    var desc: String
+        set(value) {
+            @Suppress("Deprecation")
+            getProjectSkeleton().desc = value
+        }
+        @Suppress("Deprecation")
+        get() = getProjectSkeleton().desc
+
+    var path: String
+        set(value) {
+            @Suppress("Deprecation")
+            getProjectSkeleton().path = value
+        }
+        @Suppress("Deprecation")
+        get() = getProjectSkeleton().path
+
+    var color: Int
+        set(value) {
+            @Suppress("Deprecation")
+            getProjectSkeleton().color = value
+        }
+        @Suppress("Deprecation")
+        get() = getProjectSkeleton().color
+
+    @Suppress("Deprecation")
+    fun getGraphs() = getProjectSkeleton().getGraphs()
+
+    @Suppress("Deprecation")
+    fun addGraphs(graphs: Collection<Graph<*, *>>) = getProjectSkeleton().addGraphs(graphs)
+
+    @Suppress("Deprecation")
+    fun getSettings() = getProjectSkeleton().getProjectSettings()
+
+    @Suppress("Deprecation")
+    fun addSettings(settings: Settings) = getProjectSkeleton().addProjectSettings(settings)
+
+    @Suppress("Deprecation")
+    fun getNotifications() = getProjectSkeleton().getNotifications()
+
+    @Suppress("Deprecation")
+    fun addNotifications(notifications: Collection<Notification>) =
+        getProjectSkeleton().addNotifications(notifications)
 
     fun getTableLayout(): TableLayout
 

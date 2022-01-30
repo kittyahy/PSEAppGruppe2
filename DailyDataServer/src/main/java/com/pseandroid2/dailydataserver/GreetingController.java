@@ -19,14 +19,16 @@
 */
 package com.pseandroid2.dailydataserver;
 
+import com.pseandroid2.dailydataserver.postDatabase.requestparameters.AddPostParameter;
+import org.springframework.data.util.Pair;
 import org.springframework.web.bind.annotation.*;
+
 
 /**
  * Controller to know if the server is available.
  * The client doesn't need to log in for access the controller
  */
 @RestController
-@CrossOrigin(origins= "http://localhost:8080")
 @RequestMapping(path = "/")
 public class GreetingController {
 
@@ -44,6 +46,12 @@ public class GreetingController {
     @GetMapping("/greet")
     public String greets() {
         return serverGreetings.greeting();
+    }
+
+    @GetMapping("/test")
+    public String test(@RequestHeader String token){
+
+        return token ;
     }
 
 }

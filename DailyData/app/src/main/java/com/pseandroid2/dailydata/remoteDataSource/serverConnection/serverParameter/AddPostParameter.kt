@@ -1,9 +1,31 @@
+/*
+
+    DailyData is an android app to easily create diagrams from data one has collected
+    Copyright (C) 2022  Antonia Heiming, Anton Kadelbach, Arne Kuchenbecker, Merlin Opp, Robin Amman
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+*/
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter
 
 /**
- * @param token: The authentication token
+ * A dataclass which will be send to the server. Contains the parameters needed to the server for adding a new post
+ *
  * @param postPreview: The preview of the post as JSON
- * @param projectTemplate: The project template as JSON
- * @param graphTemplate: The graph templates as Collection of JSONs
+ * @param projectTemplate: The project template as a pair of the project template and the project template preview
+ * @param graphTemplates: The graph templates as Collection of pairs of graph templates as JSONs and the graph template previews
  */
-data class AddPostParameter(val token: String, val postPreview: String, val projectTemplate: String, val graphTemplate: Collection<String>)
+
+data class AddPostParameter(val postPreview: String = "", var projectTemplate: Pair<String, String> = Pair("", ""),
+                            val graphTemplates: Collection<Pair<String, String>> = listOf(Pair("", "")))

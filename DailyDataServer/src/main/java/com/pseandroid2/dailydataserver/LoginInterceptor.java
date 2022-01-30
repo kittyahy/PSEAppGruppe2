@@ -19,13 +19,14 @@
 */
 package com.pseandroid2.dailydataserver;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StreamUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.InputStream;
 
 /**
  * #TODO javadoc,Test, implemetierung
@@ -38,28 +39,22 @@ import java.io.InputStream;
  * The authentication works with firebase. The user name ist the uid from firebase.
  */
 @Component
+@Slf4j
 public class LoginInterceptor implements HandlerInterceptor {
+
+    @Autowired
+    private FirebaseManager firebaseManager;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        //so halb getestet, ich hoffe, dass es funktioniert..
-        InputStream inputStream = request.getInputStream();
-        byte[] byteBody = StreamUtils.copyToByteArray(inputStream);
-        String body = new String(byteBody); //müsste den body auslesen
+        String token = request.getHeader("token"); //da der Token jetzt in den Header kommt.
 
-        //aus dem Body herausparsen, was der Token ist: ganz ungetestet:
-        //ich hab jetzt mal eifnach aus dem wissen heraus agiert, dass der token immer ganz vorne steht..., kann man sicher hüscher machen
+        // Firebase token authentication
+        String userID = firebaseManager.getUserIDFromToken(token);
+        log.info(userID);
+        // Update attribute with the computed UserID
+        request.setAttribute("name", userID);
 
-        //Ich hoffe, dass der Token mit token= eingeleitet wird, und nach dem Token eine } kommt....
-        int indexofTokenstart = body.indexOf("token") + 6;
-        String splitted = body.substring(indexofTokenstart);
-        int indexOfTokenEnd = splitted.indexOf("}");
-        String firebaseToken = splitted.substring(0, indexOfTokenEnd).trim();
-
-        // Firebase auth
-        String name = "TODO"; // firebasetoken.getUid(); Bitte austauschen, sobald firebase steht.
-        request.setAttribute("user", name);
         return HandlerInterceptor.super.preHandle(request, response, handler);
-
     }
 }

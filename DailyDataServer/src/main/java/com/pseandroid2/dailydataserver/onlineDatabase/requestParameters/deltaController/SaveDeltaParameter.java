@@ -19,8 +19,6 @@
 */
 package com.pseandroid2.dailydataserver.onlineDatabase.requestParameters.deltaController;
 
-import com.pseandroid2.dailydataserver.Communication.RequestParameter;
-
 /**
  * #TODO Testen
  */
@@ -28,18 +26,16 @@ import com.pseandroid2.dailydataserver.Communication.RequestParameter;
 /**
  * The parameters for {@link com.pseandroid2.dailydataserver.onlineDatabase.DeltaController#saveDelta(long, String, SaveDeltaParameter) saveDelta()}
  */
-public class SaveDeltaParameter extends RequestParameter {
+public class SaveDeltaParameter{
     private String command;
 
 
     /**
      * The parameters for saveDeltas. Constructor.
      *
-     * @param token   the token to verify the user (provided by the user)
      * @param command the command which should be saved (provided by the user)
      */
-    public SaveDeltaParameter(String token, String command) {
-        super(token);
+    public SaveDeltaParameter(String command) {
         this.command = command;
     }
 
@@ -59,7 +55,7 @@ public class SaveDeltaParameter extends RequestParameter {
     public String toString() {
         return "SaveDeltaParameter{" +
                 "command='" + command + '\'' +
-                "} " + super.toString();
+                "} ";
     }
 
 

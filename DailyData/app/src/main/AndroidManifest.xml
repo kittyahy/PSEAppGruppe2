@@ -42,6 +42,13 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:host="www.dailydata.com" android:scheme="http"/>
+                <data android:host="www.dailydata.com" android:scheme="https"/> <!-- Receive the deeplink (eg: https://www.dailydata.com/?projectid=1) -->
+            </intent-filter>
         </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

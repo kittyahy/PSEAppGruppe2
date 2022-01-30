@@ -20,19 +20,46 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
-import java.time.LocalDateTime
+import com.pseandroid2.dailydata.model.database.daos.NotificationsDAO
+import com.pseandroid2.dailydata.model.notifications.Notification
+import com.pseandroid2.dailydata.model.notifications.TimeNotification
+import com.pseandroid2.dailydata.model.project.Project
+import com.pseandroid2.dailydata.model.project.ProjectBuilder
+import java.time.LocalTime
 
 class Notification(
-    override val id: Long,
+    override val id: Int,
     val message: String,
-    val time: LocalDateTime
-): Identifiable {
+    val time: LocalTime,
+    val notificationsDAO: NotificationsDAO,
+    val projectID: Int
+) : Identifiable, Convertible<Notification> {
+    constructor(
+        timeNotification: TimeNotification,
+        notificationsDAO: NotificationsDAO,
+        projectID: Int
+    ) : this(
+        timeNotification.id,
+        timeNotification.getMessage(),
+        TODO(), //timeNotification.send
+        notificationsDAO,
+        projectID
+    )
+
     override fun deleteIsPossible(): Boolean {
-        TODO("Not yet implemented")
+        return true
     }
 
     //@throws IllegalOperationException
-    override fun delete() {
-        TODO("Not yet implemented")
+    override suspend fun delete() {
+        notificationsDAO.deleteNotification(projectID, id)
+    }
+
+    override fun toDBEquivalent(): TimeNotification {
+        return TimeNotification(message, time, id)
+    }
+
+    override fun addYourself(builder: ProjectBuilder<out Project>) {
+        builder.addNotifications(listOf(toDBEquivalent()))
     }
 }

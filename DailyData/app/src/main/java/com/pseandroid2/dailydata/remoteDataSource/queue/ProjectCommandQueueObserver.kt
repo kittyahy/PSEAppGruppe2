@@ -20,6 +20,9 @@
 
 package com.pseandroid2.dailydata.remoteDataSource.queue
 
+/**
+ * Gets updated if a new command is added to the project command queue
+ */
 interface ProjectCommandQueueObserver {
     /**
      * Will be called if an element is added to the queue

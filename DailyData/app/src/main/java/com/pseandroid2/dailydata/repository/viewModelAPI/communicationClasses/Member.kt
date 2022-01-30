@@ -21,7 +21,7 @@
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
 class Member(
-    override val id: Long,
+    override val id: Int,
     val name: String
 ): Identifiable {
     override fun deleteIsPossible(): Boolean {
@@ -29,7 +29,7 @@ class Member(
     }
 
     //@throws IllegalOperationException
-    override fun delete() {
+    override suspend fun delete() {
         TODO("Not yet implemented. Wish kriterium")
     }
 }

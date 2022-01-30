@@ -24,18 +24,20 @@ import android.graphics.Color
 import android.graphics.drawable.Drawable
 
 class PieChart(
-    override val id: Long,
+    override val id: Int,
     override val image: Drawable,
     val color: List<Color>,
     val mapping: List<Column>,
     val showPercentages: Boolean
-): Graph {
+): Graph() {
+    override val typeName: String = "Pie Chart" //TODO Magic String
+
     override fun deleteIsPossible(): Boolean {
         TODO("Not yet implemented")
     }
 
     //@throws IllegalOperationException
-    override fun delete() {
+    override suspend fun delete() {
         TODO("Not yet implemented")
     }
 }
