@@ -22,6 +22,7 @@ package com.pseandroid2.dailydata.repository.viewModelAPI
 
 
 import com.pseandroid2.dailydata.model.database.AppDataBase
+import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import com.pseandroid2.dailydata.repository.commandCenter.commands.CreateProject
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Button
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Column
@@ -43,7 +44,8 @@ class ProjectHandler(
     val projectPreviewFlow: ProjectPreviewFlow,
     val projectTemplateFlow: ProjectTemplateFlow,
     val graphTemplateFlow: GraphTemplateFlow,
-    private val appDataBase: AppDataBase
+    private val appDataBase: AppDataBase,
+    private val executeQueue: ExecuteQueue
 ) {
     val scope = CoroutineScope(Dispatchers.IO)
     fun getProjectByID(id: Int): Flow<Project> {
@@ -58,7 +60,7 @@ class ProjectHandler(
         buttons: List<Button>,
         notification: List<Notification>,
         graphs: List<Graph>
-    ): Project {
+    ): Int {
         val createProject = CreateProject(
             "User1",
             name,
@@ -70,15 +72,13 @@ class ProjectHandler(
             graphs
         )
         val task = scope.async {
-            createProject.execute(
-                appDataBase,
-                TODO()
-            )
-        } //TODO() Arne fragen, wie ich an die ProjektID komme
+            executeQueue.add(createProject)
+                }
+
         return TODO()
     }
 
-    fun newProject(project: Project): Project {
+    fun newProject(project: Project): Int {
         return newProject(
             project.title,
             project.description,

@@ -30,5 +30,10 @@ import kotlinx.coroutines.InternalCoroutinesApi
 class RepositoryViewModelAPI (appDataBase: AppDataBase, remoteDataSourceAPI: RemoteDataSourceAPI){
     val serverHandler = ServerHandler(appDataBase)
     @InternalCoroutinesApi
-    val projectHandler = ProjectHandler(ProjectPreviewFlow(appDataBase.projectDataDAO().getAllProjectData()), TODO(), TODO(), appDataBase)
+    val projectHandler = ProjectHandler(
+        ProjectPreviewFlow(appDataBase.projectDataDAO().getAllProjectData()),
+        TODO(),
+        TODO(),
+        appDataBase,
+    )
 }

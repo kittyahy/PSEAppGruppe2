@@ -35,7 +35,7 @@ class CreateProject (commandByUser: String,
         notification.forEach{ notification -> notification.addYourself(pb)}
 
         val project: Project = pb.build()
-        appDataBase.projectCDManager().insertProject(project)
+        val prod = appDataBase.projectCDManager().insertProject(project)
         //super.execute(appDataBase, remoteDataSourceAPI) Todo rein
     }
 

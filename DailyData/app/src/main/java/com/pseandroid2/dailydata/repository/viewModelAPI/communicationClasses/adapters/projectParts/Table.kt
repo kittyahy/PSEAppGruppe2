@@ -13,7 +13,7 @@ class Table {
             val tableLayout: TableLayout = ArrayListLayout()
             val table: Table = ArrayListTable(tableLayout)
             for (column in columns) {
-                table.addColumn(column.dataType.representation, "") //TODO Arne frage ob das Probleme machen könnte
+                tableLayout.addColumn(column.dataType.representation)
             }
             for (row in rows) {
                 table.addRow(row.toDBEquivalent())
