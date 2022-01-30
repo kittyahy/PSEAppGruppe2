@@ -23,6 +23,7 @@ package com.pseandroid2.dailydata.repository
 import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
+import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
 import com.pseandroid2.dailydata.repository.viewModelAPI.ProjectHandler
 import com.pseandroid2.dailydata.repository.viewModelAPI.ServerHandler
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectPreviewFlow
@@ -37,6 +38,6 @@ class RepositoryViewModelAPI (appDataBase: AppDataBase, remoteDataSourceAPI: Rem
         ProjectTemplateFlow(),
         TODO(),
         appDataBase,
-        ExecuteQueue(appDataBase,remoteDataSourceAPI)
+        ExecuteQueue(appDataBase,remoteDataSourceAPI, PublishQueue(appDataBase, remoteDataSourceAPI))
     )
 }

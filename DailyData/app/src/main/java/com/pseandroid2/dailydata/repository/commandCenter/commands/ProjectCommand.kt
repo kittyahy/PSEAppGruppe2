@@ -2,6 +2,7 @@ package com.pseandroid2.dailydata.repository.commandCenter.commands
 
 import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
+import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
 import java.time.LocalDateTime
 
 abstract class ProjectCommand (
@@ -12,10 +13,16 @@ abstract class ProjectCommand (
     var commandByUser: String? = null,
     var isProjectAdmin: Boolean? = null
 ){
-    open suspend fun execute(appDataBase: AppDataBase, remoteDataSourceAPI: RemoteDataSourceAPI) {
-        TODO()
+    open suspend fun execute(
+        appDataBase: AppDataBase,
+        remoteDataSourceAPI: RemoteDataSourceAPI,
+        publishQueue: PublishQueue
+    ) {
+        if (publish()) {
+            publishQueue.add(this)
+        }
     }
     open suspend fun publish(): Boolean {
-        TODO()
+        return onlineProjectID != null
     }
 }

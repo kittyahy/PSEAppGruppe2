@@ -1,7 +1,6 @@
 package com.pseandroid2.dailydata.repository.commandCenter.commands
 
 import com.pseandroid2.dailydata.model.database.AppDataBase
-import com.pseandroid2.dailydata.model.database.daos.ProjectCDManager
 import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.project.SimpleProject
 import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
@@ -46,7 +45,7 @@ class CreateProjectTest {
         coEvery {appDataBase.projectCDManager().insertProject(capture(slot))} returns mockk<SimpleProject>()
         val task = async {createProject.execute(
             appDataBase,
-            mockk<RemoteDataSourceAPI>(),
+            mockk<RemoteDataSourceAPI>(),,
         )}
         task.await()
         assertEquals(testString, slot.captured.name)

@@ -4,13 +4,13 @@ import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.project.SimpleProjectBuilder
 import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
+import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Button
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Column
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Notification
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.projectParts.Table
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
 
 class CreateProject(
     private val projectIDReturn: MutableSharedFlow<Int>,
@@ -29,7 +29,8 @@ class CreateProject(
 ) {
     override suspend fun execute(
         appDataBase: AppDataBase,
-        remoteDataSourceAPI: RemoteDataSourceAPI
+        remoteDataSourceAPI: RemoteDataSourceAPI,
+        publishQueue: PublishQueue
     ) {
         val pb = SimpleProjectBuilder()
         pb.setName(name)
@@ -42,10 +43,6 @@ class CreateProject(
         val project: Project = pb.build()
         val prod = appDataBase.projectCDManager().insertProject(project)
         projectIDReturn.emit(prod.id)
-        //super.execute(appDataBase, remoteDataSourceAPI) Todo rein
-    }
-
-    override suspend fun publish(): Boolean {
-        return true
+        super.execute(appDataBase, remoteDataSourceAPI, publishQueue)
     }
 }
