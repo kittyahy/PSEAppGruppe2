@@ -7,9 +7,12 @@ import java.io.File
 class IOUtil {
 
     companion object {
-        fun getSDRelativePath(context: Context): String {
-            val file = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "Graphs")
-            return Environment.getExternalStorageDirectory().absolutePath //TODO
+        fun getSDRelativePath(folder: String, context: Context): String {
+            val file = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), folder)
+            return file.absolutePath.substring(
+                Environment.getExternalStorageDirectory().absolutePath.length,
+                file.absolutePath.length
+            )
         }
     }
 
