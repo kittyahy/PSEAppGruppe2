@@ -18,6 +18,8 @@ class DeltaControllerSaveDeltasTests {
 
     private val commandLimit = 128 // number of commands a user can upload for a project in one day
 
+    /*
+
     @Before
     fun setup() {
         // Generate valid firebase authentication token
@@ -81,5 +83,6 @@ class DeltaControllerSaveDeltasTests {
         Assert.assertEquals(projectCommand, projectCommand)
     }
 
+     */
     //TODO Tests auskommentieren
 }

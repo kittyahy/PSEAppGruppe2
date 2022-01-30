@@ -11,6 +11,7 @@ import org.junit.Before
 class PostsControllerTests {
     private var restAPI: RESTAPI = RESTAPI()
     private lateinit var authToken: String
+    /*
     @Before
     fun setup() {
         // Generate valid firebase authentication token
@@ -55,5 +56,6 @@ class PostsControllerTests {
 
         Assert.assertTrue(restAPI.removePost(postID, authToken))
     }
+    */
     //TODO Tests auskommentieren
 }

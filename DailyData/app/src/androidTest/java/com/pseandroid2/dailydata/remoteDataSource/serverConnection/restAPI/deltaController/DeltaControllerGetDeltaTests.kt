@@ -3,12 +3,15 @@ package com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI.delt
 import android.util.Log
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI.postController.RESTAPITests_PostsController_PostContent
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.Delta
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
+import org.junit.AfterClass
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
+import java.time.LocalDateTime
 import kotlin.collections.remove as remove
 
 class DeltaControllerGetDeltaTests {
@@ -20,16 +23,21 @@ class DeltaControllerGetDeltaTests {
     private val fm: FirebaseManager = FirebaseManager(null)
     private var email = "test@student.kit.edu"
     private var password = "PSEistsuper"
+    private val userID = "4hpJh32YaAWrAYoVvo047q7Ey183"
     private val email2 = "pseFan@student.kit.edu"
     private val password2 = "mehrSpaßAlsBeiPSEGibtsNicht"
+    private val userID2 = "a5sYrdnd1EX2TtkJAEGGMHqebUq2"
     private var email3 = "unermüdlicherStudent@student.kit.edu"
     private var password3 = "ohneKaffeeKeinPSE"
+    private val userID3 = "CBVFbOwfHmTLAA2d7Q9wt6RXQyH2"
 
     private var projectID: Long = -1
 
     private var serverManager = ServerManager(restAPI)
 
     private val projectCommandToSend: String = "projectCommand"
+
+    /*
 
     @Before
     fun setup() {
@@ -49,11 +57,38 @@ class DeltaControllerGetDeltaTests {
 
         // Save a delta to the server
         Assert.assertEquals(listOf(projectCommandToSend), serverManager.sendCommandsToServer(projectID, listOf(projectCommandToSend), authToken))
+        setTeardown(restAPI, projectID, authToken, userID, userID2, userID3)
+    }
+
+    companion object Teardown{
+        private var restAPI: RESTAPI? = null
+        private var projectID: Long = -1
+        private var authToken: String = ""
+        private var userToRemove1: String = ""
+        private var userToRemove2: String = ""
+        private var userToRemove3: String = ""
+
+        fun setTeardown(restapi: RESTAPI, projectID: Long, authToken: String, userToRemove1: String, userToRemove2: String, userToRemove3: String) {
+            restAPI = restapi
+            Teardown.projectID = projectID
+            Teardown.authToken = authToken
+            Teardown.userToRemove1 = userToRemove1
+            Teardown.userToRemove2 = userToRemove2
+            Teardown.userToRemove3 = userToRemove3
+        }
+
+        @AfterClass
+        @JvmStatic fun teardown() {
+            // Remove all users from project so that the project gets removed
+            restAPI?.removeUser(userToRemove3, projectID, authToken)
+            restAPI?.removeUser(userToRemove2, projectID, authToken)
+            restAPI?.removeUser(userToRemove1, projectID, authToken)
+        }
     }
 
     @Test
     fun getDeltaFromServer() {
-        var downloadedDeltas = restAPI.getDelta(projectID, authToken) as MutableList<Delta>
+        val downloadedDeltas = restAPI.getDelta(projectID, authToken) as MutableList<Delta>
         Assert.assertNotEquals(0, downloadedDeltas.size)
 
         var deltaFound = false
@@ -70,13 +105,13 @@ class DeltaControllerGetDeltaTests {
 
     @Test
     fun getDeltaWhenNoProjectMember() {
-        var downloadedDeltas = restAPI.getDelta(projectID, authToken2) as MutableList
+        val downloadedDeltas = restAPI.getDelta(projectID, authToken2) as MutableList
         Assert.assertEquals(0, downloadedDeltas.size)
     }
 
     @Test
     fun getSameDeltaTwice() {
-        // User 3 should try to download the same delta twice
+        // User 3 should try to download the same delta twice (and it should work both times)
         // Download the deltas for the first time
         var downloadedDeltas = restAPI.getDelta(projectID, authToken3) as MutableList
         Assert.assertNotEquals(0, downloadedDeltas.size)
@@ -100,5 +135,12 @@ class DeltaControllerGetDeltaTests {
         Assert.assertTrue(deltaFound)
     }
 
+
+
+    @Test
+    fun getRemoveTime() {
+        Assert.assertNotEquals(LocalDateTime.parse("0001-01-01T00:00"), restAPI.getRemoveTime(authToken))
+    }
+     */
     //TODO Tests auskommentieren
 }

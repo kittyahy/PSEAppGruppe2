@@ -18,6 +18,7 @@ class RESTAPITests_PostsController_PostContent {
 
     private lateinit var postPreviewsList: MutableList<PostPreview>
     private var postID: Int = -1
+/*
 
     @Before
     fun setup() {
@@ -83,5 +84,6 @@ class RESTAPITests_PostsController_PostContent {
         Assert.assertEquals("", restAPI.getProjectTemplate(-1, authToken))
         Assert.assertEquals("", restAPI.getGraphTemplate(-1, 1, authToken))
     }
+    */
     //TODO Tests auskommentieren
 }
