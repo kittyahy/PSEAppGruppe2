@@ -4,10 +4,10 @@ import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
 import com.pseandroid2.dailydata.repository.commandCenter.commands.ProjectCommand
 
-class ExecuteQueue(appDataBase: AppDataBase, remoteDataSourceAPI: RemoteDataSourceAPI) :
+class ExecuteQueue(appDataBase: AppDataBase, remoteDataSourceAPI: RemoteDataSourceAPI, private val publishQueue: PublishQueue) :
     CommandQueue( appDataBase, remoteDataSourceAPI) {
     override suspend fun performCommandAction(command: ProjectCommand) {
-        command.execute(appDataBase, remoteDataSourceAPI)
+        command.execute(appDataBase, remoteDataSourceAPI, publishQueue)
     }
 
     //No contingency plan required because execution will always succeed
