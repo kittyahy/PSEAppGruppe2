@@ -37,6 +37,7 @@ import com.pseandroid2.dailydata.ui.project.creation.ProjectCreationScreen
 import com.pseandroid2.dailydata.ui.project.data.ProjectDataScreen
 import com.pseandroid2.dailydata.ui.project.overview.ProjectOverviewScreen
 import com.pseandroid2.dailydata.ui.templates.TemplatesScreen
+import kotlinx.coroutines.InternalCoroutinesApi
 
 @Composable
 fun Navigation(navController: NavHostController) {
@@ -48,7 +49,6 @@ fun Navigation(navController: NavHostController) {
         startDestination = Routes.PROJECT
     ) {
         composable(Routes.PROJECT) {
-            println("StateLog Navigation    :" + projectNavState.value.toString())
             ProjectScreen(
                 navState = projectNavState
             )
@@ -70,6 +70,7 @@ fun Navigation(navController: NavHostController) {
     }
 }
 
+@InternalCoroutinesApi
 @Composable
 fun ProjectNavigation(
     navController: NavHostController,
@@ -81,9 +82,9 @@ fun ProjectNavigation(
         startDestination = startDestination
     ) {
         composable(
-            route = Routes.CREATION + "?projectId={projectId}",
+            route = Routes.CREATION + "?projectTemplateId={projectId}",
             arguments = listOf(
-                navArgument(name = "projectId") {
+                navArgument(name = "projectTemplateId") {
                     type = NavType.IntType
                     defaultValue = -1;
                 }

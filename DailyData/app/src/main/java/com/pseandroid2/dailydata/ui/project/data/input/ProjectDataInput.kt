@@ -32,32 +32,35 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pseandroid2.dailydata.R
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Button
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Column
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Row
 import com.pseandroid2.dailydata.ui.project.creation.AppDialog
-import com.pseandroid2.dailydata.util.ui.DataType
-import com.pseandroid2.dailydata.util.ui.TableRow
-import com.pseandroid2.dailydata.util.ui.TableButton
-import com.pseandroid2.dailydata.util.ui.TableColumn
 import com.pseandroid2.dailydata.util.ui.UiEvent
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import java.util.Calendar
 
+@InternalCoroutinesApi
 @Composable
 fun ProjectDataInputScreen(
+    projectId : Int,
     onNavigate: (UiEvent.Navigate) -> Unit,
     viewModel: ProjectDataInputScreenViewModel = hiltViewModel()
 ) {
 
     var scrollState = rememberScrollState()
     val context = LocalContext.current
-    var members = viewModel.members.collectAsState(initial = listOf())
-    var table = viewModel.table.collectAsState(initial = listOf())
+    var members = viewModel.members
+    var table = viewModel.table
 
     LaunchedEffect(key1 = true) {
+        viewModel.onEvent(ProjectDataInputScreenEvent.OnCreate(projectId = projectId))
         viewModel.uiEvent.collect { event ->
             when(event) {
                 is UiEvent.ShowToast -> Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
@@ -84,7 +87,8 @@ fun ProjectDataInputScreen(
             background = viewModel.wallpaper,
             descriptionUnfolded = viewModel.isDescriptionUnfolded,
             onDescriptionClick = { viewModel.onEvent(ProjectDataInputScreenEvent.OnDescriptionClick) },
-            members = members.value.map { it.name.first().toString() },
+            isOnlineProject = viewModel.isOnlineProject,
+            members = members.map { it.name.first().toString() },
             memberColor = Color.Magenta
         )
         IncButtons(
@@ -100,23 +104,15 @@ fun ProjectDataInputScreen(
             onValueChange = { index, value ->
                 viewModel.onEvent(ProjectDataInputScreenEvent.OnColumnChange(index, value))
             },
-            insertRow = viewModel.insertRow,
-            onInsertRowChange = { viewModel.onEvent(ProjectDataInputScreenEvent.OnColumnInsertRowChange(value = it)) },
             onClickAdd = { viewModel.onEvent(ProjectDataInputScreenEvent.OnColumnAdd)}
         )
         Divider(modifier = Modifier.padding(vertical = 10.dp))
         Table(
             header = viewModel.columns,
-            data = table.value,
+            data = table,
             onPress = { viewModel.onEvent(ProjectDataInputScreenEvent.OnRowDialogShow(index = it)) }
         )
     }
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun Prev() {
-
 }
 
 @Composable
@@ -126,6 +122,7 @@ fun ProjectHeader(
     background : Color,
     descriptionUnfolded : Boolean,
     onDescriptionClick : () -> Unit,
+    isOnlineProject : Boolean,
     members : List<String>,
     memberColor : Color
 ) {
@@ -155,18 +152,20 @@ fun ProjectHeader(
                         overflow = TextOverflow.Ellipsis
                     )
                 }
-                Spacer(modifier = Modifier.padding(4.dp))
-                Row() {
-                    LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                        items(members) { member ->
-                            Box(
-                                modifier = Modifier
-                                    .size(40.dp)
-                                    .clip(CircleShape)
-                                    .background(memberColor),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(text = member, fontSize = 20.sp)
+                if (isOnlineProject) {
+                    Spacer(modifier = Modifier.padding(4.dp))
+                    Row() {
+                        LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                            items(members) { member ->
+                                Box(
+                                    modifier = Modifier
+                                        .size(40.dp)
+                                        .clip(CircleShape)
+                                        .background(memberColor),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(text = member, fontSize = 20.sp)
+                                }
                             }
                         }
                     }
@@ -178,7 +177,7 @@ fun ProjectHeader(
 
 @Composable
 fun IncButtons(
-    buttons : List<TableButton>,
+    buttons : List<Button>,
     onClickInc : (id : Int) -> Unit,
     onClickDec : (id : Int) -> Unit,
     onClickAdd : (id : Int) -> Unit
@@ -265,11 +264,9 @@ fun IncButton(
 
 @Composable
 fun Columns (
-    table: List<TableColumn>,
+    table: List<Column>,
     values : List<String>,
     onValueChange: (index : Int, value : String) -> Unit,
-    insertRow : String,
-    onInsertRowChange : (String) -> Unit,
     onClickAdd: () -> Unit
 ) {
     Column(modifier = Modifier
@@ -292,20 +289,6 @@ fun Columns (
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = "After row:  ")
-            var textColor = if (isInt(insertRow)) {
-                MaterialTheme.colors.onBackground
-            } else {
-                MaterialTheme.colors.error
-            }
-            BasicTextField(value = "", onValueChange = {})
-            BasicTextField(
-                modifier = Modifier.width(50.dp),
-                value = insertRow,
-                textStyle = LocalTextStyle.current.copy(color = textColor),
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                onValueChange = onInsertRowChange,
-            )
             OutlinedButton(onClick = onClickAdd) {
                 Text(text = "Add")
             }
@@ -387,8 +370,8 @@ fun TableColumn (
 
 @Composable
 fun Table(
-    header : List<TableColumn>,
-    data : List<TableRow>,
+    header : List<Column>,
+    data : List<Row>,
     onPress : (index : Int) -> Unit
 ) {
     val configuration = LocalConfiguration.current
@@ -487,14 +470,5 @@ fun RowDialog(
                 Text(text = "Delete")
             }
         }
-    }
-}
-
-fun isInt(value : String) : Boolean {
-    return try {
-        value.toInt()
-        true
-    } catch (e : NumberFormatException) {
-        false
     }
 }

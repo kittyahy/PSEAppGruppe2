@@ -27,7 +27,9 @@ import androidx.compose.runtime.MutableState
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.pseandroid2.dailydata.util.ui.ProjectNavigation
+import kotlinx.coroutines.InternalCoroutinesApi
 
+@InternalCoroutinesApi
 @Composable
 fun ProjectScreen(navState : MutableState<Bundle>) {
     val navController = rememberNavController()

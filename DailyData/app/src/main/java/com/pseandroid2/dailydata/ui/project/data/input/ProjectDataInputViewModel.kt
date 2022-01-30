@@ -4,108 +4,125 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.pseandroid2.dailydata.di.Repository
-import com.pseandroid2.dailydata.util.ui.ProjectMember
-import com.pseandroid2.dailydata.util.ui.TableRow
-import com.pseandroid2.dailydata.util.ui.TableButton
-import com.pseandroid2.dailydata.util.ui.TableColumn
+import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Button
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Column
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Member
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Row
 import com.pseandroid2.dailydata.util.ui.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flatMapConcat
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@InternalCoroutinesApi
 @HiltViewModel
 class ProjectDataInputScreenViewModel @Inject constructor(
-    private val repository: Repository
+    private val repository: RepositoryViewModelAPI
 ) : ViewModel() {
 
     private val _uiEvent = MutableSharedFlow<UiEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
 
+    private lateinit var initialProject : Project
+    var isOnlineProject = false
+        private set
+    var isAdmin = false
+        private set
+
     var title = ""
+        private set
     var description = ""
+        private set
     var wallpaper = Color.Blue
+        private set
+    var members = listOf<Member>()
+        private set
+    var columns = listOf<Column>()
+        private set
+    var buttons : List<Button> = listOf()
+    var table = listOf<Row>()
+
     var isDescriptionUnfolded by mutableStateOf(false)
-        private set
-    val members : Flow<List<ProjectMember>> = flow {
-        emptyList<ProjectMember>()
-    }
-    var columns : List<TableColumn> = listOf()
-        private set
-    var insertRow by mutableStateOf("")
         private set
     var isRowDialogOpen by mutableStateOf(false)
         private set
-    private var rowEdit = 0
-    var buttons : List<TableButton> = listOf()
     var columnValues : List<String> = listOf()
         private set
-    var table : Flow<List<TableRow>> = flow {
-        emptyList<TableRow>()
-    }
-
-    init {
-
-    }
+    private var rowEdit = 0
 
     fun onEvent(event: ProjectDataInputScreenEvent) {
         when(event) {
+            is ProjectDataInputScreenEvent.OnCreate -> {
+                viewModelScope.launch {
+                    repository.projectHandler.getProjectByID(id = event.projectId).collect { project ->
+                        title = project.title
+                        description = project.description
+                        wallpaper = Color(project.wallpaper)
+                        table = project.data
+                        buttons = project.buttons
+                        members = project.members
+                        isAdmin = project.isAdmin
+                        isOnlineProject = project.isOnlineProject
+                        initialProject = project
+                    }
+                }
+            }
             is ProjectDataInputScreenEvent.OnDescriptionClick -> {
                 isDescriptionUnfolded = !isDescriptionUnfolded
             }
             is ProjectDataInputScreenEvent.OnButtonClickInc -> {
-                //repository add button
+                var button = buttons.find { it.id == event.id }!!
+                button.increaseValue()
             }
             is ProjectDataInputScreenEvent.OnButtonClickDec -> {
-                //repository
+                var button = buttons.find { it.id == event.id }!!
+                button.decreaseValue()
             }
             is ProjectDataInputScreenEvent.OnButtonClickAdd -> {
-                columnValues[columns.indexOfFirst { it.id == event.id }]
-                //repository button(initial value)
+                var button = buttons.find { it.id == event.id }!!
+                var mutable = columnValues.toMutableList()
+                mutable[columns.indexOfFirst { it.id == event.id }] = button.value.toString()
+                columnValues = mutable.toList()
+                button.setValue(0)
             }
             is ProjectDataInputScreenEvent.OnColumnChange -> {
                 var mutable = columnValues.toMutableList()
                 mutable[event.index] = event.value
                 columnValues = mutable.toList()
             }
-            is ProjectDataInputScreenEvent.OnColumnInsertRowChange -> {
-                insertRow = event.value
-                viewModelScope.launch {
-                    var lastIndex = table.flattenToList().lastIndex
-                    if(isInt(insertRow) && insertRow.toInt() > lastIndex) {
-                        insertRow = lastIndex.toString()
-                    }
-                }
-            }
             is ProjectDataInputScreenEvent.OnColumnAdd -> {
-
-                //repository add row(list<String>)
+                columns.forEachIndexed { index, column ->
+                    TODO("Repository add regex to column")
+                    //if regex is invalid color this colum input red
+                }
+                initialProject.addRow(Row(id = 0, elements = columnValues))
             }
             is ProjectDataInputScreenEvent.OnRowDialogShow -> {
-                rowEdit = event.index
-                isRowDialogOpen = true
+                if(isOnlineProject) {
+                    rowEdit = event.index
+                    isRowDialogOpen = true
+                }
             }
             is ProjectDataInputScreenEvent.OnCloseRowDialog -> {
                 isRowDialogOpen = false
             }
             is ProjectDataInputScreenEvent.OnRowModifyClick -> {
-                viewModelScope.launch {
-                    var list = table.flattenToList()
-                    columnValues = list[rowEdit].elements
-                }
-
+                columnValues = table[rowEdit].elements
             }
             is ProjectDataInputScreenEvent.OnRowDeleteClick -> {
-                //repository remove row
+                initialProject.deleteRow(table[rowEdit])
             }
         }
     }

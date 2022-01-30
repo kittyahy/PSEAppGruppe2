@@ -35,18 +35,17 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pseandroid2.dailydata.ui.project.creation.AppDialog
 import com.pseandroid2.dailydata.util.ui.UiEvent
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.InternalCoroutinesApi
 
+@InternalCoroutinesApi
 @Composable
 fun ProjectOverviewScreen(
     onNavigate: (UiEvent.Navigate) -> Unit,
@@ -54,6 +53,7 @@ fun ProjectOverviewScreen(
 ) {
 
     val projects by viewModel.projects.collectAsState(initial = emptyList())
+    val templates by viewModel.templates.collectAsState(initial = emptyList())
 
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->
@@ -67,9 +67,10 @@ fun ProjectOverviewScreen(
     ProjectTemplateDialog(
         isOpen = viewModel.isTemplateDialogOpen,
         onDismissRequest = { viewModel.onEvent(ProjectOverviewEvent.OnTemplateProjectClick(isOpen = false)) },
-        templates = listOf("Template 1", "Template 2", "Template 3"),
+        templates = templates.map { TODO("Get Template Names") },
         onClick = {
-            viewModel.onEvent(ProjectOverviewEvent.OnTemplateClick(index = it))
+            TODO("Get template id")
+            viewModel.onEvent(ProjectOverviewEvent.OnTemplateClick(id = it))
             viewModel.onEvent(ProjectOverviewEvent.OnTemplateProjectClick(isOpen = false))
         }
     )
@@ -83,25 +84,19 @@ fun ProjectOverviewScreen(
         ProjectRepresentationButton(
             text = "Add new Project",
             icon = Icons.Default.Add,
-            onClick = {
-                viewModel.onEvent(ProjectOverviewEvent.OnNewProjectClick)
-            }
+            onClick = { viewModel.onEvent(ProjectOverviewEvent.OnNewProjectClick) }
         )
 
         ProjectRepresentationButton(
             text = "Project from Template",
             icon = Icons.Default.Add,
-            onClick = {
-                viewModel.onEvent(ProjectOverviewEvent.OnTemplateProjectClick(isOpen = true))
-            }
+            onClick = { viewModel.onEvent(ProjectOverviewEvent.OnTemplateProjectClick(isOpen = true)) }
         )
 
         for(project in projects) {
             ProjectRepresentationButton(
-                text = "Project 1",
-                onClick = {
-                    viewModel.onEvent(ProjectOverviewEvent.OnProjectClick(id = 1))
-                }
+                text = project.name,
+                onClick = { viewModel.onEvent(ProjectOverviewEvent.OnProjectClick(project.id)) }
             )
         }
     }

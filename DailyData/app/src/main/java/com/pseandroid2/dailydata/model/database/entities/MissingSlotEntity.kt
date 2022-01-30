@@ -25,7 +25,7 @@ import java.time.LocalDateTime
 
 @Entity(tableName = "missingSlot", primaryKeys = ["projectId", "from", "until"])
 data class MissingSlotEntity(
-    val projectId: Int,
+    val projectId: Long,
     val from: LocalDateTime,
     val until: LocalDateTime
 )
