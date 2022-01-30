@@ -19,7 +19,7 @@ class CommandWrapperTest : TestCase() {
         val testCommand = TestCommand(id)
         val json = CommandWrapper(testCommand).toJson()
         val command : ProjectCommand = CommandWrapper.fromJson(json)
-        command.execute(mockk<AppDataBase>(), mockk<RemoteDataSourceAPI>(),)
+        command.execute(mockk<AppDataBase>(), mockk<RemoteDataSourceAPI>(), mockk<PublishQueue>())
         assertEquals(id * 2, command.projectID)
     }
 }
