@@ -1,7 +1,6 @@
 package com.pseandroid2.dailydata.repository.commandCenter.commands
 
 import com.pseandroid2.dailydata.model.database.AppDataBase
-import com.pseandroid2.dailydata.model.database.daos.ProjectCDManager
 import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.project.SimpleProjectBuilder
 import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
@@ -40,6 +39,7 @@ class CreateProject (commandByUser: String,
         //super.execute(appDataBase, remoteDataSourceAPI) Todo rein
     }
 
-    override suspend fun publish() {
+    override suspend fun publish(): Boolean {
+        return true
     }
 }

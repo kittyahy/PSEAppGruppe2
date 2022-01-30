@@ -15,7 +15,7 @@ abstract class ProjectCommand (
     open suspend fun execute(appDataBase: AppDataBase, remoteDataSourceAPI: RemoteDataSourceAPI) {
         TODO()
     }
-    open suspend fun publish() {
+    open suspend fun publish(): Boolean {
         TODO()
     }
 }
