@@ -34,7 +34,7 @@ class Notification(
     val time: LocalTime,
     private val notificationsDAO: NotificationsDAO? = null,
     val projectID: Int
-) : Identifiable, Convertible<Notification> {
+) : Identifiable(), Convertible<Notification> {
     constructor(
         timeNotification: TimeNotification,
         notificationsDAO: NotificationsDAO?,
@@ -53,10 +53,7 @@ class Notification(
 
     //@throws IllegalOperationException
     override suspend fun delete() {
-        if (notificationsDAO == null) {
-            throw IllegalOperationException()
-        }
-        notificationsDAO.deleteNotification(projectID, id)
+        TODO()
     }
 
     override fun toDBEquivalent(): TimeNotification {
