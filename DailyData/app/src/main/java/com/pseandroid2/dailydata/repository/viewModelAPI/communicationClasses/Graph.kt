@@ -26,6 +26,7 @@ import com.pseandroid2.dailydata.model.graph.Graph
 import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.project.ProjectBuilder
 
+
 abstract class Graph: Identifiable, Convertible<Graph>{
     companion object {
         val availableGraphs: MutableList<String> = ArrayList<String>()
@@ -46,11 +47,11 @@ abstract class Graph: Identifiable, Convertible<Graph>{
     abstract val image: Bitmap //TODO("Robin changes")
     abstract val typeName: String
 
-    override fun toDBEquivalent(): Graph<*, *> {
-        return TODO()
+    override fun toDBEquivalent() : Graph {
+        return TODO() //Todo Arne fragen, wie ich den richtigen Graph erstelle: Kommt noch
     }
 
     override fun addYourself(builder: ProjectBuilder<out Project>) {
-        builder.addGraphs(listOf(toDBEquivalent()))
+        builder.addGraphs(listOf(toDBEquivalent())) //TODO Arne: es kommen Änderungen
     }
 }

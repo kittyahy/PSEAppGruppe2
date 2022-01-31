@@ -42,7 +42,8 @@ class Project(
     var notifications: List<Notification> = ArrayList<Notification>(),
     var graphs: List<Graph> = ArrayList<Graph>(),
     var members: List<Member> = ArrayList<Member>()
-): Identifiable() {
+): Identifiable {
+    override lateinit var executeQueue: ExecuteQueue
     val scope = CoroutineScope(Dispatchers.IO)
 
     //TODO("Robin Changes")

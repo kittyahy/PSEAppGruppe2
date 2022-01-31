@@ -20,18 +20,22 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
+import com.pseandroid2.dailydata.model.project.Project
+import com.pseandroid2.dailydata.model.project.ProjectBuilder
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.model.uielements.UIElementType
+import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 
 class Button(
     override val id: Int,
     val name: String,
     val columnId: Int,
     val value: Int
-): Identifiable() {
+): Identifiable, Convertible<UIElement> {
+    override lateinit var executeQueue: ExecuteQueue
     constructor(uiElement: UIElement, columnId: Int) : this(
         uiElement.id,
-        TODO(),
+        uiElement.name,
         columnId,
         uiElement.state.toInt()
     )
@@ -45,7 +49,7 @@ class Button(
         TODO("Not yet implemented")
     }
 
-    fun toDBEquivalent(): UIElement {
+    override fun toDBEquivalent(): UIElement {
         return UIElement(
             id,
             UIElementType.BUTTON,
@@ -61,5 +65,9 @@ class Button(
     }
     fun setValue(value: Int) {
         TODO()
+    }
+
+    override fun addYourself(builder: ProjectBuilder<out Project>) {
+        TODO("Not yet implemented")
     }
 }
