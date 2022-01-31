@@ -28,6 +28,13 @@ import com.pseandroid2.dailydata.model.settings.Settings
 import com.pseandroid2.dailydata.model.users.User
 
 interface Graph<T : DataSet<S>, S : Entry> {
+    companion object {
+        const val SET_LABEL_KEY = "SET LABEL"
+
+        const val ENABLE = "ENABLED"
+        const val DISABLE = "DISABLED"
+    }
+
     var id: Int
 
     fun getDataSets(): List<T>
