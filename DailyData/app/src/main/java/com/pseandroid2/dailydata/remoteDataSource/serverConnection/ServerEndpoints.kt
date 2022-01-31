@@ -103,7 +103,7 @@ interface ServerEndpoints
                        @Body params: ProvideOldDataParameter): Call<Boolean>
 
     @GET("OnlineDatabase/Delta"+"/time")
-    fun getRemoveTime(@Header("token") token: String): Call<LocalDateTime>
+    fun getRemoveTime(@Header("token") token: String): Call<Long>
 
 
     // FetchRequestController

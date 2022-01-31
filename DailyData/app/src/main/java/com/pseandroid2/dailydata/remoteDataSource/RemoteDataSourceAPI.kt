@@ -295,9 +295,9 @@ class RemoteDataSourceAPI @Inject constructor(uAccount: UserAccount?, sManager: 
     /**
      * Gets the remove time from the server
      *
-     * @return LocalDateTime: The time how long an project command can remain on the server until it gets deleted by the server
+     * @return Long: The time how long an project command can remain on the server until it gets deleted by the server. On error returns -1
      */
-    fun getRemoveTime(): LocalDateTime {
+    fun getRemoveTime(): Long {
         val authToken: String = userAccount.getToken()
         return serverManager.getRemoveTime(authToken)
     }

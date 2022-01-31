@@ -65,7 +65,7 @@ internal class ServerManagerTests_RESTAPICorrectlyLinked {
         coEvery { restAPI.saveDelta(1, "command1", "") } returns true // use coEvery for mockking suspend functions
         every { restAPI.getDelta(1, "") } returns deltaList
         every { restAPI.providedOldData("", "", LocalDateTime.parse("0001-01-01T00:00"), "", 1, false, "") } returns true
-        every { restAPI.getRemoveTime("") } returns LocalDateTime.parse("0001-01-01T00:00")
+        every { restAPI.getRemoveTime("") } returns 42
         every { restAPI.demandOldData(1, "", "") } returns true
         every { restAPI.getFetchRequests(1, "") } returns fetchRequestList
 
@@ -112,7 +112,7 @@ internal class ServerManagerTests_RESTAPICorrectlyLinked {
 
         Assert.assertTrue(serverManager.provideOldData("", "", LocalDateTime.parse("0001-01-01T00:00"), "", 1, false, ""))
 
-        Assert.assertEquals(LocalDateTime.parse("0001-01-01T00:00"), serverManager.getRemoveTime(""))
+        Assert.assertEquals(42, serverManager.getRemoveTime(""))
 
         Assert.assertEquals(true, serverManager.demandOldData(1, "", ""))
 

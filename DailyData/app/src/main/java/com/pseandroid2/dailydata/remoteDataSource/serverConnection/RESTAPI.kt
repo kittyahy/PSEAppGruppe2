@@ -283,12 +283,12 @@ class RESTAPI {
      * Gets the remove time from the server
      *
      * @param authToken: The authentication token
-     * @return LocalDateTime: How long comments stay on the server before they get deleted. If an error occurred returns "0001-01-01T00:00"
+     * @return Long: The time how long an project command can remain on the server until it gets deleted by the server. On error returns -1
      */
-    fun getRemoveTime(authToken: String): LocalDateTime {
-        val call: Call<LocalDateTime> = server.getRemoveTime(authToken)
+    fun getRemoveTime(authToken: String): Long {
+        val call: Call<Long> = server.getRemoveTime(authToken)
 
-        return call.execute().body() ?: LocalDateTime.parse("0001-01-01T00:00")
+        return call.execute().body() ?: -1
     }
 
     //------------------------------------- FetchRequestController -------------------------------------

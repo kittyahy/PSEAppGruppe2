@@ -256,9 +256,9 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * Gets the remove time from the server
      *
      * @param authToken: The authentication token
-     * @return LocalDateTime: The time how long an project command can remain on the server until it gets deleted by the server
+     * @return Long: The time how long an project command can remain on the server until it gets deleted by the server. On error returns -1
      */
-    fun getRemoveTime(authToken: String): LocalDateTime {
+    fun getRemoveTime(authToken: String): Long {
         return restAPI.getRemoveTime(authToken)
     }
 

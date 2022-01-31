@@ -50,7 +50,7 @@ class RDSAPI_CorrectlyLinked {
 
         every { serverManager.sendCommandsToServer(1, emptyList(), "") } returns sendCommandsList // use coEvery for mockking suspend functions
         every { serverManager.provideOldData("", "", LocalDateTime.parse("0001-01-01T00:00"), "", 1, false, "") } returns true
-        every { serverManager.getRemoveTime("") } returns LocalDateTime.parse("0001-01-01T00:00")
+        every { serverManager.getRemoveTime("") } returns 42
         every { serverManager.demandOldData(1, "", "") } returns true
 
         // mock UserAccount
@@ -84,7 +84,7 @@ class RDSAPI_CorrectlyLinked {
         Assert.assertEquals("", rdsAPI.getProjectAdmin(1))
         Assert.assertEquals(sendCommandsList.elementAt(0), rdsAPI.sendCommandsToServer(1, emptyList()).elementAt(0))
         Assert.assertTrue(rdsAPI.provideOldData("", "", LocalDateTime.parse("0001-01-01T00:00"), "", 1, false))
-        Assert.assertEquals(LocalDateTime.parse("0001-01-01T00:00"), rdsAPI.getRemoveTime())
+        Assert.assertEquals(42, rdsAPI.getRemoveTime())
         Assert.assertTrue(rdsAPI.demandOldData(1, ""))
     }
 

@@ -37,7 +37,7 @@ class DeltaControllerGetDeltaTests {
 
     private val projectCommandToSend: String = "projectCommand"
 
-    /*
+
 
     @Before
     fun setup() {
@@ -85,6 +85,8 @@ class DeltaControllerGetDeltaTests {
             restAPI?.removeUser(userToRemove1, projectID, authToken)
         }
     }
+
+    /*
 
     @Test
     fun getDeltaFromServer() {
@@ -139,8 +141,9 @@ class DeltaControllerGetDeltaTests {
 
     @Test
     fun getRemoveTime() {
-        Assert.assertNotEquals(LocalDateTime.parse("0001-01-01T00:00"), restAPI.getRemoveTime(authToken))
+        Assert.assertNotEquals(-1, restAPI.getRemoveTime(authToken))
     }
-     */
+    */
+
     //TODO Tests auskommentieren
 }
