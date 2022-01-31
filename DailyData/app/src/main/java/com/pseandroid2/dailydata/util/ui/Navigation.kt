@@ -39,6 +39,7 @@ import com.pseandroid2.dailydata.ui.project.overview.ProjectOverviewScreen
 import com.pseandroid2.dailydata.ui.templates.TemplatesScreen
 import kotlinx.coroutines.InternalCoroutinesApi
 
+@InternalCoroutinesApi
 @Composable
 fun Navigation(navController: NavHostController) {
 
@@ -116,9 +117,6 @@ fun ProjectNavigation(
             )
         ) {
             ProjectDataScreen(
-                onNavigate = {
-                    navController.navigate(it.route)
-                },
                 onPopBackStack = {
                     navController.popBackStack()
                 }

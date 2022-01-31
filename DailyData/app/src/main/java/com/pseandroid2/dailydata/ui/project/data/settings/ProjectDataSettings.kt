@@ -21,7 +21,6 @@
 package com.pseandroid2.dailydata.ui.project.data.settings
 
 import android.annotation.SuppressLint
-import android.content.ClipData
 import android.content.Context
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
@@ -45,6 +44,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.pseandroid2.dailydata.util.ui.UiEvent
 import com.pseandroid2.dailydata.R
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
 import com.pseandroid2.dailydata.ui.composables.ButtonElement
 import com.pseandroid2.dailydata.ui.composables.ListInput
 import com.pseandroid2.dailydata.ui.composables.SaveButton
@@ -173,7 +173,7 @@ fun ProjectDataSettingsScreen(
                     viewModel.onEvent(
                         ProjectDataSettingsScreenEvent.OnButtonAdd(
                             name = name,
-                            columnId = viewModel.table.filter { it.dataType == DataType.WHOLE_NUMBER }[column].id,  //TODO(vielleicht nochmal ueberarbeiten)
+                            columnId = viewModel.table.filter { it.dataType == DataType.WHOLE_NUMBER }[column].id,
                             value = value.toInt()
                         )
                     )
@@ -211,7 +211,7 @@ fun ProjectDataSettingsScreen(
                 isOpen = viewModel.isGraphDialogOpen,
                 onDismissRequest = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnShowGraphDialog(false)) },
                 onClick = { graph ->
-                  //  viewModel.onEvent(ProjectDataSettingsScreenEvent.OnGraphAdd(Graph.create(graph))) TODO(Repository create function)
+                    viewModel.onEvent(ProjectDataSettingsScreenEvent.OnGraphAdd(Graph.createFromType(graph)))
                     viewModel.onEvent(ProjectDataSettingsScreenEvent.OnShowGraphDialog(false))
                 }
             )
@@ -220,7 +220,7 @@ fun ProjectDataSettingsScreen(
                 mainIcon = ImageVector.vectorResource(id = R.drawable.ic_chart),
                 onClick = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnShowGraphDialog(true)) },
                 onClickItem = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnButtonRemove(index = it)) },
-                elements = viewModel.graphs.map { TODO("it.representation") }
+                elements = viewModel.graphs.map { it.typeName }
             )
             ButtonElement(
                 icon = Icons.Default.ExitToApp,

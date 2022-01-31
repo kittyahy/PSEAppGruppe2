@@ -61,6 +61,7 @@ fun ProjectCreationScreen(
                 is UiEvent.ShowToast -> Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
                 is UiEvent.Navigate -> onNavigate(event)
                 is UiEvent.PopBackStack -> onPopBackStack()
+                else -> Unit
             }
         }
     }
@@ -182,7 +183,7 @@ fun ProjectCreationScreen(
                 isOpen = viewModel.isGraphDialogOpen,
                 onDismissRequest = { viewModel.onEvent(ProjectCreationEvent.OnShowGraphDialog(false)) },
                 onClick = { graph ->
-                    //viewModel.onEvent(ProjectCreationEvent.OnGraphAdd(Graph.create(graph))) //TODO("Reository create graph from type")
+                    viewModel.onEvent(ProjectCreationEvent.OnGraphAdd(Graph.createFromType(graph)))
                     viewModel.onEvent(ProjectCreationEvent.OnShowGraphDialog(false))
                 }
             )

@@ -20,6 +20,15 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
-class Post {
+import android.graphics.Bitmap
+
+//TODO("Robin changes")
+class Post(
+    var title : String,
+    var image : Bitmap,
+    var id : Int,
+    var graphTemplate : GraphTemplate?,
+    var projectTemplate: ProjectTemplate? //exactly one of both is null
+) {
     //Todo implementierung
 }

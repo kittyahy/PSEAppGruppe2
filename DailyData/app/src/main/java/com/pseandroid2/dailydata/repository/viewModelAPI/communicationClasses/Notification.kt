@@ -27,6 +27,15 @@ import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.project.ProjectBuilder
 import java.time.LocalTime
 
+//TODO("Robin changes")
+fun Notification(
+    id: Int,
+    message: String,
+    time: LocalTime
+) : com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Notification {
+    TODO()
+}
+
 class Notification(
     override val id: Int,
     val message: String,

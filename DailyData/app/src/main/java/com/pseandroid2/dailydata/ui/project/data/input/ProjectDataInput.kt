@@ -305,7 +305,6 @@ fun TableColumn (
     placeholder: String,
     onValueChange : (String) -> Unit
 ) {
-    var numberError = false
     val scrollState = rememberScrollState()
 
     Row(
@@ -326,6 +325,7 @@ fun TableColumn (
             DataType.STRING -> {
                 OutlinedTextField(
                     value = value,
+                    isError = !dataType.regex.toRegex().matches(value),
                     onValueChange = onValueChange,
                     placeholder = { Text(placeholder) }
                 )
@@ -356,7 +356,7 @@ fun TableColumn (
                 OutlinedTextField(
                     label = { Text("Unit") },
                     value = value,
-                    isError = numberError,
+                    isError = !dataType.regex.toRegex().matches(value),
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                     onValueChange = onValueChange,
                     modifier = Modifier

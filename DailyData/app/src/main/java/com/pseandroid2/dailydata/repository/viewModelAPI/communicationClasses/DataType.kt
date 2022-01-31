@@ -20,8 +20,10 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
-enum class DataType(val representation : String) {
-    WHOLE_NUMBER("Whole Number"), FLOATING_POINT_NUMBER("Floating Point Number"), TIME("Time"), STRING("String");
+
+//TODO("Robin changes")
+enum class DataType(val representation : String, val regex: String) {
+    WHOLE_NUMBER("Whole Number", ""), FLOATING_POINT_NUMBER("Floating Point Number", ""), TIME("Time", ""), STRING("String", "");
 
     companion object {
         fun fromString(rep : String) : DataType {

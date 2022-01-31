@@ -67,10 +67,9 @@ fun ProjectOverviewScreen(
     ProjectTemplateDialog(
         isOpen = viewModel.isTemplateDialogOpen,
         onDismissRequest = { viewModel.onEvent(ProjectOverviewEvent.OnTemplateProjectClick(isOpen = false)) },
-        templates = templates.map { TODO("Get Template Names") },
+        templates = templates.map { it.titel },
         onClick = {
-            TODO("Get template id")
-            viewModel.onEvent(ProjectOverviewEvent.OnTemplateClick(id = it))
+            viewModel.onEvent(ProjectOverviewEvent.OnTemplateClick(id = templates[it].id))
             viewModel.onEvent(ProjectOverviewEvent.OnTemplateProjectClick(isOpen = false))
         }
     )

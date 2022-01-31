@@ -50,13 +50,10 @@ class TemplatesScreenViewModel @Inject constructor(
     var tab by mutableStateOf(0)
         private set
 
-    var graphTemplates = repository.projectHandler.graphTemplateFlow
+    var graphTemplates = repository.projectHandler.graphTemplateFlow.templates
         private set
-    var projectTemplates = repository.projectHandler.projectTemplateFlow
+    var projectTemplates = repository.projectHandler.projectTemplateFlow.flow
         private set
-
-    init {
-    }
 
     fun onEvent(event : TemplatesScreenEvent) {
         when (event) {
@@ -64,14 +61,10 @@ class TemplatesScreenViewModel @Inject constructor(
                 tab = event.index
             }
             is TemplatesScreenEvent.OnGraphTemplateDelete -> {
-                var mutable = graphTemplates.toMutableList()
-                mutable.removeAt(index = event.index)
-                graphTemplates = mutable.toList()
+                repository.projectHandler.deleteGraphTemplate(event.id)
             }
             is TemplatesScreenEvent.OnProjectTemplateDelete -> {
-                var mutable = projectTemplates.toMutableList()
-                mutable.removeAt(index = event.index)
-                projectTemplates = mutable.toList()
+                repository.projectHandler.deleteProjectTemplate(event.id)
             }
         }
     }

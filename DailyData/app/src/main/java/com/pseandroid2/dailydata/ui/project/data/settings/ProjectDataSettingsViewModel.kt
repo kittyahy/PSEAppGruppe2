@@ -133,7 +133,7 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
             }
             is ProjectDataSettingsScreenEvent.OnNotificationAdd -> {
                 var mutable = notifications.toMutableList()
-                //mutable.add(Notification(id = 0, message = event.message, time = event.time)) TODO(Repository fix notifications)
+                mutable.add(Notification(id = 0, message = event.message, time = event.time))
                 notifications = mutable.toList()
             }
             is ProjectDataSettingsScreenEvent.OnNotificationRemove -> {
@@ -142,8 +142,7 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
                 notifications = mutable.toList()
             }
             is ProjectDataSettingsScreenEvent.OnCreateLink -> {
-                TODO("Repository create link")
-                var link = ""
+                var link = initialProject.createLink()
                 sendUiEvent(UiEvent.CopyToClipboard(link))
             }
             is ProjectDataSettingsScreenEvent.OnGraphAdd -> {
@@ -207,7 +206,7 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
                         var id = 0
                         initialProject.setName(name = title)
                         initialProject.setDescription(description = description)
-                        initialProject.setWallpaper(image = wallpaper.toArgb()) //TODO("Repository change to int)
+                        initialProject.changeWallpaper(image = wallpaper.toArgb())
                         for (column in initialProject.table) {
                             if(!table.contains(column)) {
                                 initialProject.deleteColumn(column = column)
@@ -220,12 +219,12 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
                         }
                         for (button in initialProject.buttons) {
                             if(!buttons.contains(button)) {
-                                TODO("Repository delete button")
+                                initialProject.deleteButton(button = button)
                             }
                         }
                         for (button in buttons) {
                             if(!initialProject.buttons.contains(button)) {
-                                TODO("Repository add button")
+                                initialProject.addButton(button = button)
                             }
                         }
                         for (member in initialProject.members) {
@@ -240,7 +239,7 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
                         }
                         for (notification in notifications) {
                             if(!initialProject.notifications.contains(notification)) {
-                                TODO("Repository add notification")
+                                initialProject.addNotification(notification = notification)
                             }
                         }
                         for (graph in initialProject.graphs) {
@@ -250,9 +249,9 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
                                 }
                             }
                         }
-                        for (notification in notifications) {
-                            if(!initialProject.notifications.contains(notification)) {
-                                TODO("Repository Add graph")
+                        for (graph in graphs) {
+                            if(!initialProject.graphs.contains(graph)) {
+                                initialProject.addGraph(graph = graph)
                             }
                         }
                         sendUiEvent(UiEvent.Navigate(DataTabs.INPUT.toString()))

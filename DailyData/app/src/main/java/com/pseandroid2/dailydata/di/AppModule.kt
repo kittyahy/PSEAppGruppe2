@@ -52,7 +52,7 @@ object AppModule {
     }
     @Provides
     @Singleton
-    fun provideRepositoryViewModelAPI(): RepositoryViewModelAPI {
-        return RepositoryViewModelAPI(provideAppDatabase(), provideRemoteDataSourceAPI())
+    fun provideRepositoryViewModelAPI(database : AppDataBase, remoteDataBase : RemoteDataSourceAPI): RepositoryViewModelAPI {
+        return RepositoryViewModelAPI(database, remoteDataBase) //hab ich geändert - robin
     }
 }

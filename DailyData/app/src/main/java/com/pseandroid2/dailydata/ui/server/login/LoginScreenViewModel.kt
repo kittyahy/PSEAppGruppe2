@@ -37,14 +37,14 @@ class LoginScreenViewModel @Inject constructor(
                 userPassword = event.password
             }
             is LoginScreenEvent.Login -> {
-                TODO("Check if input is valid")
-                repository.serverHandler.login(username = userEmail, password = userPassword)
+                //i assume model checks if valid
+                repository.serverHandler.login(email = userEmail, password = userPassword)
             }
             is LoginScreenEvent.LoginGoogle -> {
 
             }
             is LoginScreenEvent.SignUp -> {
-                TODO("Repository")
+                repository.serverHandler.signUp(email = event.email, password = event.password)
             }
             is LoginScreenEvent.ShowSignUpDialog -> {
                 isSignUpDialogOpen = event.isOpen

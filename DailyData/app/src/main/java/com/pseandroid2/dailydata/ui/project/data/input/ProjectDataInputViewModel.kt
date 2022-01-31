@@ -104,8 +104,10 @@ class ProjectDataInputScreenViewModel @Inject constructor(
             }
             is ProjectDataInputScreenEvent.OnColumnAdd -> {
                 columns.forEachIndexed { index, column ->
-                    TODO("Repository add regex to column")
-                    //if regex is invalid color this colum input red
+                    if (!column.dataType.regex.toRegex().matches(columnValues[index])) {
+                        sendUiEvent(UiEvent.ShowToast(message = "Invalid Input"))
+                        return
+                    }
                 }
                 initialProject.addRow(Row(id = 0, elements = columnValues))
             }
