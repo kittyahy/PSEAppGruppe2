@@ -33,7 +33,7 @@ public class ProvideOldDataParameter {
     private boolean wasAdmin;
 
     /**
-     * The constructor to create those parameters.
+     * The constructor to create  parameters for the method provideOldDelta.
      *
      * @param command        the command what the user, who initially  added the Delta, changed.
      * @param forUser        the user, which needs the old Deltas.
