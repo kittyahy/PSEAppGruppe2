@@ -21,6 +21,8 @@
 package com.pseandroid2.dailydata.repository.viewModelAPI
 
 import com.pseandroid2.dailydata.model.database.AppDataBase
+import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
+import com.pseandroid2.dailydata.remoteDataSource.userManager.SignInTypes
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.GraphTemplate
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Post
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.PostDetail
@@ -28,41 +30,40 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Pr
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class ServerHandler(appDataBase: AppDataBase) {
-    fun getPostPreviews(): Flow<List<Post>> {
-        return MutableStateFlow(ArrayList<Post>()) // TODO Implementierung
+class ServerHandler(private val appDataBase: AppDataBase, private val api: RemoteDataSourceAPI) {
+    //TODO("Anton changes")
+    fun getPostPreviews(): List<Post> {
+        return TODO() // Implementierung
     }
 
-    fun getPostDetail(id: Int): PostDetail {
+    fun getPostDetail(postId: Int): PostDetail {
         return TODO()
     }
 
-    fun getProjectTemplate(id: Int): ProjectTemplate {
+    fun getProjectTemplate(postId: Int): ProjectTemplate {
         return TODO()
     }
 
-    fun getGraphTemplate(id: Int, index: Int): GraphTemplate {
+    fun getGraphTemplate(postId: Int, index: Int): GraphTemplate {
         return TODO()
     }
 
     fun isServerCurrentlyReachable(): Boolean {
-        return TODO()
+        return api.connectionToServerPossible()
     }
 
-    fun login(email: String, password: String) {
-        TODO()
+    fun login(email: String, password: String) { //Todo erweiterbarkeit
+        api.signInUser(email, password, SignInTypes.EMAIL)
     }
 
-    fun signUp(email: String, password: String) {
-        TODO()
+    fun signUp(email: String, password: String) { //Todo erweiterbarkeit
+        api.registerUser(email, password, SignInTypes.EMAIL)
     }
 
-    //TODO("Robin changes")
     fun downloadProjectTemplate(id : Int) {
 
     }
 
-    //TODO("Robin changes")
     fun downloadGraphTemplate(projectId : Int, graphId : Int) {
 
     }

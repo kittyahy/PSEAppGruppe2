@@ -32,7 +32,7 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ad
 import kotlinx.coroutines.InternalCoroutinesApi
 
 class RepositoryViewModelAPI (appDataBase: AppDataBase, remoteDataSourceAPI: RemoteDataSourceAPI){
-    val serverHandler = ServerHandler(appDataBase)
+    val serverHandler = ServerHandler(appDataBase, remoteDataSourceAPI)
     @InternalCoroutinesApi
     val projectHandler = ProjectHandler(
         ProjectPreviewFlow(appDataBase.projectDataDAO().getAllProjectData()),
