@@ -14,7 +14,7 @@ class Table {
             val tableLayout: TableLayout = ArrayListLayout()
             val table: Table = ArrayListTable(tableLayout)
             for (column in columns) {
-                tableLayout.addColumn(column.dataType.representation)
+                tableLayout.addColumn(column.dataType.representation, "", "") //TODO insert actual values here
             }
             for (button in buttons) {
                 tableLayout.addUIElements(button.columnId, button.toDBEquivalent())

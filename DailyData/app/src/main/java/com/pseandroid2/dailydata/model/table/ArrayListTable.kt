@@ -52,8 +52,8 @@ class ArrayListTable(private var layout: TableLayout = ArrayListLayout()) : Tabl
         return result
     }
 
-    override fun addColumn(typeString: String, default: Any) {
-        layout.addColumn(typeString)
+    override fun addColumn(typeString: String, name: String, unit: String, default: Any) {
+        layout.addColumn(typeString, name, unit)
         for (row in table) {
             row.createCell(default)
         }
