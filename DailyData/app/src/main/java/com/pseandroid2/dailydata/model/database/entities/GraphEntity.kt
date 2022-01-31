@@ -21,7 +21,7 @@
 package com.pseandroid2.dailydata.model.database.entities
 
 import androidx.room.Entity
-import com.pseandroid2.dailydata.model.GraphType
+import com.pseandroid2.dailydata.model.graph.GraphType
 import com.pseandroid2.dailydata.model.project.Project
 
 @Entity(tableName = "graph", primaryKeys = ["id", "projectId"])

@@ -3,6 +3,7 @@ package com.pseandroid2.dailydata.model
 import com.pseandroid2.dailydata.model.table.ArrayListLayout
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.model.uielements.UIElementType
+import com.pseandroid2.dailydata.util.Quadruple
 import com.pseandroid2.dailydata.util.getSerializableClassName
 import org.junit.Assert.assertEquals
 import org.junit.BeforeClass
@@ -13,19 +14,23 @@ class LayoutTester {
 
     companion object {
         @JvmStatic
-        lateinit var layoutList: ArrayList<Pair<String, MutableList<UIElement>>>
+        lateinit var layoutList: ArrayList<Quadruple<String, String, String, MutableList<UIElement>>>
 
         @BeforeClass
         @JvmStatic
         fun classSetup() {
             layoutList = ArrayList(
                 mutableListOf(
-                    Pair(
+                    Quadruple(
                         String::class.getSerializableClassName(),
+                        "Test",
+                        "Test",
                         mutableListOf(UIElement(0, UIElementType.BUTTON, "Test", "0"))
                     ),
-                    Pair(
+                    Quadruple(
                         String::class.getSerializableClassName(),
+                        "Test",
+                        "Test",
                         mutableListOf(
                             UIElement(1, UIElementType.BUTTON, "Test", "0.0"),
                             UIElement(2, UIElementType.NUMBER_FIELD, "Test", "0.1")
@@ -42,7 +47,7 @@ class LayoutTester {
         for (i in layoutList.indices) {
             assertEquals(Class.forName(layoutList[i].first).kotlin, layout.getColumnType(i))
             for (j in layout.getUIElements(i).indices) {
-                assertEquals(layoutList[i].second[j], layout.getUIElements(i)[j])
+                assertEquals(layoutList[i].fourth[j], layout.getUIElements(i)[j])
             }
         }
     }

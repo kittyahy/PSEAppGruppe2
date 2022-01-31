@@ -25,6 +25,7 @@ import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.model.database.entities.RowEntity
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.model.users.NullUser
+import com.pseandroid2.dailydata.util.Quadruple
 import java.time.LocalDateTime
 import kotlin.reflect.KClass
 
@@ -44,13 +45,13 @@ interface Table {
 
     fun getColumn(col: Int): List<Any>
 
-    fun addColumn(typeString: String, default: Any)
+    fun addColumn(typeString: String, name: String, unit: String, default: Any)
 
     fun deleteColumn(col: Int)
 
 }
 
-interface TableLayout : Iterable<Pair<KClass<out Any>, List<UIElement>>> {
+interface TableLayout : Iterable<Quadruple<KClass<out Any>, String, String, List<UIElement>>> {
 
     companion object {
         @JvmStatic
@@ -66,9 +67,12 @@ interface TableLayout : Iterable<Pair<KClass<out Any>, List<UIElement>>> {
     fun getUIElements(col: Int): List<UIElement>
     fun addUIElements(col: Int, vararg elements: UIElement)
 
-    operator fun get(col: Int): Pair<KClass<out Any>, List<UIElement>>
+    fun getName(col: Int): String
+    fun getUnit(col: Int): String
 
-    fun addColumn(typeString: String)
+    operator fun get(col: Int): Quadruple<KClass<out Any>, String, String, List<UIElement>>
+
+    fun addColumn(typeString: String, name: String, unit: String)
 
     fun deleteColumn(col: Int)
 

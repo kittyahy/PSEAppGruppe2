@@ -40,6 +40,8 @@ class MapSettings(settings: Map<String, String> = mapOf()) : Settings {
     }
 
     override fun iterator(): Iterator<Pair<String, String>> = MapSettingsIterator(this)
+
+    override fun containsKey(key: String) = settings.contains(key)
 }
 
 class MapSettingsIterator(settings: MapSettings) : Iterator<Pair<String, String>> {
