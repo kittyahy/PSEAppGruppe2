@@ -7,8 +7,7 @@ import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOpti
 
 
 class FirebaseRegisterNewUser {
-
-    // NOTE: The test works but it got removed because every time a new email and password ist needed and we don't want to have to many test firebase accounts in our firebase-project
+    /* // NOTE: The test works but it got removed because every time a new email and password ist needed and we don't want to have to many test firebase accounts in our firebase-project
     @Test
     fun registerNewUser() {
         var email = "pseFan@student.kit.edu"
@@ -20,4 +19,5 @@ class FirebaseRegisterNewUser {
 
         //Assert.assertEquals(FirebaseReturnOptions.REGISTERED, fm.registerUserWithEmailAndPassword(email, password))
     }
+    */
 }
