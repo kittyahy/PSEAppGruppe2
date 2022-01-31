@@ -301,7 +301,7 @@ class RESTAPI {
      * @return Boolean: Did the server call succeed
      */
     fun demandOldData(projectID: Long, requestInfo: String, authToken: String): Boolean {
-        val call: Call<Boolean> = server.demandOldData(authToken, projectID, requestInfo)
+        val call: Call<Boolean> = server.demandOldData(token = authToken, projectID, requestInfo = requestInfo)
 
         return call.execute().body() ?: false
     }

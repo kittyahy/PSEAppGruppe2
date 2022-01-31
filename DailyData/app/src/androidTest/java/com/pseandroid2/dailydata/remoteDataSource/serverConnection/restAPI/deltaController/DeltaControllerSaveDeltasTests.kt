@@ -48,6 +48,7 @@ class DeltaControllerSaveDeltasTests {
         )
     }
 
+    /*
     @Test
     fun saveTenDeltas() {
         val projectCommands: MutableList<String> = mutableListOf()
@@ -82,7 +83,7 @@ class DeltaControllerSaveDeltasTests {
         val projectCommand = listOf("exceeds the upload limit")
         Assert.assertEquals(projectCommand, projectCommand)
     }
-
-     */
+    */
+    */
     //TODO Tests auskommentieren
 }

@@ -1,20 +1,15 @@
-package com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI.deltaController
+package com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI.fetchRequestController
 
-import android.util.Log
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
-import com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI.postController.RESTAPITests_PostsController_PostContent
-import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.Delta
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
 import org.junit.AfterClass
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import java.time.LocalDateTime
-import kotlin.collections.remove as remove
 
-class DeltaControllerGetDeltaTests {
+class FetchRequestControllerTests {
     private var restAPI: RESTAPI = RESTAPI()
     private lateinit var authToken: String
     private lateinit var authToken2: String
@@ -86,62 +81,26 @@ class DeltaControllerGetDeltaTests {
         }
     }
 
-    /*
+    @Test
+    fun demandOldData() {
+        Assert.assertTrue(restAPI.demandOldData(projectID, "request information", authToken))
+    }
 
     @Test
-    fun getDeltaFromServer() {
-        val downloadedDeltas = restAPI.getDelta(projectID, authToken) as MutableList<Delta>
-        Assert.assertNotEquals(0, downloadedDeltas.size)
+    fun getFetchRequests() {
+        var requestsToSend = mutableListOf<String>("request information 1", "request information 2")
+        Assert.assertTrue(restAPI.demandOldData(projectID, requestsToSend.elementAt(0), authToken))
+        Assert.assertTrue(restAPI.demandOldData(projectID, requestsToSend.elementAt(1), authToken))
 
-        var deltaFound = false
-        downloadedDeltas.forEach {
-            val command: String = it.projectCommand
+        val downloadedFetchRequests = restAPI.getFetchRequests(projectID, authToken2) // User 2 wants to receive the uploaded fetch requests
+        Assert.assertNotEquals(0, downloadedFetchRequests.size)
 
-            if (command == "projectCommand") {
-                deltaFound = true
-            }
+        downloadedFetchRequests.forEach {
+            requestsToSend.remove(it.requestInfo)
         }
-
-        Assert.assertTrue(deltaFound)
+        Assert.assertEquals(0, requestsToSend) // The send fetch requests from user1 were received by user2
     }
 
-    @Test
-    fun getDeltaWhenNoProjectMember() {
-        val downloadedDeltas = restAPI.getDelta(projectID, authToken2) as MutableList
-        Assert.assertEquals(0, downloadedDeltas.size)
-    }
-
-    @Test
-    fun getSameDeltaTwice() {
-        // User 3 should try to download the same delta twice (and it should work both times)
-        // Download the deltas for the first time
-        var downloadedDeltas = restAPI.getDelta(projectID, authToken3) as MutableList
-        Assert.assertNotEquals(0, downloadedDeltas.size)
-
-        var deltaFound = false
-        downloadedDeltas.forEach {
-            if (it.projectCommand == "\"projectCommand\"") {
-                deltaFound = true
-            }
-        }
-        Assert.assertTrue(deltaFound)
-
-        // Download deltas again
-        downloadedDeltas = restAPI.getDelta(projectID, authToken3) as MutableList
-        deltaFound = false
-        downloadedDeltas.forEach {
-            if (it.projectCommand == "\"projectCommand\"") {
-                deltaFound = true
-            }
-        }
-        Assert.assertTrue(deltaFound)
-    }
-
-    @Test
-    fun getRemoveTime() {
-        Assert.assertNotEquals(-1, restAPI.getRemoveTime(authToken))
-    }
-    */
-
-    //TODO Tests auskommentieren
+    // TODO: Test Ideas: 1. getFetchrequests from the same account who send them, 2.
+    
 }
