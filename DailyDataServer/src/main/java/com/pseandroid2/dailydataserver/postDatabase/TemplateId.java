@@ -49,7 +49,7 @@ public class TemplateId implements Serializable {
     public void setTemplateNumber(int templateNumber) {
         this.templateNumber = templateNumber;
     }
-  
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

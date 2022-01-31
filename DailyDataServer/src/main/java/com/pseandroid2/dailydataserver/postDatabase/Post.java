@@ -26,21 +26,22 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "Post_Table")
-public class Posts {
-    private @Id int postId;
+public class Post {
+    private @Id
+    int postId;
     private String postPreview;
     private String createdBy;
 
     private int templateIds;
 
-    public Posts(int postId, String postPreview, String createdBy) {
+    public Post(int postId, String postPreview, String createdBy) {
         this.postId = postId;
         this.postPreview = postPreview;
         this.createdBy = createdBy;
         templateIds = 0;
     }
 
-    public Posts() {
+    public Post() {
 
     }
 
@@ -78,7 +79,7 @@ public class Posts {
 
     @Override
     public String toString() {
-        return "Posts{" +
+        return "Post{" +
                 "postId=" + postId +
                 ", postPreview='" + postPreview + '\'' +
                 ", createdBy='" + createdBy + '\'' +
@@ -89,8 +90,8 @@ public class Posts {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Posts posts = (Posts) o;
-        return postId == posts.postId;
+        Post post = (Post) o;
+        return postId == post.postId;
     }
 
     @Override

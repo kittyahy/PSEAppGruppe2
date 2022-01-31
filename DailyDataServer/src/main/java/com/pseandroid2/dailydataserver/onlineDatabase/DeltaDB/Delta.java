@@ -19,48 +19,55 @@
 */
 package com.pseandroid2.dailydataserver.onlineDatabase.DeltaDB;
 
-import com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB.ProjectParticipants;
 
-import javax.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 
 /**
  * #TODO JavaDoc
  */
+@Getter
+@Setter
 @Entity
 @Table(name = "Delta_Table")
-@IdClass(DeltaID.class)
+
+@IdClass(value = DeltaID.class)
 public class Delta {
-    private @Id
+    @Id
+    private
     LocalDateTime addedToServer;
-    private @Id
+    @Id
+    private
     String user;
     private String projectCommand;
     private long project;
     private boolean isAdmin;
-
     private String requestedBy;
-    @OneToMany
-    private Set<ProjectParticipants> downloadedBy;
+
 
     /**
      * new Delta
      */
-    public Delta(String user,String projectCommand, long project, boolean isAdmin){
-        addedToServer = LocalDateTime.now();
+    public Delta(String user, String projectCommand, long project, boolean isAdmin) {
+        this.addedToServer = LocalDateTime.now();
         this.user = user;
         this.projectCommand = projectCommand;
         this.project = project;
         this.isAdmin = isAdmin;
-        requestedBy ="";
-        downloadedBy = new HashSet<>();
+        this.requestedBy = "";
     }
+
     /**
      * Old data
+     *
      * @param addedToServer
      * @param user
      * @param projectCommand
@@ -78,72 +85,10 @@ public class Delta {
     }
 
 
-
     public Delta() {
 
     }
 
-    public Set<ProjectParticipants> getDownloadedBy() {
-        return downloadedBy;
-    }
-
-    public void addDownloadedBy(ProjectParticipants participant) {
-        downloadedBy.add(participant);
-
-    }
-
-    public void setDownloadedBy(Set<ProjectParticipants> downloadedBy){
-        this.downloadedBy = downloadedBy;
-    }
-
-
-    public LocalDateTime getAddedToServer() {
-        return addedToServer;
-    }
-
-    public void setAddedToServer(LocalDateTime addedToServer) {
-        this.addedToServer = addedToServer;
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-    public String getProjectCommand() {
-        return projectCommand;
-    }
-
-    public void setProjectCommand(String projectCommand) {
-        this.projectCommand = projectCommand;
-    }
-
-    public long getProject() {
-        return project;
-    }
-
-    public void setProject(long project) {
-        this.project = project;
-    }
-
-    public String getRequestedBy() {
-        return requestedBy;
-    }
-
-    public void setRequestedBy(String requestedBy) {
-        this.requestedBy = requestedBy;
-    }
-
-    public boolean isAdmin() {
-        return isAdmin;
-    }
-
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -165,8 +110,9 @@ public class Delta {
                 ", user='" + user + '\'' +
                 ", projectCommand='" + projectCommand + '\'' +
                 ", project=" + project +
-                ", requestedBy='" + requestedBy + '\'' +
                 ", isAdmin=" + isAdmin +
+                ", requestedBy='" + requestedBy +
                 '}';
     }
+
 }

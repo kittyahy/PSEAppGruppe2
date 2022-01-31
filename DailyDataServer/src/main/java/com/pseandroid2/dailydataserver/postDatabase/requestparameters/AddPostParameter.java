@@ -38,12 +38,11 @@ public class AddPostParameter {
     /**
      * The parameters for addPost. Constructor.
      *
-     * @param token           the token, to verify the user (provided by the client)
      * @param postPreview     the postPreview for the post (provided by the client) first is the template, the second is the detailView.
      * @param projectTemplate the projectTemplate (provided by the client)
      * @param graphTemplates  all graphTemplates (provided by the client)
      */
-    public AddPostParameter(String token, String postPreview, Pair<String, String> projectTemplate, List<Pair<String, String>> graphTemplates) {
+    public AddPostParameter(String postPreview, Pair<String, String> projectTemplate, List<Pair<String, String>> graphTemplates) {
         this.postPreview = postPreview;
         this.projectTemplate = projectTemplate;
         this.graphTemplates = new ArrayList<>();

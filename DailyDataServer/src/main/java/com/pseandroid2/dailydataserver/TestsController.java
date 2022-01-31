@@ -19,32 +19,39 @@
 */
 package com.pseandroid2.dailydataserver;
 
+import com.pseandroid2.dailydataserver.postDatabase.requestparameters.AddPostParameter;
+import org.springframework.data.util.Pair;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * Controller to know if the server is available.
- * The client doesn't need to log in for access the controller
- */
 @RestController
-@RequestMapping(path = "/")
-public class GreetingController {
+@RequestMapping(path = "/test")
+public class TestsController {
 
-    private ServerGreetings serverGreetings;
+    @GetMapping("/token")
+    public String test(@RequestHeader String token) {
 
-    public GreetingController() {
-        this.serverGreetings = new ServerGreetings();
+        return "token";
     }
 
-    /**
-     * Returns a String with length, longer than 0, to make sure the server is available.
-     *
-     * @return greeting to signalise, the server is reachable.
-     */
-    @GetMapping("/greet")
-    public String greets() {
-        return serverGreetings.greeting();
+    @GetMapping("/username")
+    public String name(@RequestHeader String token, @RequestAttribute String user) {
+        return user;
     }
 
+    @GetMapping("/u")
+    public AddPostParameter para() {
+        Pair projectTemplate = Pair.of("projectTemplate", "project Preview");
+        Pair graphTemplate1 = Pair.of("graph Template 1", "graph Preview 1");
+        Pair graphTemplate2 = Pair.of("graph Template 2", "graph Preview 2");
+
+        List l = new ArrayList();
+        l.add(graphTemplate1);
+        l.add(graphTemplate2);
+
+        return new AddPostParameter("Postpreview", projectTemplate, l);
+    }
 
 }
