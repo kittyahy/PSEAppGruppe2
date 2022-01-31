@@ -29,7 +29,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -38,15 +38,15 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pseandroid2.dailydata.ui.composables.TopNavigationBar
 import com.pseandroid2.dailydata.util.ui.UiEvent
 import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.flow.collect
 
 @InternalCoroutinesApi
 @Composable
@@ -54,6 +54,9 @@ fun TemplatesScreen(
     onNavigate: (UiEvent.Navigate) -> Unit,
     viewModel: TemplatesScreenViewModel = hiltViewModel()
 ) {
+    var graphTemplates = viewModel.graphTemplates
+    var projectTemplates = viewModel.projectTemplates.collectAsState(initial = listOf())
+
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->
             when(event) {
@@ -73,33 +76,27 @@ fun TemplatesScreen(
         when(viewModel.tabs[viewModel.tab]) {
             TemplateTabs.GRAPHS -> {
                 LazyColumn {
-                    itemsIndexed(viewModel.graphTemplates) { index, template ->
-                        /*
+                    items(graphTemplates) { template ->
                         TemplatesCard(
                             title = template.title,
-                            image = painterResource(id = template.image),
+                            image = template.image.asImageBitmap(),
                             onIconClick = {
-                                viewModel.onEvent(TemplatesScreenEvent.OnGraphTemplateDelete(index))
+                                viewModel.onEvent(TemplatesScreenEvent.OnGraphTemplateDelete(template.id))
                             }
                         )
-
-                         */
                     }
                 }
             }
             TemplateTabs.PROJECTS -> {
                 LazyColumn {
-                    itemsIndexed(viewModel.projectTemplates) { index, template ->
-                        /*
+                    items(projectTemplates.value) { template ->
                         TemplatesCard(
-                            title = template.title,
-                            image = painterResource(id = template.image),
+                            title = template.titel,
+                            image = template.image.asImageBitmap(),
                             onIconClick = {
-                                viewModel.onEvent(TemplatesScreenEvent.OnProjectTemplateDelete(index))
+                                viewModel.onEvent(TemplatesScreenEvent.OnProjectTemplateDelete(template.id))
                             }
                         )
-
-                         */
                     }
                 }
             }
@@ -110,7 +107,7 @@ fun TemplatesScreen(
 @Composable
 fun TemplatesCard(
     title : String,
-    image : Painter,
+    image : ImageBitmap,
     onIconClick : () -> Unit
 ) {
     Card(
@@ -126,7 +123,7 @@ fun TemplatesCard(
         ){
 
             Image(
-                painter = image,
+                bitmap = image,
                 contentDescription = "Text 2",
                 modifier = Modifier
                     .fillMaxWidth()

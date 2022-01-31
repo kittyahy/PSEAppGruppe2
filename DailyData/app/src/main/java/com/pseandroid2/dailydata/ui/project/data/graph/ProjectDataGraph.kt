@@ -34,6 +34,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -73,7 +76,8 @@ fun ProjectDataGraphScreen(
     LazyColumn {
         itemsIndexed(viewModel.graphs) { index, graph ->
             Image(
-                painter = TODO("Repository change to something reliable"),//graph.image,
+                //useResource("image.png") { loadImageBitmap(it) }
+                bitmap = graph.image.asImageBitmap(),
                 contentDescription = "",
                 modifier = Modifier
                     .fillMaxWidth()
@@ -96,8 +100,7 @@ fun ProjectGraphDialog(
         Column(
             modifier = Modifier.width(300.dp)
         ) {
-            var type = graph.typeName //TODO("Repository change to Enum and not list of string")
-            when(graph) {
+           when(graph) {
                 is LineChart -> {
                     LineChartDialog(
                         onDismissRequest = onDismissRequest,
@@ -124,8 +127,9 @@ fun PieChartDialog(
     table : List<Column>
 ) {
     Column() {
+        //useResource("image.png") { loadImageBitmap(it) }
         Image(
-            painter = painterResource(id = R.drawable.chart),
+            bitmap = graph.image.asImageBitmap(),
             contentDescription = "",
             modifier = Modifier.fillMaxWidth()
         )
@@ -147,7 +151,7 @@ fun PieChartDialog(
                             modifier = Modifier
                                 .size((25.dp))
                                 .clip(CircleShape)
-                                .background(color = Color.Green) //TODO(Repository change color to int) color = Color(graph.colors[index])
+                                .background(color = Color(graph.color[index]))
                         )
                     }
                     Text(text = column.name)
@@ -164,14 +168,14 @@ fun PieChartDialog(
             verticalAlignment = Alignment.CenterVertically
         ) {
             var suggestions = table.map { it.name }
-            var col by  remember { mutableStateOf( suggestions.first() ) }
+            var col by  remember { mutableStateOf( 0 ) }
             EnumDropDownMenu(
                 suggestions = suggestions,
-                value = col,
-                onClick = { col = suggestions[it] }
+                value = suggestions[col],
+                onClick = { col = it }
             )
             TextButton(onClick = {
-                TODO("Repository addMapping")
+                graph.addMapping(column = table[col])
             }) {
                 Text(text = "Add Column")
             }
@@ -180,7 +184,7 @@ fun PieChartDialog(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Checkbox(checked = graph.showPercentages, onCheckedChange = {
-                TODO("Repository showPercentages")
+                graph.showPercentages(show = it)
             })
             Text(text = "Show Percentages")
         }
@@ -216,6 +220,9 @@ fun LineChartDialog(
                     imageVector = Icons.Default.Delete,
                     contentDescription = "",
                     tint = MaterialTheme.colors.onBackground,
+                    modifier = Modifier.clickable {
+                        graph.deleteVerticalMapping(index = index)
+                    }
                 )
             }
         }
@@ -224,14 +231,14 @@ fun LineChartDialog(
             verticalAlignment = Alignment.CenterVertically
         ) {
             var suggestions = table.map { it.name }
-            var col by  remember { mutableStateOf( suggestions.first() ) }
+            var col by  remember { mutableStateOf( 0 ) }
             EnumDropDownMenu(
                 suggestions = suggestions,
-                value = col,
-                onClick = { col = suggestions[it] }
+                value = suggestions[col],
+                onClick = { col = it }
             )
             TextButton(onClick = {
-                TODO("Repository addVerticalMapping")
+                graph.addVerticalMapping(column = table[col])
             }) {
                 Text(text = "Add Column")
             }
@@ -240,33 +247,33 @@ fun LineChartDialog(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(text = "Dot Size")
-            var suggestions = DotSize.values().map { it.name } //TODO(Repository add dot size strings)
+            var suggestions = DotSize.values().map { it.representation }
             EnumDropDownMenu(
                 suggestions = suggestions,
-                value = graph.dotSize.name,
-                onClick = { TODO("Repository change dot size") }
+                value = graph.dotSize.representation,
+                onClick = { graph.changeDotSize(dotSize = DotSize.values()[it]) }
             )
         }
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(text = "Dot Color")
-            var suggestions = Wallpapers.values().map { it.representation } //TODO(Repository maybe different colors)
+            var suggestions = Wallpapers.values().map { it.representation }
             EnumDropDownMenu(
                 suggestions = suggestions,
                 value = graph.dotColor.toString(),
-                onClick = { TODO("Repository change dot color") }
+                onClick = { graph.changeDotColor(color = Wallpapers.values()[it].value.toArgb()) }
             )
         }
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(text = "Line Type")
-            var suggestions = LineType.values().map { it.name } //TODO(Repository add line type strings)
+            var suggestions = LineType.values().map { it.representation }
             EnumDropDownMenu(
                 suggestions = suggestions,
-                value = graph.lineType.name,
-                onClick = { TODO("Repository change line type") }
+                value = graph.lineType.representation,
+                onClick = { graph.changeLineType(LineType.values()[it]) }
             )
         }
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {

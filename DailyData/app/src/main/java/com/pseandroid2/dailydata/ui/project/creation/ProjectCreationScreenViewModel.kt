@@ -85,7 +85,13 @@ class ProjectCreationScreenViewModel @Inject constructor(
         if(id != -1) {
             viewModelScope.launch {
                 var template = repository.serverHandler.getProjectTemplate(id = id)
-                //TODO(get values of template)
+                title = template.titel
+                description = template.description
+                wallpaper = Color(template.wallpaper)
+                table = template.table
+                buttons = template.buttons
+                notifications = template.notifications
+                graphs = template.graphTemplates.map { Graph.createFromTemplate(it) }
             }
         }
     }
@@ -136,7 +142,7 @@ class ProjectCreationScreenViewModel @Inject constructor(
             }
             is ProjectCreationEvent.OnNotificationAdd -> {
                 var mutable = notifications.toMutableList()
-                mutable.add(Notification(id = 0, message = event.message, time = event.time, notificationsDAO = TODO("Anton das ist Müll"), projectID = 0))
+                mutable.add(Notification(id = 0, message = event.message, time = event.time))
                 notifications = mutable.toList()
             }
             is ProjectCreationEvent.OnNotificationRemove -> {

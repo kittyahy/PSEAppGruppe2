@@ -20,14 +20,15 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 
 class LineChart(
     override val id: Int,
-    override val image: Drawable,
+    override val image: Bitmap,
     val dotSize: DotSize,
-    val dotColor: Color,
+    val dotColor: Int,
     val lineType: LineType,
     val mappingVertical: List<Column>
 ): Graph() {
@@ -40,5 +41,30 @@ class LineChart(
     //@throws IllegalOperationException
     override suspend fun delete() {
         TODO("Not yet implemented")
+    }
+
+    //TODO("Robin changes")
+    fun addVerticalMapping(column: Column) {
+
+    }
+
+    //TODO("Robin changes")
+    fun deleteVerticalMapping(index : Int) {
+
+    }
+
+    //TODO("Robin changes")
+    fun changeDotSize(dotSize: DotSize) {
+
+    }
+
+    //TODO("Robin changes")
+    fun changeDotColor(color : Int) {
+
+    }
+
+    //TODO("Robin changes")
+    fun changeLineType(lineType: LineType) {
+
     }
 }

@@ -44,6 +44,11 @@ class Project(
     var members: List<Member> = ArrayList<Member>()
 ): Identifiable() {
     val scope = CoroutineScope(Dispatchers.IO)
+
+    //TODO("Robin Changes")
+    fun createLink() : String {
+        TODO()
+    }
     fun update(graphEntity: GraphEntity) {
         TODO("not yet implemented")
     }
@@ -59,6 +64,11 @@ class Project(
     //Todo nothing mit typ für settings ersetzen
     fun update(settings: Nothing) {
         TODO("not yet implemented")
+    }
+
+    //TODO("Robin changes")
+    fun addGraph(graph : Graph) {
+
     }
 
     fun addRowIsPossible(): Boolean {
@@ -99,6 +109,18 @@ class Project(
         } else {
             throw IllegalOperationException()
         }
+    }
+
+    //TODO("Robin changes")
+    //@throws IllegalOperationException
+    fun addButton(button: Button) {
+        TODO()
+    }
+
+    //TODO("Robin changes")
+    //@throws IllegalOperationException
+    fun deleteButton(button: Button) {
+        TODO()
     }
 
     override fun deleteIsPossible(): Boolean {
@@ -158,7 +180,8 @@ class Project(
         TODO()
     }
 
-    fun setWallpaper(image: Bitmap) {
+    //TODO("Robin changes")
+    fun changeWallpaper(image: Int) {
         TODO()
     }
 
@@ -168,6 +191,11 @@ class Project(
 
     fun deleteNotification(notification: Notification) {
         scope.launch { notification.delete() }
+    }
+
+    //TODO("Robin changes")
+    fun addNotification(notification: Notification) {
+
     }
 
     fun setName(name: String) {

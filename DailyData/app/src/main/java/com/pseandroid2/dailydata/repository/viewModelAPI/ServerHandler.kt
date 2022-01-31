@@ -49,12 +49,22 @@ class ServerHandler(appDataBase: AppDataBase) {
         return TODO()
     }
 
-    fun login(username: String, password: String) {
+    fun login(email: String, password: String) {
         TODO()
     }
 
-    fun signUp(username: String, password: String) {
+    fun signUp(email: String, password: String) {
         TODO()
+    }
+
+    //TODO("Robin changes")
+    fun downloadProjectTemplate(id : Int) {
+
+    }
+
+    //TODO("Robin changes")
+    fun downloadGraphTemplate(projectId : Int, graphId : Int) {
+
     }
 
 }

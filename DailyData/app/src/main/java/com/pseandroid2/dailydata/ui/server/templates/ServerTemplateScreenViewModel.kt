@@ -25,24 +25,25 @@ class ServerTemplateScreenViewModel @Inject constructor(
         private set
     var isProjectTemplateDialogOpen by mutableStateOf(false)
         private set
-    var projectTemplateIndex by mutableStateOf(0)
+    var dialogTemplateIndex by mutableStateOf(0 )
         private set
 
     fun onEvent(event : ServerTemplateScreenEvent) {
         when (event) {
             is ServerTemplateScreenEvent.OnGraphTemplateDownload -> {
-                var mutable = graphTemplates.toMutableList()
-                mutable.removeAt(index = event.index)
-                graphTemplates = mutable.toList()
+                repository.serverHandler.downloadGraphTemplate(event.projectId, event.graphId)
+                isProjectTemplateDialogOpen = false
+                dialogTemplateIndex = 0
             }
-            is ServerTemplateScreenEvent.OnProjectTemplateDownload -> {
-                var mutable = projectTemplates.toMutableList()
-                mutable.removeAt(index = event.index)
-                projectTemplates = mutable.toList()
+            is ServerTemplateScreenEvent.OnCloseDialog -> {
+                isProjectTemplateDialogOpen = false
             }
-            is ServerTemplateScreenEvent.OnShowProjectTemplateDialog -> {
-                isProjectTemplateDialogOpen = event.isOpen
-                projectTemplateIndex = event.index
+            is ServerTemplateScreenEvent.OnShowDialog -> {
+                isProjectTemplateDialogOpen = true
+                dialogTemplateIndex = event.index
+            }
+            is ServerTemplateScreenEvent.OnTemplateDownload -> {
+                repository.serverHandler.downloadProjectTemplate(id = event.id)
             }
         }
     }

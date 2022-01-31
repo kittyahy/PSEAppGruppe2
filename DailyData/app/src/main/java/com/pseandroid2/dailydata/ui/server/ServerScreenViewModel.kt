@@ -39,7 +39,7 @@ class ServerScreenViewModel @Inject constructor() : ViewModel() {
         private set
 
     fun onEvent(event : ServerScreenEvent) {
-        TODO("Repository check if user is currently logged in")
+        //TODO("Repository check if user is currently logged in")
         when (event) {
 
         }

@@ -20,13 +20,12 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
-import android.graphics.Color
-import android.graphics.drawable.Drawable
+import android.graphics.Bitmap
 
 class PieChart(
     override val id: Int,
-    override val image: Drawable,
-    val color: List<Color>,
+    override val image: Bitmap,
+    val color: List<Int>, //TODO("Robin changes")
     val mapping: List<Column>,
     val showPercentages: Boolean
 ): Graph() {
@@ -40,4 +39,25 @@ class PieChart(
     override suspend fun delete() {
         TODO("Not yet implemented")
     }
+
+    //TODO("Robin changes")
+    fun addMapping(color : Int, column : Column) {
+
+    }
+
+    //TODO("Robin changes")
+    fun addMapping(column : Column) {
+        addMapping(PieChartColors.ORANGE.value.toInt(), column = column)
+    }
+
+    //TODO("Robin changes")
+    fun showPercentages(show : Boolean) {
+
+    }
+}
+
+enum class PieChartColors(val value: Long, val representation: String) {
+    ORANGE(0xFFF57C00, "Orange"),
+    GREEN(0xFF388E3C, "Green"),
+    BLUE(0xFF2196F3, "Blue")
 }

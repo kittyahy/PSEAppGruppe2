@@ -20,9 +20,10 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
-enum class DotSize {
-    SMALL,
-    MEDIUM,
-    BIG
+//TODO("Robin changes")
+enum class DotSize(val representation : String) {
+    SMALL("Small"),
+    MEDIUM("Medium"),
+    BIG("Big")
     //Todo Fields
 }

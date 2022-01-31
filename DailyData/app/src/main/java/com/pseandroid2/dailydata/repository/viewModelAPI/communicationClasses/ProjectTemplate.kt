@@ -20,7 +20,21 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
-class ProjectTemplate : Identifiable(){
+
+import android.graphics.Bitmap
+
+//TODO("Robin changes")
+class ProjectTemplate(
+    var titel : String,
+    var description : String,
+    var wallpaper : Int,
+    var table : List<Column>,
+    var buttons : List<Button>,
+    var notifications : List<Notification>,
+    var graphTemplates: List<GraphTemplate>,
+    var image : Bitmap
+) : Identifiable{
+
     override val id: Int
         get() = TODO("Not yet implemented")
 

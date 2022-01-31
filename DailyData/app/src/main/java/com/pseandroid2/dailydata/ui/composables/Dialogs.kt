@@ -18,7 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ProjectTemplate
@@ -30,12 +30,10 @@ fun ProjectTemplateDialog(
     onIconClick: (Int) -> Unit,
     template : ProjectTemplate
 ) {
-/*
     if(isOpen) {
         Dialog(
             onDismissRequest = onDismissRequest
         ) {
-
             Surface(
                 shape = RoundedCornerShape(5.dp),
                 color = MaterialTheme.colors.background,
@@ -47,12 +45,10 @@ fun ProjectTemplateDialog(
                             modifier = Modifier.padding(10.dp),
                             verticalArrangement = Arrangement.spacedBy(5.dp)
                         ){
-
                             Image(
-                                painter = painterResource(id = graphTemplate.image),
-                                contentDescription = "Text 2",
-                                modifier = Modifier
-                                    .fillMaxWidth()
+                                bitmap = graphTemplate.image.asImageBitmap(),
+                                contentDescription = "",
+                                modifier = Modifier.fillMaxWidth()
                             )
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
@@ -71,6 +67,4 @@ fun ProjectTemplateDialog(
             }
         }
     }
-
- */
 }

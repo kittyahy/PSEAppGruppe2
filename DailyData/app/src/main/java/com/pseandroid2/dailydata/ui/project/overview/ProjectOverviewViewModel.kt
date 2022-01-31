@@ -37,11 +37,11 @@ import javax.inject.Inject
 @InternalCoroutinesApi
 @HiltViewModel
 class ProjectOverviewViewModel @Inject constructor(
-    private val repository: RepositoryViewModelAPI
+    val repository: RepositoryViewModelAPI
 ): ViewModel() {
 
     val projects = repository.projectHandler.projectPreviewFlow.flow
-    val templates = repository.projectHandler.projectTemplateFlow //TODO("Repository add functionality")
+    val templates = repository.projectHandler.projectTemplateFlow.flow
 
     var isTemplateDialogOpen by mutableStateOf(false)
         private set

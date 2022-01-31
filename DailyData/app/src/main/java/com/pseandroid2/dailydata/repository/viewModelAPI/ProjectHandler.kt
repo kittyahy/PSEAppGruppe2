@@ -102,4 +102,14 @@ class ProjectHandler(
     fun getProjectTemplateByID() {
         TODO()
     }
+
+    //TODO("Robin changes")
+    fun deleteProjectTemplate(id : Int) {
+
+    }
+
+    //TODO("Robin changes")
+    fun deleteGraphTemplate(id : Int) {
+
+    }
 }
