@@ -48,12 +48,19 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = request.getHeader("token"); //da der Token jetzt in den Header kommt.
+//only for test: name als Header falls ein bestimmter usergebraucht ist
+        if(token.equals("MeinToken")){
+            request.setAttribute("user", request.getHeader("name"));
+            return HandlerInterceptor.super.preHandle(request, response, handler);
+        }
+        //Ende Test workaround
 
+        
         // Firebase token authentication
         String userID = firebaseManager.getUserIDFromToken(token);
         log.info(userID);
         // Update attribute with the computed UserID
-        request.setAttribute("name", userID);
+        request.setAttribute("user", userID);
 
         return HandlerInterceptor.super.preHandle(request, response, handler);
     }

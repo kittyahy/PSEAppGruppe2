@@ -39,15 +39,14 @@ import java.util.SortedSet
 import java.util.TreeSet
 
 class ProjectCDManager(
-    private val projectDAO: ProjectDataDAO,
-    private val templateDAO: TemplateDAO,
-    private val uiDAO: UIElementDAO,
-    private val notifDAO: NotificationsDAO,
-    private val graphDAO: GraphDAO,
-    private val graphManager: GraphCDManager,
     private val db: AppDataBase
 ) {
-
+    private val projectDAO: ProjectDataDAO = db.projectDataDAO()
+    private val templateDAO: TemplateDAO = db.templateDAO()
+    private val uiDAO: UIElementDAO = db.uiElementDAO()
+    private val notifDAO: NotificationsDAO = db.notificationsDAO()
+    private val graphDAO: GraphDAO = db.graphDAO()
+    private val graphManager: GraphCDManager = db.graphCDManager()
     private val existingIds: SortedSet<Int> = TreeSet()
 
     /**

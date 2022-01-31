@@ -19,10 +19,17 @@
 */
 package com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB;
 
-import javax.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "Project_Table")
 public class Project {
@@ -30,40 +37,25 @@ public class Project {
     long projectId;
     private LocalDateTime lastUpdated;
     private int participantId;
+    private String projectInfo;
 
-    public Project(long projectId) {
+
+    public Project(long projectId, String projectInfo) {
         this.projectId = projectId;
         this.lastUpdated = LocalDateTime.now();
-        participantId = 1;
+        this.participantId = 1;
+        this.projectInfo = projectInfo;
     }
 
     public Project() {
-
     }
 
-    public int getParticipantId() {
-        return participantId;
-    }
+
 
     public void addParticipant() {
-        participantId++;
+        this.participantId++;
     }
 
-    public long getProjectId() {
-        return projectId;
-    }
-
-    public void setProjectId(long projectId) {
-        this.projectId = projectId;
-    }
-
-    public LocalDateTime getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(LocalDateTime lastUpdated) {
-        this.lastUpdated = lastUpdated;
-    }
 
     @Override
     public String toString() {

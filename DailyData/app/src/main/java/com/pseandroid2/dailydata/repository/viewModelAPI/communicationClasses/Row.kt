@@ -31,7 +31,7 @@ import java.time.LocalDateTime
 class Row(
     override val id: Int,
     val elements: List<String>
-): Identifiable, Convertible<Row> {
+): Identifiable(), Convertible<Row> {
     override fun deleteIsPossible(): Boolean {
         TODO("Not yet implemented")
     }

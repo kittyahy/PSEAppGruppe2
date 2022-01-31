@@ -45,10 +45,10 @@ public class PostService {
      * @return PostPreviews
      */
     List<PostPreview> getAllPostPreview() {
-        List<Posts> postList = postRepo.findAll();
+        List<Post> postList = postRepo.findAll();
         List<PostPreview> returnList = new ArrayList<>();
 
-        for (Posts post : postList) {
+        for (Post post : postList) {
             returnList.add(
                     new PostPreview(post.getPostId(), post.getPostPreview()));
         }
@@ -56,7 +56,10 @@ public class PostService {
     }
 
     public int addPost(String postPreview, Pair<String, String> projectTemplate, List<Pair<String, String>> graphTemplates, String user) {
-        Posts post = new Posts(postId, postPreview, user);
+        if(postRepo.countByCreatedBy(user) >= MAX_POSTS){
+            return 0;
+        }
+        Post post = new Post(postId, postPreview, user);
         postRepo.save(post);
         postId++;
         Template t = new Template(post.getPostId(), post.getTemplateIds(), projectTemplate.getFirst(), true, projectTemplate.getSecond());
@@ -79,7 +82,7 @@ public class PostService {
     }
 
     public List<TemplateDetail> getTemplateDetailsAndID(int post) {
-        Posts recommendedPost = postRepo.findById(post).get();
+        Post recommendedPost = postRepo.findById(post).get();
         //#TODO sanctity check
 
         List<Template> templatesFromPost = new ArrayList<>(tempRepo.findByPost(recommendedPost.getPostId()));

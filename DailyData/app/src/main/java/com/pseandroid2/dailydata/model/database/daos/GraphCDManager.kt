@@ -20,6 +20,7 @@
 
 package com.pseandroid2.dailydata.model.database.daos
 
+import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.model.database.entities.GraphEntity
 import com.pseandroid2.dailydata.model.database.entities.GraphTemplateEntity
 import com.pseandroid2.dailydata.model.graph.Graph
@@ -28,14 +29,14 @@ import com.pseandroid2.dailydata.util.SortedIntListUtil
 import java.util.TreeSet
 
 class GraphCDManager(
-    private val graphDAO: GraphDAO,
-    private val templateDAO: TemplateDAO,
-    private val settingsDAO: SettingsDAO
+    private val appDataBase: AppDataBase
 ) {
     companion object {
         const val TEMPLATE_SETTINGS_PROJ_ID = -1
     }
-
+    private val graphDAO: GraphDAO = appDataBase.graphDAO()
+    private val templateDAO: TemplateDAO = appDataBase.templateDAO()
+    private val settingsDAO: SettingsDAO = appDataBase.settingsDAO()
     private val existingGraphIds: MutableMap<Int, TreeSet<Int>> =
         mutableMapOf<Int, TreeSet<Int>>()
     private val existingTemplateIds: TreeSet<Int> = sortedSetOf()

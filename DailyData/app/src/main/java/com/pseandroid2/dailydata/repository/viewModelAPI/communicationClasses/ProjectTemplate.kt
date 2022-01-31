@@ -20,7 +20,7 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
-class ProjectTemplate : Identifiable{
+class ProjectTemplate : Identifiable(){
     override val id: Int
         get() = TODO("Not yet implemented")
 
@@ -32,4 +32,7 @@ class ProjectTemplate : Identifiable{
         TODO("Not yet implemented")
     }
     //TODO Implementierung
+    fun toProject(): Project {
+        TODO()
+    }
 }

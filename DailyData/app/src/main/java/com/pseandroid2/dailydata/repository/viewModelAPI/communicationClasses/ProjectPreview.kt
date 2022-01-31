@@ -26,7 +26,7 @@ class ProjectPreview(
     override val id: Int,
     val name: String,
     val image: String
-): Identifiable {
+): Identifiable() {
     constructor(projectData: ProjectData) : this(projectData.id, projectData.name, projectData.wallpaper)
     //@throws IllegalOperationException
     override suspend fun delete() {
