@@ -23,22 +23,38 @@ import com.pseandroid2.dailydataserver.postDatabase.Response.PostPreview;
 import com.pseandroid2.dailydataserver.postDatabase.Response.TemplateDetail;
 import com.pseandroid2.dailydataserver.postDatabase.requestparameters.AddPostParameter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 
 /**
- * Interface for all interaction for Post
+ * Controller, which provides all methods for posts.
+ * <p>
+ * The client my call those methods and get the recommended Data or can publish them
+ * <p>
+ * This controller is the interface for all interaction which belongs to posts.
  */
 @RestController
 @RequestMapping("/Posts")
 public class PostsController {
 
     @Autowired
-    private PostService service;
+    private final PostService service;
 
 
+    /**
+     * the Constructor for the PostsController
+     *
+     * @param service the post service, which contains the logic for the methods.
+     */
     public PostsController(PostService service) {
         this.service = service;
     }
@@ -46,7 +62,7 @@ public class PostsController {
     /**
      * Provides all PostsPreviews with their PostIds.
      *
-     * @return a list with all PostPreview and the Post ids.
+     * @return a list with PostPreview, which contains postPreviews and the Post ids.
      */
     @GetMapping("/allPreview")
     public List<PostPreview> getAllPostPreview() {
@@ -54,10 +70,11 @@ public class PostsController {
     }
 
     /**
-     * Provides all Templates detail view from fromPost. Returns the identifier and the DetailView from a template
+     * Provides all Templates details from fromPost. Returns the identifier and the DetailView from a template.
+     * For every template is declared if it's a project template or not.
      *
-     * @param fromPost declares from which post the postDetail is recommended (provided by the client)
-     * @return a list of all template detailViews with TemplateNumber together, each as String.
+     * @param fromPost declares from which post the postDetail is recommended.
+     * @return a list of the template Details.
      */
     @GetMapping("/detail/{post}")
     public List<TemplateDetail> getPostDetail(@PathVariable("post") int fromPost) {
@@ -74,28 +91,26 @@ public class PostsController {
     @GetMapping("/{post}/projectTemplate")
     public String getProjectTemplate(@PathVariable("post") int fromPost) {
         return service.getProjectTemplate(fromPost);
-        //checkt nicht, ob es das gibt
     }
 
     /**
-     * Provides a specified GraphTemplate.
+     * Provides a specified GraphTemplate from a specified post.
      *
-     * @param fromPost       declares from which project the graph template is recommended (provided by the client)
-     * @param templateNumber declares which template is recommended (provided by the client)
-     * @return the GrapgTemplate as JSON
+     * @param fromPost       declares from which project the graph template is recommended.
+     * @param templateNumber declares which template is recommended.
+     * @return the GraphTemplate as JSON
      */
     @GetMapping("/{post}/{template}")
     public String getGraphTemplate(@PathVariable("post") int fromPost, @PathVariable("template") int templateNumber) {
         return service.getGraphTemplate(fromPost, templateNumber);
-        //checkt nicht, ob es das gibt
-
     }
 
     /**
-     * adds a new Post. If there is more than 5 from the same user, have to delete the oldest one.
+     * Adds a new Post. If there is more than allowed from the same user, they can not create a new one.
      *
-     * @param params the data, which are recommended to add a new post. {@link AddPostParameter} specifies this parameter.
-     * @return the postID of the new post or 0 if the user has to much posts and can't add a new one.
+     * @param params the data, which are recommended to add a new post. {@link AddPostParameter} specifies this
+     *               parameter.
+     * @return the postID of the new post or 0 if the user has too many posts and can't add a new one.
      */
     @PostMapping("/add")
     public int addPost(@RequestAttribute String user, @RequestBody AddPostParameter params) {
@@ -103,14 +118,15 @@ public class PostsController {
         if (service.checkPostAmount(user)) {
             return 0;
         } else {
-            return service.addPost(params.getPostPreview(), params.getProjectTemplate(), params.getGraphTemplates(), user);
+            return service.addPost(params.getPostPreview(), params.getProjectTemplate(), params.getGraphTemplates(),
+                    user);
         }
     }
 
     /**
      * Removes a post if the user is allowed to remove it.
      *
-     * @param user   the user, who wants to remove a post. Generated by the client.
+     * @param user   the user, who wants to remove a post.
      * @param postID which Post should be removed.
      * @return if the post could be removed.
      */
