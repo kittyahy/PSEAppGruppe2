@@ -48,7 +48,7 @@ public class ProjectParticipantsController {
      * @return false, if the project is full or the user can not participate.
      */
     @PostMapping("/addUser/{id}")
-    public boolean addUser(@RequestAttribute String user, @PathVariable("id") long projectId) {
+    public String addUser(@RequestAttribute String user, @PathVariable("id") long projectId) {
         return service.addUser(user, projectId);
     }
 
@@ -77,8 +77,8 @@ public class ProjectParticipantsController {
      * @return the projectId for the new project.
      */
     @PostMapping("/newProject")
-    public long addProject(@RequestAttribute String user) {
-        return service.addProject(user);
+    public long addProject(@RequestAttribute String user,@RequestBody String projectDetails){
+        return service.addProject(user,projectDetails);
     }
 
     /**
