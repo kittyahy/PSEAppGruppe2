@@ -45,6 +45,11 @@ public class AccessToProjectInterceptor implements HandlerInterceptor {
     @Autowired
     private ProjectParticipantsRepository repo;
 
+    /**
+     * The Constructor fpr AccessToProjectInterceptor.
+     *
+     * @param repo the repository, which handles, which user participates in which project
+     */
     public AccessToProjectInterceptor(ProjectParticipantsRepository repo) { //muss nicht übergeben werden.
         this.repo = repo;
     }

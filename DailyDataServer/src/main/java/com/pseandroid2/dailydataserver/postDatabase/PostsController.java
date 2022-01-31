@@ -79,7 +79,7 @@ public class PostsController {
     @GetMapping("/detail/{post}")
     public List<TemplateDetail> getPostDetail(@PathVariable("post") int fromPost) {
 
-        return service.getTemplateDetailsAndID(fromPost);
+        return service.getTemplateDetails(fromPost);
     }
 
     /**

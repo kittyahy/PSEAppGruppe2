@@ -60,11 +60,12 @@ public class FetchRequestController {
      * @param projectID   the project to which the request belongs.
      * @param requestInfo all information, which are necessary to save a fetchRequest, and another participant needs
      *                    to provide the right Deltas.
+     * @return if the a new fetch requests was created
      */
     @PostMapping(value = "/need/{id}")
-    public void demandOldData(@RequestAttribute String user, @PathVariable(value = "id") long projectID,
-                              @RequestBody String requestInfo) {
-        service.createFetchRequest(projectID, user, requestInfo);
+    public boolean demandOldData(@RequestAttribute String user, @PathVariable(value = "id") long projectID,
+                                 @RequestBody String requestInfo) {
+        return service.createFetchRequest(projectID, user, requestInfo);
     }
 
     /**
