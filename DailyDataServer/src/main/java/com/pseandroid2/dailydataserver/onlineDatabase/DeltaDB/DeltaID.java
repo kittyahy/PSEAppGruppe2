@@ -24,15 +24,26 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
- * #TODO JavaDoc
+ * The primary key for a Delta
+ * <p>
+ * Defines, who the primary key of Deltas needs to be handled.
  */
 public class DeltaID implements Serializable {
     private LocalDateTime addedToServer;
     private String user;
 
+    /**
+     * Recommended empty Constructor
+     */
     public DeltaID() {
     }
 
+    /**
+     * The constructor, to create a new valid Delta Id.
+     *
+     * @param addedToServer the time a Delta was initially added to the server.
+     * @param user          the user, which added the Delta.
+     */
     public DeltaID(LocalDateTime addedToServer, String user) {
         this.addedToServer = addedToServer;
         this.user = user;
@@ -52,4 +63,11 @@ public class DeltaID implements Serializable {
         return Objects.hash(addedToServer, user);
     }
 
+    @Override
+    public String toString() {
+        return "DeltaID{" +
+                "addedToServer=" + addedToServer +
+                ", user='" + user + '\'' +
+                '}';
+    }
 }

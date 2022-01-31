@@ -19,7 +19,7 @@
 */
 package com.pseandroid2.dailydataserver.onlineDatabase;
 
-import com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB.ProjectParticipantsID;
+import com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB.ProjectParticipantID;
 import com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB.ProjectParticipantsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -60,7 +60,7 @@ public class AccessToProjectInterceptor implements HandlerInterceptor {
         String projectIDString = pathVariables.get("id").toString();
 
         long projectId = Long.parseLong(projectIDString);
-        if (!repo.existsById(new ProjectParticipantsID(user, projectId))) {
+        if (!repo.existsById(new ProjectParticipantID(user, projectId))) {
             System.out.println("Decliend");
             return false;
         }

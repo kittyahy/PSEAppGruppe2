@@ -21,8 +21,8 @@ package com.pseandroid2.dailydataserver.onlineDatabase;
 
 import com.pseandroid2.dailydataserver.onlineDatabase.DeltaDB.Delta;
 import com.pseandroid2.dailydataserver.onlineDatabase.DeltaDB.DeltaRepository;
-import com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB.ProjectParticipants;
-import com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB.ProjectParticipantsID;
+import com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB.ProjectParticipant;
+import com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB.ProjectParticipantID;
 import com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB.ProjectParticipantsRepository;
 import com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB.ProjectRepository;
 import com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB.Role;
@@ -69,7 +69,7 @@ public class DeltaOrganisationService {
         if (projectCommand.getBytes().length > MAX_COMMAND_SIZE) {
             return false;
         }
-        ProjectParticipants participant = ppRepo.findById(new ProjectParticipantsID(user, projectID)).get();
+        ProjectParticipant participant = ppRepo.findById(new ProjectParticipantID(user, projectID)).get();
         Delta delta = new Delta(user, projectCommand, projectID, (participant.getRole() == Role.ADMIN));
         deltaRepo.save(delta);
         projectRepo.findById(projectID).get().setLastUpdated(LocalDateTime.now());

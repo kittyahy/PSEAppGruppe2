@@ -21,7 +21,13 @@ package com.pseandroid2.dailydataserver.onlineDatabase;
 
 import com.pseandroid2.dailydataserver.onlineDatabase.FetchRequestDB.FetchRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -29,10 +35,9 @@ import java.util.List;
  * interface for "talking" about old data
  * <p>
  * the user can post request for old Data und can get request for a project to help other participants
- * #TODO Testen
  */
 @RestController
-@RequestMapping("/OnlineDatabase/request")
+@RequestMapping(value = "/OnlineDatabase/request")
 public class FetchRequestController {
 
     @Autowired
@@ -50,8 +55,8 @@ public class FetchRequestController {
      * @param projectID   the project to which the request belongs (provided by the client)
      * @param requestInfo all information, which are necessary to save a fetchRequest.  specifies all parameters.
      */
-    @PostMapping("/need/{id}")
-    public void demandOldData(@RequestAttribute String user, @PathVariable("id") long projectID, @RequestBody String requestInfo) {
+    @PostMapping(value = "/need/{id}")
+    public void demandOldData(@RequestAttribute String user, @PathVariable(value = "id") long projectID, @RequestBody String requestInfo) {
         service.createFetchRequest(projectID, user, requestInfo);
     }
 
@@ -62,7 +67,7 @@ public class FetchRequestController {
      * @return a list of {@link FetchRequest}
      */
 
-    @GetMapping("/provide/{id}")
+    @GetMapping(value = "/provide/{id}")
     public List<FetchRequest> getFetchRequests(@PathVariable("id") long projectId) {
 
         return service.getFetchRequests(projectId);

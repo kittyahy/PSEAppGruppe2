@@ -49,7 +49,10 @@ import java.util.Objects;
 
 
 /**
- * #TODO JavaDoc
+ * FetchRequest ist an Entity, which contains the request of an user for old Deltas.
+ * <p>
+ * With a FetchRequest another participant of the same project know which old Deltas going to be needed by the user.
+ * So they could provide those Deltas.
  */
 @Getter
 @Setter
@@ -64,12 +67,22 @@ public class FetchRequest {
     private long project;
     private String requestInfo;
 
+    /**
+     * The constructor, to create a new FetchRequest.
+     *
+     * @param user        the user, who needs the old Deltas.
+     * @param project     the project, in which the user needs those Deltas.
+     * @param requestInfo the information for another participant, which specifies what Deltas they need.
+     */
     public FetchRequest(String user, long project, String requestInfo) {
         this.user = user;
         this.project = project;
         this.requestInfo = requestInfo;
     }
 
+    /**
+     * Recommended empty constructor
+     */
     public FetchRequest() {
     }
 

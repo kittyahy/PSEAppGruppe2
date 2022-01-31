@@ -19,7 +19,12 @@
 */
 package com.pseandroid2.dailydataserver.onlineDatabase;
 
-import com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB.*;
+import com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB.Project;
+import com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB.ProjectParticipant;
+import com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB.ProjectParticipantID;
+import com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB.ProjectParticipantsRepository;
+import com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB.ProjectRepository;
+import com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB.Role;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -36,7 +41,7 @@ public class ProjectParticipantService {
     public ProjectParticipantService(ProjectParticipantsRepository ppRepo, ProjectRepository projectRepo) {
         this.ppRepo = ppRepo;
         this.projectRepo = projectRepo;
-        projectIDGenerator = 1;
+        this.projectIDGenerator = 1;
     }
 
 
@@ -44,25 +49,24 @@ public class ProjectParticipantService {
         Project project = new Project(projectIDGenerator, projectInfo);
         projectIDGenerator++;
         projectRepo.save(project);
-        ppRepo.save(new ProjectParticipants(user, project.getProjectId(), Role.ADMIN, project.getParticipantId()));
-        project.setParticipantId(project.getParticipantId() + 1);
+        ppRepo.save(new ProjectParticipant(user, project.getProjectId(), Role.ADMIN, project.getParticipantJoin()));
+        project.setParticipantJoin(project.getParticipantJoin() + 1);
         projectRepo.save(project);
         return project.getProjectId();
     }
 
     public String addUser(String user, long projectID) {
-        if (ppRepo.existsById(new ProjectParticipantsID(user, projectID))) {
+        if (ppRepo.existsById(new ProjectParticipantID(user, projectID))) {
             return projectRepo.findById(projectID).get().getProjectInfo();
         } else {
             if (!(ppRepo.countByProject(projectID) < MAX_PARTICIPANTS)) {
                 return "";
             } else {
                 Project project = projectRepo.findById(projectID).get();
-                ppRepo.save(new ProjectParticipants(user, projectID, Role.PARTICIPANT, project.getParticipantId()));
+                ppRepo.save(new ProjectParticipant(user, projectID, Role.PARTICIPANT, project.getParticipantJoin()));
 
-                project.setParticipantId(project.getParticipantId() + 1);
+                project.setParticipantJoin(project.getParticipantJoin() + 1);
                 projectRepo.save(project);
-                System.out.println(ppRepo.findById(new ProjectParticipantsID(user, projectID)).get());
 
                 return project.getProjectInfo();
             }
@@ -71,37 +75,31 @@ public class ProjectParticipantService {
     }
 
     public boolean leaveProject(String user, long projectId) {
-        System.out.println("Gleicher");
-        ProjectParticipants participant = ppRepo.findById(new ProjectParticipantsID(user, projectId)).get();
-        System.out.println(participant);
+        ProjectParticipant participant = ppRepo.findById(new ProjectParticipantID(user, projectId)).get();
         if (participant.getRole().equals(Role.ADMIN)) {
-            if (ppRepo.countByProject(projectId) == 1) {
+            if (1 == ppRepo.countByProject(projectId)) {
                 projectRepo.deleteById(projectId);
-                System.out.println("Project gelöscht");
 
             } else {
-                List<ProjectParticipants> projectParticipantsList = ppRepo.findByProjectOrderByNumberOfJoinAsc(projectId);
-                projectParticipantsList.get(1).setRole(Role.ADMIN);
-                System.out.println(projectParticipantsList);
-                System.out.println("neuer Admin: " + projectParticipantsList.get(1));
+                List<ProjectParticipant> projectParticipantList = ppRepo.findByProjectOrderByNumberOfJoinAsc(projectId);
+                projectParticipantList.get(1).setRole(Role.ADMIN);
 
                 Project projectToUpdate = projectRepo.getById(projectId);
                 projectToUpdate.setLastUpdated(LocalDateTime.now());
                 projectRepo.save(projectToUpdate);
             }
         }
-        ppRepo.deleteById(new ProjectParticipantsID(user, projectId));
+        ppRepo.deleteById(new ProjectParticipantID(user, projectId));
 
         return true;
     }
 
     public boolean removeOtherUser(String user, long projectId, String userToRemove) {
-        System.out.println("Anderer");
-        ProjectParticipants participant = ppRepo.findById(new ProjectParticipantsID(user, projectId)).get();
+        ProjectParticipant participant = ppRepo.findById(new ProjectParticipantID(user, projectId)).get();
         if (!participant.getRole().equals(Role.ADMIN)) {
             return false;
         } else {
-            ppRepo.deleteById(new ProjectParticipantsID(userToRemove, projectId));
+            ppRepo.deleteById(new ProjectParticipantID(userToRemove, projectId));
             Project projectToUpdate = projectRepo.getById(projectId);
             projectToUpdate.setLastUpdated(LocalDateTime.now());
             projectRepo.save(projectToUpdate);
@@ -110,9 +108,9 @@ public class ProjectParticipantService {
     }
 
     public List<String> getParticipants(long projectId) {
-        List<ProjectParticipants> participantsList = ppRepo.findByProject(projectId);
+        List<ProjectParticipant> participantsList = ppRepo.findByProject(projectId);
         List<String> participantName = new ArrayList<>();
-        for (ProjectParticipants participant : participantsList) {
+        for (ProjectParticipant participant : participantsList) {
             participantName.add(participant.getUser());
         }
         return participantName;
