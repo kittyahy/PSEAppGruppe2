@@ -30,16 +30,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
-/**
- * #TODO javadoc,Test, implemetierung
- */
 
 /**
  * Interceptor. Checks if the user may access to the given project.
  * <p>
  * if not, rejects the request and the response is empty.
  * <p>
- * Gets called before all methods, which depends on an existing project and want's to change it.
+ * Gets called before all methods, which depends on an existing project and the user wants to change something or
+ * wants information.
  */
 @Component
 public class AccessToProjectInterceptor implements HandlerInterceptor {
@@ -56,12 +54,10 @@ public class AccessToProjectInterceptor implements HandlerInterceptor {
         String user = (String) request.getAttribute("user");
         Map pathVariables = (Map) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
 
-        System.out.println("Huer");
         String projectIDString = pathVariables.get("id").toString();
 
         long projectId = Long.parseLong(projectIDString);
         if (!repo.existsById(new ProjectParticipantID(user, projectId))) {
-            System.out.println("Decliend");
             return false;
         }
         return HandlerInterceptor.super.preHandle(request, response, handler);

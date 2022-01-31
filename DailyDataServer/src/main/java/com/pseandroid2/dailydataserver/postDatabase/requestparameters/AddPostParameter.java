@@ -90,7 +90,7 @@ public class AddPostParameter {
         list.addAll(graphTemplates);
         return list;
     }
-    
+
 
     @Override
     public String toString() {

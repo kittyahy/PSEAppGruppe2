@@ -19,6 +19,9 @@
 */
 package com.pseandroid2.dailydataserver.onlineDatabase.DeltaDB;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -26,8 +29,10 @@ import java.util.Objects;
 /**
  * The primary key for a Delta
  * <p>
- * Defines, who the primary key of Deltas needs to be handled.
+ * Defines, how the primary key of Deltas needs to be handled.
  */
+@Getter
+@Setter
 public class DeltaID implements Serializable {
     private LocalDateTime addedToServer;
     private String user;
