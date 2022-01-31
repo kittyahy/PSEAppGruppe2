@@ -30,6 +30,13 @@ class RowFlow(flow: Flow<List<Row>>) :
         flow
     ) {
     override fun provide(i: Row): com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Row {
-        TODO("Not yet implemented")
+        val metaData = i.getMetaData()
+        val data = ArrayList<String>()
+        val rows = i.getAll()
+        rows.forEach { row -> data.add(row.toString()) }
+        return com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Row(
+            metaData.createdOn.hashCode(), //TODO Richtige ID
+            data
+        )
     }
 }
