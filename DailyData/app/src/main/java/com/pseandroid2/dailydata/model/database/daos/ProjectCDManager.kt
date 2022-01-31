@@ -22,8 +22,7 @@ package com.pseandroid2.dailydata.model.database.daos
 
 
 import androidx.room.withTransaction
-import com.pseandroid2.dailydata.model.Graph
-import com.pseandroid2.dailydata.model.users.User
+import com.pseandroid2.dailydata.model.graph.Graph
 import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.model.database.entities.ProjectEntity
 import com.pseandroid2.dailydata.model.database.entities.ProjectSkeletonEntity
@@ -34,20 +33,20 @@ import com.pseandroid2.dailydata.model.project.ProjectSkeleton
 import com.pseandroid2.dailydata.model.project.ProjectTemplate
 import com.pseandroid2.dailydata.model.table.TableLayout
 import com.pseandroid2.dailydata.model.uielements.UIElement
+import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.util.SortedIntListUtil
 import java.util.SortedSet
 import java.util.TreeSet
 
 class ProjectCDManager(
-    private val projectDAO: ProjectDataDAO,
-    private val templateDAO: TemplateDAO,
-    private val uiDAO: UIElementDAO,
-    private val notifDAO: NotificationsDAO,
-    private val graphDAO: GraphDAO,
-    private val graphManager: GraphCDManager,
     private val db: AppDataBase
 ) {
-
+    private val projectDAO: ProjectDataDAO = db.projectDataDAO()
+    private val templateDAO: TemplateDAO = db.templateDAO()
+    private val uiDAO: UIElementDAO = db.uiElementDAO()
+    private val notifDAO: NotificationsDAO = db.notificationsDAO()
+    private val graphDAO: GraphDAO = db.graphDAO()
+    private val graphManager: GraphCDManager = db.graphCDManager()
     private val existingIds: SortedSet<Int> = TreeSet()
 
     /**
@@ -62,7 +61,7 @@ class ProjectCDManager(
         val newID: Int = insertProjectEntity(project)
         project.id = newID
 
-        for (graph: Graph in project.getGraphs()) {
+        for (graph: Graph<*, *> in project.getGraphs()) {
             val newGraphId: Int = graphManager.insertGraph(newID, graph)
             graph.id = newGraphId
         }
@@ -132,11 +131,6 @@ class ProjectCDManager(
     suspend fun deleteProjectTemplate(template: ProjectTemplate) {
         @Suppress("Deprecation")
         templateDAO.deleteProjectTemplateById(template.getProjectSkeleton().id)
-    }
-
-    private fun isTemplate(id: Int): Boolean {
-        TODO("Do we even need this?")
-        return false
     }
 
     private fun createSkeleton(

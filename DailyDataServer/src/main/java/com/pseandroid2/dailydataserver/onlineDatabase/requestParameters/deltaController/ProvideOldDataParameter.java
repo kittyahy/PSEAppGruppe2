@@ -20,6 +20,7 @@
 package com.pseandroid2.dailydataserver.onlineDatabase.requestParameters.deltaController;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 /**
  * #TODO Testen
@@ -29,7 +30,7 @@ import java.sql.Date;
 public class ProvideOldDataParameter {
     private String command;
     private String forUser;
-    private Date initialAdded;
+    private LocalDateTime initialAdded;
     private String initialAddedBy;
     private boolean wasAdmin;
 
@@ -40,7 +41,7 @@ public class ProvideOldDataParameter {
      * @param initialAddedBy who added the Delta initially (provided by the client)
      * @param wasAdmin       was the person at this time admin (provided by the client)
      */
-    public ProvideOldDataParameter( String command, String forUser, Date initialAdded, String initialAddedBy, boolean wasAdmin) {
+    public ProvideOldDataParameter( String command, String forUser, LocalDateTime initialAdded, String initialAddedBy, boolean wasAdmin) {
         this.command = command;
         this.forUser = forUser;
         this.initialAdded = initialAdded;
@@ -68,11 +69,11 @@ public class ProvideOldDataParameter {
         this.forUser = forUser;
     }
 
-    public Date getInitialAdded() {
+    public LocalDateTime getInitialAdded() {
         return initialAdded;
     }
 
-    public void setInitialAdded(Date initialAdded) {
+    public void setInitialAdded(LocalDateTime initialAdded) {
         this.initialAdded = initialAdded;
     }
 

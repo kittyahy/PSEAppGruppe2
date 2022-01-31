@@ -20,30 +20,29 @@
 
 package com.pseandroid2.dailydata.model.project
 
-import android.graphics.Color
-import android.graphics.drawable.Drawable
-import com.pseandroid2.dailydata.model.Graph
-import com.pseandroid2.dailydata.model.settings.Settings
+import android.graphics.Bitmap
+import com.pseandroid2.dailydata.model.graph.Graph
 import com.pseandroid2.dailydata.model.notifications.Notification
+import com.pseandroid2.dailydata.model.settings.MapSettings
+import com.pseandroid2.dailydata.model.settings.Settings
 
 class SimpleSkeleton(
-    override var id: Int,
-    override var onlineId: Long,
-    override var name: String,
-    override var desc: String,
-    override var path: String,
-    override var color: Int,
-    private val graphList: MutableList<Graph>,
-    private var skeletonSettings: Settings,
-    private val notificationList: MutableList<Notification>
+    override var id: Int = -1,
+    override var onlineId: Long = -1,
+    override var name: String = "",
+    override var desc: String = "",
+    override var path: String = "",
+    override var color: Int = -1,
+    private val graphList: MutableList<Graph<*, *>> = mutableListOf(),
+    private var skeletonSettings: Settings = MapSettings(),
+    private val notificationList: MutableList<Notification> = mutableListOf()
 ) : ProjectSkeleton {
-
-    override fun getWallpaper(): Drawable {
-        TODO("Figure out how to obtain pictures from disk")
+    override fun getWallpaper(): Bitmap {
+        TODO()
     }
 
     override fun getGraphs() = graphList
-    override fun addGraphs(graphs: Collection<Graph>) {
+    override fun addGraphs(graphs: Collection<Graph<*, *>>) {
         graphList.addAll(graphs)
     }
 

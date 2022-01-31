@@ -11,7 +11,7 @@ class ArrayListLayout(input: String = "") : TableLayout {
         if (input == "") {
             mutableListOf()
         } else {
-            Gson().fromJson<MutableList<Pair<String, MutableList<UIElement>>>>(input)
+            Gson().fromJson(input)
         }
 
     constructor(layoutList: ArrayList<Pair<String, MutableList<UIElement>>>) : this("") {
@@ -23,6 +23,10 @@ class ArrayListLayout(input: String = "") : TableLayout {
     override fun getColumnType(col: Int) = Class.forName(layout[col].first).kotlin
 
     override fun getUIElements(col: Int): List<UIElement> = layout[col].second.toList()
+
+    override fun addUIElements(col: Int, vararg elements: UIElement) {
+        layout[col].second.addAll(elements)
+    }
 
     override fun get(col: Int): Pair<KClass<out Any>, List<UIElement>> {
         val type: KClass<out Any> = Class.forName(layout[col].first).kotlin

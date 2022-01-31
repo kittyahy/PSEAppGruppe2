@@ -20,28 +20,28 @@
 
 package com.pseandroid2.dailydata.model.database.daos
 
-import com.pseandroid2.dailydata.model.Graph
-import com.pseandroid2.dailydata.model.GraphTemplate
+import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.model.database.entities.GraphEntity
 import com.pseandroid2.dailydata.model.database.entities.GraphTemplateEntity
+import com.pseandroid2.dailydata.model.graph.Graph
+import com.pseandroid2.dailydata.model.graph.GraphTemplate
 import com.pseandroid2.dailydata.util.SortedIntListUtil
-import java.util.SortedSet
 import java.util.TreeSet
 
 class GraphCDManager(
-    private val graphDAO: GraphDAO,
-    private val templateDAO: TemplateDAO,
-    private val settingsDAO: SettingsDAO
+    private val appDataBase: AppDataBase
 ) {
     companion object {
         const val TEMPLATE_SETTINGS_PROJ_ID = -1
     }
-
+    private val graphDAO: GraphDAO = appDataBase.graphDAO()
+    private val templateDAO: TemplateDAO = appDataBase.templateDAO()
+    private val settingsDAO: SettingsDAO = appDataBase.settingsDAO()
     private val existingGraphIds: MutableMap<Int, TreeSet<Int>> =
         mutableMapOf<Int, TreeSet<Int>>()
     private val existingTemplateIds: TreeSet<Int> = sortedSetOf()
 
-    suspend fun insertGraph(projectId: Int, graph: Graph): Int {
+    suspend fun insertGraph(projectId: Int, graph: Graph<*, *>): Int {
         val newId = insertGraphEntity(projectId, graph)
         for (setting in graph.getCustomizing()) {
             settingsDAO.createGraphSetting(projectId, newId, setting.first, setting.second)
@@ -66,7 +66,7 @@ class GraphCDManager(
         return newId
     }
 
-    private suspend fun insertGraphEntity(projectId: Int, graph: Graph): Int {
+    private suspend fun insertGraphEntity(projectId: Int, graph: Graph<*, *>): Int {
         val newId = getNextGraphId(projectId)
         @Suppress("Deprecation")
         graphDAO.insertGraph(
@@ -87,11 +87,11 @@ class GraphCDManager(
         templateDAO.insertGraphTemplate(
             GraphTemplateEntity(
                 newId,
-                graphTemplate.getName(),
-                graphTemplate.getDescription(),
-                graphTemplate.getType(),
-                graphTemplate.getCreator(),
-                graphTemplate.getOnlineId()
+                graphTemplate.name,
+                graphTemplate.desc,
+                graphTemplate.type,
+                graphTemplate.creator,
+                graphTemplate.onlineId
             )
         )
         return newId

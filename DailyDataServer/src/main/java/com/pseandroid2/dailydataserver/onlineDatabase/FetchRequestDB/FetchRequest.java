@@ -19,6 +19,9 @@
 */
 package com.pseandroid2.dailydataserver.onlineDatabase.FetchRequestDB;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 /*
@@ -48,6 +51,8 @@ import java.util.Objects;
 /**
  * #TODO JavaDoc
  */
+@Getter
+@Setter
 @Entity
 @Table(name = "FetchRequest_Table")
 public class FetchRequest {
@@ -68,33 +73,6 @@ public class FetchRequest {
     public FetchRequest() {
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-    public long getProject() {
-        return project;
-    }
-
-    public void setProject(long project) {
-        this.project = project;
-    }
-
-    public String getRequestInfo() {
-        return requestInfo;
-    }
-
-    public void setRequestInfo(String requestInfo) {
-        this.requestInfo = requestInfo;
-    }
 
     @Override
     public boolean equals(Object o) {

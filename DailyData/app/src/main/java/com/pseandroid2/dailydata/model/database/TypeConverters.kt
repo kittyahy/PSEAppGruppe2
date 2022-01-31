@@ -21,7 +21,7 @@
 package com.pseandroid2.dailydata.model.database
 
 import androidx.room.TypeConverter
-import com.pseandroid2.dailydata.model.GraphType
+import com.pseandroid2.dailydata.model.graph.GraphType
 import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.uielements.UIElementType
 import com.pseandroid2.dailydata.model.users.SimpleUser

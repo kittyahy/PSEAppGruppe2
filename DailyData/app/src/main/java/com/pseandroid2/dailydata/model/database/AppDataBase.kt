@@ -32,6 +32,7 @@ import com.pseandroid2.dailydata.model.database.daos.ProjectCDManager
 import com.pseandroid2.dailydata.model.database.daos.ProjectDataDAO
 import com.pseandroid2.dailydata.model.database.daos.SettingsDAO
 import com.pseandroid2.dailydata.model.database.daos.TableContentDAO
+import com.pseandroid2.dailydata.model.database.daos.TemplateDAO
 import com.pseandroid2.dailydata.model.database.daos.UIElementDAO
 import com.pseandroid2.dailydata.model.database.entities.GraphEntity
 import com.pseandroid2.dailydata.model.database.entities.GraphSettingEntity
@@ -68,7 +69,10 @@ import com.pseandroid2.dailydata.model.database.entities.UIElementMap
     GraphTypeConversion::class,
     UIElementTypeConversion::class
 )
-abstract class AppDataBase : RoomDatabase() {
+abstract class AppDataBase protected constructor() : RoomDatabase() {
+
+    private var _graphCDManager: GraphCDManager? = null
+    private var _projectCDManager: ProjectCDManager? = null
 
     companion object {
         private var instance: AppDataBase? = null
@@ -80,7 +84,9 @@ abstract class AppDataBase : RoomDatabase() {
             if (instance == null) {
                 synchronized(this)
                 {
-                    Room.databaseBuilder(context, AppDataBase::class.java, "app_database").build()
+                    instance =
+                        Room.databaseBuilder(context, AppDataBase::class.java, "app_database")
+                            .build()
                 }
             }
             return instance!!
@@ -98,4 +104,33 @@ abstract class AppDataBase : RoomDatabase() {
     abstract fun tableContentDAO(): TableContentDAO
 
     abstract fun settingsDAO(): SettingsDAO
+
+    abstract fun templateDAO(): TemplateDAO
+    /**
+     * @throws NullPointerException when database creation fails
+     */
+    fun graphCDManager(): GraphCDManager {
+        if (_graphCDManager == null) {
+            synchronized(this)
+            {
+                _graphCDManager = GraphCDManager(this)
+            }
+        }
+        return _graphCDManager!!
+    }
+    /**
+     * @throws NullPointerException when database creation fails
+     */
+    fun projectCDManager(): ProjectCDManager {
+        if (_graphCDManager == null) {
+            graphCDManager()
+        }
+        if (_projectCDManager == null) {
+            synchronized(this)
+            {
+                _projectCDManager = ProjectCDManager(this)
+            }
+        }
+        return ProjectCDManager(this)
+    }
 }

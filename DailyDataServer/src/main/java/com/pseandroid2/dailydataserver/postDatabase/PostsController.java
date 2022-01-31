@@ -31,7 +31,7 @@ import java.util.List;
  */
 
 /**
- * Interface for all interaction for Posts
+ * Interface for all interaction for Post
  */
 @RestController
 @RequestMapping("/Posts")

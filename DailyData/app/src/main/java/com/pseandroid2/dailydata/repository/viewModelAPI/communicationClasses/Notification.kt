@@ -25,6 +25,7 @@ import com.pseandroid2.dailydata.model.notifications.Notification
 import com.pseandroid2.dailydata.model.notifications.TimeNotification
 import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.project.ProjectBuilder
+import com.pseandroid2.dailydata.repository.commandCenter.commands.IllegalOperationException
 import java.time.LocalTime
 
 //TODO("Robin changes")
@@ -40,12 +41,12 @@ class Notification(
     override val id: Int,
     val message: String,
     val time: LocalTime,
-    val notificationsDAO: NotificationsDAO,
+    private val notificationsDAO: NotificationsDAO? = null,
     val projectID: Int
-) : Identifiable, Convertible<Notification> {
+) : Identifiable(), Convertible<Notification> {
     constructor(
         timeNotification: TimeNotification,
-        notificationsDAO: NotificationsDAO,
+        notificationsDAO: NotificationsDAO?,
         projectID: Int
     ) : this(
         timeNotification.id,
@@ -61,7 +62,7 @@ class Notification(
 
     //@throws IllegalOperationException
     override suspend fun delete() {
-        notificationsDAO.deleteNotification(projectID, id)
+        TODO()
     }
 
     override fun toDBEquivalent(): TimeNotification {
