@@ -29,8 +29,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class DailyDataServerApplication {
 
     /**
-     * starts the application
-     * starts spring boot
+     * starts the application and spring boot
      *
      * @param args default arguments. going to be empty.
      */

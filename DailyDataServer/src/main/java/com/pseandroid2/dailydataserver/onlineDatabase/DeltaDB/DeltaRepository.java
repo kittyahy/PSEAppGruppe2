@@ -25,15 +25,39 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * The repository for Deltas, to operate on the Table.
+ */
 @Repository
 public interface DeltaRepository extends JpaRepository<Delta, DeltaID> {
 
-    List<Delta> findByProjectAndRequestedByIs(long project, String requestedBy);
 
+    /**
+     * Count all Deltas, which are added by a defined user, after a given time.
+     *
+     * @param user          which had uploaded the recommended Deltas
+     * @param addedToServer after which point of time the Deltas should be count.
+     * @return the amount of Deltas
+     */
     long countByUserAndAddedToServerIsAfter(String user, LocalDateTime addedToServer);
 
+    /**
+     * Returns all Deltas, which are initially added to the server before a given point of time and requested by a
+     * given participant.
+     *
+     * @param addedToServer the time, before the Deltas should be added.
+     * @param requestedBy   the user, who requested them.
+     * @return a list of the recommended Deltas.
+     */
     List<Delta> findByAddedToServerIsBeforeAndRequestedBy(LocalDateTime addedToServer, String requestedBy);
 
+    /**
+     * Returns all Deltas, which a user requested in a specified project.
+     *
+     * @param user      the user, who requested the Deltas.
+     * @param projectID the project, in which the Deltas were requested.
+     * @return a list of the recommended Deltas.
+     */
     List<Delta> findByRequestedByAndProject(String user, long projectID);
 
 
