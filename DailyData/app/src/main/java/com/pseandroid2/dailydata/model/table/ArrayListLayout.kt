@@ -11,7 +11,7 @@ class ArrayListLayout(input: String = "") : TableLayout {
         if (input == "") {
             mutableListOf()
         } else {
-            Gson().fromJson<MutableList<Pair<String, MutableList<UIElement>>>>(input)
+            Gson().fromJson(input)
         }
 
     constructor(layoutList: ArrayList<Pair<String, MutableList<UIElement>>>) : this("") {

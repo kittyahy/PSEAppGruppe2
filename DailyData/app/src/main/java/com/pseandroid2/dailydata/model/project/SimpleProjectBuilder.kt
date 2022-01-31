@@ -21,7 +21,7 @@
 package com.pseandroid2.dailydata.model.project
 
 import android.graphics.Color
-import com.pseandroid2.dailydata.model.Graph
+import com.pseandroid2.dailydata.model.graph.Graph
 import com.pseandroid2.dailydata.model.settings.MapSettings
 import com.pseandroid2.dailydata.model.settings.Settings
 import com.pseandroid2.dailydata.model.notifications.Notification
@@ -101,7 +101,7 @@ class SimpleProjectBuilder : ProjectBuilder<SimpleProject> {
         return this
     }
 
-    override fun addGraphs(graphs: List<Graph>): ProjectBuilder<SimpleProject> {
+    override fun addGraphs(graphs: List<Graph<*, *>>): ProjectBuilder<SimpleProject> {
         project.addGraphs(graphs)
         return this
     }

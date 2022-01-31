@@ -69,7 +69,7 @@ import com.pseandroid2.dailydata.model.database.entities.UIElementMap
     GraphTypeConversion::class,
     UIElementTypeConversion::class
 )
-abstract class AppDataBase : RoomDatabase() {
+abstract class AppDataBase protected constructor() : RoomDatabase() {
 
     private var _graphCDManager: GraphCDManager? = null
     private var _projectCDManager: ProjectCDManager? = null
@@ -84,7 +84,9 @@ abstract class AppDataBase : RoomDatabase() {
             if (instance == null) {
                 synchronized(this)
                 {
-                    Room.databaseBuilder(context, AppDataBase::class.java, "app_database").build()
+                    instance =
+                        Room.databaseBuilder(context, AppDataBase::class.java, "app_database")
+                            .build()
                 }
             }
             return instance!!

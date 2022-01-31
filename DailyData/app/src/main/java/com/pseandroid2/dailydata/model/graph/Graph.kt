@@ -18,21 +18,23 @@
 
 */
 
-package com.pseandroid2.dailydata.model
+package com.pseandroid2.dailydata.model.graph
 
-import android.graphics.drawable.Drawable
+import android.graphics.Bitmap
+import com.github.mikephil.charting.data.DataSet
+import com.github.mikephil.charting.data.Entry
 import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.settings.Settings
 import com.pseandroid2.dailydata.model.users.User
 
-interface Graph {
+interface Graph<T : DataSet<S>, S : Entry> {
     var id: Int
 
-    fun getDataSets(): List<List<Any>>
+    fun getDataSets(): List<T>
 
     fun getCustomizing(): Settings
 
-    fun getImage(): Drawable?
+    fun getImage(): Bitmap?
 
     fun getPath(): String?
 
@@ -45,17 +47,22 @@ interface Graph {
 interface GraphTemplate {
     val id: Int
 
-    fun getName(): String
+    val name: String
 
-    fun getDescription(): String
+    val desc: String
+
+    val path: String
+    val background: Int
+
+    fun getWallpaper(): Bitmap
 
     fun getCustomizing(): Settings
 
-    fun getType(): GraphType
+    val type: GraphType
 
-    fun getCreator(): User
+    val creator: User
 
-    fun getOnlineId(): Long
+    val onlineId: Long
 
 }
 

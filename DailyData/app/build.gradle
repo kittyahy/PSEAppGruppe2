@@ -66,7 +66,8 @@ android {
     }
 }
 dependencies {
-
+    testImplementation 'androidx.test:rules:1.4.1-alpha03'
+    androidTestImplementation 'androidx.test:rules:1.4.1-alpha03'
     def roomVersion = "2.4.1"
 
     implementation 'com.google.android.gms:play-services-maps:18.0.2'
@@ -88,6 +89,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-dynamic-links-ktx'
 
     testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'junit:junit:4.13.2'
     testImplementation "androidx.room:room-testing:$roomVersion" //Room Testing
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0" //Coroutines Testing
     testImplementation "androidx.arch.core:core-testing:2.1.0" // For Testing
@@ -97,7 +99,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0" //Coroutines Testing
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    androidTestImplementation 'junit:junit:4.13.2'
 
 
     kapt "androidx.room:room-compiler:$roomVersion"
@@ -147,4 +148,9 @@ dependencies {
     testImplementation "io.mockk:mockk:1.9.3"
     
     implementation 'com.android.support:multidex:2.0.1'
+
+    //MPAndroidCharts
+    implementation 'com.github.PhilJay:MPAndroidChart:3.1.0'
+
+    debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
 }
