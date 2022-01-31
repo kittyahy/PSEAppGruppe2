@@ -36,8 +36,8 @@ class RepositoryViewModelAPI (appDataBase: AppDataBase, remoteDataSourceAPI: Rem
     @InternalCoroutinesApi
     val projectHandler = ProjectHandler(
         ProjectPreviewFlow(appDataBase.projectDataDAO().getAllProjectData()),
-        ProjectTemplateFlow(), //Todo ordentlicheImplemenntierungen
-        GraphTemplateFlow(), //Todo ordentlicheImplemenntierungen
+        ProjectTemplateFlow(TODO()),
+        TODO(),
         appDataBase,
         ExecuteQueue(appDataBase,remoteDataSourceAPI, PublishQueue(appDataBase, remoteDataSourceAPI))
     )
