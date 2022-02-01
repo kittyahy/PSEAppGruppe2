@@ -15,8 +15,17 @@ class ArrayListLayout(input: String = "") : TableLayout {
             Gson().fromJson(input)
         }
 
-    constructor(layoutList: ArrayList<Quadruple<String, String, String, MutableList<UIElement>>>) : this("") {
-        layout = layoutList
+    constructor(layoutList: ArrayList<ColumnData>) : this("") {
+        for (col in layoutList) {
+            layout.add(
+                Quadruple(
+                    col.type,
+                    col.name,
+                    col.unit,
+                    col.uiElements.toMutableList()
+                )
+            )
+        }
     }
 
     override fun getSize() = layout.size
@@ -33,13 +42,15 @@ class ArrayListLayout(input: String = "") : TableLayout {
 
     override fun getUnit(col: Int) = layout[col].third
 
-    override fun get(col: Int): Quadruple<KClass<out Any>, String, String, List<UIElement>> {
-        val type: KClass<out Any> = Class.forName(layout[col].first).kotlin
-        return Quadruple(type, layout[col].second, layout[col].third, layout[col].fourth)
-    }
+    override fun get(col: Int) = ColumnData(
+        layout[col].first,
+        layout[col].second,
+        layout[col].third,
+        layout[col].fourth.toList()
+    )
 
     override fun addColumn(typeString: String, name: String, unit: String) {
-        layout.add(Quadruple(typeString, name, unit, mutableListOf<UIElement>()))
+        layout.add(Quadruple(typeString, name, unit, mutableListOf()))
     }
 
     override fun deleteColumn(col: Int) {
@@ -57,15 +68,15 @@ class ArrayListLayout(input: String = "") : TableLayout {
 }
 
 class ArrayListLayoutIterator(layout: ArrayListLayout) :
-    Iterator<Quadruple<KClass<out Any>, String, String, MutableList<UIElement>>> {
+    Iterator<ColumnData> {
     @Suppress("Deprecation")
     val iterator = layout.getList().iterator()
 
     override fun hasNext() = iterator.hasNext()
 
-    override fun next(): Quadruple<KClass<out Any>, String, String, MutableList<UIElement>> {
+    override fun next(): ColumnData {
         val next = iterator.next()
-        return Quadruple(Class.forName(next.first).kotlin, next.second, next.third, next.fourth)
+        return ColumnData(next.first, next.second, next.third, next.fourth.toList())
     }
 
 }
