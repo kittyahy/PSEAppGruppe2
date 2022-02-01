@@ -21,6 +21,8 @@ package com.pseandroid2.dailydataserver.postDatabase.Response;
 
 import lombok.Setter;
 
+import java.util.Arrays;
+
 
 /**
  * A class, which contains a TemplateDetail and the id of the Template, where the templateDetail belongs to. It also
@@ -31,28 +33,32 @@ import lombok.Setter;
 @Setter
 public class TemplateDetail {
     private int id;
-    private String detail;
+    private String title ;
     private boolean isProjectTemplate;
+    private byte[] detailImage;
 
     /**
      * The constructor for the Template details.
      *
-     * @param id                the ID of the Template Entity, to which the detail belongs.
-     * @param detail            the detail of a given template
+     * @param id                the ID of the Template Entity, to which the title belongs.
+     * @param title            the title of a given template
      * @param isProjectTemplate if true, this template is a project template, if false, it's a graph template.
      */
-    public TemplateDetail(int id, String detail, boolean isProjectTemplate) {
+    public TemplateDetail(int id, String title,byte[] detailImage, boolean isProjectTemplate) {
         this.id = id;
-        this.detail = detail;
+        this.title = title;
         this.isProjectTemplate = isProjectTemplate;
+        this.detailImage = detailImage;
     }
+
 
     @Override
     public String toString() {
         return "TemplateDetail{" +
                 "id=" + id +
-                ", detail='" + detail + '\'' +
+                ", title='" + title + '\'' +
                 ", isProjectTemplate=" + isProjectTemplate +
+                ", detailImage=" + Arrays.toString(detailImage) +
                 '}';
     }
 }

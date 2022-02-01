@@ -24,6 +24,8 @@ package com.pseandroid2.dailydataserver.postDatabase.Response;
 
 import lombok.Setter;
 
+import java.util.Arrays;
+
 /**
  * A class, which contains a postPReview and the id of the post, where the postPreview belongs to.
  * Serves as Response object for getAllPostPreview.
@@ -34,6 +36,7 @@ import lombok.Setter;
 public class PostPreview {
     private int id;
     private String preview;
+    private byte[] previewImage;
 
 
     /**
@@ -42,9 +45,10 @@ public class PostPreview {
      * @param id      the id from the post entity.
      * @param preview the recommended postPreview.
      */
-    public PostPreview(int id, String preview) {
+    public PostPreview(int id,byte[] previewImage, String preview) {
         this.id = id;
         this.preview = preview;
+        this.previewImage = previewImage;
     }
 
     @Override
@@ -52,6 +56,7 @@ public class PostPreview {
         return "PostPreview{" +
                 "id=" + id +
                 ", preview='" + preview + '\'' +
+                ", previewImage=" + Arrays.toString(previewImage) +
                 '}';
     }
 }

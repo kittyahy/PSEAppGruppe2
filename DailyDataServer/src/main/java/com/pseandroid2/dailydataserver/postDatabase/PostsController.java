@@ -21,7 +21,7 @@ package com.pseandroid2.dailydataserver.postDatabase;
 
 import com.pseandroid2.dailydataserver.postDatabase.Response.PostPreview;
 import com.pseandroid2.dailydataserver.postDatabase.Response.TemplateDetail;
-import com.pseandroid2.dailydataserver.postDatabase.requestparameters.AddPostParameter;
+import com.pseandroid2.dailydataserver.postDatabase.Request.AddPostParameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

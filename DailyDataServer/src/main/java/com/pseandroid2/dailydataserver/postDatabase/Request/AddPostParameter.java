@@ -17,7 +17,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
-package com.pseandroid2.dailydataserver.postDatabase.requestparameters;
+package com.pseandroid2.dailydataserver.postDatabase.Request;
 
 import org.springframework.data.util.Pair;
 
@@ -29,9 +29,9 @@ import java.util.List;
  */
 public class AddPostParameter {
 
-    private String postPreview;
-    private Pair<String, String> projectTemplate;
-    private List<Pair<String, String>> graphTemplates;
+    private PostPreviewWrapper postPreview;
+    private Pair<String, TemplateDetailWrapper> projectTemplate;
+    private List<Pair<String, TemplateDetailWrapper>> graphTemplates;
 
     /**
      * The constructor to create the parameters for addPost.
@@ -42,8 +42,8 @@ public class AddPostParameter {
      * @param graphTemplates  all graphTemplates.  The first entry  of the Pair is the Template, the second is the
      *                        detailView of the template.
      */
-    public AddPostParameter(String postPreview, Pair<String, String> projectTemplate,
-                            List<Pair<String, String>> graphTemplates) {
+    public AddPostParameter(PostPreviewWrapper postPreview, Pair<String, TemplateDetailWrapper> projectTemplate,
+                            List<Pair<String, TemplateDetailWrapper>> graphTemplates) {
         this.postPreview = postPreview;
         this.projectTemplate = projectTemplate;
         this.graphTemplates = new ArrayList<>();
@@ -58,7 +58,7 @@ public class AddPostParameter {
      *
      * @return the postPreview for the post.
      */
-    public String getPostPreview() {
+    public PostPreviewWrapper getPostPreview() {
         return postPreview;
     }
 
@@ -71,7 +71,7 @@ public class AddPostParameter {
      * @return the projectTemplate. The first entry is the Template, the second is the detailView of
      * the template.
      */
-    public Pair<String, String> getProjectTemplate() {
+    public Pair<String, TemplateDetailWrapper> getProjectTemplate() {
         return projectTemplate;
     }
 
@@ -85,8 +85,8 @@ public class AddPostParameter {
      * @return all graphTemplates.  The first entry  of the Pair is the Template, the second is the
      * *                        detailView of the template.
      */
-    public List<Pair<String, String>> getGraphTemplates() {
-        List<Pair<String, String>> list = new ArrayList<>();
+    public List<Pair<String, TemplateDetailWrapper>> getGraphTemplates() {
+        List<Pair<String, TemplateDetailWrapper>> list = new ArrayList<>();
         list.addAll(graphTemplates);
         return list;
     }
@@ -96,8 +96,8 @@ public class AddPostParameter {
     public String toString() {
         return "AddPostParameter{" +
                 "postPreview='" + postPreview + '\'' +
-                ", projectTemplate='" + projectTemplate + '\'' +
-                ", graphTemplates=" + graphTemplates.toString() +
-                "} ";
+                ", projectTemplate=" + projectTemplate +
+                ", graphTemplates=" + graphTemplates +
+                '}';
     }
 }
