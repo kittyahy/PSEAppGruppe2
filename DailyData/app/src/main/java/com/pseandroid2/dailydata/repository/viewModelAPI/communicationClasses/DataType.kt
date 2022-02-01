@@ -20,15 +20,51 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
+import com.pseandroid2.dailydata.util.getSerializableClassName
+import java.time.LocalDateTime
+
 
 //TODO("Robin changes")
-enum class DataType(val representation : String, val regex: String) {
-    WHOLE_NUMBER("Whole Number", ""), FLOATING_POINT_NUMBER("Floating Point Number", ""), TIME("Time", ""), STRING("String", "");
+enum class DataType(
+    val representation: String,
+    val regex: String,
+    val serializableClassName: String
+) {
+
+
+    WHOLE_NUMBER(
+        "Whole Number",
+        "",
+        Int::class.getSerializableClassName()
+    ),
+    FLOATING_POINT_NUMBER(
+        "Floating Point Number",
+        "",
+        Float::class.getSerializableClassName()
+    ),
+    TIME(
+        "Time",
+        "",
+        LocalDateTime::class.getSerializableClassName()
+    ),
+    STRING(
+        "String",
+        "",
+        String::class.getSerializableClassName()
+    );
 
     companion object {
-        fun fromString(rep : String) : DataType {
+        fun fromString(rep: String): DataType {
             for (enum in values()) {
-                if (enum.representation == rep){
+                if (enum.representation == rep) {
+                    return enum
+                }
+            }
+            return WHOLE_NUMBER
+        }
+        fun fromSerializableClassName(rep: String) : DataType {
+            for (enum in values()) {
+                if (enum.serializableClassName == rep) {
                     return enum
                 }
             }
