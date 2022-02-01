@@ -31,7 +31,7 @@ abstract class Graph : Identifiable, Convertible<Graph<*, *>> {
     companion object {
         val availableGraphs: MutableList<String> = ArrayList<String>()
 
-        //TODO("Robin changes")
+
         fun createFromType(graph: String): com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph {
             TODO("createFromType")
         }
@@ -42,12 +42,9 @@ abstract class Graph : Identifiable, Convertible<Graph<*, *>> {
 
     }
 
-    init {
-        availableGraphs.add(typeName)
-    }
 
     abstract override val id: Int
-    abstract val image: Bitmap //TODO("Robin changes")
+    abstract val image: Bitmap
     abstract val typeName: String
 
     override fun toDBEquivalent(): Graph<*, *> {

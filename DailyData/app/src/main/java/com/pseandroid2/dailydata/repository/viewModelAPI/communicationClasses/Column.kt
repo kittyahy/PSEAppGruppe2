@@ -21,15 +21,16 @@
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
+import kotlinx.coroutines.flow.Flow
 
-class Column (
+class Column(
     override val id: Int,
     val name: String,
     val unit: String,
     val dataType: DataType
-): Identifiable {
+) : Identifiable {
     override lateinit var executeQueue: ExecuteQueue
-    override fun deleteIsPossible(): Boolean {
+    override fun deleteIsPossible(): Flow<Boolean> {
         TODO("Not yet implemented")
     }
 
