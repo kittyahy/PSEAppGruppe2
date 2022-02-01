@@ -46,11 +46,12 @@ class Project(
     override lateinit var executeQueue: ExecuteQueue
     val scope = CoroutineScope(Dispatchers.IO)
 
-    //TODO("Robin Changes")
+    //TODO("Anton Changes") Nein, werden im VM erstellt
     fun createLink() : String {
         TODO()
     }
-    fun update(graphEntity: GraphEntity) {
+    //TODO(Anton changes) eigentlich solltest du die gar nicht kennen
+    /*fun update(graphEntity: GraphEntity) {
         TODO("not yet implemented")
     }
 
@@ -65,7 +66,27 @@ class Project(
     //Todo nothing mit typ für settings ersetzen
     fun update(settings: Nothing) {
         TODO("not yet implemented")
+    }*/
+    //Alternativen
+    fun update(graph: Graph) {
+        TODO("not yet implemented")
     }
+
+    fun update(notification: Notification) {
+        TODO("not yet implemented")
+    }
+
+    fun update(
+        id: Int,
+        name: String,
+        description: String,
+        onlineId: Long,
+        wallpaper: Int) {
+        TODO("not yet implemented")
+    }
+
+    //nichts mit Settings machen
+
 
     //TODO("Robin changes")
     fun addGraph(graph : Graph) {
