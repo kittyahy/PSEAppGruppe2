@@ -20,15 +20,15 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows
 
-import com.pseandroid2.dailydata.model.GraphType
-import com.pseandroid2.dailydata.model.database.entities.GraphData
+import com.pseandroid2.dailydata.model.graph.GraphType
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
+import com.pseandroid2.dailydata.model.graph.Graph as ModelGraph
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 
 @InternalCoroutinesApi
-class GraphFlow(flow: Flow<List<com.pseandroid2.dailydata.model.Graph>>) : FlowAdapter<com.pseandroid2.dailydata.model.Graph, Graph>(flow) {
-    override fun provide(i: com.pseandroid2.dailydata.model.Graph): Graph {
+class GraphFlow(flow: Flow<List<ModelGraph<*,*>>>) : FlowAdapter<ModelGraph<*,*>, Graph>(flow) {
+    override fun provide(i: com.pseandroid2.dailydata.model.graph.Graph<*,*>): Graph {
         return when (i.getType()) {
             GraphType.LINE_CHART -> {
                 TODO() //LineChart()

@@ -52,7 +52,7 @@ class TemplatesScreenViewModel @Inject constructor(
 
     var graphTemplates = repository.projectHandler.graphTemplateFlow.templates
         private set
-    var projectTemplates = repository.projectHandler.projectTemplateFlow.flow
+    var projectTemplates = repository.projectHandler.projectTemplateFlow.getFlow()
         private set
 
     fun onEvent(event : TemplatesScreenEvent) {

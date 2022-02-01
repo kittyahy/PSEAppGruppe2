@@ -31,8 +31,9 @@ class Button(
     val name: String,
     val columnId: Int,
     val value: Int
-): Identifiable, Convertible<UIElement> {
+) : Identifiable, Convertible<UIElement> {
     override lateinit var executeQueue: ExecuteQueue
+
     constructor(uiElement: UIElement, columnId: Int) : this(
         uiElement.id,
         uiElement.name,
@@ -57,12 +58,15 @@ class Button(
             value.toString()
         )
     }
+
     fun increaseValue() {
         setValue(value + 1)
     }
+
     fun decreaseValue() {
         setValue(value - 1)
     }
+
     fun setValue(value: Int) {
         TODO()
     }

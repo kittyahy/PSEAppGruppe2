@@ -40,8 +40,8 @@ class ProjectOverviewViewModel @Inject constructor(
     val repository: RepositoryViewModelAPI
 ): ViewModel() {
 
-    val projects = repository.projectHandler.projectPreviewFlow.flow
-    val templates = repository.projectHandler.projectTemplateFlow.flow
+    val projects = repository.projectHandler.projectPreviewFlow.getFlow()
+    val templates = repository.projectHandler.projectTemplateFlow.getFlow()
 
     var isTemplateDialogOpen by mutableStateOf(false)
         private set

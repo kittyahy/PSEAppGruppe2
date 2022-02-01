@@ -27,8 +27,8 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 
 @InternalCoroutinesApi
-class ButtonFlow(flow: Flow<List<UIElement>>) : FlowAdapter<UIElement, Button>(flow) {
-    override fun provide(i: UIElement): Button {
-        return Button(i, TODO())
+class ButtonFlow(flow: Flow<List<UIElementMap>>) : FlowAdapter<UIElementMap, Button>(flow) {
+    override fun provide(i: UIElementMap): Button {
+        return Button(TODO(), TODO())
     }
 }

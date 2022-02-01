@@ -60,7 +60,7 @@ class ProjectTemplate : Identifiable {
     constructor(projectTemplateData: ProjectTemplateData) {
         this.titel = projectTemplateData.name
         this.description = projectTemplateData.description
-        this.wallpaper = projectTemplateData.wallpaper
+        this.wallpaper = TODO()//projectTemplateData.wallpaper
         val layout = projectTemplateData.layout
         val buttons = ArrayList<Button>()
         val table = ArrayList<Column>()

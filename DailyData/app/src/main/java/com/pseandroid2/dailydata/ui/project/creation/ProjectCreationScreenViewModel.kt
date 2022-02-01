@@ -84,7 +84,7 @@ class ProjectCreationScreenViewModel @Inject constructor(
         val id = savedStateHandle.get<Int>("projectTemplateId")!!
         if(id != -1) {
             viewModelScope.launch {
-                var template = repository.serverHandler.getProjectTemplate(id = id)
+                var template = repository.serverHandler.getProjectTemplate(postId = id)
                 title = template.titel
                 description = template.description
                 wallpaper = Color(template.wallpaper)
@@ -165,7 +165,9 @@ class ProjectCreationScreenViewModel @Inject constructor(
                     title.isBlank() -> sendUiEvent(UiEvent.ShowToast("Please Enter a title"))
                     table.isEmpty() -> sendUiEvent(UiEvent.ShowToast("Please Enter a column"))
                     else            -> {
-                        var newProject = repository.projectHandler.newProject(
+                        //Todo Anton neue signatur
+                        /*
+                        var newProject = repository.projectHandler.newProjectAsync(
                             name = title,
                             description = description,
                             wallpaper = wallpaper.hashCode(),
@@ -175,7 +177,7 @@ class ProjectCreationScreenViewModel @Inject constructor(
                             graphs = graphs
                         )
                         sendUiEvent(UiEvent.PopBackStack)
-                        sendUiEvent(UiEvent.Navigate(Routes.DATA + "?projectId=${newProject.id}"))
+                        sendUiEvent(UiEvent.Navigate(Routes.DATA + "?projectId=${newProject.id}"))*/
                     }
                 }
             }

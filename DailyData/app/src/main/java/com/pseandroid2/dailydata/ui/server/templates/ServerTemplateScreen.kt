@@ -19,7 +19,7 @@ fun ServerTemplatesScreen(
     onNavigate: (UiEvent.Navigate) -> Unit,
     viewModel: ServerTemplateScreenViewModel = hiltViewModel()
 ) {
-    val posts by viewModel.posts.collectAsState(initial = listOf())
+    val posts = viewModel.posts
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->
             when(event) {

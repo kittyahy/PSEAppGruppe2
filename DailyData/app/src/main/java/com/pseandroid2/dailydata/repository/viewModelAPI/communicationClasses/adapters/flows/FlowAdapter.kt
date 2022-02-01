@@ -29,7 +29,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @InternalCoroutinesApi
-abstract class FlowAdapter <I, O> (val flow: Flow<List<I>>){
+abstract class FlowAdapter <I, O> (private val flow: Flow<List<I>>){
     private val sharedFlow = MutableSharedFlow<List<O>>()
     init {
         GlobalScope.launch {
