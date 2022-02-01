@@ -13,8 +13,7 @@ class ExecuteQueue(
     remoteDataSourceAPI: RemoteDataSourceAPI,
     private val publishQueue: PublishQueue
 ) :
-    CommandQueue(appDataBase, remoteDataSourceAPI) {
-    private val remoteDataSourceProjectCommandObserver = RemoteDataSourceProjectCommandObserver(this, remoteDataSourceAPI, super.scope)
+    CommandQueue(appDataBase, remoteDataSourceAPI), ProjectCommandQueueObserver{
     override suspend fun performCommandAction(command: ProjectCommand) {
         command.execute(appDataBase, remoteDataSourceAPI, publishQueue)
     }
@@ -30,21 +29,14 @@ class ExecuteQueue(
     //No contingency plan required because execution will always succeed
     override suspend fun commandFailedAction(command: ProjectCommand) {}
 
-    private class RemoteDataSourceProjectCommandObserver(
-        private val executeQueue: ExecuteQueue,
-        private val remoteDataSourceAPI: RemoteDataSourceAPI,
-        private val scope: CoroutineScope
-    ) : ProjectCommandQueueObserver {
-        override fun update() {
-            while (remoteDataSourceAPI.getProjectCommandQueueLength() > 0) {
-                val projectCommandInfo = remoteDataSourceAPI.getProjectCommandFromQueue()!!
-                var command = CommandWrapper.fromJson(projectCommandInfo.projectCommand)
-                command = CommandUtility.setServerInfo(command, projectCommandInfo)
-                scope.launch {
-                    executeQueue.add(command)
-                }
+    override fun update() {
+        while (remoteDataSourceAPI.getProjectCommandQueueLength() > 0) {
+            val projectCommandInfo = remoteDataSourceAPI.getProjectCommandFromQueue()!!
+            var command = CommandWrapper.fromJson(projectCommandInfo.projectCommand)
+            command = CommandUtility.setServerInfo(command, projectCommandInfo)
+            scope.launch {
+                add(command)
             }
         }
-
     }
 }
