@@ -34,7 +34,12 @@ class GraphUITester {
             Pair(GraphPieChart.SLICE_COLOR_KEY + 3, "#00ff00"),
             Pair(GraphPieChart.PERCENTAGE_ENABLE_KEY, Graph.ENABLE),
             Pair(Graph.SET_LABEL_KEY, "Test"),
-            Pair(Generator.GRAPH_NAME_KEY, "Test")
+            Pair(Generator.GRAPH_NAME_KEY, "Test"),
+            Pair(GraphPieChart.VALUE_LABEL_ENABLE_KEY, Graph.ENABLE),
+            Pair(GraphPieChart.VALUE_LABEL_KEY + 0, "Test 1"),
+            Pair(GraphPieChart.VALUE_LABEL_KEY + 1, "Test 2"),
+            Pair(GraphPieChart.VALUE_LABEL_KEY + 2, "Test 2"),
+            Pair(GraphPieChart.VALUE_LABEL_KEY + 3, "Test 4")
         )
         lateinit var pieChart: GraphPieChart
 

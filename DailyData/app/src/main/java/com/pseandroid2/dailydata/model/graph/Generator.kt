@@ -3,6 +3,7 @@ package com.pseandroid2.dailydata.model.graph
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
+import android.util.Log
 import android.view.View
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
@@ -29,6 +30,8 @@ import com.pseandroid2.dailydata.model.graph.LineChart.Companion.LINE_STYLE_NONE
 import com.pseandroid2.dailydata.model.graph.LineChart.Companion.LINE_STYLE_SOLID
 import com.pseandroid2.dailydata.model.graph.PieChart.Companion.PERCENTAGE_ENABLE_KEY
 import com.pseandroid2.dailydata.model.graph.PieChart.Companion.SLICE_COLOR_KEY
+import com.pseandroid2.dailydata.model.graph.PieChart.Companion.VALUE_LABEL_ENABLE_KEY
+import com.pseandroid2.dailydata.model.graph.PieChart.Companion.VALUE_LABEL_KEY
 import com.pseandroid2.dailydata.model.settings.Settings
 import com.pseandroid2.dailydata.util.IOUtil
 
@@ -149,16 +152,42 @@ object Generator {
 
         val data = PieData(dataSet)
 
+        //Increase Text Size of Entries
+        data.setValueTextSize(60.0f)
+
         val pieChart = PieChart(context)
         pieChart.data = data
+
+        //Make the hole in the middle slightly smaller as per Default
+        pieChart.holeRadius = pieChart.holeRadius / 1.5f
+        pieChart.setHoleColor(Color.TRANSPARENT)
+        pieChart.transparentCircleRadius = pieChart.transparentCircleRadius / 1.25f
+
+        //Disable Description
+        pieChart.description.isEnabled = false
+
+        //Disable Legend
+        pieChart.legend.isEnabled = false
+
+        //Enable Label Entry Drawing
+        if (settings.containsKey(VALUE_LABEL_ENABLE_KEY)) {
+            pieChart.setDrawEntryLabels(settings[VALUE_LABEL_ENABLE_KEY] == ENABLE)
+            pieChart.setEntryLabelTextSize(30.0f)
+            pieChart.setEntryLabelColor(Color.BLACK)
+        } else {
+            pieChart.setDrawEntryLabels(false)
+        }
 
         //Enable Percentage display
         if (settings.containsKey(PERCENTAGE_ENABLE_KEY)) {
             if (settings[PERCENTAGE_ENABLE_KEY] == ENABLE) {
                 pieChart.setUsePercentValues(true)
+                pieChart.data.setValueFormatter(PercentFormatter(pieChart))
             } else {
                 pieChart.setDrawEntryLabels(false)
             }
+        } else {
+            pieChart.setDrawEntryLabels(false)
         }
         IOUtil.saveToFile(pieChart, GRAPH_DIR_NAME, settings[GRAPH_NAME_KEY], context)
         return pieChart
