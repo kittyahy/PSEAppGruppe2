@@ -59,9 +59,9 @@ class Row(
     //@throws IllegalOperationException
     fun setCell(indexColumn: Int, content: String) {
         if (indexColumn >= 0 && indexColumn < elements.size) {
-            TODO()
+            TODO("setCell")
         }
-        TODO()
+        TODO("setCell2")
     }
 
     override fun toDBEquivalent(): Row {

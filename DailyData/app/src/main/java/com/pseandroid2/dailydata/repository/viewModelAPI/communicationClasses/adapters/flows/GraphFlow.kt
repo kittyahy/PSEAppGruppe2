@@ -31,10 +31,10 @@ class GraphFlow(flow: Flow<List<ModelGraph<*,*>>>) : FlowAdapter<ModelGraph<*,*>
     override fun provide(i: com.pseandroid2.dailydata.model.graph.Graph<*,*>): Graph {
         return when (i.getType()) {
             GraphType.LINE_CHART -> {
-                TODO() //LineChart()
+                TODO("LineChart") //LineChart()
             }
             GraphType.PIE_CHART -> {
-                TODO() //PieChart()
+                TODO("PieChart") //PieChart()
             }
             else -> {
                 throw IllegalArgumentException()

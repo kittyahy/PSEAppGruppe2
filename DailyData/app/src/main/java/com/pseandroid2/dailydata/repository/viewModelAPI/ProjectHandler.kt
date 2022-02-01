@@ -94,11 +94,11 @@ class ProjectHandler(
     }
 
     fun joinOnlineProject(onlineID: Long): Int {
-        return TODO()
+        return TODO("joinOnlineProject")
     }
 
     fun getProjectTemplateByID() {
-        TODO()
+        TODO("getProjectTemplateByID")
     }
 
     //TODO("Robin changes")

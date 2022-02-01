@@ -36,7 +36,7 @@ class LineChart(
     val mappingVertical: List<Column>
 ) : Graph() {
     override lateinit var executeQueue: ExecuteQueue
-    override val typeName: String = "Line Chart" //TODO() Magic String
+    override val typeName: String = "Line Chart" //TODO Magic String
 
     override fun deleteIsPossible(): Boolean {
         TODO("Not yet implemented")
@@ -73,6 +73,6 @@ class LineChart(
     }
 
     fun show(context: Context): View {
-        TODO()
+        TODO("show")
     }
 }

@@ -33,11 +33,11 @@ abstract class Graph : Identifiable, Convertible<Graph<*, *>> {
 
         //TODO("Robin changes")
         fun createFromType(graph: String): com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph {
-            TODO()
+            TODO("createFromType")
         }
 
         fun createFromTemplate(graph: GraphTemplate): com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph {
-            TODO()
+            TODO("createFromTemplate")
         }
 
     }
@@ -51,7 +51,7 @@ abstract class Graph : Identifiable, Convertible<Graph<*, *>> {
     abstract val typeName: String
 
     override fun toDBEquivalent(): Graph<*, *> {
-        return TODO() //Todo Arne fragen, wie ich den richtigen Graph erstelle: Kommt noch
+        return TODO("toDBEquivalentGraph") //Todo Arne fragen, wie ich den richtigen Graph erstelle: Kommt noch
     }
 
     override fun addYourself(builder: ProjectBuilder<out Project>) {
