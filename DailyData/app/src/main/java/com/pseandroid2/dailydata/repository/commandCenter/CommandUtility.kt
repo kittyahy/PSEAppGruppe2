@@ -9,6 +9,7 @@ object CommandUtility {
         projectCommand.wentOnline = projectCommandInfo.wentOnline
         projectCommand.commandByUser = projectCommandInfo.commandByUser
         projectCommand.isProjectAdmin = projectCommandInfo.isProjectAdmin
+        projectCommand.projectID = TODO() //Todo Arne Fragen wie ich zwischen online/Offline ids übersetzen kann
         return projectCommand
     }
 }
