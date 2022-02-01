@@ -57,7 +57,7 @@ public class PostService {
     }
 
     /**
-     * Provides all Post previews with ids as PostPreview
+     * Provides all Post previews (id, title, image) as {@link PostPreview}
      *
      * @return a list of all available PostPreviews
      */
@@ -117,7 +117,7 @@ public class PostService {
     }
 
     /**
-     * Provides the template Details, their ids and if its a project template.
+     * Provides the template Details (image and title), their ids and if its a project template.
      * <p>
      * This method does not check: if the post exists.
      *

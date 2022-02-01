@@ -22,17 +22,19 @@ package com.pseandroid2.dailydataserver.postDatabase.Response;
 #TODO JAVA DOC
  */
 
+import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Arrays;
 
 /**
- * A class, which contains a postPReview and the id of the post, where the postPreview belongs to.
- * Serves as Response object for getAllPostPreview.
+ * A class, which contains an image, the title and the id of the post, where the postPreview belongs to.
+ * Serves as Response object for  getAllPostPreview.
  * <p>
  * The class exists, because not the whole Post entity should be returned.
  */
 @Setter
+@Getter
 public class PostPreview {
     private int id;
     private String preview;

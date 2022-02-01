@@ -19,6 +19,8 @@
 */
 package com.pseandroid2.dailydataserver.postDatabase.Request;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.util.Pair;
 
 import java.util.ArrayList;
@@ -27,6 +29,8 @@ import java.util.List;
 /**
  * A class which specifies all Parameters, which are recommended for the body of addPost.
  */
+@Getter
+@Setter
 public class AddPostParameter {
 
     private PostPreviewWrapper postPreview;
@@ -48,47 +52,6 @@ public class AddPostParameter {
         this.projectTemplate = projectTemplate;
         this.graphTemplates = new ArrayList<>();
         this.graphTemplates.addAll(graphTemplates);
-    }
-
-    /**
-     * Getter for postPreview.
-     * <p>
-     * There are no need for setters, because the class is only for transfer the Data from the
-     * client (who sets them) to the server (who gets them)
-     *
-     * @return the postPreview for the post.
-     */
-    public PostPreviewWrapper getPostPreview() {
-        return postPreview;
-    }
-
-    /**
-     * Getter for projectTemplate.
-     * <p>
-     * There are no need for setters, because the class is only for transfer the Data from the
-     * client (who sets them) to the server (who gets them)
-     *
-     * @return the projectTemplate. The first entry is the Template, the second is the detailView of
-     * the template.
-     */
-    public Pair<String, TemplateDetailWrapper> getProjectTemplate() {
-        return projectTemplate;
-    }
-
-
-    /**
-     * Getter for graph templates, which returns a copy of  graphTemplates
-     * <p>
-     * There are no need for setters, because the class is only for transfer the Data from the
-     * client (who sets them) to the server (who gets them)
-     *
-     * @return all graphTemplates.  The first entry  of the Pair is the Template, the second is the
-     * *                        detailView of the template.
-     */
-    public List<Pair<String, TemplateDetailWrapper>> getGraphTemplates() {
-        List<Pair<String, TemplateDetailWrapper>> list = new ArrayList<>();
-        list.addAll(graphTemplates);
-        return list;
     }
 
 

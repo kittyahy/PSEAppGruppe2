@@ -19,32 +19,43 @@
 */
 package com.pseandroid2.dailydataserver.postDatabase.Response;
 
+import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Arrays;
 
 
 /**
- * A class, which contains a TemplateDetail and the id of the Template, where the templateDetail belongs to. It also
+ * A class, which contains the image, the title and the id of the Template, where the templateDetail belongs to. It also
  * contains if the template is a projectTemplate. If not, it's a graph template.
  * <p>
  * The class exists, because not the whole Post entity should be returned.
  */
 @Setter
+@Getter
 public class TemplateDetail {
     private int id;
-    private String title ;
+    private String title;
     private boolean isProjectTemplate;
     private byte[] detailImage;
 
     /**
+     *
+     *
+     * @param id
+     * @param title
+     * @param isProjectTemplate
+     *
+     */
+    /**
      * The constructor for the Template details.
      *
-     * @param id                the ID of the Template Entity, to which the title belongs.
-     * @param title            the title of a given template
-     * @param isProjectTemplate if true, this template is a project template, if false, it's a graph template.
+     * @param id                The ID of the Template Entity, to which the title belongs.
+     * @param title             The title of a given template preview.
+     * @param detailImage       An image for the template preview.
+     * @param isProjectTemplate If true, this template is a project template, if false, it's a graph template.
      */
-    public TemplateDetail(int id, String title,byte[] detailImage, boolean isProjectTemplate) {
+    public TemplateDetail(int id, String title, byte[] detailImage, boolean isProjectTemplate) {
         this.id = id;
         this.title = title;
         this.isProjectTemplate = isProjectTemplate;

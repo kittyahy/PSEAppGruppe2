@@ -25,6 +25,7 @@ import lombok.Setter;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -46,10 +47,11 @@ public class Post {
     /**
      * The constructor, which should be used, to create a new Post. The templateIds is initialized with 0, because
      * they start without any templates.
-     *  @param postId      the id, which belongs to the post.
-     * @param postPreviewImage the postPreview, which identifies the post
-     * @param createdBy   the user, who upload the post.
-     * @param previewTitle
+     *
+     * @param postId           the id, which belongs to the post.
+     * @param postPreviewImage the image for the postPreview.
+     * @param createdBy        the user, who upload the post.
+     * @param previewTitle     the title of the post.
      */
     public Post(int postId, byte[] postPreviewImage, String createdBy, String previewTitle) {
         this.postId = postId;
@@ -74,11 +76,7 @@ public class Post {
         templateIds++;
     }
 
-    @Override
-    public String toString() {
-        return "Post{" + "postId=" + postId + ", postPreview='"
-                + postPreviewImage + '\'' + ", createdBy='" + createdBy + '\'' + '}';
-    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -91,5 +89,16 @@ public class Post {
     @Override
     public int hashCode() {
         return Objects.hash(postId);
+    }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "postId=" + postId +
+                ", postPreviewImage=" + Arrays.toString(postPreviewImage) +
+                ", previewTitle='" + previewTitle + '\'' +
+                ", createdBy='" + createdBy + '\'' +
+                ", templateIds=" + templateIds +
+                '}';
     }
 }

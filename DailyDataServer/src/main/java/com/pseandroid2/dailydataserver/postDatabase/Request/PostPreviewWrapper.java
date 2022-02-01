@@ -1,32 +1,32 @@
 package com.pseandroid2.dailydataserver.postDatabase.Request;
 
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Arrays;
 
+/**
+ * This method contains everything, what is necessary fpr the post Preview.
+ * It is used for a request, to get a post preview.
+ */
+@Getter
+@Setter
 public class PostPreviewWrapper {
-  private  byte[] PreviewPicture;
-  private   String title;
+    private byte[] PreviewPicture;
+    private String title;
 
+    /**
+     * The Constructor for the postPreviewWrapper.
+     *
+     * @param previewPicture the picture, which the user can see, as preview for the whole post.
+     * @param title          the title of the post.
+     */
     public PostPreviewWrapper(final byte[] previewPicture, final String title) {
         PreviewPicture = previewPicture;
         this.title = title;
     }
 
-    public byte[] getPreviewPicture() {
-        return PreviewPicture;
-    }
-
-    public void setPreviewPicture(final byte[] previewPicture) {
-        PreviewPicture = previewPicture;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(final String title) {
-        this.title = title;
-    }
 
     @Override
     public String toString() {
