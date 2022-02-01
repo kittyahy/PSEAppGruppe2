@@ -13,7 +13,7 @@ abstract class ProjectCommand (
     var commandByUser: String? = null,
     var isProjectAdmin: Boolean? = null
 ){
-    val cameFromServer = false
+    var cameFromServer = false
     open suspend fun execute(
         appDataBase: AppDataBase,
         remoteDataSourceAPI: RemoteDataSourceAPI,
