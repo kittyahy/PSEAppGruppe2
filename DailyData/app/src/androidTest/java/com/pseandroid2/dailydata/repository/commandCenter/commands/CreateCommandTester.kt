@@ -55,7 +55,7 @@ class CreateCommandTester {
         db = Room.inMemoryDatabaseBuilder(context, AppDataBase::class.java).build()
         remoteDataSourceAPI = mockk<RemoteDataSourceAPI>()
         every { remoteDataSourceAPI.addProject() } returns testOnlineID
-    }
+    }/*
     @InternalCoroutinesApi
     @ExperimentalCoroutinesApi
     @Test
@@ -76,7 +76,7 @@ class CreateCommandTester {
         val id = deferred.await()
         val project = project1.await()
         assertEquals(project[0], ph.getProjectByID(id))
-    }
+    }*/
 
 }
 
