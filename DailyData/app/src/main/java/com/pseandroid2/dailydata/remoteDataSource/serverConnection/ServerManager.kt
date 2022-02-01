@@ -249,7 +249,7 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @return Boolean: Did the server call succeed
      */
     fun provideOldData(projectCommand: String, forUser: String, initialAddedDate: LocalDateTime, initialAddedBy: String, projectID: Long, wasAdmin: Boolean, authToken: String): Boolean {
-        return restAPI.providedOldData(projectCommand, forUser, initialAddedDate, initialAddedBy, projectID, wasAdmin, authToken)
+        return restAPI.provideOldData(projectCommand, forUser, initialAddedDate, initialAddedBy, projectID, wasAdmin, authToken)
     }
 
     /**

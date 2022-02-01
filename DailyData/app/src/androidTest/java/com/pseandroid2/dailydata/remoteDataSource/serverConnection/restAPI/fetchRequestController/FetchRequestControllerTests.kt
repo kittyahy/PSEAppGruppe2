@@ -28,17 +28,11 @@ class FetchRequestControllerTests {
 
     private var projectID: Long = -1
 
-    private var serverManager = ServerManager(restAPI)
-
-    private val projectCommandToSend: String = "projectCommand"
-
-
-
     @Before
     fun setup() {
-        // Generate valid firebase authentication tokens
         Assert.assertEquals(FirebaseReturnOptions.SINGED_IN, fm.signInWithEmailAndPassword(email3, password3))
         authToken3 = fm.getToken()
+        // Generate valid firebase authentication tokens
         Assert.assertEquals(FirebaseReturnOptions.SINGED_IN, fm.signInWithEmailAndPassword(email2, password2))
         authToken2 = fm.getToken()
         Assert.assertEquals(FirebaseReturnOptions.SINGED_IN, fm.signInWithEmailAndPassword(email, password))
@@ -48,10 +42,8 @@ class FetchRequestControllerTests {
         projectID = restAPI.addProject(authToken, "project details")
         Assert.assertTrue(projectID > 0)
         // Adds third user to the project
-        Assert.assertEquals("project details", restAPI.addUser(projectID, authToken3))
+        Assert.assertEquals("project details", restAPI.addUser(projectID, authToken2))
 
-        // Save a delta to the server
-        Assert.assertEquals(listOf(projectCommandToSend), serverManager.sendCommandsToServer(projectID, listOf(projectCommandToSend), authToken))
         setTeardown(restAPI, projectID, authToken, userID, userID2, userID3)
     }
 
@@ -101,6 +93,13 @@ class FetchRequestControllerTests {
         Assert.assertEquals(0, requestsToSend) // The send fetch requests from user1 were received by user2
     }
 
+    @Test
+    fun getFetchRequestsWhenNoProjectMember() {
+        Assert.assertTrue(restAPI.demandOldData(projectID, "request information", authToken))
+        //User 3 is no project member
+        Assert.assertEquals(0, restAPI.getFetchRequests(projectID, authToken3).size)
+    }
+
     // TODO: Test Ideas: 1. getFetchrequests from the same account who send them, 2.
-    
+
 }

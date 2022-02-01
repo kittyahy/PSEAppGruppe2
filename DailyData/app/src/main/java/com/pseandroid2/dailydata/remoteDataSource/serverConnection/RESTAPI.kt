@@ -271,7 +271,7 @@ class RESTAPI {
      * @param authToken: The authentication token
      * @return Boolean: Did the server call succeed
      */
-    fun providedOldData(projectCommand: String, forUser: String, initialAdded: LocalDateTime, initialAddedBy: String, projectID: Long, wasAdmin: Boolean, authToken: String): Boolean {
+    fun provideOldData(projectCommand: String, forUser: String, initialAdded: LocalDateTime, initialAddedBy: String, projectID: Long, wasAdmin: Boolean, authToken: String): Boolean {
         val params = ProvideOldDataParameter(projectCommand, forUser, initialAdded, initialAddedBy, wasAdmin)
 
         val call: Call<Boolean> = server.provideOldData(authToken, projectID, params)
