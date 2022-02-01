@@ -20,8 +20,6 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
-import android.graphics.Bitmap
-import com.pseandroid2.dailydata.model.database.entities.GraphEntity
 import com.pseandroid2.dailydata.model.database.entities.ProjectData
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddRow
@@ -31,7 +29,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlin.reflect.KClass
@@ -53,12 +50,12 @@ class Project(
     override lateinit var executeQueue: ExecuteQueue
     private val scope = CoroutineScope(Dispatchers.IO)
 
-    private val IsPossible = mutableMapOf<KClass<out ProjectCommand>, MutableSharedFlow<Boolean>>(
+    private val isPossible = mutableMapOf<KClass<out ProjectCommand>, MutableSharedFlow<Boolean>>(
         Pair(AddRow::class, MutableSharedFlow())
     )
 
     init {
-        for (pair in IsPossible) {
+        for (pair in isPossible) {
             runBlocking { //Todo runBlocking weg
                 pair.value.emit(pair.key.members.single {
                     it.name == "IsPossible"
@@ -73,16 +70,21 @@ class Project(
     }
 
     fun addGraphIsPossible(): Flow<Boolean> {
-        TODO("addGraphIsPossible")
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
     }
 
-    //TODO("Robin changes")
+
     fun addGraph(graph: Graph) {
 
     }
 
     fun addRowIsPossible(): Flow<Boolean> {
-        return IsPossible[AddRow::class]!!
+        return isPossible[AddRow::class]!!
     }
 
     //@throws IllegalOperationException
@@ -91,7 +93,12 @@ class Project(
     }
 
     fun deleteRowIsPossible(row: Row): Flow<Boolean> {
-        TODO("deleteRowIsPossible")
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
     }
 
     //@throws IllegalOperationException
@@ -104,7 +111,12 @@ class Project(
     }
 
     fun addColumnIsPossible(): Flow<Boolean> {
-        TODO("addColumnIsPossible")
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
     }
 
     //@throws IllegalOperationException
@@ -113,7 +125,12 @@ class Project(
     }
 
     fun deleteColumnIsPossible(column: Column): Flow<Boolean> {
-        TODO("deleteColumnIsPossible")
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
     }
 
     //@throws IllegalOperationException
@@ -127,10 +144,15 @@ class Project(
 
 
     fun addButtonIsPossible(): Flow<Boolean> {
-        TODO("addButtonIsPossible")
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
     }
 
-    //TODO("Robin changes")
+
     //@throws IllegalOperationException
     fun addButton(button: Button) {
         TODO("addButton")
@@ -138,10 +160,15 @@ class Project(
 
 
     fun deleteButtonIsPossible(button: Button): Flow<Boolean> {
-        TODO("deleteButtonIsPossible")
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
     }
 
-    //TODO("Robin changes")
+
     //@throws IllegalOperationException
     fun deleteButton(button: Button) {
         TODO("deleteButton")
@@ -158,8 +185,14 @@ class Project(
 
 
     fun setCellIsPossible(): Flow<Boolean> {
-        TODO("setCellIsPossible")
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
     }
+
     //@throws IllegalOperationException
     fun setCell(indexRow: Int, indexColumn: Int, content: String) {
         if (indexRow >= 0 && indexRow < data.size) {
@@ -169,7 +202,12 @@ class Project(
     }
 
     fun addMemberIsPossible(): Flow<Boolean> {
-        TODO("addMemberIsPossible")
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
     }
 
     fun addMember(member: Member) {
@@ -182,7 +220,12 @@ class Project(
     }
 
     fun leaveOnlineProjectIsPossible(): Flow<Boolean> {
-        TODO("leaveOnlineProjectIsPossible")//return isOnlineProject
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow//return isOnlineProject
     }
 
     fun leaveOnlineProject() {
@@ -190,7 +233,12 @@ class Project(
     }
 
     fun deleteMemberIsPossible(member: Member): Flow<Boolean> {
-        TODO("deleteMemberIsPossible")
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
     }
 
     fun deleteMember(member: Member) {
@@ -202,7 +250,12 @@ class Project(
     }
 
     fun setAdminIsPossible(): Flow<Boolean> {
-        TODO("setAdminIsPossible")
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
     }
 
     fun setAdmin(member: Member) {
@@ -210,16 +263,26 @@ class Project(
     }
 
     fun changeWallpaperIsPossible(): Flow<Boolean> {
-        TODO("changeWallpaperIsPossible")
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
     }
 
-    //TODO("Robin changes")
+
     fun changeWallpaper(image: Int) {
         TODO("changeWallpaper")
     }
 
     fun setNotificationIsPossible(): Flow<Boolean> {
-        TODO("setNotificationIsPossible")
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
     }
 
     fun setNotification(notification: Notification) {
@@ -227,7 +290,12 @@ class Project(
     }
 
     fun deleteNotificationIsPossible(notification: Notification): Flow<Boolean> {
-        TODO("deleteNotificationIsPossible")
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
     }
 
     fun deleteNotification(notification: Notification) {
@@ -235,16 +303,26 @@ class Project(
     }
 
     fun addNotificationIsPossible(): Flow<Boolean> {
-        TODO("addNotificationIsPossible")
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
     }
 
-    //TODO("Robin changes")
+
     fun addNotification(notification: Notification) {
 
     }
 
     fun setNameIsPossible(): Flow<Boolean> {
-        TODO("setNameIsPossible")
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
     }
 
     fun setName(name: String) {
@@ -253,7 +331,12 @@ class Project(
 
 
     fun setDescriptionIsPossible(): Flow<Boolean> {
-        TODO("setDescriptionIsPossible")
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
     }
 
     @JvmName("setDescription1")
@@ -270,7 +353,12 @@ class Project(
     }
 
     fun setButtonIsPossible(): Flow<Boolean> {
-        TODO("setButtonIsPossible")
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
     }
 
     fun setButton(button: Button) {

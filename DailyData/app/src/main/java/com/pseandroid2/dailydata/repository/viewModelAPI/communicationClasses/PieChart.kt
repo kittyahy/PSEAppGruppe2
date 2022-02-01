@@ -23,16 +23,22 @@ package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 import android.graphics.Bitmap
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.runBlocking
 
 class PieChart(
     override val id: Int,
     override val image: Bitmap,
-    val color: List<Int>, //TODO("Robin changes")
+    val color: List<Int>,
     val mapping: List<Column>,
     val showPercentages: Boolean
-): Graph() {
+) : Graph() {
     override lateinit var executeQueue: ExecuteQueue
     override val typeName: String = "Pie Chart" //TODO Magic String
+
+    init {
+        availableGraphs.add(typeName)
+    }
 
     override fun deleteIsPossible(): Flow<Boolean> {
         TODO("Not yet implemented")
@@ -43,18 +49,42 @@ class PieChart(
         TODO("Not yet implemented")
     }
 
-    //TODO("Robin changes")
-    fun addMapping(color : Int, column : Column) {
+    fun addMappingColorIsPossible(): Flow<Boolean> {
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
+    }
+
+    fun addMapping(color: Int, column: Column) { //Todo Robin fragen was die color hier bedeutet
 
     }
 
-    //TODO("Robin changes")
-    fun addMapping(column : Column) {
+    fun addMappingIsPossible(): Flow<Boolean> {
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
+    }
+
+    fun addMapping(column: Column) {
         addMapping(PieChartColors.ORANGE.value.toInt(), column = column)
     }
 
-    //TODO("Robin changes")
-    fun showPercentages(show : Boolean) {
+    fun showPercentagesIsPossible(): Flow<Boolean> {
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
+    }
+
+    fun showPercentages(show: Boolean) {
 
     }
 }

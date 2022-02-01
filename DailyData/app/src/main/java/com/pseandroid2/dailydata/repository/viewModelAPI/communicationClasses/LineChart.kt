@@ -27,6 +27,8 @@ import android.graphics.drawable.Drawable
 import android.view.View
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.runBlocking
 
 class LineChart(
     override val id: Int,
@@ -39,6 +41,10 @@ class LineChart(
     override lateinit var executeQueue: ExecuteQueue
     override val typeName: String = "Line Chart" //TODO Magic String
 
+    init {
+        availableGraphs.add(typeName)
+    }
+
     override fun deleteIsPossible(): Flow<Boolean> {
         TODO("Not yet implemented")
     }
@@ -48,29 +54,83 @@ class LineChart(
         TODO("Not yet implemented")
     }
 
-    //TODO("Robin changes")
+    fun addVerticalMappingIsPossible(): Flow<Boolean> {
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
+    }
+
+
     fun addVerticalMapping(column: Column) {
 
     }
 
-    //TODO("Robin changes")
+    fun deleteVerticalMappingIsPossible(): Flow<Boolean> {
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
+    }
+
+
     fun deleteVerticalMapping(index: Int) {
 
     }
 
-    //TODO("Robin changes")
+    fun changeDotSizeIsPossible(): Flow<Boolean> {
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
+    }
+
+
     fun changeDotSize(dotSize: DotSize) {
 
     }
 
-    //TODO("Robin changes")
+    fun changeDotColorIsPossible(): Flow<Boolean> {
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
+    }
+
+
     fun changeDotColor(color: Int) {
 
     }
 
-    //TODO("Robin changes")
+    fun changeLineTypeIsPossible(): Flow<Boolean> {
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
+    }
+
+
     fun changeLineType(lineType: LineType) {
 
+    }
+
+    fun showIsPossible(): Flow<Boolean> {
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
     }
 
     fun show(context: Context): View {

@@ -30,8 +30,11 @@ import kotlinx.coroutines.flow.Flow
 class Member(
     override val id: Int,
     val name: String
-): Identifiable, Convertible<User>{
-    constructor(user: User) : this(user.getId().toInt(), user.getName()) //Todo Arne Fragen ob der Cast passt: Nein, User werden über firebaseID identifiziert und die ist ein String
+) : Identifiable, Convertible<User> {
+    constructor(user: User) : this(
+        user.getId().toInt(),
+        user.getName()
+    ) //Todo Arne Fragen ob der Cast passt: Nein, User werden über firebaseID identifiziert und die ist ein String
 
     override lateinit var executeQueue: ExecuteQueue
     override fun deleteIsPossible(): Flow<Boolean> {

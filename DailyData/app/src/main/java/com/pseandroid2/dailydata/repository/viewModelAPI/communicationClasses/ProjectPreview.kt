@@ -28,10 +28,16 @@ class ProjectPreview(
     override val id: Int,
     val name: String,
     val image: String
-): Identifiable {
+) : Identifiable {
 
     override lateinit var executeQueue: ExecuteQueue
-    constructor(projectData: ProjectData) : this(projectData.id, projectData.name, projectData.wallpaper)
+
+    constructor(projectData: ProjectData) : this(
+        projectData.id,
+        projectData.name,
+        projectData.wallpaper
+    )
+
     //@throws IllegalOperationException
     override suspend fun delete() {
         TODO("Not yet implemented")
