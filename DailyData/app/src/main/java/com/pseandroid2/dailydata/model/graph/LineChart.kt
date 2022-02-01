@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineDataSet
+import com.pseandroid2.dailydata.model.graph.Graph.Companion.SET_LABEL_KEY
 import com.pseandroid2.dailydata.model.settings.Settings
 import com.pseandroid2.dailydata.model.project.Project
 
@@ -24,20 +25,17 @@ abstract class LineChart<T : Any>(
 
         const val LINE_STYLE_NONE = "NONE"
         const val LINE_STYLE_SOLID = "SOLID"
-
-        const val DOT_ENABLE = "ENABLED"
-        const val DOT_DISABLE = "DISABLED"
     }
 
     override fun getDataSets(): List<LineDataSet> {
         val dataSetMaps = xToFloat(transformation.recalculate())
         val dataSets = mutableListOf<LineDataSet>()
-        for (map in dataSetMaps) {
+        for (i in dataSetMaps.indices) {
             val entries = ArrayList<Entry>()
-            for (entry in map) {
+            for (entry in dataSetMaps[i]) {
                 entries.add(Entry(entry.key, entry.value))
             }
-            dataSets.add(LineDataSet(entries, ""))
+            dataSets.add(LineDataSet(entries, settings[SET_LABEL_KEY + i]))
         }
         return dataSets.toList()
     }
@@ -45,11 +43,7 @@ abstract class LineChart<T : Any>(
     override fun getCustomizing() = settings
 
     override fun getImage(): Bitmap? {
-        return if (path != null) {
-            BitmapFactory.decodeFile(path)
-        } else {
-            null
-        }
+        return BitmapFactory.decodeFile(path)
     }
 
     override fun getPath() = path

@@ -141,8 +141,9 @@ class ProjectCDManager(
         val name: String = skeleton.name
         val desc: String = skeleton.desc
         val wallpaper: String = skeleton.path
+        val color: Int = skeleton.color
         val onlineId: Long = skeleton.onlineId
-        return ProjectSkeletonEntity(id, name, desc, wallpaper, layout.toJSON(), onlineId)
+        return ProjectSkeletonEntity(id, name, desc, wallpaper, color, layout.toJSON(), onlineId)
     }
 
     private suspend fun insertProjectEntity(project: Project): Int {
