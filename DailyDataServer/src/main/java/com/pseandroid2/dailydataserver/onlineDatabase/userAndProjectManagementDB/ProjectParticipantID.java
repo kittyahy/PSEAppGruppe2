@@ -22,28 +22,39 @@ package com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementD
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * #TODO JavaDoc
- */
 
-public class ProjectParticipantsID implements Serializable {
+/**
+ * The id for a ProjectParticipant.
+ * <p>
+ * Defines, who the primary key of ProjectParticipants needs to be handled.
+ */
+public class ProjectParticipantID implements Serializable {
     private String user;
     private long project;
 
 
-    public ProjectParticipantsID(String user, long project) {
+    /**
+     * The constructor, which should be used, to create a valid ProjectParticipantID.
+     *
+     * @param user    the user, who is the ProjectParticipant.
+     * @param project the project, in which the user participates.
+     */
+    public ProjectParticipantID(String user, long project) {
         this.user = user;
         this.project = project;
     }
 
-    public ProjectParticipantsID() {
+    /**
+     * the recommended empty constructor.
+     */
+    public ProjectParticipantID() {
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || this.getClass() != o.getClass()) return false;
-        ProjectParticipantsID proPaId = (ProjectParticipantsID) o;
+        ProjectParticipantID proPaId = (ProjectParticipantID) o;
         return user.equals(proPaId.user) && proPaId.project == project;
     }
 

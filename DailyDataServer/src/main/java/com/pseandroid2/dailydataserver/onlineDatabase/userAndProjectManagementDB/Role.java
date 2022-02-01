@@ -19,12 +19,21 @@
 */
 package com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementDB;
 
-/**
- * #TODO JavaDoc
- */
 
+/**
+ * An Enum which declares roles for project Participants.
+ * Different roles can have different abilities and permissions for the project and user management as well as for
+ * changing the table on the clients' device.
+ */
 public enum Role {
 
+    /**
+     * The standard role for project Participants.
+     */
     PARTICIPANT,
+    /**
+     * there is only one admin per time for an project. They have more abilties and permissions for the user and
+     * project management and the table.
+     */
     ADMIN
 }

@@ -22,21 +22,16 @@ package com.pseandroid2.dailydataserver;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * #TODO javadoc,Test, implemetierung
- */
-
-/**
  * Authenticates the user and adds the user id to the RequestAttributes.
  * Most of the requests get interrupted by this Interceptor.
  * <p>
- * The authentication works with firebase. The user name ist the uid from firebase.
+ * The authentication works with firebase. The user id ist the uid from firebase.
  */
 @Component
 @Slf4j

@@ -25,14 +25,29 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The repository for FetchRequests.
+ * <p>
+ * It defines methods to operate on the table FetchRequests_Table.
+ */
 @Repository
 public interface FetchRequestRepository extends JpaRepository<FetchRequest, Integer> {
+    /**
+     * Returns all FetchRequests, which belongs to one specified Project.
+     *
+     * @param project the project, to which the FetchRequests belongs
+     * @return all recommended FetchRequests.
+     */
     List<FetchRequest> findByProject(long project);
 
+    /**
+     * Returns all FetchRequests, which belongs to a user in a project.
+     *
+     * @param user    the user, which had created the FetchRequest.
+     * @param project the project, to which the FetchRequest belongs.
+     * @return all recommended FetchRequests.
+     */
     List<FetchRequest> findByUserAndProject(String user, long project);
-
-
-
 
 
 }

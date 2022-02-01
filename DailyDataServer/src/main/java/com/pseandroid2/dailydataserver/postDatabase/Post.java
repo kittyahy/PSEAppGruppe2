@@ -19,21 +19,38 @@
 */
 package com.pseandroid2.dailydataserver.postDatabase;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Objects;
 
+/**
+ * Post is an Entity, which contains all information to a post. The templateIDs contains the next id for a new graph
+ * or project Template.
+ */
+@Getter
+@Setter
 @Entity
 @Table(name = "Post_Table")
 public class Post {
-    private @Id
-    int postId;
+    @Id
+    public int postId;
     private String postPreview;
     private String createdBy;
 
     private int templateIds;
 
+    /**
+     * The constructor, which should be used, to create a new Post. The templateIds is initialized with 0, because
+     * they start without any templates.
+     *
+     * @param postId      the id, which belongs to the post.
+     * @param postPreview the postPreview, which identifies the post
+     * @param createdBy   the user, who upload the post.
+     */
     public Post(int postId, String postPreview, String createdBy) {
         this.postId = postId;
         this.postPreview = postPreview;
@@ -41,49 +58,25 @@ public class Post {
         templateIds = 0;
     }
 
+    /**
+     * The recommended empty constructor
+     */
     public Post() {
 
     }
 
-    public int getTemplateIds() {
-        return templateIds;
-    }
 
+    /**
+     * This method increases the templateIDs for one. it can be used, after a new template for this post gets created.
+     */
     public void increaseTemplateIds() {
         templateIds++;
     }
 
-    public int getPostId() {
-        return postId;
-    }
-
-    public void setPostId(int postId) {
-        this.postId = postId;
-    }
-
-    public String getPostPreview() {
-        return postPreview;
-    }
-
-    public void setPostPreview(String postPreview) {
-        this.postPreview = postPreview;
-    }
-
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
     @Override
     public String toString() {
-        return "Post{" +
-                "postId=" + postId +
-                ", postPreview='" + postPreview + '\'' +
-                ", createdBy='" + createdBy + '\'' +
-                '}';
+        return "Post{" + "postId=" + postId + ", postPreview='"
+                + postPreview + '\'' + ", createdBy='" + createdBy + '\'' + '}';
     }
 
     @Override

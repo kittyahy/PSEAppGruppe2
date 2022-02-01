@@ -19,7 +19,9 @@
 */
 package com.pseandroid2.dailydataserver;
 
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 
 /**
@@ -30,8 +32,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "/")
 public class GreetingController {
 
-    private ServerGreetings serverGreetings;
+    private final ServerGreetings serverGreetings;
 
+    /**
+     * Constructor to create the GreetingController
+     */
     public GreetingController() {
         this.serverGreetings = new ServerGreetings();
     }

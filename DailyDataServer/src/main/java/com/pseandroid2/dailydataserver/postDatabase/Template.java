@@ -19,6 +19,9 @@
 */
 package com.pseandroid2.dailydataserver.postDatabase;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
@@ -26,8 +29,15 @@ import javax.persistence.Table;
 import java.util.Objects;
 
 /**
- * Wie kommt man an die Templateid's?
+ * Template is an Entity, which represents a Template with its information.
+ * <p>
+ * The primary key consists of to parts, because the template number must only be unique in a post. Together the post
+ * and the templateNumber define a Template.
+ * It is solved by an idClass, because, there are more cases, where only the post is relevant than the whole primary
+ * key.
  */
+@Getter
+@Setter
 @Entity
 @Table(name = "Template_Table")
 @IdClass(TemplateId.class)
@@ -41,7 +51,17 @@ public class Template {
     private boolean isProjectTemplate;
     private String detailView;
 
-    public Template(int post, int templateNumber, String templateInitial, boolean isProjectTemplate, String detailView) {
+    /**
+     * The constructor, which should be used to create a template.
+     *
+     * @param post              defines the post, to which the template belongs.
+     * @param templateNumber    defines the unique number, within the post,of the template
+     * @param templateInitial   the project or graph Template themselves, which can be understood by the client.
+     * @param isProjectTemplate declares, if this template contains a project template or not.
+     * @param detailView        the detailView of the template.
+     */
+    public Template(int post, int templateNumber, String templateInitial, boolean isProjectTemplate,
+                    String detailView) {
         this.post = post;
         this.templateNumber = templateNumber;
         this.templateInitial = templateInitial;
@@ -49,6 +69,9 @@ public class Template {
         this.detailView = detailView;
     }
 
+    /**
+     * the recommended empty constructor
+     */
     public Template() {
 
     }
@@ -66,45 +89,6 @@ public class Template {
         return Objects.hash(post, templateNumber);
     }
 
-    public int getPost() {
-        return post;
-    }
-
-    public void setPost(int post) {
-        this.post = post;
-    }
-
-    public int getTemplateNumber() {
-        return templateNumber;
-    }
-
-    public void setTemplateNumber(int templateNumber) {
-        this.templateNumber = templateNumber;
-    }
-
-    public String getTemplateInitial() {
-        return templateInitial;
-    }
-
-    public void setTemplateInitial(String templateInitial) {
-        this.templateInitial = templateInitial;
-    }
-
-    public boolean isProjectTemplate() {
-        return isProjectTemplate;
-    }
-
-    public void setProjectTemplate(boolean projectTemplate) {
-        isProjectTemplate = projectTemplate;
-    }
-
-    public String getDetailView() {
-        return detailView;
-    }
-
-    public void setDetailView(String detailView) {
-        this.detailView = detailView;
-    }
 
     @Override
     public String toString() {

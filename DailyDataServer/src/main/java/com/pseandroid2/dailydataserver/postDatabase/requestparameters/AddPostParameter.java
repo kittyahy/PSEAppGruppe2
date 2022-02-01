@@ -25,10 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * #TODO Testen, JavaDoc
+ * A class which specifies all Parameters, which are recommended for the body of addPost.
  */
-
-
 public class AddPostParameter {
 
     private String postPreview;
@@ -36,13 +34,16 @@ public class AddPostParameter {
     private List<Pair<String, String>> graphTemplates;
 
     /**
-     * The parameters for addPost. Constructor.
+     * The constructor to create the parameters for addPost.
      *
-     * @param postPreview     the postPreview for the post (provided by the client) first is the template, the second is the detailView.
-     * @param projectTemplate the projectTemplate (provided by the client)
-     * @param graphTemplates  all graphTemplates (provided by the client)
+     * @param postPreview     the postPreview for the post.
+     * @param projectTemplate the projectTemplate. The first entry is the Template, the second is the detailView of
+     *                        the template.
+     * @param graphTemplates  all graphTemplates.  The first entry  of the Pair is the Template, the second is the
+     *                        detailView of the template.
      */
-    public AddPostParameter(String postPreview, Pair<String, String> projectTemplate, List<Pair<String, String>> graphTemplates) {
+    public AddPostParameter(String postPreview, Pair<String, String> projectTemplate,
+                            List<Pair<String, String>> graphTemplates) {
         this.postPreview = postPreview;
         this.projectTemplate = projectTemplate;
         this.graphTemplates = new ArrayList<>();
@@ -50,27 +51,39 @@ public class AddPostParameter {
     }
 
     /**
-     * getters and setters
+     * Getter for postPreview.
+     * <p>
+     * There are no need for setters, because the class is only for transfer the Data from the
+     * client (who sets them) to the server (who gets them)
+     *
+     * @return the postPreview for the post.
      */
-
     public String getPostPreview() {
         return postPreview;
     }
 
-    public void setPostPreview(String postPreview) {
-        this.postPreview = postPreview;
-    }
-
+    /**
+     * Getter for projectTemplate.
+     * <p>
+     * There are no need for setters, because the class is only for transfer the Data from the
+     * client (who sets them) to the server (who gets them)
+     *
+     * @return the projectTemplate. The first entry is the Template, the second is the detailView of
+     * the template.
+     */
     public Pair<String, String> getProjectTemplate() {
         return projectTemplate;
     }
 
-    public void setProjectTemplate(Pair<String, String> projectTemplate) {
-        this.projectTemplate = projectTemplate;
-    }
 
     /**
-     * @return a copy of the list
+     * Getter for graph templates, which returns a copy of  graphTemplates
+     * <p>
+     * There are no need for setters, because the class is only for transfer the Data from the
+     * client (who sets them) to the server (who gets them)
+     *
+     * @return all graphTemplates.  The first entry  of the Pair is the Template, the second is the
+     * *                        detailView of the template.
      */
     public List<Pair<String, String>> getGraphTemplates() {
         List<Pair<String, String>> list = new ArrayList<>();
@@ -78,9 +91,6 @@ public class AddPostParameter {
         return list;
     }
 
-    public void setGraphTemplates(List<Pair<String, String>> graphTemplates) {
-        this.graphTemplates.addAll(graphTemplates);
-    }
 
     @Override
     public String toString() {
