@@ -25,6 +25,7 @@ import com.pseandroid2.dailydata.model.project.ProjectBuilder
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.model.uielements.UIElementType
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
+import kotlinx.coroutines.flow.Flow
 
 class Button(
     override val id: Int,
@@ -41,7 +42,7 @@ class Button(
         uiElement.state.toInt()
     )
 
-    override fun deleteIsPossible(): Boolean {
+    override fun deleteIsPossible(): Flow<Boolean> {
         TODO("Not yet implemented")
     }
 

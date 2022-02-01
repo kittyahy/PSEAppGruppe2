@@ -28,6 +28,7 @@ import com.pseandroid2.dailydata.model.table.Row
 import com.pseandroid2.dailydata.model.table.RowMetaData
 import com.pseandroid2.dailydata.model.users.SimpleUser
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
+import kotlinx.coroutines.flow.Flow
 import java.time.LocalDateTime
 
 class Row(
@@ -48,7 +49,7 @@ class Row(
         }
     }
 
-    override fun deleteIsPossible(): Boolean {
+    override fun deleteIsPossible(): Flow<Boolean> {
         TODO("Not yet implemented")
     }
 

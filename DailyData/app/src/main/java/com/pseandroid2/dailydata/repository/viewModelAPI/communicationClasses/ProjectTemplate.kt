@@ -25,6 +25,7 @@ import android.graphics.Bitmap
 import com.pseandroid2.dailydata.model.database.entities.ProjectTemplateData
 import com.pseandroid2.dailydata.model.table.TableLayout
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
+import kotlinx.coroutines.flow.Flow
 
 //TODO("Robin changes")
 class ProjectTemplate : Identifiable {
@@ -85,7 +86,7 @@ class ProjectTemplate : Identifiable {
     override val id: Int
         get() = TODO("Not yet implemented")
 
-    override fun deleteIsPossible(): Boolean {
+    override fun deleteIsPossible(): Flow<Boolean> {
         TODO("Not yet implemented")
     }
 

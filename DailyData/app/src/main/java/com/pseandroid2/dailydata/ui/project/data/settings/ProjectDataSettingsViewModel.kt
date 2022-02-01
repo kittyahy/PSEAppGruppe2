@@ -140,11 +140,11 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
                 var mutable = notifications.toMutableList()
                 mutable.removeAt(index = event.index)
                 notifications = mutable.toList()
-            }
+            }/*
             is ProjectDataSettingsScreenEvent.OnCreateLink -> {
                 var link = initialProject.createLink()
                 sendUiEvent(UiEvent.CopyToClipboard(link))
-            }
+            }*/ //TODO(Anton changes)
             is ProjectDataSettingsScreenEvent.OnGraphAdd -> {
                 var mutable = graphs.toMutableList()
                 mutable.add(event.graph)

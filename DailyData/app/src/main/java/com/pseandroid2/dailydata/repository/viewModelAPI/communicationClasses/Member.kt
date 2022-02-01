@@ -25,6 +25,7 @@ import com.pseandroid2.dailydata.model.project.ProjectBuilder
 import com.pseandroid2.dailydata.model.users.SimpleUser
 import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
+import kotlinx.coroutines.flow.Flow
 
 class Member(
     override val id: Int,
@@ -33,7 +34,7 @@ class Member(
     constructor(user: User) : this(user.getId().toInt(), user.getName()) //Todo Arne Fragen ob der Cast passt: Nein, User werden über firebaseID identifiziert und die ist ein String
 
     override lateinit var executeQueue: ExecuteQueue
-    override fun deleteIsPossible(): Boolean {
+    override fun deleteIsPossible(): Flow<Boolean> {
         TODO("Not yet implemented")
     }
 

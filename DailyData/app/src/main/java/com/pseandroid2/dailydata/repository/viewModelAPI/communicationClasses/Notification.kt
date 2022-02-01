@@ -27,6 +27,7 @@ import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.project.ProjectBuilder
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import com.pseandroid2.dailydata.repository.commandCenter.commands.IllegalOperationException
+import kotlinx.coroutines.flow.Flow
 import java.time.LocalTime
 
 //TODO("Robin changes")
@@ -55,8 +56,8 @@ class Notification(
         projectID
     )
 
-    override fun deleteIsPossible(): Boolean {
-        return true
+    override fun deleteIsPossible(): Flow<Boolean> {
+        return TODO("deleteIsPossibleNotif")
     }
 
     //@throws IllegalOperationException

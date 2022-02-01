@@ -22,6 +22,7 @@ package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
 import android.graphics.Bitmap
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
+import kotlinx.coroutines.flow.Flow
 
 class PieChart(
     override val id: Int,
@@ -33,7 +34,7 @@ class PieChart(
     override lateinit var executeQueue: ExecuteQueue
     override val typeName: String = "Pie Chart" //TODO Magic String
 
-    override fun deleteIsPossible(): Boolean {
+    override fun deleteIsPossible(): Flow<Boolean> {
         TODO("Not yet implemented")
     }
 

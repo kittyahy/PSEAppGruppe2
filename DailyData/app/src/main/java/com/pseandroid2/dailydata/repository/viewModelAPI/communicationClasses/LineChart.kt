@@ -26,6 +26,7 @@ import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.view.View
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
+import kotlinx.coroutines.flow.Flow
 
 class LineChart(
     override val id: Int,
@@ -38,7 +39,7 @@ class LineChart(
     override lateinit var executeQueue: ExecuteQueue
     override val typeName: String = "Line Chart" //TODO Magic String
 
-    override fun deleteIsPossible(): Boolean {
+    override fun deleteIsPossible(): Flow<Boolean> {
         TODO("Not yet implemented")
     }
 

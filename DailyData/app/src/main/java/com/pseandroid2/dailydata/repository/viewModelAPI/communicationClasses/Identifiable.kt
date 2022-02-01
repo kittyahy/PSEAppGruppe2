@@ -21,11 +21,12 @@
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
+import kotlinx.coroutines.flow.Flow
 
 interface Identifiable {
     val id: Int
     var executeQueue: ExecuteQueue
-    fun deleteIsPossible(): Boolean
+    fun deleteIsPossible(): Flow<Boolean>
     //@throws IllegalOperationException
     suspend fun delete()
     fun connectToDB(executeQueue: ExecuteQueue) {

@@ -53,58 +53,44 @@ class Project(
     override lateinit var executeQueue: ExecuteQueue
     private val scope = CoroutineScope(Dispatchers.IO)
 
-    private val isPossible = mutableMapOf<KClass<out ProjectCommand>, MutableSharedFlow<Boolean>>(
+    private val IsPossible = mutableMapOf<KClass<out ProjectCommand>, MutableSharedFlow<Boolean>>(
         Pair(AddRow::class, MutableSharedFlow())
     )
 
     init {
-        for (pair in isPossible) {
-            runBlocking {
+        for (pair in IsPossible) {
+            runBlocking { //Todo runBlocking weg
                 pair.value.emit(pair.key.members.single {
-                    it.name == "isPossible"
+                    it.name == "IsPossible"
                 }.call(this) as Boolean)
             }
         }
     }
 
-    //TODO("Anton Changes") Nein, werden im VM erstellt
-    fun createLink(): String {
-        TODO("createLink")
-    }
-
-    //TODO(Anton changes) eigentlich solltest du die gar nicht kennen
-    /*fun update(graphEntity: GraphEntity) {
-        TODO("not yet implemented")
-    }
-
-    fun update(notification: com.pseandroid2.dailydata.model.notifications.Notification) {
-        TODO("not yet implemented")
-    }*/
 
     fun update(projectData: ProjectData) {
         TODO("not yet implemented")
     }
-    /*
 
-    //Todo nothing mit typ für settings ersetzen
-    fun update(settings: Nothing) {
-        TODO("not yet implemented")
-    }*/
-
+    fun addGraphIsPossible(): Flow<Boolean> {
+        TODO("addGraphIsPossible")
+    }
 
     //TODO("Robin changes")
     fun addGraph(graph: Graph) {
 
     }
 
-    fun addRowIsPossible() = isPossible[AddRow::class]
+    fun addRowIsPossible(): Flow<Boolean> {
+        return IsPossible[AddRow::class]!!
+    }
 
     //@throws IllegalOperationException
     fun addRow(row: Row) {
         TODO("addRow")
     }
 
-    fun deleteRowIsPossible(): Flow<Boolean> {
+    fun deleteRowIsPossible(row: Row): Flow<Boolean> {
         TODO("deleteRowIsPossible")
     }
 
@@ -126,6 +112,10 @@ class Project(
         TODO("addColumn")
     }
 
+    fun deleteColumnIsPossible(column: Column): Flow<Boolean> {
+        TODO("deleteColumnIsPossible")
+    }
+
     //@throws IllegalOperationException
     fun deleteColumn(column: Column) {
         if (column in table) {
@@ -135,10 +125,20 @@ class Project(
         }
     }
 
+
+    fun addButtonIsPossible(): Flow<Boolean> {
+        TODO("addButtonIsPossible")
+    }
+
     //TODO("Robin changes")
     //@throws IllegalOperationException
     fun addButton(button: Button) {
         TODO("addButton")
+    }
+
+
+    fun deleteButtonIsPossible(button: Button): Flow<Boolean> {
+        TODO("deleteButtonIsPossible")
     }
 
     //TODO("Robin changes")
@@ -147,7 +147,7 @@ class Project(
         TODO("deleteButton")
     }
 
-    override fun deleteIsPossible(): Boolean {
+    override fun deleteIsPossible(): Flow<Boolean> {
         TODO("deleteIsPossibleProj")
     }
 
@@ -156,6 +156,10 @@ class Project(
         TODO("deleteProj")
     }
 
+
+    fun setCellIsPossible(): Flow<Boolean> {
+        TODO("setCellIsPossible")
+    }
     //@throws IllegalOperationException
     fun setCell(indexRow: Int, indexColumn: Int, content: String) {
         if (indexRow >= 0 && indexRow < data.size) {
@@ -164,7 +168,7 @@ class Project(
         throw IllegalOperationException()
     }
 
-    fun addMemberIsPossible(): Boolean {
+    fun addMemberIsPossible(): Flow<Boolean> {
         TODO("addMemberIsPossible")
     }
 
@@ -177,15 +181,15 @@ class Project(
         }
     }
 
-    fun leaveOnlineProjectPossible(): Boolean {
-        return isOnlineProject
+    fun leaveOnlineProjectIsPossible(): Flow<Boolean> {
+        TODO("leaveOnlineProjectIsPossible")//return isOnlineProject
     }
 
     fun leaveOnlineProject() {
         TODO("leaveOnlineProject")
     }
 
-    fun deleteMemberIsPossible(): Boolean {
+    fun deleteMemberIsPossible(member: Member): Flow<Boolean> {
         TODO("deleteMemberIsPossible")
     }
 
@@ -197,12 +201,16 @@ class Project(
         }
     }
 
-    fun setAdminPossible(): Boolean {
-        TODO("setAdminPossible")
+    fun setAdminIsPossible(): Flow<Boolean> {
+        TODO("setAdminIsPossible")
     }
 
     fun setAdmin(member: Member) {
         TODO("setAdmin")
+    }
+
+    fun changeWallpaperIsPossible(): Flow<Boolean> {
+        TODO("changeWallpaperIsPossible")
     }
 
     //TODO("Robin changes")
@@ -210,12 +218,24 @@ class Project(
         TODO("changeWallpaper")
     }
 
+    fun setNotificationIsPossible(): Flow<Boolean> {
+        TODO("setNotificationIsPossible")
+    }
+
     fun setNotification(notification: Notification) {
         TODO("setNotification")
     }
 
+    fun deleteNotificationIsPossible(notification: Notification): Flow<Boolean> {
+        TODO("deleteNotificationIsPossible")
+    }
+
     fun deleteNotification(notification: Notification) {
         scope.launch { notification.delete() }
+    }
+
+    fun addNotificationIsPossible(): Flow<Boolean> {
+        TODO("addNotificationIsPossible")
     }
 
     //TODO("Robin changes")
@@ -223,8 +243,17 @@ class Project(
 
     }
 
+    fun setNameIsPossible(): Flow<Boolean> {
+        TODO("setNameIsPossible")
+    }
+
     fun setName(name: String) {
         TODO("setNameProj")
+    }
+
+
+    fun setDescriptionIsPossible(): Flow<Boolean> {
+        TODO("setDescriptionIsPossible")
     }
 
     @JvmName("setDescription1")
@@ -232,12 +261,16 @@ class Project(
         TODO("setDescriptionProj")
     }
 
-    fun publishIsPossible(): Boolean {
+    fun publishIsPossible(): Flow<Boolean> {
         TODO("publishIsPossibleProj")
     }
 
     fun publish() {
         TODO("Proj")
+    }
+
+    fun setButtonIsPossible(): Flow<Boolean> {
+        TODO("setButtonIsPossible")
     }
 
     fun setButton(button: Button) {
