@@ -59,7 +59,7 @@ class ProjectDatabaseTester {
 
         projectDAO.insertProjectEntity(
             ProjectEntity(
-                ProjectSkeletonEntity(1, "Test", "", "", "", 1),
+                ProjectSkeletonEntity(1, "Test", "", "", 0, "", 1),
                 SimpleUser("", "")
             )
         )
@@ -91,7 +91,7 @@ class ProjectDatabaseTester {
         for (i in 0 until noProjects) {
             projectDAO.insertProjectEntity(
                 ProjectEntity(
-                    ProjectSkeletonEntity(i, "Test$i", "", "", "", i.toLong()),
+                    ProjectSkeletonEntity(i, "Test$i", "", "", 0, "", i.toLong()),
                     user
                 )
             )
@@ -114,7 +114,7 @@ class ProjectDatabaseTester {
             runTest {
                 projectDAO.insertProjectEntity(
                     ProjectEntity(
-                        ProjectSkeletonEntity(1, "Test", "", "", "", 1),
+                        ProjectSkeletonEntity(1, "Test", "", "", 0, "", 1),
                         SimpleUser("", "")
                     )
                 )
@@ -129,11 +129,11 @@ class ProjectDatabaseTester {
     @Test
     fun testRemoveProject() = runTest {
         val ent = ProjectEntity(
-            ProjectSkeletonEntity(1, "Test", "", "", "", 1),
+            ProjectSkeletonEntity(1, "Test", "", "", 0, "", 1),
             SimpleUser("", "")
         )
         projectDAO.insertProjectEntity(ent)
-        assertEquals(ProjectData(1, "Test", "", 1, ""), projectDAO.getProjectData(1).first()!!)
+        assertEquals(ProjectData(1, "Test", "", 1, "", 0), projectDAO.getProjectData(1).first()!!)
         projectDAO.deleteProjectEntity(ent)
         assertNull(projectDAO.getProjectData(1).first())
     }

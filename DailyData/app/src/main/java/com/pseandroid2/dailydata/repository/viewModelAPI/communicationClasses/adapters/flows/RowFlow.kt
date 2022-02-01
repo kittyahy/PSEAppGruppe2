@@ -30,6 +30,6 @@ class RowFlow(flow: Flow<List<Row>>) :
         flow
     ) {
     override fun provide(i: Row): com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Row {
-        TODO("Not yet implemented")
+        return com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Row(i)
     }
 }

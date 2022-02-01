@@ -20,10 +20,19 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
+import com.pseandroid2.dailydata.model.project.Project
+import com.pseandroid2.dailydata.model.project.ProjectBuilder
+import com.pseandroid2.dailydata.model.users.SimpleUser
+import com.pseandroid2.dailydata.model.users.User
+import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
+
 class Member(
     override val id: Int,
     val name: String
-): Identifiable() {
+): Identifiable, Convertible<User>{
+    constructor(user: User) : this(user.getId().toInt(), user.getName()) //Todo Arne Fragen ob der Cast passt: Nein, User werden über firebaseID identifiziert und die ist ein String
+
+    override lateinit var executeQueue: ExecuteQueue
     override fun deleteIsPossible(): Boolean {
         TODO("Not yet implemented")
     }
@@ -31,5 +40,13 @@ class Member(
     //@throws IllegalOperationException
     override suspend fun delete() {
         TODO("Not yet implemented. Wish kriterium")
+    }
+
+    override fun toDBEquivalent(): User {
+        return SimpleUser(id.toString(), name)
+    }
+
+    override fun addYourself(builder: ProjectBuilder<out Project>) {
+        builder.addUsers(listOf(this.toDBEquivalent()))
     }
 }

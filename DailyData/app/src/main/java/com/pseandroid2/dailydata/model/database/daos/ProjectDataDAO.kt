@@ -34,13 +34,13 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 abstract class ProjectDataDAO {
     /*===================================PROJECT RELATED STUFF====================================*/
-    @Query("SELECT id, name, description, wallpaper, onlineId FROM project")
+    @Query("SELECT id, name, description, wallpaper, onlineId, color FROM project")
     abstract fun getAllProjectData(): Flow<List<ProjectData>>
 
-    @Query("SELECT id, name, description, wallpaper, onlineId FROM project WHERE id IN (:ids)")
+    @Query("SELECT id, name, description, wallpaper, onlineId, color FROM project WHERE id IN (:ids)")
     abstract fun getProjectDataByIds(vararg ids: Int): Flow<List<ProjectData>>
 
-    @Query("SELECT id, name, description, wallpaper, onlineId FROM project WHERE id = :id")
+    @Query("SELECT id, name, description, wallpaper, onlineId, color FROM project WHERE id = :id")
     abstract fun getProjectData(id: Int): Flow<ProjectData?>
 
     @Query("UPDATE project SET name = :name WHERE id = :id")
@@ -54,6 +54,9 @@ abstract class ProjectDataDAO {
 
     @Query("UPDATE project SET onlineId = :onlineID WHERE id = :id")
     abstract suspend fun setOnlineID(id: Int, onlineID: Long)
+
+    @Query("UPDATE project SET color = :color WHERE id = :id")
+    abstract suspend fun setColor(id: Int, color: Int)
 
     /*=====================================USER RELATED STUFF=====================================*/
     @Query("SELECT * FROM user WHERE projectId IN (:ids)")

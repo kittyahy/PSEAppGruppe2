@@ -20,18 +20,23 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
+import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.Drawable
+import android.view.View
+import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 
 class LineChart(
     override val id: Int,
-    override val image: Drawable,
+    override val image: Bitmap,
     val dotSize: DotSize,
-    val dotColor: Color,
+    val dotColor: Int,
     val lineType: LineType,
     val mappingVertical: List<Column>
-): Graph() {
-    override val typeName: String = "Line Chart" //TODO() Magic String
+) : Graph() {
+    override lateinit var executeQueue: ExecuteQueue
+    override val typeName: String = "Line Chart" //TODO Magic String
 
     override fun deleteIsPossible(): Boolean {
         TODO("Not yet implemented")
@@ -40,5 +45,34 @@ class LineChart(
     //@throws IllegalOperationException
     override suspend fun delete() {
         TODO("Not yet implemented")
+    }
+
+    //TODO("Robin changes")
+    fun addVerticalMapping(column: Column) {
+
+    }
+
+    //TODO("Robin changes")
+    fun deleteVerticalMapping(index: Int) {
+
+    }
+
+    //TODO("Robin changes")
+    fun changeDotSize(dotSize: DotSize) {
+
+    }
+
+    //TODO("Robin changes")
+    fun changeDotColor(color: Int) {
+
+    }
+
+    //TODO("Robin changes")
+    fun changeLineType(lineType: LineType) {
+
+    }
+
+    fun show(context: Context): View {
+        TODO("show")
     }
 }

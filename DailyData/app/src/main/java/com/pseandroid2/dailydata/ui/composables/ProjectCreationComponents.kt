@@ -141,7 +141,7 @@ fun ListInput(
     mainIcon : ImageVector = ImageVector.vectorResource(R.drawable.blank_icon),
     elementIcon : ImageVector = Icons.Default.Close,
     onClick : () -> Unit,
-    onClickItem : (id : Int) -> Unit,
+    onClickItem : (index : Int) -> Unit,
     elements : List<String> = listOf(),
     height: Dp = 60.dp
 ) {

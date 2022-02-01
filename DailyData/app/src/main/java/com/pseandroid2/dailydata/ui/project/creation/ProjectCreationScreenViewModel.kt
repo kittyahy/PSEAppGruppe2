@@ -27,15 +27,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Button
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Column
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Notification
 import com.pseandroid2.dailydata.util.ui.UiEvent
-import com.pseandroid2.dailydata.di.Repository
-import com.pseandroid2.dailydata.util.ui.DataType
-import com.pseandroid2.dailydata.util.ui.Graphs
-import com.pseandroid2.dailydata.util.ui.Notification
 import com.pseandroid2.dailydata.util.ui.Routes
-import com.pseandroid2.dailydata.util.ui.TableButton
-import com.pseandroid2.dailydata.util.ui.TableColumn
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
@@ -43,7 +44,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProjectCreationScreenViewModel @Inject constructor(
-    private val repository: Repository,
+    private val repository: RepositoryViewModelAPI,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -56,13 +57,13 @@ class ProjectCreationScreenViewModel @Inject constructor(
         private set
     var wallpaper by mutableStateOf(Color.White)
         private set
-    var table by mutableStateOf( listOf<TableColumn>() )
+    var table by mutableStateOf( listOf<Column>() )
         private set
-    var buttons by mutableStateOf( listOf<TableButton>() )
+    var buttons by mutableStateOf( listOf<Button>() )
         private set
     var notifications by mutableStateOf( listOf<Notification>() )
         private set
-    var graphs by mutableStateOf( listOf<Graphs>() )
+    var graphs by mutableStateOf( listOf<Graph>() )
         private set
 
     var isWallpaperDialogOpen by mutableStateOf(false)
@@ -80,14 +81,22 @@ class ProjectCreationScreenViewModel @Inject constructor(
         private set
 
     init {
-        val todoId = savedStateHandle.get<Int>("projectId")!!
-        if(todoId != -1) {
+        val id = savedStateHandle.get<Int>("projectTemplateId")!!
+        if(id != -1) {
             viewModelScope.launch {
-                //set template values
+                var template = repository.serverHandler.getProjectTemplate(postId = id)
+                title = template.titel
+                description = template.description
+                wallpaper = Color(template.wallpaper)
+                table = template.table
+                buttons = template.buttons
+                notifications = template.notifications
+                graphs = template.graphTemplates.map { Graph.createFromTemplate(it) }
             }
         }
     }
 
+    @InternalCoroutinesApi
     fun onEvent(event: ProjectCreationEvent) {
         when (event) {
             is ProjectCreationEvent.OnTitleChange -> {
@@ -106,14 +115,14 @@ class ProjectCreationScreenViewModel @Inject constructor(
                     table.last().id + 1
                 }
                 var mutable = table.toMutableList()
-                mutable.add(TableColumn(id = id, name = event.name, unit = event.unit, dataType = event.dataType))
+                mutable.add(Column(id = id, name = event.name, unit = event.unit, dataType = event.dataType))
                 table = mutable.toList()
             }
             is ProjectCreationEvent.OnTableRemove -> {
                 var mutable = table.toMutableList()
                 var removed = mutable.removeAt(index = event.index)
                 var mutableButtons = buttons.toMutableList()
-                buttons = mutableButtons.filter { it.column.id != removed.id}.toList()
+                buttons = mutableButtons.filter { it.columnId != removed.id}.toList()
                 table = mutable.toList()
             }
             is ProjectCreationEvent.OnButtonAdd -> {
@@ -123,7 +132,7 @@ class ProjectCreationScreenViewModel @Inject constructor(
                     buttons.last().id + 1
                 }
                 var mutable = buttons.toMutableList()
-                mutable.add(TableButton(id = id, name = event.name, column = table.find {event.columnId == it.id}!!, value = event.value))
+                mutable.add(Button(id = id, name = event.name, columnId = table.find {event.columnId == it.id}!!.id, value = event.value))
                 buttons = mutable.toList()
             }
             is ProjectCreationEvent.OnButtonRemove -> {
@@ -133,7 +142,7 @@ class ProjectCreationScreenViewModel @Inject constructor(
             }
             is ProjectCreationEvent.OnNotificationAdd -> {
                 var mutable = notifications.toMutableList()
-                mutable.add(Notification(message = event.message, time = event.time))
+                mutable.add(Notification(id = 0, message = event.message, time = event.time))
                 notifications = mutable.toList()
             }
             is ProjectCreationEvent.OnNotificationRemove -> {
@@ -156,9 +165,19 @@ class ProjectCreationScreenViewModel @Inject constructor(
                     title.isBlank() -> sendUiEvent(UiEvent.ShowToast("Please Enter a title"))
                     table.isEmpty() -> sendUiEvent(UiEvent.ShowToast("Please Enter a column"))
                     else            -> {
-                        var id = 0 //id = repository.createProject(...)
-                        sendUiEvent(UiEvent.PopBackStack )
-                        sendUiEvent(UiEvent.Navigate(Routes.DATA + "?projectId=$id"))
+                        //Todo Anton neue signatur
+                        /*
+                        var newProject = repository.projectHandler.newProjectAsync(
+                            name = title,
+                            description = description,
+                            wallpaper = wallpaper.hashCode(),
+                            table = table,
+                            buttons = buttons,
+                            notification = notifications,
+                            graphs = graphs
+                        )
+                        sendUiEvent(UiEvent.PopBackStack)
+                        sendUiEvent(UiEvent.Navigate(Routes.DATA + "?projectId=${newProject.id}"))*/
                     }
                 }
             }

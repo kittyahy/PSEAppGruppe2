@@ -39,9 +39,7 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 
 @InternalCoroutinesApi
 class ProjectHandler(
@@ -96,10 +94,20 @@ class ProjectHandler(
     }
 
     fun joinOnlineProject(onlineID: Long): Int {
-        return TODO()
+        return TODO("joinOnlineProject")
     }
 
     fun getProjectTemplateByID() {
-        TODO()
+        TODO("getProjectTemplateByID")
+    }
+
+    //TODO("Robin changes")
+    fun deleteProjectTemplate(id : Int) {
+
+    }
+
+    //TODO("Robin changes")
+    fun deleteGraphTemplate(id : Int) {
+
     }
 }

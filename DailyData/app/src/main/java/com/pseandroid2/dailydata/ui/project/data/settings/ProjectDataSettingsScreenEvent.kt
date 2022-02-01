@@ -1,10 +1,15 @@
 package com.pseandroid2.dailydata.ui.project.data.settings
 
 import androidx.compose.ui.graphics.Color
-import com.pseandroid2.dailydata.util.ui.DataType
-import com.pseandroid2.dailydata.util.ui.Graphs
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
+import java.time.LocalTime
 
 sealed class ProjectDataSettingsScreenEvent {
+
+    data class OnCreate(val projectId : Int) : ProjectDataSettingsScreenEvent()
+
+    object OnCreateLink : ProjectDataSettingsScreenEvent()
 
     data class OnTitleChange(val title : String) : ProjectDataSettingsScreenEvent()
     data class OnDescriptionChange(val description : String) : ProjectDataSettingsScreenEvent()
@@ -13,12 +18,9 @@ sealed class ProjectDataSettingsScreenEvent {
     data class OnTableRemove(val index : Int) : ProjectDataSettingsScreenEvent()
     data class OnButtonAdd(val name : String, val columnId : Int, val value: Int) : ProjectDataSettingsScreenEvent()
     data class OnButtonRemove(val index : Int) : ProjectDataSettingsScreenEvent()
-    /*
-     TODO : change time from string to meaningful
-      */
-    data class OnNotificationAdd(val message : String, val time : String) : ProjectDataSettingsScreenEvent()
+    data class OnNotificationAdd(val message : String, val time : LocalTime) : ProjectDataSettingsScreenEvent()
     data class OnNotificationRemove(val index : Int) : ProjectDataSettingsScreenEvent()
-    data class OnGraphAdd(val graph: Graphs) : ProjectDataSettingsScreenEvent()
+    data class OnGraphAdd(val graph: Graph) : ProjectDataSettingsScreenEvent()
     data class OnGraphRemove(val index : Int) : ProjectDataSettingsScreenEvent()
     object OnSaveClick : ProjectDataSettingsScreenEvent()
 
@@ -33,9 +35,6 @@ sealed class ProjectDataSettingsScreenEvent {
 
     object OnNavigateBack : ProjectDataSettingsScreenEvent()
 
-    data class OnChangeEditMember(val name : String) : ProjectDataSettingsScreenEvent()
-    object OnAddMember : ProjectDataSettingsScreenEvent()
-    data class OnShowMemberDialog(val isOpen : Boolean) : ProjectDataSettingsScreenEvent()
     data class OnMemberRemove(val index : Int) : ProjectDataSettingsScreenEvent()
     object OnLeaveProject : ProjectDataSettingsScreenEvent()
     object OnDeleteProject : ProjectDataSettingsScreenEvent()
