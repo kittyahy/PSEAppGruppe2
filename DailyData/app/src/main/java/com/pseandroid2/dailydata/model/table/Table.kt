@@ -51,7 +51,7 @@ interface Table {
 
 }
 
-interface TableLayout : Iterable<Quadruple<KClass<out Any>, String, String, List<UIElement>>> {
+interface TableLayout : Iterable<ColumnData> {
 
     companion object {
         @JvmStatic
@@ -70,7 +70,7 @@ interface TableLayout : Iterable<Quadruple<KClass<out Any>, String, String, List
     fun getName(col: Int): String
     fun getUnit(col: Int): String
 
-    operator fun get(col: Int): Quadruple<KClass<out Any>, String, String, List<UIElement>>
+    operator fun get(col: Int): ColumnData
 
     fun addColumn(typeString: String, name: String, unit: String)
 
@@ -112,4 +112,14 @@ data class RowMetaData(
     val createdOn: LocalDateTime = LocalDateTime.now(),
     var publishedOn: LocalDateTime = LocalDateTime.now(),
     val createdBy: User = NullUser()
+)
+
+/**
+ * @param type Serializable Name of a kotlin class (as obtained by KClass.getSerializableName())
+ */
+data class ColumnData(
+    val type: String,
+    val name: String,
+    val unit: String,
+    val uiElements: List<UIElement>
 )
