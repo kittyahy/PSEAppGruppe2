@@ -7,12 +7,12 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class FlowTester {
-
+/*
     @Test
     fun testProjectCreation() {
         val proj = Project()
         runBlocking {
             assertTrue(proj.addRowIsPossible()?.first()!!)
         }
-    }
+    }*/
 }
