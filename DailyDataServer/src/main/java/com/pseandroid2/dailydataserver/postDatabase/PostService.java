@@ -27,6 +27,13 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * Logic for the PostsController.
+ * <p>
+ * The PostService provides methods, to create and delete Posts, get recommended Templates and previews. It also
+ * handles the postIds.
+ */
 @Service
 public class PostService {
 
@@ -35,6 +42,12 @@ public class PostService {
     private final PostsRepository postRepo;
     private int postId;
 
+    /**
+     * Creates a postService Constructor.
+     *
+     * @param postRepo a postRepository, to access the Posts_Table.
+     * @param tempRepo a template Repository, to access the Template_Table
+     */
     public PostService(PostsRepository postRepo, TemplateRepository tempRepo) {
         this.postRepo = postRepo;
         this.tempRepo = tempRepo;
@@ -42,7 +55,9 @@ public class PostService {
     }
 
     /**
-     * @return PostPreviews
+     * Provides all Post previews with ids as PostPreview
+     *
+     * @return a list of all available PostPreviews
      */
     List<PostPreview> getAllPostPreview() {
         List<Post> postList = postRepo.findAll();
@@ -55,20 +70,33 @@ public class PostService {
         return returnList;
     }
 
-    public int addPost(String postPreview, Pair<String, String> projectTemplate, List<Pair<String, String>> graphTemplates, String user) {
-        if(postRepo.countByCreatedBy(user) >= MAX_POSTS){
-            return 0;
-        }
+
+    /**
+     * Adds a new post to the Post_Table, regardless of the amount of posts a user already had done.
+     *
+     * @param postPreview     the postPreview for the post.
+     * @param projectTemplate the projectTemplate for the post. The first is the template itself, the second is the
+     *                        detailView.
+     * @param graphTemplates  a list of graph Templates. The first entry of en entity is the template, the second is
+     *                        the detailView.(could be an empty list)
+     * @param user            the user how wants to save a new post.
+     * @return the post id of the new Post
+     */
+    public int addPost(String postPreview, Pair<String, String> projectTemplate,
+                       List<Pair<String, String>> graphTemplates, String user) {
+
         Post post = new Post(postId, postPreview, user);
         postRepo.save(post);
         postId++;
-        Template t = new Template(post.getPostId(), post.getTemplateIds(), projectTemplate.getFirst(), true, projectTemplate.getSecond());
-        tempRepo.save(t);
+
+        tempRepo.save(new Template(post.getPostId(), post.getTemplateIds(), projectTemplate.getFirst(), true,
+                projectTemplate.getSecond()));
         post.increaseTemplateIds();
 
-        for (Pair<String, String> template :
-                graphTemplates) {
-            tempRepo.save(new Template(post.getPostId(), post.getTemplateIds(), template.getFirst(), false, template.getSecond()));
+        for (Pair<String, String> template : graphTemplates) {
+
+            tempRepo.save(new Template(post.getPostId(), post.getTemplateIds(), template.getFirst(), false,
+                    template.getSecond()));
             post.increaseTemplateIds();
 
         }
@@ -76,14 +104,26 @@ public class PostService {
     }
 
 
+    /**
+     * This method checks, if a user doesn't have more than a certain amount of posts
+     *
+     * @param user the user, from whom the posts should be checked
+     * @return true, if the user has less than the critical number of Posts.
+     */
     public boolean checkPostAmount(String user) {
-        //#TODO;
-        return false;
+        return (postRepo.countByCreatedBy(user) >= MAX_POSTS);
     }
 
-    public List<TemplateDetail> getTemplateDetailsAndID(int post) {
+    /**
+     * Provides the template Details, their ids and if its a project template.
+     * <p>
+     * This method does not check: if the post exists.
+     *
+     * @param post from which post the details are recommended.
+     * @return the list of Template Details.
+     */
+    public List<TemplateDetail> getTemplateDetails(int post) {
         Post recommendedPost = postRepo.findById(post).get();
-        //#TODO sanctity check
 
         List<Template> templatesFromPost = new ArrayList<>(tempRepo.findByPost(recommendedPost.getPostId()));
         List<TemplateDetail> detailList = new ArrayList<>();
@@ -93,15 +133,42 @@ public class PostService {
         return detailList;
     }
 
+    /**
+     * Provides the recommended project Template.
+     * <p>
+     * This method does not check: if the post exists.
+     *
+     * @param postId the post, from which the project template is recommended.
+     * @return the project template.
+     */
     public String getProjectTemplate(int postId) {
         return tempRepo.findByPostAndIsProjectTemplateIsTrue(postId).getTemplateInitial();
     }
 
+    /**
+     * Provides a specified graph template from a specified project.
+     * <p>
+     * This method does not check: if the recommended template is a project template, if the post exists, if the
+     * template exists.
+     *
+     * @param postId the post, to which  the template belongs.
+     * @param tempNr the template number, from the graphtemplate, which is recommended.
+     * @return
+     */
     public String getGraphTemplate(int postId, int tempNr) {
         Template tem = tempRepo.findById(new TemplateId(postId, tempNr)).get();
         return tem.getTemplateInitial();
     }
 
+    /**
+     * It deletes a Post, if the user has created it.
+     * <p>
+     * This method does not check: if the post exists.
+     *
+     * @param postId the post which should be removed.
+     * @param user   the user who wants to remove the post.
+     * @return true, if the post can be removed, false, if it was not possible
+     */
     public boolean removePost(int postId, String user) {
         if (!user.equals(postRepo.findById(postId).get().getCreatedBy())) {
             return false;

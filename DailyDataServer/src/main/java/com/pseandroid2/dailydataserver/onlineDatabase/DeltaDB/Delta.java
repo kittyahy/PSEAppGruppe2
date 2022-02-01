@@ -32,7 +32,15 @@ import java.util.Objects;
 
 
 /**
- * #TODO JavaDoc
+ * Delta is an entity, which stores a project Command and data, which belongs to it.
+ * <p>
+ * The project Command contains the changes, which is going to be executed from a participant.
+ * If a project Participant gets a Delta, they don't need the information "requested By", "project" and who already
+ * has downloaded it.
+ * The primary key are split in addedTOServer and user, because one user is not able to create two Deltas at exactly
+ * one time.
+ * The most of the time, one need only one of those attributes to find do something which the Deltas, therefore, the
+ * id is created as ID Class.
  */
 @Getter
 @Setter
@@ -54,7 +62,16 @@ public class Delta {
 
 
     /**
-     * new Delta
+     * Constructor for  New Delta.
+     * <p>
+     * This constructor should be used to create a new Delta, which is not requested by anybody.
+     * (If a participant (the user) makes a change on this table, they can share it which the other participants.
+     *
+     * @param user           the user, who wants to share his changes.
+     * @param projectCommand the command, what user had changed.
+     * @param project        the project, to which belongs this Delta.
+     * @param isAdmin        declares, if the user war admin at the time, when the Delta was created. (So other users
+     *                       can verfiy, that user make the change)
      */
     public Delta(String user, String projectCommand, long project, boolean isAdmin) {
         this.addedToServer = LocalDateTime.now();
@@ -66,16 +83,23 @@ public class Delta {
     }
 
     /**
-     * Old data
+     * Constructor for Old Deltas.
+     * <p>
+     * This constructor should be used, when a user reuploads an old Delta for another participant. They can recreate
+     * all old details with it.
      *
-     * @param addedToServer
-     * @param user
-     * @param projectCommand
-     * @param project
-     * @param isAdmin
-     * @param requestedBy
+     * @param addedToServer  the time, when the Delta initially was added to the server. (so the user can recreate,
+     *                       when the change was made)
+     * @param user           the user, who initially made the change.
+     * @param projectCommand the command, what had been changed.
+     * @param project        the project, which the Delta belongs to.
+     * @param isAdmin        declares, if the user was admin to the time, they made the change. (if a user made a
+     *                       change, for which they had to be admin, and to the time, the Delta was reuploaded they
+     *                       aren't admin anymore)
+     * @param requestedBy    The participant, who needs this Delta
      */
-    public Delta(LocalDateTime addedToServer, String user, String projectCommand, long project, boolean isAdmin, String requestedBy) {
+    public Delta(LocalDateTime addedToServer, String user, String projectCommand, long project, boolean isAdmin,
+                 String requestedBy) {
         this.addedToServer = addedToServer;
         this.user = user;
         this.projectCommand = projectCommand;
@@ -85,8 +109,10 @@ public class Delta {
     }
 
 
+    /**
+     * Needed empty Constructor
+     */
     public Delta() {
-
     }
 
 

@@ -28,6 +28,12 @@ import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+/**
+ * Project is an Entity, which contains basic information for a project.
+ * <p>
+ * The Project also contains usefully parameters for handling the project, like the participantJoin. It describes who
+ * many user already joined the project, plus one.
+ */
 @Getter
 @Setter
 @Entity
@@ -36,24 +42,27 @@ public class Project {
     private @Id
     long projectId;
     private LocalDateTime lastUpdated;
-    private int participantId;
+    private int participantJoin;
     private String projectInfo;
 
 
+    /**
+     * the constructor for a project, which should be used, if a new project get instanced.
+     *
+     * @param projectId   the id for the new Project.
+     * @param projectInfo Information for a new Participant, to initialize the project on their device.
+     */
     public Project(long projectId, String projectInfo) {
         this.projectId = projectId;
         this.lastUpdated = LocalDateTime.now();
-        this.participantId = 1;
+        this.participantJoin = 1;
         this.projectInfo = projectInfo;
     }
 
+    /**
+     * the recommended empty constructor
+     */
     public Project() {
-    }
-
-
-
-    public void addParticipant() {
-        this.participantId++;
     }
 
 

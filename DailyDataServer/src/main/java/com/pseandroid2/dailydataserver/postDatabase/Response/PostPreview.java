@@ -18,30 +18,32 @@
 
 */
 package com.pseandroid2.dailydataserver.postDatabase.Response;
+/*
+#TODO JAVA DOC
+ */
 
+import lombok.Setter;
+
+/**
+ * A class, which contains a postPReview and the id of the post, where the postPreview belongs to.
+ * Serves as Response object for getAllPostPreview.
+ * <p>
+ * The class exists, because not the whole Post entity should be returned.
+ */
+@Setter
 public class PostPreview {
     private int id;
     private String preview;
 
 
-    public PostPreview(int id, String templateDetail) {
+    /**
+     * The constructor, to create an object, which contains a postPreview and the corresponding id.
+     *
+     * @param id      the id from the post entity.
+     * @param preview the recommended postPreview.
+     */
+    public PostPreview(int id, String preview) {
         this.id = id;
-        this.preview = templateDetail;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getPreview() {
-        return preview;
-    }
-
-    public void setPreview(String preview) {
         this.preview = preview;
     }
 
