@@ -25,6 +25,7 @@ data class ProjectSkeletonEntity(
     val name: String,
     val description: String,
     val wallpaper: String,
+    val color: Int,
     val layout: String,
     val onlineId: Long
 )

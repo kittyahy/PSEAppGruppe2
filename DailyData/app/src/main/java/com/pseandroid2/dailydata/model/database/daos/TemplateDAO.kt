@@ -162,6 +162,7 @@ abstract class TemplateDAO {
                         skeleton.description,
                         skeleton.onlineId,
                         skeleton.wallpaper,
+                        skeleton.color,
                         template.createdBy,
                         TableLayout.fromJSON(skeleton.layout)
                     )

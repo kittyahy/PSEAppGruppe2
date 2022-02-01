@@ -25,5 +25,6 @@ data class ProjectData(
     val name: String,
     val description: String,
     val onlineId: Long,
-    val wallpaper: String
+    val wallpaper: String,
+    val color: Int
 )
