@@ -68,7 +68,7 @@ class Button(
     }
 
     fun setValue(value: Int) {
-        TODO()
+        TODO("setValue")
     }
 
     override fun addYourself(builder: ProjectBuilder<out Project>) {

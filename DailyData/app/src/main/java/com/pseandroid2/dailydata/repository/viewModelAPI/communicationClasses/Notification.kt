@@ -35,7 +35,7 @@ fun Notification(
     message: String,
     time: LocalTime
 ) : com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Notification {
-    TODO()
+    TODO("NotificationWarum")
 }
 
 class Notification(
@@ -51,7 +51,7 @@ class Notification(
     ) : this(
         timeNotification.id,
         timeNotification.getMessage(),
-        TODO(), //timeNotification.send //Todo arne fragen: HMM kritisch
+        TODO("timeNotification.send"), //timeNotification.send //Todo arne fragen: HMM kritisch
         projectID
     )
 
@@ -61,7 +61,7 @@ class Notification(
 
     //@throws IllegalOperationException
     override suspend fun delete() {
-        TODO()
+        TODO("DeleteNotification")
     }
 
     override fun toDBEquivalent(): TimeNotification {

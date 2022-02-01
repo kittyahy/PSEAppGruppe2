@@ -33,19 +33,19 @@ import kotlinx.coroutines.flow.MutableStateFlow
 class ServerHandler(private val appDataBase: AppDataBase, private val api: RemoteDataSourceAPI) {
     //TODO("Anton changes")
     fun getPostPreviews(): List<Post> {
-        return TODO() // Implementierung
+        return TODO("getPostPreviews") // Implementierung
     }
 
     fun getPostDetail(postId: Int): PostDetail {
-        return TODO()
+        return TODO("getPostDetail")
     }
 
     fun getProjectTemplate(postId: Int): ProjectTemplate {
-        return TODO()
+        return TODO("getProjectTemplate")
     }
 
     fun getGraphTemplate(postId: Int, index: Int): GraphTemplate {
-        return TODO()
+        return TODO("getGraphTemplate")
     }
 
     fun isServerCurrentlyReachable(): Boolean {

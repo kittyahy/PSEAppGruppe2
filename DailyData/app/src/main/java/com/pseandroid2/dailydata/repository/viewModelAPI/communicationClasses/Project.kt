@@ -69,7 +69,7 @@ class Project(
 
     //TODO("Anton Changes") Nein, werden im VM erstellt
     fun createLink(): String {
-        TODO()
+        TODO("createLink")
     }
 
     //TODO(Anton changes) eigentlich solltest du die gar nicht kennen
@@ -101,11 +101,11 @@ class Project(
 
     //@throws IllegalOperationException
     fun addRow(row: Row) {
-        TODO()
+        TODO("addRow")
     }
 
     fun deleteRowIsPossible(): Flow<Boolean> {
-        TODO()
+        TODO("deleteRowIsPossible")
     }
 
     //@throws IllegalOperationException
@@ -118,12 +118,12 @@ class Project(
     }
 
     fun addColumnIsPossible(): Flow<Boolean> {
-        TODO()
+        TODO("addColumnIsPossible")
     }
 
     //@throws IllegalOperationException
     fun addColumn(column: Column) {
-        TODO()
+        TODO("addColumn")
     }
 
     //@throws IllegalOperationException
@@ -138,22 +138,22 @@ class Project(
     //TODO("Robin changes")
     //@throws IllegalOperationException
     fun addButton(button: Button) {
-        TODO()
+        TODO("addButton")
     }
 
     //TODO("Robin changes")
     //@throws IllegalOperationException
     fun deleteButton(button: Button) {
-        TODO()
+        TODO("deleteButton")
     }
 
     override fun deleteIsPossible(): Boolean {
-        TODO("Not yet implemented")
+        TODO("deleteIsPossibleProj")
     }
 
     //@throws IllegalOperationException
     override suspend fun delete() {
-        TODO("Not yet implemented")
+        TODO("deleteProj")
     }
 
     //@throws IllegalOperationException
@@ -165,13 +165,13 @@ class Project(
     }
 
     fun addMemberIsPossible(): Boolean {
-        TODO()
+        TODO("addMemberIsPossible")
     }
 
     fun addMember(member: Member) {
         //Todo If bedingung schöner machen, keine Magic numbers und aussagekräftigere Exceptions werfen
         if (member !in members && members.size < 25 && isOnlineProject) {
-            TODO()
+            TODO("addMember")
         } else {
             throw IllegalOperationException()
         }
@@ -182,36 +182,36 @@ class Project(
     }
 
     fun leaveOnlineProject() {
-        TODO()
+        TODO("leaveOnlineProject")
     }
 
     fun deleteMemberIsPossible(): Boolean {
-        TODO()
+        TODO("deleteMemberIsPossible")
     }
 
     fun deleteMember(member: Member) {
         if (member in members && members.size > 1) {
-            TODO()
+            TODO("deleteMember")
         } else {
             throw IllegalOperationException()
         }
     }
 
     fun setAdminPossible(): Boolean {
-        TODO()
+        TODO("setAdminPossible")
     }
 
     fun setAdmin(member: Member) {
-        TODO()
+        TODO("setAdmin")
     }
 
     //TODO("Robin changes")
     fun changeWallpaper(image: Int) {
-        TODO()
+        TODO("changeWallpaper")
     }
 
     fun setNotification(notification: Notification) {
-        TODO()
+        TODO("setNotification")
     }
 
     fun deleteNotification(notification: Notification) {
@@ -224,24 +224,24 @@ class Project(
     }
 
     fun setName(name: String) {
-        TODO()
+        TODO("setNameProj")
     }
 
     @JvmName("setDescription1")
     fun setDescription(description: String) {
-        TODO()
+        TODO("setDescriptionProj")
     }
 
     fun publishIsPossible(): Boolean {
-        TODO()
+        TODO("publishIsPossibleProj")
     }
 
     fun publish() {
-        TODO()
+        TODO("Proj")
     }
 
     fun setButton(button: Button) {
-        TODO()
+        TODO("setButton")
     }
 
     override fun connectToDB(executeQueue: ExecuteQueue) {

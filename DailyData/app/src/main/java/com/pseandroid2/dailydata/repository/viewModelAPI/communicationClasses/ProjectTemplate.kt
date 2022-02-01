@@ -60,7 +60,7 @@ class ProjectTemplate : Identifiable {
     constructor(projectTemplateData: ProjectTemplateData) {
         this.titel = projectTemplateData.name
         this.description = projectTemplateData.description
-        this.wallpaper = TODO()//projectTemplateData.wallpaper
+        this.wallpaper = TODO("projectTemplateData.wallpaper")//projectTemplateData.wallpaper
         val layout = projectTemplateData.layout
         val buttons = ArrayList<Button>()
         val table = ArrayList<Column>()
@@ -96,6 +96,6 @@ class ProjectTemplate : Identifiable {
 
     //TODO Implementierung
     fun toProject(): Project {
-        TODO()
+        TODO("toProject")
     }
 }
