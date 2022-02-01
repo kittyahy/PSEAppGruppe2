@@ -24,10 +24,17 @@ import android.graphics.Bitmap
 import com.pseandroid2.dailydata.model.database.entities.GraphEntity
 import com.pseandroid2.dailydata.model.database.entities.ProjectData
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
+import com.pseandroid2.dailydata.repository.commandCenter.commands.AddRow
 import com.pseandroid2.dailydata.repository.commandCenter.commands.IllegalOperationException
+import com.pseandroid2.dailydata.repository.commandCenter.commands.ProjectCommand
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlin.reflect.KClass
 
 class Project(
     override var id: Int = 0,
@@ -42,35 +49,62 @@ class Project(
     var notifications: List<Notification> = ArrayList<Notification>(),
     var graphs: List<Graph> = ArrayList<Graph>(),
     var members: List<Member> = ArrayList<Member>()
-): Identifiable() {
-    val scope = CoroutineScope(Dispatchers.IO)
-    fun update(graphEntity: GraphEntity) {
+) : Identifiable {
+    override lateinit var executeQueue: ExecuteQueue
+    private val scope = CoroutineScope(Dispatchers.IO)
+
+    private val isPossible = mutableMapOf<KClass<out ProjectCommand>, MutableSharedFlow<Boolean>>(
+        Pair(AddRow::class, MutableSharedFlow())
+    )
+
+    init {
+        for (pair in isPossible) {
+            runBlocking {
+                pair.value.emit(pair.key.members.single {
+                    it.name == "isPossible"
+                }.call(this) as Boolean)
+            }
+        }
+    }
+
+    //TODO("Anton Changes") Nein, werden im VM erstellt
+    fun createLink(): String {
+        TODO()
+    }
+
+    //TODO(Anton changes) eigentlich solltest du die gar nicht kennen
+    /*fun update(graphEntity: GraphEntity) {
         TODO("not yet implemented")
     }
 
     fun update(notification: com.pseandroid2.dailydata.model.notifications.Notification) {
         TODO("not yet implemented")
-    }
+    }*/
 
     fun update(projectData: ProjectData) {
         TODO("not yet implemented")
     }
+    /*
 
     //Todo nothing mit typ für settings ersetzen
     fun update(settings: Nothing) {
         TODO("not yet implemented")
+    }*/
+
+
+    //TODO("Robin changes")
+    fun addGraph(graph: Graph) {
+
     }
 
-    fun addRowIsPossible(): Boolean {
-        TODO()
-    }
+    fun addRowIsPossible() = isPossible[AddRow::class]
 
     //@throws IllegalOperationException
     fun addRow(row: Row) {
         TODO()
     }
 
-    fun deleteRowIsPossible(): Boolean {
+    fun deleteRowIsPossible(): Flow<Boolean> {
         TODO()
     }
 
@@ -83,7 +117,7 @@ class Project(
         }
     }
 
-    fun addColumnIsPossible(): Boolean {
+    fun addColumnIsPossible(): Flow<Boolean> {
         TODO()
     }
 
@@ -99,6 +133,18 @@ class Project(
         } else {
             throw IllegalOperationException()
         }
+    }
+
+    //TODO("Robin changes")
+    //@throws IllegalOperationException
+    fun addButton(button: Button) {
+        TODO()
+    }
+
+    //TODO("Robin changes")
+    //@throws IllegalOperationException
+    fun deleteButton(button: Button) {
+        TODO()
     }
 
     override fun deleteIsPossible(): Boolean {
@@ -118,7 +164,7 @@ class Project(
         throw IllegalOperationException()
     }
 
-    fun addMemberIsPossible() : Boolean {
+    fun addMemberIsPossible(): Boolean {
         TODO()
     }
 
@@ -130,15 +176,16 @@ class Project(
             throw IllegalOperationException()
         }
     }
-    
-    fun leaveOnlineProjectPossible() : Boolean {
+
+    fun leaveOnlineProjectPossible(): Boolean {
         return isOnlineProject
     }
+
     fun leaveOnlineProject() {
         TODO()
     }
 
-    fun deleteMemberIsPossible() : Boolean {
+    fun deleteMemberIsPossible(): Boolean {
         TODO()
     }
 
@@ -150,7 +197,7 @@ class Project(
         }
     }
 
-    fun setAdminPossible() : Boolean {
+    fun setAdminPossible(): Boolean {
         TODO()
     }
 
@@ -158,7 +205,8 @@ class Project(
         TODO()
     }
 
-    fun setWallpaper(image: Bitmap) {
+    //TODO("Robin changes")
+    fun changeWallpaper(image: Int) {
         TODO()
     }
 
@@ -170,6 +218,11 @@ class Project(
         scope.launch { notification.delete() }
     }
 
+    //TODO("Robin changes")
+    fun addNotification(notification: Notification) {
+
+    }
+
     fun setName(name: String) {
         TODO()
     }
@@ -179,7 +232,7 @@ class Project(
         TODO()
     }
 
-    fun publishIsPossible() : Boolean {
+    fun publishIsPossible(): Boolean {
         TODO()
     }
 

@@ -20,14 +20,26 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
+import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import com.pseandroid2.dailydata.model.graph.Graph
 import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.project.ProjectBuilder
 
-abstract class Graph : Identifiable(), Convertible<Graph<*, *>> {
+
+abstract class Graph : Identifiable, Convertible<Graph<*, *>> {
     companion object {
         val availableGraphs: MutableList<String> = ArrayList<String>()
+
+        //TODO("Robin changes")
+        fun createFromType(graph: String): com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph {
+            TODO()
+        }
+
+        fun createFromTemplate(graph: GraphTemplate): com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph {
+            TODO()
+        }
+
     }
 
     init {
@@ -35,14 +47,14 @@ abstract class Graph : Identifiable(), Convertible<Graph<*, *>> {
     }
 
     abstract override val id: Int
-    abstract val image: Drawable
+    abstract val image: Bitmap //TODO("Robin changes")
     abstract val typeName: String
 
     override fun toDBEquivalent(): Graph<*, *> {
-        return TODO()
+        return TODO() //Todo Arne fragen, wie ich den richtigen Graph erstelle: Kommt noch
     }
 
     override fun addYourself(builder: ProjectBuilder<out Project>) {
-        builder.addGraphs(listOf(toDBEquivalent()))
+        builder.addGraphs(listOf(toDBEquivalent())) //TODO Arne: es kommen Änderungen
     }
 }

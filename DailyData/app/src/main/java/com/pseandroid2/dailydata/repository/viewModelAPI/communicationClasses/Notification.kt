@@ -25,25 +25,33 @@ import com.pseandroid2.dailydata.model.notifications.Notification
 import com.pseandroid2.dailydata.model.notifications.TimeNotification
 import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.project.ProjectBuilder
+import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import com.pseandroid2.dailydata.repository.commandCenter.commands.IllegalOperationException
 import java.time.LocalTime
+
+//TODO("Robin changes")
+fun Notification(
+    id: Int,
+    message: String,
+    time: LocalTime
+) : com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Notification {
+    TODO()
+}
 
 class Notification(
     override val id: Int,
     val message: String,
     val time: LocalTime,
-    private val notificationsDAO: NotificationsDAO? = null,
     val projectID: Int
-) : Identifiable(), Convertible<Notification> {
+) : Identifiable, Convertible<Notification> {
+    override lateinit var executeQueue: ExecuteQueue
     constructor(
         timeNotification: TimeNotification,
-        notificationsDAO: NotificationsDAO?,
         projectID: Int
     ) : this(
         timeNotification.id,
         timeNotification.getMessage(),
-        TODO(), //timeNotification.send
-        notificationsDAO,
+        TODO(), //timeNotification.send //Todo arne fragen: HMM kritisch
         projectID
     )
 

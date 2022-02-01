@@ -22,13 +22,13 @@ package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 
-abstract class Identifiable {
-    abstract val id: Int
-    lateinit var executeQueue: ExecuteQueue
-    abstract fun deleteIsPossible(): Boolean
+interface Identifiable {
+    val id: Int
+    var executeQueue: ExecuteQueue
+    fun deleteIsPossible(): Boolean
     //@throws IllegalOperationException
-    abstract suspend fun delete()
-    open fun connectToDB(executeQueue: ExecuteQueue) {
+    suspend fun delete()
+    fun connectToDB(executeQueue: ExecuteQueue) {
         this.executeQueue= executeQueue
     }
 }

@@ -18,12 +18,13 @@
 
 */
 
+
 package com.pseandroid2.dailydata.util.ui
 
 import android.media.Image
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-
+/*
 data class TableColumn(val id : Int, val name: String, val unit : String, val dataType : DataType)
 data class TableButton(val id : Int, val name: String, val column : TableColumn, val value : Int)
 data class Notification(val message : String, val time : String)
@@ -69,3 +70,5 @@ data class Post(
 
 class Template() {
 }
+
+ */

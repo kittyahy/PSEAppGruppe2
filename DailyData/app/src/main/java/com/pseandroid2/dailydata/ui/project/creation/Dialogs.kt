@@ -32,7 +32,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
@@ -40,11 +39,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.pseandroid2.dailydata.ui.composables.EnumDropDownMenu
-import com.pseandroid2.dailydata.util.ui.DataType
-import com.pseandroid2.dailydata.util.ui.Graphs
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
 import com.pseandroid2.dailydata.util.ui.Wallpapers
+import com.pseandroid2.dailydata.ui.composables.EnumDropDownMenu
 import java.lang.NumberFormatException
+import java.time.LocalTime
 import java.util.Calendar
 
 
@@ -282,7 +282,7 @@ fun ButtonDialog(
 fun NotificationDialog(
     isOpen: Boolean,
     onDismissRequest: () -> Unit,
-    onClick: (String, String) -> Unit
+    onClick: (String, LocalTime) -> Unit
 ) {
     AppDialog(isOpen = isOpen, onDismissRequest = onDismissRequest) {
         var message by remember { mutableStateOf("") }
@@ -292,10 +292,10 @@ fun NotificationDialog(
         val calendar = Calendar.getInstance()
         val hour = calendar[Calendar.HOUR_OF_DAY]
         val minute = calendar[Calendar.MINUTE]
-        var time by remember { mutableStateOf("$hour:$minute") }
+        var time by remember { mutableStateOf(LocalTime.now()) }
         val timePickerDialog = TimePickerDialog( context,
             {_, hour : Int, minute: Int ->
-                time = "$hour:$minute"
+                time = LocalTime.of(hour, minute)
             }, hour, minute, true
         )
         Column(
@@ -342,21 +342,21 @@ fun NotificationDialog(
 fun GraphDialog(
     isOpen: Boolean,
     onDismissRequest: () -> Unit,
-    onClick: (Graphs) -> Unit
+    onClick: (String) -> Unit
 ) {
     AppDialog(isOpen = isOpen, onDismissRequest = onDismissRequest) {
         Column(modifier = Modifier.width(200.dp)) {
-            Graphs.values().toList().forEachIndexed { index, graphs ->
+            Graph.availableGraphs.forEachIndexed { index, graph ->
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(32.dp)
-                        .clickable { onClick(graphs) },
+                        .clickable { onClick(graph) },
                     contentAlignment = Alignment.CenterStart
                 ) {
-                    Text(text = graphs.representation)
+                    Text(text = graph)
                 }
-                if (index <  Graphs.values().lastIndex)
+                if (index < Graph.availableGraphs.lastIndex)
                     Divider()
             }
         }

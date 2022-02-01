@@ -36,18 +36,24 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 @InternalCoroutinesApi
-class ProjectFlow (
+class ProjectFlow(
     private val appDataBase: AppDataBase,
     private val projectId: Int
 ) : FlowAdapter<Void, Project>(MutableSharedFlow()) {
     private lateinit var sharedFlow: Flow<Project>
-    private val buttonFlow : Flow<List<Button>> = ButtonFlow(appDataBase.uiElementDAO().getUIElements(projectId)).getFlow()
-    private val graphFlow : Flow<List<Graph>> = GraphFlow(appDataBase.graphDAO().getGraphDataForProject(projectId)).getFlow()
-    private val memberFlow : Flow<List<Member>> = MemberFlow(TODO()).getFlow()
-    private val notificationFlow : Flow<List<Notification>> = NotificationFlow(appDataBase.notificationsDAO().getNotificationEntities(projectId)).getFlow()
-    private val projectDataFlow : Flow<ProjectData?> = appDataBase.projectDataDAO().getProjectData(projectId)
+    private val buttonFlow: Flow<List<Button>> = ButtonFlow(
+        appDataBase.uiElementDAO().getUIElements(projectId)
+    ).getFlow() //Todo Arne fragen passt so
+    private val graphFlow: Flow<List<Graph>> =
+        GraphFlow(TODO()).getFlow() //appDataBase.graphDAO().getGraphDataForProject(projectId)
+    private val memberFlow: Flow<List<Member>> = MemberFlow(TODO()).getFlow()
+    private val notificationFlow: Flow<List<Notification>> =
+        NotificationFlow(appDataBase.notificationsDAO().getNotifications(projectId)).getFlow()
+    private val projectDataFlow: Flow<ProjectData?> =
+        appDataBase.projectDataDAO().getProjectData(projectId)
     private val settingsFlow: Flow<Map<String, String>> = TODO()
-    private val rowFlow : Flow<List<Row>> = RowFlow(appDataBase.tableContentDAO().getRowsById(projectId)).getFlow()
+    private val rowFlow: Flow<List<Row>> =
+        RowFlow(appDataBase.tableContentDAO().getRowsById(projectId)).getFlow()
 
     init {
         GlobalScope.launch {
@@ -64,7 +70,7 @@ class ProjectFlow (
         val emptyProject = Project()
         val emptyFlow = MutableSharedFlow<Project>()
         emptyFlow.emit(emptyProject)
-        sharedFlow= emptyFlow.combine(buttonFlow) { project, buttonList ->
+        sharedFlow = emptyFlow.combine(buttonFlow) { project, buttonList ->
             project.buttons = buttonList
             project
         }.combine(graphFlow) { project, graphList ->

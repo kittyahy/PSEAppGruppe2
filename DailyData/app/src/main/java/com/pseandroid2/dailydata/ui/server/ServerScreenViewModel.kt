@@ -20,15 +20,8 @@
 
 package com.pseandroid2.dailydata.ui.server
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.pseandroid2.dailydata.ui.templates.TemplateTabs
-import com.pseandroid2.dailydata.ui.templates.TemplatesScreenEvent
-import com.pseandroid2.dailydata.util.ui.GraphTemplate
-import com.pseandroid2.dailydata.util.ui.ProjectTemplate
 import com.pseandroid2.dailydata.util.ui.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -42,7 +35,11 @@ class ServerScreenViewModel @Inject constructor() : ViewModel() {
     private val _uiEvent = MutableSharedFlow<UiEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
 
+    var loggedIn = true
+        private set
+
     fun onEvent(event : ServerScreenEvent) {
+        //TODO("Repository check if user is currently logged in")
         when (event) {
 
         }
