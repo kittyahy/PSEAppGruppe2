@@ -28,28 +28,43 @@ import javax.persistence.IdClass;
 import java.util.Objects;
 
 /**
- * #TODO JavaDoc
+ * ProjectParticipant is an Entity, which represents a participant of a project.
+ * <p>
+ * The primary key is split in the user and the project, because every user can at most be one participant to a
+ * project. (If user A is in the project, user A can not be another projectParticipant in the same project).
+ * The Id is not embedded, because there multiple cases where the user or the project is needed.
  */
 @Getter
 @Setter
 @Entity
-@IdClass(ProjectParticipantsID.class)
-public class ProjectParticipants {
-    private @Id
-    String user;
-    private @Id
-    long project;
+@IdClass(value = ProjectParticipantID.class)
+public class ProjectParticipant {
+    @Id
+    private String user;
+    @Id
+    private long project;
     private Role role;
     private int numberOfJoin;
 
-    public ProjectParticipants(String user, long project, Role role, int numberOfJoin) {
+    /**
+     * The constructor, which should been used to create a new ProjectParticipant.
+     *
+     * @param user         who is the new Participant
+     * @param project      to which the participant belongs.
+     * @param role         which role the user is.
+     * @param numberOfJoin how many people are joint before the user plus 1;
+     */
+    public ProjectParticipant(String user, long project, Role role, int numberOfJoin) {
         this.user = user;
         this.project = project;
         this.role = role;
         this.numberOfJoin = numberOfJoin;
     }
 
-    public ProjectParticipants() {
+    /**
+     * The recommended empty constructor
+     */
+    public ProjectParticipant() {
     }
 
 
@@ -57,7 +72,7 @@ public class ProjectParticipants {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ProjectParticipants that = (ProjectParticipants) o;
+        ProjectParticipant that = (ProjectParticipant) o;
         return project == that.project && user.equals(that.user);
     }
 
@@ -68,7 +83,7 @@ public class ProjectParticipants {
 
     @Override
     public String toString() {
-        return "ProjectParticipants{" +
+        return "ProjectParticipant{" +
                 "user='" + user + '\'' +
                 ", project=" + project +
                 ", role=" + role +

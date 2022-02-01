@@ -22,8 +22,20 @@ package com.pseandroid2.dailydataserver.postDatabase;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+/**
+ * The repository for Posts.
+ * <p>
+ * It contains operations for the posts_table.
+ */
 @Repository
 public interface PostsRepository extends JpaRepository<Post, Integer> {
+
+    /**
+     * Counts how many posts a user provides.
+     *
+     * @param createdBy the user, which created the posts.
+     * @return the amount of recommended Posts.
+     */
     long countByCreatedBy(String createdBy);
 
 }

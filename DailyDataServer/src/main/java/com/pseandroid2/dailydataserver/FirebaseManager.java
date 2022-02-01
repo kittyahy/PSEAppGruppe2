@@ -31,20 +31,23 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-@Slf4j
-@Component
+
 /**
  * Logic for Firebase Tasks (Token authentication)
  */
+@Slf4j
+@Component
 public class FirebaseManager {
     private FirebaseOptions firebaseOptions;
 
+    /**
+     * Constructor for the firebase Manager.
+     */
     FirebaseManager() {
         try {
             ClassPathResource res = new ClassPathResource("daily-data-69b6a-firebase-adminsdk-skzcn-f851c90c36.json");
-            firebaseOptions = FirebaseOptions.builder()
-                    .setCredentials(GoogleCredentials.fromStream(res.getInputStream()))
-                    .build();
+            firebaseOptions =
+                    FirebaseOptions.builder().setCredentials(GoogleCredentials.fromStream(res.getInputStream())).build();
 
             FirebaseApp.initializeApp(firebaseOptions);
         } catch (IOException e) {
@@ -56,8 +59,8 @@ public class FirebaseManager {
     /**
      * Returns the userID of the user that belongs to the authentication token
      *
-     * @param authToken: The authentication Token
-     * @return String: The UserID of the user who send this token. Returns "" on error / invalid token
+     * @param authToken The authentication Token
+     * @return String The UserID of the user who send this token. Returns "" on error / invalid token
      */
     public String getUserIDFromToken(String authToken) {
         try {

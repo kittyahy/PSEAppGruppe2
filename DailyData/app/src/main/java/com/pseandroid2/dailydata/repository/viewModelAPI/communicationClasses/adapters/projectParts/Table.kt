@@ -10,11 +10,19 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Ro
 
 class Table {
     companion object {
-        fun extractFrom(columns: List<Column>, buttons: List<Button>, rows: List<Row> = ArrayList<Row>()) : Table{
+        fun extractFrom(
+            columns: List<Column>,
+            buttons: List<Button>,
+            rows: List<Row> = ArrayList<Row>()
+        ): Table {
             val tableLayout: TableLayout = ArrayListLayout()
             val table: Table = ArrayListTable(tableLayout)
             for (column in columns) {
-                tableLayout.addColumn(column.dataType.representation)
+                tableLayout.addColumn(
+                    column.dataType.serializableClassName,
+                    column.name,
+                    column.unit
+                )
             }
             for (button in buttons) {
                 tableLayout.addUIElements(button.columnId, button.toDBEquivalent())

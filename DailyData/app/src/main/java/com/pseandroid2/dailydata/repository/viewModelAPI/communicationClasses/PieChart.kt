@@ -21,6 +21,7 @@
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
 import android.graphics.Bitmap
+import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 
 class PieChart(
     override val id: Int,
@@ -29,6 +30,7 @@ class PieChart(
     val mapping: List<Column>,
     val showPercentages: Boolean
 ): Graph() {
+    override lateinit var executeQueue: ExecuteQueue
     override val typeName: String = "Pie Chart" //TODO Magic String
 
     override fun deleteIsPossible(): Boolean {

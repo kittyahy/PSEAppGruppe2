@@ -20,6 +20,7 @@
 
 package com.pseandroid2.dailydata.di
 
+import android.app.Application
 import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
@@ -31,7 +32,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Inject
 import javax.inject.Singleton
 
 @Module
@@ -40,8 +40,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideAppDatabase() : AppDataBase {
-        return AppDataBase.getInstance(TODO())
+    fun provideAppDatabase(app: Application) : AppDataBase {
+        return AppDataBase.getInstance(app)
     }
     @Provides
     @Singleton

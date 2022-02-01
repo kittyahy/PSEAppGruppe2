@@ -26,7 +26,6 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * configurations for the Interceptors.
  * This is the point, where Spring know which request should be intercepted.
  */
 @Component
@@ -38,6 +37,11 @@ public class GeneralConfig implements WebMvcConfigurer {
     @Autowired
     private AccessToProjectInterceptor accessToProjectInterceptor;
 
+    /**
+     * Configurations for the Interceptors. Declares the order and where the interceptors should intercept.
+     *
+     * @param registry the regestry which helps to cofingure the given interceptors.
+     */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loginInterceptor).excludePathPatterns("/greet");

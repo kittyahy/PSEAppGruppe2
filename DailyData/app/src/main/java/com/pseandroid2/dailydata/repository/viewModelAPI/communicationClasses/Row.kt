@@ -20,24 +20,42 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
+import com.pseandroid2.dailydata.model.database.entities.UIElementMap
 import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.project.ProjectBuilder
 import com.pseandroid2.dailydata.model.table.ArrayListRow
 import com.pseandroid2.dailydata.model.table.Row
 import com.pseandroid2.dailydata.model.table.RowMetaData
 import com.pseandroid2.dailydata.model.users.SimpleUser
+import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import java.time.LocalDateTime
 
 class Row(
     override val id: Int,
     val elements: List<String>
-): Identifiable(), Convertible<Row> {
+) : Identifiable, Convertible<Row> {
+    override lateinit var executeQueue: ExecuteQueue
+    constructor(row: Row) : this(
+        row.getMetaData().createdOn.hashCode(), //TODO Richtige ID
+        listConversion(row.getAll())
+    )
+
+    companion object {
+        private fun listConversion(all: List<Any>): List<String> {
+            val list = ArrayList<String>()
+            all.forEach { element -> list.add(element.toString()) }
+            return list
+        }
+    }
+
     override fun deleteIsPossible(): Boolean {
         TODO("Not yet implemented")
     }
+
     override suspend fun delete() {
         TODO("Not yet implemented")
     }
+
     //@throws IllegalOperationException
     fun setCell(indexColumn: Int, content: String) {
         if (indexColumn >= 0 && indexColumn < elements.size) {
@@ -47,8 +65,12 @@ class Row(
     }
 
     override fun toDBEquivalent(): Row {
-        val rowMetaData = RowMetaData(LocalDateTime.now(), LocalDateTime.MAX, SimpleUser("0", "No One")) //Todo werte fixen
-        val elementList : MutableList<Any> = ArrayList<Any>()
+        val rowMetaData = RowMetaData(
+            LocalDateTime.now(),
+            LocalDateTime.MAX,
+            SimpleUser("0", "No One")
+        ) //Todo werte fixen
+        val elementList: MutableList<Any> = ArrayList<Any>()
         elementList.addAll(elements)
         return ArrayListRow(elementList, rowMetaData)
     }

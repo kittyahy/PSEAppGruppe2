@@ -19,35 +19,38 @@
 */
 package com.pseandroid2.dailydataserver.postDatabase;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * The primary key for a Template
+ * <p>
+ * Defines, how the primary key of Template needs to be handled.
+ */
+@Getter
+@Setter
 public class TemplateId implements Serializable {
     private int post;
     private int templateNumber;
 
+    /**
+     * The constructor, to create a new valid Template Id.
+     *
+     * @param postID         the post to which the template belongs.
+     * @param templateNumber the unique number of the template within the post.
+     */
     public TemplateId(int postID, int templateNumber) {
         this.post = postID;
         this.templateNumber = templateNumber;
     }
 
+    /**
+     * the recommended empty constructor.
+     */
     public TemplateId() {
-    }
-
-    public int getPost() {
-        return post;
-    }
-
-    public void setPost(int post) {
-        this.post = post;
-    }
-
-    public int getTemplateNumber() {
-        return templateNumber;
-    }
-
-    public void setTemplateNumber(int templateNumber) {
-        this.templateNumber = templateNumber;
     }
 
     @Override

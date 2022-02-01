@@ -22,7 +22,7 @@ package com.pseandroid2.dailydataserver;
 import org.springframework.stereotype.Component;
 
 /**
- * Logic for greeting
+ * Logic for greeting.
  */
 @Component
 public class ServerGreetings {
