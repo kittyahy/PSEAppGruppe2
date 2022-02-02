@@ -25,6 +25,7 @@ import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddButton
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddColumn
+import com.pseandroid2.dailydata.repository.commandCenter.commands.AddNotification
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddRow
 import com.pseandroid2.dailydata.repository.commandCenter.commands.IllegalOperationException
 import com.pseandroid2.dailydata.repository.commandCenter.commands.ProjectCommand
@@ -57,7 +58,8 @@ class Project(
     private val supportedCommands = listOf<KClass<out ProjectCommand>>(
         AddRow::class,
         AddColumn::class,
-        AddButton::class
+        AddButton::class,
+        AddNotification::class
     )
     private val isPossible = mutableMapOf<KClass<out ProjectCommand>, MutableSharedFlow<Boolean>>()
 
@@ -318,17 +320,13 @@ class Project(
     }
 
     fun addNotificationIsPossible(): Flow<Boolean> {
-        //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
-        runBlocking {
-            flow.emit(true)
-        }
-        return flow
+        return isPossible[AddNotification::class]!!
     }
 
 
     suspend fun addNotification(notification: Notification) {
-
+        isPossible[AddNotification::class]!!.emit(false)
+        executeQueue.add(AddNotification(id, notification))
     }
 
     fun setNameIsPossible(): Flow<Boolean> {

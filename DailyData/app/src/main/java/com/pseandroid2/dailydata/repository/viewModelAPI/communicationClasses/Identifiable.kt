@@ -41,5 +41,6 @@ interface Identifiable {
 
     fun connectToProject(project: Project) {
         this.project = project
+        this.connectToRepository(project.repositoryViewModelAPI)
     }
 }
