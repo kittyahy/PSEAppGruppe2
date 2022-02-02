@@ -92,45 +92,46 @@ class PieChart(
         val columnColor = PieChartColors.toRgb(color.toLong())
         columnColors[column.id] = columnColor
         mapping.add(column)
-    }
 
-    fun addMappingIsPossible(): Flow<Boolean> {
-        //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
-        runBlocking {
-            flow.emit(true)
+
+        fun addMappingIsPossible(): Flow<Boolean> {
+            //Todo replace with valid proof
+            val flow = MutableSharedFlow<Boolean>()
+            runBlocking {
+                flow.emit(true)
+            }
+            return flow
         }
-        return flow
-    }
 
-    suspend fun addMapping(column: Column) {
-        addMapping(PieChartColors.ORANGE.value.toInt(), column = column)
-    }
-
-    fun showPercentagesIsPossible(): Flow<Boolean> {
-        //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
-        runBlocking {
-            flow.emit(true)
+        suspend fun addMapping(column: Column) {
+            addMapping(PieChartColors.ORANGE.value.toInt(), column = column)
         }
-        return flow
-    }
 
-    suspend fun showPercentages(show: Boolean) {
+        fun showPercentagesIsPossible(): Flow<Boolean> {
+            //Todo replace with valid proof
+            val flow = MutableSharedFlow<Boolean>()
+            runBlocking {
+                flow.emit(true)
+            }
+            return flow
+        }
 
-    }
-}
+        suspend fun showPercentages(show: Boolean) {
 
-enum class PieChartColors(val value: Long, val representation: String, val rgb: String) {
-
-    ORANGE(0xFFF57C00, "Orange", "#F57C00"),
-    GREEN(0xFF388E3C, "Green", "#388E3C"),
-    BLUE(0xFF2196F3, "Blue", "#2196F3");
-
-    companion object {
-        fun toRgb(value: Long): String {
-            TODO("toRGB")
         }
     }
 
+    enum class PieChartColors(val value: Long, val representation: String, val rgb: String) {
+
+        ORANGE(0xFFF57C00, "Orange", "#F57C00"),
+        GREEN(0xFF388E3C, "Green", "#388E3C"),
+        BLUE(0xFF2196F3, "Blue", "#2196F3");
+
+        companion object {
+            fun toRgb(value: Long): String {
+                TODO("toRGB")
+            }
+        }
+
+    }
 }

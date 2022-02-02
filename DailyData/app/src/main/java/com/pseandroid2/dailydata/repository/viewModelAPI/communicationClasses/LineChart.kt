@@ -144,5 +144,6 @@ class LineChart(
 
     suspend fun changeLineType(lineType: LineType) {
 
+
     }
 }
