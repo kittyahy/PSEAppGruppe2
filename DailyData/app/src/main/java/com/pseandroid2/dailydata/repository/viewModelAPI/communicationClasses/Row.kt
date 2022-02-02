@@ -38,6 +38,7 @@ class Row(
     val elements: List<String>
 ) : Identifiable, Convertible<Row> {
     override lateinit var executeQueue: ExecuteQueue
+override lateinit var project: Project
 
     constructor(row: Row) : this(
         row.getMetaData().createdOn.hashCode(), //TODO Richtige ID

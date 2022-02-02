@@ -21,6 +21,7 @@
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
 import com.pseandroid2.dailydata.model.database.entities.ProjectData
+import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddRow
 import com.pseandroid2.dailydata.repository.commandCenter.commands.IllegalOperationException
@@ -45,16 +46,22 @@ class Project(
     var buttons: List<Button> = ArrayList<Button>(),
     var notifications: List<Notification> = ArrayList<Notification>(),
     var graphs: List<Graph> = ArrayList<Graph>(),
-    var members: List<Member> = ArrayList<Member>()
+    var members: List<Member> = ArrayList<Member>(),
+    val repositoryViewModelAPI: RepositoryViewModelAPI
 ) : Identifiable {
     override lateinit var executeQueue: ExecuteQueue
+override lateinit var project: Project
     private val scope = CoroutineScope(Dispatchers.IO)
 
     private val isPossible = mutableMapOf<KClass<out ProjectCommand>, MutableSharedFlow<Boolean>>(
         Pair(AddRow::class, MutableSharedFlow())
     )
-
     init {
+        connectToProject(this)
+        for (id in getIntefiableChildred()) {
+            id.connectToProject(this)
+        }
+        connectToRepository(repositoryViewModelAPI)
         for (pair in isPossible) {
             runBlocking { //Todo runBlocking weg
                 pair.value.emit(pair.key.members.single {
@@ -373,7 +380,14 @@ class Project(
         TODO("setButton")
     }
 
-    override fun connectToDB(executeQueue: ExecuteQueue) {
+    override fun connectToRepository(repositoryViewModelAPI: RepositoryViewModelAPI) {
+        for (id in getIntefiableChildred()) {
+            id.connectToRepository(repositoryViewModelAPI)
+        }
+        super.connectToRepository(repositoryViewModelAPI)
+    }
+
+    private fun getIntefiableChildred(): List<Identifiable> {
         val i = ArrayList<Identifiable>()
         i.addAll(table)
         i.addAll(data)
@@ -381,6 +395,6 @@ class Project(
         i.addAll(notifications)
         i.addAll(graphs)
         i.addAll(members)
-        super.connectToDB(executeQueue)
+        return i
     }
 }

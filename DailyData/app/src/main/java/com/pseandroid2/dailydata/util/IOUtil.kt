@@ -76,5 +76,9 @@ class IOUtil {
                 )
             }
         }
+
+        fun getGraphImage(name: String, context: Context): Bitmap? {
+            TODO()
+        }
     }
 }

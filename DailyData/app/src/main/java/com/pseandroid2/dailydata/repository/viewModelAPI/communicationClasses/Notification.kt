@@ -37,6 +37,7 @@ class Notification(
     val time: LocalTime
 ) : Identifiable, Convertible<Notification> {
     override lateinit var executeQueue: ExecuteQueue
+override lateinit var project: Project
 
     constructor(timeNotification: TimeNotification) : this(
         timeNotification.id,

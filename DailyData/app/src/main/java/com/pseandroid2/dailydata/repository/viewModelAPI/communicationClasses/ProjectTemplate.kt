@@ -83,6 +83,7 @@ class ProjectTemplate : Identifiable {
     }
 
     override lateinit var executeQueue: ExecuteQueue
+override lateinit var project: Project
     override val id: Int
         get() = TODO("Not yet implemented")
 

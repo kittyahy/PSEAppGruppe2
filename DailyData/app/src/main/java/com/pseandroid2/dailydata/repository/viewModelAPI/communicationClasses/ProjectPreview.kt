@@ -31,6 +31,7 @@ class ProjectPreview(
 ) : Identifiable {
 
     override lateinit var executeQueue: ExecuteQueue
+override lateinit var project: Project
 
     constructor(projectData: ProjectData) : this(
         projectData.id,

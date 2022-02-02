@@ -36,6 +36,7 @@ class Button(
     val value: Int
 ) : Identifiable, Convertible<UIElement> {
     override lateinit var executeQueue: ExecuteQueue
+override lateinit var project: Project
 
     constructor(uiElement: UIElement, columnId: Int) : this(
         uiElement.id,
