@@ -20,10 +20,14 @@
 
 package com.pseandroid2.dailydata.model.transformation
 
-class Identity() :
-    TransformationFunction<List<Any>>(IDENTITY_ID) {
+import java.lang.IllegalArgumentException
 
-    override fun execute(input: List<List<Any>>): List<List<Any>> {
-        return input
+abstract class Identity<T : Any> protected constructor(typeString: String) :
+    TransformationFunction<List<T>>("$IDENTITY_ID%$typeString") {
+
+    override fun execute(input: List<List<Any>>): List<List<T>> {
+        return convertElements(input)
     }
+
+    protected abstract fun convertElements(input: List<List<Any>>): List<List<T>>
 }
