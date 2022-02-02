@@ -20,7 +20,7 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
-//TODO("Robin changes")
+
 enum class LineType(val representation : String) {
     DOTTED("Dotted"),
     NONE("None"),

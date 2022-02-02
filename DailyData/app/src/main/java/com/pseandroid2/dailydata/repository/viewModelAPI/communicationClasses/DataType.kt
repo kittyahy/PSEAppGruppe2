@@ -24,7 +24,6 @@ import com.pseandroid2.dailydata.util.getSerializableClassName
 import java.time.LocalDateTime
 
 
-//TODO("Robin changes")
 enum class DataType(
     val representation: String,
     val regex: String,
@@ -62,7 +61,8 @@ enum class DataType(
             }
             return WHOLE_NUMBER
         }
-        fun fromSerializableClassName(rep: String) : DataType {
+
+        fun fromSerializableClassName(rep: String): DataType {
             for (enum in values()) {
                 if (enum.serializableClassName == rep) {
                     return enum

@@ -22,7 +22,7 @@ package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
 import android.graphics.Bitmap
 
-//TODO("Robin changes")
+
 //Todo("Anton changes) post sehen im PflichtenHeft anders aus
 class Post(
     var title : String,

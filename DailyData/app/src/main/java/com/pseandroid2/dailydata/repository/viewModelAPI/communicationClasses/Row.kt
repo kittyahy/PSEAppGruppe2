@@ -28,6 +28,9 @@ import com.pseandroid2.dailydata.model.table.Row
 import com.pseandroid2.dailydata.model.table.RowMetaData
 import com.pseandroid2.dailydata.model.users.SimpleUser
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.runBlocking
 import java.time.LocalDateTime
 
 class Row(
@@ -35,6 +38,7 @@ class Row(
     val elements: List<String>
 ) : Identifiable, Convertible<Row> {
     override lateinit var executeQueue: ExecuteQueue
+
     constructor(row: Row) : this(
         row.getMetaData().createdOn.hashCode(), //TODO Richtige ID
         listConversion(row.getAll())
@@ -48,12 +52,21 @@ class Row(
         }
     }
 
-    override fun deleteIsPossible(): Boolean {
+    override fun deleteIsPossible(): Flow<Boolean> {
         TODO("Not yet implemented")
     }
 
     override suspend fun delete() {
         TODO("Not yet implemented")
+    }
+
+    fun setCellIsPossible(): Flow<Boolean> {
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
     }
 
     //@throws IllegalOperationException
