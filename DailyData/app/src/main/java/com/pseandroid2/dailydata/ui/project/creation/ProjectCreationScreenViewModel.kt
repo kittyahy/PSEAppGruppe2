@@ -40,6 +40,7 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.newFixedThreadPoolContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -166,18 +167,20 @@ class ProjectCreationScreenViewModel @Inject constructor(
                     table.isEmpty() -> sendUiEvent(UiEvent.ShowToast("Please Enter a column"))
                     else            -> {
                         //Todo Anton neue signatur
-                        /*
-                        var newProject = repository.projectHandler.newProjectAsync(
-                            name = title,
-                            description = description,
-                            wallpaper = wallpaper.hashCode(),
-                            table = table,
-                            buttons = buttons,
-                            notification = notifications,
-                            graphs = graphs
-                        )
-                        sendUiEvent(UiEvent.PopBackStack)
-                        sendUiEvent(UiEvent.Navigate(Routes.DATA + "?projectId=${newProject.id}"))*/
+                        viewModelScope.launch {
+                            var newProject = repository.projectHandler.newProjectAsync(
+                                name = title,
+                                description = description,
+                                wallpaper = wallpaper.hashCode(),
+                                table = table,
+                                buttons = buttons,
+                                notification = notifications,
+                                graphs = graphs
+                            )
+                            var id = newProject.await()
+                            sendUiEvent(UiEvent.PopBackStack)
+                            sendUiEvent(UiEvent.Navigate(Routes.DATA + "?projectId=$id"))
+                        }
                     }
                 }
             }

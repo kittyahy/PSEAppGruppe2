@@ -1,4 +1,4 @@
-package com.pseandroid2.dailydata.remoteDataSource.appLinks
+package com.pseandroid2.dailydata.ui.link.appLinks
 
 import java.lang.Long.toHexString
 import kotlin.math.ceil

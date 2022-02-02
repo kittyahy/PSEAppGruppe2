@@ -54,29 +54,3 @@ fun LinkScreen(
         }
     }
 }
-
-
-@Preview(showSystemUi = true, showBackground = true)
-@Composable
-fun Prev() {
-    Column(
-        modifier = Modifier.padding(vertical = 40.dp),
-        verticalArrangement = Arrangement.spacedBy(30.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Box(
-            modifier = Modifier
-                .size(100.dp)
-                .clip(CircleShape)
-                .background(Color.Green),
-            contentAlignment = Alignment.Center
-        ) {
-
-        }
-        Text(text = "Title")
-        Button(onClick = { } ) {
-            Text(text = "Join Project")
-        }
-    }
-    
-}

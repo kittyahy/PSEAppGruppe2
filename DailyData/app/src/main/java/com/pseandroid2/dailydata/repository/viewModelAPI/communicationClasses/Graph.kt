@@ -21,7 +21,6 @@
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
 import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import com.pseandroid2.dailydata.model.graph.Graph
 import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.project.ProjectBuilder

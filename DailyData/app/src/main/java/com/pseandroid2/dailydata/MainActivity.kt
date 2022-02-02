@@ -34,10 +34,11 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
-import com.pseandroid2.dailydata.remoteDataSource.appLinks.JoinProjectLinkManager
+import com.pseandroid2.dailydata.ui.link.appLinks.JoinProjectLinkManager
 import com.pseandroid2.dailydata.ui.theme.DailyDataTheme
 import com.pseandroid2.dailydata.ui.composables.BottomNavItem
 import com.pseandroid2.dailydata.ui.composables.BottomNavigationBar
@@ -138,3 +139,8 @@ fun Main() {
     }
 }
 
+@Preview(showBackground = true)
+@Composable
+fun Prev() {
+
+}

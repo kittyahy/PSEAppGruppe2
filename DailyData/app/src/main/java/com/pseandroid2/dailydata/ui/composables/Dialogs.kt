@@ -40,6 +40,7 @@ fun ProjectTemplateDialog(
                 modifier = Modifier.padding(10.dp)
             ) {
                 LazyColumn {
+
                     itemsIndexed(template.graphTemplates) { index, graphTemplate ->
                         Column (
                             modifier = Modifier.padding(10.dp),

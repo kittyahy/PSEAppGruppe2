@@ -39,6 +39,7 @@ class ServerTemplateScreenViewModel @Inject constructor(
                 isProjectTemplateDialogOpen = false
             }
             is ServerTemplateScreenEvent.OnShowDialog -> {
+
                 isProjectTemplateDialogOpen = true
                 dialogTemplateIndex = event.index
             }

@@ -18,6 +18,7 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Gr
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Member
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Notification
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
+import com.pseandroid2.dailydata.ui.link.appLinks.JoinProjectLinkManager
 import com.pseandroid2.dailydata.ui.project.data.DataTabs
 import com.pseandroid2.dailydata.util.ui.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -140,11 +141,12 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
                 var mutable = notifications.toMutableList()
                 mutable.removeAt(index = event.index)
                 notifications = mutable.toList()
-            }/*
+            }
             is ProjectDataSettingsScreenEvent.OnCreateLink -> {
-                var link = initialProject.createLink()
+                var manager = JoinProjectLinkManager()
+                var link = manager.createLink(initialProject.id.toLong())
                 sendUiEvent(UiEvent.CopyToClipboard(link))
-            }*/ //TODO(Anton changes)
+            }
             is ProjectDataSettingsScreenEvent.OnGraphAdd -> {
                 var mutable = graphs.toMutableList()
                 mutable.add(event.graph)

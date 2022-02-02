@@ -47,33 +47,6 @@ import java.lang.NumberFormatException
 import java.time.LocalTime
 import java.util.Calendar
 
-
-@Preview(showBackground = true)
-@Composable
-fun Prev() {
-    Card(modifier = Modifier
-        .clickable { }) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(60.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column(modifier = Modifier
-                .size(40.dp)
-                .wrapContentSize(Alignment.CenterStart)) {
-                Box(
-                    modifier = Modifier
-                        .size((20.dp))
-                        .clip(CircleShape)
-                        .background(color = Color.Green)
-                )
-            }
-            Text(text = "Green")
-        }
-    }
-}
-
 @Composable
 fun AppDialog(
     isOpen: Boolean,
