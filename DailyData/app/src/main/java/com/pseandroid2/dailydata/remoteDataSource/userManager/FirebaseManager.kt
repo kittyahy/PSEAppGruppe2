@@ -37,10 +37,6 @@ class FirebaseManager(timeout: Long?) {
     // Initialize Firebase Auth
     private var auth: FirebaseAuth = Firebase.auth
 
-    init {
-        refreshIdToken(true)
-    }
-
     /**
      * Registers a new user with the requested sign in type.
      * Note: The registration will also fail, if there already exists an account with the registration parameters
