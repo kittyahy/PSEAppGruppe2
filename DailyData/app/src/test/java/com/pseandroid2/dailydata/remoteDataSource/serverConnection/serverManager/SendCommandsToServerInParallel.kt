@@ -21,7 +21,6 @@
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverManager
 
 import android.util.Log
-import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandInfo
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.Delta
@@ -34,7 +33,6 @@ import io.mockk.mockk
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import java.time.LocalDateTime
 
 internal class SendCommandsToServerInParallel {
 

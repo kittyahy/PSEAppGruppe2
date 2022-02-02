@@ -22,14 +22,36 @@ package com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturn
 /**
  * A dataclass which will be received from the server. It stores the details of a single template (project template or graph template)
  *
- * @param id: The id of the template
- * @param title: The title of the template
- * @param isProjectTemplate: If true, than a projectTemplate is described. If false, than a graphTemplate is described
- * @param detailImage: The detail image of the template
+ * @param id:                   The id of the template
+ * @param title:                The title of the template
+ * @param isProjectTemplate:    If true, than a projectTemplate is described. If false, than a graphTemplate is described
+ * @param detailImage:          The detail image of the template
  */
 data class TemplateDetail(
     val id: Int = 0,
     val title: String = "",
     val isProjectTemplate: Boolean = false,
-    val detailImage: List<Byte> = listOf()
-)
+    val detailImage: ByteArray = ByteArray(0)
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as TemplateDetail
+
+        if (id != other.id) return false
+        if (title != other.title) return false
+        if (isProjectTemplate != other.isProjectTemplate) return false
+        if (!detailImage.contentEquals(other.detailImage)) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = id
+        result = 31 * result + title.hashCode()
+        result = 31 * result + isProjectTemplate.hashCode()
+        result = 31 * result + detailImage.contentHashCode()
+        return result
+    }
+}

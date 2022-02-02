@@ -1,14 +1,13 @@
 package com.pseandroid2.dailydata.remoteDataSource.rdsAPI
 
-import android.os.UserManager
+import android.graphics.Bitmap
 import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
-import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
-import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.Delta
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.PostPreviewWrapper
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.TemplateDetailWrapper
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.PostPreview
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.TemplateDetail
-import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
 import com.pseandroid2.dailydata.remoteDataSource.userManager.SignInTypes
 import com.pseandroid2.dailydata.remoteDataSource.userManager.UserAccount
@@ -30,17 +29,18 @@ class RDSAPI_CorrectlyLinked {
     private var deltaList: Collection<String> = listOf("Delta")
     private var fetchRequestList: Collection<FetchRequest> = listOf(FetchRequest(requestInfo = "FetchRequest"))
 
+    private val bitmap = Bitmap.createBitmap(0, 0, Bitmap.Config.ARGB_8888)
+
     @Before
     fun setup() {
         val serverManager = mockk<ServerManager>()
 
         every { serverManager.greet() } returns true
-
         every { serverManager.getAllPostPreview("")} returns postPreviewList
         every { serverManager.getPostDetail(1,"")} returns postDetailList
         every { serverManager.getProjectTemplate(1, "")} returns "ProjectTemplate"
         every { serverManager.getGraphTemplate(1, 1, "")} returns "GraphTemplate"
-        every { serverManager.addPost("", projectTemplate =  Pair("", ""), graphTemplates = listOf(Pair("", "")), "")} returns 1
+        every { serverManager.addPost(postPreview = Pair(bitmap, ""), projectTemplate = Pair("", Pair(bitmap, "")), graphTemplates = listOf(Pair("", Pair(bitmap, ""))), authToken =  "")} returns 1
         every { serverManager.removePost(1, "")} returns true
         every { serverManager.addUser(1, "")} returns "project details"
         every { serverManager.removeUser("", 1, "")} returns true
@@ -75,7 +75,7 @@ class RDSAPI_CorrectlyLinked {
         Assert.assertEquals(postDetailList.elementAt(0), rdsAPI.getPostDetail(1).elementAt(0))
         Assert.assertEquals("ProjectTemplate", rdsAPI.getProjectTemplate(1))
         Assert.assertEquals("GraphTemplate", rdsAPI.getGraphTemplate(1, 1))
-        Assert.assertEquals(1, rdsAPI.uploadPost("", Pair("", ""), listOf(Pair("", ""))))
+        Assert.assertEquals(1, rdsAPI.uploadPost(postPreview = Pair(bitmap, ""), projectTemplate = Pair("", Pair(bitmap, "")), graphTemplates = listOf(Pair("", Pair(bitmap, "")))))
         Assert.assertTrue(rdsAPI.removePost(1))
         Assert.assertEquals("project details", rdsAPI.joinProject(1))
         Assert.assertTrue(rdsAPI.removeUser("", 1))

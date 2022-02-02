@@ -20,11 +20,14 @@
 
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection
 
+import android.graphics.Bitmap
 import com.pseandroid2.dailydata.remoteDataSource.queue.FetchRequestQueue
 import com.pseandroid2.dailydata.remoteDataSource.queue.FetchRequestQueueObserver
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandInfo
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueue
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueueObserver
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.PostPreviewWrapper
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.TemplateDetailWrapper
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.Delta
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.PostPreview
@@ -33,7 +36,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import retrofit2.Call
+import java.io.ByteArrayOutputStream
 import java.time.LocalDateTime
 import javax.inject.Inject
 
@@ -107,15 +110,32 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
     /**
      * Uploads a post to the server
      *
-     * @param postPreview: The preview of the post that should be added
-     * @param projectTemplate: The project template pair as a pair of the project template and the project template preview
-     * @param graphTemplates: The graph templates as Collection of pairs of graph templates as JSONs and the graph template previews
-     * @param authToken: The authentication token
+     * @param postPreview: The preview of the post that should be added. The first element of the Pair has the preview picture and the second element has the title
+     * @param projectTemplate: The project template. The first element of the outer Pair is the template as a JSON and the second element is the inner Pair.
+     *                           The inner Pair has as it first element the template detail image and as its second element the title of the template
+     * @param graphTemplates: The graph templates. Every list element is a graph template.
+     *                          The first element of the outer Pair is the template as a JSON and the second element is the inner Pair.
+     *                          The inner Pair has as it first element the template detail image and as its second element the title of the template
      * @return Int: The PostID of the new post. -1 if the call didn't succeed, 0 if the user reached his limit of uploaded posts.
      */
-    fun addPost(postPreview: String, projectTemplate: Pair<String, String>, graphTemplates: Collection<Pair<String, String>>, authToken: String): Int {
-        return restAPI.addPost(postPreview, projectTemplate, graphTemplates, authToken)
+    fun addPost(postPreview: Pair<Bitmap, String>, projectTemplate: Pair<String, Pair<Bitmap, String>>, graphTemplates: List<Pair<String, Pair<Bitmap, String>>>, authToken: String): Int {
+        val postPreviewToUpload = PostPreviewWrapper(bitmapToByteArray(postPreview.first), postPreview.second)
+        val templateDetailToUpload = Pair(projectTemplate.first, TemplateDetailWrapper(bitmapToByteArray(projectTemplate.second.first), projectTemplate.second.second))
+        var graphDetailsToUpload = mutableListOf<Pair<String, TemplateDetailWrapper>>()
+        graphTemplates.forEach {
+            val templateDetailWrapper = TemplateDetailWrapper(bitmapToByteArray(it.second.first), it.second.second)
+            graphDetailsToUpload.add(Pair(it.first, templateDetailWrapper))
+        }
+        return restAPI.addPost(postPreviewToUpload, templateDetailToUpload, graphDetailsToUpload, authToken)
     }
+
+    private fun bitmapToByteArray(toConvert: Bitmap): ByteArray {
+        val stream = ByteArrayOutputStream()
+        toConvert.compress(Bitmap.CompressFormat.PNG, 90, stream)
+
+        return stream.toByteArray()
+    }
+
 
     // Wish-criteria
     /**
@@ -232,7 +252,7 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
         receivedProjectCommands.forEach {
             // Transform Delta into an Project Command
             val queueElement = ProjectCommandInfo(
-                commandByUser =  it.user, isProjectAdmin = it.isAdmin, projectCommand = it.projectCommand)
+                commandByUser =  it.user, isProjectAdmin = it.isAdmin, projectCommand = it.projectCommand, it.addedToServer)
             projectCommandQueue.addProjectCommand(queueElement)
         }
     }

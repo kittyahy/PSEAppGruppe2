@@ -24,9 +24,11 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.AddPostParameter
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.DemandOldDataParameter
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.PostPreviewWrapper
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.ProvideOldDataParameter
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.RemoveUserParameter
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.SaveDeltaParameter
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.TemplateDetailWrapper
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.Delta
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.PostPreview
@@ -134,12 +136,12 @@ class RESTAPI {
      * Uploads a post to the server
      *
      * @param postPreview: The preview of the post that should be added
-     * @param projectTemplate: The project template pair as a pair of the project template and the project template preview
-     * @param graphTemplates: The graph templates as Collection of pairs of graph templates as JSONs and the graph template previews
+     * @param projectTemplate: The project template. The first element of the Pair is the template as a JSON, the second one is the detailView of the template
+     * @param graphTemplates: The graph templates. The first element of a Pair is the template as a JSON, the second one is the detailView of the template
      * @param authToken: The authentication token
      * @return Int: The PostID of the new post. -1 if the call didn't succeed, 0 if the user reached his limit of uploaded posts.
      */
-    fun addPost (postPreview: String, projectTemplate: Pair<String, String>, graphTemplates: Collection<Pair<String, String>>, authToken: String): Int {
+    fun addPost (postPreview: PostPreviewWrapper, projectTemplate: Pair<String, TemplateDetailWrapper>, graphTemplates: List<Pair<String, TemplateDetailWrapper>>, authToken: String): Int {
         val params = AddPostParameter(postPreview, projectTemplate, graphTemplates)
         val call: Call<Int> = server.addPost(authToken, params)
 
@@ -255,7 +257,7 @@ class RESTAPI {
         val body = call.execute().body() ?: return mutableListOf()
         var refactoredDeltas: MutableList<Delta> = mutableListOf()
         body.forEach {
-            refactoredDeltas.add(Delta(it.user, it.projectCommand.substring( 1, it.projectCommand.length - 1), it.project, it.isAdmin))
+            refactoredDeltas.add(Delta(it.addedToServer, it.user, it.projectCommand.substring( 1, it.projectCommand.length - 1), it.project, it.isAdmin, it.requestedBy))
         }
         return refactoredDeltas
     }

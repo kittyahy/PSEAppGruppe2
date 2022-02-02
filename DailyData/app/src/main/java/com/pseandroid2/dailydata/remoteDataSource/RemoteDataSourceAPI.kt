@@ -20,11 +20,14 @@
 
 package com.pseandroid2.dailydata.remoteDataSource
 
+import android.graphics.Bitmap
 import com.pseandroid2.dailydata.remoteDataSource.queue.FetchRequestQueueObserver
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandInfo
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueueObserver
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.PostPreviewWrapper
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.TemplateDetailWrapper
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.PostPreview
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.TemplateDetail
@@ -174,13 +177,16 @@ class RemoteDataSourceAPI @Inject constructor(uAccount: UserAccount?, sManager: 
     // Wish-criteria
     /**
      * Uploads a post to the server
-     * 
-     * @param postPreview: The preview of the post that should be uploaded
-     * @param projectTemplate: The project template pair as a pair of the project template and the project template preview
-     * @param graphTemplates: The graph templates as Collection of pairs of graph templates as JSONs and the graph template previews
+     *
+     * @param postPreview: The preview of the post that should be added. The first element of the Pair has the preview picture and the second element has the title
+     * @param projectTemplate: The project template. The first element of the outer Pair is the template as a JSON and the second element is the inner Pair.
+     *                           The inner Pair has as it first element the template detail image and as its second element the title of the template
+     * @param graphTemplates: The graph templates. Every list element is a graph template.
+     *                          The first element of the outer Pair is the template as a JSON and the second element is the inner Pair.
+     *                          The inner Pair has as it first element the template detail image and as its second element the title of the template
      * @return Int: The PostID of the new post. -1 if the call didn't succeed, 0 if the user reached his limit of uploaded posts.
      */
-    fun uploadPost(postPreview: String, projectTemplate: Pair<String, String>, graphTemplates: Collection<Pair<String, String>>): Int {
+    fun uploadPost(postPreview: Pair<Bitmap, String>, projectTemplate: Pair<String, Pair<Bitmap, String>>, graphTemplates: List<Pair<String, Pair<Bitmap, String>>>): Int {
         val authToken: String = userAccount.getToken()
         return serverManager.addPost(postPreview, projectTemplate, graphTemplates, authToken)
     }
