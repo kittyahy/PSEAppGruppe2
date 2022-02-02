@@ -26,6 +26,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -49,24 +50,27 @@ public class Template {
     int templateNumber;
     private String templateInitial;
     private boolean isProjectTemplate;
-    private String detailView;
+    private String detailViewTitle;
+    private byte[] detailViewImage;
 
     /**
      * The constructor, which should be used to create a template.
      *
      * @param post              defines the post, to which the template belongs.
-     * @param templateNumber    defines the unique number, within the post,of the template
+     * @param templateNumber    defines the unique number, within the post, of the template.
      * @param templateInitial   the project or graph Template themselves, which can be understood by the client.
      * @param isProjectTemplate declares, if this template contains a project template or not.
-     * @param detailView        the detailView of the template.
+     * @param detailViewTitle   the title of the detailView, which is going to be presented to the user.
+     * @param detailViewImage   the image, which the user can see, before they download the template.
      */
     public Template(int post, int templateNumber, String templateInitial, boolean isProjectTemplate,
-                    String detailView) {
+                    String detailViewTitle, byte[] detailViewImage) {
         this.post = post;
         this.templateNumber = templateNumber;
         this.templateInitial = templateInitial;
         this.isProjectTemplate = isProjectTemplate;
-        this.detailView = detailView;
+        this.detailViewTitle = detailViewTitle;
+        this.detailViewImage = detailViewImage;
     }
 
     /**
@@ -89,7 +93,6 @@ public class Template {
         return Objects.hash(post, templateNumber);
     }
 
-
     @Override
     public String toString() {
         return "Template{" +
@@ -97,7 +100,10 @@ public class Template {
                 ", templateNumber=" + templateNumber +
                 ", templateInitial='" + templateInitial + '\'' +
                 ", isProjectTemplate=" + isProjectTemplate +
-                ", detailView='" + detailView + '\'' +
+                ", detailViewTitle='" + detailViewTitle + '\'' +
+                ", detailViewImage=" + Arrays.toString(detailViewImage) +
                 '}';
     }
+
+
 }

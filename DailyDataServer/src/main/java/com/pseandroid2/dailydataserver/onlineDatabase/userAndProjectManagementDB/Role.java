@@ -32,8 +32,10 @@ public enum Role {
      */
     PARTICIPANT,
     /**
-     * there is only one admin per time for an project. They have more abilties and permissions for the user and
+     * there is only one admin per time for a project. They have more abilities and permissions for the user and
      * project management and the table.
+     * <p>
+     * An admin can everything a participant can.
      */
     ADMIN
 }

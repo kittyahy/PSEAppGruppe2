@@ -19,12 +19,17 @@
 */
 package com.pseandroid2.dailydataserver.onlineDatabase.requestParameters.deltaController;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 
 
 /**
  * A class which specifies all Parameter, which are recommended for the body of provideOldDelta.
  */
+@Getter
+@Setter
 public class ProvideOldDataParameter {
     private String command;
     private String forUser;
@@ -48,71 +53,6 @@ public class ProvideOldDataParameter {
         this.initialAdded = initialAdded;
         this.initialAddedBy = initialAddedBy;
         this.wasAdmin = wasAdmin;
-    }
-
-    /**
-     * getters (there are no need for setters, because the class is only for transfer the Data from the client (who
-     * sets them) to the server (who gets them)
-     */
-
-    /**
-     * Getter for command.
-     * <p>
-     * There are no need for setters, because the class is only for transfer the Data from the
-     * client (who sets them) to the server (who gets them)
-     *
-     * @return the command what the user, who initially  added the Delta, changed.
-     */
-    public String getCommand() {
-        return command;
-    }
-
-    /**
-     * Getter for forUser.
-     * <p>
-     * There are no need for setters, because the class is only for transfer the Data from the
-     * client (who sets them) to the server (who gets them)
-     *
-     * @return the user, which needs the old Deltas.
-     */
-    public String getForUser() {
-        return forUser;
-    }
-
-    /**
-     * Getter for initialAdded.
-     * <p>
-     * There are no need for setters, because the class is only for transfer the Data from the
-     * client (who sets them) to the server (who gets them)
-     *
-     * @return when was the Delta initially added to the server.
-     */
-    public LocalDateTime getInitialAdded() {
-        return initialAdded;
-    }
-
-    /**
-     * Getter for initialAddedBy.
-     * <p>
-     * There are no need for setters, because the class is only for transfer the Data from the
-     * client (who sets them) to the server (who gets them)
-     *
-     * @return the user, who added the Delta initially.
-     */
-    public String getInitialAddedBy() {
-        return initialAddedBy;
-    }
-
-    /**
-     * Getter for wasAdmin.
-     * <p>
-     * There are no need for setters, because the class is only for transfer the Data from the
-     * client (who sets them) to the server (who gets them)
-     *
-     * @return was the person at this time admin, when they added the Delta.
-     */
-    public boolean isWasAdmin() {
-        return wasAdmin;
     }
 
 
