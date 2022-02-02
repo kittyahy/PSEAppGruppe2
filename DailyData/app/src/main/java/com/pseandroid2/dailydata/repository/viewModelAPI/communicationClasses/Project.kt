@@ -69,6 +69,13 @@ class Project(
         TODO("not yet implemented")
     }
 
+    //TODO Deli: Bitte über allen IsPossible Funktionen in diesem Package einfügen.
+    /**
+     * If false, it would be imprudent to use the corresponding "manipulation" fun.
+     * Thus it should be used to block input options from being used if false.
+     * e.g. If manipulationIsPossible.first() is false,
+     *      users should not be able to call manipulation().
+     */
     fun addGraphIsPossible(): Flow<Boolean> {
         //Todo replace with valid proof
         val flow = MutableSharedFlow<Boolean>()
