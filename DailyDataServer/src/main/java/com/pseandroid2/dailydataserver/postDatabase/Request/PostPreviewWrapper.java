@@ -13,7 +13,7 @@ import java.util.Arrays;
 @Getter
 @Setter
 public class PostPreviewWrapper {
-    private byte[] PreviewPicture;
+    private byte[] previewPicture;
     private String title;
 
     /**
@@ -23,7 +23,7 @@ public class PostPreviewWrapper {
      * @param title          the title of the post.
      */
     public PostPreviewWrapper(final byte[] previewPicture, final String title) {
-        PreviewPicture = previewPicture;
+        this.previewPicture = previewPicture;
         this.title = title;
     }
 
@@ -31,7 +31,7 @@ public class PostPreviewWrapper {
     @Override
     public String toString() {
         return "PostPreviewWrapper{" +
-                "PreviewPicture=" + Arrays.toString(PreviewPicture) +
+                "PreviewPicture=" + Arrays.toString(previewPicture) +
                 ", title='" + title + '\'' +
                 '}';
     }

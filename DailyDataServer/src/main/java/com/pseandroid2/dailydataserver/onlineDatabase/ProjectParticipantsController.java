@@ -119,7 +119,7 @@ public class ProjectParticipantsController {
      *
      * @param user      the participant, who wants to know who the admin is.
      * @param projectId the id from which the admin is recommended.
-     * @return the admin≤
+     * @return the admin
      */
     @GetMapping(value = "/{id}/admin")
     public String getAdmin(@RequestAttribute String user, @PathVariable("id") long projectId) {

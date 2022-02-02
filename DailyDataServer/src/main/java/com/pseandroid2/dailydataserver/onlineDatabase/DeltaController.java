@@ -20,7 +20,7 @@
 package com.pseandroid2.dailydataserver.onlineDatabase;
 
 import com.pseandroid2.dailydataserver.onlineDatabase.DeltaDB.Delta;
-import com.pseandroid2.dailydataserver.onlineDatabase.requestParameters.deltaController.ProvideOldDataParameter;
+import com.pseandroid2.dailydataserver.onlineDatabase.requestParameters.ProvideOldDataParameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

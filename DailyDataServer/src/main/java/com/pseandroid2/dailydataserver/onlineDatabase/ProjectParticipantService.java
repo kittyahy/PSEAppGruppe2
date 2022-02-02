@@ -122,6 +122,7 @@ public class ProjectParticipantService {
                 projectParticipantList.get(1).setRole(Role.ADMIN);
                 ppRepo.save(projectParticipantList.get(1));
 
+                ppRepo.deleteById(new ProjectParticipantID(user, projectId));
                 Project projectToUpdate = projectRepo.getById(projectId);
                 projectToUpdate.setLastUpdated(LocalDateTime.now());
                 projectRepo.save(projectToUpdate);
