@@ -26,6 +26,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,15 +46,14 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Li
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.PieChart
 import com.pseandroid2.dailydata.ui.composables.EnumDropDownMenu
 import com.pseandroid2.dailydata.ui.project.creation.AppDialog
-import com.pseandroid2.dailydata.util.ui.UiEvent
 import com.pseandroid2.dailydata.util.ui.Wallpapers
 import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.launch
 
 @InternalCoroutinesApi
 @Composable
 fun ProjectDataGraphScreen(
     projectId : Int,
-    onNavigate: (UiEvent.Navigate) -> Unit,
     viewModel: ProjectDataGraphScreenViewModel = hiltViewModel()
 ) {
 
@@ -120,6 +120,7 @@ fun PieChartDialog(
     graph : PieChart,
     table : List<Column>
 ) {
+    val coroutineScope = rememberCoroutineScope()
     Column() {
         //useResource("image.png") { loadImageBitmap(it) }
         Image(
@@ -161,7 +162,7 @@ fun PieChartDialog(
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            var suggestions = table.map { it.name }
+            val suggestions = table.map { it.name }
             var col by  remember { mutableStateOf( 0 ) }
             EnumDropDownMenu(
                 suggestions = suggestions,
@@ -169,7 +170,9 @@ fun PieChartDialog(
                 onClick = { col = it }
             )
             TextButton(onClick = {
-                graph.addMapping(column = table[col])
+                coroutineScope.launch {
+                    graph.addMapping(column = table[col])
+                }
             }) {
                 Text(text = "Add Column")
             }
@@ -178,7 +181,9 @@ fun PieChartDialog(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Checkbox(checked = graph.showPercentages, onCheckedChange = {
-                graph.showPercentages(show = it)
+                coroutineScope.launch {
+                    graph.showPercentages(show = it)
+                }
             })
             Text(text = "Show Percentages")
         }
@@ -196,6 +201,7 @@ fun LineChartDialog(
     graph : LineChart,
     table : List<Column>
 ) {
+    val coroutineScope = rememberCoroutineScope()
     Column() {
         Image(
             painter = painterResource(id = R.drawable.chart),
@@ -215,7 +221,9 @@ fun LineChartDialog(
                     contentDescription = "",
                     tint = MaterialTheme.colors.onBackground,
                     modifier = Modifier.clickable {
-                        graph.deleteVerticalMapping(index = index)
+                        coroutineScope.launch {
+                            graph.deleteVerticalMapping(index = index)
+                        }
                     }
                 )
             }
@@ -224,7 +232,7 @@ fun LineChartDialog(
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            var suggestions = table.map { it.name }
+            val suggestions = table.map { it.name }
             var col by  remember { mutableStateOf( 0 ) }
             EnumDropDownMenu(
                 suggestions = suggestions,
@@ -232,7 +240,9 @@ fun LineChartDialog(
                 onClick = { col = it }
             )
             TextButton(onClick = {
-                graph.addVerticalMapping(column = table[col])
+                coroutineScope.launch {
+                    graph.addVerticalMapping(column = table[col])
+                }
             }) {
                 Text(text = "Add Column")
             }
@@ -241,33 +251,45 @@ fun LineChartDialog(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(text = "Dot Size")
-            var suggestions = DotSize.values().map { it.representation }
+            val suggestions = DotSize.values().map { it.representation }
             EnumDropDownMenu(
                 suggestions = suggestions,
                 value = graph.dotSize.representation,
-                onClick = { graph.changeDotSize(dotSize = DotSize.values()[it]) }
+                onClick = {
+                    coroutineScope.launch {
+                        graph.changeDotSize(dotSize = DotSize.values()[it])
+                    }
+                }
             )
         }
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(text = "Dot Color")
-            var suggestions = Wallpapers.values().map { it.representation }
+            val suggestions = Wallpapers.values().map { it.representation }
             EnumDropDownMenu(
                 suggestions = suggestions,
                 value = graph.dotColor.toString(),
-                onClick = { graph.changeDotColor(color = Wallpapers.values()[it].value.toArgb()) }
+                onClick = {
+                    coroutineScope.launch {
+                        graph.changeDotColor(color = Wallpapers.values()[it].value.toArgb())
+                    }
+                }
             )
         }
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(text = "Line Type")
-            var suggestions = LineType.values().map { it.representation }
+            val suggestions = LineType.values().map { it.representation }
             EnumDropDownMenu(
                 suggestions = suggestions,
                 value = graph.lineType.representation,
-                onClick = { graph.changeLineType(LineType.values()[it]) }
+                onClick = {
+                    coroutineScope.launch {
+                        graph.changeLineType(LineType.values()[it])
+                    }
+                }
             )
         }
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {

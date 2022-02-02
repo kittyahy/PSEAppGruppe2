@@ -52,8 +52,3 @@ fun TopNavigationBar(
         }
     }
 }
-
-data class TopNavItem(
-    val name: String,
-    val route: String
-)

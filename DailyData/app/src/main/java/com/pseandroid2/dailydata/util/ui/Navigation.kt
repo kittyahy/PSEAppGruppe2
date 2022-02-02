@@ -87,7 +87,7 @@ fun ProjectNavigation(
             arguments = listOf(
                 navArgument(name = "projectTemplateId") {
                     type = NavType.IntType
-                    defaultValue = -1;
+                    defaultValue = -1
                 }
             )
         ) {
@@ -112,7 +112,7 @@ fun ProjectNavigation(
             arguments = listOf(
                 navArgument(name = "projectId") {
                     type = NavType.IntType
-                    defaultValue = -1;
+                    defaultValue = -1
                 }
             )
         ) {
