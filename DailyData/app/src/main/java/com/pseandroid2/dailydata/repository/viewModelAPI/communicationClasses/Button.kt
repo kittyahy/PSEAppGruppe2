@@ -71,7 +71,7 @@ class Button(
         return flow
     }
 
-    fun increaseValue() {
+    suspend fun increaseValue() {
         setValue(value + 1)
     }
 
@@ -84,7 +84,7 @@ class Button(
         return flow
     }
 
-    fun decreaseValue() {
+    suspend fun decreaseValue() {
         setValue(value - 1)
     }
 
@@ -97,7 +97,7 @@ class Button(
         return flow
     }
 
-    fun setValue(value: Int) {
+    suspend fun setValue(value: Int) {
         TODO("setValue")
     }
 
