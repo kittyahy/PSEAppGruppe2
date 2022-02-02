@@ -3,7 +3,8 @@ package com.pseandroid2.dailydata.repository.commandCenter
 import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
 import com.pseandroid2.dailydata.repository.commandCenter.commands.ProjectCommand
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -12,8 +13,9 @@ abstract class CommandQueue
     (val appDataBase: AppDataBase, val remoteDataSourceAPI: RemoteDataSourceAPI) {
     private var commandQueue: MutableList<ProjectCommand> = ArrayList<ProjectCommand>()
     private val mutex = Mutex()
+    protected val scope = CoroutineScope(Dispatchers.IO)
     init {
-        GlobalScope.launch {
+        scope.launch {
             //Todo lösung finden was mit commands passieren soll, die vor beendigen der App nicht ausgeführt werden können
             while (true) {
                 if (commandQueue.isNotEmpty()) {

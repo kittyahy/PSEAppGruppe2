@@ -20,23 +20,31 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
+import com.pseandroid2.dailydata.model.project.Project
+import com.pseandroid2.dailydata.model.project.ProjectBuilder
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.model.uielements.UIElementType
+import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.runBlocking
 
 class Button(
     override val id: Int,
     val name: String,
     val columnId: Int,
     val value: Int
-): Identifiable() {
+) : Identifiable, Convertible<UIElement> {
+    override lateinit var executeQueue: ExecuteQueue
+
     constructor(uiElement: UIElement, columnId: Int) : this(
         uiElement.id,
-        TODO(),
+        uiElement.name,
         columnId,
         uiElement.state.toInt()
     )
 
-    override fun deleteIsPossible(): Boolean {
+    override fun deleteIsPossible(): Flow<Boolean> {
         TODO("Not yet implemented")
     }
 
@@ -45,7 +53,7 @@ class Button(
         TODO("Not yet implemented")
     }
 
-    fun toDBEquivalent(): UIElement {
+    override fun toDBEquivalent(): UIElement {
         return UIElement(
             id,
             UIElementType.BUTTON,
@@ -53,13 +61,47 @@ class Button(
             value.toString()
         )
     }
+
+    fun increaseValueIsPossible(): Flow<Boolean> {
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
+    }
+
     fun increaseValue() {
         setValue(value + 1)
     }
+
+    fun decreaseValueIsPossible(): Flow<Boolean> {
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
+    }
+
     fun decreaseValue() {
         setValue(value - 1)
     }
+
+    fun setValueIsPossible(): Flow<Boolean> {
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
+    }
+
     fun setValue(value: Int) {
-        TODO()
+        TODO("setValue")
+    }
+
+    override fun addYourself(builder: ProjectBuilder<out Project>) {
+        TODO("Not yet implemented")
     }
 }

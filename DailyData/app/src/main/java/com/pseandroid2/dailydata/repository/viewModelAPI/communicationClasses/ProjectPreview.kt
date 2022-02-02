@@ -21,19 +21,29 @@
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
 import com.pseandroid2.dailydata.model.database.entities.ProjectData
+import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
+import kotlinx.coroutines.flow.Flow
 
 class ProjectPreview(
     override val id: Int,
     val name: String,
     val image: String
-): Identifiable() {
-    constructor(projectData: ProjectData) : this(projectData.id, projectData.name, projectData.wallpaper)
+) : Identifiable {
+
+    override lateinit var executeQueue: ExecuteQueue
+
+    constructor(projectData: ProjectData) : this(
+        projectData.id,
+        projectData.name,
+        projectData.wallpaper
+    )
+
     //@throws IllegalOperationException
     override suspend fun delete() {
         TODO("Not yet implemented")
     }
 
-    override fun deleteIsPossible(): Boolean {
+    override fun deleteIsPossible(): Flow<Boolean> {
         TODO("Not yet implemented")
     }
 }

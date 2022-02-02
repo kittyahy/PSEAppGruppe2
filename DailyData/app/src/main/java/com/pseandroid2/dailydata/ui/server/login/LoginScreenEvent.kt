@@ -5,8 +5,10 @@ sealed class LoginScreenEvent {
     data class OnEmailChange(val email : String) : LoginScreenEvent()
     data class OnPasswordChange(val password : String) : LoginScreenEvent()
 
+    data class ShowSignUpDialog(val isOpen : Boolean) : LoginScreenEvent()
+
     object Login : LoginScreenEvent()
     object LoginGoogle : LoginScreenEvent()
-    object SignUp : LoginScreenEvent()
+    data class SignUp(val email : String, val password : String) : LoginScreenEvent()
 
 }

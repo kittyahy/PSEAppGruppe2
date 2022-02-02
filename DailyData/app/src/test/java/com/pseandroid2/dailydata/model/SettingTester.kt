@@ -23,6 +23,7 @@ package com.pseandroid2.dailydata.model
 import com.pseandroid2.dailydata.exceptions.SettingNotFoundException
 import com.pseandroid2.dailydata.model.settings.MapSettings
 import org.junit.Assert
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class SettingTester {
@@ -39,6 +40,14 @@ class SettingTester {
         Assert.assertThrows(SettingNotFoundException::class.java) {
             settings["Some non-existent key"]
         }
+    }
+
+    @Test
+    fun checkContainsKey() {
+        val map =
+            mutableMapOf<String, String>(Pair("Test1", "3"), Pair("Test2", "5"), Pair("Test3", "0"))
+        val settings = MapSettings(map)
+        assertTrue(settings.containsKey("Test1"))
     }
 
 }
