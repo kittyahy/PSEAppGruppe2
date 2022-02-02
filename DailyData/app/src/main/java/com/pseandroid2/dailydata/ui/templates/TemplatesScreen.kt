@@ -54,8 +54,8 @@ fun TemplatesScreen(
     onNavigate: (UiEvent.Navigate) -> Unit,
     viewModel: TemplatesScreenViewModel = hiltViewModel()
 ) {
-    var graphTemplates = viewModel.graphTemplates
-    var projectTemplates = viewModel.projectTemplates.collectAsState(initial = listOf())
+    val graphTemplates = viewModel.graphTemplates
+    val projectTemplates = viewModel.projectTemplates.collectAsState(initial = listOf())
 
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->

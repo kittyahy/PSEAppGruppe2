@@ -7,9 +7,6 @@ import android.os.Environment
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TableLayout
-import com.pseandroid2.dailydata.DailyDataApp
-import com.pseandroid2.dailydata.ui.project.data.input.Table
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException

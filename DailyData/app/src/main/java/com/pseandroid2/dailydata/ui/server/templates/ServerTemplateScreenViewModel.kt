@@ -48,10 +48,4 @@ class ServerTemplateScreenViewModel @Inject constructor(
             }
         }
     }
-
-    private fun sendUiEvent(event : UiEvent) {
-        viewModelScope.launch {
-            _uiEvent.emit(event)
-        }
-    }
 }

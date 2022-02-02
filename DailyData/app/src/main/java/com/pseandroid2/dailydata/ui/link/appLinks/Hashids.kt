@@ -84,8 +84,8 @@ class Hashids(salt: String = defaultSalt, minHashLength: Int = defaultMinimalHas
             }
         }
     }
-
-    private fun guardIndex(numbersHash: Int, returnString: String, index: Int): Int = (numbersHash + returnString.toCharArray()[index].toInt()) % finalGuards.length
+                                                                                                                             //.toInt --> code because toInt id deprecated
+    private fun guardIndex(numbersHash: Int, returnString: String, index: Int): Int = (numbersHash + returnString.toCharArray()[index].code) % finalGuards.length
 
     /**
      * Encoded hex string to string
@@ -194,8 +194,8 @@ class Hashids(salt: String = defaultSalt, minHashLength: Int = defaultMinimalHas
 
     private fun extractLotteryCharAndHashArray(initialSplit: List<String>): Pair<Char, List<String>> {
         val separatorsRegex = "[$finalSeparators]".toRegex()
-        val i = when {
-            initialSplit.size == 2 || initialSplit.size == 3 -> 1
+        val i = when (initialSplit.size) {
+            2, 3 -> 1
             else -> 0
         }
         val ithElementOfSplit = initialSplit[i]

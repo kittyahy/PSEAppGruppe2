@@ -133,7 +133,7 @@ fun LoginScreen(
                     )
                 }
             )
-            Row() {
+            Row {
                 Text(
                     style = MaterialTheme.typography.caption,
                     text = "Need an Account? "

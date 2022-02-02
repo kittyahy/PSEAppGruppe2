@@ -21,12 +21,10 @@
 package com.pseandroid2.dailydata.ui.server
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.pseandroid2.dailydata.util.ui.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -37,17 +35,4 @@ class ServerScreenViewModel @Inject constructor() : ViewModel() {
 
     var loggedIn = true
         private set
-
-    fun onEvent(event : ServerScreenEvent) {
-        //TODO("Repository check if user is currently logged in")
-        when (event) {
-
-        }
-    }
-
-    private fun sendUiEvent(event : UiEvent) {
-        viewModelScope.launch {
-            _uiEvent.emit(event)
-        }
-    }
 }

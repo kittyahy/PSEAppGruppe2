@@ -4,7 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
@@ -16,13 +15,8 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Ro
 import com.pseandroid2.dailydata.util.ui.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flatMapConcat
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -37,8 +31,6 @@ class ProjectDataInputScreenViewModel @Inject constructor(
 
     private lateinit var initialProject : Project
     var isOnlineProject = false
-        private set
-    var isAdmin = false
         private set
 
     var title = ""
@@ -73,7 +65,6 @@ class ProjectDataInputScreenViewModel @Inject constructor(
                         table = project.data
                         buttons = project.buttons
                         members = project.members
-                        isAdmin = project.isAdmin
                         isOnlineProject = project.isOnlineProject
                         initialProject = project
                     }
@@ -83,22 +74,29 @@ class ProjectDataInputScreenViewModel @Inject constructor(
                 isDescriptionUnfolded = !isDescriptionUnfolded
             }
             is ProjectDataInputScreenEvent.OnButtonClickInc -> {
-                var button = buttons.find { it.id == event.id }!!
-                button.increaseValue()
+                val button = buttons.find { it.id == event.id }!!
+                viewModelScope.launch {
+                    button.increaseValue()
+                }
+
             }
             is ProjectDataInputScreenEvent.OnButtonClickDec -> {
-                var button = buttons.find { it.id == event.id }!!
-                button.decreaseValue()
+                val button = buttons.find { it.id == event.id }!!
+                viewModelScope.launch {
+                    button.decreaseValue()
+                }
             }
             is ProjectDataInputScreenEvent.OnButtonClickAdd -> {
-                var button = buttons.find { it.id == event.id }!!
-                var mutable = columnValues.toMutableList()
+                val button = buttons.find { it.id == event.id }!!
+                val mutable = columnValues.toMutableList()
                 mutable[columns.indexOfFirst { it.id == event.id }] = button.value.toString()
                 columnValues = mutable.toList()
-                button.setValue(0)
+                viewModelScope.launch {
+                    button.setValue(0)
+                }
             }
             is ProjectDataInputScreenEvent.OnColumnChange -> {
-                var mutable = columnValues.toMutableList()
+                val mutable = columnValues.toMutableList()
                 mutable[event.index] = event.value
                 columnValues = mutable.toList()
             }
@@ -109,7 +107,9 @@ class ProjectDataInputScreenViewModel @Inject constructor(
                         return
                     }
                 }
-                initialProject.addRow(Row(id = 0, elements = columnValues))
+                viewModelScope.launch {
+                    initialProject.addRow(Row(id = 0, elements = columnValues))
+                }
             }
             is ProjectDataInputScreenEvent.OnRowDialogShow -> {
                 if(isOnlineProject) {
@@ -124,13 +124,12 @@ class ProjectDataInputScreenViewModel @Inject constructor(
                 columnValues = table[rowEdit].elements
             }
             is ProjectDataInputScreenEvent.OnRowDeleteClick -> {
-                initialProject.deleteRow(table[rowEdit])
+                viewModelScope.launch {
+                    initialProject.deleteRow(table[rowEdit])
+                }
             }
         }
     }
-
-    private suspend fun <T> Flow<List<T>>.flattenToList() =
-        flatMapConcat { it.asFlow() }.toList()
 
     private fun sendUiEvent(event : UiEvent) {
         viewModelScope.launch {
