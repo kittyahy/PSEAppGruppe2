@@ -20,6 +20,16 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
-class Post {
+import android.graphics.Bitmap
+
+
+//Todo("Anton changes) post sehen im PflichtenHeft anders aus
+class Post(
+    var title : String,
+    var image : Bitmap,
+    var id : Int,
+    var graphTemplate : GraphTemplate?,
+    var projectTemplate: ProjectTemplate? //exactly one of both is null
+) {
     //Todo implementierung
 }

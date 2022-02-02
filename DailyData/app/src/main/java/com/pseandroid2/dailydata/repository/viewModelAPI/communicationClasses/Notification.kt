@@ -25,35 +25,32 @@ import com.pseandroid2.dailydata.model.notifications.Notification
 import com.pseandroid2.dailydata.model.notifications.TimeNotification
 import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.project.ProjectBuilder
+import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import com.pseandroid2.dailydata.repository.commandCenter.commands.IllegalOperationException
+import kotlinx.coroutines.flow.Flow
 import java.time.LocalTime
+
 
 class Notification(
     override val id: Int,
     val message: String,
-    val time: LocalTime,
-    private val notificationsDAO: NotificationsDAO? = null,
-    val projectID: Int
-) : Identifiable(), Convertible<Notification> {
-    constructor(
-        timeNotification: TimeNotification,
-        notificationsDAO: NotificationsDAO?,
-        projectID: Int
-    ) : this(
+    val time: LocalTime
+) : Identifiable, Convertible<Notification> {
+    override lateinit var executeQueue: ExecuteQueue
+
+    constructor(timeNotification: TimeNotification) : this(
         timeNotification.id,
         timeNotification.getMessage(),
-        TODO(), //timeNotification.send
-        notificationsDAO,
-        projectID
+        TODO("timeNotification.send"), //timeNotification.send //Todo arne fragen: HMM kritisch
     )
 
-    override fun deleteIsPossible(): Boolean {
-        return true
+    override fun deleteIsPossible(): Flow<Boolean> {
+        return TODO("deleteIsPossibleNotif")
     }
 
     //@throws IllegalOperationException
     override suspend fun delete() {
-        TODO()
+        TODO("DeleteNotification")
     }
 
     override fun toDBEquivalent(): TimeNotification {

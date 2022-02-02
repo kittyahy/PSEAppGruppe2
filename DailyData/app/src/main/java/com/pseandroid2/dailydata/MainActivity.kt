@@ -41,29 +41,35 @@ import com.pseandroid2.dailydata.remoteDataSource.appLinks.JoinProjectLinkManage
 import com.pseandroid2.dailydata.ui.theme.DailyDataTheme
 import com.pseandroid2.dailydata.ui.composables.BottomNavItem
 import com.pseandroid2.dailydata.ui.composables.BottomNavigationBar
+import com.pseandroid2.dailydata.ui.link.LinkScreen
 import com.pseandroid2.dailydata.util.ui.Navigation
 import com.pseandroid2.dailydata.util.ui.Routes
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.InternalCoroutinesApi
+
+var pID : Long = -1
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     val joinProjectLinkManager = JoinProjectLinkManager()
 
+    @InternalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             DailyDataTheme {
+                joinProjectLink()
                 Main()
             }
         }
-        joinProjectLink()
+
     }
 
     /**
      * Checks if the app was started by a dynamic link.
      * If it was started by an correct link it will call openJoinProjectScreen()
      */
-    private fun joinProjectLink() {
+    fun joinProjectLink() {
         val dynamicLink = Firebase.dynamicLinks.getDynamicLink(intent).addOnSuccessListener(this) { pendingDynamicLinkData ->
             // Get deep link from result (may be null if no link is found)
             var deepLink: Uri? = null
@@ -78,7 +84,7 @@ class MainActivity : ComponentActivity() {
 
                 // open join project screen when project id is valid
                 if (projectID > 0) {
-                    openJoinProjectScreen(projectID)
+                    pID = projectID
                 }
             } else {
                 Log.d("Link", "no projectID in link")
@@ -86,16 +92,9 @@ class MainActivity : ComponentActivity() {
 
         } .addOnFailureListener(this) { e -> Log.w("DynamicLink", "getDynamicLink:onFailure", e) }
     }
-
-    /**
-     * Loads the the screen where user can join a project
-     */
-    private fun openJoinProjectScreen(projectID: Long) {
-        // TODO: Implement this method
-        Log.d("Link", "open join project screen with project id: $projectID")
-    }
 }
 
+@InternalCoroutinesApi
 @Composable
 fun Main() {
     val navController = rememberNavController()
@@ -129,7 +128,12 @@ fun Main() {
         Box(
             modifier = Modifier.padding(it)
         ) {
-            Navigation(navController = navController)
+            if(pID > 0) {
+                  LinkScreen(pID = pID, onJoinClick = { pID = -1 })
+            } else {
+                Navigation(navController = navController)
+            }
+
         }
     }
 }

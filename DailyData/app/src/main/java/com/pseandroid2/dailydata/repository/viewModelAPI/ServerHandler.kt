@@ -21,6 +21,8 @@
 package com.pseandroid2.dailydata.repository.viewModelAPI
 
 import com.pseandroid2.dailydata.model.database.AppDataBase
+import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
+import com.pseandroid2.dailydata.remoteDataSource.userManager.SignInTypes
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.GraphTemplate
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Post
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.PostDetail
@@ -28,33 +30,42 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Pr
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class ServerHandler(appDataBase: AppDataBase) {
-    fun getPostPreviews(): Flow<List<Post>> {
-        return MutableStateFlow(ArrayList<Post>()) // TODO Implementierung
+class ServerHandler(private val appDataBase: AppDataBase, private val api: RemoteDataSourceAPI) {
+    //TODO("Anton changes")
+    fun getPostPreviews(): List<Post> {
+        return TODO("getPostPreviews") // Implementierung
     }
 
-    fun getPostDetail(id: Int): PostDetail {
-        return TODO()
+    fun getPostDetail(postId: Int): PostDetail {
+        return TODO("getPostDetail")
     }
 
-    fun getProjectTemplate(id: Int): ProjectTemplate {
-        return TODO()
+    fun getProjectTemplate(postId: Int): ProjectTemplate {
+        return TODO("getProjectTemplate")
     }
 
-    fun getGraphTemplate(id: Int, index: Int): GraphTemplate {
-        return TODO()
+    fun getGraphTemplate(postId: Int, index: Int): GraphTemplate {
+        return TODO("getGraphTemplate")
     }
 
     fun isServerCurrentlyReachable(): Boolean {
-        return TODO()
+        return api.connectionToServerPossible()
     }
 
-    fun login(username: String, password: String) {
-        TODO()
+    fun login(email: String, password: String) { //Todo erweiterbarkeit
+        api.signInUser(email, password, SignInTypes.EMAIL)
     }
 
-    fun signUp(username: String, password: String) {
-        TODO()
+    fun signUp(email: String, password: String) { //Todo erweiterbarkeit
+        api.registerUser(email, password, SignInTypes.EMAIL)
+    }
+
+    fun downloadProjectTemplate(id : Int) {
+
+    }
+
+    fun downloadGraphTemplate(projectId : Int, graphId : Int) {
+
     }
 
 }

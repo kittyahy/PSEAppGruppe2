@@ -20,19 +20,27 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
-import android.graphics.Color
-import android.graphics.drawable.Drawable
+import android.graphics.Bitmap
+import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.runBlocking
 
 class PieChart(
     override val id: Int,
-    override val image: Drawable,
-    val color: List<Color>,
+    override val image: Bitmap,
+    val color: List<Int>,
     val mapping: List<Column>,
     val showPercentages: Boolean
-): Graph() {
+) : Graph() {
+    override lateinit var executeQueue: ExecuteQueue
     override val typeName: String = "Pie Chart" //TODO Magic String
 
-    override fun deleteIsPossible(): Boolean {
+    init {
+        availableGraphs.add(typeName)
+    }
+
+    override fun deleteIsPossible(): Flow<Boolean> {
         TODO("Not yet implemented")
     }
 
@@ -40,4 +48,49 @@ class PieChart(
     override suspend fun delete() {
         TODO("Not yet implemented")
     }
+
+    fun addMappingColorIsPossible(): Flow<Boolean> {
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
+    }
+
+    fun addMapping(color: Int, column: Column) { //Todo Robin fragen was die color hier bedeutet
+
+    }
+
+    fun addMappingIsPossible(): Flow<Boolean> {
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
+    }
+
+    fun addMapping(column: Column) {
+        addMapping(PieChartColors.ORANGE.value.toInt(), column = column)
+    }
+
+    fun showPercentagesIsPossible(): Flow<Boolean> {
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
+    }
+
+    fun showPercentages(show: Boolean) {
+
+    }
+}
+
+enum class PieChartColors(val value: Long, val representation: String) {
+    ORANGE(0xFFF57C00, "Orange"),
+    GREEN(0xFF388E3C, "Green"),
+    BLUE(0xFF2196F3, "Blue")
 }
