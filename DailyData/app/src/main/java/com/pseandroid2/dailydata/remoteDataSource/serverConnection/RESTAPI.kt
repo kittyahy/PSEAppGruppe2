@@ -20,6 +20,7 @@
 
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection
 
+import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.AddPostParameter
@@ -100,7 +101,6 @@ class RESTAPI {
      */
     fun getPostDetail(fromPost: Int, authToken: String): Collection<TemplateDetail> {
         val call: Call<List<TemplateDetail>> = server.getPostDetail(authToken, fromPost)
-
         return call.execute().body() ?: emptyList()
     }
 

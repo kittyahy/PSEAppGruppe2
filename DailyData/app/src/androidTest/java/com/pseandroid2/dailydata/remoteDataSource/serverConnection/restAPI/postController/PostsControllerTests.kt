@@ -58,7 +58,7 @@ class PostsControllerTests {
             PostPreviewWrapper(),
             Pair("project template", TemplateDetailWrapper()),
             listOf(Pair("graph template", TemplateDetailWrapper())), authToken)
-        Assert.assertNotEquals(-1, postID)
+        Assert.assertTrue(postID > 0)
 
         Assert.assertTrue(restAPI.removePost(postID, authToken))
     }

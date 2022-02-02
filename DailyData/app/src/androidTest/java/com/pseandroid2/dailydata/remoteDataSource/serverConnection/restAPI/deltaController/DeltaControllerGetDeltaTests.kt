@@ -1,18 +1,13 @@
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI.deltaController
 
-import android.util.Log
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
-import com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI.postController.RESTAPITests_PostsController_PostContent
-import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.Delta
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
 import org.junit.AfterClass
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import java.time.LocalDateTime
-import kotlin.collections.remove as remove
 
 class DeltaControllerGetDeltaTests {
     private var restAPI: RESTAPI = RESTAPI()

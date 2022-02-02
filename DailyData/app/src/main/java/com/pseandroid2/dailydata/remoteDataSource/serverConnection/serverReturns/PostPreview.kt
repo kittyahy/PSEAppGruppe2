@@ -28,7 +28,7 @@ package com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturn
  */
 data class PostPreview(val id: Int = 0,
                        val preview: String = "",
-                       val previewImage: ByteArray = ByteArray(0)
+                       val previewPicture: ByteArray = ByteArray(0)
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -38,7 +38,7 @@ data class PostPreview(val id: Int = 0,
 
         if (id != other.id) return false
         if (preview != other.preview) return false
-        if (!previewImage.contentEquals(other.previewImage)) return false
+        if (!previewPicture.contentEquals(other.previewPicture)) return false
 
         return true
     }
@@ -46,7 +46,7 @@ data class PostPreview(val id: Int = 0,
     override fun hashCode(): Int {
         var result = id
         result = 31 * result + preview.hashCode()
-        result = 31 * result + previewImage.contentHashCode()
+        result = 31 * result + previewPicture.contentHashCode()
         return result
     }
 }

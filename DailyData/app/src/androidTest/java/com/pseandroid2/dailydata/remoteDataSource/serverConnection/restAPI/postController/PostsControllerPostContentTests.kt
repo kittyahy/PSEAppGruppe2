@@ -2,38 +2,39 @@ package com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI.post
 
 import android.util.Log
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.PostPreviewWrapper
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.TemplateDetailWrapper
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.PostPreview
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.TemplateDetail
-import org.junit.Assert
-import org.junit.Test
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
 import org.junit.AfterClass
+import org.junit.Assert
 import org.junit.Before
+import org.junit.Test
 
-
-class RESTAPITests_PostsController_PostContent {
+class PostsControllerPostContentTests {
     private var restAPI: RESTAPI = RESTAPI()
     private lateinit var authToken: String
 
     private lateinit var postPreviewsList: MutableList<PostPreview>
     private var postID: Int = -1
-/*
 
     @Before
     fun setup() {
         // Generate valid firebase authentication token
         val fm: FirebaseManager = FirebaseManager(null)
-        var email = "test@student.kit.edu"
-        var password = "PSEistsuper"
+        val email = "test@student.kit.edu"
+        val password = "PSEistsuper"
 
         Assert.assertEquals(FirebaseReturnOptions.SINGED_IN, fm.signInWithEmailAndPassword(email, password))
         authToken = fm.getToken()
 
-        postID = restAPI.addPost("postPreview1", Pair("projectTemplate", "projectTemplatePreview"),
-            listOf(Pair("graphTemplate", "graphTemplatePreview")), authToken)
-        Assert.assertNotEquals(-1, postID)
-
+        postID = restAPI.addPost(
+            PostPreviewWrapper( title = "project preview"),
+            Pair("project template", TemplateDetailWrapper()),
+            listOf(Pair("graph template", TemplateDetailWrapper())), authToken)
+        Assert.assertTrue(postID > 0)
 
         // Set Values in companion object for correct teardown
         setTeardown(restAPI, postID, authToken)
@@ -50,8 +51,9 @@ class RESTAPITests_PostsController_PostContent {
             Teardown.authToken = authToken
         }
 
-        @AfterClass @JvmStatic fun teardown() {
-            Assert.assertTrue(restAPI!!.removePost(postID, authToken))
+        @AfterClass
+        @JvmStatic fun teardown() {
+            restAPI!!.removePost(postID, authToken)
             Log.d("Teardown", "Complete")
         }
     }
@@ -62,7 +64,7 @@ class RESTAPITests_PostsController_PostContent {
         val templateDetails: List<TemplateDetail> = restAPI.getPostDetail(postID, authToken) as List<TemplateDetail>
         Assert.assertNotEquals(emptyList<TemplateDetail>(), templateDetails)
         templateDetails.forEach() {
-            Assert.assertNotEquals("", it.detail)
+            Assert.assertNotEquals("", it.title)
         }
     }
 
@@ -84,6 +86,6 @@ class RESTAPITests_PostsController_PostContent {
         Assert.assertEquals("", restAPI.getProjectTemplate(-1, authToken))
         Assert.assertEquals("", restAPI.getGraphTemplate(-1, 1, authToken))
     }
-    */
+
     //TODO Tests auskommentieren
 }
