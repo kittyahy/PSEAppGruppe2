@@ -2,11 +2,14 @@ package com.pseandroid2.dailydata.repository.commandCenter
 
 import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
+import com.pseandroid2.dailydata.repository.commandCenter.commands.CommandWrapper
+import com.pseandroid2.dailydata.repository.commandCenter.commands.IllegalOperationException
 import com.pseandroid2.dailydata.repository.commandCenter.commands.ProjectCommand
 import kotlinx.coroutines.delay
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.temporal.TemporalAmount
+import java.time.temporal.TemporalUnit
 
 class PublishQueue(appDataBase: AppDataBase, remoteDataSourceAPI: RemoteDataSourceAPI) :
     CommandQueue(appDataBase, remoteDataSourceAPI) {
@@ -15,7 +18,12 @@ class PublishQueue(appDataBase: AppDataBase, remoteDataSourceAPI: RemoteDataSour
     private var serverConnectionTolerance: TemporalAmount = Duration.ZERO.plusMinutes(5)
     private val untilRetrySleepForTime: Long = 1000 * 60 * 5
     override suspend fun performCommandAction(command: ProjectCommand) {
-        //TODO
+        val wrapper = CommandWrapper(command)
+        val commandJson = wrapper.toJson()
+        if (command.onlineProjectID == null) {
+            throw IllegalOperationException()
+        }
+        remoteDataSourceAPI.sendCommandsToServer(command.onlineProjectID!!, listOf(commandJson))
     }
 
 

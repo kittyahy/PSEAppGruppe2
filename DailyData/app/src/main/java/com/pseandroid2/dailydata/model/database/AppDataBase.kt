@@ -20,6 +20,7 @@
 
 package com.pseandroid2.dailydata.model.database
 
+import android.app.Application
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
@@ -80,7 +81,7 @@ abstract class AppDataBase protected constructor() : RoomDatabase() {
         /**
          * @throws NullPointerException when database creation fails
          */
-        fun getInstance(context: Context): AppDataBase {
+        fun getInstance(context: Application): AppDataBase {
             if (instance == null) {
                 synchronized(this)
                 {

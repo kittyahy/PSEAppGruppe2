@@ -26,17 +26,18 @@ import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
 import com.pseandroid2.dailydata.repository.viewModelAPI.ProjectHandler
 import com.pseandroid2.dailydata.repository.viewModelAPI.ServerHandler
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.GraphTemplateFlow
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectPreviewFlow
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectTemplateFlow
 import kotlinx.coroutines.InternalCoroutinesApi
 
 class RepositoryViewModelAPI (appDataBase: AppDataBase, remoteDataSourceAPI: RemoteDataSourceAPI){
-    val serverHandler = ServerHandler(appDataBase)
+    val serverHandler = ServerHandler(appDataBase, remoteDataSourceAPI)
     @InternalCoroutinesApi
     val projectHandler = ProjectHandler(
         ProjectPreviewFlow(appDataBase.projectDataDAO().getAllProjectData()),
-        ProjectTemplateFlow(),
-        TODO(),
+        ProjectTemplateFlow(TODO("ProjectTemplateFlowParameter")),
+        TODO("GraphTemplateFlow"),
         appDataBase,
         ExecuteQueue(appDataBase,remoteDataSourceAPI, PublishQueue(appDataBase, remoteDataSourceAPI))
     )

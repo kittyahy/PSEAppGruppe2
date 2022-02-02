@@ -16,13 +16,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun ServerCard(
     title : String,
-    image : Painter,
+    image : ImageBitmap,
     imageClickable : Boolean,
     onImageClick : () -> Unit = { },
     onIconClick : () -> Unit
@@ -40,7 +41,7 @@ fun ServerCard(
         ){
 
             Image(
-                painter = image,
+                bitmap = image,
                 contentDescription = "Text 2",
                 modifier = Modifier
                     .fillMaxWidth()

@@ -20,6 +20,13 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
-class GraphTemplate {
+import android.graphics.Bitmap
+
+
+class GraphTemplate(
+    var title: String,
+    var image: Bitmap,
+    var id: Int
+) {
     //TODO Implementierung
 }

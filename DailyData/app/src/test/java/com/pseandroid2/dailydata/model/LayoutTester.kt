@@ -1,6 +1,7 @@
 package com.pseandroid2.dailydata.model
 
 import com.pseandroid2.dailydata.model.table.ArrayListLayout
+import com.pseandroid2.dailydata.model.table.ColumnData
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.model.uielements.UIElementType
 import com.pseandroid2.dailydata.util.Quadruple
@@ -14,20 +15,20 @@ class LayoutTester {
 
     companion object {
         @JvmStatic
-        lateinit var layoutList: ArrayList<Quadruple<String, String, String, MutableList<UIElement>>>
+        lateinit var layoutList: ArrayList<ColumnData>
 
         @BeforeClass
         @JvmStatic
         fun classSetup() {
             layoutList = ArrayList(
                 mutableListOf(
-                    Quadruple(
+                    ColumnData(
                         String::class.getSerializableClassName(),
                         "Test",
                         "Test",
                         mutableListOf(UIElement(0, UIElementType.BUTTON, "Test", "0"))
                     ),
-                    Quadruple(
+                    ColumnData(
                         String::class.getSerializableClassName(),
                         "Test",
                         "Test",
@@ -45,9 +46,9 @@ class LayoutTester {
     fun checkListConstructor() {
         val layout = ArrayListLayout(layoutList)
         for (i in layoutList.indices) {
-            assertEquals(Class.forName(layoutList[i].first).kotlin, layout.getColumnType(i))
+            assertEquals(Class.forName(layoutList[i].type).kotlin, layout.getColumnType(i))
             for (j in layout.getUIElements(i).indices) {
-                assertEquals(layoutList[i].fourth[j], layout.getUIElements(i)[j])
+                assertEquals(layoutList[i].uiElements[j], layout.getUIElements(i)[j])
             }
         }
     }

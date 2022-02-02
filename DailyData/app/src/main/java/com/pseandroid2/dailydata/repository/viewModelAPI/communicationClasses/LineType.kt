@@ -20,9 +20,10 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
-enum class LineType {
-    DOTTED,
-    NONE,
-    CONTINUOUS
+
+enum class LineType(val representation : String) {
+    DOTTED("Dotted"),
+    NONE("None"),
+    CONTINUOUS("continuous")
     //Todo Fields
 }

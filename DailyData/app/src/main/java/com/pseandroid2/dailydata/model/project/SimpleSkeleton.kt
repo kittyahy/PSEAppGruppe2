@@ -38,7 +38,7 @@ class SimpleSkeleton(
     private val notificationList: MutableList<Notification> = mutableListOf()
 ) : ProjectSkeleton {
     override fun getWallpaper(): Bitmap {
-        TODO()
+        TODO("getWallpaper")
     }
 
     override fun getGraphs() = graphList

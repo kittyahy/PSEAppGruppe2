@@ -20,35 +20,70 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
+import com.pseandroid2.dailydata.model.database.entities.UIElementMap
 import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.project.ProjectBuilder
 import com.pseandroid2.dailydata.model.table.ArrayListRow
 import com.pseandroid2.dailydata.model.table.Row
 import com.pseandroid2.dailydata.model.table.RowMetaData
 import com.pseandroid2.dailydata.model.users.SimpleUser
+import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.runBlocking
 import java.time.LocalDateTime
 
 class Row(
     override val id: Int,
     val elements: List<String>
-): Identifiable(), Convertible<Row> {
-    override fun deleteIsPossible(): Boolean {
+) : Identifiable, Convertible<Row> {
+    override lateinit var executeQueue: ExecuteQueue
+
+    constructor(row: Row) : this(
+        row.getMetaData().createdOn.hashCode(), //TODO Richtige ID
+        listConversion(row.getAll())
+    )
+
+    companion object {
+        private fun listConversion(all: List<Any>): List<String> {
+            val list = ArrayList<String>()
+            all.forEach { element -> list.add(element.toString()) }
+            return list
+        }
+    }
+
+    override fun deleteIsPossible(): Flow<Boolean> {
         TODO("Not yet implemented")
     }
+
     override suspend fun delete() {
         TODO("Not yet implemented")
     }
+
+    fun setCellIsPossible(): Flow<Boolean> {
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
+    }
+
     //@throws IllegalOperationException
     fun setCell(indexColumn: Int, content: String) {
         if (indexColumn >= 0 && indexColumn < elements.size) {
-            TODO()
+            TODO("setCell")
         }
-        TODO()
+        TODO("setCell2")
     }
 
     override fun toDBEquivalent(): Row {
-        val rowMetaData = RowMetaData(LocalDateTime.now(), LocalDateTime.MAX, SimpleUser("0", "No One")) //Todo werte fixen
-        val elementList : MutableList<Any> = ArrayList<Any>()
+        val rowMetaData = RowMetaData(
+            LocalDateTime.now(),
+            LocalDateTime.MAX,
+            SimpleUser("0", "No One")
+        ) //Todo werte fixen
+        val elementList: MutableList<Any> = ArrayList<Any>()
         elementList.addAll(elements)
         return ArrayListRow(elementList, rowMetaData)
     }

@@ -9,6 +9,7 @@ data class ProjectTemplateData(
     val description: String,
     val onlineId: Long,
     val wallpaper: String,
+    val color: Int,
     val creator: User,
     val layout: TableLayout
 )
