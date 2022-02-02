@@ -79,7 +79,7 @@ class Project(
     }
 
 
-    suspend fun addGraph(graph: Graph) {
+    fun addGraph(graph: Graph) {
 
     }
 
@@ -88,9 +88,8 @@ class Project(
     }
 
     //@throws IllegalOperationException
-    suspend fun addRow(row: Row) {
-        isPossible[AddRow::class]!!.emit(false)
-        executeQueue.add(AddRow(id, row))
+    fun addRow(row: Row) {
+        TODO("addRow")
     }
 
     fun deleteRowIsPossible(row: Row): Flow<Boolean> {
@@ -103,7 +102,7 @@ class Project(
     }
 
     //@throws IllegalOperationException
-    suspend fun deleteRow(row: Row) {
+    fun deleteRow(row: Row) {
         if (row in data) {
             scope.launch { row.delete() }
         } else {
@@ -121,7 +120,7 @@ class Project(
     }
 
     //@throws IllegalOperationException
-    suspend fun addColumn(column: Column) {
+    fun addColumn(column: Column) {
         TODO("addColumn")
     }
 
@@ -135,7 +134,7 @@ class Project(
     }
 
     //@throws IllegalOperationException
-    suspend fun deleteColumn(column: Column) {
+    fun deleteColumn(column: Column) {
         if (column in table) {
             scope.launch { column.delete() }
         } else {
@@ -155,7 +154,7 @@ class Project(
 
 
     //@throws IllegalOperationException
-    suspend fun addButton(button: Button) {
+    fun addButton(button: Button) {
         TODO("addButton")
     }
 
@@ -171,7 +170,7 @@ class Project(
 
 
     //@throws IllegalOperationException
-    suspend fun deleteButton(button: Button) {
+    fun deleteButton(button: Button) {
         TODO("deleteButton")
     }
 
@@ -195,7 +194,7 @@ class Project(
     }
 
     //@throws IllegalOperationException
-    suspend fun setCell(indexRow: Int, indexColumn: Int, content: String) {
+    fun setCell(indexRow: Int, indexColumn: Int, content: String) {
         if (indexRow >= 0 && indexRow < data.size) {
             data[indexRow].setCell(indexColumn, content)
         }
@@ -211,7 +210,7 @@ class Project(
         return flow
     }
 
-    suspend fun addMember(member: Member) {
+    fun addMember(member: Member) {
         //Todo If bedingung schöner machen, keine Magic numbers und aussagekräftigere Exceptions werfen
         if (member !in members && members.size < 25 && isOnlineProject) {
             TODO("addMember")
@@ -229,7 +228,7 @@ class Project(
         return flow//return isOnlineProject
     }
 
-    suspend fun leaveOnlineProject() {
+    fun leaveOnlineProject() {
         TODO("leaveOnlineProject")
     }
 
@@ -242,7 +241,7 @@ class Project(
         return flow
     }
 
-    suspend fun deleteMember(member: Member) {
+    fun deleteMember(member: Member) {
         if (member in members && members.size > 1) {
             TODO("deleteMember")
         } else {
@@ -259,7 +258,7 @@ class Project(
         return flow
     }
 
-    suspend fun setAdmin(member: Member) {
+    fun setAdmin(member: Member) {
         TODO("setAdmin")
     }
 
@@ -273,7 +272,7 @@ class Project(
     }
 
 
-    suspend fun changeWallpaper(image: Int) {
+    fun changeWallpaper(image: Int) {
         TODO("changeWallpaper")
     }
 
@@ -286,7 +285,7 @@ class Project(
         return flow
     }
 
-    suspend fun setNotification(notification: Notification) {
+    fun setNotification(notification: Notification) {
         TODO("setNotification")
     }
 
@@ -299,7 +298,7 @@ class Project(
         return flow
     }
 
-    suspend fun deleteNotification(notification: Notification) {
+    fun deleteNotification(notification: Notification) {
         scope.launch { notification.delete() }
     }
 
@@ -313,7 +312,7 @@ class Project(
     }
 
 
-    suspend fun addNotification(notification: Notification) {
+    fun addNotification(notification: Notification) {
 
     }
 
@@ -326,7 +325,7 @@ class Project(
         return flow
     }
 
-    suspend fun setName(name: String) {
+    fun setName(name: String) {
         TODO("setNameProj")
     }
 
@@ -341,7 +340,7 @@ class Project(
     }
 
     @JvmName("setDescription1")
-    suspend fun setDescription(description: String) {
+    fun setDescription(description: String) {
         TODO("setDescriptionProj")
     }
 
@@ -349,7 +348,7 @@ class Project(
         TODO("publishIsPossibleProj")
     }
 
-    suspend fun publish() {
+    fun publish() {
         TODO("Proj")
     }
 
@@ -362,7 +361,7 @@ class Project(
         return flow
     }
 
-    suspend fun setButton(button: Button) {
+    fun setButton(button: Button) {
         TODO("setButton")
     }
 

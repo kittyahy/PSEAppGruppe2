@@ -64,7 +64,7 @@ class LineChart(
     }
 
 
-    suspend fun addVerticalMapping(column: Column) {
+    fun addVerticalMapping(column: Column) {
 
     }
 
@@ -78,7 +78,7 @@ class LineChart(
     }
 
 
-    suspend fun deleteVerticalMapping(index: Int) {
+    fun deleteVerticalMapping(index: Int) {
 
     }
 
@@ -92,7 +92,7 @@ class LineChart(
     }
 
 
-    suspend fun changeDotSize(dotSize: DotSize) {
+    fun changeDotSize(dotSize: DotSize) {
 
     }
 
@@ -106,7 +106,7 @@ class LineChart(
     }
 
 
-    suspend fun changeDotColor(color: Int) {
+    fun changeDotColor(color: Int) {
 
     }
 
@@ -120,7 +120,7 @@ class LineChart(
     }
 
 
-    suspend fun changeLineType(lineType: LineType) {
+    fun changeLineType(lineType: LineType) {
 
     }
 
@@ -133,7 +133,7 @@ class LineChart(
         return flow
     }
 
-    suspend fun show(context: Context): View {
+    fun show(context: Context): View {
         TODO("show")
     }
 }
