@@ -28,13 +28,10 @@ abstract class TransformationFunction<O : Any> protected constructor(
         const val SUM_ID = "SUM"
         const val IDENTITY_ID = "ID"
 
-        fun identity() = Identity()
-
-        fun integerSum(cols: List<Int>) = IntSum(cols)
-
         fun parse(functionString: String): TransformationFunction<out Any> {
-            var function: String = functionString.substringBefore('|')
-            var args: String = functionString.substringAfter('|', "")
+            var tableType = functionString.substringBefore("::")
+            var function: String = functionString.substringAfter("::").substringBefore('|')
+            var args: String = functionString.substringAfter("::").substringAfter('|', "")
 
             //No need to change stuff if there are no arguments
             if (args != "") {
@@ -62,7 +59,7 @@ abstract class TransformationFunction<O : Any> protected constructor(
                             "No Constructor for Identity function found with arguments $args"
                         )
                     } else {
-                        Identity()
+                        FloatIdentity()
                     }
                 }
                 else -> throw IllegalArgumentException("No such function: $function")

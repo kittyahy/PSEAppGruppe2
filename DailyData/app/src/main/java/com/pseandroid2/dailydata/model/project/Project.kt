@@ -125,7 +125,7 @@ interface Project {
     abstract class DataTransformation<D : Any> private constructor(
         private val table: Table,
         private val function: TransformationFunction<D>,
-        private vararg val cols: Int
+        private vararg val cols: Int = IntArray(table.getLayout().getSize()) { it }
     ) {
 
         fun recalculate(): List<D> {
