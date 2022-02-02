@@ -58,7 +58,10 @@ class PieChart(
         return flow
     }
 
-    fun addMapping(color: Int, column: Column) { //Todo Robin fragen was die color hier bedeutet
+    suspend fun addMapping(
+        color: Int,
+        column: Column
+    ) { //Todo Robin fragen was die color hier bedeutet
 
     }
 
@@ -71,7 +74,7 @@ class PieChart(
         return flow
     }
 
-    fun addMapping(column: Column) {
+    suspend fun addMapping(column: Column) {
         addMapping(PieChartColors.ORANGE.value.toInt(), column = column)
     }
 
@@ -84,7 +87,7 @@ class PieChart(
         return flow
     }
 
-    fun showPercentages(show: Boolean) {
+    suspend fun showPercentages(show: Boolean) {
 
     }
 }

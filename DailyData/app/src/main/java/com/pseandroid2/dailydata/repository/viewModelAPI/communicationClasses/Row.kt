@@ -70,7 +70,7 @@ class Row(
     }
 
     //@throws IllegalOperationException
-    fun setCell(indexColumn: Int, content: String) {
+    suspend fun setCell(indexColumn: Int, content: String) {
         if (indexColumn >= 0 && indexColumn < elements.size) {
             TODO("setCell")
         }
