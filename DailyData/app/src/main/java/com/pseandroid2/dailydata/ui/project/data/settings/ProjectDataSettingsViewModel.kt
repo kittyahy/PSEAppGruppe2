@@ -190,8 +190,10 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
             }
 
             is ProjectDataSettingsScreenEvent.OnLeaveProject -> {
-                initialProject.leaveOnlineProject()
-                sendUiEvent(UiEvent.PopBackStack)
+                viewModelScope.launch {
+                    initialProject.leaveOnlineProject()
+                    sendUiEvent(UiEvent.PopBackStack)
+                }
             }
             is ProjectDataSettingsScreenEvent.OnDeleteProject -> {
                 viewModelScope.launch {
@@ -206,54 +208,56 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
                     table.isEmpty() -> sendUiEvent(UiEvent.ShowToast("Please Enter a column"))
                     else            -> {
                         var id = 0
-                        initialProject.setName(name = title)
-                        initialProject.setDescription(description = description)
-                        initialProject.changeWallpaper(image = wallpaper.toArgb())
-                        for (column in initialProject.table) {
-                            if(!table.contains(column)) {
-                                initialProject.deleteColumn(column = column)
-                            }
-                        }
-                        for (column in table) {
-                            if(!initialProject.table.contains(column)) {
-                                initialProject.addColumn(column = column)
-                            }
-                        }
-                        for (button in initialProject.buttons) {
-                            if(!buttons.contains(button)) {
-                                initialProject.deleteButton(button = button)
-                            }
-                        }
-                        for (button in buttons) {
-                            if(!initialProject.buttons.contains(button)) {
-                                initialProject.addButton(button = button)
-                            }
-                        }
-                        for (member in initialProject.members) {
-                            if(!members.contains(member)) {
-                                initialProject.deleteMember(member = member)
-                            }
-                        }
-                        for (notification in initialProject.notifications) {
-                            if(!notifications.contains(notification)) {
-                                initialProject.deleteNotification(notification = notification)
-                            }
-                        }
-                        for (notification in notifications) {
-                            if(!initialProject.notifications.contains(notification)) {
-                                initialProject.addNotification(notification = notification)
-                            }
-                        }
-                        for (graph in initialProject.graphs) {
-                            if(!graphs.contains(graph)) {
-                                viewModelScope.launch {
-                                    graph.delete()
+                        viewModelScope.launch {
+                            initialProject.setName(name = title)
+                            initialProject.setDescription(description = description)
+                            initialProject.changeWallpaper(image = wallpaper.toArgb())
+                            for (column in initialProject.table) {
+                                if(!table.contains(column)) {
+                                    initialProject.deleteColumn(column = column)
                                 }
                             }
-                        }
-                        for (graph in graphs) {
-                            if(!initialProject.graphs.contains(graph)) {
-                                initialProject.addGraph(graph = graph)
+                            for (column in table) {
+                                if(!initialProject.table.contains(column)) {
+                                    initialProject.addColumn(column = column)
+                                }
+                            }
+                            for (button in initialProject.buttons) {
+                                if(!buttons.contains(button)) {
+                                    initialProject.deleteButton(button = button)
+                                }
+                            }
+                            for (button in buttons) {
+                                if(!initialProject.buttons.contains(button)) {
+                                    initialProject.addButton(button = button)
+                                }
+                            }
+                            for (member in initialProject.members) {
+                                if(!members.contains(member)) {
+                                    initialProject.deleteMember(member = member)
+                                }
+                            }
+                            for (notification in initialProject.notifications) {
+                                if(!notifications.contains(notification)) {
+                                    initialProject.deleteNotification(notification = notification)
+                                }
+                            }
+                            for (notification in notifications) {
+                                if(!initialProject.notifications.contains(notification)) {
+                                    initialProject.addNotification(notification = notification)
+                                }
+                            }
+                            for (graph in initialProject.graphs) {
+                                if(!graphs.contains(graph)) {
+                                    viewModelScope.launch {
+                                        graph.delete()
+                                    }
+                                }
+                            }
+                            for (graph in graphs) {
+                                if(!initialProject.graphs.contains(graph)) {
+                                    initialProject.addGraph(graph = graph)
+                                }
                             }
                         }
                         sendUiEvent(UiEvent.Navigate(DataTabs.INPUT.toString()))
