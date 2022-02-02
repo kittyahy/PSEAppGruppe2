@@ -6,6 +6,7 @@ import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Column
 
 class AddColumn(projectID: Int, column: Column) : ProjectCommand(projectID = projectID) {
+    override val publishable: Boolean = true
 
     override suspend fun execute(
         appDataBase: AppDataBase,

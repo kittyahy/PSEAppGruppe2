@@ -7,6 +7,7 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Ro
 
 class AddRow(private val projectId: Int, private val row: Row) :
     ProjectCommand(projectID = projectId) {
+    override val publishable: Boolean = true
 
     override suspend fun execute(
         appDataBase: AppDataBase,

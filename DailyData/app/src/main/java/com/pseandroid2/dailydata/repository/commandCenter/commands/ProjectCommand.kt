@@ -20,6 +20,7 @@ abstract class ProjectCommand(
         }
     }
 
+    abstract val publishable: Boolean
     var cameFromServer = false
     open suspend fun execute(
         appDataBase: AppDataBase,
@@ -36,6 +37,6 @@ abstract class ProjectCommand(
         remoteDataSourceAPI: RemoteDataSourceAPI,
         publishQueue: PublishQueue
     ): Boolean {
-        return onlineProjectID != null && !cameFromServer
+        return onlineProjectID != null && !cameFromServer && publishable
     }
 }
