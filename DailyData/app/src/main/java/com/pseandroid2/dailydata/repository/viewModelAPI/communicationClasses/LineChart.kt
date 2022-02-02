@@ -20,18 +20,14 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
-import android.content.Context
 import android.graphics.Bitmap
-import android.view.View
 import com.pseandroid2.dailydata.model.database.AppDataBase
-import com.pseandroid2.dailydata.model.graph.FloatLineChart
 import com.pseandroid2.dailydata.model.graph.Generator
 import com.pseandroid2.dailydata.model.graph.LineChart
 import com.pseandroid2.dailydata.model.settings.MapSettings
 import com.pseandroid2.dailydata.model.transformation.FloatSum
 import com.pseandroid2.dailydata.model.transformation.PieChartTransformation
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
-import com.pseandroid2.dailydata.util.IOUtil
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.runBlocking
