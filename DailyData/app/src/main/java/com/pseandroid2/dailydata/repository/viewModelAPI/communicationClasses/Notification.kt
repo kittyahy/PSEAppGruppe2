@@ -20,13 +20,11 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
-import com.pseandroid2.dailydata.model.database.daos.NotificationsDAO
 import com.pseandroid2.dailydata.model.notifications.Notification
 import com.pseandroid2.dailydata.model.notifications.TimeNotification
-import com.pseandroid2.dailydata.model.project.Project
+import com.pseandroid2.dailydata.model.project.Project as ModelProject
 import com.pseandroid2.dailydata.model.project.ProjectBuilder
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
-import com.pseandroid2.dailydata.repository.commandCenter.commands.IllegalOperationException
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalTime
 
@@ -58,7 +56,7 @@ override lateinit var project: Project
         return TimeNotification(message, time, id)
     }
 
-    override fun addYourself(builder: ProjectBuilder<out Project>) {
+    override fun addYourself(builder: ProjectBuilder<out ModelProject>) {
         builder.addNotifications(listOf(toDBEquivalent()))
     }
 }

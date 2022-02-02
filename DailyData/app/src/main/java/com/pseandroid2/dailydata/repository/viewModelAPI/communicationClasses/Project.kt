@@ -25,6 +25,7 @@ import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddButton
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddColumn
+import com.pseandroid2.dailydata.repository.commandCenter.commands.AddGraph
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddNotification
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddRow
 import com.pseandroid2.dailydata.repository.commandCenter.commands.IllegalOperationException
@@ -59,7 +60,8 @@ class Project(
         AddRow::class,
         AddColumn::class,
         AddButton::class,
-        AddNotification::class
+        AddNotification::class,
+        AddGraph::class
     )
     private val isPossible = mutableMapOf<KClass<out ProjectCommand>, MutableSharedFlow<Boolean>>()
 
@@ -94,17 +96,13 @@ class Project(
      *      users should not be able to call manipulation().
      */
     fun addGraphIsPossible(): Flow<Boolean> {
-        //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
-        runBlocking {
-            flow.emit(true)
-        }
-        return flow
+        return isPossible[AddGraph::class]!!
     }
 
 
     suspend fun addGraph(graph: Graph) {
-
+        isPossible[AddGraph::class]!!.emit(false)
+        executeQueue.add(AddGraph(id, graph))
     }
 
     fun addRowIsPossible(): Flow<Boolean> {
