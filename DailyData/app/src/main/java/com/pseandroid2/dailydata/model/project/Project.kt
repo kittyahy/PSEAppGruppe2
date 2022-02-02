@@ -119,13 +119,21 @@ interface Project {
 
     fun createTransformationFromString(transformationString: String): DataTransformation<out Any>
 
+    @Suppress("Deprecation")
+    fun <D : Any> createDataTransformation(
+        function: TransformationFunction<D>,
+        vararg cols: Int = IntArray(table.getLayout().getSize()) { it }
+    ) = DataTransformation(table, function, *cols)
+
     /**
      * @param D Type of the elements that this DataTransformation will output as DataSets
      */
-    abstract class DataTransformation<D : Any> private constructor(
+    class DataTransformation<D : Any>
+    @Deprecated("Should only be created via a Project. Use Project.createDataTransformation() instead")
+    constructor(
         private val table: Table,
         private val function: TransformationFunction<D>,
-        private vararg val cols: Int = IntArray(table.getLayout().getSize()) { it }
+        private vararg val cols: Int
     ) {
 
         fun recalculate(): List<D> {
