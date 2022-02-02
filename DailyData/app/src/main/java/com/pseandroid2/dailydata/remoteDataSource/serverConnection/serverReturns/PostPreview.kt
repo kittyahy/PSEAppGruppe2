@@ -24,6 +24,8 @@ package com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturn
  *
  * @param id: The id of the post
  * @param preview: The PostPreview as a JSON
+ * @param previewImage: The preview image of the post
  */
 data class PostPreview(val id: Int = 0,
-                       val preview: String = "")
+                       val preview: String = "",
+                       val previewImage: List<Byte> = listOf())
