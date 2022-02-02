@@ -50,12 +50,13 @@ class Project(
     val repositoryViewModelAPI: RepositoryViewModelAPI
 ) : Identifiable {
     override lateinit var executeQueue: ExecuteQueue
-override lateinit var project: Project
+    override lateinit var project: Project
     private val scope = CoroutineScope(Dispatchers.IO)
 
     private val isPossible = mutableMapOf<KClass<out ProjectCommand>, MutableSharedFlow<Boolean>>(
         Pair(AddRow::class, MutableSharedFlow())
     )
+
     init {
         connectToProject(this)
         for (id in getIntefiableChildred()) {
@@ -119,7 +120,7 @@ override lateinit var project: Project
     //@throws IllegalOperationException
     suspend fun deleteRow(row: Row) {
         if (row in data) {
-            scope.launch { row.delete() }
+            row.delete()
         } else {
             throw IllegalOperationException()
         }
@@ -151,7 +152,7 @@ override lateinit var project: Project
     //@throws IllegalOperationException
     suspend fun deleteColumn(column: Column) {
         if (column in table) {
-            scope.launch { column.delete() }
+            column.delete()
         } else {
             throw IllegalOperationException()
         }
@@ -314,7 +315,7 @@ override lateinit var project: Project
     }
 
     suspend fun deleteNotification(notification: Notification) {
-        scope.launch { notification.delete() }
+        notification.delete()
     }
 
     fun addNotificationIsPossible(): Flow<Boolean> {
