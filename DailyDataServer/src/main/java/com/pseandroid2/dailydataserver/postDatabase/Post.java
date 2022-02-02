@@ -25,6 +25,7 @@ import lombok.Setter;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -38,23 +39,25 @@ import java.util.Objects;
 public class Post {
     @Id
     public int postId;
-    private String postPreview;
+    private byte[] postPreviewImage;
+    private String previewTitle;
     private String createdBy;
-
     private int templateIds;
 
     /**
      * The constructor, which should be used, to create a new Post. The templateIds is initialized with 0, because
      * they start without any templates.
      *
-     * @param postId      the id, which belongs to the post.
-     * @param postPreview the postPreview, which identifies the post
-     * @param createdBy   the user, who upload the post.
+     * @param postId           the id, which belongs to the post.
+     * @param postPreviewImage the image for the postPreview.
+     * @param createdBy        the user, who upload the post.
+     * @param previewTitle     the title of the post.
      */
-    public Post(int postId, String postPreview, String createdBy) {
+    public Post(int postId, byte[] postPreviewImage, String createdBy, String previewTitle) {
         this.postId = postId;
-        this.postPreview = postPreview;
+        this.postPreviewImage = postPreviewImage;
         this.createdBy = createdBy;
+        this.previewTitle = previewTitle;
         templateIds = 0;
     }
 
@@ -73,11 +76,7 @@ public class Post {
         templateIds++;
     }
 
-    @Override
-    public String toString() {
-        return "Post{" + "postId=" + postId + ", postPreview='"
-                + postPreview + '\'' + ", createdBy='" + createdBy + '\'' + '}';
-    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -90,5 +89,16 @@ public class Post {
     @Override
     public int hashCode() {
         return Objects.hash(postId);
+    }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "postId=" + postId +
+                ", postPreviewImage=" + Arrays.toString(postPreviewImage) +
+                ", previewTitle='" + previewTitle + '\'' +
+                ", createdBy='" + createdBy + '\'' +
+                ", templateIds=" + templateIds +
+                '}';
     }
 }

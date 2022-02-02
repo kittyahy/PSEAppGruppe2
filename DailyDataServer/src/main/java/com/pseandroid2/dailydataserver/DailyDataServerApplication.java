@@ -36,5 +36,4 @@ public class DailyDataServerApplication {
     public static void main(String[] args) {
         SpringApplication.run(DailyDataServerApplication.class, args);
     }
-
 }
