@@ -60,13 +60,13 @@ class Project(
 
     private val supportedCommands = listOf<KClass<out ProjectCommand>>(
         AddRow::class,
-        AddColumn::class,
         AddButton::class,
         AddNotification::class,
         AddGraph::class,
         AddMember::class
     )
     private val isPossible = mutableMapOf<KClass<out ProjectCommand>, MutableSharedFlow<Boolean>>()
+    private val isPossibleAddColumn = mutableMapOf<DataType, MutableSharedFlow<Boolean>>()
 
     init {
         connectToProject(this)
@@ -83,6 +83,10 @@ class Project(
                     it.name == "IsPossible"
                 }.call(this) as Boolean)
             }
+        }
+        for (type in DataType.values()) {
+            isPossibleAddColumn[type] = MutableSharedFlow()
+            AddColumn.isPossible(project, type)
         }
     }
 
@@ -136,13 +140,23 @@ class Project(
         }
     }
 
-    fun addColumnIsPossible(): Flow<Boolean> {
-        return isPossible[AddColumn::class]!!
+    /**
+     * If false, it would be imprudent to use the corresponding "manipulation" fun.
+     * Thus it should be used to block input options from being used if false.
+     * Because the result heavily depends on the columns DataType a map is returned, containing a
+     * separate Flow (value) for each DataType (key).
+     * e.g. If manipulationIsPossible.first() is false,
+     *      users should not be able to call manipulation().
+     */
+    fun addColumnIsPossible(): Map<DataType, Flow<Boolean>> {
+        return isPossibleAddColumn
     }
 
     //@throws IllegalOperationException
     suspend fun addColumn(column: Column) {
-        isPossible[AddColumn::class]!!.emit(false)
+        for (type in DataType.values()) {
+            isPossibleAddColumn[type]!!.emit(false)
+        }
         executeQueue.add(AddColumn(id, column))
     }
 

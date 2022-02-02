@@ -27,32 +27,51 @@ import java.time.LocalDateTime
 enum class DataType(
     val representation: String,
     val regex: String,
-    val serializableClassName: String
+    val serializableClassName: String,
+    /**
+     * Describes the amount of space in byte an AddRow ProjectCommand gains in its json form
+     * (using CommandWrapper) in the worst case, when a column of this type is added.
+     */
+    val storageSize: Int
 ) {
 
 
     WHOLE_NUMBER(
         "Whole Number",
         "",
-        Int::class.getSerializableClassName()
+        Int::class.getSerializableClassName(),
+        Int.MAX_VALUE.toString().length * DataType.charSizeInString
     ),
     FLOATING_POINT_NUMBER(
         "Floating Point Number",
         "",
-        Float::class.getSerializableClassName()
+        Float::class.getSerializableClassName(),
+        Float.MAX_VALUE.toString().length * DataType.charSizeInString
     ),
     TIME(
         "Time",
         "",
-        LocalDateTime::class.getSerializableClassName()
+        LocalDateTime::class.getSerializableClassName(),
+        LocalDateTime.MAX.toString().length * DataType.charSizeInString
     ),
     STRING(
         "String",
         "",
-        String::class.getSerializableClassName()
+        String::class.getSerializableClassName(),
+        150 * DataType.charSizeInString //Todo Magic Int
     );
 
     companion object {
+        private const val charSizeInString = 8 //Todo ausrechnen
+
+        /**
+         * Describes the amount of space in byte an AddRow ProjectCommand has in its json form
+         * (using CommandWrapper) regardless of its contents.
+         */
+        const val storageSizeBaseline = 200 * charSizeInString //Todo ausrechnen + überlegen, ob
+
+        // diese zahlen nicht aus CommandWrapper kommen sollten
+        const val maxStorageSize = 1024
         fun fromString(rep: String): DataType {
             for (enum in values()) {
                 if (enum.representation == rep) {
