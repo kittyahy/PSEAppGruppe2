@@ -89,24 +89,45 @@ interface Project {
         @Suppress("Deprecation")
         get() = getProjectSkeleton().color
 
-    @Suppress("Deprecation")
-    fun getGraphs() = getProjectSkeleton().getGraphs()
+    var graphs: MutableList<Graph<*, *>>
+        set(value) {
+            @Suppress("Deprecation")
+            getProjectSkeleton().graphs = value
+        }
+        @Suppress("Deprecation")
+        get() = getProjectSkeleton().graphs
 
     @Suppress("Deprecation")
-    fun addGraphs(graphs: Collection<Graph<*, *>>) = getProjectSkeleton().addGraphs(graphs)
+    fun addGraphs(graphsToAdd: Collection<Graph<*, *>>) = graphs.addAll(graphsToAdd)
 
-    @Suppress("Deprecation")
-    fun getSettings() = getProjectSkeleton().getProjectSettings()
+    var settings: Settings
+        set(value) {
+            @Suppress("Deprecation")
+            getProjectSkeleton().settings = value
+        }
+        @Suppress("Deprecation")
+        get() = getProjectSkeleton().settings
 
-    @Suppress("Deprecation")
-    fun addSettings(settings: Settings) = getProjectSkeleton().addProjectSettings(settings)
+    fun addSettings(settingsToAdd: Settings) {
+        for (setting in settingsToAdd) {
+            settings[setting.first] = setting.second
+        }
+    }
 
-    @Suppress("Deprecation")
-    fun getNotifications() = getProjectSkeleton().getNotifications()
+    var notifications: MutableList<Notification>
+        set(value) {
+            @Suppress("Deprecation")
+            getProjectSkeleton().notifications = value
+        }
+        @Suppress("Deprecation")
+        get() = getProjectSkeleton().notifications
 
-    @Suppress("Deprecation")
-    fun addNotifications(notifications: Collection<Notification>) =
-        getProjectSkeleton().addNotifications(notifications)
+
+    fun addNotifications(notificationsToAdd: Collection<Notification>) {
+        for (notification in notificationsToAdd) {
+            notifications.add(notification)
+        }
+    }
 
     var table: Table
 
@@ -171,14 +192,11 @@ interface ProjectSkeleton {
     var path: String
     var color: Int
 
-    fun getGraphs(): Collection<Graph<*, *>>
-    fun addGraphs(graphs: Collection<Graph<*, *>>)
+    var graphs: MutableList<Graph<*, *>>
 
-    fun getProjectSettings(): Settings
-    fun addProjectSettings(settings: Settings)
+    var settings: Settings
 
-    fun getNotifications(): Collection<Notification>
-    fun addNotifications(notifications: Collection<Notification>)
+    var notifications: MutableList<Notification>
 
 }
 
@@ -234,24 +252,45 @@ interface ProjectTemplate {
         @Suppress("Deprecation")
         get() = getProjectSkeleton().color
 
-    @Suppress("Deprecation")
-    fun getGraphs() = getProjectSkeleton().getGraphs()
+    var graphs: MutableList<Graph<*, *>>
+        set(value) {
+            @Suppress("Deprecation")
+            getProjectSkeleton().graphs = value
+        }
+        @Suppress("Deprecation")
+        get() = getProjectSkeleton().graphs
 
     @Suppress("Deprecation")
-    fun addGraphs(graphs: Collection<Graph<*, *>>) = getProjectSkeleton().addGraphs(graphs)
+    fun addGraphs(graphsToAdd: Collection<Graph<*, *>>) = graphs.addAll(graphsToAdd)
 
-    @Suppress("Deprecation")
-    fun getSettings() = getProjectSkeleton().getProjectSettings()
+    var settings: Settings
+        set(value) {
+            @Suppress("Deprecation")
+            getProjectSkeleton().settings = value
+        }
+        @Suppress("Deprecation")
+        get() = getProjectSkeleton().settings
 
-    @Suppress("Deprecation")
-    fun addSettings(settings: Settings) = getProjectSkeleton().addProjectSettings(settings)
+    fun addSettings(settingsToAdd: Settings) {
+        for (setting in settingsToAdd) {
+            settings[setting.first] = setting.second
+        }
+    }
 
-    @Suppress("Deprecation")
-    fun getNotifications() = getProjectSkeleton().getNotifications()
+    var notifications: MutableList<Notification>
+        set(value) {
+            @Suppress("Deprecation")
+            getProjectSkeleton().notifications = value
+        }
+        @Suppress("Deprecation")
+        get() = getProjectSkeleton().notifications
 
-    @Suppress("Deprecation")
-    fun addNotifications(notifications: Collection<Notification>) =
-        getProjectSkeleton().addNotifications(notifications)
+
+    fun addNotifications(notificationsToAdd: Collection<Notification>) {
+        for (notification in notificationsToAdd) {
+            notifications.add(notification)
+        }
+    }
 
     fun getTableLayout(): TableLayout
 

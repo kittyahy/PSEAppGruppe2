@@ -33,28 +33,11 @@ class SimpleSkeleton(
     override var desc: String = "",
     override var path: String = "",
     override var color: Int = -1,
-    private val graphList: MutableList<Graph<*, *>> = mutableListOf(),
-    private var skeletonSettings: Settings = MapSettings(),
-    private val notificationList: MutableList<Notification> = mutableListOf()
+    override var graphs: MutableList<Graph<*, *>> = mutableListOf(),
+    override var settings: Settings = MapSettings(),
+    override var notifications: MutableList<Notification> = mutableListOf()
 ) : ProjectSkeleton {
     override fun getWallpaper(): Bitmap {
         TODO("getWallpaper")
-    }
-
-    override fun getGraphs() = graphList
-    override fun addGraphs(graphs: Collection<Graph<*, *>>) {
-        graphList.addAll(graphs)
-    }
-
-    override fun getProjectSettings() = skeletonSettings
-    override fun addProjectSettings(settings: Settings) {
-        for (setting in settings) {
-            skeletonSettings[setting.first] = setting.second
-        }
-    }
-
-    override fun getNotifications() = notificationList
-    override fun addNotifications(notifications: Collection<Notification>) {
-        notificationList.addAll(notifications)
     }
 }

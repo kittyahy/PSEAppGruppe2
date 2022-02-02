@@ -34,6 +34,7 @@ class GraphCDManager(
     companion object {
         const val TEMPLATE_SETTINGS_PROJ_ID = -1
     }
+
     private val graphDAO: GraphDAO = appDataBase.graphDAO()
     private val templateDAO: TemplateDAO = appDataBase.templateDAO()
     private val settingsDAO: SettingsDAO = appDataBase.settingsDAO()

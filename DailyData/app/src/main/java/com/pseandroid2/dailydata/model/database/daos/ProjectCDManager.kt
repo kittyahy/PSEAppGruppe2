@@ -61,12 +61,12 @@ class ProjectCDManager(
         val newID: Int = insertProjectEntity(project)
         project.id = newID
 
-        for (graph: Graph<*, *> in project.getGraphs()) {
+        for (graph: Graph<*, *> in project.graphs) {
             val newGraphId: Int = graphManager.insertGraph(newID, graph)
             graph.id = newGraphId
         }
 
-        for (notif: Notification in project.getNotifications()) {
+        for (notif: Notification in project.notifications) {
             val newNotifId: Int = notifDAO.insertNotification(newID, notif)
             notif.id = newNotifId
         }
