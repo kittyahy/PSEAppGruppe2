@@ -37,8 +37,6 @@ class DeltaControllerGetDeltaTests {
 
     private val projectCommandToSend: String = "projectCommand"
 
-
-
     @Before
     fun setup() {
         // Generate valid firebase authentication tokens
@@ -86,18 +84,15 @@ class DeltaControllerGetDeltaTests {
         }
     }
 
-    /*
 
     @Test
     fun getDeltaFromServer() {
-        val downloadedDeltas = restAPI.getDelta(projectID, authToken) as MutableList<Delta>
+        val downloadedDeltas = restAPI.getDelta(projectID, authToken)as MutableList
         Assert.assertNotEquals(0, downloadedDeltas.size)
 
         var deltaFound = false
         downloadedDeltas.forEach {
-            val command: String = it.projectCommand
-
-            if (command == "projectCommand") {
+            if (it.projectCommand == "projectCommand") {
                 deltaFound = true
             }
         }
@@ -105,11 +100,13 @@ class DeltaControllerGetDeltaTests {
         Assert.assertTrue(deltaFound)
     }
 
+    /* TODO: Implement this in the quality control phase
     @Test
     fun getDeltaWhenNoProjectMember() {
         val downloadedDeltas = restAPI.getDelta(projectID, authToken2) as MutableList
         Assert.assertEquals(0, downloadedDeltas.size)
     }
+    */
 
     @Test
     fun getSameDeltaTwice() {
@@ -120,7 +117,7 @@ class DeltaControllerGetDeltaTests {
 
         var deltaFound = false
         downloadedDeltas.forEach {
-            if (it.projectCommand == "\"projectCommand\"") {
+            if (it.projectCommand == "projectCommand") {
                 deltaFound = true
             }
         }
@@ -130,7 +127,7 @@ class DeltaControllerGetDeltaTests {
         downloadedDeltas = restAPI.getDelta(projectID, authToken3) as MutableList
         deltaFound = false
         downloadedDeltas.forEach {
-            if (it.projectCommand == "\"projectCommand\"") {
+            if (it.projectCommand == "projectCommand") {
                 deltaFound = true
             }
         }
@@ -141,7 +138,6 @@ class DeltaControllerGetDeltaTests {
     fun getRemoveTime() {
         Assert.assertNotEquals(-1, restAPI.getRemoveTime(authToken))
     }
-    */
 
     //TODO Tests auskommentieren
 }

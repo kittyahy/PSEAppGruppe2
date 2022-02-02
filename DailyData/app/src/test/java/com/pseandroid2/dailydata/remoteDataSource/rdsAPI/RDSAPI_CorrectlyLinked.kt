@@ -29,10 +29,12 @@ class RDSAPI_CorrectlyLinked {
     private var deltaList: Collection<String> = listOf("Delta")
     private var fetchRequestList: Collection<FetchRequest> = listOf(FetchRequest(requestInfo = "FetchRequest"))
 
-    private val bitmap = Bitmap.createBitmap(0, 0, Bitmap.Config.ARGB_8888)
+    private lateinit var bitmap: Bitmap
 
     @Before
     fun setup() {
+        bitmap = mockk()
+
         val serverManager = mockk<ServerManager>()
 
         every { serverManager.greet() } returns true

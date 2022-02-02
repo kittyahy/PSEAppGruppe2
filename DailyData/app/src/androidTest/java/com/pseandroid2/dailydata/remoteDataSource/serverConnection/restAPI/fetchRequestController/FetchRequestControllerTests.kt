@@ -1,5 +1,6 @@
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI.fetchRequestController
 
+import android.util.Log
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
@@ -88,17 +89,27 @@ class FetchRequestControllerTests {
         Assert.assertNotEquals(0, downloadedFetchRequests.size)
 
         downloadedFetchRequests.forEach {
-            requestsToSend.remove(it.requestInfo)
+            if (userID == it.user) { // checks, if the user is passed correclty
+                requestsToSend.remove(it.requestInfo) // removes correctly received requests
+            }
         }
-        Assert.assertEquals(0, requestsToSend) // The send fetch requests from user1 were received by user2
+        Assert.assertEquals(0, requestsToSend.size) // The send fetch requests from user1 were received by user2
     }
 
+    /* TODO: Implement this in the quality control phase
     @Test
     fun getFetchRequestsWhenNoProjectMember() {
         Assert.assertTrue(restAPI.demandOldData(projectID, "request information", authToken))
         //User 3 is no project member
         Assert.assertEquals(0, restAPI.getFetchRequests(projectID, authToken3).size)
     }
+    */
+
+    /*
+
+     */
+
+
 
     // TODO: Test Ideas: 1. getFetchrequests from the same account who send them, 2.
 

@@ -1,6 +1,8 @@
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI.postController
 
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.PostPreviewWrapper
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.TemplateDetailWrapper
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.PostPreview
 import org.junit.Assert
 import org.junit.Test
@@ -11,7 +13,7 @@ import org.junit.Before
 class PostsControllerTests {
     private var restAPI: RESTAPI = RESTAPI()
     private lateinit var authToken: String
-    /*
+
     @Before
     fun setup() {
         // Generate valid firebase authentication token
@@ -26,8 +28,10 @@ class PostsControllerTests {
     @Test
     fun getAllPostsPreviewIsNotEmpty() {
         // First create a new post, so the post preview is always not empty
-        val postID = restAPI.addPost("postPreview1", Pair("projectTemplate", "projectTemplatePreview"),
-            listOf(Pair("graphTemplate", "graphTemplatePreview")), authToken)
+        val postID = restAPI.addPost(
+            PostPreviewWrapper(),
+            Pair("project template", TemplateDetailWrapper()),
+            listOf(Pair("graph template", TemplateDetailWrapper())), authToken)
         Assert.assertNotEquals(-1, postID)
 
         // Check if post preview is not empty
@@ -50,12 +54,14 @@ class PostsControllerTests {
 
     @Test
     fun addAndRemovePost() {
-        val postID: Int = restAPI.addPost("postPreviewTest", Pair("projectTemplate", "projectTemplatePreview"),
-            listOf(Pair("graphTemplate", "graphTemplatePreview")), authToken)
+        val postID: Int = restAPI.addPost(
+            PostPreviewWrapper(),
+            Pair("project template", TemplateDetailWrapper()),
+            listOf(Pair("graph template", TemplateDetailWrapper())), authToken)
         Assert.assertNotEquals(-1, postID)
 
         Assert.assertTrue(restAPI.removePost(postID, authToken))
     }
-    */
+
     //TODO Tests auskommentieren
 }

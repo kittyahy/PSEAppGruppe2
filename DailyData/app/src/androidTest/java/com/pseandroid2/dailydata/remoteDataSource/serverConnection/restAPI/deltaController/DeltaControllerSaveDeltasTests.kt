@@ -18,8 +18,6 @@ class DeltaControllerSaveDeltasTests {
 
     private val commandLimit = 128 // number of commands a user can upload for a project in one day
 
-    /*
-
     @Before
     fun setup() {
         // Generate valid firebase authentication token
@@ -38,7 +36,6 @@ class DeltaControllerSaveDeltasTests {
         Assert.assertTrue(projectID > 0)
     }
 
-    //TODO: We have currently a problem that the server can't handle too many uploaded deltas at a time. When this bug is removed this methods will be integrated again
     @Test
     fun saveDelta() {
         // Save a delta to the server
@@ -48,6 +45,7 @@ class DeltaControllerSaveDeltasTests {
         )
     }
 
+    //TODO: We have currently a problem that the server can't handle too many uploaded deltas at a time.
     /*
     @Test
     fun saveTenDeltas() {
@@ -83,7 +81,6 @@ class DeltaControllerSaveDeltasTests {
         val projectCommand = listOf("exceeds the upload limit")
         Assert.assertEquals(projectCommand, projectCommand)
     }
-    */
     */
     //TODO Tests auskommentieren
 }

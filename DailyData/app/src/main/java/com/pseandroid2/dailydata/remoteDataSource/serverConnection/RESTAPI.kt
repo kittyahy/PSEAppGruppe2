@@ -250,14 +250,16 @@ class RESTAPI {
      * @param authToken: The authentication token
      */
     fun getDelta(projectID: Long, authToken: String): Collection<Delta> {
-        val call: Call<Collection<Delta>> = server.getDelta(token = authToken, projectID)
-        /* TODO:
+        val call: Call<List<Delta>> = server.getDelta(token = authToken, projectID)
+
+        val body: List<Delta> = call.execute().body() ?: return mutableListOf()
+
+        /*
          * Note: There was an error that project commands always had too many quotation marks. These are removed here
          */
-        val body = call.execute().body() ?: return mutableListOf()
         var refactoredDeltas: MutableList<Delta> = mutableListOf()
         body.forEach {
-            refactoredDeltas.add(Delta(it.addedToServer, it.user, it.projectCommand.substring( 1, it.projectCommand.length - 1), it.project, it.isAdmin, it.requestedBy))
+            refactoredDeltas.add(Delta(it.addedToServerS, it.user, it.projectCommand.substring( 1, it.projectCommand.length - 1), it.project, it.requestedBy, it.admin))
         }
         return refactoredDeltas
     }
@@ -317,6 +319,15 @@ class RESTAPI {
     fun getFetchRequests(projectID: Long, authToken: String): Collection<FetchRequest> {
         val call: Call<Collection<FetchRequest>> = server.getFetchRequest(authToken, projectID)
 
-        return call.execute().body() ?: emptyList()
+        val body = call.execute().body() ?: emptyList()
+
+        /*
+         * Note: There was an error that the received requestInfo always had too many quotation marks. These are removed here
+         */
+        var refactoredFetchRequests: MutableList<FetchRequest> = mutableListOf()
+        body.forEach {
+            refactoredFetchRequests.add(FetchRequest(it.id, it.user, it.project, it.requestInfo.substring(1, it.requestInfo.length - 1)))
+        }
+        return refactoredFetchRequests
     }
 }

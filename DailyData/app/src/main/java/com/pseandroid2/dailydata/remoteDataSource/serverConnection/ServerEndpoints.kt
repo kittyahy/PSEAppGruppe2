@@ -96,7 +96,7 @@ interface ServerEndpoints
                   @Body command: String): Boolean
 
     @GET("OnlineDatabase/Delta"+"/get/{id}")
-    fun getDelta(@Header("token") token: String, @Path("id") projectId: Long): Call<Collection<Delta>>
+    fun getDelta(@Header("token") token: String, @Path("id") projectId: Long): Call<List<Delta>>
 
     @POST("OnlineDatabase/Delta"+"/provide/{id}")
     fun provideOldData(@Header("token") token: String, @Path(value = "id") projectId: Long,

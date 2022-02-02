@@ -9,7 +9,7 @@ import org.junit.Before
 import org.junit.Test
 
 class ProjectParticipantsTests {
-    /*
+
     private val restAPI: RESTAPI = RESTAPI()
     private val fm = FirebaseManager(null)
 
@@ -160,6 +160,6 @@ class ProjectParticipantsTests {
 
         Assert.assertFalse(restAPI.removeUser(authToken2, projectID, authToken3))
     }
-*/
+
     //TODO Tests auskommentieren
 }

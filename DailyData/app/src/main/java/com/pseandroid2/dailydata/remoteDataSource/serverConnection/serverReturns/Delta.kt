@@ -30,12 +30,12 @@ import java.time.LocalDateTime
  * @param user:           The UserID of the user who uploaded the delta
  * @param projectCommand: The projectCommand as JSON
  * @param project:        The ProjectID of the project to which this delta belongs
- * @param isAdmin:        Was the creator of the delta an admin
+ * @param admin:        Was the creator of the delta an admin
  * @param requestedBy:    The participant, who needs this Delta
  */
-data class Delta(val addedToServer: LocalDateTime = LocalDateTime.parse("0001-01-01T01:01:01"),
+data class Delta(val addedToServerS: LocalDateTime = LocalDateTime.parse("0001-01-01T01:01:01.123456"),
                  val user: String = "",
                  val projectCommand: String = "",
                  val project: Long = -1,
-                 val isAdmin: Boolean = false,
-                 val requestedBy: String = "")
+                 val requestedBy: String = "",
+                 val admin: Boolean = false)
