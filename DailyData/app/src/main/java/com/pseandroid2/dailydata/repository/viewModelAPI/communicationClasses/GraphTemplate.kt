@@ -23,11 +23,10 @@ package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 import android.graphics.Bitmap
 
 
-//TODO("Robin changes")
 class GraphTemplate(
-    var title : String,
-    var image : Bitmap,
-    var id : Int
+    var title: String,
+    var image: Bitmap,
+    var id: Int
 ) {
     //TODO Implementierung
 }

@@ -45,13 +45,13 @@ class ProjectFlow(
         appDataBase.uiElementDAO().getUIElements(projectId)
     ).getFlow() //Todo Arne fragen passt so
     private val graphFlow: Flow<List<Graph>> =
-        GraphFlow(TODO()).getFlow() //appDataBase.graphDAO().getGraphDataForProject(projectId)
-    private val memberFlow: Flow<List<Member>> = MemberFlow(TODO()).getFlow()
+        GraphFlow(TODO("GraphFlow")).getFlow() //appDataBase.graphDAO().getGraphDataForProject(projectId)
+    private val memberFlow: Flow<List<Member>> = MemberFlow(TODO("MemberFlow")).getFlow()
     private val notificationFlow: Flow<List<Notification>> =
         NotificationFlow(appDataBase.notificationsDAO().getNotifications(projectId)).getFlow()
     private val projectDataFlow: Flow<ProjectData?> =
         appDataBase.projectDataDAO().getProjectData(projectId)
-    private val settingsFlow: Flow<Map<String, String>> = TODO()
+    private val settingsFlow: Flow<Map<String, String>> = TODO("settingsFlow")
     private val rowFlow: Flow<List<Row>> =
         RowFlow(appDataBase.tableContentDAO().getRowsById(projectId)).getFlow()
 

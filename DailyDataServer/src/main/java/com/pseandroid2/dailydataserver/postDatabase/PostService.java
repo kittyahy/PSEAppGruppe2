@@ -19,6 +19,8 @@
 */
 package com.pseandroid2.dailydataserver.postDatabase;
 
+import com.pseandroid2.dailydataserver.postDatabase.Request.PostPreviewWrapper;
+import com.pseandroid2.dailydataserver.postDatabase.Request.TemplateDetailWrapper;
 import com.pseandroid2.dailydataserver.postDatabase.Response.PostPreview;
 import com.pseandroid2.dailydataserver.postDatabase.Response.TemplateDetail;
 import org.springframework.data.util.Pair;
@@ -55,7 +57,7 @@ public class PostService {
     }
 
     /**
-     * Provides all Post previews with ids as PostPreview
+     * Provides all Post previews (id, title, image) as {@link PostPreview}
      *
      * @return a list of all available PostPreviews
      */
@@ -65,7 +67,7 @@ public class PostService {
 
         for (Post post : postList) {
             returnList.add(
-                    new PostPreview(post.getPostId(), post.getPostPreview()));
+                    new PostPreview(post.getPostId(), post.getPostPreviewImage(), post.getPreviewTitle()));
         }
         return returnList;
     }
@@ -82,21 +84,21 @@ public class PostService {
      * @param user            the user how wants to save a new post.
      * @return the post id of the new Post
      */
-    public int addPost(String postPreview, Pair<String, String> projectTemplate,
-                       List<Pair<String, String>> graphTemplates, String user) {
+    public int addPost(PostPreviewWrapper postPreview, Pair<String, TemplateDetailWrapper> projectTemplate,
+                       List<Pair<String, TemplateDetailWrapper>> graphTemplates, String user) {
 
-        Post post = new Post(postId, postPreview, user);
+        Post post = new Post(postId, postPreview.getPreviewPicture(), user, postPreview.getTitle());
         postRepo.save(post);
         postId++;
 
         tempRepo.save(new Template(post.getPostId(), post.getTemplateIds(), projectTemplate.getFirst(), true,
-                projectTemplate.getSecond()));
+                projectTemplate.getSecond().getTitle(), projectTemplate.getSecond().getTemplateDetailImage()));
         post.increaseTemplateIds();
 
-        for (Pair<String, String> template : graphTemplates) {
+        for (Pair<String, TemplateDetailWrapper> template : graphTemplates) {
 
             tempRepo.save(new Template(post.getPostId(), post.getTemplateIds(), template.getFirst(), false,
-                    template.getSecond()));
+                    template.getSecond().getTitle(), template.getSecond().getTemplateDetailImage()));
             post.increaseTemplateIds();
 
         }
@@ -115,7 +117,7 @@ public class PostService {
     }
 
     /**
-     * Provides the template Details, their ids and if its a project template.
+     * Provides the template Details (image and title), their ids and if its a project template.
      * <p>
      * This method does not check: if the post exists.
      *
@@ -128,7 +130,8 @@ public class PostService {
         List<Template> templatesFromPost = new ArrayList<>(tempRepo.findByPost(recommendedPost.getPostId()));
         List<TemplateDetail> detailList = new ArrayList<>();
         for (Template tem : templatesFromPost) {
-            detailList.add(new TemplateDetail(tem.getTemplateNumber(), tem.getDetailView(), tem.isProjectTemplate()));
+            detailList.add(new TemplateDetail(tem.getTemplateNumber(), tem.getDetailViewTitle(),
+                    tem.getDetailViewImage(), tem.isProjectTemplate()));
         }
         return detailList;
     }

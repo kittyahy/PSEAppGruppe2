@@ -19,9 +19,9 @@
 */
 package com.pseandroid2.dailydataserver.postDatabase;
 
+import com.pseandroid2.dailydataserver.postDatabase.Request.AddPostParameter;
 import com.pseandroid2.dailydataserver.postDatabase.Response.PostPreview;
 import com.pseandroid2.dailydataserver.postDatabase.Response.TemplateDetail;
-import com.pseandroid2.dailydataserver.postDatabase.requestparameters.AddPostParameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -60,7 +60,7 @@ public class PostsController {
     }
 
     /**
-     * Provides all PostsPreviews with their PostIds.
+     * Provides all PostsPreviews (title and image) with their PostIds.
      *
      * @return a list with PostPreview, which contains postPreviews and the Post ids.
      */
@@ -70,7 +70,8 @@ public class PostsController {
     }
 
     /**
-     * Provides all Templates details from fromPost. Returns the identifier and the DetailView from a template.
+     * Provides all Templates details from fromPost. Returns the identifier and the DetailView (image and title) from
+     * a template.
      * For every template is declared if it's a project template or not.
      *
      * @param fromPost declares from which post the postDetail is recommended.
@@ -83,7 +84,7 @@ public class PostsController {
     }
 
     /**
-     * Provides the projectTemplate from the post fromPost
+     * Provides the projectTemplate from the post fromPost.
      *
      * @param fromPost declares from which post the projectTemplate is recommended (provided by the client)
      * @return the projectTemplate as JSON
