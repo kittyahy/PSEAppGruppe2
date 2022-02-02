@@ -23,6 +23,7 @@ package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 import com.pseandroid2.dailydata.model.database.entities.ProjectData
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
+import com.pseandroid2.dailydata.repository.commandCenter.commands.AddButton
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddColumn
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddRow
 import com.pseandroid2.dailydata.repository.commandCenter.commands.IllegalOperationException
@@ -157,18 +158,14 @@ class Project(
 
 
     fun addButtonIsPossible(): Flow<Boolean> {
-        //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
-        runBlocking {
-            flow.emit(true)
-        }
-        return flow
+        return isPossible[AddButton::class]!!
     }
 
 
     //@throws IllegalOperationException
     suspend fun addButton(button: Button) {
-        TODO("addButton")
+        isPossible[AddButton::class]!!.emit(false)
+        executeQueue.add(AddButton(id, button))
     }
 
 
