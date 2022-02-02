@@ -26,6 +26,7 @@ import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddButton
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddColumn
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddGraph
+import com.pseandroid2.dailydata.repository.commandCenter.commands.AddMember
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddNotification
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddRow
 import com.pseandroid2.dailydata.repository.commandCenter.commands.IllegalOperationException
@@ -52,6 +53,7 @@ class Project(
     var members: List<Member> = ArrayList<Member>(),
     val repositoryViewModelAPI: RepositoryViewModelAPI
 ) : Identifiable {
+    //Todo wish Flows erstellen, die Commands erlauben dynamisch ihre isPossible Funktionen upzudaten
     override lateinit var executeQueue: ExecuteQueue
     override lateinit var project: Project
     private val scope = CoroutineScope(Dispatchers.IO)
@@ -61,7 +63,8 @@ class Project(
         AddColumn::class,
         AddButton::class,
         AddNotification::class,
-        AddGraph::class
+        AddGraph::class,
+        AddMember::class
     )
     private val isPossible = mutableMapOf<KClass<out ProjectCommand>, MutableSharedFlow<Boolean>>()
 
@@ -217,18 +220,14 @@ class Project(
     }
 
     fun addMemberIsPossible(): Flow<Boolean> {
-        //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
-        runBlocking {
-            flow.emit(true)
-        }
-        return flow
+        return isPossible[AddMember::class]!!
     }
 
     suspend fun addMember(member: Member) {
         //Todo If bedingung schöner machen, keine Magic numbers und aussagekräftigere Exceptions werfen
-        if (member !in members && members.size < 25 && isOnlineProject) {
-            TODO("addMember")
+        if (member !in members && members.size < 24 && isOnlineProject) {
+            isPossible[AddMember::class]!!.emit(false)
+            executeQueue.add(AddMember(id, member))
         } else {
             throw IllegalOperationException()
         }
