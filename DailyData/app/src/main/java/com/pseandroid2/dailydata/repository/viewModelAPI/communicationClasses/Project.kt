@@ -54,10 +54,12 @@ class Project(
     override lateinit var project: Project
     private val scope = CoroutineScope(Dispatchers.IO)
 
-    private val isPossible = mutableMapOf<KClass<out ProjectCommand>, MutableSharedFlow<Boolean>>(
-        Pair(AddRow::class, MutableSharedFlow()),
-        Pair(AddColumn::class, MutableSharedFlow())
+    private val supportedCommands = listOf<KClass<out ProjectCommand>>(
+        AddRow::class,
+        AddColumn::class,
+        AddButton::class
     )
+    private val isPossible = mutableMapOf<KClass<out ProjectCommand>, MutableSharedFlow<Boolean>>()
 
     init {
         connectToProject(this)
@@ -65,6 +67,9 @@ class Project(
             id.connectToProject(this)
         }
         connectToRepository(repositoryViewModelAPI)
+        for (commandClass in supportedCommands) {
+            isPossible[commandClass] = MutableSharedFlow<Boolean>()
+        }
         for (pair in isPossible) {
             runBlocking { //Todo runBlocking weg
                 pair.value.emit(pair.key.members.single {
