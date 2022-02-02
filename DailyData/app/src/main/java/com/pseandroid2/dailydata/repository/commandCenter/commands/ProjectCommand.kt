@@ -16,7 +16,7 @@ abstract class ProjectCommand(
 ) {
     companion object {
         fun isPossible(project: Project): Boolean {
-            return false
+            return true
         }
     }
 

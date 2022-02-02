@@ -23,6 +23,7 @@ package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 import com.pseandroid2.dailydata.model.database.entities.ProjectData
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
+import com.pseandroid2.dailydata.repository.commandCenter.commands.AddColumn
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddRow
 import com.pseandroid2.dailydata.repository.commandCenter.commands.IllegalOperationException
 import com.pseandroid2.dailydata.repository.commandCenter.commands.ProjectCommand
@@ -30,7 +31,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlin.reflect.KClass
 
@@ -54,7 +54,8 @@ class Project(
     private val scope = CoroutineScope(Dispatchers.IO)
 
     private val isPossible = mutableMapOf<KClass<out ProjectCommand>, MutableSharedFlow<Boolean>>(
-        Pair(AddRow::class, MutableSharedFlow())
+        Pair(AddRow::class, MutableSharedFlow()),
+        Pair(AddColumn::class, MutableSharedFlow())
     )
 
     init {
@@ -127,17 +128,13 @@ class Project(
     }
 
     fun addColumnIsPossible(): Flow<Boolean> {
-        //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
-        runBlocking {
-            flow.emit(true)
-        }
-        return flow
+        return isPossible[AddColumn::class]!!
     }
 
     //@throws IllegalOperationException
     suspend fun addColumn(column: Column) {
-        TODO("addColumn")
+        isPossible[AddColumn::class]!!.emit(false)
+        executeQueue.add(AddColumn(id, column))
     }
 
     fun deleteColumnIsPossible(column: Column): Flow<Boolean> {
