@@ -20,6 +20,7 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.pseandroid2.dailydata.model.graph.Graph.Companion.ENABLE
+import com.pseandroid2.dailydata.model.graph.Graph.Companion.SET_LABEL_KEY
 import com.pseandroid2.dailydata.model.graph.LineChart.Companion.DOT_COLOR_KEY
 import com.pseandroid2.dailydata.model.graph.LineChart.Companion.DOT_ENABLE_KEY
 import com.pseandroid2.dailydata.model.graph.LineChart.Companion.DOT_SIZE_KEY
@@ -87,19 +88,23 @@ object Generator {
 
             //Line Style
             if (settings.containsKey(LINE_STYLE_KEY + i)) {
+                Log.d("XXX", settings[LINE_STYLE_KEY + i])
                 when (settings[LINE_STYLE_KEY + i]) {
                     LINE_STYLE_SOLID -> {
-                        data[i].setColor(data[i].color, 1)
+                        Log.d("XXX", "${data[i].color}")
+                        data[i].setColor(data[i].color, 255)
+                        Log.d("XXX", "${data[i].color}")
                     }
                     LINE_STYLE_NONE -> {
                         data[i].setColor(data[i].color, 0)
                     }
                     else -> {
-                        data[i].setColor(data[i].color, 1)
+                        data[i].setColor(data[i].color, 255)
                     }
                 }
             } else {
-                data[i].setColor(data[i].color, 1)
+                Log.d("XXX", "Key ${LINE_STYLE_KEY + i} not found")
+                data[i].setColor(data[i].color, 255)
             }
 
             //DOT SIZE
@@ -113,7 +118,7 @@ object Generator {
             if (settings.containsKey(DOT_COLOR_KEY + i)) {
                 data[i].circleColors = listOf(Color.parseColor(settings[DOT_COLOR_KEY + i]))
             } else {
-                data[i].circleColors = listOf(Color.WHITE)
+                data[i].circleColors = listOf(Color.BLACK)
             }
 
             //DISABLE DOTS
@@ -122,9 +127,22 @@ object Generator {
                     data[i].circleRadius = 0.0f
                 }
             }
+
+            //Set Labels
+            if (settings.containsKey(SET_LABEL_KEY + i)) {
+                data[i].label = settings[SET_LABEL_KEY + i]
+            } else {
+                data[i].label = "Set $i"
+            }
         }
         val lineChart = LineChart(context)
         lineChart.data = LineData(data)
+
+        //Remove X-Axis as that is not currently in use
+        lineChart.xAxis.isEnabled = false
+        //Disable Description
+        lineChart.description.isEnabled = false
+
         IOUtil.saveToFile(lineChart, GRAPH_DIR_NAME, settings[GRAPH_NAME_KEY], context)
         return lineChart
     }
