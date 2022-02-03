@@ -24,6 +24,7 @@ package com.pseandroid2.dailydata.repository.viewModelAPI
 import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import com.pseandroid2.dailydata.repository.commandCenter.commands.CreateProject
+import com.pseandroid2.dailydata.repository.commandCenter.commands.JoinOnlineProject
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Button
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Column
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
@@ -93,6 +94,7 @@ class ProjectHandler(
             project.graphs
         )
     }
+
     /**
      * If false, it would be imprudent to use the corresponding "manipulation" fun.
      * Thus it should be used to block input options from being used if false.
@@ -100,15 +102,16 @@ class ProjectHandler(
      *      users should not be able to call manipulation().
      */
     fun joinOnlineProjectIsPossible(): Flow<Boolean> {
-        //Todo replace with valid proof
         val flow = MutableSharedFlow<Boolean>()
         runBlocking {
-            flow.emit(true)
+            flow.emit(JoinOnlineProject.isPossible())
         }
         return flow
     }
 
-    fun joinOnlineProject(onlineID: Long): Int {
-        return TODO("joinOnlineProject")
+    suspend fun joinOnlineProject(onlineID: Long): Flow<Int> {
+        val idFlow = MutableSharedFlow<Int>()
+        executeQueue.add(JoinOnlineProject(onlineID, idFlow))
+        return idFlow
     }
 }

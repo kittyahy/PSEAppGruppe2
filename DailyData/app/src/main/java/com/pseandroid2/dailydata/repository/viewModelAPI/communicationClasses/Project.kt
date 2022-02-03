@@ -88,7 +88,7 @@ class Project(
         for (pair in isPossible) {
             runBlocking { //Todo runBlocking weg
                 pair.value.emit(pair.key.members.single {
-                    it.name == "IsPossible"
+                    it.name == "isPossible"
                 }.call(this) as Boolean)
             }
         }

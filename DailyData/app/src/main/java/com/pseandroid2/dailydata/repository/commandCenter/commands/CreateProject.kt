@@ -27,6 +27,12 @@ class CreateProject(
     commandByUser = commandByUser,
     isProjectAdmin = true
 ) {
+    companion object {
+        fun isPossible(project: com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project): Boolean {
+            return ProjectCommand.isPossible(project)
+        }
+    }
+
     override val publishable: Boolean = false
 
     override suspend fun execute(
