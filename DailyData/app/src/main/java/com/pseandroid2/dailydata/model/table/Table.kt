@@ -29,7 +29,7 @@ import com.pseandroid2.dailydata.util.Quadruple
 import java.time.LocalDateTime
 import kotlin.reflect.KClass
 
-interface Table {
+interface Table : Iterable<Row> {
 
     fun getCell(row: Int, col: Int): Any
 
@@ -118,6 +118,7 @@ data class RowMetaData(
  * @param type Serializable Name of a kotlin class (as obtained by KClass.getSerializableName())
  */
 data class ColumnData(
+    val id: Int,
     val type: String,
     val name: String,
     val unit: String,
