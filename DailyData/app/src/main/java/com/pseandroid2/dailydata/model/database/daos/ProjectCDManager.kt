@@ -97,7 +97,7 @@ class ProjectCDManager(
         val id = project.getProjectSkeleton().id
         @Suppress("Deprecation")
         graphDAO.deleteAllGraphs(id)
-
+        @Suppress("Deprecation")
         notifDAO.deleteAllNotifications(id)
 
         uiDAO.deleteAllUIElements(id)
@@ -153,7 +153,7 @@ class ProjectCDManager(
         val skeleton: ProjectSkeletonEntity =
             createSkeleton(id, project.getProjectSkeleton(), project.table.getLayout())
         val admin: User = project.admin
-        val entity = ProjectEntity(skeleton, admin)
+        val entity = ProjectEntity(skeleton, admin, project.isOnline)
 
         projectDAO.insertProjectEntity(entity)
 

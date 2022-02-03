@@ -36,6 +36,7 @@ import java.util.TreeMap
 @Dao
 abstract class SettingsDAO {
     fun getProjectSettings(projectId: Int): Flow<Settings> {
+        @Suppress("Deprecation")
         return getProjectSettingEntities(projectId).map {
             val map: MutableMap<String, String> = TreeMap()
             for (setting: ProjectSettingEntity in it) {
@@ -46,6 +47,7 @@ abstract class SettingsDAO {
     }
 
     fun getGraphSettings(projectId: Int, graphId: Int): Flow<Settings> {
+        @Suppress("Deprecation")
         return getGraphSettingEntities(projectId, graphId).map {
             val map: MutableMap<String, String> = TreeMap()
             for (setting: GraphSettingEntity in it) {
@@ -55,19 +57,33 @@ abstract class SettingsDAO {
         }
     }
 
+    suspend fun getSingleGraphSettings(projectId: Int, graphId: Int): Settings {
+        @Suppress("Deprecation")
+        val settings = getSingleGraphSettingsEntities(projectId, graphId)
+        val map = mutableMapOf<String, String>()
+        for (setting in settings) {
+            map[setting.settingKey] = setting.value
+        }
+        return MapSettings(map)
+    }
+
     suspend fun changeProjectSetting(projectId: Int, key: String, value: String) {
+        @Suppress("Deprecation")
         changeProjectSettingEntity(ProjectSettingEntity(projectId, key, value))
     }
 
     suspend fun changeGraphSetting(projectId: Int, graphId: Int, key: String, value: String) {
+        @Suppress("Deprecation")
         changeGraphSettingEntity(GraphSettingEntity(projectId, graphId, key, value))
     }
 
     suspend fun createProjectSetting(projectId: Int, key: String, value: String) {
+        @Suppress("Deprecation")
         insertProjectSettingEntity(ProjectSettingEntity(projectId, key, value))
     }
 
     suspend fun createGraphSetting(projectId: Int, graphId: Int, key: String, value: String) {
+        @Suppress("Deprecation")
         insertGraphSettingsEntity(GraphSettingEntity(projectId, graphId, key, value))
     }
 
@@ -84,30 +100,45 @@ abstract class SettingsDAO {
     abstract suspend fun deleteAllGraphSettings(projectId: Int, graphId: Int)
 
     /*========================SHOULD ONLY BE CALLED FROM INSIDE THE MODEL=========================*/
+    @Deprecated("Should only be used from inside the model. Use getProjectSettings() instead")
     @Query("SELECT * FROM projectSetting WHERE projectId = :projectId")
     abstract fun getProjectSettingEntities(projectId: Int): Flow<List<ProjectSettingEntity>>
 
+    @Deprecated("Should only be used from inside the model. Use getGraphSettings() instead")
     @Query("SELECT * FROM graphSetting WHERE projectId = :projectId AND graphId = :graphId")
     abstract fun getGraphSettingEntities(
         projectId: Int,
         graphId: Int
     ): Flow<List<GraphSettingEntity>>
 
+    @Deprecated("Should only be used from inside the model. Use getSingleGraphSettings() instead")
+    @Query("SELECT * FROM graphSetting WHERE projectId = :projectId AND graphId = :graphId")
+    abstract suspend fun getSingleGraphSettingsEntities(
+        projectId: Int,
+        graphId: Int
+    ): List<GraphSettingEntity>
+
+    @Deprecated("Should only be used from inside the model. Use changeProjectSetting() instead")
     @Update
     abstract suspend fun changeProjectSettingEntity(setting: ProjectSettingEntity)
 
+    @Deprecated("Should only be used from inside the model. Use changeGraphSetting() instead")
     @Update
     abstract suspend fun changeGraphSettingEntity(setting: GraphSettingEntity)
 
+    @Deprecated("Should only be used from inside the model. Use createProjectSetting() instead")
     @Insert
     abstract suspend fun insertProjectSettingEntity(setting: ProjectSettingEntity)
 
+    @Deprecated("Should only be used from inside the model. Use createGraphSetting() instead")
     @Insert
     abstract suspend fun insertGraphSettingsEntity(setting: GraphSettingEntity)
 
+    @Deprecated("Should only be used from inside the model. Use deleteProjectSetting() instead")
     @Delete
     abstract suspend fun deleteProjectSettingEntity(setting: ProjectSettingEntity)
 
+    @Deprecated("Should only be used from inside the model. Use deleteGraphSetting() instead")
     @Delete
     abstract suspend fun deleteGraphSettingEntity(setting: GraphSettingEntity)
 }

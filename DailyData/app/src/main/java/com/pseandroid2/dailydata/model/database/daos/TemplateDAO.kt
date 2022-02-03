@@ -183,7 +183,9 @@ abstract class TemplateDAO {
                         template.name,
                         template.description,
                         template.type,
-                        template.createdBy
+                        template.color,
+                        template.createdBy,
+                        template.onlineId
                     )
                 )
             }

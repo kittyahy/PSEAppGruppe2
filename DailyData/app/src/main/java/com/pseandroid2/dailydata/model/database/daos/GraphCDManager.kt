@@ -56,7 +56,7 @@ class GraphCDManager(
 
     suspend fun insertGraphTemplate(graphTemplate: GraphTemplate): Int {
         val newId = insertGraphTemplateEntity(graphTemplate)
-        for (setting in graphTemplate.getCustomizing()) {
+        for (setting in graphTemplate.customizing) {
             settingsDAO.createGraphSetting(
                 TEMPLATE_SETTINGS_PROJ_ID,
                 newId,
@@ -91,6 +91,7 @@ class GraphCDManager(
                 graphTemplate.name,
                 graphTemplate.desc,
                 graphTemplate.type,
+                graphTemplate.background,
                 graphTemplate.creator,
                 graphTemplate.onlineId
             )

@@ -43,6 +43,12 @@ abstract class ProjectDataDAO {
     @Query("SELECT id, name, description, wallpaper, onlineId, color FROM project WHERE id = :id")
     abstract fun getProjectData(id: Int): Flow<ProjectData?>
 
+    @Query("SELECT layout FROM project WHERE id = :id")
+    abstract suspend fun getCurrentLayout(id: Int): String
+
+    @Query("SELECT isOnline FROM project WHERE id = :id")
+    abstract fun isOnline(id: Int): Flow<Boolean>
+
     @Query("UPDATE project SET name = :name WHERE id = :id")
     abstract suspend fun setName(id: Int, name: String)
 
