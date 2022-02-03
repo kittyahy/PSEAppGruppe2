@@ -23,20 +23,25 @@ package com.pseandroid2.dailydata.repository.viewModelAPI
 import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
 import com.pseandroid2.dailydata.remoteDataSource.userManager.SignInTypes
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Post
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.PostEntry
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.PostPreview
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.PostDetail
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.runBlocking
 
 class ServerHandler(private val appDataBase: AppDataBase, private val api: RemoteDataSourceAPI) {
-    //TODO("Anton changes")
-    fun getPostPreviews(): List<PostPreview> {
-        return TODO("getPostPreviews") // Implementierung
+    fun getPostPreviews(): Collection<PostPreview> {
+        val arrayList = ArrayList<PostPreview>()
+        for (serverPreview in api.getPostPreviews()) {
+            arrayList.add(PostPreview(serverPreview, api))
+        }
+        return arrayList
     }
 
-    fun getPostDetail(postId: Int): PostDetail {
-        return TODO("getPostDetail")
+    fun getPost(postId: Int): Post {
+
+        return Post(postId, api.getPostDetail(postId))
     }
 
 

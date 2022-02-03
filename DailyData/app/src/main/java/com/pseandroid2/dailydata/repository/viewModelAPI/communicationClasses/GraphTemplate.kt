@@ -21,6 +21,7 @@
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
 import android.graphics.Bitmap
+import com.pseandroid2.dailydata.model.settings.Settings
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import kotlinx.coroutines.flow.Flow
 
@@ -28,9 +29,14 @@ import kotlinx.coroutines.flow.Flow
 class GraphTemplate(
     var title: String,
     var image: Bitmap,
-    override var id: Int
-) : Identifiable {
-    //TODO Implementierung
+    override var id: Int,
+    var descrition: String,
+    var color: Int,
+    var settings: Settings,
+    var type
+) : Identifiable, Template() {
+    // beschreibung farbe SettingsObj, Typ, erstellung onlineId
+
     override lateinit var executeQueue: ExecuteQueue
     override lateinit var project: Project
 

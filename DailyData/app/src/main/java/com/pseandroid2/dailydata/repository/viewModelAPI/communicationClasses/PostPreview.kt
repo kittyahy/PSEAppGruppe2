@@ -22,6 +22,7 @@ package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
 import android.graphics.Bitmap
 import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.forRepoReturns.PostPreviewWithPicture
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import kotlinx.coroutines.flow.Flow
 
@@ -31,24 +32,26 @@ class PostPreview(
     override var id: Int,
     var remoteDataSourceAPI: RemoteDataSourceAPI
 ) : Identifiable {
+    constructor(
+        postPreviewWithPicture: PostPreviewWithPicture,
+        remoteDataSourceAPI: RemoteDataSourceAPI
+    ) : this(
+        postPreviewWithPicture.preview,
+        postPreviewWithPicture.previewPicture,
+        postPreviewWithPicture.id,
+        remoteDataSourceAPI
+    )
+
     override lateinit var executeQueue: ExecuteQueue
     override lateinit var project: Project
 
-    fun getPostDetail(): Collection<PostDetail> {
-        val postDetail = ArrayList<PostDetail>()
+    fun getPostDetail(): Collection<PostEntry> {
+        val postDetail = ArrayList<PostEntry>()
         val serverList = remoteDataSourceAPI.getPostDetail(id)
         for (serverDetail in serverList) {
-            postDetail.add(PostDetail(serverDetail))
+            postDetail.add(PostEntry(serverDetail))
         }
         return postDetail
-    }
-
-    fun getProjectTemplate(): ProjectTemplate {
-        TODO("getProjectTemplate")
-    }
-
-    fun getGraphTemplate(id: Int): GraphTemplate {
-        TODO("getGraphTemplate")
     }
 
     override fun deleteIsPossible(): Flow<Boolean> {

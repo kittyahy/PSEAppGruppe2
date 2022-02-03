@@ -25,7 +25,7 @@ import com.pseandroid2.dailydata.remoteDataSource.serverConnection.forRepoReturn
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import kotlinx.coroutines.flow.Flow
 
-class PostDetail(
+class PostEntry(
     override val id: Int,
     val title: String = "template detail",
     val detailImage: Bitmap,
