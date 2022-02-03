@@ -23,7 +23,6 @@ package com.pseandroid2.dailydata.repository.viewModelAPI
 
 import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
-import com.pseandroid2.dailydata.repository.commandCenter.commands.AddGraph
 import com.pseandroid2.dailydata.repository.commandCenter.commands.CreateProject
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Button
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Column
@@ -68,7 +67,6 @@ class ProjectHandler(
 
         val idFlow = MutableSharedFlow<Int>()
         val createProject = CreateProject(
-            idFlow,
             "User1",
             name,
             description,
@@ -76,7 +74,8 @@ class ProjectHandler(
             table,
             buttons,
             notification,
-            graphs
+            graphs,
+            idFlow
         )
         executeQueue.add(createProject)
         return@async idFlow.first()

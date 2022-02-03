@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 
 abstract class ProjectCommand(
     var projectID: Int? = null,
-    var onlineProjectID: Long? = null,
+    var onlineProjectID: Long? = null, //Todo Überall noch setzen
     var wentOnline: LocalDateTime? = null,
     var serverRemoveTime: LocalDateTime? = null,
     var commandByUser: String? = null,

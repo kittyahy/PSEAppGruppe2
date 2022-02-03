@@ -31,6 +31,7 @@ import com.pseandroid2.dailydata.repository.commandCenter.commands.AddNotificati
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddRow
 import com.pseandroid2.dailydata.repository.commandCenter.commands.IllegalOperationException
 import com.pseandroid2.dailydata.repository.commandCenter.commands.ProjectCommand
+import com.pseandroid2.dailydata.repository.commandCenter.commands.PublishProject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -63,7 +64,8 @@ class Project(
         AddButton::class,
         AddNotification::class,
         AddGraph::class,
-        AddMember::class
+        AddMember::class,
+        PublishProject::class
     )
     private val isPossible = mutableMapOf<KClass<out ProjectCommand>, MutableSharedFlow<Boolean>>()
 
@@ -364,11 +366,13 @@ class Project(
     }
 
     fun publishIsPossible(): Flow<Boolean> {
-        TODO("publishIsPossibleProj")
+        return isPossible[PublishProject::class]!!
     }
 
     suspend fun publish() {
-        TODO("Proj")
+        isPossible[AddGraph::class]!!.emit(false)
+        @Suppress("DEPRECATION")
+        executeQueue.add(PublishProject(id, this))
     }
 
     fun setButtonIsPossible(): Flow<Boolean> {

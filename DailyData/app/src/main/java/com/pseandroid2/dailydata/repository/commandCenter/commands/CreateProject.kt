@@ -13,7 +13,6 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ad
 import kotlinx.coroutines.flow.MutableSharedFlow
 
 class CreateProject(
-    private val projectIDReturn: MutableSharedFlow<Int>,
     commandByUser: String,
     private val name: String,
     private val description: String,
@@ -21,12 +20,15 @@ class CreateProject(
     private val table: List<Column>,
     private val buttons: List<Button>,
     private val notification: List<Notification>,
-    private val graphs: List<Graph>
+    private val graphs: List<Graph>,
+    private val projectIDReturn: MutableSharedFlow<Int>? = null
 ) //Todo secondary constructor with communicationClasses.project
     : ProjectCommand(
     commandByUser = commandByUser,
     isProjectAdmin = true
 ) {
+    override val publishable: Boolean = false
+
     override suspend fun execute(
         appDataBase: AppDataBase,
         remoteDataSourceAPI: RemoteDataSourceAPI,
@@ -37,13 +39,15 @@ class CreateProject(
         pb.setDescription(description)
         pb.addTable(Table.extractFrom(table, buttons))
         pb.setBackground(wallpaper)
+        @Suppress("DEPRECATION")
         graphs.forEach { graph -> graph.addYourself(pb) }
+        @Suppress("DEPRECATION")
         notification.forEach { notification -> notification.addYourself(pb) }
 
         val project: Project = pb.build()
         val prod = appDataBase.projectCDManager().insertProject(project)
         projectID = prod.id
-        projectIDReturn.emit(prod.id)
+        projectIDReturn?.emit(prod.id)
         super.execute(appDataBase, remoteDataSourceAPI, publishQueue)
     }
 
