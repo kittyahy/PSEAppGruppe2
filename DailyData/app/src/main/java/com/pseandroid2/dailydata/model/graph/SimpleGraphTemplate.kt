@@ -1,6 +1,7 @@
 package com.pseandroid2.dailydata.model.graph
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import com.pseandroid2.dailydata.model.database.entities.GraphData
 import com.pseandroid2.dailydata.model.database.entities.GraphTemplateData
 import com.pseandroid2.dailydata.model.settings.MapSettings
@@ -34,7 +35,7 @@ class SimpleGraphTemplate(
         customizing[key] = value
     }
 
-    override fun getWallpaper(): Bitmap {
-        TODO("Not yet implemented")
+    override fun getWallpaper(): Bitmap? {
+        return BitmapFactory.decodeFile(path)
     }
 }

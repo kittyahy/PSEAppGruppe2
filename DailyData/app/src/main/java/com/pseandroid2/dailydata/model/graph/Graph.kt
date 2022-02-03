@@ -61,7 +61,7 @@ interface GraphTemplate {
     val path: String
     val background: Int
 
-    fun getWallpaper(): Bitmap
+    fun getWallpaper(): Bitmap?
 
     var customizing: Settings
     fun addSetting(key: String, value: String)
