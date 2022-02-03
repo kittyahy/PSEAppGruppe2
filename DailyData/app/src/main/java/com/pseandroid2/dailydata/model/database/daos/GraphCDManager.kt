@@ -54,8 +54,8 @@ class GraphCDManager(
         settingsDAO.deleteAllGraphSettings(projectId, id)
     }
 
-    suspend fun insertGraphTemplate(graphTemplate: GraphTemplate): Int {
-        val newId = insertGraphTemplateEntity(graphTemplate)
+    suspend fun insertGraphTemplate(graphTemplate: GraphTemplate, projectTemplateId: Int): Int {
+        val newId = insertGraphTemplateEntity(graphTemplate, projectTemplateId)
         for (setting in graphTemplate.customizing) {
             settingsDAO.createGraphSetting(
                 TEMPLATE_SETTINGS_PROJ_ID,
@@ -82,12 +82,16 @@ class GraphCDManager(
         return newId
     }
 
-    private suspend fun insertGraphTemplateEntity(graphTemplate: GraphTemplate): Int {
+    private suspend fun insertGraphTemplateEntity(
+        graphTemplate: GraphTemplate,
+        projectTemplateId: Int
+    ): Int {
         val newId = getNextTemplateId()
         @Suppress("Deprecation")
         templateDAO.insertGraphTemplate(
             GraphTemplateEntity(
                 newId,
+                projectTemplateId,
                 graphTemplate.name,
                 graphTemplate.desc,
                 graphTemplate.type,
