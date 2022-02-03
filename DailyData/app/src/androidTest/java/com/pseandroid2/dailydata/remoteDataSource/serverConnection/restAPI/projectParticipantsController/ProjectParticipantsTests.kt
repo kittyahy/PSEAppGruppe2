@@ -105,7 +105,7 @@ class ProjectParticipantsTests {
         Assert.assertFalse(serverManager.isProjectParticipant(authToken, projectID, userID2))
     }
 
-    /** TODO
+    /* TODO: Implement this in quality control phase
     @Test
     fun getParticipantsFromNotExistingProject() {
         restAPI.getProjectParticipants(authToken, -1)
@@ -159,7 +159,7 @@ class ProjectParticipantsTests {
         Assert.assertTrue(restAPI.removeUser(userID, projectID2, authToken))
     }
 
-    /* TODO: In quality phase
+    /* TODO: Implement this in quality control phase
     @Test
     fun userIsNoProjectMember() {
         Assert.assertNotEquals(mutableListOf<List<String>>(), restAPI.getProjectParticipants(authToken, projectID))

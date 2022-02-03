@@ -53,7 +53,8 @@ class PostsControllerPostContentTests {
     /**
      * Converts Ints into an byte array
      */
-    private fun byteArrayOfInts(vararg ints: Int) = ByteArray(ints.size) { pos -> ints[pos].toByte() }
+    private fun byteArrayOfInts(vararg ints: Int) =
+        ByteArray(ints.size) { pos -> ints[pos].toByte() }
 
 
     companion object Teardown {

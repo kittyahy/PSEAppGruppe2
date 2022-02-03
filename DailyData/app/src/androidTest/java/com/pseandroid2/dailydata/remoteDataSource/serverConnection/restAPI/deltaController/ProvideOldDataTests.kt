@@ -1,8 +1,6 @@
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI.deltaController
 
-import android.util.Log
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
-import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
 import org.junit.AfterClass
@@ -15,7 +13,6 @@ class ProvideOldDataTests {
     private var restAPI: RESTAPI = RESTAPI()
     private lateinit var authToken: String
     private lateinit var authToken2: String
-    private lateinit var authToken3: String
 
     private val fm: FirebaseManager = FirebaseManager(null)
     private var email = "test@student.kit.edu"
