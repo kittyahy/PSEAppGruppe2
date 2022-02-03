@@ -8,5 +8,7 @@ data class GraphTemplateData(
     val name: String,
     val description: String,
     val type: GraphType,
-    val creator: User
+    val color: Int,
+    val creator: User,
+    val onlineId: Long
 )
