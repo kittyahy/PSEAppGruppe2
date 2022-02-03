@@ -21,25 +21,35 @@
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
 import android.graphics.Bitmap
-import com.pseandroid2.dailydata.remoteDataSource.serverConnection.forRepoReturns.TemplateDetailWithPicture
+import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import kotlinx.coroutines.flow.Flow
 
-class PostDetail(
-    override val id: Int,
-    val title: String = "template detail",
-    val detailImage: Bitmap,
-    val isProjectTemplate: Boolean = false
+class PostPreview(
+    var title: String,
+    var image: Bitmap,
+    override var id: Int,
+    var remoteDataSourceAPI: RemoteDataSourceAPI
 ) : Identifiable {
-    constructor(templateDetailWithPicture: TemplateDetailWithPicture) : this(
-        templateDetailWithPicture.id,
-        templateDetailWithPicture.title,
-        templateDetailWithPicture.detailImage,
-        templateDetailWithPicture.projectTemplate
-    )
-
     override lateinit var executeQueue: ExecuteQueue
     override lateinit var project: Project
+
+    fun getPostDetail(): Collection<PostDetail> {
+        val postDetail = ArrayList<PostDetail>()
+        val serverList = remoteDataSourceAPI.getPostDetail(id)
+        for (serverDetail in serverList) {
+            postDetail.add(PostDetail(serverDetail))
+        }
+        return postDetail
+    }
+
+    fun getProjectTemplate(): ProjectTemplate {
+        TODO("getProjectTemplate")
+    }
+
+    fun getGraphTemplate(id: Int): GraphTemplate {
+        TODO("getGraphTemplate")
+    }
 
     override fun deleteIsPossible(): Flow<Boolean> {
         TODO("Not yet implemented")
@@ -48,5 +58,4 @@ class PostDetail(
     override suspend fun delete() {
         TODO("Not yet implemented")
     }
-
 }
