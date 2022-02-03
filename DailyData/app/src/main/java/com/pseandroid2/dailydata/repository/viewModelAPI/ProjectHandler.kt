@@ -22,6 +22,7 @@ package com.pseandroid2.dailydata.repository.viewModelAPI
 
 
 import com.pseandroid2.dailydata.model.database.AppDataBase
+import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import com.pseandroid2.dailydata.repository.commandCenter.commands.CreateProject
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Button
@@ -47,11 +48,12 @@ class ProjectHandler(
     val projectTemplateFlow: ProjectTemplateFlow,
     val graphTemplateFlow: GraphTemplateFlowProvider,
     private val appDataBase: AppDataBase,
+    private val rds: RemoteDataSourceAPI,
     private val executeQueue: ExecuteQueue
 ) {
     private val scope = CoroutineScope(Dispatchers.IO)
     fun getProjectByID(id: Int): Flow<Project> {
-        return ProjectFlow(appDataBase, id).getProjectFlow()
+        return ProjectFlow(appDataBase, rds, id).getProject()
     }
 
     suspend fun newProjectAsync(
