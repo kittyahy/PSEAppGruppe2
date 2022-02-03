@@ -20,6 +20,7 @@
 
 package com.pseandroid2.dailydata.model.project
 
+import com.pseandroid2.dailydata.model.graph.Graph
 import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.model.table.Table
 import com.pseandroid2.dailydata.model.users.NullUser
@@ -31,7 +32,8 @@ constructor(
     override var table: Table,
     override var admin: User = NullUser(),
     override var isOnline: Boolean = false,
-    override var users: MutableList<User>
+    override var users: MutableList<User>,
+    override var graphs: MutableList<Graph<*, *>> = mutableListOf()
 ) : Project {
 
     init {
@@ -43,10 +45,6 @@ constructor(
     @Suppress("Deprecation")
     @Deprecated("Properties of Project should be accessed directly, access via Skeleton is deprecated")
     override fun getProjectSkeleton() = skeleton
-
-    override fun addUsers(usersToAdd: Collection<User>) {
-        users.addAll(usersToAdd)
-    }
 
     override fun createTransformationFromString(transformationString: String): Project.DataTransformation<out Any> {
         TODO("Not yet implemented")

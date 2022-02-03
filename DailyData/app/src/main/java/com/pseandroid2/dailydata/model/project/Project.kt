@@ -23,6 +23,7 @@ package com.pseandroid2.dailydata.model.project
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import com.pseandroid2.dailydata.model.graph.Graph
+import com.pseandroid2.dailydata.model.graph.GraphTemplate
 import com.pseandroid2.dailydata.model.notifications.Notification
 import com.pseandroid2.dailydata.model.settings.Settings
 import com.pseandroid2.dailydata.model.table.Table
@@ -90,15 +91,6 @@ interface Project {
         get() = getProjectSkeleton().color
 
     var graphs: MutableList<Graph<*, *>>
-        set(value) {
-            @Suppress("Deprecation")
-            getProjectSkeleton().graphs = value
-        }
-        @Suppress("Deprecation")
-        get() = getProjectSkeleton().graphs
-
-    @Suppress("Deprecation")
-    fun addGraphs(graphsToAdd: Collection<Graph<*, *>>) = graphs.addAll(graphsToAdd)
 
     var settings: Settings
         set(value) {
@@ -136,7 +128,7 @@ interface Project {
     var isOnline: Boolean
 
     var users: MutableList<User>
-    fun addUsers(users: Collection<User>)
+    fun addUsers(usersToAdd: Collection<User>) = users.addAll(usersToAdd)
 
     fun createTransformationFromString(transformationString: String): DataTransformation<out Any>
 
@@ -187,12 +179,10 @@ interface ProjectSkeleton {
 
     var desc: String
 
-    fun getWallpaper(): Bitmap
+    fun getWallpaper(): Bitmap?
 
     var path: String
     var color: Int
-
-    var graphs: MutableList<Graph<*, *>>
 
     var settings: Settings
 
@@ -252,16 +242,9 @@ interface ProjectTemplate {
         @Suppress("Deprecation")
         get() = getProjectSkeleton().color
 
-    var graphs: MutableList<Graph<*, *>>
-        set(value) {
-            @Suppress("Deprecation")
-            getProjectSkeleton().graphs = value
-        }
-        @Suppress("Deprecation")
-        get() = getProjectSkeleton().graphs
+    var graphs: MutableList<GraphTemplate>
 
-    @Suppress("Deprecation")
-    fun addGraphs(graphsToAdd: Collection<Graph<*, *>>) = graphs.addAll(graphsToAdd)
+    fun addGraphs(graphsToAdd: Collection<GraphTemplate>) = graphs.addAll(graphsToAdd)
 
     var settings: Settings
         set(value) {
