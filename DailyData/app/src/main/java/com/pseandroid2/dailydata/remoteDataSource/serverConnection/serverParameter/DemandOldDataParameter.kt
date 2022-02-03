@@ -24,4 +24,4 @@ package com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParame
  *
  *  @param requestInfo: The fetch request as JSON
  */
-data class DemandOldDataParameter(val requestInfo: String)
+data class DemandOldDataParameter(val requestInfo: String = "fetch request")

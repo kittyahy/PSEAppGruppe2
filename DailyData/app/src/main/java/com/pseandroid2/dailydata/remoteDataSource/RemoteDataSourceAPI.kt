@@ -20,11 +20,16 @@
 
 package com.pseandroid2.dailydata.remoteDataSource
 
+import android.graphics.Bitmap
 import com.pseandroid2.dailydata.remoteDataSource.queue.FetchRequestQueueObserver
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandInfo
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueueObserver
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.forRepoReturns.PostPreviewWithPicture
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.forRepoReturns.TemplateDetailWithPicture
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.PostPreviewWrapper
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.TemplateDetailWrapper
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.PostPreview
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.TemplateDetail
@@ -39,7 +44,7 @@ import javax.inject.Inject
  * This class allows the repository to use all the required server (and firebase) sided features
  */
 class RemoteDataSourceAPI @Inject constructor(uAccount: UserAccount?, sManager: ServerManager?)  {
-    private val userAccount: UserAccount = uAccount ?: UserAccount(FirebaseManager())
+    private val userAccount: UserAccount = uAccount ?: UserAccount(FirebaseManager(null))
     private val serverManager: ServerManager = sManager ?: ServerManager(RESTAPI())
 
 // -----------------------------FireBase-------------------------------
@@ -128,23 +133,29 @@ class RemoteDataSourceAPI @Inject constructor(uAccount: UserAccount?, sManager: 
 
     // -----------------------------PostsController-------------------------------
     /**
-     * @return Collection<PostPreview>: The previews of the posts
+     * Gets post previews from the server
+     *
+     * @return Collection<PostPreviewWithPicture>: The previews of the posts
      */
-    fun getAllPostPreview(): Collection<PostPreview> {
+    fun getPostPreviews(): Collection<PostPreviewWithPicture> {
         val authToken: String = userAccount.getToken()
         return serverManager.getAllPostPreview(authToken)
     }
 
     /**
+     * Gets the details of a post
+     *
      * @param fromPost: The id from the searched post
-     * @return Collection<TemplateDetail>: Returns the detailed post belonging to the post id
+     * @return Collection<TemplateDetailWithPicture>: Returns the detailed post belonging to the post id
      */
-    fun getPostDetail(fromPost: Int): Collection<TemplateDetail> {
+    fun getPostDetail(fromPost: Int): Collection<TemplateDetailWithPicture> { // TODO: TemplateDetail -> TemplateDetailWithPicture ändern
         val authToken: String = userAccount.getToken()
         return serverManager.getPostDetail(fromPost, authToken)
     }
 
     /**
+     * Gets the project template of a post
+     * 
      * @param fromPost: The post from which the project template should be downloaded
      * @return String - The requested project template as JSON
      */
@@ -153,7 +164,8 @@ class RemoteDataSourceAPI @Inject constructor(uAccount: UserAccount?, sManager: 
         return serverManager.getProjectTemplate(fromPost, authToken)
     }
 
-    /** Downloads one graph template that is contained by a post
+    /** 
+     * Gets one graph template of a post
      *
      * @param fromPost: The post from which the graph templates should be downloaded
      * @param templateNumber: Which graph template should be downloaded from the post
@@ -166,20 +178,27 @@ class RemoteDataSourceAPI @Inject constructor(uAccount: UserAccount?, sManager: 
 
     // Wish-criteria
     /**
-     * @param postPreview: The preview of the post that should be added
-     * @param projectTemplate: The project template pair as a pair of the project template and the project template preview
-     * @param graphTemplates: The graph templates as Collection of pairs of graph templates as JSONs and the graph template previews
+     * Uploads a post to the server
+     *
+     * @param postPreview: The preview of the post that should be added. The first element of the Pair has the preview picture and the second element has the title
+     * @param projectTemplate: The project template. The first element of the outer Pair is the template as a JSON and the second element is the inner Pair.
+     *                           The inner Pair has as it first element the template detail image and as its second element the title of the template
+     * @param graphTemplates: The graph templates. Every list element is a graph template.
+     *                          The first element of the outer Pair is the template as a JSON and the second element is the inner Pair.
+     *                          The inner Pair has as it first element the template detail image and as its second element the title of the template
      * @return Int: The PostID of the new post. -1 if the call didn't succeed, 0 if the user reached his limit of uploaded posts.
-     */// TODO Überarbeite JAVADOC
-    fun addPost(postPreview: String, projectTemplate: Pair<String, String>, graphTemplates: Collection<Pair<String, String>>): Int {
+     */
+    fun uploadPost(postPreview: Pair<Bitmap, String>, projectTemplate: Pair<String, Pair<Bitmap, String>>, graphTemplates: List<Pair<String, Pair<Bitmap, String>>>): Int {
         val authToken: String = userAccount.getToken()
         return serverManager.addPost(postPreview, projectTemplate, graphTemplates, authToken)
     }
 
     // Wish-criteria
     /**
+     * Deletes a post from the server
+     *
      * @param postID: The id of the post that should be removed from the server
-     * @return Boolean: Did the server call succeed
+     * @return Boolean: Did the operation succeed
      */
     fun removePost(postID: Int): Boolean {
         val authToken: String = userAccount.getToken()
@@ -188,18 +207,22 @@ class RemoteDataSourceAPI @Inject constructor(uAccount: UserAccount?, sManager: 
 
     // -----------------------------ProjectParticipantsController-------------------------------
     /**
+     * Lets the currently signed in user join the project and returns the project information
+     *
      * @param projectID: The id of the project to which the user is to be added
-     * @return Boolean: Did the server call succeed
+     * @return String: Returns the project information as a JSON. (Returns "" on error)
      */
-    fun joinProject(projectID: Long): Boolean {
+    fun joinProject(projectID: Long): String {
         val authToken: String = userAccount.getToken()
         return serverManager.addUser(projectID, authToken)
     }
 
     /**
-     * @param userToRemove: The id of the user that sould be removed from the project
+     * Removes a user from a project
+     *
+     * @param userToRemove: The id of the user that should be removed from the project
      * @param projectID: The id of the project from which the user should be removed
-     * @return Boolean: Did the server call succeed
+     * @return Boolean: Did the operation succeed
      */
     fun removeUser(userToRemove: String, projectID: Long): Boolean{
         val authToken: String = userAccount.getToken()
@@ -207,19 +230,57 @@ class RemoteDataSourceAPI @Inject constructor(uAccount: UserAccount?, sManager: 
     }
 
     /**
-     * @return LONG: Returns the id of the created project. Returns -1 if an error occured
+     * Creates a new online project on the server and returns the id
+     *
+     * @param projectDetails: The details of a project (project name, project description, table format, ...) as JSON
+     * @return LONG: Returns the id of the created project. Returns -1 if an error occurred
      */
-    fun addProject(): Long{
+    fun createNewOnlineProject(projectDetails: String): Long{
         val authToken: String = userAccount.getToken()
-        return serverManager.addProject(authToken)
+        return serverManager.addProject(authToken, projectDetails)
+    }
+
+    /**
+     *  Gets all the project members
+     *
+     *  @param projectID: The id of the project whose user should be returned
+     *  @return Collection<String>: The participants of the project. Returns empty list on error
+     */
+    fun getProjectParticipants(projectID: Long): Collection<String>{
+        val authToken: String = userAccount.getToken()
+        return serverManager.getProjectParticipants(authToken, projectID)
+    }
+
+    /**
+     * Is the user a project participant from the project.
+     * (The user who send the authToken has to be a member of the project)
+     *
+     * @param authToken: The token from the currently logged in user
+     * @param userID: The userID of the user, that should be checked, if it is part of the project
+     * @return Boolean: True if the server call succeed and the user is part of the project. Otherwise false
+     */
+    fun isProjectParticipant(authToken: String, projectID: Long, userID: String): Boolean {
+        return serverManager.isProjectParticipant(authToken, projectID, userID)
+    }
+
+    /**
+     * Gets the admin of the project
+     *
+     * @param projectID: The id of the project whose admin should be returned
+     * @return String: The UserID of the admin. Returns "" on error
+     */
+    fun getProjectAdmin(projectID: Long): String{
+        val authToken: String = userAccount.getToken()
+        return serverManager.getProjectAdmin(authToken, projectID)
     }
 
     // -----------------------------DeltaController-------------------------------
-    /** Sends newly added project commands to the server
+    /**
+     * Sends newly added project commands to the server
      *
      * @param projectID: The id of the project to which the project command should be added
      * @param projectCommands: The project commands that should be send to the server (as JSON)
-     * @return Collection<String>: The successfully uploaded project commands (as JSONs) // TODO: ändere dies im Entwurfsdokument
+     * @return Collection<String>: The successfully uploaded project commands (as JSONs)
      */
     fun sendCommandsToServer(projectID: Long, projectCommands: Collection<String>): Collection<String> {
         val authToken: String = userAccount.getToken()
@@ -227,14 +288,18 @@ class RemoteDataSourceAPI @Inject constructor(uAccount: UserAccount?, sManager: 
     }
 
     /**
+     * Gets the project commands of a project
+     *
      * @param projectID: The id of the project whose deltas (projectCommands) you want to load into the ProjectCommandQueue
      */
-    fun getProjectCommandsFromServer(projectID: Long): Unit {
+    fun getProjectCommandsFromServer(projectID: Long) {
         val authToken: String = userAccount.getToken()
         return serverManager.getProjectCommandsFromServer(projectID, authToken)
     }
 
     /**
+     * Answers a fetch request
+     *
      * @param projectCommand: The projectCommand that should be uploaded to the server (as JSON)
      * @param forUser: The id of the user whose fetch request is answered
      * @param initialAddedDate: When the project command was send to the server
@@ -248,15 +313,19 @@ class RemoteDataSourceAPI @Inject constructor(uAccount: UserAccount?, sManager: 
     }
 
     /**
-     * @return LocalDateTime: The time how long an project command can remain on the server until it gets deleted by the server
+     * Gets the remove time from the server
+     *
+     * @return Long: The time how long an project command can remain on the server until it gets deleted by the server. On error returns -1
      */
-    fun getRemoveTime(): LocalDateTime {
+    fun getRemoveTime(): Long {
         val authToken: String = userAccount.getToken()
         return serverManager.getRemoveTime(authToken)
     }
 
     // -----------------------------FetchRequestController-------------------------------
     /**
+     * Sends a fetch request to the server
+     *
      * @param projectID: The id of the project to which the fetch request should be uploaded
      * @param requestInfo: The fetch request as JSON
      * @return Boolean: Did the server call succeed
@@ -267,15 +336,19 @@ class RemoteDataSourceAPI @Inject constructor(uAccount: UserAccount?, sManager: 
     }
 
     /**
+     * Fills the FetchRequestQueue with fetch requests from a project
+     *
      * @param projectID: The id of the project from which the fetch requests should be downloaded
      */
-    fun getFetchRequests(projectID: Long){
+    fun getFetchRequests(projectID: Long) {
         val authToken: String = userAccount.getToken()
         return serverManager.getFetchRequests(projectID, authToken)
     }
 
     // -----------------------------ObserverLogic-------------------------------
     /**
+     * Adds an observer to the fetch request queue
+     *
      * @param observer: The observer that should be added to the FetchRequestQueue
      */
     fun addObserverToFetchRequestQueue(observer: FetchRequestQueueObserver) {
@@ -283,6 +356,8 @@ class RemoteDataSourceAPI @Inject constructor(uAccount: UserAccount?, sManager: 
     }
 
     /**
+     * Removes an observer from the fetch request queue
+     *
      * @param observer: The observer that should be removed from the FetchRequestQueue
      */
     fun unregisterObserverFromFetchRequestQueue(observer: FetchRequestQueueObserver) {
@@ -290,6 +365,8 @@ class RemoteDataSourceAPI @Inject constructor(uAccount: UserAccount?, sManager: 
     }
 
     /**
+     * Adds an observer to the project command queue
+     *
      * @param observer: The observer that should be added to the ProjectCommandQueue
      */
     fun addObserverToProjectCommandQueue(observer: ProjectCommandQueueObserver) {
@@ -297,6 +374,8 @@ class RemoteDataSourceAPI @Inject constructor(uAccount: UserAccount?, sManager: 
     }
 
     /**
+     * Removes an observer from the project command queue
+     *
      * @param observer: The observer that should be removed from the ProjectCommandQueue
      */
     fun unregisterObserverFromProjectCommandQueue(observer: ProjectCommandQueueObserver) {
@@ -312,7 +391,9 @@ class RemoteDataSourceAPI @Inject constructor(uAccount: UserAccount?, sManager: 
     }
 
     /**
-     * @return String: Returns a fetchRequest as JSON if there is one in the queue. (Returns null if the queue is empty)
+     * Returns a fetchRequest from the queue and removes it from the queue
+     *
+     * @return String: The returned fetchRequest as JSON if there is one in the queue. (Returns null if the queue is empty)
      */
     fun getFetchRequestFromQueue(): FetchRequest? {
         return serverManager.getFetchRequestFromQueue()
@@ -325,8 +406,11 @@ class RemoteDataSourceAPI @Inject constructor(uAccount: UserAccount?, sManager: 
         return serverManager.getProjectCommandQueueLength()
     }
 
+
     /**
-     * @return ProjectCommandInfo: Returns a projectCommand as a ProjectCommandInfo Object if there is one in the queue. (Returns null if the queue is empty)
+     * Returns a project command from the queue and removes it from the queue
+     *
+     * @return String: The returned project command as JSON if there is one in the queue. (Returns null if the queue is empty)
      */
     fun getProjectCommandFromQueue(): ProjectCommandInfo? {
         return serverManager.getProjectCommandFromQueue()

@@ -37,6 +37,7 @@ import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParamet
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.PostPreview
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.TemplateDetail
 import retrofit2.http.Header
+import retrofit2.http.Query
 import java.time.LocalDateTime
 
 /**
@@ -44,13 +45,15 @@ import java.time.LocalDateTime
  */
 interface ServerEndpoints
 {
-    //TODO: Alle URLs sind noch Platzhalter, bis wir endgültige vom Server bekommen
-    //TODO: Prüfe ob Rückgabe typen nullable sein können
+    // TODO: Java docs für Methoden im Interface
 
     // Greeting Controller
     @GET("greet")
     fun greet(): Call<String>
 
+    // TEST TODO: Wahrscheinlich entfernen
+    @GET("test")
+    fun getPostsFromUser(@Header("token") token: String): Call<List<Int>>
 
     // Post Controller
     @GET("Posts"+"/allPreview")
@@ -74,37 +77,43 @@ interface ServerEndpoints
 
 
     // ProjectParticipantsController
-    @GET("OnlineDatabase"+"/addUser/{id}")
-    fun addUser(@Header("token") token: String, @Path("id") projectId: Long): Call<Boolean>
+    @POST("OnlineDatabase"+"/addUser/{id}")
+    fun addUser(@Header("token") token: String, @Path("id") projectId: Long): Call<String>
 
     @DELETE("OnlineDatabase"+"/removeUser/{id}")
     fun removeUser(@Header("token") token: String, @Path("id") projectId: Long,
-        params: RemoveUserParameter): Call<Boolean>
+                    @Query("userToRemove") userToRemove: String): Call<Boolean>
 
     @POST("OnlineDatabase"+"/newProject")
-    fun addProject(@Header("token") token: String): Call<Long>
+    fun addProject(@Header("token") token: String, @Body projectDetails: String): Call<Long>
 
+    // TODO: Create RDSAPI Methods
+    @GET("OnlineDatabase"+"/{id}/participants")
+    fun getParticipants(@Header("token") token: String, @Path("id") projectId: Long): Call<List<String>>
+
+    @GET("OnlineDatabase"+"/{id}/admin")
+    fun getAdmin(@Header("token") token: String, @Path("id") projectId: Long): Call<String>
 
     // DeltaController
-    @POST("OnlineDatabase/Delta"+"/save/{projectId}")
-    suspend fun saveDelta(@Header("token") token: String, @Path("projectId") projectId: Long,
-                  @Body saveDeltaParameter: SaveDeltaParameter): Boolean
+    @POST("OnlineDatabase/Delta"+"/save/{id}")
+    suspend fun saveDelta(@Header("token") token: String, @Path("id") projectId: Long,
+                  @Body command: String): Boolean
 
-    @GET("OnlineDatabase/Delta"+"/get/{projectId}")
-    fun getDelta(@Header("token") token: String, @Path("projectID") projectId: Long): Call<Collection<Delta>>
+    @GET("OnlineDatabase/Delta"+"/get/{id}")
+    fun getDelta(@Header("token") token: String, @Path("id") projectId: Long): Call<List<Delta>>
 
-    @POST("OnlineDatabase/Delta"+"/provide/{projectId}")
-    fun provideOldData(@Header("token") token: String, @Path(value = "projectID") projectId: Long,
+    @POST("OnlineDatabase/Delta"+"/provide/{id}")
+    fun provideOldData(@Header("token") token: String, @Path(value = "id") projectId: Long,
                        @Body params: ProvideOldDataParameter): Call<Boolean>
 
     @GET("OnlineDatabase/Delta"+"/time")
-    fun getRemoveTime(@Header("token") token: String): Call<LocalDateTime>
+    fun getRemoveTime(@Header("token") token: String): Call<Long>
 
 
     // FetchRequestController
     @POST("OnlineDatabase/request"+"/need/{id}")
     fun demandOldData(@Header("token") token: String, @Path("id") projectID: Long,
-        params: DemandOldDataParameter): Call<Boolean>
+        @Body requestInfo: String): Call<Boolean>
 
     @GET("OnlineDatabase/request"+"/provide/{id}")
     fun getFetchRequest(@Header("token") token: String, @Path("id") projectId: Long): Call<Collection<FetchRequest>>

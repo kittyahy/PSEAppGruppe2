@@ -29,8 +29,9 @@ class ProjectCommandQueue {
 
     // Queue Logic
     /**
-     * @return ProjectCommandInfo?: Gibt einen ProjectCommand aus der Queue aus (und entfernt diesen aus der Queue)
-     *                              Ist kein ProjectCommand mehr in der Queue enthalten wird null ausgegeben
+     * Returns a project command from the queue and removes it from the queue
+     *
+     * @return ProjectCommandInfo?: The project command from the queue. If the queue is empty returns null
      */
     fun getProjectCommand(): ProjectCommandInfo? {
         if (projectCommands.isNotEmpty()) {
@@ -40,7 +41,9 @@ class ProjectCommandQueue {
     }
 
     /**
-     * @param projectCommand: Der ProjectCommand, der in die Queue hinzugefügt werden soll
+     * Adds a project command to the queue and notifies all observer
+     *
+     * @param projectCommand: The project command that should be added to the queue
      */
     fun addProjectCommand(projectCommand: ProjectCommandInfo) {
         projectCommands.add(projectCommand)
@@ -48,7 +51,7 @@ class ProjectCommandQueue {
     }
 
     /**
-     * @return INT: Die Länge der ProjectCommandQueue
+     * @return INT: How many elements there are in the queue
      */
     fun getQueueLength(): Int {
         return projectCommands.size
@@ -56,7 +59,9 @@ class ProjectCommandQueue {
 
     // Observer Logic
     /**
-     * @param observer: Der Observer, der zur ProjectCommandQueue hinzugefügt werden soll
+     * Registers a new observer to the queue. If the observer is already observing it won't be added again
+     *
+     * @param observer: The observer that should be added to the project command queue
      */
     fun registerObserver(observer: ProjectCommandQueueObserver) {
         if (!observers.contains(observer)) {
@@ -65,12 +70,12 @@ class ProjectCommandQueue {
     }
 
     /**
-     * @param observer: Der Observer, der von der ProjectCommandQueue entfernt werden soll
+     * Unregisters an observer from the queue
+     *
+     * @param observer: The observer that should be removed from the queue
      */
     fun unregisterObserver(observer: ProjectCommandQueueObserver) {
-        while (observers.contains(observer)) {
-            observers.remove(observer)
-        }
+        observers.remove(observer)
     }
 
     /**

@@ -18,14 +18,17 @@
 
 */
 
-package com.pseandroid2.dailydata.remoteDataSource.queue
+package com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.fetchRequest
 
-/**
- * Gets updated if a new fetch request is added to the fetch requests queue
- */
-interface FetchRequestQueueObserver {
-    /**
-     * Will be called if an element is added to the queue
-     */
-    fun update()
+import com.pseandroid2.dailydata.remoteDataSource.queue.FetchRequestQueueObserver
+import com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.UpdatedByObserverForTesting
+
+class FetchRequestQueueObserverForTesting(toUpdate: UpdatedByObserverForTesting) :
+    FetchRequestQueueObserver {
+    var toUpdateObject = toUpdate
+
+    @Override
+    override fun update() {
+        toUpdateObject.update()
+    }
 }

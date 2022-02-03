@@ -22,8 +22,31 @@ package com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturn
 /**
  * A dataclass which will be received from the server. It stores a single post preview
  *
- * @param id: The id of the post
- * @param preview: The PostPreview as a JSON
+ * @param id:               The id of the post
+ * @param preview:          The PostPreview as a JSON
+ * @param previewPicture:   The preview image of the post
  */
 data class PostPreview(val id: Int = 0,
-                       val preview: String = "")
+                       val preview: String = "post preview",
+                       val previewPicture: ByteArray = ByteArray(0))
+    {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as PostPreview
+
+        if (id != other.id) return false
+        if (preview != other.preview) return false
+        if (!previewPicture.contentEquals(other.previewPicture)) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = id
+        result = 31 * result + preview.hashCode()
+        result = 31 * result + previewPicture.contentHashCode()
+        return result
+    }
+}

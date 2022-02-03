@@ -21,25 +21,24 @@
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection
 
 import android.util.Log
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.AddPostParameter
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.DemandOldDataParameter
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.PostPreviewWrapper
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.ProvideOldDataParameter
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.RemoveUserParameter
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.SaveDeltaParameter
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.TemplateDetailWrapper
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.Delta
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
-import retrofit2.Call
-import retrofit2.Response
-import java.time.LocalDateTime
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import com.google.gson.GsonBuilder
-
-import com.google.gson.Gson
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.PostPreview
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.TemplateDetail
-import kotlinx.coroutines.runBlocking
-import java.util.concurrent.CompletableFuture
+import retrofit2.Call
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.time.LocalDateTime
 
 /**
  * Carries out all calls to our server
@@ -62,10 +61,10 @@ class RESTAPI {
 
     // Note: There is no need to send the User ID of the current user to the server, as this can be read from the Firebase authToken
 
-    // TODO: Bei alles Tests prüfen wie man nach Fehlern sucht
-
     //------------------------------------- Greetings Controller -------------------------------------
     /**
+     * Checks if it possible to connect to our server
+     *
      * @return Boolean: Returns true, if the server could be successfully reached. Otherwise return false
      */
     fun greet(): Boolean {
@@ -80,9 +79,10 @@ class RESTAPI {
         return false
     }
 
-
     //------------------------------------- Posts Controller -------------------------------------
     /**
+     * Gets post previews from the server
+     *
      * @param authToken: The authentication token
      * @return Collection<PostPreview>: The previews of the posts
      */
@@ -93,6 +93,8 @@ class RESTAPI {
     }
 
     /**
+     * Gets the details of a post
+     *
      * @param fromPost: The id from the searched post
      * @param authToken: The authentication token
      * @return Collection<TemplateDetail>: Returns the detailed post belonging to the post id
@@ -104,17 +106,20 @@ class RESTAPI {
     }
 
     /**
+     * Gets the project template of a post
+     *
      * @param fromPost: The post from which the project template should be downloaded
      * @param authToken: The authentication token
      * @return String - The requested project template as JSON
      */
     fun getProjectTemplate(fromPost: Int, authToken: String): String {
         val call: Call<String> = server.getProjectTemplate(authToken, fromPost)
-
+3
         return call.execute().body() ?: ""
     }
 
-    /** Downloads one graph template that is contained by a post
+    /**
+     * Downloads one graph template that is contained by a post
      *
      * @param fromPost: The post from which the graph templates should be downloaded
      * @param templateNumber: Which graph template should be downloaded from the post
@@ -129,13 +134,15 @@ class RESTAPI {
 
     // Wish-criteria
     /**
+     * Uploads a post to the server
+     *
      * @param postPreview: The preview of the post that should be added
-     * @param projectTemplate: The project template pair as a pair of the project template and the project template preview
-     * @param graphTemplates: The graph templates as Collection of pairs of graph templates as JSONs and the graph template previews
+     * @param projectTemplate: The project template. The first element of the Pair is the template as a JSON, the second one is the detailView of the template
+     * @param graphTemplates: The graph templates. The first element of a Pair is the template as a JSON, the second one is the detailView of the template
      * @param authToken: The authentication token
      * @return Int: The PostID of the new post. -1 if the call didn't succeed, 0 if the user reached his limit of uploaded posts.
      */
-    fun addPost (postPreview: String, projectTemplate: Pair<String, String>, graphTemplates: Collection<Pair<String, String>>, authToken: String): Int {
+    fun addPost (postPreview: PostPreviewWrapper, projectTemplate: Pair<String, TemplateDetailWrapper>, graphTemplates: List<Pair<String, TemplateDetailWrapper>>, authToken: String): Int {
         val params = AddPostParameter(postPreview, projectTemplate, graphTemplates)
         val call: Call<Int> = server.addPost(authToken, params)
 
@@ -144,6 +151,8 @@ class RESTAPI {
 
     // Wish-criteria
     /**
+     * Deletes a post from the server
+     *
      * @param postID: The id of the post that should be removed from the server
      * @param authToken: The authentication token
      * @return Boolean: Did the server call succeed
@@ -157,65 +166,108 @@ class RESTAPI {
 
     //------------------------------------- ProjectParticipantsController -------------------------------------
     /**
+     * Lets the currently signed in user join the project and returns the project information
+     *
      * @param projectID: The id of the project to which the user is to be added
      * @param authToken: The authentication token
-     * @return Boolean: Did the server call succeed
+     * @return String: Returns the project information as a JSON. (Returns "" on error)
      */
-    fun addUser(projectID: Long, authToken: String): Boolean {
-        val call: Call<Boolean> = server.addUser(authToken, projectID)
+    fun addUser(projectID: Long, authToken: String): String {
+        val call: Call<String> = server.addUser(authToken, projectID)
 
-        return call.execute().body() ?: false
+        return call.execute().body() ?: ""
     }
 
     /**
-     * @param userToRemove: The id of the user that sould be removed from the project
+     * Removes a user from a project
+     *
+     * @param userToRemove: The id of the user that should be removed from the project
      * @param projectID: The id of the project from which the user should be removed
      * @param authToken: The authentication token
      * @return Boolean: Did the server call succeed
      */
     fun removeUser(userToRemove: String, projectID: Long, authToken: String): Boolean {
-        val params = RemoveUserParameter(userToRemove = userToRemove, projectID = projectID)
-
-        val call: Call<Boolean> = server.removeUser(authToken, projectID, params)
+        val call: Call<Boolean> = server.removeUser(authToken, projectID, userToRemove = userToRemove)
 
         return call.execute().body() ?: false
     }
 
     /**
+     * Creates a new online project on the server and returns the id
+     *
      * @param authToken: The authentication token
+     * @param projectDetails: The details of a project (project name, project description, table format, ...) as JSON
      * @return LONG: Returns the id of the created project. Returns -1 if an error occurred
      */
-    fun addProject(authToken: String): Long {
-        val call: Call<Long> = server.addProject(authToken)
+    fun addProject(authToken: String, projectDetails: String): Long {
+        val call: Call<Long> = server.addProject(authToken, projectDetails)
 
         return call.execute().body() ?: -1
     }
 
+    /**
+     *  Gets all the project members
+     *
+     *  @param authToken: The authentication token
+     *  @param projectID: The id of the project whose user should be returned
+     *  @return Collection<String>: The participants of the project. Returns empty list on error
+     */
+    fun getProjectParticipants(authToken: String, projectID: Long): Collection<String> {
+        val call: Call<List<String>> = server.getParticipants(authToken, projectID)
+
+        return call.execute().body() ?: listOf()
+    }
+
+    /**
+     * Gets the admin of the project
+     *
+     * @param authToken: The authentication token
+     * @param projectID: The id of the project whose admin should be returned
+     * @return String: The UserID of the admin. Returns "" on error
+     */
+    fun getProjectAdmin(authToken: String, projectID: Long): String{
+        val call: Call<String> = server.getAdmin(authToken, projectID)
+
+        return call.execute().body() ?: ""
+    }
 
     //------------------------------------- Delta Controller -------------------------------------
-    /** Uploads a Project Command to the Server
+    /**
+     * Uploads a Project Command to the Server
+     *
      * @param projectID: The id of the project to which the project command should be uploaded
      * @param projectCommand: The project command that should be send to the server (as JSON)
      * @param authToken: The authentication token
      * @return Boolean: True if uploaded successfully, otherwise false
      */
     suspend fun saveDelta(projectID: Long, projectCommand: String, authToken: String):Boolean {
-        val params = SaveDeltaParameter(projectCommand)
-
-        return server.saveDelta(authToken, projectID, params)
+        return server.saveDelta(authToken, projectID, projectCommand)
     }
 
     /**
+     * Gets the project commands of a project
+     *
      * @param projectID: The id of the project whose delta (projectCommands) you want to load into the FetchRequestQueue
      * @param authToken: The authentication token
      */
     fun getDelta(projectID: Long, authToken: String): Collection<Delta> {
-        val call: Call<Collection<Delta>> = server.getDelta(authToken, projectID)
+        val call: Call<List<Delta>> = server.getDelta(token = authToken, projectID)
 
-        return call.execute().body() ?: mutableListOf()
+        val body: List<Delta> = call.execute().body() ?: return mutableListOf()
+
+        /*
+         * Note: There was an error that project commands always had too many quotation marks. These are removed here
+         */
+        var refactoredDeltas: MutableList<Delta> = mutableListOf()
+        body.forEach {
+            refactoredDeltas.add(Delta(it.addedToServerS, it.user, it.projectCommand.substring( 1, it.projectCommand.length - 1), it.project, it.requestedBy, it.admin))
+        }
+        return refactoredDeltas
     }
 
     /**
+     * Answers a fetch request
+     *
      * @param projectCommand: The projectCommand that should be uploaded to the server (as JSON)
      * @param forUser: The id of the user whose fetch request is answered
      * @param initialAdded: The time when the fetchRequest is uploaded
@@ -224,7 +276,7 @@ class RESTAPI {
      * @param authToken: The authentication token
      * @return Boolean: Did the server call succeed
      */
-    fun providedOldData(projectCommand: String, forUser: String, initialAdded: LocalDateTime, initialAddedBy: String, projectID: Long, wasAdmin: Boolean, authToken: String): Boolean {
+    fun provideOldData(projectCommand: String, forUser: String, initialAdded: LocalDateTime, initialAddedBy: String, projectID: Long, wasAdmin: Boolean, authToken: String): Boolean {
         val params = ProvideOldDataParameter(projectCommand, forUser, initialAdded, initialAddedBy, wasAdmin)
 
         val call: Call<Boolean> = server.provideOldData(authToken, projectID, params)
@@ -233,36 +285,56 @@ class RESTAPI {
     }
 
     /**
+     * Gets the remove time from the server
+     *
      * @param authToken: The authentication token
-     * @return LocalDateTime: How long comments stay on the server before they get deleted. If an error occurred returns "0001-01-01T00:00"
+     * @return Long: The time how long an project command can remain on the server until it gets deleted by the server. On error returns -1
      */
-    fun getRemoveTime(authToken: String): LocalDateTime {
-        val call: Call<LocalDateTime> = server.getRemoveTime(authToken)
+    fun getRemoveTime(authToken: String): Long {
+        val call: Call<Long> = server.getRemoveTime(authToken)
 
-        return call.execute().body() ?: LocalDateTime.parse("0001-01-01T00:00")
+        return call.execute().body() ?: -1
     }
 
     //------------------------------------- FetchRequestController -------------------------------------
     /**
+     * Sends a fetch request to the server
+     *
      * @param projectID: The id of the project to which the fetch request should be uploaded
      * @param requestInfo: The fetch request as JSON
      * @param authToken: The authentication token
      * @return Boolean: Did the server call succeed
      */
     fun demandOldData(projectID: Long, requestInfo: String, authToken: String): Boolean {
-        val params = DemandOldDataParameter(requestInfo)
-
-        val call: Call<Boolean> = server.demandOldData(authToken, projectID, params)
+        val call: Call<Boolean> = server.demandOldData(token = authToken, projectID, requestInfo = requestInfo)
 
         return call.execute().body() ?: false
     }
 
     /**
+     * Gets fetch requests from the server
+     *
      * @param projectID: The id of the project from which the fetch requests should be downloaded
      * @param authToken: The authentication token
      */
     fun getFetchRequests(projectID: Long, authToken: String): Collection<FetchRequest> {
         val call: Call<Collection<FetchRequest>> = server.getFetchRequest(authToken, projectID)
+
+        val body = call.execute().body() ?: emptyList()
+
+        /*
+         * Note: There was an error that the received requestInfo always had too many quotation marks. These are removed here
+         */
+        var refactoredFetchRequests: MutableList<FetchRequest> = mutableListOf()
+        body.forEach {
+            refactoredFetchRequests.add(FetchRequest(it.id, it.user, it.project, it.requestInfo.substring(1, it.requestInfo.length - 1)))
+        }
+        return refactoredFetchRequests
+    }
+
+    // TODO: This method is just for testing
+    fun getPostsFromUser(authToken: String): List<Int> {
+        val call: Call<List<Int>> = server.getPostsFromUser(authToken)
 
         return call.execute().body() ?: emptyList()
     }

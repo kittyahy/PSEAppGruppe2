@@ -18,14 +18,24 @@
 
 */
 
-package com.pseandroid2.dailydata.remoteDataSource.queue
+package com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.projectCommand
+
+import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueueObserver
+import com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.UpdatedByObserverForTesting
 
 /**
- * Gets updated if a new fetch request is added to the fetch requests queue
+ * A project command queue observer used for testing
+ * @param toUpdate: The class which should be updated by the observer when the observer is updated
  */
-interface FetchRequestQueueObserver {
+class ProjectCommandQueueObserverForTesting(toUpdate: UpdatedByObserverForTesting) :
+    ProjectCommandQueueObserver {
+    var toUpdateObject = toUpdate
+
     /**
-     * Will be called if an element is added to the queue
+     * updates the toUpdateObject
      */
-    fun update()
+    @Override
+    override fun update() {
+        toUpdateObject.update()
+    }
 }

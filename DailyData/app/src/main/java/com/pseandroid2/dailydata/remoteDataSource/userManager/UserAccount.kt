@@ -26,40 +26,47 @@ import javax.inject.Inject
 /**
  * Manages all the user related features
  */
-class UserAccount @Inject constructor(private val fm: FirebaseManager) {
+class UserAccount @Inject constructor(fm: FirebaseManager) {
     private val firebaseManager: FirebaseManager = fm // Get the FirebaseManager via dependency injection
 
     /**
+     * Registers a new user with the requested sign in type.
+     * Note: The registration will also fail, if there already exists an account with the registration parameters
+     *
      * @param eMail: The email of the user that should be registered
      * @param password: The password of the user that should be registered
      * @param type: Through which method should the user be register (eg email)
      */
     fun registerUser(eMail: String, password: String, type: SignInTypes): FirebaseReturnOptions {
-        // Hier können dann später, falls mehere Anmeldemöglichkeiten zur Verfüngung stehen, die jeweils ausgewählte Anmeldemöglichkeit ausgewählt werden
+        // Choose the correct registration method
         when(type)
         {
             SignInTypes.EMAIL -> return firebaseManager.registerUserWithEmailAndPassword(eMail, password)
-            SignInTypes.GOOGLE -> Log.d("SignIn: ", "SignInType not implemented") // TODO: Wenn später noch google Anmeldung hinzugefügt werden sollen
+            SignInTypes.GOOGLE -> Log.d("SignIn: ", "SignInType not implemented") // You could add google registration here, if implemented
         }
         return FirebaseReturnOptions.REGISTRATION_FAILED
     }
 
     /**
+     * Signs in an already existing user with the passed sign in parameters
+     *
      * @param eMail: The email of the user that should be signed in
      * @param password: The password of the user that should be signed in
      * @param type: Through which method should the user be signed in (eg email)
      */
     fun signInUser(eMail: String, password: String, type: SignInTypes): FirebaseReturnOptions {
-        // Hier können dann später, falls mehere Anmeldemöglichkeiten zur Verfüngung stehen, die jeweils ausgewählte Anmeldemöglichkeit ausgewählt werden
+        // choose the correct sign in method
         when(type)
         {
             SignInTypes.EMAIL -> return firebaseManager.signInWithEmailAndPassword(eMail, password)
-            SignInTypes.GOOGLE -> Log.d("SignIn: ", "SignInType not implemented") // TODO: Wenn später noch google Anmeldung hinzugefügt werden sollen
+            SignInTypes.GOOGLE -> Log.d("SignIn: ", "SignInType not implemented") // You could add google sign in here, if implemented
         }
         return FirebaseReturnOptions.REGISTRATION_FAILED
     }
 
     /**
+     * Signs out the currently logged in user
+     *
      * @return FirebaseReturnOptions: The success status of the request
      */
     fun signOut(): FirebaseReturnOptions {
@@ -67,6 +74,8 @@ class UserAccount @Inject constructor(private val fm: FirebaseManager) {
     }
 
     /**
+     * Get the id of the currently signed in user
+     *
      * @return String: The firebase ID of the signed in user. If no user is signed in return ""
      */
     fun getUserID(): String {
@@ -74,6 +83,8 @@ class UserAccount @Inject constructor(private val fm: FirebaseManager) {
     }
 
     /**
+     * Get the username of the currently signed in user
+     *
      * @return String: The username of the signed in user. If no user is signed in return ""
      */
     fun getUserName(): String {
@@ -81,6 +92,8 @@ class UserAccount @Inject constructor(private val fm: FirebaseManager) {
     }
 
     /**
+     * Get the email of the currently signed in user
+     *
      * @return String: The email of the signed in user (if existing). If no user is signed in return ""
      */
     fun getUserEMail(): String {
@@ -88,6 +101,8 @@ class UserAccount @Inject constructor(private val fm: FirebaseManager) {
     }
 
     /**
+     * Get the user photo url of the currently signed in user
+     *
      * @return String: The photoURL of the signed in user (if existing). If no user is signed in return ""
      */
     fun getUserPhotoUrl(): String {
@@ -95,6 +110,8 @@ class UserAccount @Inject constructor(private val fm: FirebaseManager) {
     }
 
     /**
+     * Get an authentication token
+     *
      * @return String: The token of the signed in user. If no user is signed in return ""
      */
     fun getToken(): String {

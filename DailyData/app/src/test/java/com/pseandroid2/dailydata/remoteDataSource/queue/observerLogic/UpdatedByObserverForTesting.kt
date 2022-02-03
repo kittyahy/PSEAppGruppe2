@@ -18,14 +18,42 @@
 
 */
 
-package com.pseandroid2.dailydata.remoteDataSource.queue
+package com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic
 
 /**
- * Gets updated if a new fetch request is added to the fetch requests queue
+ * A class which allows the testing of the observers
  */
-interface FetchRequestQueueObserver {
+class UpdatedByObserverForTesting {
+    private var updated: Int = 0
+
     /**
-     * Will be called if an element is added to the queue
+     * updates the Observer
      */
-    fun update()
+    fun update() {
+        ++updated
+    }
+
+    /**
+     * @return Boolean: True, wenn es schon vom Observer geupdated wurde, sonst false
+     */
+    fun isUpdated(): Boolean {
+        if (updated == 0) {
+            return false
+        }
+        return true
+    }
+
+    /**
+     * @return Int: Wie oft dieses Objekt vom Observer geupdated wurde
+     */
+    fun getUpdated(): Int {
+        return updated
+    }
+
+    /**
+     * resets the update variable
+     */
+    fun resetUpdate() {
+        updated = 0
+    }
 }
