@@ -66,6 +66,9 @@ class Project(
         AddMember::class
     )
     private val isPossible = mutableMapOf<KClass<out ProjectCommand>, MutableSharedFlow<Boolean>>()
+
+    //addColumns is handled separately, because whether a column might not be added depends on its
+    // DataType
     private val isPossibleAddColumn = mutableMapOf<DataType, MutableSharedFlow<Boolean>>()
 
     init {
@@ -221,24 +224,6 @@ class Project(
     //@throws IllegalOperationException
     override suspend fun delete() {
         TODO("deleteProj")
-    }
-
-
-    fun setCellIsPossible(): Flow<Boolean> {
-        //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
-        runBlocking {
-            flow.emit(true)
-        }
-        return flow
-    }
-
-    //@throws IllegalOperationException
-    suspend fun setCell(indexRow: Int, indexColumn: Int, content: String) {
-        if (indexRow >= 0 && indexRow < data.size) {
-            data[indexRow].setCell(indexColumn, content)
-        }
-        throw IllegalOperationException()
     }
 
     fun addMemberIsPossible(): Flow<Boolean> {
