@@ -61,7 +61,7 @@ class FlowTester {
         }
         launch(Dispatchers.IO) {
             Log.d(LOG_TAG, "Starting Observing Stuff now")
-            val proj = handle.getProject().first {
+            val proj = handle.provideFlow.first {
                 it != null && it.name == "50"
             }!!
             Log.d(LOG_TAG, "Done Asserting")
