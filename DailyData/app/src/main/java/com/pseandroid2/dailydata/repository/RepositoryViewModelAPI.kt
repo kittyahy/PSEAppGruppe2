@@ -32,7 +32,7 @@ import kotlinx.coroutines.InternalCoroutinesApi
 
 class RepositoryViewModelAPI(
     val appDataBase: AppDataBase,
-    remoteDataSourceAPI: RemoteDataSourceAPI
+    val remoteDataSourceAPI: RemoteDataSourceAPI
 ) {
     val serverHandler = ServerHandler(appDataBase, remoteDataSourceAPI)
 

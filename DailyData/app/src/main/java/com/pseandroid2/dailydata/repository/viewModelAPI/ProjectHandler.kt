@@ -23,6 +23,7 @@ package com.pseandroid2.dailydata.repository.viewModelAPI
 
 import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
+import com.pseandroid2.dailydata.repository.commandCenter.commands.AddGraph
 import com.pseandroid2.dailydata.repository.commandCenter.commands.CreateProject
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Button
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Column
@@ -40,6 +41,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 
 @InternalCoroutinesApi
 class ProjectHandler(
@@ -92,22 +94,22 @@ class ProjectHandler(
             project.graphs
         )
     }
+    /**
+     * If false, it would be imprudent to use the corresponding "manipulation" fun.
+     * Thus it should be used to block input options from being used if false.
+     * e.g. If manipulationIsPossible.first() is false,
+     *      users should not be able to call manipulation().
+     */
+    fun joinOnlineProjectIsPossible(): Flow<Boolean> {
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
+    }
 
     fun joinOnlineProject(onlineID: Long): Int {
         return TODO("joinOnlineProject")
-    }
-
-    fun getProjectTemplateByID() {
-        TODO("getProjectTemplateByID")
-    }
-
-    //TODO("Robin changes")
-    fun deleteProjectTemplate(id: Int) {
-
-    }
-
-    //TODO("Robin changes")
-    fun deleteGraphTemplate(id: Int) {
-
     }
 }

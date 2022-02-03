@@ -27,6 +27,9 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Gr
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Post
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.PostDetail
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ProjectTemplate
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.runBlocking
 
 class ServerHandler(private val appDataBase: AppDataBase, private val api: RemoteDataSourceAPI) {
     //TODO("Anton changes")
@@ -38,32 +41,81 @@ class ServerHandler(private val appDataBase: AppDataBase, private val api: Remot
         return TODO("getPostDetail")
     }
 
-    fun getProjectTemplate(postId: Int): ProjectTemplate {
-        return TODO("getProjectTemplate")
-    }
 
-    fun getGraphTemplate(postId: Int, index: Int): GraphTemplate {
-        return TODO("getGraphTemplate")
-    }
-
-    fun isServerCurrentlyReachable(): Boolean {
-        return api.connectionToServerPossible()
+    /**
+     * If false, it would be imprudent to use the corresponding "manipulation" fun.
+     * Thus it should be used to block input options from being used if false.
+     * e.g. If manipulationIsPossible.first() is false,
+     *      users should not be able to call manipulation().
+     */
+    fun loginIsPossible(): Flow<Boolean> {
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
     }
 
     fun login(email: String, password: String) { //Todo erweiterbarkeit
         api.signInUser(email, password, SignInTypes.EMAIL)
     }
 
+    /**
+     * If false, it would be imprudent to use the corresponding "manipulation" fun.
+     * Thus it should be used to block input options from being used if false.
+     * e.g. If manipulationIsPossible.first() is false,
+     *      users should not be able to call manipulation().
+     */
+    fun signUpIsPossible(): Flow<Boolean> {
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
+    }
+
     fun signUp(email: String, password: String) { //Todo erweiterbarkeit
         api.registerUser(email, password, SignInTypes.EMAIL)
     }
 
-    fun downloadProjectTemplate(id: Int) {
+    /**
+     * If false, it would be imprudent to use the corresponding "manipulation" fun.
+     * Thus it should be used to block input options from being used if false.
+     * e.g. If manipulationIsPossible.first() is false,
+     *      users should not be able to call manipulation().
+     */
+    fun downloadProjectTemplateIsPossible(): Flow<Boolean> {
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
+    }
 
+    fun downloadProjectTemplate(id: Int) {
+        return TODO("downloadProjectTemplate")
+    }
+
+    /**
+     * If false, it would be imprudent to use the corresponding "manipulation" fun.
+     * Thus it should be used to block input options from being used if false.
+     * e.g. If manipulationIsPossible.first() is false,
+     *      users should not be able to call manipulation().
+     */
+    fun downloadGraphTemplateIsPossible(): Flow<Boolean> {
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
     }
 
     fun downloadGraphTemplate(projectId: Int, graphId: Int) {
-
+        return TODO("downloadGraphTemplate")
     }
 
 }
