@@ -331,7 +331,7 @@ class RemoteDataSourceAPI @Inject constructor(uAccount: UserAccount?, sManager: 
     }
 
     /**
-     * Gets the remove time from the server
+     * Gets the remove time from the server (in Minutes)
      *
      * @return Long: The time how long an project command can remain on the server until it gets deleted by the server. On error returns -1
      */
