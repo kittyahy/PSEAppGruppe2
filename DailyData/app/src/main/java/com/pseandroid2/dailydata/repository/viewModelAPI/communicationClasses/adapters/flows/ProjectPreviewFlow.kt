@@ -21,15 +21,32 @@
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows
 
 
+import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.model.database.entities.ProjectData
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ProjectPreview
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 
 @InternalCoroutinesApi
-class ProjectPreviewFlow(flow: Flow<List<ProjectData>>) : FlowAdapter<ProjectData, ProjectPreview> (flow){
-    override fun provide(i: ProjectData): ProjectPreview {
+class ProjectPreviewFlow(private val db: AppDataBase)/* :
+    FlowAdapter<ProjectData, ProjectPreview>(flow)*/ {
+    /*override fun provide(i: ProjectData): ProjectPreview {
         return ProjectPreview(i)
+    }*/
+
+    fun getPreviews(): Flow<List<ProjectPreview>> {
+        return ProjectPreviewFlowProvider(db).provideFlow.distinctUntilChanged()
+            .map { projectData ->
+                val previews = mutableListOf<ProjectPreview>()
+                for (data in projectData) {
+                    previews.add(
+                        ProjectPreview(data)
+                    )
+                }
+                previews.toList()
+            }
     }
 
 
