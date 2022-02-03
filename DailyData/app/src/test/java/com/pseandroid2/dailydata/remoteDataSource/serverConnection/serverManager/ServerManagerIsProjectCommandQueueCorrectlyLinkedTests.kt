@@ -21,41 +21,51 @@
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverManager
 
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandInfo
-import com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.UpdatedByObserver_ForTesting
-import com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.projectCommand.ProjectCommandQueueObserver_ForTesting
+import com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.UpdatedByObserverForTesting
+import com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.projectCommand.ProjectCommandQueueObserverForTesting
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.Delta
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Test
 
 internal class ServerManagerIsProjectCommandQueueCorrectlyLinkedTests {
 
-    @Test
-    fun projectCommandQueueLinked() {
-        // Create mocked restAPI
-        val deltaList: Collection<Delta> = listOf(Delta(project = 1), Delta(project = 2), Delta(project = 3))
+    private val deltaList: Collection<Delta> =
+        listOf(Delta(project = 1), Delta(project = 2), Delta(project = 3))
+    private lateinit var restAPI: RESTAPI
 
-        var restAPI: RESTAPI = mockk<RESTAPI>()
+    // Create TestQueues
+    private val toUpdate = UpdatedByObserverForTesting()
+    private val projectCommandObserver = ProjectCommandQueueObserverForTesting(toUpdate)
+
+    // Create ServerManager with mocked RestAPI
+    private lateinit var serverManager: ServerManager
+
+    @Before
+    fun setup() {
+        // Create mocked restAPI
+        restAPI = mockk()
         every { restAPI.getDelta(1, "") } returns deltaList
 
-
-        // Create TestQueues
-        var toUpdate = UpdatedByObserver_ForTesting()
-        var projectCommandObserver = ProjectCommandQueueObserver_ForTesting(toUpdate)
-
-        // Create ServerManager with mocked RestAPI
-        val serverManager = ServerManager(restAPI)
+        serverManager = ServerManager(restAPI)
 
         Assert.assertEquals(0, toUpdate.getUpdated())
+    }
 
+    @Test
+    fun projectCommandQueueLinked() {
         // Add Observer to queues
         serverManager.addObserverToProjectCommandQueue(projectCommandObserver)
 
-        // Fill Queues
-        serverManager.getProjectCommandsFromServer(1, "") // Fills ProjectCommandQueue with projectCommandInfo Objects
+        // Fills ProjectCommandQueue with projectCommandInfo Objects
+        serverManager.getProjectCommandsFromServer(
+            1,
+            ""
+        )
         Assert.assertEquals(deltaList.size, toUpdate.getUpdated())
 
         Assert.assertEquals(deltaList.size, serverManager.getProjectCommandQueueLength())
@@ -81,8 +91,14 @@ internal class ServerManagerIsProjectCommandQueueCorrectlyLinkedTests {
         serverManager.unregisterObserverFromProjectCommandQueue(projectCommandObserver)
 
         // Fill Queues
-        serverManager.getProjectCommandsFromServer(1, "") // Fills ProjectCommandQueue with projectCommandList
+        serverManager.getProjectCommandsFromServer(
+            1,
+            ""
+        ) // Fills ProjectCommandQueue with projectCommandList
 
-        Assert.assertEquals(deltaListSize, toUpdate.getUpdated()) // Should not update because no observer is linked
+        Assert.assertEquals(
+            deltaListSize,
+            toUpdate.getUpdated()
+        ) // Should not update because no observer is linked
     }
 }

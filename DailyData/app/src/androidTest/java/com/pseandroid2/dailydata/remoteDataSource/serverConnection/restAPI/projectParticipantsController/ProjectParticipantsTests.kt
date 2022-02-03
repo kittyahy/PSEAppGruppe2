@@ -1,16 +1,19 @@
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI.projectParticipantsController
 
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
+import retrofit2.http.GET
 
 class ProjectParticipantsTests {
 
     private val restAPI: RESTAPI = RESTAPI()
+    private val serverManager: ServerManager = ServerManager(RESTAPI())
     private val fm = FirebaseManager(null)
 
     private val email = "test@student.kit.edu"
@@ -92,6 +95,16 @@ class ProjectParticipantsTests {
         Assert.assertTrue(participants.remove(userID))
     }
 
+    @Test
+    fun isProjectParticipant() {
+        Assert.assertTrue(serverManager.isProjectParticipant(authToken, projectID, userID))
+    }
+
+    @Test
+    fun isNoProjectParticipant() {
+        Assert.assertFalse(serverManager.isProjectParticipant(authToken, projectID, userID2))
+    }
+
     /** TODO
     @Test
     fun getParticipantsFromNotExistingProject() {
@@ -130,7 +143,6 @@ class ProjectParticipantsTests {
 
         Assert.assertEquals("project details", restAPI.addUser(projectID, authToken))
     }
-
     @Test
     fun leaveProject() {
         Assert.assertEquals("project details", restAPI.addUser(projectID, authToken2))
@@ -147,11 +159,13 @@ class ProjectParticipantsTests {
         Assert.assertTrue(restAPI.removeUser(userID, projectID2, authToken))
     }
 
+    /* TODO: In quality phase
     @Test
     fun userIsNoProjectMember() {
         Assert.assertNotEquals(mutableListOf<List<String>>(), restAPI.getProjectParticipants(authToken, projectID))
         Assert.assertNotEquals("", restAPI.getProjectAdmin(authToken, projectID))
     }
+    */
 
     @Test
     fun removeUserWhileNotBeingAdmin() {

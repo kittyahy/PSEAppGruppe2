@@ -21,16 +21,18 @@
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import com.pseandroid2.dailydata.remoteDataSource.queue.FetchRequestQueue
 import com.pseandroid2.dailydata.remoteDataSource.queue.FetchRequestQueueObserver
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandInfo
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueue
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueueObserver
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.forRepoReturns.PostPreviewWithPicture
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.forRepoReturns.TemplateDetailWithPicture
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.PostPreviewWrapper
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.TemplateDetailWrapper
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.Delta
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
-import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.PostPreview
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.TemplateDetail
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.joinAll
@@ -66,21 +68,46 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * Gets post previews from the server
      *
      * @param authToken: The authentication token
-     * @return Collection<PostPreview>: The previews of the posts
+     * @return Collection<PostPreviewWithPicture>: The previews of the posts
      */
-    fun getAllPostPreview(authToken: String): Collection<PostPreview> {
-        return restAPI.getAllPostsPreview(authToken)
+    fun getAllPostPreview(authToken: String): Collection<PostPreviewWithPicture> {
+        //convert PostPreview from PostPreviewWithPicture
+        val postPreviews = restAPI.getAllPostsPreview(authToken)
+        var postPreviewWithPicture = mutableListOf<PostPreviewWithPicture>()
+        postPreviews.forEach {
+            postPreviewWithPicture.add(
+                PostPreviewWithPicture(
+                    it.id,
+                    it.preview,
+                    byteArrayToBitmap(it.previewPicture)
+                )
+            )
+        }
+        return postPreviewWithPicture
     }
 
     /**
      * Gets the details of a post
      *
-     * @param fromPost: The id from the searched post
-     * @param authToken: The authentication token
+     * @param fromPost:     The id from the searched post
+     * @param authToken:    The authentication token
      * @return Collection<TemplateDetail>: Returns the detailed post belonging to the post id
      */
-    fun getPostDetail(fromPost: Int, authToken: String): Collection<TemplateDetail> {
-        return restAPI.getPostDetail(fromPost, authToken)
+    fun getPostDetail(fromPost: Int, authToken: String): Collection<TemplateDetailWithPicture> {
+        //convert TemplateDetail to TemplateDetailWithPicture
+        val templateDetails = restAPI.getPostDetail(fromPost, authToken)
+        val templateDetailsWithPicture = mutableListOf<TemplateDetailWithPicture>()
+        templateDetails.forEach {
+            templateDetailsWithPicture.add(
+                TemplateDetailWithPicture(
+                    it.id,
+                    it.title,
+                    byteArrayToBitmap(it.detailImage),
+                    it.projectTemplate
+                )
+            )
+        }
+        return templateDetailsWithPicture
     }
 
     /**
@@ -118,22 +145,56 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      *                              The inner Pair has as it first element the template detail image and as its second element the title of the template
      * @return Int: The PostID of the new post. -1 if the call didn't succeed, 0 if the user reached his limit of uploaded posts.
      */
-    fun addPost(postPreview: Pair<Bitmap, String>, projectTemplate: Pair<String, Pair<Bitmap, String>>, graphTemplates: List<Pair<String, Pair<Bitmap, String>>>, authToken: String): Int {
-        val postPreviewToUpload = PostPreviewWrapper(bitmapToByteArray(postPreview.first), postPreview.second)
-        val templateDetailToUpload = Pair(projectTemplate.first, TemplateDetailWrapper(bitmapToByteArray(projectTemplate.second.first), projectTemplate.second.second))
-        var graphDetailsToUpload = mutableListOf<Pair<String, TemplateDetailWrapper>>()
+    fun addPost(
+        postPreview: Pair<Bitmap, String>,
+        projectTemplate: Pair<String, Pair<Bitmap, String>>,
+        graphTemplates: List<Pair<String, Pair<Bitmap, String>>>,
+        authToken: String
+    ): Int {
+        val postPreviewToUpload =
+            PostPreviewWrapper(bitmapToByteArray(postPreview.first), postPreview.second)
+        val templateDetailToUpload = Pair(
+            "\"" +projectTemplate.first + "\"", // Fixes bug, that server does not uploads a string TODO
+            TemplateDetailWrapper(
+                bitmapToByteArray(projectTemplate.second.first),
+                projectTemplate.second.second
+            )
+        )
+        val graphDetailsToUpload = mutableListOf<Pair<String, TemplateDetailWrapper>>()
         graphTemplates.forEach {
-            val templateDetailWrapper = TemplateDetailWrapper(bitmapToByteArray(it.second.first), it.second.second)
-            graphDetailsToUpload.add(Pair(it.first, templateDetailWrapper))
+            val templateDetailWrapper =
+                TemplateDetailWrapper(bitmapToByteArray(it.second.first), it.second.second)
+            graphDetailsToUpload.add(Pair(
+                "\"" + it.first + "\"", // Fixes bug, that server does not uploads a string TODO
+                templateDetailWrapper))
         }
-        return restAPI.addPost(postPreviewToUpload, templateDetailToUpload, graphDetailsToUpload, authToken)
+        return restAPI.addPost(
+            postPreviewToUpload,
+            templateDetailToUpload,
+            graphDetailsToUpload,
+            authToken
+        )
     }
 
+    /**
+     * Converts a bitmap into a byte array
+     * @param toConvert:    The bitmap that should be converted
+     * @return ByteArray:   The converted Bitmap
+     */
     private fun bitmapToByteArray(toConvert: Bitmap): ByteArray {
         val stream = ByteArrayOutputStream()
         toConvert.compress(Bitmap.CompressFormat.PNG, 90, stream)
 
         return stream.toByteArray()
+    }
+
+    /**
+     * Converts a byte array into a bitmap
+     * @param toConvert:    The byte array that should be converted
+     * @return ByteArray:   The converted byte array
+     */
+    private fun byteArrayToBitmap(toConvert: ByteArray): Bitmap {
+        return BitmapFactory.decodeByteArray(toConvert, 0, toConvert.size)
     }
 
 
@@ -157,7 +218,7 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param authToken: The authentication token
      * @return String: Returns the project information as a JSON. (Returns "" on error)
      */
-    fun addUser(projectID: Long, authToken: String): String{
+    fun addUser(projectID: Long, authToken: String): String {
         return restAPI.addUser(projectID, authToken)
     }
 
@@ -169,7 +230,7 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param authToken: The authentication token
      * @return Did the task succeed?
      */
-    fun removeUser(userToRemove: String, projectID: Long, authToken: String): Boolean{
+    fun removeUser(userToRemove: String, projectID: Long, authToken: String): Boolean {
         return restAPI.removeUser(userToRemove, projectID, authToken)
     }
 
@@ -180,7 +241,7 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param projectDetails: The details of a project (project name, project description, table format, ...) as JSON
      * @return LONG: Returns the id of the created project. Returns -1 if an error occurred
      */
-    fun addProject(authToken: String, projectDetails: String): Long{
+    fun addProject(authToken: String, projectDetails: String): Long {
         return restAPI.addProject(authToken, projectDetails)
     }
 
@@ -220,7 +281,7 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param projectID: The id of the project whose admin should be returned
      * @return String: The UserID of the admin. Returns "" on error
      */
-    fun getProjectAdmin(authToken: String, projectID: Long): String{
+    fun getProjectAdmin(authToken: String, projectID: Long): String {
         return restAPI.getProjectAdmin(authToken, projectID)
     }
 
@@ -233,10 +294,14 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param authToken: The authentication token
      * @return Collection<String>: The successfully uploaded project commands (as JSONs)
      */
-    fun sendCommandsToServer(projectID: Long, projectCommands: Collection<String>, authToken: String): Collection<String> {
+    fun sendCommandsToServer(
+        projectID: Long,
+        projectCommands: Collection<String>,
+        authToken: String
+    ): Collection<String> {
         val successfullyUploaded: MutableList<String> = mutableListOf()
 
-        if (projectCommands.isEmpty()){
+        if (projectCommands.isEmpty()) {
             return successfullyUploaded
         }
 
@@ -270,7 +335,11 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
         receivedProjectCommands.forEach {
             // Transform Delta into an Project Command
             val queueElement = ProjectCommandInfo(
-                commandByUser =  it.user, isProjectAdmin = it.admin, projectCommand = it.projectCommand, it.addedToServerS     )
+                commandByUser = it.user,
+                isProjectAdmin = it.admin,
+                projectCommand = it.projectCommand,
+                it.addedToServerS
+            )
             projectCommandQueue.addProjectCommand(queueElement)
         }
     }
@@ -286,8 +355,24 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param authToken: The authentication token
      * @return Boolean: Did the server call succeed
      */
-    fun provideOldData(projectCommand: String, forUser: String, initialAddedDate: LocalDateTime, initialAddedBy: String, projectID: Long, wasAdmin: Boolean, authToken: String): Boolean {
-        return restAPI.provideOldData(projectCommand, forUser, initialAddedDate, initialAddedBy, projectID, wasAdmin, authToken)
+    fun provideOldData(
+        projectCommand: String,
+        forUser: String,
+        initialAddedDate: LocalDateTime,
+        initialAddedBy: String,
+        projectID: Long,
+        wasAdmin: Boolean,
+        authToken: String
+    ): Boolean {
+        return restAPI.provideOldData(
+            projectCommand,
+            forUser,
+            initialAddedDate,
+            initialAddedBy,
+            projectID,
+            wasAdmin,
+            authToken
+        )
     }
 
     /**
@@ -320,7 +405,8 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param authToken: The authentication token
      */
     fun getFetchRequests(projectID: Long, authToken: String) {
-        val receivedFetchRequests: Collection<FetchRequest> = restAPI.getFetchRequests(projectID, authToken)
+        val receivedFetchRequests: Collection<FetchRequest> =
+            restAPI.getFetchRequests(projectID, authToken)
         receivedFetchRequests.forEach {
             fetchRequestQueue.addFetchRequest(it)
         }

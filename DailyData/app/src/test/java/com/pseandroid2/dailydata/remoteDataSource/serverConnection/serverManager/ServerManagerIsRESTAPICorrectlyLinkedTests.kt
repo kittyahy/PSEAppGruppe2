@@ -20,7 +20,6 @@
 
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverManager
 
-import android.graphics.Bitmap
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandInfo
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
@@ -43,7 +42,8 @@ internal class ServerManagerIsRESTAPICorrectlyLinkedTests {
     private var postPreviewList: List<PostPreview> = listOf(PostPreview())
     private var postDetailList: List<TemplateDetail> = listOf(TemplateDetail(id = 1))
     private var deltaList: Collection<Delta> = listOf(Delta(projectCommand = "ProjectCommand"))
-    private var fetchRequestList: Collection<FetchRequest> = listOf(FetchRequest(requestInfo = "FetchRequest"))
+    private var fetchRequestList: Collection<FetchRequest> =
+        listOf(FetchRequest(requestInfo = "FetchRequest"))
 
     private lateinit var restAPI: RESTAPI
 
@@ -54,21 +54,44 @@ internal class ServerManagerIsRESTAPICorrectlyLinkedTests {
         restAPI = mockk()
         every { restAPI.greet() } returns true
 
-        every { restAPI.getAllPostsPreview("")} returns postPreviewList
-        every { restAPI.getPostDetail(1,"")} returns postDetailList
-        every { restAPI.getProjectTemplate(1, "")} returns "ProjectTemplate"
-        every { restAPI.getGraphTemplate(1, 1, "")} returns "GraphTemplate"
-        every { restAPI.addPost(PostPreviewWrapper(), Pair("", TemplateDetailWrapper()), listOf(Pair("", TemplateDetailWrapper())), "")} returns 1
-        every { restAPI.removePost(1, "")} returns true
-        every { restAPI.addUser(1, "")} returns "project details"
-        every { restAPI.removeUser("", 1, "")} returns true
-        every { restAPI.addProject("", "project details")} returns 0
-        every { restAPI.getProjectParticipants("", 1)} returns listOf("")
-        every { restAPI.getProjectParticipants("user", 1)} returns listOf("user", "otherUser")
-        every { restAPI.getProjectAdmin("", 1)} returns ""
-        coEvery { restAPI.saveDelta(1, "command1", "") } returns true // use coEvery for mockking suspend functions
+        every { restAPI.getAllPostsPreview("") } returns postPreviewList
+        every { restAPI.getPostDetail(1, "") } returns postDetailList
+        every { restAPI.getProjectTemplate(1, "") } returns "ProjectTemplate"
+        every { restAPI.getGraphTemplate(1, 1, "") } returns "GraphTemplate"
+        every {
+            restAPI.addPost(
+                PostPreviewWrapper(),
+                Pair("", TemplateDetailWrapper()),
+                listOf(Pair("", TemplateDetailWrapper())),
+                ""
+            )
+        } returns 1
+        every { restAPI.removePost(1, "") } returns true
+        every { restAPI.addUser(1, "") } returns "project details"
+        every { restAPI.removeUser("", 1, "") } returns true
+        every { restAPI.addProject("", "project details") } returns 0
+        every { restAPI.getProjectParticipants("", 1) } returns listOf("")
+        every { restAPI.getProjectParticipants("user", 1) } returns listOf("user", "otherUser")
+        every { restAPI.getProjectAdmin("", 1) } returns ""
+        coEvery {
+            restAPI.saveDelta(
+                1,
+                "command1",
+                ""
+            )
+        } returns true // use coEvery for mockking suspend functions
         every { restAPI.getDelta(1, "") } returns deltaList
-        every { restAPI.provideOldData("", "", LocalDateTime.parse("0001-01-01T00:00"), "", 1, false, "") } returns true
+        every {
+            restAPI.provideOldData(
+                "",
+                "",
+                LocalDateTime.parse("0001-01-01T00:00"),
+                "",
+                1,
+                false,
+                ""
+            )
+        } returns true
         every { restAPI.getRemoveTime("") } returns 42
         every { restAPI.demandOldData(1, "", "") } returns true
         every { restAPI.getFetchRequests(1, "") } returns fetchRequestList
@@ -83,9 +106,15 @@ internal class ServerManagerIsRESTAPICorrectlyLinkedTests {
         // Test if serverManager returns the expected outputs
         Assert.assertTrue(serverManager.greet())
 
-        Assert.assertEquals(postPreviewList.elementAt(0), serverManager.getAllPostPreview("").elementAt(0))
+        Assert.assertEquals(
+            postPreviewList.elementAt(0),
+            serverManager.getAllPostPreview("").elementAt(0)
+        )
 
-        Assert.assertEquals(postDetailList.elementAt(0), serverManager.getPostDetail(1, "").elementAt(0))
+        Assert.assertEquals(
+            postDetailList.elementAt(0),
+            serverManager.getPostDetail(1, "").elementAt(0)
+        )
 
         Assert.assertEquals("ProjectTemplate", serverManager.getProjectTemplate(1, ""))
 
@@ -105,16 +134,31 @@ internal class ServerManagerIsRESTAPICorrectlyLinkedTests {
 
         Assert.assertEquals("", serverManager.getProjectAdmin("", 1))
 
-        Assert.assertEquals("command1", serverManager.sendCommandsToServer(1, projectCommands=listOf("command1"), "").elementAt(0))
+        Assert.assertEquals(
+            "command1",
+            serverManager.sendCommandsToServer(1, projectCommands = listOf("command1"), "")
+                .elementAt(0)
+        )
 
         // Test if projectCommand lands in the projectCommandQueue
         serverManager.getProjectCommandsFromServer(1, "")
         val delta: Delta = deltaList.elementAt(0)
-        val projectCommandInfoInList = ProjectCommandInfo(delta.user, delta.admin, delta.projectCommand, delta.addedToServerS)
+        val projectCommandInfoInList =
+            ProjectCommandInfo(delta.user, delta.admin, delta.projectCommand, delta.addedToServerS)
 
         Assert.assertEquals(projectCommandInfoInList, serverManager.getProjectCommandFromQueue())
 
-        Assert.assertTrue(serverManager.provideOldData("", "", LocalDateTime.parse("0001-01-01T00:00"), "", 1, false, ""))
+        Assert.assertTrue(
+            serverManager.provideOldData(
+                "",
+                "",
+                LocalDateTime.parse("0001-01-01T00:00"),
+                "",
+                1,
+                false,
+                ""
+            )
+        )
 
         Assert.assertEquals(42, serverManager.getRemoveTime(""))
 

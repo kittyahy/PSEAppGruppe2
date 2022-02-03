@@ -20,8 +20,8 @@
 
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverManager
 
-import com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.UpdatedByObserver_ForTesting
-import com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.fetchRequest.FetchRequestQueueObserver_ForTesting
+import com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.UpdatedByObserverForTesting
+import com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.fetchRequest.FetchRequestQueueObserverForTesting
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
@@ -33,17 +33,21 @@ import org.junit.Test
 
 internal class ServerManagerIsFetchRequestQueueCorrectlyLinkedTests {
 
-    private var fetchRequestList: MutableList<FetchRequest> = mutableListOf(FetchRequest(project = 1), FetchRequest(project = 2), FetchRequest(project = 3))
+    private var fetchRequestList: MutableList<FetchRequest> = mutableListOf(
+        FetchRequest(project = 1),
+        FetchRequest(project = 2),
+        FetchRequest(project = 3)
+    )
     private lateinit var restAPI: RESTAPI
     private lateinit var serverManager: ServerManager
 
     // Create Observer
-    private val toUpdate = UpdatedByObserver_ForTesting()
-    private val fetchRequestObserver = FetchRequestQueueObserver_ForTesting(toUpdate)
+    private val toUpdate = UpdatedByObserverForTesting()
+    private val fetchRequestObserver = FetchRequestQueueObserverForTesting(toUpdate)
 
     @Before
     fun setup() {
-        restAPI = mockk<RESTAPI>()
+        restAPI = mockk()
         every { restAPI.getFetchRequests(1, "") } returns fetchRequestList
         // Create ServerManager with mocked RestAPI
         serverManager = ServerManager(restAPI)
@@ -57,7 +61,10 @@ internal class ServerManagerIsFetchRequestQueueCorrectlyLinkedTests {
         serverManager.addObserverToFetchRequestQueue(fetchRequestObserver)
 
         // Fill Queues
-        serverManager.getFetchRequests(1, "") // Fills ProjectCommandQueue with projectCommandInfo Objects
+        serverManager.getFetchRequests(
+            1,
+            ""
+        ) // Fills ProjectCommandQueue with projectCommandInfo Objects
         val fetchRequestListSize = fetchRequestList.size
         Assert.assertEquals(fetchRequestListSize, toUpdate.getUpdated())
 
@@ -68,7 +75,10 @@ internal class ServerManagerIsFetchRequestQueueCorrectlyLinkedTests {
         for (i in 1..fetchRequestListSize) {
             val fetchRequestFromQueue: FetchRequest? = serverManager.getFetchRequestFromQueue()
             Assert.assertTrue(fetchRequestList.remove(fetchRequestFromQueue))
-            Assert.assertEquals(fetchRequestListSize - i, serverManager.getFetchRequestQueueLength())
+            Assert.assertEquals(
+                fetchRequestListSize - i,
+                serverManager.getFetchRequestQueueLength()
+            )
         }
 
         // Unregister Observer
@@ -77,6 +87,9 @@ internal class ServerManagerIsFetchRequestQueueCorrectlyLinkedTests {
         // Fill Queues
         serverManager.getFetchRequests(1, "")  // Fills ProjectCommandQueue with projectCommandList
 
-        Assert.assertEquals(fetchRequestListSize, toUpdate.getUpdated()) // Should not update because no observer is linked
+        Assert.assertEquals(
+            fetchRequestListSize,
+            toUpdate.getUpdated()
+        ) // Should not update because no observer is linked
     }
 }

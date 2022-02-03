@@ -20,7 +20,7 @@ class ProjectCommandQueueTests {
 
     @After
     fun cleanUp() {
-        while(projectCommandQueue.getQueueLength() > 0) {
+        while (projectCommandQueue.getQueueLength() > 0) {
             projectCommandQueue.getProjectCommand()
         }
         Assert.assertEquals(0, projectCommandQueue.getQueueLength())
@@ -40,7 +40,7 @@ class ProjectCommandQueueTests {
         val projectCommands: MutableList<ProjectCommandInfo> = mutableListOf()
 
         for (idx in 1..10) {
-            var projectCommand1 = ProjectCommandInfo(projectCommand = "Project Command: $idx")
+            val projectCommand1 = ProjectCommandInfo(projectCommand = "Project Command: $idx")
             projectCommands.add(projectCommand1)
             projectCommandQueue.addProjectCommand(projectCommand1)
         }
@@ -55,7 +55,7 @@ class ProjectCommandQueueTests {
     }
 
     @Test
-    fun getFromEmptyprojectCommandQueue() {
+    fun getFromEmptyProjectCommandQueue() {
         Assert.assertEquals(null, projectCommandQueue.getProjectCommand())
 
         Assert.assertEquals(0, projectCommandQueue.getQueueLength())

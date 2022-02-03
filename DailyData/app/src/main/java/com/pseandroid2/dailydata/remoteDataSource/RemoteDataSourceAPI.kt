@@ -26,6 +26,8 @@ import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandInfo
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueueObserver
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.forRepoReturns.PostPreviewWithPicture
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.forRepoReturns.TemplateDetailWithPicture
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.PostPreviewWrapper
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.TemplateDetailWrapper
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
@@ -133,9 +135,9 @@ class RemoteDataSourceAPI @Inject constructor(uAccount: UserAccount?, sManager: 
     /**
      * Gets post previews from the server
      *
-     * @return Collection<PostPreview>: The previews of the posts
+     * @return Collection<PostPreviewWithPicture>: The previews of the posts
      */
-    fun getPostPreviews(): Collection<PostPreview> {
+    fun getPostPreviews(): Collection<PostPreviewWithPicture> {
         val authToken: String = userAccount.getToken()
         return serverManager.getAllPostPreview(authToken)
     }
@@ -144,9 +146,9 @@ class RemoteDataSourceAPI @Inject constructor(uAccount: UserAccount?, sManager: 
      * Gets the details of a post
      *
      * @param fromPost: The id from the searched post
-     * @return Collection<TemplateDetail>: Returns the detailed post belonging to the post id
+     * @return Collection<TemplateDetailWithPicture>: Returns the detailed post belonging to the post id
      */
-    fun getPostDetail(fromPost: Int): Collection<TemplateDetail> {
+    fun getPostDetail(fromPost: Int): Collection<TemplateDetailWithPicture> { // TODO: TemplateDetail -> TemplateDetailWithPicture ändern
         val authToken: String = userAccount.getToken()
         return serverManager.getPostDetail(fromPost, authToken)
     }

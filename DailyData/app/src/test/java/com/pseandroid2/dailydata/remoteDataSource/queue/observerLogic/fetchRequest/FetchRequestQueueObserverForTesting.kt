@@ -18,13 +18,15 @@
 
 */
 
-package com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.projectCommand
+package com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.fetchRequest
 
-import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueueObserver
-import com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.UpdatedByObserver_ForTesting
+import com.pseandroid2.dailydata.remoteDataSource.queue.FetchRequestQueueObserver
+import com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.UpdatedByObserverForTesting
 
-class ProjectCommandQueueObserver_ForTesting(toUpdate: UpdatedByObserver_ForTesting): ProjectCommandQueueObserver  {
+class FetchRequestQueueObserverForTesting(toUpdate: UpdatedByObserverForTesting) :
+    FetchRequestQueueObserver {
     var toUpdateObject = toUpdate
+
     @Override
     override fun update() {
         toUpdateObject.update()

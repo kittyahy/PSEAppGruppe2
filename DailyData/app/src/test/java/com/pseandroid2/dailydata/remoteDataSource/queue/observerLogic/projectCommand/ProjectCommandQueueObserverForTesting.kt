@@ -18,37 +18,24 @@
 
 */
 
-package com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic
+package com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.projectCommand
 
-// Eine Hilfsmethode, die das Testen von Observern ermöglicht
-class UpdatedByObserver_ForTesting {
-    private var updated: Int = 0
+import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueueObserver
+import com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.UpdatedByObserverForTesting
 
-    fun update() {
-        ++updated
-    }
-
-    /**
-     * @return Boolean: True, wenn es schon vom Observer geupdated wurde, sonst false
-     */
-    fun isUpdated(): Boolean {
-        if (updated == 0) {
-            return  false
-        }
-        return true
-    }
+/**
+ * A project command queue observer used for testing
+ * @param toUpdate: The class which should be updated by the observer when the observer is updated
+ */
+class ProjectCommandQueueObserverForTesting(toUpdate: UpdatedByObserverForTesting) :
+    ProjectCommandQueueObserver {
+    var toUpdateObject = toUpdate
 
     /**
-     * @return Int: Wie oft dieses Objekt vom Observer geupdated wurde
+     * updates the toUpdateObject
      */
-    fun getUpdated(): Int {
-        return updated
-    }
-
-    /**
-     * resets the update variable
-     */
-    fun resetUpdate() {
-        updated = 0
+    @Override
+    override fun update() {
+        toUpdateObject.update()
     }
 }

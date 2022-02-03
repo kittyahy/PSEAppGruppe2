@@ -1,7 +1,7 @@
 package com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.fetchRequest
 
 import com.pseandroid2.dailydata.remoteDataSource.queue.FetchRequestQueue
-import com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.UpdatedByObserver_ForTesting
+import com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.UpdatedByObserverForTesting
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
 import org.junit.After
 import org.junit.Assert
@@ -11,19 +11,21 @@ import org.junit.Test
 class FetchRequestObserverTests {
     private var fetchRequestQueue = FetchRequestQueue()
 
-    private var toUpdate = UpdatedByObserver_ForTesting()
-    private var toUpdateObjects = mutableListOf<UpdatedByObserver_ForTesting>() // for testing multiple observer
+    private var toUpdate = UpdatedByObserverForTesting()
+    private var toUpdateObjects =
+        mutableListOf<UpdatedByObserverForTesting>() // for testing multiple observer
 
     // Create observer
-    private var observer = FetchRequestQueueObserver_ForTesting(toUpdate)
-    private val observers: MutableList<FetchRequestQueueObserver_ForTesting> = mutableListOf() // for testing multiple observer
+    private var observer = FetchRequestQueueObserverForTesting(toUpdate)
+    private val observers: MutableList<FetchRequestQueueObserverForTesting> =
+        mutableListOf() // for testing multiple observer
 
 
     @Before
     fun setup() {
         for (idx in 1..10) {
-            val toUpdate = UpdatedByObserver_ForTesting()
-            observers.add(FetchRequestQueueObserver_ForTesting(toUpdate))
+            val toUpdate = UpdatedByObserverForTesting()
+            observers.add(FetchRequestQueueObserverForTesting(toUpdate))
             toUpdateObjects.add(toUpdate)
         }
     }
@@ -58,7 +60,7 @@ class FetchRequestObserverTests {
         fetchRequestQueue.registerObserver(observer)
 
         //Test if update() is called in the observer
-        Assert.assertEquals(false, toUpdate.isUpdated() )
+        Assert.assertEquals(false, toUpdate.isUpdated())
         Assert.assertEquals(0, fetchRequestQueue.getQueueLength())
         fetchRequestQueue.addFetchRequest(FetchRequest(requestInfo = "Fetch Request: 1"))
         Assert.assertEquals(1, fetchRequestQueue.getQueueLength())
@@ -74,7 +76,7 @@ class FetchRequestObserverTests {
     @Test
     fun addTenObserver() {
         // Add observers to queue
-        observers.forEach() {
+        observers.forEach {
             fetchRequestQueue.registerObserver(it)
         }
         toUpdateObjects.forEach {

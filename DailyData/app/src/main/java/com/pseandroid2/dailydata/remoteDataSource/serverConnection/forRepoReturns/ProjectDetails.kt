@@ -1,4 +1,4 @@
-package com.pseandroid2.dailydata.remoteDataSource.serverConnection
+package com.pseandroid2.dailydata.remoteDataSource.serverConnection.forRepoReturns
 
 /**
  * Contains important details for an online project

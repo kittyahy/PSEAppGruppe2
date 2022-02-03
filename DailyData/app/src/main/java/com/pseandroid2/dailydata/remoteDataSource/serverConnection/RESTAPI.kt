@@ -101,6 +101,7 @@ class RESTAPI {
      */
     fun getPostDetail(fromPost: Int, authToken: String): Collection<TemplateDetail> {
         val call: Call<List<TemplateDetail>> = server.getPostDetail(authToken, fromPost)
+
         return call.execute().body() ?: emptyList()
     }
 
@@ -113,7 +114,7 @@ class RESTAPI {
      */
     fun getProjectTemplate(fromPost: Int, authToken: String): String {
         val call: Call<String> = server.getProjectTemplate(authToken, fromPost)
-
+3
         return call.execute().body() ?: ""
     }
 

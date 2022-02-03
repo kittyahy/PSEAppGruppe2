@@ -10,7 +10,7 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
-class UserManager_CorrectlyLinked {
+class UserManagerCorrectlyLinkedTest {
 
     private val fm: FirebaseManager = FirebaseManager(null)
     private val userAccount = UserAccount(fm)

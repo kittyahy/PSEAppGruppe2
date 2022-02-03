@@ -24,13 +24,13 @@ package com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturn
  *
  * @param id:                   The id of the template
  * @param title:                The title of the template
- * @param isProjectTemplate:    If true, than a projectTemplate is described. If false, than a graphTemplate is described
+ * @param projectTemplate:      If true, than a projectTemplate is described. If false, than a graphTemplate is described
  * @param detailImage:          The detail image of the template
  */
 data class TemplateDetail(
     val id: Int = 0,
     val title: String = "template detail",
-    val detailImage: ByteArray = ByteArray(0),
+    val detailImage: ByteArray = ByteArray(1),
     val projectTemplate: Boolean = false
 ) {
     override fun equals(other: Any?): Boolean {

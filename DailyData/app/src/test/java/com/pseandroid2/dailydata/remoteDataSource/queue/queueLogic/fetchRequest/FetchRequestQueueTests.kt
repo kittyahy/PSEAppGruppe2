@@ -21,7 +21,7 @@ class FetchRequestQueueTests {
 
     @After
     fun cleanUp() {
-        while(fetchRequestQueue.getQueueLength() > 0) {
+        while (fetchRequestQueue.getQueueLength() > 0) {
             fetchRequestQueue.getFetchRequest()
         }
         Assert.assertEquals(0, fetchRequestQueue.getQueueLength())
@@ -41,7 +41,7 @@ class FetchRequestQueueTests {
         val fetchRequests: MutableList<FetchRequest> = mutableListOf()
 
         for (idx in 1..10) {
-            var fetchRequest1 = FetchRequest(requestInfo = "Fetch Request: $idx")
+            val fetchRequest1 = FetchRequest(requestInfo = "Fetch Request: $idx")
             fetchRequests.add(fetchRequest1)
             fetchRequestQueue.addFetchRequest(fetchRequest1)
         }

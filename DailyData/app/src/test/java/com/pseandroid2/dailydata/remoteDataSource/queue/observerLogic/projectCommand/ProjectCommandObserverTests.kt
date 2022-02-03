@@ -2,7 +2,7 @@ package com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.projectCo
 
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandInfo
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueue
-import com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.UpdatedByObserver_ForTesting
+import com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.UpdatedByObserverForTesting
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
@@ -11,19 +11,21 @@ import org.junit.Test
 class ProjectCommandObserverTests {
     private var projectCommandQueue = ProjectCommandQueue()
 
-    private var toUpdate = UpdatedByObserver_ForTesting()
-    private var toUpdateObjects = mutableListOf<UpdatedByObserver_ForTesting>() // for testing multiple observer
+    private var toUpdate = UpdatedByObserverForTesting()
+    private var toUpdateObjects =
+        mutableListOf<UpdatedByObserverForTesting>() // for testing multiple observer
 
     // Create observer
-    private var observer = ProjectCommandQueueObserver_ForTesting(toUpdate)
-    private val observers: MutableList<ProjectCommandQueueObserver_ForTesting> = mutableListOf() // for testing multiple observer
+    private var observer = ProjectCommandQueueObserverForTesting(toUpdate)
+    private val observers: MutableList<ProjectCommandQueueObserverForTesting> =
+        mutableListOf() // for testing multiple observer
 
 
     @Before
     fun setup() {
         for (idx in 1..10) {
-            val toUpdate = UpdatedByObserver_ForTesting()
-            observers.add(ProjectCommandQueueObserver_ForTesting(toUpdate))
+            val toUpdate = UpdatedByObserverForTesting()
+            observers.add(ProjectCommandQueueObserverForTesting(toUpdate))
             toUpdateObjects.add(toUpdate)
         }
     }
@@ -58,7 +60,7 @@ class ProjectCommandObserverTests {
         projectCommandQueue.registerObserver(observer)
 
         //Test if update() is called in the observer
-        Assert.assertEquals(false, toUpdate.isUpdated() )
+        Assert.assertEquals(false, toUpdate.isUpdated())
         Assert.assertEquals(0, projectCommandQueue.getQueueLength())
         projectCommandQueue.addProjectCommand(ProjectCommandInfo(projectCommand = "Fetch Request: 1"))
         Assert.assertEquals(1, projectCommandQueue.getQueueLength())
@@ -74,7 +76,7 @@ class ProjectCommandObserverTests {
     @Test
     fun addTenObserver() {
         // Add observers to queue
-        observers.forEach() {
+        observers.forEach {
             projectCommandQueue.registerObserver(it)
         }
         toUpdateObjects.forEach {
