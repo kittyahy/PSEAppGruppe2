@@ -31,7 +31,7 @@ constructor(
     override var table: Table,
     override var admin: User = NullUser(),
     override var isOnline: Boolean = false,
-    private val userList: MutableList<User>
+    override var users: MutableList<User>
 ) : Project {
 
     init {
@@ -44,9 +44,8 @@ constructor(
     @Deprecated("Properties of Project should be accessed directly, access via Skeleton is deprecated")
     override fun getProjectSkeleton() = skeleton
 
-    override fun getUsers() = userList.toList()
-    override fun addUsers(users: Collection<User>) {
-        userList.addAll(users)
+    override fun addUsers(usersToAdd: Collection<User>) {
+        users.addAll(usersToAdd)
     }
 
     override fun createTransformationFromString(transformationString: String): Project.DataTransformation<out Any> {

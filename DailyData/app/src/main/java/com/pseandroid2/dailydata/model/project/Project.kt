@@ -135,7 +135,7 @@ interface Project {
 
     var isOnline: Boolean
 
-    fun getUsers(): Collection<User>
+    var users: MutableList<User>
     fun addUsers(users: Collection<User>)
 
     fun createTransformationFromString(transformationString: String): DataTransformation<out Any>
@@ -143,8 +143,8 @@ interface Project {
     @Suppress("Deprecation")
     fun <D : Any> createDataTransformation(
         function: TransformationFunction<D>,
-        vararg cols: Int = IntArray(table.getLayout().getSize()) { it }
-    ) = DataTransformation(table, function, *cols)
+        cols: List<Int> = IntArray(table.getLayout().getSize()) { it }.toList()
+    ) = DataTransformation(table, function, cols)
 
     /**
      * @param D Type of the elements that this DataTransformation will output as DataSets
@@ -154,7 +154,7 @@ interface Project {
     constructor(
         private val table: Table,
         private val function: TransformationFunction<D>,
-        private vararg val cols: Int
+        val cols: List<Int>
     ) {
 
         fun recalculate(): List<D> {
