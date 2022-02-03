@@ -2,6 +2,7 @@ package com.pseandroid2.dailydata.ui.project.data.input
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
@@ -127,11 +128,12 @@ class ProjectDataInputScreenViewModel @Inject constructor(
                     if (initialProject.addRowIsPossible().first()) {
                         initialProject.addRow(Row(id = 0, elements = columnValues))
                         val mutable = columnValues.toMutableList()
+                        val currentTime = LocalTime.now()
                         for (index in mutable.indices) {
                             if(columns[index].dataType != DataType.TIME) {
                                 mutable[index] = columns[index].dataType.initialValue
                             } else {
-                                mutable[index] = LocalTime.now().toString()
+                                mutable[index] = LocalTime.of(currentTime.hour, currentTime.minute).toString()
                             }
                         }
                         columnValues = mutable.toList()

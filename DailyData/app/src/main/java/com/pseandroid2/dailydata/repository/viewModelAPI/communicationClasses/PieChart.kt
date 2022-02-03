@@ -75,6 +75,10 @@ class PieChart(
         return PieChart(id, dataTrapo, settings)
     }
 
+    fun addMappingColor(index : Int, color : Int) {
+        //Todo(von Robin)
+    }
+
     fun addMappingColorIsPossible(): Flow<Boolean> {
         //Todo replace with valid proof
         val flow = MutableSharedFlow<Boolean>()

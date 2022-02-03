@@ -33,3 +33,16 @@ class Post(
 ) {
     //Todo implementierung
 }
+
+data class TemplateDetailWithPicture(
+    val id : Int,
+    val title : String,
+    val detailImage : Bitmap,
+    val projectTemplate : Boolean
+)
+
+data class PostPreviewWithPicture(
+    val id : Int = 0,
+    val preview : String = "Title",
+    val previewPicture : Bitmap? = null
+)

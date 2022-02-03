@@ -83,7 +83,6 @@ class ProjectCreationScreenViewModel @Inject constructor(
     init {
         val id = savedStateHandle.get<Int>("projectTemplateId")!!
         if(id != -1) {
-            /*TODO("Anton was soll das?")
             viewModelScope.launch {
                 val template = repository.serverHandler.getProjectTemplate(postId = id)
                 title = template.titel
@@ -94,8 +93,6 @@ class ProjectCreationScreenViewModel @Inject constructor(
                 notifications = template.notifications
                 graphs = template.graphTemplates.map { Graph.createFromTemplate(it) }
             }
-
-             */
         }
     }
 

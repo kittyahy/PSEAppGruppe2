@@ -41,7 +41,7 @@ class TemplatesScreenViewModel @Inject constructor(
     private val _uiEvent = MutableSharedFlow<UiEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
 
-    var tabs by mutableStateOf( listOf<TemplateTabs>())
+    var tabs = TemplateTabs.values()
         private set
     var tab by mutableStateOf(0)
         private set

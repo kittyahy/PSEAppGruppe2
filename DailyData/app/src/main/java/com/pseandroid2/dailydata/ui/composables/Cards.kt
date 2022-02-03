@@ -13,30 +13,34 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.pseandroid2.dailydata.R
 
 @Composable
-fun ServerCard(
+fun PreviewCard(
     title : String,
     image : ImageBitmap,
     imageClickable : Boolean,
     onImageClick : () -> Unit = { },
-    onIconClick : () -> Unit
+    onIconClick : () -> Unit,
+    icon : ImageVector
 ) {
-    Card(
-        modifier = Modifier
-            .padding(20.dp)
-            .width(400.dp),
-        shape = MaterialTheme.shapes.medium,
-        elevation = 10.dp
+    Card(modifier = Modifier
+        .width(400.dp),
+        elevation = 4.dp,
+        shape = RectangleShape
     ) {
         Column (
-            modifier = Modifier.padding(10.dp),
-            verticalArrangement = Arrangement.spacedBy(5.dp)
+            verticalArrangement = Arrangement.spacedBy(4.dp),
+            modifier = Modifier.padding(bottom = 4.dp)
         ){
 
             Image(
@@ -47,12 +51,12 @@ fun ServerCard(
                     .clickable(enabled = imageClickable, onClick = onImageClick)
             )
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(text = title)
                 Icon(
-                    imageVector = Icons.Default.Download,
+                    imageVector = icon,
                     contentDescription = "",
                     modifier = Modifier.clickable { onIconClick() }
                 )
