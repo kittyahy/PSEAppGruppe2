@@ -17,7 +17,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
-package com.pseandroid2.dailydataserver.onlineDatabase.requestParameters.deltaController;
+package com.pseandroid2.dailydataserver.onlineDatabase.requestParameters;
 
 import lombok.Getter;
 import lombok.Setter;

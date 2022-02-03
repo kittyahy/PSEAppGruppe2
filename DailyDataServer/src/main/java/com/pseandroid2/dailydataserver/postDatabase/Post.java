@@ -39,7 +39,7 @@ import java.util.Objects;
 public class Post {
     @Id
     public int postId;
-    private byte[] postPreviewImage;
+    private Byte[] postPreviewImage;
     private String previewTitle;
     private String createdBy;
     private int templateIds;
@@ -53,7 +53,7 @@ public class Post {
      * @param createdBy        the user, who upload the post.
      * @param previewTitle     the title of the post.
      */
-    public Post(int postId, byte[] postPreviewImage, String createdBy, String previewTitle) {
+    public Post(int postId,Byte[] postPreviewImage, String createdBy, String previewTitle) {
         this.postId = postId;
         this.postPreviewImage = postPreviewImage;
         this.createdBy = createdBy;
