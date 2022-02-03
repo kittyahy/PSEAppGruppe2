@@ -44,7 +44,7 @@ interface ServerEndpoints {
     @GET("greet")
     fun greet(): Call<String>
 
-    // TEST TODO: Wahrscheinlich entfernen
+    // TEST TODO: Probably remove or change path later
     @GET("test")
     fun getPostsFromUser(@Header("token") token: String): Call<List<Int>>
 

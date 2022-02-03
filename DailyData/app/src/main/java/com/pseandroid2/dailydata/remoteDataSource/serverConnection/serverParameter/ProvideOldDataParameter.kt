@@ -19,8 +19,6 @@
 */
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter
 
-import java.time.LocalDateTime
-
 /**
  * A dataclass which will be send to the server. Contains the parameters needed to the server for answering a fetch request
  *

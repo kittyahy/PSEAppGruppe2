@@ -330,9 +330,9 @@ class RESTAPI {
         return call.execute().body() ?: emptyList()
     }
 
-    // TODO: This method is just for testing
     /**
      * Gets all the postIDs from the posts which one user uploaded
+     * Note: This method is just for testing
      *
      * @param authToken:    The authentication token
      * @return List<Int>:   The postIDs from the posts

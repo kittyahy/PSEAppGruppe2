@@ -29,7 +29,7 @@ import com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.UpdatedByO
  */
 class ProjectCommandQueueObserverForTesting(toUpdate: UpdatedByObserverForTesting) :
     ProjectCommandQueueObserver {
-    var toUpdateObject = toUpdate
+    private var toUpdateObject = toUpdate
 
     /**
      * updates the toUpdateObject
