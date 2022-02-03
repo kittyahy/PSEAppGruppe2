@@ -26,6 +26,10 @@ import android.graphics.drawable.Drawable
 import com.google.gson.Gson
 import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.model.graph.GraphType
+import com.pseandroid2.dailydata.model.graph.LineChart.Companion.DOT_COLOR_KEY
+import com.pseandroid2.dailydata.model.graph.LineChart.Companion.LINE_STYLE_KEY
+import com.pseandroid2.dailydata.model.graph.LineChart.Companion.LINE_STYLE_NONE
+import com.pseandroid2.dailydata.model.graph.LineChart.Companion.LINE_STYLE_SOLID
 import com.pseandroid2.dailydata.model.graph.Graph as ModelGraph
 import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.project.ProjectBuilder
@@ -68,16 +72,16 @@ fun ModelGraph<*, *>.toViewGraph(layout: TableLayout): Graph {
         GraphType.FLOAT_LINE_CHART, GraphType.TIME_LINE_CHART, GraphType.INT_LINE_CHART -> {
             //TODO getImage probably shouldn't have a NPE thrown, DotSize should be dependent on graph settings
             val dotColor =
-                if (settings.containsKey(com.pseandroid2.dailydata.model.graph.LineChart.DOT_COLOR_KEY)) {
-                    Color.parseColor(settings[com.pseandroid2.dailydata.model.graph.LineChart.DOT_COLOR_KEY])
+                if (settings.containsKey(DOT_COLOR_KEY)) {
+                    Color.parseColor(settings[DOT_COLOR_KEY])
                 } else {
                     Color.BLACK
                 }
             val lineStyle =
-                if (settings.containsKey(com.pseandroid2.dailydata.model.graph.LineChart.LINE_STYLE_KEY)) {
-                    when (settings[com.pseandroid2.dailydata.model.graph.LineChart.LINE_STYLE_KEY]) {
-                        com.pseandroid2.dailydata.model.graph.LineChart.LINE_STYLE_NONE -> LineType.NONE
-                        com.pseandroid2.dailydata.model.graph.LineChart.LINE_STYLE_SOLID -> LineType.CONTINUOUS
+                if (settings.containsKey(LINE_STYLE_KEY)) {
+                    when (settings[LINE_STYLE_KEY]) {
+                        LINE_STYLE_NONE -> LineType.NONE
+                        LINE_STYLE_SOLID -> LineType.CONTINUOUS
                         else -> LineType.CONTINUOUS
                     }
                 } else {
@@ -96,8 +100,8 @@ fun ModelGraph<*, *>.toViewGraph(layout: TableLayout): Graph {
             }
             LineChart(
                 this.id,
-                this.getImage()!!,
-                DotSize.MEDIUM,
+                this.getImage()!!, //TODO
+                DotSize.MEDIUM, //TODO
                 dotColor,
                 lineStyle,
                 columns
