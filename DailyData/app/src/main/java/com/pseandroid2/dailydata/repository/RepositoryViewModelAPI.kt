@@ -47,9 +47,8 @@ class RepositoryViewModelAPI(
         TODO("GraphTemplateFlow"),
         appDataBase,
         ExecuteQueue(
-            appDataBase,
-            remoteDataSourceAPI,
-            PublishQueue(appDataBase, remoteDataSourceAPI)
+            ,
+            PublishQueue()
         )
     )
 }

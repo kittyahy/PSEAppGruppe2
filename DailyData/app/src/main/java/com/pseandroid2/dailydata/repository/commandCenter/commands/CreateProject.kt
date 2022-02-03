@@ -1,9 +1,8 @@
 package com.pseandroid2.dailydata.repository.commandCenter.commands
 
-import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.project.SimpleProjectBuilder
-import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
+import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Button
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Column
@@ -36,8 +35,7 @@ class CreateProject(
     override val publishable: Boolean = false
 
     override suspend fun execute(
-        appDataBase: AppDataBase,
-        remoteDataSourceAPI: RemoteDataSourceAPI,
+        repositoryViewModelAPI: RepositoryViewModelAPI,
         publishQueue: PublishQueue
     ) {
         val pb = SimpleProjectBuilder()
@@ -51,21 +49,20 @@ class CreateProject(
         notification.forEach { notification -> notification.addYourself(pb) }
 
         val project: Project = pb.build()
-        val prod = appDataBase.projectCDManager().insertProject(project)
+        val prod = repositoryViewModelAPI.appDataBase.projectCDManager().insertProject(project)
         projectID = prod.id
         projectIDReturn?.emit(prod.id)
-        super.execute(appDataBase, remoteDataSourceAPI, publishQueue)
+        super.execute(repositoryViewModelAPI, publishQueue)
     }
 
     override suspend fun publish(
-        appDataBase: AppDataBase,
-        remoteDataSourceAPI: RemoteDataSourceAPI,
+        repositoryViewModelAPI: RepositoryViewModelAPI,
         publishQueue: PublishQueue
     ): Boolean {
         //ReserveServerSlot
-        onlineProjectID = remoteDataSourceAPI.addProject()
+        onlineProjectID = repositoryViewModelAPI.remoteDataSourceAPI.addProject()
         //Make Created Project Online Project
-        appDataBase.projectDataDAO().setOnlineID(projectID!!, onlineProjectID!!)
-        return super.publish(appDataBase, remoteDataSourceAPI, publishQueue)
+        repositoryViewModelAPI.appDataBase.projectDataDAO().setOnlineID(projectID!!, onlineProjectID!!)
+        return super.publish(repositoryViewModelAPI, publishQueue)
     }
 }

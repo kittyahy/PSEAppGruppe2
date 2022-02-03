@@ -66,7 +66,7 @@ class CreateProjectTest {
             createProject.execute(
                 appDataBase,
                 remoteDataSourceAPI,
-                publishQueue
+                publishQueue,
             )
         }
         task.await()

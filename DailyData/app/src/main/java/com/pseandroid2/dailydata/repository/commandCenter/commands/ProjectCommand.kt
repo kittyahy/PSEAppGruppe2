@@ -1,7 +1,6 @@
 package com.pseandroid2.dailydata.repository.commandCenter.commands
 
-import com.pseandroid2.dailydata.model.database.AppDataBase
-import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
+import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
 import java.time.LocalDateTime
@@ -23,18 +22,16 @@ abstract class ProjectCommand(
     abstract val publishable: Boolean
     var cameFromServer = false
     open suspend fun execute(
-        appDataBase: AppDataBase,
-        remoteDataSourceAPI: RemoteDataSourceAPI,
+        repositoryViewModelAPI: RepositoryViewModelAPI,
         publishQueue: PublishQueue
     ) {
-        if (publish(appDataBase, remoteDataSourceAPI, publishQueue)) {
+        if (publish(repositoryViewModelAPI, publishQueue)) {
             publishQueue.add(this)
         }
     }
 
     open suspend fun publish(
-        appDataBase: AppDataBase,
-        remoteDataSourceAPI: RemoteDataSourceAPI,
+        repositoryViewModelAPI: RepositoryViewModelAPI,
         publishQueue: PublishQueue
     ): Boolean {
         return onlineProjectID != null && !cameFromServer && publishable

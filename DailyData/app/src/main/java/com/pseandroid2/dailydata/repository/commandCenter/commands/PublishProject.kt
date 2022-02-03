@@ -1,7 +1,6 @@
 package com.pseandroid2.dailydata.repository.commandCenter.commands
 
-import com.pseandroid2.dailydata.model.database.AppDataBase
-import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
+import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
 
@@ -9,11 +8,10 @@ class PublishProject(private val id: Int, private val project: Project) : Projec
     override val publishable: Boolean = true
 
     override suspend fun publish(
-        appDataBase: AppDataBase,
-        remoteDataSourceAPI: RemoteDataSourceAPI,
+        repositoryViewModelAPI: RepositoryViewModelAPI,
         publishQueue: PublishQueue
     ): Boolean {
-        return super.publish(appDataBase, remoteDataSourceAPI, publishQueue)
+        return super.publish(repositoryViewModelAPI, publishQueue)
     }
 
     companion object {
@@ -23,19 +21,18 @@ class PublishProject(private val id: Int, private val project: Project) : Projec
     }
 
     override suspend fun execute(
-        appDataBase: AppDataBase,
-        remoteDataSourceAPI: RemoteDataSourceAPI,
+        repositoryViewModelAPI: RepositoryViewModelAPI,
         publishQueue: PublishQueue
     ) {
-        appDataBase.projectDataDAO().setOnlineID(
+        repositoryViewModelAPI.appDataBase.projectDataDAO().setOnlineID(
             project.id,
-            remoteDataSourceAPI.addProject()
+            repositoryViewModelAPI.remoteDataSourceAPI.addProject()
         ) //Todo Fehlerbehandlung, falls publishen fehl schlägt
         project.isOnlineProject = true
-        if (publish(appDataBase, remoteDataSourceAPI, publishQueue)) {
+        if (publish(repositoryViewModelAPI, publishQueue)) {
             publishQueue.add(
                 CreateProject(
-                    remoteDataSourceAPI.getUserID(), //Todo mit Arne Absprechen, was wir nehmen
+                    repositoryViewModelAPI.remoteDataSourceAPI.getUserID(), //Todo mit Arne Absprechen, was wir nehmen
                     project.title,
                     project.description,
                     project.wallpaper,
