@@ -11,7 +11,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 
-class GraphTemplateFlow(private val templateId: Int, private val db: AppDataBase) :
+class GraphTemplateFlowProvider(private val templateId: Int, private val db: AppDataBase) :
     FlowProvider<GraphTemplate?>() {
     private var template: GraphTemplate = SimpleGraphTemplate(type = GraphType.PIE_CHART)
     override suspend fun initialize() = coroutineScope {
