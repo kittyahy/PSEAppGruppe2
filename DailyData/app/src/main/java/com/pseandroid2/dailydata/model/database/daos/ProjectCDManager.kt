@@ -79,7 +79,7 @@ class ProjectCDManager(
             }
         }
 
-        for (user: User in project.getUsers()) {
+        for (user: User in project.users) {
             projectDAO.addUser(newID, user)
         }
 
