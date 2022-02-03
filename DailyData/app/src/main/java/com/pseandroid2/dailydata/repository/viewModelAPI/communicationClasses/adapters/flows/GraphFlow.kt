@@ -59,7 +59,7 @@ class GraphFlow(
     }*/
 
     fun getGraphs(): Flow<List<Graph>> {
-        return GraphFlowProvider().provideFlow.distinctUntilChanged().map { graphs ->
+        return GraphFlowProvider(projectId, db).provideFlow.distinctUntilChanged().map { graphs ->
             val graphList = mutableListOf<Graph>()
             for (graph in graphs) {
                 graphList.add(
