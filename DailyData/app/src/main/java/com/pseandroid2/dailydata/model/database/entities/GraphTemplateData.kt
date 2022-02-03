@@ -5,6 +5,7 @@ import com.pseandroid2.dailydata.model.users.User
 
 data class GraphTemplateData(
     val id: Int,
+    val projectTemplateId: Int,
     val name: String,
     val description: String,
     val type: GraphType,
