@@ -28,6 +28,7 @@ import com.google.firebase.ktx.Firebase
 
 /**
  * Carries out firebase authentication calls and has firebase parameter like the current user of the authentication token
+ *
  * @param timeout: The time firebase calls can take until they are canceled by a Timeout (is passed for testing timeout in tests)
  */
 class FirebaseManager(timeout: Long?) {
@@ -41,7 +42,7 @@ class FirebaseManager(timeout: Long?) {
      * Registers a new user with the requested sign in type.
      * Note: The registration will also fail, if there already exists an account with the registration parameters
      *
-     * @param email: The email of the user that should be registered
+     * @param email:    The email of the user that should be registered
      * @param password: The password of the user that should be registered
      */
     fun registerUserWithEmailAndPassword(email: String, password: String): FirebaseReturnOptions {
@@ -54,7 +55,7 @@ class FirebaseManager(timeout: Long?) {
         val task = auth.createUserWithEmailAndPassword(email, password)
 
         while (!task.isComplete) {
-            if(System.currentTimeMillis() - startTime >= timeoutTime) {
+            if (System.currentTimeMillis() - startTime >= timeoutTime) {
                 return returnParameter
             }
         }
@@ -74,7 +75,7 @@ class FirebaseManager(timeout: Long?) {
     /**
      * Signs in an already existing user with email and password
      *
-     * @param email: The email of the user that should be signed in
+     * @param email:    The email of the user that should be signed in
      * @param password: The password of the user that should be signed in
      */
     fun signInWithEmailAndPassword(email: String, password: String): FirebaseReturnOptions {
@@ -87,7 +88,7 @@ class FirebaseManager(timeout: Long?) {
 
         val task = auth.signInWithEmailAndPassword(email, password)
 
-        while(!task.isComplete) {
+        while (!task.isComplete) {
             if (System.currentTimeMillis() - startTime > timeoutTime) {
                 return returnParameter
             }
@@ -140,7 +141,7 @@ class FirebaseManager(timeout: Long?) {
         if (user == null || user.displayName == null) {
             return ""
         }
-        return user.displayName?:""
+        return user.displayName ?: ""
     }
 
     /**
@@ -153,7 +154,7 @@ class FirebaseManager(timeout: Long?) {
         if (user == null || user.email == null) {
             return ""
         }
-        return user.email?:""
+        return user.email ?: ""
     }
 
     /**
@@ -174,7 +175,7 @@ class FirebaseManager(timeout: Long?) {
      *
      * @return String: The token of the signed in user. If no user is signed in return ""
      */
-    fun getToken(): String{
+    fun getToken(): String {
         refreshIdToken(false)
         return idToken
     }

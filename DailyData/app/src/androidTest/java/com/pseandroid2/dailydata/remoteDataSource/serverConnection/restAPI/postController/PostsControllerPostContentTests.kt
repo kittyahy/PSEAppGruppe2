@@ -39,10 +39,10 @@ class PostsControllerPostContentTests {
         postID = restAPI.addPost(
             PostPreviewWrapper(title = "project preview"),
             Pair(
-                "\"project template\"",
+                "project template",
                 TemplateDetailWrapper(byteArray)
             ), // Adds quotation marks because the server can't recognize is otherwise as a String (bug)
-            listOf(Pair("\"graph template\"", TemplateDetailWrapper())), authToken
+            listOf(Pair("graph template", TemplateDetailWrapper())), authToken
         )
         Assert.assertTrue(postID > 0)
 

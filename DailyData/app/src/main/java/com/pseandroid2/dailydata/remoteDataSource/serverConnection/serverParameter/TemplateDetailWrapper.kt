@@ -3,8 +3,8 @@ package com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParame
 /**
  * A data class for uploading a template of a post. It has the template detail image and it's title
  *
- * @param templateDetailImage: The template detail image
- * @param title: The title of the post
+ * @param templateDetailImage:  The template detail image
+ * @param title:                The title of the post
  */
 data class TemplateDetailWrapper(val templateDetailImage: ByteArray =  ByteArray(0),
                                  val title: String = "template") {

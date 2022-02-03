@@ -1,8 +1,8 @@
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI.deltaController
 
+import android.util.Log
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
-import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
 import org.junit.AfterClass
@@ -24,20 +24,19 @@ class ProvideOldDataTests {
     private val email2 = "pseFan@student.kit.edu"
     private val password2 = "mehrSpaßAlsBeiPSEGibtsNicht"
     private val userID2 = "a5sYrdnd1EX2TtkJAEGGMHqebUq2"
-    private var email3 = "unermüdlicherStudent@student.kit.edu"
-    private var password3 = "ohneKaffeeKeinPSE"
-    private val userID3 = "CBVFbOwfHmTLAA2d7Q9wt6RXQyH2"
-
     private var projectID: Long = -1
 
     @Before
     fun setup() {
-        // Generate valid firebase authentication tokens
-        Assert.assertEquals(FirebaseReturnOptions.SINGED_IN, fm.signInWithEmailAndPassword(email3, password3))
-        authToken3 = fm.getToken()
-        Assert.assertEquals(FirebaseReturnOptions.SINGED_IN, fm.signInWithEmailAndPassword(email2, password2))
+        Assert.assertEquals(
+            FirebaseReturnOptions.SINGED_IN,
+            fm.signInWithEmailAndPassword(email2, password2)
+        )
         authToken2 = fm.getToken()
-        Assert.assertEquals(FirebaseReturnOptions.SINGED_IN, fm.signInWithEmailAndPassword(email, password))
+        Assert.assertEquals(
+            FirebaseReturnOptions.SINGED_IN,
+            fm.signInWithEmailAndPassword(email, password)
+        )
         authToken = fm.getToken()
 
         // Create new project
@@ -48,30 +47,34 @@ class ProvideOldDataTests {
 
         Assert.assertTrue(restAPI.demandOldData(projectID, "request information", authToken))
 
-        setTeardown(restAPI, projectID, authToken, userID, userID2, userID3)
+        setTeardown(restAPI, projectID, authToken, userID, userID2)
     }
 
-    companion object Teardown{
+    companion object Teardown {
         private var restAPI: RESTAPI? = null
         private var projectID: Long = -1
         private var authToken: String = ""
         private var userToRemove1: String = ""
         private var userToRemove2: String = ""
-        private var userToRemove3: String = ""
 
-        fun setTeardown(restapi: RESTAPI, projectID: Long, authToken: String, userToRemove1: String, userToRemove2: String, userToRemove3: String) {
+        fun setTeardown(
+            restapi: RESTAPI,
+            projectID: Long,
+            authToken: String,
+            userToRemove1: String,
+            userToRemove2: String
+        ) {
             restAPI = restapi
             Teardown.projectID = projectID
             Teardown.authToken = authToken
             Teardown.userToRemove1 = userToRemove1
             Teardown.userToRemove2 = userToRemove2
-            Teardown.userToRemove3 = userToRemove3
         }
 
         @AfterClass
-        @JvmStatic fun teardown() {
+        @JvmStatic
+        fun teardown() {
             // Remove all users from project so that the project gets removed
-            restAPI?.removeUser(userToRemove3, projectID, authToken)
             restAPI?.removeUser(userToRemove2, projectID, authToken)
             restAPI?.removeUser(userToRemove1, projectID, authToken)
         }
@@ -79,18 +82,16 @@ class ProvideOldDataTests {
 
     @Test
     fun provideOldData() {
-        var downloadedFetchRequests = restAPI.getFetchRequests(projectID, authToken2) as MutableList<FetchRequest>
-
-        var fetchRequestToAnswer: FetchRequest? = null
-        downloadedFetchRequests.forEach {
-            if (it.requestInfo == "request information") {
-                fetchRequestToAnswer = it
-            }
-        }
-        Assert.assertNotEquals(null, fetchRequestToAnswer)
-
-        Assert.assertTrue(restAPI.provideOldData("project Command",
-            fetchRequestToAnswer!!.user, LocalDateTime.of(0, 1, 1, 1, 1),
-            userID, projectID, true, authToken2))
+        Assert.assertTrue(
+            restAPI.provideOldData(
+                projectCommand = "project Command",
+                forUser = userID,
+                initialAdded = LocalDateTime.now(),
+                initialAddedBy = userID,
+                projectID = projectID,
+                wasAdmin = false,
+                authToken = authToken2
+            )
+        )
     }
 }

@@ -26,7 +26,7 @@ package com.pseandroid2.dailydata.remoteDataSource.userManager
  * @return true: The operation succeeded as planned - No error happened
  *         false: something went wrong
  */
-enum class FirebaseReturnOptions (val success: Boolean){
+enum class FirebaseReturnOptions(val success: Boolean) {
     REGISTERED(true),
     REGISTRATION_FAILED(false),
     SINGED_IN(true),

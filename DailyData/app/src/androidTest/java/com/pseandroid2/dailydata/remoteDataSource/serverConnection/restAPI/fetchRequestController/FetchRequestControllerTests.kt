@@ -1,8 +1,6 @@
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI.fetchRequestController
 
-import android.util.Log
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
-import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
 import org.junit.AfterClass
@@ -104,12 +102,6 @@ class FetchRequestControllerTests {
         Assert.assertEquals(0, restAPI.getFetchRequests(projectID, authToken3).size)
     }
     */
-
-    /*
-
-     */
-
-
 
     // TODO: Test Ideas: 1. getFetchrequests from the same account who send them, 2.
 

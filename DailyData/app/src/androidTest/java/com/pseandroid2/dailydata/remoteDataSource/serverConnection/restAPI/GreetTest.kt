@@ -8,12 +8,13 @@ import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
 
 class GreetTest {
-
+    /*
     @Test
     fun greet() {
         var restAPI: RESTAPI = RESTAPI()
 
         Assert.assertTrue(restAPI.greet())
     }
+    */
     //TODO Tests auskommentieren
 }

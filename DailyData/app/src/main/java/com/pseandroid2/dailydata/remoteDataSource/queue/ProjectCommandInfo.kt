@@ -18,6 +18,7 @@
 
 */
 package com.pseandroid2.dailydata.remoteDataSource.queue
+
 import java.time.LocalDateTime
 
 /**
@@ -28,7 +29,9 @@ import java.time.LocalDateTime
  * @param projectCommand:   The project command as JSON
  * @param wentOnline:       the time, when the Delta initially was added to the server
  */
-data class ProjectCommandInfo(val commandByUser: String = "",
-                              val isProjectAdmin: Boolean = false,
-                              val projectCommand: String = "",
-                              val wentOnline: LocalDateTime = LocalDateTime.parse("0001-01-01T01:01:01"))
+data class ProjectCommandInfo(
+    val commandByUser: String = "",
+    val isProjectAdmin: Boolean = false,
+    val projectCommand: String = "",
+    val wentOnline: LocalDateTime = LocalDateTime.parse("0001-01-01T01:01:01")
+)
