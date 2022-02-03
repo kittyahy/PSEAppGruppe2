@@ -14,10 +14,12 @@ import java.util.List;
 public class Test {
     private PostsRepository pr;
 
+    @Deprecated(since = "Only for testing")
     public Test(PostsRepository p){
         pr = p;
     }
 
+    @Deprecated(since = "Only for testing")
     @RequestMapping("/test")
     public List<Integer> test(@RequestAttribute String user){
         List<Post> postList = pr.findByCreatedBy(user);
