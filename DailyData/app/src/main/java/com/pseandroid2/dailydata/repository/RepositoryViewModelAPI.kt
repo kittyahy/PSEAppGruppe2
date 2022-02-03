@@ -31,12 +31,16 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ad
 import kotlinx.coroutines.InternalCoroutinesApi
 
 class RepositoryViewModelAPI(
+    @Deprecated("Internal function, should not be used outside the RepositoryViewModelAPI")
     val appDataBase: AppDataBase,
+    @Deprecated("Internal function, should not be used outside the RepositoryViewModelAPI")
     val remoteDataSourceAPI: RemoteDataSourceAPI
 ) {
+    @Suppress("DEPRECATION")
     val serverHandler = ServerHandler(appDataBase, remoteDataSourceAPI)
 
     @InternalCoroutinesApi
+    @Suppress("DEPRECATION")
     val projectHandler = ProjectHandler(
         ProjectPreviewFlow(appDataBase.projectDataDAO().getAllProjectData()),
         ProjectTemplateFlow(TODO("ProjectTemplateFlowParameter")),

@@ -49,7 +49,7 @@ class ProjectHandler(
     val projectTemplateFlow: ProjectTemplateFlow,
     val graphTemplateFlow: GraphTemplateFlow,
     private val appDataBase: AppDataBase,
-    val executeQueue: ExecuteQueue
+    private val executeQueue: ExecuteQueue
 ) {
     private val scope = CoroutineScope(Dispatchers.IO)
     fun getProjectByID(id: Int): Flow<Project> {
