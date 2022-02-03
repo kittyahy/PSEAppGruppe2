@@ -23,7 +23,6 @@ package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
 import android.graphics.Bitmap
 import com.pseandroid2.dailydata.model.database.entities.ProjectTemplateData
-import com.pseandroid2.dailydata.model.table.TableLayout
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import kotlinx.coroutines.flow.Flow
 
@@ -83,7 +82,7 @@ class ProjectTemplate : Identifiable {
     }
 
     override lateinit var executeQueue: ExecuteQueue
-override lateinit var project: Project
+    override lateinit var project: Project
     override val id: Int
         get() = TODO("Not yet implemented")
 

@@ -4,7 +4,5 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Gr
 
 
 class GraphTemplateFlow(
-    var templates : List<GraphTemplate>
-) {
-
-}
+    var templates: List<GraphTemplate>
+)

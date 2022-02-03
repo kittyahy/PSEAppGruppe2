@@ -27,7 +27,8 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 
 @InternalCoroutinesApi
-class ProjectPreviewFlow(flow: Flow<List<ProjectData>>) : FlowAdapter<ProjectData, ProjectPreview> (flow){
+class ProjectPreviewFlow(flow: Flow<List<ProjectData>>) :
+    FlowAdapter<ProjectData, ProjectPreview>(flow) {
     override fun provide(i: ProjectData): ProjectPreview {
         return ProjectPreview(i)
     }

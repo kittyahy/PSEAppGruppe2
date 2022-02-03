@@ -25,7 +25,6 @@ import android.graphics.Bitmap
 import android.view.View
 import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.model.graph.Generator
-import com.pseandroid2.dailydata.model.graph.Graph as ModelGraph
 import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.project.ProjectBuilder
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
@@ -33,6 +32,7 @@ import com.pseandroid2.dailydata.util.IOUtil
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.runBlocking
+import com.pseandroid2.dailydata.model.graph.Graph as ModelGraph
 
 
 abstract class Graph : Identifiable, Convertible<ModelGraph<*, *>> {
@@ -56,12 +56,15 @@ abstract class Graph : Identifiable, Convertible<ModelGraph<*, *>> {
     abstract val typeName: String
     abstract var appDataBase: AppDataBase
 
+    @Deprecated("Internal function, should not be used outside the RepositoryViewModelAPI")
     override fun connectToRepository(repositoryViewModelAPI: RepositoryViewModelAPI) {
         appDataBase = repositoryViewModelAPI.appDataBase
+        @Suppress("DEPRECATION")
         super.connectToRepository(repositoryViewModelAPI)
     }
 
     override fun addYourself(builder: ProjectBuilder<out Project>) {
+        @Suppress("DEPRECATION")
         builder.addGraphs(listOf(toDBEquivalent())) //TODO Arne: es kommen Änderungen
     }
 

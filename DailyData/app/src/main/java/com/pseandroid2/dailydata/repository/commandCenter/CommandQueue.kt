@@ -14,6 +14,7 @@ abstract class CommandQueue
     private var commandQueue: MutableList<ProjectCommand> = ArrayList<ProjectCommand>()
     private val mutex = Mutex()
     protected val scope = CoroutineScope(Dispatchers.IO)
+
     init {
         scope.launch {
             //Todo lösung finden was mit commands passieren soll, die vor beendigen der App nicht ausgeführt werden können
@@ -40,7 +41,7 @@ abstract class CommandQueue
     }
 
     abstract suspend fun performCommandAction(command: ProjectCommand)
-    abstract suspend fun commandActionSucceedsProbably() : Boolean
+    abstract suspend fun commandActionSucceedsProbably(): Boolean
     abstract suspend fun beforeCommandActionAttempt(command: ProjectCommand)
     abstract suspend fun commandFailedAction(command: ProjectCommand)
 

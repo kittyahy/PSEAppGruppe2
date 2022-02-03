@@ -27,20 +27,29 @@ import kotlinx.coroutines.flow.Flow
 
 interface Identifiable {
     val id: Int
+
+    @Deprecated("Internal function, should not be used outside the RepositoryViewModelAPI")
     var executeQueue: ExecuteQueue
+
+    @Deprecated("Internal function, should not be used outside the RepositoryViewModelAPI")
     var project: Project
     fun deleteIsPossible(): Flow<Boolean>
 
     //@throws IllegalOperationException
     suspend fun delete()
 
+    @Deprecated("Internal function, should not be used outside the RepositoryViewModelAPI")
     @OptIn(InternalCoroutinesApi::class) //Todo dringend FlowAdapter reparieren, dann fällt das weg
     fun connectToRepository(repositoryViewModelAPI: RepositoryViewModelAPI) {
+        @Suppress("DEPRECATION")
         this.executeQueue = repositoryViewModelAPI.projectHandler.executeQueue
     }
 
+    @Deprecated("Internal function, should not be used outside the RepositoryViewModelAPI")
     fun connectToProject(project: Project) {
+        @Suppress("DEPRECATION")
         this.project = project
+        @Suppress("DEPRECATION")
         this.connectToRepository(project.repositoryViewModelAPI)
     }
 }

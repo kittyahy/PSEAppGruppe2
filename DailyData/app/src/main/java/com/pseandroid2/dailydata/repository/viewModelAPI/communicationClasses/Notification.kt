@@ -22,11 +22,11 @@ package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
 import com.pseandroid2.dailydata.model.notifications.Notification
 import com.pseandroid2.dailydata.model.notifications.TimeNotification
-import com.pseandroid2.dailydata.model.project.Project as ModelProject
 import com.pseandroid2.dailydata.model.project.ProjectBuilder
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalTime
+import com.pseandroid2.dailydata.model.project.Project as ModelProject
 
 
 class Notification(
@@ -35,7 +35,7 @@ class Notification(
     val time: LocalTime
 ) : Identifiable, Convertible<Notification> {
     override lateinit var executeQueue: ExecuteQueue
-override lateinit var project: Project
+    override lateinit var project: Project
 
     constructor(timeNotification: TimeNotification) : this(
         timeNotification.id,

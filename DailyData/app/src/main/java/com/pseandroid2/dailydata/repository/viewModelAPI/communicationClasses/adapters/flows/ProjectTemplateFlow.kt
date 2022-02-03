@@ -6,9 +6,9 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 
 
-
 @InternalCoroutinesApi
-class ProjectTemplateFlow(flow: Flow<List<ProjectTemplateData>>) : FlowAdapter<ProjectTemplateData, ProjectTemplate> (flow){
+class ProjectTemplateFlow(flow: Flow<List<ProjectTemplateData>>) :
+    FlowAdapter<ProjectTemplateData, ProjectTemplate>(flow) {
     override fun provide(i: ProjectTemplateData): ProjectTemplate {
         TODO("ich hab keine ahung von dem kram")
     }

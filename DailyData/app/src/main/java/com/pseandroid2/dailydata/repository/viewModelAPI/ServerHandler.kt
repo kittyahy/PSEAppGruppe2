@@ -27,8 +27,6 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Gr
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Post
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.PostDetail
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ProjectTemplate
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 
 class ServerHandler(private val appDataBase: AppDataBase, private val api: RemoteDataSourceAPI) {
     //TODO("Anton changes")
@@ -60,11 +58,11 @@ class ServerHandler(private val appDataBase: AppDataBase, private val api: Remot
         api.registerUser(email, password, SignInTypes.EMAIL)
     }
 
-    fun downloadProjectTemplate(id : Int) {
+    fun downloadProjectTemplate(id: Int) {
 
     }
 
-    fun downloadGraphTemplate(projectId : Int, graphId : Int) {
+    fun downloadGraphTemplate(projectId: Int, graphId: Int) {
 
     }
 

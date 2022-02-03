@@ -62,7 +62,7 @@ class ProjectHandler(
         buttons: List<Button>,
         notification: List<Notification>,
         graphs: List<Graph>
-    ) = scope.async{
+    ) = scope.async {
 
         val idFlow = MutableSharedFlow<Int>()
         val createProject = CreateProject(
@@ -76,8 +76,8 @@ class ProjectHandler(
             notification,
             graphs
         )
-            executeQueue.add(createProject)
-            return@async idFlow.first()
+        executeQueue.add(createProject)
+        return@async idFlow.first()
 
     }
 
@@ -102,12 +102,12 @@ class ProjectHandler(
     }
 
     //TODO("Robin changes")
-    fun deleteProjectTemplate(id : Int) {
+    fun deleteProjectTemplate(id: Int) {
 
     }
 
     //TODO("Robin changes")
-    fun deleteGraphTemplate(id : Int) {
+    fun deleteGraphTemplate(id: Int) {
 
     }
 }

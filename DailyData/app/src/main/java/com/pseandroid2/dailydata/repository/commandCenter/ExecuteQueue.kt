@@ -5,7 +5,6 @@ import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueueObserver
 import com.pseandroid2.dailydata.repository.commandCenter.commands.CommandWrapper
 import com.pseandroid2.dailydata.repository.commandCenter.commands.ProjectCommand
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 class ExecuteQueue(
@@ -13,7 +12,7 @@ class ExecuteQueue(
     remoteDataSourceAPI: RemoteDataSourceAPI,
     private val publishQueue: PublishQueue
 ) :
-    CommandQueue(appDataBase, remoteDataSourceAPI), ProjectCommandQueueObserver{
+    CommandQueue(appDataBase, remoteDataSourceAPI), ProjectCommandQueueObserver {
     override suspend fun performCommandAction(command: ProjectCommand) {
         command.execute(appDataBase, remoteDataSourceAPI, publishQueue)
     }

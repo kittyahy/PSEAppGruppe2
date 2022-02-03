@@ -69,10 +69,13 @@ class Project(
     private val isPossibleAddColumn = mutableMapOf<DataType, MutableSharedFlow<Boolean>>()
 
     init {
+        @Suppress("DEPRECATION")
         connectToProject(this)
         for (id in getIntefiableChildred()) {
+            @Suppress("DEPRECATION")
             id.connectToProject(this)
         }
+        @Suppress("DEPRECATION")
         connectToRepository(repositoryViewModelAPI)
         for (commandClass in supportedCommands) {
             isPossible[commandClass] = MutableSharedFlow<Boolean>()
@@ -86,11 +89,12 @@ class Project(
         }
         for (type in DataType.values()) {
             isPossibleAddColumn[type] = MutableSharedFlow()
+            @Suppress("DEPRECATION")
             AddColumn.isPossible(project, type)
         }
     }
 
-
+    @Deprecated("Internal function, should not be used outside the RepositoryViewModelAPI")
     fun update(projectData: ProjectData) {
         TODO("not yet implemented")
     }
@@ -109,6 +113,7 @@ class Project(
 
     suspend fun addGraph(graph: Graph) {
         isPossible[AddGraph::class]!!.emit(false)
+        @Suppress("DEPRECATION")
         executeQueue.add(AddGraph(id, graph))
     }
 
@@ -119,6 +124,7 @@ class Project(
     //@throws IllegalOperationException
     suspend fun addRow(row: Row) {
         isPossible[AddRow::class]!!.emit(false)
+        @Suppress("DEPRECATION")
         executeQueue.add(AddRow(id, row))
     }
 
@@ -157,6 +163,7 @@ class Project(
         for (type in DataType.values()) {
             isPossibleAddColumn[type]!!.emit(false)
         }
+        @Suppress("DEPRECATION")
         executeQueue.add(AddColumn(id, column))
     }
 
@@ -187,6 +194,7 @@ class Project(
     //@throws IllegalOperationException
     suspend fun addButton(button: Button) {
         isPossible[AddButton::class]!!.emit(false)
+        @Suppress("DEPRECATION")
         executeQueue.add(AddButton(id, button))
     }
 
@@ -241,6 +249,7 @@ class Project(
         //Todo If bedingung schöner machen, keine Magic numbers und aussagekräftigere Exceptions werfen
         if (member !in members && members.size < 24 && isOnlineProject) {
             isPossible[AddMember::class]!!.emit(false)
+            @Suppress("DEPRECATION")
             executeQueue.add(AddMember(id, member))
         } else {
             throw IllegalOperationException()
@@ -337,6 +346,7 @@ class Project(
 
     suspend fun addNotification(notification: Notification) {
         isPossible[AddNotification::class]!!.emit(false)
+        @Suppress("DEPRECATION")
         executeQueue.add(AddNotification(id, notification))
     }
 
@@ -389,10 +399,13 @@ class Project(
         TODO("setButton")
     }
 
+    @Suppress("DEPRECATION")
     override fun connectToRepository(repositoryViewModelAPI: RepositoryViewModelAPI) {
         for (id in getIntefiableChildred()) {
+            @Suppress("DEPRECATION")
             id.connectToRepository(repositoryViewModelAPI)
         }
+        @Suppress("DEPRECATION")
         super.connectToRepository(repositoryViewModelAPI)
     }
 
