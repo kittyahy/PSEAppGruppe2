@@ -43,8 +43,8 @@ import com.pseandroid2.dailydata.ui.theme.DailyDataTheme
 import com.pseandroid2.dailydata.ui.composables.BottomNavItem
 import com.pseandroid2.dailydata.ui.composables.BottomNavigationBar
 import com.pseandroid2.dailydata.ui.link.LinkScreen
-import com.pseandroid2.dailydata.util.ui.Navigation
-import com.pseandroid2.dailydata.util.ui.Routes
+import com.pseandroid2.dailydata.ui.navigation.Navigation
+import com.pseandroid2.dailydata.ui.navigation.Routes
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.InternalCoroutinesApi
 

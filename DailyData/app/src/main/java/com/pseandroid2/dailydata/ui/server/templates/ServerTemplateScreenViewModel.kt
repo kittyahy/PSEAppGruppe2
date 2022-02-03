@@ -10,6 +10,7 @@ import com.pseandroid2.dailydata.util.ui.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,9 +32,15 @@ class ServerTemplateScreenViewModel @Inject constructor(
     fun onEvent(event : ServerTemplateScreenEvent) {
         when (event) {
             is ServerTemplateScreenEvent.OnGraphTemplateDownload -> {
-                repository.serverHandler.downloadGraphTemplate(event.projectId, event.graphId)
-                isProjectTemplateDialogOpen = false
-                dialogTemplateIndex = 0
+                viewModelScope.launch {
+                    if (repository.serverHandler.downloadGraphTemplateIsPossible().first()) {
+                        repository.serverHandler.downloadGraphTemplate(event.projectId, event.graphId)
+                        isProjectTemplateDialogOpen = false
+                        dialogTemplateIndex = 0
+                    } else {
+                        sendUiEvent(UiEvent.ShowToast("Could not download graph template"))
+                    }
+                }
             }
             is ServerTemplateScreenEvent.OnCloseDialog -> {
                 isProjectTemplateDialogOpen = false
@@ -44,8 +51,20 @@ class ServerTemplateScreenViewModel @Inject constructor(
                 dialogTemplateIndex = event.index
             }
             is ServerTemplateScreenEvent.OnTemplateDownload -> {
-                repository.serverHandler.downloadProjectTemplate(id = event.id)
+                viewModelScope.launch {
+                    if (repository.serverHandler.downloadProjectTemplateIsPossible().first()) {
+                        repository.serverHandler.downloadProjectTemplate(id = event.id)
+                    } else {
+                        sendUiEvent(UiEvent.ShowToast("Could not download project template"))
+                    }
+                }
             }
+        }
+    }
+
+    private fun sendUiEvent(event : UiEvent) {
+        viewModelScope.launch {
+            _uiEvent.emit(event)
         }
     }
 }

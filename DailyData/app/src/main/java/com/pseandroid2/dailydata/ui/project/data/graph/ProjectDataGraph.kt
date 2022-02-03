@@ -1,5 +1,6 @@
 package com.pseandroid2.dailydata.ui.project.data.graph
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -34,7 +35,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pseandroid2.dailydata.R
@@ -48,6 +51,7 @@ import com.pseandroid2.dailydata.ui.composables.EnumDropDownMenu
 import com.pseandroid2.dailydata.ui.project.creation.AppDialog
 import com.pseandroid2.dailydata.util.ui.Wallpapers
 import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 @InternalCoroutinesApi
@@ -56,7 +60,8 @@ fun ProjectDataGraphScreen(
     projectId : Int,
     viewModel: ProjectDataGraphScreenViewModel = hiltViewModel()
 ) {
-
+    val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
     LaunchedEffect(Unit) {
         viewModel.onEvent(ProjectDataGraphScreenEvent.OnCreate(projectId = projectId))
     }
@@ -69,16 +74,27 @@ fun ProjectDataGraphScreen(
 
     LazyColumn {
         itemsIndexed(viewModel.graphs) { index, graph ->
-            Image(
-                //useResource("image.png") { loadImageBitmap(it) }
-                bitmap = graph.image.asImageBitmap(),
-                contentDescription = "",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable {
-                        viewModel.onEvent(ProjectDataGraphScreenEvent.OnShowGraphDialog(index = index))
-                    }
-            )
+            coroutineScope.launch {
+                if(graph.image == null && graph.showIsPossible().first()) {
+                    graph.show(context = context)
+                }
+            }
+            if(graph.image != null) {
+                Image(
+                    //useResource("image.png") { loadImageBitmap(it) }
+                    bitmap = graph.image!!.asImageBitmap(),
+                    contentDescription = "",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            viewModel.onEvent(
+                                ProjectDataGraphScreenEvent.OnShowGraphDialog(
+                                    index = index
+                                )
+                            )
+                        }
+                )
+            }
         }
     }
 }
@@ -121,10 +137,12 @@ fun PieChartDialog(
     table : List<Column>
 ) {
     val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
     Column() {
         //useResource("image.png") { loadImageBitmap(it) }
         Image(
-            bitmap = graph.image.asImageBitmap(),
+            //cannot be null cause image is already shown in preview
+            bitmap = graph.image!!.asImageBitmap(),
             contentDescription = "",
             modifier = Modifier.fillMaxWidth()
         )
@@ -171,7 +189,11 @@ fun PieChartDialog(
             )
             TextButton(onClick = {
                 coroutineScope.launch {
-                    graph.addMapping(column = table[col])
+                    if (graph.addMappingIsPossible().first()) {
+                        graph.addMapping(column = table[col])
+                    } else {
+                        Toast.makeText(context, "Could not change add mapping", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }) {
                 Text(text = "Add Column")
@@ -182,7 +204,11 @@ fun PieChartDialog(
         ) {
             Checkbox(checked = graph.showPercentages, onCheckedChange = {
                 coroutineScope.launch {
-                    graph.showPercentages(show = it)
+                    if (graph.showPercentagesIsPossible().first()) {
+                        graph.showPercentages(show = it)
+                    } else {
+                        Toast.makeText(context, "Could not edit percentages", Toast.LENGTH_SHORT).show()
+                    }
                 }
             })
             Text(text = "Show Percentages")
@@ -202,6 +228,7 @@ fun LineChartDialog(
     table : List<Column>
 ) {
     val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
     Column() {
         Image(
             painter = painterResource(id = R.drawable.chart),
@@ -222,7 +249,11 @@ fun LineChartDialog(
                     tint = MaterialTheme.colors.onBackground,
                     modifier = Modifier.clickable {
                         coroutineScope.launch {
-                            graph.deleteVerticalMapping(index = index)
+                            if (graph.deleteVerticalMappingIsPossible().first()) {
+                                graph.deleteVerticalMapping(index = index)
+                            } else {
+                                Toast.makeText(context, "Could not delete mapping", Toast.LENGTH_SHORT).show()
+                            }
                         }
                     }
                 )
@@ -241,7 +272,11 @@ fun LineChartDialog(
             )
             TextButton(onClick = {
                 coroutineScope.launch {
-                    graph.addVerticalMapping(column = table[col])
+                    if (graph.addVerticalMappingIsPossible().first()) {
+                        graph.addVerticalMapping(column = table[col])
+                    } else {
+                        Toast.makeText(context, "Could not add mapping", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }) {
                 Text(text = "Add Column")
@@ -257,7 +292,11 @@ fun LineChartDialog(
                 value = graph.dotSize.representation,
                 onClick = {
                     coroutineScope.launch {
-                        graph.changeDotSize(dotSize = DotSize.values()[it])
+                        if (graph.changeDotColorIsPossible().first()) {
+                            graph.changeDotSize(dotSize = DotSize.values()[it])
+                        } else {
+                            Toast.makeText(context, "Could not change dot size", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
             )
@@ -272,7 +311,11 @@ fun LineChartDialog(
                 value = graph.dotColor.toString(),
                 onClick = {
                     coroutineScope.launch {
-                        graph.changeDotColor(color = Wallpapers.values()[it].value.toArgb())
+                        if (graph.changeDotColorIsPossible().first()) {
+                            graph.changeDotColor(color = Wallpapers.values()[it].value.toArgb())
+                        } else {
+                            Toast.makeText(context, "Could not change dot color", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
             )
@@ -287,7 +330,11 @@ fun LineChartDialog(
                 value = graph.lineType.representation,
                 onClick = {
                     coroutineScope.launch {
-                        graph.changeLineType(LineType.values()[it])
+                        if (graph.changeLineTypeIsPossible().first()) {
+                            graph.changeLineType(LineType.values()[it])
+                        } else {
+                            Toast.makeText(context, "Could not change line type", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
             )

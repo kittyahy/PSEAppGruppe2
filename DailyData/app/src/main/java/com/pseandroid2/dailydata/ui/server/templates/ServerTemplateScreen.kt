@@ -1,10 +1,12 @@
 package com.pseandroid2.dailydata.ui.server.templates
 
+import android.widget.Toast
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pseandroid2.dailydata.ui.composables.ProjectTemplateDialog
 import com.pseandroid2.dailydata.ui.composables.ServerCard
@@ -16,11 +18,14 @@ fun ServerTemplatesScreen(
     onNavigate: (UiEvent.Navigate) -> Unit,
     viewModel: ServerTemplateScreenViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
     val posts = viewModel.posts
+
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->
             when(event) {
                 is UiEvent.Navigate -> onNavigate(event)
+                is UiEvent.ShowToast -> Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
                 else -> { }
             }
         }

@@ -18,7 +18,7 @@
 
 */
 
-package com.pseandroid2.dailydata.util.ui
+package com.pseandroid2.dailydata.ui.navigation
 
 import android.os.Bundle
 import androidx.compose.runtime.Composable

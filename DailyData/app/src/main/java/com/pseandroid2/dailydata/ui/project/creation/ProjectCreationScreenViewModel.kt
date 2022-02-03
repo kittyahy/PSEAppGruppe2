@@ -34,7 +34,7 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Da
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Notification
 import com.pseandroid2.dailydata.util.ui.UiEvent
-import com.pseandroid2.dailydata.util.ui.Routes
+import com.pseandroid2.dailydata.ui.navigation.Routes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -83,6 +83,7 @@ class ProjectCreationScreenViewModel @Inject constructor(
     init {
         val id = savedStateHandle.get<Int>("projectTemplateId")!!
         if(id != -1) {
+            /*TODO("Anton was soll das?")
             viewModelScope.launch {
                 val template = repository.serverHandler.getProjectTemplate(postId = id)
                 title = template.titel
@@ -93,6 +94,8 @@ class ProjectCreationScreenViewModel @Inject constructor(
                 notifications = template.notifications
                 graphs = template.graphTemplates.map { Graph.createFromTemplate(it) }
             }
+
+             */
         }
     }
 
@@ -165,7 +168,6 @@ class ProjectCreationScreenViewModel @Inject constructor(
                     title.isBlank() -> sendUiEvent(UiEvent.ShowToast("Please Enter a title"))
                     table.isEmpty() -> sendUiEvent(UiEvent.ShowToast("Please Enter a column"))
                     else            -> {
-                        //Todo Anton neue signatur
                         viewModelScope.launch {
                             val newProject = repository.projectHandler.newProjectAsync(
                                 name = title,
