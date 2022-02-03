@@ -1,6 +1,5 @@
 package com.pseandroid2.dailydata.repository.commandCenter.commands
 
-import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.project.SimpleProjectBuilder
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
@@ -8,11 +7,12 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Bu
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Column
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Notification
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.projectParts.Table
 import kotlinx.coroutines.flow.MutableSharedFlow
+import com.pseandroid2.dailydata.model.project.Project as ModelProject
 
 class CreateProject(
-    commandByUser: String,
     private val name: String,
     private val description: String,
     private val wallpaper: Int,
@@ -21,13 +21,25 @@ class CreateProject(
     private val notification: List<Notification>,
     private val graphs: List<Graph>,
     private val projectIDReturn: MutableSharedFlow<Int>? = null
-) //Todo secondary constructor with communicationClasses.project
-    : ProjectCommand(
-    commandByUser = commandByUser,
+) : ProjectCommand(
     isProjectAdmin = true
 ) {
+    constructor(
+        project: Project,
+        projectIDReturn: MutableSharedFlow<Int>? = null
+    ) : this(
+        project.title,
+        project.description,
+        project.wallpaper,
+        project.table,
+        project.buttons,
+        project.notifications,
+        project.graphs,
+        projectIDReturn
+    )
+
     companion object {
-        fun isPossible(project: com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project): Boolean {
+        fun isPossible(project: Project): Boolean {
             return ProjectCommand.isPossible(project)
         }
     }
@@ -48,7 +60,7 @@ class CreateProject(
         @Suppress("DEPRECATION")
         notification.forEach { notification -> notification.addYourself(pb) }
 
-        val project: Project = pb.build()
+        val project: ModelProject = pb.build()
         val prod = repositoryViewModelAPI.appDataBase.projectCDManager().insertProject(project)
         projectID = prod.id
         projectIDReturn?.emit(prod.id)
@@ -62,7 +74,8 @@ class CreateProject(
         //ReserveServerSlot
         onlineProjectID = repositoryViewModelAPI.remoteDataSourceAPI.addProject()
         //Make Created Project Online Project
-        repositoryViewModelAPI.appDataBase.projectDataDAO().setOnlineID(projectID!!, onlineProjectID!!)
+        repositoryViewModelAPI.appDataBase.projectDataDAO()
+            .setOnlineID(projectID!!, onlineProjectID!!)
         return super.publish(repositoryViewModelAPI, publishQueue)
     }
 }
