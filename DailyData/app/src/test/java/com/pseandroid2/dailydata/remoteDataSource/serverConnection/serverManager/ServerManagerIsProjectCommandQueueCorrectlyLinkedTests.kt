@@ -31,7 +31,7 @@ import io.mockk.mockk
 import org.junit.Assert
 import org.junit.Test
 
-internal class ServerManagerTests_ProjectCommandQueueCorrectlyLinked {
+internal class ServerManagerIsProjectCommandQueueCorrectlyLinkedTests {
 
     @Test
     fun projectCommandQueueLinked() {
@@ -65,7 +65,7 @@ internal class ServerManagerTests_ProjectCommandQueueCorrectlyLinked {
         // Convert deltas into ProjectCommandObjects
         for (i in deltaList.indices) {
             val delta: Delta = deltaList.elementAt(i)
-            val projectCommand = ProjectCommandInfo(delta.user, delta.isAdmin, delta.projectCommand)
+            val projectCommand = ProjectCommandInfo(delta.user, delta.admin, delta.projectCommand)
             projectCommands.add(projectCommand)
         }
 

@@ -110,12 +110,12 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
     /**
      * Uploads a post to the server
      *
-     * @param postPreview: The preview of the post that should be added. The first element of the Pair has the preview picture and the second element has the title
-     * @param projectTemplate: The project template. The first element of the outer Pair is the template as a JSON and the second element is the inner Pair.
-     *                           The inner Pair has as it first element the template detail image and as its second element the title of the template
-     * @param graphTemplates: The graph templates. Every list element is a graph template.
-     *                          The first element of the outer Pair is the template as a JSON and the second element is the inner Pair.
-     *                          The inner Pair has as it first element the template detail image and as its second element the title of the template
+     * @param postPreview:      The preview of the post that should be added. The first element of the Pair has the preview picture and the second element has the title
+     * @param projectTemplate:  The project template. The first element of the outer Pair is the template as a JSON and the second element is the inner Pair.
+     *                              The inner Pair has as it first element the template detail image and as its second element the title of the template
+     * @param graphTemplates:   The graph templates. Every list element is a graph template.
+     *                              The first element of the outer Pair is the template as a JSON and the second element is the inner Pair.
+     *                              The inner Pair has as it first element the template detail image and as its second element the title of the template
      * @return Int: The PostID of the new post. -1 if the call didn't succeed, 0 if the user reached his limit of uploaded posts.
      */
     fun addPost(postPreview: Pair<Bitmap, String>, projectTemplate: Pair<String, Pair<Bitmap, String>>, graphTemplates: List<Pair<String, Pair<Bitmap, String>>>, authToken: String): Int {
@@ -193,6 +193,24 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      */
     fun getProjectParticipants(authToken: String, projectID: Long): Collection<String> {
         return restAPI.getProjectParticipants(authToken, projectID)
+    }
+
+    /**
+     * Is the user a project participant from the project.
+     * (The user who send the authToken has to be a member of the project)
+     *
+     * @param authToken: The token from the currently logged in user
+     * @param userID: The userID of the user, that should be checked, if it is part of the project
+     * @return Boolean: True if the server call succeed and the user is part of the project. Otherwise false
+     */
+    fun isProjectParticipant(authToken: String, projectID: Long, userID: String): Boolean {
+        val projectParticipants = restAPI.getProjectParticipants(authToken, projectID)
+        projectParticipants.forEach {
+            if (it == userID) {
+                return true
+            }
+        }
+        return false
     }
 
     /**
@@ -364,5 +382,17 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      */
     fun getProjectCommandFromQueue(): ProjectCommandInfo? {
         return projectCommandQueue.getProjectCommand()
+    }
+
+    /** // TODO This method is just for testing
+     * Deletes all Posts from User
+     */
+    fun deleteAllPostsFromUser(authToken: String) {
+        var postIds: List<Int> = restAPI.getPostsFromUser(authToken)
+        postIds.forEach {
+            if (it > 0) {
+                restAPI.removePost(it, authToken)
+            }
+        }
     }
 }

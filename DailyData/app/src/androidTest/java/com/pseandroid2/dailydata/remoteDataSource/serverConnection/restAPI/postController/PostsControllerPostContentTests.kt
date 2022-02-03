@@ -2,6 +2,7 @@ package com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI.post
 
 import android.util.Log
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.PostPreviewWrapper
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.TemplateDetailWrapper
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.PostPreview
@@ -14,7 +15,8 @@ import org.junit.Before
 import org.junit.Test
 
 class PostsControllerPostContentTests {
-    private var restAPI: RESTAPI = RESTAPI()
+    private val restAPI: RESTAPI = RESTAPI()
+    private val serverManager = ServerManager(restAPI)
     private lateinit var authToken: String
 
     private lateinit var postPreviewsList: MutableList<PostPreview>
@@ -29,6 +31,8 @@ class PostsControllerPostContentTests {
 
         Assert.assertEquals(FirebaseReturnOptions.SINGED_IN, fm.signInWithEmailAndPassword(email, password))
         authToken = fm.getToken()
+
+        serverManager.deleteAllPostsFromUser(authToken)
 
         postID = restAPI.addPost(
             PostPreviewWrapper( title = "project preview"),

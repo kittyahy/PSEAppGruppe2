@@ -7,7 +7,7 @@ package com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParame
  * @param title: The title of the post
  */
 data class TemplateDetailWrapper(val templateDetailImage: ByteArray =  ByteArray(0),
-                                 val title: String = "") {
+                                 val title: String = "template") {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

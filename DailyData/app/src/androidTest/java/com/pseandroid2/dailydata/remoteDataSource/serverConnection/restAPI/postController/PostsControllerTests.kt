@@ -1,6 +1,7 @@
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI.postController
 
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.PostPreviewWrapper
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.TemplateDetailWrapper
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.PostPreview
@@ -12,6 +13,7 @@ import org.junit.Before
 
 class PostsControllerTests {
     private var restAPI: RESTAPI = RESTAPI()
+    private val serverManager = ServerManager(restAPI)
     private lateinit var authToken: String
 
     @Before
@@ -23,6 +25,8 @@ class PostsControllerTests {
 
         Assert.assertEquals(FirebaseReturnOptions.SINGED_IN, fm.signInWithEmailAndPassword(email, password))
         authToken = fm.getToken()
+
+        serverManager.deleteAllPostsFromUser(authToken)
     }
 
     @Test

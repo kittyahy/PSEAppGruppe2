@@ -29,9 +29,9 @@ package com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturn
  */
 data class TemplateDetail(
     val id: Int = 0,
-    val title: String = "",
-    val isProjectTemplate: Boolean = false,
-    val detailImage: ByteArray = ByteArray(0)
+    val title: String = "template detail",
+    val detailImage: ByteArray = ByteArray(0),
+    val projectTemplate: Boolean = false
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -41,7 +41,7 @@ data class TemplateDetail(
 
         if (id != other.id) return false
         if (title != other.title) return false
-        if (isProjectTemplate != other.isProjectTemplate) return false
+        if (projectTemplate != other.projectTemplate) return false
         if (!detailImage.contentEquals(other.detailImage)) return false
 
         return true
@@ -50,7 +50,7 @@ data class TemplateDetail(
     override fun hashCode(): Int {
         var result = id
         result = 31 * result + title.hashCode()
-        result = 31 * result + isProjectTemplate.hashCode()
+        result = 31 * result + projectTemplate.hashCode()
         result = 31 * result + detailImage.contentHashCode()
         return result
     }

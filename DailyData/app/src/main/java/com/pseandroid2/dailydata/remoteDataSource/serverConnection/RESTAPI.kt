@@ -330,4 +330,11 @@ class RESTAPI {
         }
         return refactoredFetchRequests
     }
+
+    // TODO: This method is just for testing
+    fun getPostsFromUser(authToken: String): List<Int> {
+        val call: Call<List<Int>> = server.getPostsFromUser(authToken)
+
+        return call.execute().body() ?: emptyList()
+    }
 }

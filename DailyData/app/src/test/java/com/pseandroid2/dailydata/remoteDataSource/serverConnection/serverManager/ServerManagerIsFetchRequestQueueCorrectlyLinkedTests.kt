@@ -31,7 +31,7 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
-internal class ServerManagerTests_FetchRequestQueueCorrectlyLinked {
+internal class ServerManagerIsFetchRequestQueueCorrectlyLinkedTests {
 
     private var fetchRequestList: MutableList<FetchRequest> = mutableListOf(FetchRequest(project = 1), FetchRequest(project = 2), FetchRequest(project = 3))
     private lateinit var restAPI: RESTAPI

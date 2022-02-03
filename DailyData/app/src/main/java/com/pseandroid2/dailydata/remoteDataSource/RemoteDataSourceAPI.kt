@@ -250,6 +250,18 @@ class RemoteDataSourceAPI @Inject constructor(uAccount: UserAccount?, sManager: 
     }
 
     /**
+     * Is the user a project participant from the project.
+     * (The user who send the authToken has to be a member of the project)
+     *
+     * @param authToken: The token from the currently logged in user
+     * @param userID: The userID of the user, that should be checked, if it is part of the project
+     * @return Boolean: True if the server call succeed and the user is part of the project. Otherwise false
+     */
+    fun isProjectParticipant(authToken: String, projectID: Long, userID: String): Boolean {
+        return serverManager.isProjectParticipant(authToken, projectID, userID)
+    }
+
+    /**
      * Gets the admin of the project
      *
      * @param projectID: The id of the project whose admin should be returned

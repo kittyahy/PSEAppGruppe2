@@ -27,7 +27,7 @@ package com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturn
  * @param previewImage: The preview image of the post
  */
 data class PostPreview(val id: Int = 0,
-                       val preview: String = "",
+                       val preview: String = "post preview",
                        val previewPicture: ByteArray = ByteArray(0)
 ) {
     override fun equals(other: Any?): Boolean {

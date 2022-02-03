@@ -51,6 +51,10 @@ interface ServerEndpoints
     @GET("greet")
     fun greet(): Call<String>
 
+    // TEST TODO: Wahrscheinlich entfernen
+    @GET("test")
+    fun getPostsFromUser(@Header("token") token: String): Call<List<Int>>
+
     // Post Controller
     @GET("Posts"+"/allPreview")
     fun getAllPostPreview(@Header("token") token: String): Call<List<PostPreview>>

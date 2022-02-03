@@ -38,7 +38,7 @@ import org.junit.Before
 import org.junit.Test
 import java.time.LocalDateTime
 
-internal class ServerManagerTests_RESTAPICorrectlyLinked {
+internal class ServerManagerIsRESTAPICorrectlyLinkedTests {
 
     private var postPreviewList: List<PostPreview> = listOf(PostPreview())
     private var postDetailList: List<TemplateDetail> = listOf(TemplateDetail(id = 1))
@@ -64,6 +64,7 @@ internal class ServerManagerTests_RESTAPICorrectlyLinked {
         every { restAPI.removeUser("", 1, "")} returns true
         every { restAPI.addProject("", "project details")} returns 0
         every { restAPI.getProjectParticipants("", 1)} returns listOf("")
+        every { restAPI.getProjectParticipants("user", 1)} returns listOf("user", "otherUser")
         every { restAPI.getProjectAdmin("", 1)} returns ""
         coEvery { restAPI.saveDelta(1, "command1", "") } returns true // use coEvery for mockking suspend functions
         every { restAPI.getDelta(1, "") } returns deltaList
@@ -90,9 +91,6 @@ internal class ServerManagerTests_RESTAPICorrectlyLinked {
 
         Assert.assertEquals("GraphTemplate", serverManager.getGraphTemplate(1, 1, ""))
 
-        // TODO: Check this test again
-        //Assert.assertEquals(1, serverManager.addPost())
-
         Assert.assertTrue(serverManager.removePost(1, ""))
 
         Assert.assertEquals("project details", serverManager.addUser(1, ""))
@@ -103,6 +101,8 @@ internal class ServerManagerTests_RESTAPICorrectlyLinked {
 
         Assert.assertEquals(listOf(""), serverManager.getProjectParticipants("", 1))
 
+        Assert.assertTrue(serverManager.isProjectParticipant("user", 1, "user"))
+
         Assert.assertEquals("", serverManager.getProjectAdmin("", 1))
 
         Assert.assertEquals("command1", serverManager.sendCommandsToServer(1, projectCommands=listOf("command1"), "").elementAt(0))
@@ -110,7 +110,7 @@ internal class ServerManagerTests_RESTAPICorrectlyLinked {
         // Test if projectCommand lands in the projectCommandQueue
         serverManager.getProjectCommandsFromServer(1, "")
         val delta: Delta = deltaList.elementAt(0)
-        val projectCommandInfoInList = ProjectCommandInfo(delta.user, delta.isAdmin, delta.projectCommand)
+        val projectCommandInfoInList = ProjectCommandInfo(delta.user, delta.admin, delta.projectCommand, delta.addedToServerS)
 
         Assert.assertEquals(projectCommandInfoInList, serverManager.getProjectCommandFromQueue())
 
