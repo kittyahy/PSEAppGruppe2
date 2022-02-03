@@ -37,7 +37,7 @@ public class TemplateDetail {
     private int id;
     private String title;
     private boolean isProjectTemplate;
-    private byte[] detailImage;
+    private Byte[] detailImage;
 
     /**
      *
@@ -55,7 +55,7 @@ public class TemplateDetail {
      * @param detailImage       An image for the template preview.
      * @param isProjectTemplate If true, this template is a project template, if false, it's a graph template.
      */
-    public TemplateDetail(int id, String title, byte[] detailImage, boolean isProjectTemplate) {
+    public TemplateDetail(int id, String title, Byte[] detailImage, boolean isProjectTemplate) {
         this.id = id;
         this.title = title;
         this.isProjectTemplate = isProjectTemplate;
