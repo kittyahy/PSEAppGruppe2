@@ -66,7 +66,7 @@ class PieChart(
         }
         val sum = FloatSum(mappingInt)
         val trafo = PieChartTransformation(sum)
-        val dataTrapo = Project.DataTransformation<Float>()
+        val dataTrapo = project.id.
         val settings = MapSettings()
         for (pair in columnColors) {
             settings[PieChart.SLICE_COLOR_KEY + pair.key] = pair.value
