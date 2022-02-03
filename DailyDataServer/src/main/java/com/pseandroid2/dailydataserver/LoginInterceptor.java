@@ -53,7 +53,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         
         // Firebase token authentication
         String userID = firebaseManager.getUserIDFromToken(token);
-        log.info(userID);
+
         // Update attribute with the computed UserID
         request.setAttribute("user", userID);
 

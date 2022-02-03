@@ -18,9 +18,6 @@
 
 */
 package com.pseandroid2.dailydataserver.postDatabase.Response;
-/*
-#TODO JAVA DOC
- */
 
 import lombok.Getter;
 import lombok.Setter;
@@ -38,16 +35,16 @@ import java.util.Arrays;
 public class PostPreview {
     private int id;
     private String preview;
-    private byte[] previewImage;
+    private Byte[] previewImage;
 
 
     /**
      * The constructor, to create an object, which contains a postPreview and the corresponding id.
-     *
-     * @param id      the id from the post entity.
+     *  @param id      the id from the post entity.
+     * @param previewImage
      * @param preview the recommended postPreview.
      */
-    public PostPreview(int id,byte[] previewImage, String preview) {
+    public PostPreview(int id, Byte[] previewImage, String preview) {
         this.id = id;
         this.preview = preview;
         this.previewImage = previewImage;

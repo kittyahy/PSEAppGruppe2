@@ -65,7 +65,6 @@ public class FirebaseManager {
     public String getUserIDFromToken(String authToken) {
         try {
             FirebaseToken firebaseToken = FirebaseAuth.getInstance().verifyIdToken(authToken);
-            log.info(firebaseToken.getEmail());
             return firebaseToken.getUid();
         } catch (FirebaseAuthException e) {
             e.printStackTrace();

@@ -76,7 +76,7 @@ public class FetchRequestController {
      */
 
     @GetMapping(value = "/provide/{id}")
-    public List<FetchRequest> getFetchRequests(@PathVariable("id") long projectId) {
+    public List<FetchRequest> getFetchRequests(@PathVariable("id") long projectId, @RequestAttribute String user) {
 
         return service.getFetchRequests(projectId);
     }

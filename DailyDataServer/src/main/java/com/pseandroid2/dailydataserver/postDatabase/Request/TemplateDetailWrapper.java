@@ -14,7 +14,7 @@ import java.util.Arrays;
 @Getter
 @Setter
 public class TemplateDetailWrapper {
-    private byte[] templateDetailImage;
+    private Byte[] templateDetailImage;
     private String title;
 
     /**
@@ -23,7 +23,7 @@ public class TemplateDetailWrapper {
      * @param templateDetailImage the image, which the user should see.
      * @param title               the title of the template.
      */
-    public TemplateDetailWrapper(final byte[] templateDetailImage, final String title) {
+    public TemplateDetailWrapper(final Byte[] templateDetailImage, final String title) {
         this.templateDetailImage = templateDetailImage;
         this.title = title;
     }

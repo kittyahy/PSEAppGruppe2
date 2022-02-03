@@ -22,6 +22,8 @@ package com.pseandroid2.dailydataserver.postDatabase;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * The repository for Posts.
  * <p>
@@ -37,5 +39,11 @@ public interface PostsRepository extends JpaRepository<Post, Integer> {
      * @return the amount of recommended Posts.
      */
     long countByCreatedBy(String createdBy);
+
+    // #TODO MERLIN TEST
+    List<Post> findByCreatedBy(String createdBy);
+
+
+
 
 }
