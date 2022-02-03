@@ -11,18 +11,18 @@ import kotlinx.coroutines.launch
 
 class ProjectTemplateFlowProvider(private val templateId: Int, private val db: AppDataBase) :
     FlowProvider<ProjectTemplate?>() {
-    private var projectTemplate = SimpleProjectTemplate(TODO(), TODO(), TODO())
+    private var template = SimpleProjectTemplate()
     override suspend fun initialize() = coroutineScope {
         //Observe Template Data
         launch(Dispatchers.IO) {
             db.templateDAO().getProjectTemplateData(templateId).distinctUntilChanged()
                 .collect { templateData ->
                     if (templateData.size != 1) {
-                        //Multiple or no template with that id
+                        //multiple or no templates with this id
                         mutableFlow.emit(null)
                     } else {
-                        projectTemplate = SimpleProjectTemplate(templateData[0])
-                        mutableFlow.emit(projectTemplate)
+                        template = SimpleProjectTemplate(templateData[0])
+                        mutableFlow.emit(template)
                     }
                 }
         }
@@ -30,18 +30,19 @@ class ProjectTemplateFlowProvider(private val templateId: Int, private val db: A
         launch(Dispatchers.IO) {
             db.settingsDAO().getProjectSettings(templateId).distinctUntilChanged()
                 .collect { settings ->
-                    projectTemplate.settings = settings
-                    mutableFlow.emit(projectTemplate)
+                    template.settings = settings
+                    mutableFlow.emit(template)
                 }
         }
-        //Observe Graphs for Template
+        //Observe GraphTemplates for Template
         launch(Dispatchers.IO) {
-            GraphFlowProvider(templateId, db).provideFlow.distinctUntilChanged().collect { graphs ->
-                projectTemplate.graphs = graphs.toMutableList()
-                mutableFlow.emit(projectTemplate)
-            }
+            GraphTemplateFlowProvider(templateId, db).provideFlow.distinctUntilChanged()
+                .collect { graphs ->
+                    template.graphs = graphs.toMutableList()
+                    mutableFlow.emit(template)
+                }
         }
-        TODO()
+
         Unit
     }
 }
