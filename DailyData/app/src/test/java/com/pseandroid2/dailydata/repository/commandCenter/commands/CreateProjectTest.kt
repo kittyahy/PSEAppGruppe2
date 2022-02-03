@@ -37,7 +37,6 @@ class CreateProjectTest {
         val idFlow = MutableSharedFlow<Int>()
         val createProject =
             CreateProject(
-                idFlow,
                 "user",
                 testString,
                 "description",
@@ -45,7 +44,8 @@ class CreateProjectTest {
                 listOf(Column(0, "column", "unit", DataType.TIME)),
                 listOf(Button(0, "button", 0, 0)),
                 ArrayList<Notification>(),
-                ArrayList<Graph>()
+                ArrayList<Graph>(),
+                idFlow
             )
         val projectDataDAO = mockk<ProjectDataDAO>()
         coEvery { projectDataDAO.setOnlineID(any<Int>(), any<Long>()) } returns Unit
@@ -59,14 +59,14 @@ class CreateProjectTest {
             appDataBase.projectDataDAO()
         } returns projectDataDAO
         val remoteDataSourceAPI = mockk<RemoteDataSourceAPI>()
-        every { remoteDataSourceAPI.addProject() } returns testOnlineID
+        every { remoteDataSourceAPI.createNewOnlineProject("") } returns testOnlineID // TODO add project details
         val publishQueue : PublishQueue= mockk()
         coEvery { publishQueue.add(any<ProjectCommand>()) } returns Unit
         val task = async {
             createProject.execute(
                 appDataBase,
                 remoteDataSourceAPI,
-                publishQueue
+                publishQueue,
             )
         }
         task.await()

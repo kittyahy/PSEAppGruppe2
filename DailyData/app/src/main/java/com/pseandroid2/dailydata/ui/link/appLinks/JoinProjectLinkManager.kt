@@ -41,7 +41,7 @@ class JoinProjectLinkManager {
     /**
      * Encodes the postID into a hash
      *
-     * @param postIDToEncode: The Long that should be encoded. It has to be in [1, uLongsize-1] // TODO rework comment
+     * @param postIDToEncode: The Long that should be encoded. It has to be in [1, size of max uLong-1]
      * @return String: returns the encoded long as a hash. Returns "" if error
      */
     private fun encodeLong(postIDToEncode: Long): String {

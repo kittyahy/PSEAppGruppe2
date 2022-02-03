@@ -47,7 +47,7 @@ object AppModule {
     @Singleton
     fun provideRemoteDataSourceAPI(): RemoteDataSourceAPI {
         return RemoteDataSourceAPI(
-            UserAccount(FirebaseManager()),
+            UserAccount(FirebaseManager(null)),
             ServerManager(RESTAPI()))
     }
     @Provides

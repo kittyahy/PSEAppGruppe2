@@ -23,11 +23,13 @@ package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
 import android.graphics.Bitmap
 import com.pseandroid2.dailydata.model.database.entities.ProjectTemplateData
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.forRepoReturns.TemplateDetailWithPicture
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import kotlinx.coroutines.flow.Flow
 
 
-class ProjectTemplate : Identifiable {
+class ProjectTemplate : Identifiable, Template
+{
     lateinit var titel: String
     lateinit var description: String
     var wallpaper: Int = 0
@@ -45,7 +47,7 @@ class ProjectTemplate : Identifiable {
         buttons: List<Button>,
         notifications: List<Notification>,
         graphTemplates: List<GraphTemplate>,
-        image: Bitmap
+        image: Bitmap,
     ) {
         this.titel = titel
         this.description = description
@@ -56,6 +58,7 @@ class ProjectTemplate : Identifiable {
         this.graphTemplates = graphTemplates
         this.image = image
     }
+    constructor(templateDetailWithPicture: TemplateDetailWithPicture, graphTemplates: List<GraphTemplate>)
 
     constructor(projectTemplateData: ProjectTemplateData) {
         this.titel = projectTemplateData.name

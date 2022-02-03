@@ -21,7 +21,7 @@
 package com.pseandroid2.dailydata.remoteDataSource.queue
 
 /**
- * Gets updated if a new fetch request is added to the fetch requets queue
+ * Gets updated if a new fetch request is added to the fetch requests queue
  */
 interface FetchRequestQueueObserver {
     /**

@@ -1,20 +1,18 @@
 package com.pseandroid2.dailydata.repository.commandCenter
 
-import com.pseandroid2.dailydata.model.database.AppDataBase
-import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueueObserver
+import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.commands.CommandWrapper
 import com.pseandroid2.dailydata.repository.commandCenter.commands.ProjectCommand
 import kotlinx.coroutines.launch
 
 class ExecuteQueue(
-    appDataBase: AppDataBase,
-    remoteDataSourceAPI: RemoteDataSourceAPI,
+    override val repositoryViewModelAPI: RepositoryViewModelAPI,
     private val publishQueue: PublishQueue
 ) :
-    CommandQueue(appDataBase, remoteDataSourceAPI), ProjectCommandQueueObserver {
+    CommandQueue(repositoryViewModelAPI), ProjectCommandQueueObserver {
     override suspend fun performCommandAction(command: ProjectCommand) {
-        command.execute(appDataBase, remoteDataSourceAPI, publishQueue)
+        command.execute(repositoryViewModelAPI, publishQueue)
     }
 
     //No contingency plan required because execution will always succeed
@@ -29,8 +27,9 @@ class ExecuteQueue(
     override suspend fun commandFailedAction(command: ProjectCommand) {}
 
     override fun update() {
-        while (remoteDataSourceAPI.getProjectCommandQueueLength() > 0) {
-            val projectCommandInfo = remoteDataSourceAPI.getProjectCommandFromQueue()!!
+        while (repositoryViewModelAPI.remoteDataSourceAPI.getProjectCommandQueueLength() > 0) {
+            val projectCommandInfo =
+                repositoryViewModelAPI.remoteDataSourceAPI.getProjectCommandFromQueue()!!
             var command = CommandWrapper.fromJson(projectCommandInfo.projectCommand)
             command = CommandUtility.setServerInfo(command, projectCommandInfo)
             scope.launch {

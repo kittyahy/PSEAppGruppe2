@@ -20,7 +20,7 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
-import com.pseandroid2.dailydata.model.project.Project
+import com.pseandroid2.dailydata.model.project.Project as ModelProject
 import com.pseandroid2.dailydata.model.project.ProjectBuilder
 import com.pseandroid2.dailydata.model.users.SimpleUser
 import com.pseandroid2.dailydata.model.users.User
@@ -51,7 +51,7 @@ class Member(
         return SimpleUser(id.toString(), name)
     }
 
-    override fun addYourself(builder: ProjectBuilder<out Project>) {
+    override fun addYourself(builder: ProjectBuilder<out ModelProject>) {
         builder.addUsers(listOf(this.toDBEquivalent()))
     }
 }
