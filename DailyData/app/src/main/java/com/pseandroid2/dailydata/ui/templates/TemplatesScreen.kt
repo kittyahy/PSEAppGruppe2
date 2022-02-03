@@ -54,14 +54,14 @@ fun TemplatesScreen(
     onNavigate: (UiEvent.Navigate) -> Unit,
     viewModel: TemplatesScreenViewModel = hiltViewModel()
 ) {
-    var graphTemplates = viewModel.graphTemplates
+    var graphTemplates = viewModel.graphTemplates.collectAsState(initial = listOf())
     var projectTemplates = viewModel.projectTemplates.collectAsState(initial = listOf())
 
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->
-            when(event) {
+            when (event) {
                 is UiEvent.Navigate -> onNavigate(event)
-                else -> { }
+                else -> {}
             }
         }
     }
@@ -73,15 +73,20 @@ fun TemplatesScreen(
                 viewModel.onEvent(TemplatesScreenEvent.OnTabChange(it))
             }
         )
-        when(viewModel.tabs[viewModel.tab]) {
+        when (viewModel.tabs[viewModel.tab]) {
             TemplateTabs.GRAPHS -> {
                 LazyColumn {
-                    items(graphTemplates) { template ->
+                    items(graphTemplates.value) { template ->
                         TemplatesCard(
                             title = template.title,
-                            image = template.image.asImageBitmap(),
+                            image = template.image?.asImageBitmap()
+                                ?: TODO("Probably should include some kind of fallback"),
                             onIconClick = {
-                                viewModel.onEvent(TemplatesScreenEvent.OnGraphTemplateDelete(template.id))
+                                viewModel.onEvent(
+                                    TemplatesScreenEvent.OnGraphTemplateDelete(
+                                        template.id
+                                    )
+                                )
                             }
                         )
                     }
@@ -91,10 +96,15 @@ fun TemplatesScreen(
                 LazyColumn {
                     items(projectTemplates.value) { template ->
                         TemplatesCard(
-                            title = template.titel,
-                            image = template.image.asImageBitmap(),
+                            title = template.name,
+                            image = template.image?.asImageBitmap()
+                                ?: TODO("Probably should include some kind of fallback"),
                             onIconClick = {
-                                viewModel.onEvent(TemplatesScreenEvent.OnProjectTemplateDelete(template.id))
+                                viewModel.onEvent(
+                                    TemplatesScreenEvent.OnProjectTemplateDelete(
+                                        template.id
+                                    )
+                                )
                             }
                         )
                     }
@@ -106,9 +116,9 @@ fun TemplatesScreen(
 
 @Composable
 fun TemplatesCard(
-    title : String,
-    image : ImageBitmap,
-    onIconClick : () -> Unit
+    title: String,
+    image: ImageBitmap,
+    onIconClick: () -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -117,10 +127,10 @@ fun TemplatesCard(
         shape = MaterialTheme.shapes.medium,
         elevation = 10.dp
     ) {
-        Column (
+        Column(
             modifier = Modifier.padding(10.dp),
             verticalArrangement = Arrangement.spacedBy(5.dp)
-        ){
+        ) {
 
             Image(
                 bitmap = image,

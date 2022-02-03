@@ -38,7 +38,7 @@ abstract class TransformationFunction<O : Any> protected constructor(
                 args = args.substring(0, args.length)
                 function = function.substringBefore('|')
             }
-
+            //TODO functionstrings have changed
             val transform: TransformationFunction<out Any> = when (function) {
                 SUM_ID -> {
                     val split = args.split(";")
@@ -49,7 +49,7 @@ abstract class TransformationFunction<O : Any> protected constructor(
                         cols.add(string.toInt())
                     }
                     when (split[1].substringAfter('=', "")) {
-                        Sum.TYPE_INT -> IntSum(cols)
+                        Sum.TYPE_INT -> IntSum()
                         else -> throw IllegalArgumentException("No such Sum function: ${split[1]}")
                     }
                 }
