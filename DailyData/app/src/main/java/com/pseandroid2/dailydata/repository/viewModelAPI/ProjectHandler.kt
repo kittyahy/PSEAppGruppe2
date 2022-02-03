@@ -29,7 +29,7 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Co
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Notification
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.GraphTemplateFlow
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.GraphTemplateFlowProvider
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectFlow
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectPreviewFlow
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectTemplateFlow
@@ -45,7 +45,7 @@ import kotlinx.coroutines.flow.first
 class ProjectHandler(
     val projectPreviewFlow: ProjectPreviewFlow,
     val projectTemplateFlow: ProjectTemplateFlow,
-    val graphTemplateFlow: GraphTemplateFlow,
+    val graphTemplateFlow: GraphTemplateFlowProvider,
     private val appDataBase: AppDataBase,
     private val executeQueue: ExecuteQueue
 ) {
