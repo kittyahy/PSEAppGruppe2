@@ -27,8 +27,8 @@ class IntSum(cols: List<Int>) : Sum<Int>(cols) {
     override fun unsafeSum(list: List<Any>): Int {
         var sum: Int = 0
         for (element in list) {
-            if (element is Int) {
-                sum += element
+            if (element is Number) {
+                sum += element.toInt()
             } else {
                 throw NumberFormatException("Couldn't convert $element to Int")
             }

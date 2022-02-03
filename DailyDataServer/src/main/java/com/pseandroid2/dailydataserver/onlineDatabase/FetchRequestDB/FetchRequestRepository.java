@@ -28,7 +28,7 @@ import java.util.Optional;
 /**
  * The repository for FetchRequests.
  * <p>
- * It defines methods to operate on the table FetchRequests_Table.
+ * It defines methods to operate on the table FetchRequests_FetchReqTable.
  */
 @Repository
 public interface FetchRequestRepository extends JpaRepository<FetchRequest, Integer> {

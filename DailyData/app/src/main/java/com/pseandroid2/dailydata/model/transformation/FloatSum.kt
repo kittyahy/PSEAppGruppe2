@@ -20,14 +20,19 @@
 
 package com.pseandroid2.dailydata.model.transformation
 
-import java.lang.IllegalArgumentException
+class FloatSum(cols: List<Int>) : Sum<Float>(cols) {
 
-abstract class Identity<T : Any> protected constructor(typeString: String) :
-    TransformationFunction<List<T>>("$IDENTITY_ID%$typeString") {
+    override var functionString = "$SUM_ID|col=$cols;type=${TYPE_FLOAT}"
 
-    override fun execute(input: List<List<Any>>): List<List<T>> {
-        return convertElements(input)
+    override fun unsafeSum(list: List<Any>): Float {
+        var sum: Float = 0.0f
+        for (element in list) {
+            if (element is Number) {
+                sum += element.toFloat()
+            } else {
+                throw NumberFormatException("Couldn't convert $element to Float")
+            }
+        }
+        return sum
     }
-
-    protected abstract fun convertElements(input: List<List<Any>>): List<List<T>>
 }

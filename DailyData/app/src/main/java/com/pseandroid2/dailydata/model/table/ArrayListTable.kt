@@ -67,7 +67,7 @@ class ArrayListTable(private var layout: TableLayout = ArrayListLayout()) : Tabl
     }
 
     private fun assertLayout(row: Row): Boolean {
-        for (i in 0..layout.getSize()) {
+        for (i in 0 until layout.getSize()) {
             if (row.getCell(i).javaClass == layout.getColumnType(i)) {
                 return false
             }
