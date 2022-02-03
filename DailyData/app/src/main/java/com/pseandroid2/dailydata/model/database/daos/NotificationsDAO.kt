@@ -32,10 +32,17 @@ import kotlinx.coroutines.flow.map
 import java.util.*
 import kotlin.collections.ArrayList
 
+/**
+ * This class provides Methods and Queries to create and change and remove Notifications and add
+ * their messages in the table.
+ */
 @Dao
 abstract class NotificationsDAO {
     private val existingIds: MutableMap<Int, out SortedSet<Int>> = mutableMapOf<Int, TreeSet<Int>>()
 
+    /**
+     * It returns all notifications, which belong to a specified project as notifications, and not entities.
+     */
     fun getNotifications(projectId: Int): Flow<List<Notification>> {
         return getNotificationEntities(projectId).map {
             val list: MutableList<Notification> = ArrayList()
@@ -46,6 +53,9 @@ abstract class NotificationsDAO {
         }
     }
 
+    /**
+     * It adds a Notification to a specified project, create an id and returns it.
+     */
     suspend fun insertNotification(projectId: Int, notification: Notification): Int {
         val id = getNextId(projectId)
         insertNotificationEntity(
@@ -59,9 +69,15 @@ abstract class NotificationsDAO {
         return id
     }
 
+    /**
+     * It deletes all Notifications from the Table notification, which belong to the given ids for a specified project.
+     */
     @Query("DELETE FROM notification WHERE projectId = :projectId AND id IN (:ids)")
     abstract suspend fun deleteNotification(projectId: Int, vararg ids: Int)
 
+    /**
+     * It changes the message of an specified Notification in a specified project.
+     */
     @Query(
         "UPDATE notification SET message = :message " +
                 "WHERE projectId = :projectId AND id = :id"
@@ -69,15 +85,27 @@ abstract class NotificationsDAO {
     abstract suspend fun setNotificationMessage(projectId: Int, id: Int, message: String)
 
     /*========================SHOULD ONLY BE CALLED FROM INSIDE THE MODEL=========================*/
+    /**
+     * It returns all notifications from a specified project.
+     */
     @Query("SELECT * FROM notification WHERE projectId = :projectId")
     abstract fun getNotificationEntities(projectId: Int): Flow<List<NotificationEntity>>
 
+    /**
+     * It inserts a given Notification to the Table.
+     */
     @Insert
     abstract suspend fun insertNotificationEntity(notificationEntity: NotificationEntity)
 
+    /**
+     * It deletes a  specified notification.
+     */
     @Delete
     abstract suspend fun deleteNotificationEntity(notificationEntity: NotificationEntity)
 
+    /**
+     * It deletes all notification from a given project.
+     */
     @Query("DELETE FROM notification WHERE projectId = :projectId")
     abstract suspend fun deleteAllNotifications(projectId: Int)
 
