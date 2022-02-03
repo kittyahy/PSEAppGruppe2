@@ -82,7 +82,7 @@ fun TemplatesScreen(
                             title = template.title,
                             image = template.image.asImageBitmap(),
                             onIconClick = {
-                                viewModel.onEvent(TemplatesScreenEvent.OnGraphTemplateDelete(template.id))
+                                viewModel.onEvent(TemplatesScreenEvent.OnGraphTemplateDelete(template))
                             },
                             icon = Icons.Default.Delete,
                             imageClickable = false
@@ -97,7 +97,7 @@ fun TemplatesScreen(
                             title = template.titel,
                             image = template.image.asImageBitmap(),
                             onIconClick = {
-                                viewModel.onEvent(TemplatesScreenEvent.OnProjectTemplateDelete(template.id))
+                                viewModel.onEvent(TemplatesScreenEvent.OnProjectTemplateDelete(template))
                             },
                             icon = Icons.Default.Delete,
                             imageClickable = false

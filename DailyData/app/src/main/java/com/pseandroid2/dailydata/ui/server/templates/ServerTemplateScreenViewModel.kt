@@ -22,7 +22,7 @@ class ServerTemplateScreenViewModel @Inject constructor(
     private val _uiEvent = MutableSharedFlow<UiEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
 
-    var posts = repository.serverHandler.getPostPreviews()
+    var posts = repository.serverHandler.getPostPreviews().toList()
         private set
     var isProjectTemplateDialogOpen by mutableStateOf(false)
         private set

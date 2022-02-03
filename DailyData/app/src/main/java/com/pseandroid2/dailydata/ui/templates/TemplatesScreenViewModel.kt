@@ -24,12 +24,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.util.ui.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @InternalCoroutinesApi
@@ -57,10 +60,18 @@ class TemplatesScreenViewModel @Inject constructor(
                 tab = event.index
             }
             is TemplatesScreenEvent.OnGraphTemplateDelete -> {
-                repository.projectHandler.deleteGraphTemplate(event.id)
+                viewModelScope.launch {
+                    if (event.template.deleteIsPossible().first()) {
+                        event.template.delete()
+                    }
+                }
             }
             is TemplatesScreenEvent.OnProjectTemplateDelete -> {
-                repository.projectHandler.deleteProjectTemplate(event.id)
+                viewModelScope.launch {
+                    if (event.template.deleteIsPossible().first()) {
+                        event.template.delete()
+                    }
+                }
             }
         }
     }

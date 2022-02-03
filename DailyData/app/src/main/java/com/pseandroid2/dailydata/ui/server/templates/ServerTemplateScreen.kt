@@ -24,6 +24,7 @@ fun ServerTemplatesScreen(
 ) {
     val context = LocalContext.current
     val posts = viewModel.posts
+
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->
             when(event) {
@@ -34,17 +35,15 @@ fun ServerTemplatesScreen(
         }
     }
 
-    if(posts.isNotEmpty() && posts[viewModel.dialogTemplateIndex].projectTemplate != null) {
-        val template = posts[viewModel.dialogTemplateIndex].projectTemplate!!
+    if(posts.isNotEmpty()) {
+        val templates = posts[viewModel.dialogTemplateIndex].getPostDetail().toList()
         ProjectTemplateDialog(
             isOpen = viewModel.isProjectTemplateDialogOpen,
             onDismissRequest = { viewModel.onEvent(ServerTemplateScreenEvent.OnCloseDialog) },
-            onIconClick = { 
-                viewModel.onEvent(ServerTemplateScreenEvent.OnGraphTemplateDownload(
-                    projectId = template.id, 
-                    graphId = template.graphTemplates[it].id
-                )) },
-            template = template
+            onIconClick = {
+                //Download template
+                          },
+            templates = templates
         )
     }
 
@@ -56,11 +55,7 @@ fun ServerTemplatesScreen(
                  title = post.title,
                  image = post.image.asImageBitmap(),
                  imageClickable = false,
-                 onImageClick = {
-                     if (post.graphTemplate == null) {
-                         viewModel.onEvent(ServerTemplateScreenEvent.OnShowDialog(index = index))
-                     }
-                 },
+                 onImageClick = { viewModel.onEvent(ServerTemplateScreenEvent.OnShowDialog(index = index)) },
                  onIconClick = {
                      viewModel.onEvent(ServerTemplateScreenEvent.OnTemplateDownload(post.id))
                  },

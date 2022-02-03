@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.PostEntry
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ProjectTemplate
 
 @Composable
@@ -28,7 +29,7 @@ fun ProjectTemplateDialog(
     isOpen : Boolean,
     onDismissRequest : () -> Unit,
     onIconClick: (Int) -> Unit,
-    template : ProjectTemplate
+    templates : List<PostEntry>
 ) {
     if(isOpen) {
         Dialog(
@@ -41,13 +42,13 @@ fun ProjectTemplateDialog(
             ) {
                 LazyColumn {
 
-                    itemsIndexed(template.graphTemplates) { index, graphTemplate ->
+                    itemsIndexed(templates) { index, postEntry ->
                         Column (
                             modifier = Modifier.padding(10.dp),
                             verticalArrangement = Arrangement.spacedBy(5.dp)
                         ){
                             Image(
-                                bitmap = graphTemplate.image.asImageBitmap(),
+                                bitmap = postEntry.detailImage.asImageBitmap(),
                                 contentDescription = "",
                                 modifier = Modifier.fillMaxWidth()
                             )
@@ -55,7 +56,7 @@ fun ProjectTemplateDialog(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
-                                Text(text = graphTemplate.title)
+                                Text(text = postEntry.title)
                                 Icon(
                                     imageVector = Icons.Default.Delete,
                                     contentDescription = "",
