@@ -42,7 +42,14 @@ class ProjectTemplateFlowProvider(private val templateId: Int, private val db: A
                     mutableFlow.emit(template)
                 }
         }
-
+        //Observe Notifications for Template
+        launch(Dispatchers.IO) {
+            db.notificationsDAO().getNotifications(templateId).distinctUntilChanged()
+                .collect { notifications ->
+                    template.notifications = notifications.toMutableList()
+                    mutableFlow.emit(template)
+                }
+        }
         Unit
     }
 }

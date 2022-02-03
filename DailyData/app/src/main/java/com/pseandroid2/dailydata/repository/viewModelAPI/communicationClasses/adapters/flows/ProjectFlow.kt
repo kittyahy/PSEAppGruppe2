@@ -26,6 +26,7 @@ import com.pseandroid2.dailydata.model.database.entities.ProjectData
 import com.pseandroid2.dailydata.model.notifications.TimeNotification
 import com.pseandroid2.dailydata.model.table.ArrayListLayout
 import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
+import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Button
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Member
@@ -47,72 +48,13 @@ import kotlinx.coroutines.launch
 class ProjectFlow(
     private val db: AppDataBase,
     private val rds: RemoteDataSourceAPI,
+    private val eq: ExecuteQueue,
     private val projectId: Int
-)/* : FlowAdapter<Void, Project>(MutableSharedFlow()) */ {
-    /*private lateinit var sharedFlow: Flow<Project>
-    private val buttonFlow: Flow<List<Button>> = ButtonFlow(
-        appDataBase.uiElementDAO().getUIElements(projectId)
-    ).getFlow() //Todo Arne fragen passt so
-    private val graphFlow: Flow<List<Graph>> =
-        GraphFlow(TODO("GraphFlow")).getFlow() //appDataBase.graphDAO().getGraphDataForProject(projectId)
-    private val memberFlow: Flow<List<Member>> = MemberFlow(TODO("MemberFlow")).getFlow()
-    private val notificationFlow: Flow<List<Notification>> =
-        NotificationFlow(appDataBase.notificationsDAO().getNotifications(projectId)).getFlow()
-    private val projectDataFlow: Flow<ProjectData?> =
-        appDataBase.projectDataDAO().getProjectData(projectId)
-    private val settingsFlow: Flow<Map<String, String>> = TODO("settingsFlow")
-    private val rowFlow: Flow<List<Row>> =
-        RowFlow(appDataBase.tableContentDAO().getRowsById(projectId)).getFlow()
-
-    init {
-        GlobalScope.launch {
-            adapt()
-        }
-    }
-
-    fun getProjectFlow(): Flow<Project> {
-        return sharedFlow
-    }
-
-    @InternalCoroutinesApi
-    override suspend fun adapt() {
-        val emptyProject = Project()
-        val emptyFlow = MutableSharedFlow<Project>()
-        emptyFlow.emit(emptyProject)
-        sharedFlow = emptyFlow.combine(buttonFlow) { project, buttonList ->
-            project.buttons = buttonList
-            project
-        }.combine(graphFlow) { project, graphList ->
-            project.graphs = graphList
-            project
-        }.combine(memberFlow) { project, memberList ->
-            project.members = memberList
-            project
-        }.combine(notificationFlow) { project, notificationList ->
-            project.notifications = notificationList
-            project
-        }.combine(projectDataFlow) { project, projectData ->
-            projectData!! //Todo überprüfen, ob man diese Assertion hier so verwenden darf
-            project.update(projectData)
-            project
-        }.combine(settingsFlow) { project, settingsMap ->
-            //Todo project.update(settingsMap)
-            project
-        }.combine(rowFlow) { project, rowList ->
-            project.data = rowList
-            project
-        }
-    }
-
-    override fun provide(i: Void): Project {
-        //unreachable code, because it is never used by overwritten adapt fun
-        return Project()
-    }*/
-
+) {
     fun getProject(): Flow<Project> {
         return ProjectFlowProvider(projectId, db).provideFlow.distinctUntilChanged()
             .map { project ->
-                if (project == null) {
+                val ret = if (project == null) {
                     Project()
                 } else {
                     val rows = mutableListOf<Row>()
@@ -161,6 +103,8 @@ class ProjectFlow(
                         members.toList()
                     )
                 }
+                ret.executeQueue = eq
+                return@map ret
             }
     }
 }

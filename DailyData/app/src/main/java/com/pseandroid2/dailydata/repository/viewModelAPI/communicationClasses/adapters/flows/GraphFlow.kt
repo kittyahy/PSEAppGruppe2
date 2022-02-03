@@ -20,56 +20,34 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows
 
-import android.graphics.Color
-import androidx.lifecycle.Transformations.map
 import com.google.gson.Gson
 import com.pseandroid2.dailydata.model.database.AppDataBase
-import com.pseandroid2.dailydata.model.graph.GraphType
 import com.pseandroid2.dailydata.model.table.ArrayListLayout
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Column
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DotSize
+import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.LineChart
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.LineType
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.toViewGraph
-import com.pseandroid2.dailydata.model.graph.Graph as ModelGraph
-import com.pseandroid2.dailydata.model.graph.LineChart as ModelLineChart
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
 class GraphFlow(
-    private val projectId: Int,
-    private val db: AppDataBase
-) {// : FlowAdapter<ModelGraph<*, *>, Graph>(flow) {
-    /*override fun provide(i: ModelGraph<*, *>): Graph {
-        return when (i.getType()) {
-            GraphType.LINE_CHART -> {
-                TODO("LineChart") //LineChart()
-            }
-            GraphType.PIE_CHART -> {
-                TODO("PieChart") //PieChart()
-            }
-            else -> {
-                throw IllegalArgumentException()
-            }
-        }
-    }*/
+    private val db: AppDataBase,
+    private val eq: ExecuteQueue,
+    private val projectId: Int
+) {
 
     fun getGraphs(): Flow<List<Graph>> {
         return GraphFlowProvider(projectId, db).provideFlow.distinctUntilChanged().map { graphs ->
             val graphList = mutableListOf<Graph>()
             for (graph in graphs) {
-                graphList.add(
-                    graph.toViewGraph(
-                        Gson().fromJson(
-                            db.projectDataDAO().getCurrentLayout(projectId),
-                            ArrayListLayout::class.java
-                        )
+                val addGraph = graph.toViewGraph(
+                    Gson().fromJson(
+                        db.projectDataDAO().getCurrentLayout(projectId),
+                        ArrayListLayout::class.java
                     )
                 )
+                addGraph.executeQueue = eq
+                graphList.add(addGraph)
             }
             graphList.toList()
         }
