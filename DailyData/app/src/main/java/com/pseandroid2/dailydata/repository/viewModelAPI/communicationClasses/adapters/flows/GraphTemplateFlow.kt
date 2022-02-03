@@ -6,19 +6,21 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
-class GraphTemplateFlow(private val templateId: Int, private val db: AppDataBase) {
-    fun getTemplate(): Flow<GraphTemplate?> {
-        return GraphTemplateFlowProvider(templateId, db).provideFlow.distinctUntilChanged()
-            .map { template ->
-                if (template == null) {
-                    null
-                } else {
-                    GraphTemplate(
-                        template.name,
-                        template.getWallpaper(),
-                        template.id,
+class GraphTemplateFlow(private val db: AppDataBase) {
+    fun getTemplate(): Flow<List<GraphTemplate>> {
+        return GraphTemplateFlowProvider(db).provideFlow.distinctUntilChanged()
+            .map { templates ->
+                val list = mutableListOf<GraphTemplate>()
+                for (template in templates) {
+                    list.add(
+                        GraphTemplate(
+                            template.name,
+                            template.getWallpaper(),
+                            template.id,
+                        )
                     )
                 }
+                list.toList()
             }
     }
 }
