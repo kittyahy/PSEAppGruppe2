@@ -20,6 +20,7 @@
 
 package com.pseandroid2.dailydata.model
 
+import com.pseandroid2.dailydata.model.transformation.FloatIdentity
 import com.pseandroid2.dailydata.model.transformation.Identity
 import com.pseandroid2.dailydata.model.transformation.IntSum
 import com.pseandroid2.dailydata.model.transformation.Sum
@@ -32,7 +33,7 @@ import org.junit.Test
 class DataTransformationTester {
     private lateinit var transform1: Sum<Int>
     private lateinit var transform2: Sum<Int>
-    private lateinit var transformId: Identity
+    private lateinit var transformId: FloatIdentity
     private val testSet1 = listOf(listOf(2, 3))
     private val testSet2 = listOf(
         listOf(2, 3, -1), listOf(9, 21, -20), listOf(234, 92, -10000), listOf(3)
@@ -42,7 +43,7 @@ class DataTransformationTester {
     fun setup() {
         transform1 = IntSum(listOf(0))
         transform2 = IntSum(listOf(0, 1, 3))
-        transformId = Identity()
+        transformId = FloatIdentity()
     }
 
     @Test
@@ -61,7 +62,7 @@ class DataTransformationTester {
 
         for (i in testSet2.indices) {
             for (j in testSet2[i].indices) {
-                assertEquals(testSet2[i][j], result3[i][j])
+                assertEquals(testSet2[i][j].toFloat(), result3[i][j])
             }
         }
     }
