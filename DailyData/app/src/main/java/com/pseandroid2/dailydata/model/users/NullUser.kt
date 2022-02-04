@@ -22,6 +22,9 @@ package com.pseandroid2.dailydata.model.users
 
 import java.lang.NullPointerException
 
+/**
+ * This class defines the behave, if a user could be null and what happens, if the methods get called.
+ */
 class NullUser : User {
     companion object {
         const val NPE_STRING =
