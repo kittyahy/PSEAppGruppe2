@@ -27,9 +27,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.ui.navigation.Routes
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ProjectPreview
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ProjectTemplatePreview
 import com.pseandroid2.dailydata.util.ui.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
@@ -39,10 +42,10 @@ import javax.inject.Inject
 @HiltViewModel
 class ProjectOverviewViewModel @Inject constructor(
     val repository: RepositoryViewModelAPI
-): ViewModel() {
+) : ViewModel() {
 
-    val projects = repository.projectHandler.getProjectPreviews()
-    val templates = repository.projectHandler.getProjectTemplatePreviews() 
+    val projects = getProjectPreviews()
+    val templates = getTemplatePreviews()
 
     var isTemplateDialogOpen by mutableStateOf(false)
         private set
@@ -51,7 +54,7 @@ class ProjectOverviewViewModel @Inject constructor(
     val uiEvent = _uiEvent.asSharedFlow()
 
     fun onEvent(event: ProjectOverviewEvent) {
-        when(event) {
+        when (event) {
             is ProjectOverviewEvent.OnNewProjectClick -> {
                 sendUiEvent(UiEvent.Navigate(Routes.CREATION))
             }
@@ -59,18 +62,36 @@ class ProjectOverviewViewModel @Inject constructor(
                 isTemplateDialogOpen = event.isOpen
             }
             is ProjectOverviewEvent.OnProjectClick -> {
-                sendUiEvent(UiEvent.Navigate(Routes.DATA + "?projectId=${event.id}" ))
+                sendUiEvent(UiEvent.Navigate(Routes.DATA + "?projectId=${event.id}"))
             }
             is ProjectOverviewEvent.OnTemplateClick -> {
-                sendUiEvent(UiEvent.Navigate(Routes.CREATION + "?projectTemplateId=${event.id}" ))
+                sendUiEvent(UiEvent.Navigate(Routes.CREATION + "?projectTemplateId=${event.id}"))
             }
 
         }
     }
 
-    private fun sendUiEvent(event : UiEvent) {
+    private fun sendUiEvent(event: UiEvent) {
         viewModelScope.launch {
             _uiEvent.emit(event)
         }
+    }
+
+    private fun getProjectPreviews(): Flow<List<ProjectPreview>> {
+        if (!repository.projectHandler.previewsInitialized) {
+            viewModelScope.launch {
+                repository.projectHandler.initializePreviews()
+            }
+        }
+        return repository.projectHandler.getProjectPreviews()
+    }
+
+    private fun getTemplatePreviews(): Flow<List<ProjectTemplatePreview>> {
+        if (!repository.projectHandler.previewsInitialized) {
+            viewModelScope.launch {
+                repository.projectHandler.initializePreviews()
+            }
+        }
+        return repository.projectHandler.getProjectTemplatePreviews()
     }
 }
