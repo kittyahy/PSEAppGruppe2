@@ -36,7 +36,7 @@ abstract class GraphDAO {
     /**
      * It provides information of a specified graph.
      */
-    @Query("SELECT id, dataTransformation, type, path FROM graph WHERE projectId = :id")
+    @Query("SELECT id, function, cols, type, path FROM graph WHERE projectId = :id")
     abstract fun getGraphDataForProject(id: Int): Flow<List<GraphData>>
 
     /**

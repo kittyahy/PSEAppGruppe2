@@ -20,6 +20,7 @@
 
 package com.pseandroid2.dailydata.model.database.daos
 
+import com.google.gson.Gson
 import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.model.database.entities.GraphEntity
 import com.pseandroid2.dailydata.model.database.entities.GraphTemplateEntity
@@ -74,7 +75,8 @@ class GraphCDManager(
             GraphEntity(
                 newId,
                 projectId,
-                graph.getCalculationFunction(),
+                graph.getCalculationFunction().toFunctionString(),
+                Gson().toJson(graph.getCalculationFunction().cols),
                 graph.getType(),
                 graph.getPath() ?: ""
             )
