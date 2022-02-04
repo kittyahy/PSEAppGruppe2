@@ -20,23 +20,31 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
+import android.content.Context
 import android.graphics.Bitmap
+import android.view.View
+import com.pseandroid2.dailydata.model.database.AppDataBase
+import com.pseandroid2.dailydata.model.graph.Generator
+import com.pseandroid2.dailydata.model.project.Project
+import com.pseandroid2.dailydata.model.project.ProjectBuilder
+import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
+import com.pseandroid2.dailydata.util.IOUtil
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.runBlocking
+import com.pseandroid2.dailydata.model.graph.Graph as ModelGraph
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import com.google.gson.Gson
-import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.model.graph.GraphType
 import com.pseandroid2.dailydata.model.graph.LineChart.Companion.DOT_COLOR_KEY
 import com.pseandroid2.dailydata.model.graph.LineChart.Companion.LINE_STYLE_KEY
 import com.pseandroid2.dailydata.model.graph.LineChart.Companion.LINE_STYLE_NONE
 import com.pseandroid2.dailydata.model.graph.LineChart.Companion.LINE_STYLE_SOLID
-import com.pseandroid2.dailydata.model.graph.Graph as ModelGraph
-import com.pseandroid2.dailydata.model.project.Project
-import com.pseandroid2.dailydata.model.project.ProjectBuilder
-import com.pseandroid2.dailydata.model.table.ArrayListLayout
 import com.pseandroid2.dailydata.model.table.TableLayout
-
-
+/**
+ * Graph class that handles its specific interaction with ViewModel.
+ */
 abstract class Graph : Identifiable, Convertible<ModelGraph<*, *>> {
     companion object {
         val availableGraphs: MutableList<String> = ArrayList<String>()
@@ -54,15 +62,36 @@ abstract class Graph : Identifiable, Convertible<ModelGraph<*, *>> {
 
 
     abstract override val id: Int
-    abstract val image: Bitmap
+    //abstract val image: Bitmap?
     abstract val typeName: String
+    abstract var appDataBase: AppDataBase
 
-    override fun toDBEquivalent(): ModelGraph<*, *> {
-        return TODO("toDBEquivalentGraph") //Todo Arne fragen, wie ich den richtigen Graph erstelle: Kommt noch
+    @Deprecated("Internal function, should not be used outside the RepositoryViewModelAPI")
+    override fun connectToRepository(repositoryViewModelAPI: RepositoryViewModelAPI) {
+        appDataBase = repositoryViewModelAPI.appDataBase
+        @Suppress("DEPRECATION")
+        super.connectToRepository(repositoryViewModelAPI)
     }
 
     override fun addYourself(builder: ProjectBuilder<out Project>) {
+        @Suppress("DEPRECATION")
         builder.addGraphs(listOf(toDBEquivalent())) //TODO Arne: es kommen Änderungen
+    }
+
+    fun showIsPossible(): Flow<Boolean> {
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
+    }
+
+    suspend fun show(context: Context): View {
+        val graph: ModelGraph<*, *> = TODO("aus DB holen") // Todo richtiger graph typ
+        val view = Generator.generateChart(graph, context)
+        //image = IOUtil.getGraphImage(graph.getCustomizing()[Generator.GRAPH_NAME_KEY], context)
+        return view
     }
 }
 

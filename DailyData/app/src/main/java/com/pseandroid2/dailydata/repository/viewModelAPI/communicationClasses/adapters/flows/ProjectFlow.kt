@@ -22,10 +22,10 @@ package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.a
 
 import com.google.gson.Gson
 import com.pseandroid2.dailydata.model.database.AppDataBase
-import com.pseandroid2.dailydata.model.database.entities.ProjectData
 import com.pseandroid2.dailydata.model.notifications.TimeNotification
 import com.pseandroid2.dailydata.model.table.ArrayListLayout
 import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
+import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Button
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
@@ -35,27 +35,27 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Pr
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Row
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.toColumnList
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.toViewGraph
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 
 @InternalCoroutinesApi
 class ProjectFlow(
-    private val db: AppDataBase,
-    private val rds: RemoteDataSourceAPI,
-    private val eq: ExecuteQueue,
+    private val repositoryViewModelAPI: RepositoryViewModelAPI,
     private val projectId: Int
 ) {
+    @Suppress("DEPRECATION")
+    private val db: AppDataBase = repositoryViewModelAPI.appDataBase
+
+    @Suppress("DEPRECATION")
+    private val rds: RemoteDataSourceAPI = repositoryViewModelAPI.remoteDataSourceAPI
+    private val eq: ExecuteQueue = repositoryViewModelAPI.projectHandler.executeQueue
     fun getProject(): Flow<Project> {
         return ProjectFlowProvider(projectId, db).provideFlow.distinctUntilChanged()
             .map { project ->
                 val ret = if (project == null) {
-                    Project()
+                    Project(repositoryViewModelAPI = repositoryViewModelAPI)
                 } else {
                     val rows = mutableListOf<Row>()
                     for (row in project.table) {
@@ -100,7 +100,8 @@ class ProjectFlow(
                         buttons.toList(),
                         notifications.toList(),
                         graphs.toList(),
-                        members.toList()
+                        members.toList(),
+                        repositoryViewModelAPI
                     )
                 }
                 ret.executeQueue = eq

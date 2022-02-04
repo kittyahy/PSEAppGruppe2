@@ -202,7 +202,6 @@ fun PieChartDialog(
             )
         }
         graph.mapping.forEachIndexed { index, column ->
-
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,

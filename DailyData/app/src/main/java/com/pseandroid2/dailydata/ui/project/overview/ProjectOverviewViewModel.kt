@@ -41,8 +41,8 @@ class ProjectOverviewViewModel @Inject constructor(
     val repository: RepositoryViewModelAPI
 ): ViewModel() {
 
-    val projects = repository.projectHandler.getProjectPreviews() //TODO Arne
-    val templates = repository.projectHandler.getProjectTemplatePreviews() //TODO Arne
+    val projects = repository.projectHandler.getProjectPreviews()
+    val templates = repository.projectHandler.getProjectTemplatePreviews() 
 
     var isTemplateDialogOpen by mutableStateOf(false)
         private set

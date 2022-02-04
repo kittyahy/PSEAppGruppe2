@@ -21,7 +21,6 @@
 package com.pseandroid2.dailydata.model.project
 
 import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import com.pseandroid2.dailydata.model.graph.Graph
 import com.pseandroid2.dailydata.model.graph.GraphTemplate
 import com.pseandroid2.dailydata.model.notifications.Notification
@@ -154,7 +153,7 @@ interface Project {
         }
 
         fun toFunctionString(): String {
-            return table.getLayout().toJSON() + "|#|" + function.toCompleteString()
+            return function.toCompleteString()
         }
 
         private fun map(table: Table): List<List<Any>> {

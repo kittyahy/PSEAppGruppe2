@@ -46,8 +46,10 @@ public class LoginInterceptor implements HandlerInterceptor {
         String token = request.getHeader("token");
 
         //only for testing:
-        testAuth(token,request);
-
+        if (token.equals("MeinToken")) {
+            request.setAttribute("user", request.getHeader("name"));
+            return true;
+        }
         String userID = "";
         // Firebase token authentication
         try {
@@ -61,11 +63,4 @@ public class LoginInterceptor implements HandlerInterceptor {
         return HandlerInterceptor.super.preHandle(request, response, handler);
     }
 
-
-    @Deprecated(since = "Only for testing")
-    private void testAuth(String token,HttpServletRequest request ){
-        if (token.equals("MeinToken")) {
-            request.setAttribute("user", request.getHeader("name"));
-        }
-    }
 }

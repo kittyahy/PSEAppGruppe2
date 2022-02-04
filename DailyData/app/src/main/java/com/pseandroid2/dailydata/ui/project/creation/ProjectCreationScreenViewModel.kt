@@ -95,8 +95,6 @@ class ProjectCreationScreenViewModel @Inject constructor(
 
                  */
             }
-
-
         }
     }
 

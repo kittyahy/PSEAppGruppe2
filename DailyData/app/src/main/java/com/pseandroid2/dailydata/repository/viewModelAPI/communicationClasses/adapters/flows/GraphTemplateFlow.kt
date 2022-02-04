@@ -21,6 +21,10 @@ class GraphTemplateFlow(
                         template.name,
                         template.getWallpaper(),
                         template.id,
+                        template.desc,
+                        template.background,
+                        template.customizing,
+                        template.type
                     )
                     //TODO figure out if GraphTemplates should have an executeQueue?
                     //addTemplate.executeQueue = eq

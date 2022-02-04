@@ -21,6 +21,7 @@
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
 import com.pseandroid2.dailydata.model.database.entities.ProjectData
+import com.pseandroid2.dailydata.model.project.ProjectBuilder
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddButton
@@ -38,6 +39,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.runBlocking
 import kotlin.reflect.KClass
+import com.pseandroid2.dailydata.model.project.Project as ModelProject
 
 class Project(
     override var id: Int = 0,
@@ -53,7 +55,7 @@ class Project(
     var graphs: List<Graph> = ArrayList<Graph>(),
     var members: List<Member> = ArrayList<Member>(),
     val repositoryViewModelAPI: RepositoryViewModelAPI
-) : Identifiable {
+) : Identifiable, Convertible<ModelProject> {
     //Todo wish Flows erstellen, die Commands erlauben dynamisch ihre isPossible Funktionen upzudaten
     override lateinit var executeQueue: ExecuteQueue
     override lateinit var project: Project
@@ -407,5 +409,13 @@ class Project(
         i.addAll(graphs)
         i.addAll(members)
         return i
+    }
+
+    override fun toDBEquivalent(): ModelProject {
+        TODO("Not yet implemented")
+    }
+
+    override fun addYourself(builder: ProjectBuilder<out ModelProject>) {
+        TODO("Not yet implemented")
     }
 }

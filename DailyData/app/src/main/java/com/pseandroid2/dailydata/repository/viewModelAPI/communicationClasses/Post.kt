@@ -24,6 +24,9 @@ import com.pseandroid2.dailydata.remoteDataSource.serverConnection.forRepoReturn
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * Post class that handles its specific interaction with ViewModel.
+ */
 class Post : Identifiable {
     override var id: Int = -1
     lateinit var postEntries: List<PostEntry>
@@ -42,12 +45,12 @@ class Post : Identifiable {
         this.postEntries = postEntries
     }
 
-    fun getProjectTemplate(): ProjectTemplate {
-        TODO()
+    fun downloadProjectTemplate() {
+        TODO("downloadProjectTemplate")
     }
 
-    fun getGraphTemplate(id: Int): GraphTemplate {
-        TODO()
+    fun downloadGraphTemplate(id: Int) {
+        TODO("downloadGraphTemplate")
     }
 
     override lateinit var executeQueue: ExecuteQueue
