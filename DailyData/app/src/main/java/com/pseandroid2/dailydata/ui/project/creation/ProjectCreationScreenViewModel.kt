@@ -34,7 +34,7 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Da
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Notification
 import com.pseandroid2.dailydata.util.ui.UiEvent
-import com.pseandroid2.dailydata.util.ui.Routes
+import com.pseandroid2.dailydata.ui.navigation.Routes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -84,7 +84,7 @@ class ProjectCreationScreenViewModel @Inject constructor(
         val id = savedStateHandle.get<Int>("projectTemplateId")!!
         if(id != -1) {
             viewModelScope.launch {
-                var template = repository.serverHandler.getProjectTemplate(postId = id)
+                val template = repository.serverHandler.getProjectTemplate(postId = id)
                 title = template.titel
                 description = template.description
                 wallpaper = Color(template.wallpaper)
@@ -109,54 +109,54 @@ class ProjectCreationScreenViewModel @Inject constructor(
                 wallpaper = event.wallpaper
             }
             is ProjectCreationEvent.OnTableAdd -> {
-                var id = if (table.isEmpty()) {
+                val id = if (table.isEmpty()) {
                     0
                 } else {
                     table.last().id + 1
                 }
-                var mutable = table.toMutableList()
+                val mutable = table.toMutableList()
                 mutable.add(Column(id = id, name = event.name, unit = event.unit, dataType = event.dataType))
                 table = mutable.toList()
             }
             is ProjectCreationEvent.OnTableRemove -> {
-                var mutable = table.toMutableList()
-                var removed = mutable.removeAt(index = event.index)
-                var mutableButtons = buttons.toMutableList()
+                val mutable = table.toMutableList()
+                val removed = mutable.removeAt(index = event.index)
+                val mutableButtons = buttons.toMutableList()
                 buttons = mutableButtons.filter { it.columnId != removed.id}.toList()
                 table = mutable.toList()
             }
             is ProjectCreationEvent.OnButtonAdd -> {
-                var id = if (buttons.isEmpty()) {
+                val id = if (buttons.isEmpty()) {
                     0
                 } else {
                     buttons.last().id + 1
                 }
-                var mutable = buttons.toMutableList()
+                val mutable = buttons.toMutableList()
                 mutable.add(Button(id = id, name = event.name, columnId = table.find {event.columnId == it.id}!!.id, value = event.value))
                 buttons = mutable.toList()
             }
             is ProjectCreationEvent.OnButtonRemove -> {
-                var mutable = buttons.toMutableList()
+                val mutable = buttons.toMutableList()
                 mutable.removeAt(index = event.index)
                 buttons = mutable.toList()
             }
             is ProjectCreationEvent.OnNotificationAdd -> {
-                var mutable = notifications.toMutableList()
+                val mutable = notifications.toMutableList()
                 mutable.add(Notification(id = 0, message = event.message, time = event.time))
                 notifications = mutable.toList()
             }
             is ProjectCreationEvent.OnNotificationRemove -> {
-                var mutable = notifications.toMutableList()
+                val mutable = notifications.toMutableList()
                 mutable.removeAt(index = event.index)
                 notifications = mutable.toList()
             }
             is ProjectCreationEvent.OnGraphAdd -> {
-                var mutable = graphs.toMutableList()
+                val mutable = graphs.toMutableList()
                 mutable.add(event.graph)
                 graphs = mutable.toList()
             }
             is ProjectCreationEvent.OnGraphRemove -> {
-                var mutable = graphs.toMutableList()
+                val mutable = graphs.toMutableList()
                 mutable.removeAt(index = event.index)
                 graphs = mutable.toList()
             }
@@ -165,19 +165,20 @@ class ProjectCreationScreenViewModel @Inject constructor(
                     title.isBlank() -> sendUiEvent(UiEvent.ShowToast("Please Enter a title"))
                     table.isEmpty() -> sendUiEvent(UiEvent.ShowToast("Please Enter a column"))
                     else            -> {
-                        //Todo Anton neue signatur
-                        /*
-                        var newProject = repository.projectHandler.newProjectAsync(
-                            name = title,
-                            description = description,
-                            wallpaper = wallpaper.hashCode(),
-                            table = table,
-                            buttons = buttons,
-                            notification = notifications,
-                            graphs = graphs
-                        )
-                        sendUiEvent(UiEvent.PopBackStack)
-                        sendUiEvent(UiEvent.Navigate(Routes.DATA + "?projectId=${newProject.id}"))*/
+                        viewModelScope.launch {
+                            val newProject = repository.projectHandler.newProjectAsync(
+                                name = title,
+                                description = description,
+                                wallpaper = wallpaper.hashCode(),
+                                table = table,
+                                buttons = buttons,
+                                notification = notifications,
+                                graphs = graphs
+                            )
+                            val id = newProject.await()
+                            sendUiEvent(UiEvent.PopBackStack)
+                            sendUiEvent(UiEvent.Navigate(Routes.DATA + "?projectId=$id"))
+                        }
                     }
                 }
             }

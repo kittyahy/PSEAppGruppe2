@@ -186,8 +186,8 @@ fun ProjectDataSettingsScreen(
                 onClick = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnShowButtonsDialog(true)) },
                 onClickItem = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnButtonRemove(index = it)) },
                 elements = viewModel.buttons.map { button ->
-                    var columnName = viewModel.table.find { it.id == button.columnId} ?: ""
-                    "${button.name} in ${columnName}"
+                    val columnName = viewModel.table.find { it.id == button.columnId} ?: ""
+                    "${button.name} in $columnName"
                 }
             )
             Divider()
@@ -219,7 +219,7 @@ fun ProjectDataSettingsScreen(
                 label = "Add Graph",
                 mainIcon = ImageVector.vectorResource(id = R.drawable.ic_chart),
                 onClick = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnShowGraphDialog(true)) },
-                onClickItem = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnButtonRemove(index = it)) },
+                onClickItem = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnGraphRemove(index = it)) },
                 elements = viewModel.graphs.map { it.typeName }
             )
             ButtonElement(

@@ -37,7 +37,6 @@ class CreateProjectTest {
         val idFlow = MutableSharedFlow<Int>()
         val createProject =
             CreateProject(
-                idFlow,
                 "user",
                 testString,
                 "description",
@@ -45,7 +44,8 @@ class CreateProjectTest {
                 listOf(Column(0, "column", "unit", DataType.TIME)),
                 listOf(Button(0, "button", 0, 0)),
                 ArrayList<Notification>(),
-                ArrayList<Graph>()
+                ArrayList<Graph>(),
+                idFlow
             )
         val projectDataDAO = mockk<ProjectDataDAO>()
         coEvery { projectDataDAO.setOnlineID(any<Int>(), any<Long>()) } returns Unit
@@ -66,7 +66,7 @@ class CreateProjectTest {
             createProject.execute(
                 appDataBase,
                 remoteDataSourceAPI,
-                publishQueue
+                publishQueue,
             )
         }
         task.await()

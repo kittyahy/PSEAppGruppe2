@@ -72,12 +72,8 @@ fun ProjectCreationScreen(
     BackDialog(
         isOpen = viewModel.isBackDialogOpen,
         onDismissRequest = { viewModel.onEvent(ProjectCreationEvent.OnShowBackDialog(false)) },
-        onOkClick = {
-            viewModel.onEvent(ProjectCreationEvent.OnNavigateBack)
-        },
-        onCancelClick = {
-            viewModel.onEvent(ProjectCreationEvent.OnShowBackDialog(false))
-        }
+        onOkClick = { viewModel.onEvent(ProjectCreationEvent.OnNavigateBack) },
+        onCancelClick = { viewModel.onEvent(ProjectCreationEvent.OnShowBackDialog(false)) }
     )
 
     Scaffold(
@@ -97,7 +93,6 @@ fun ProjectCreationScreen(
                 placeholder = "Add Title",
                 value = viewModel.title,
                 onValueChange = { viewModel.onEvent(ProjectCreationEvent.OnTitleChange(it)) }
-
             )
             Divider()
             TextInput(
@@ -191,7 +186,7 @@ fun ProjectCreationScreen(
                 label = "Add Graph",
                 mainIcon = ImageVector.vectorResource(id = R.drawable.ic_chart),
                 onClick = { viewModel.onEvent(ProjectCreationEvent.OnShowGraphDialog(true)) },
-                onClickItem = { viewModel.onEvent(ProjectCreationEvent.OnButtonRemove(index = it)) },
+                onClickItem = { viewModel.onEvent(ProjectCreationEvent.OnGraphRemove(index = it)) },
                 elements = viewModel.graphs.map { it.typeName }
             )
         }

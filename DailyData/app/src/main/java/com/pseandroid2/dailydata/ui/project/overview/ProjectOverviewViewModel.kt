@@ -27,7 +27,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.util.ui.UiEvent
-import com.pseandroid2.dailydata.util.ui.Routes
+import com.pseandroid2.dailydata.ui.navigation.Routes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.*
@@ -63,6 +63,7 @@ class ProjectOverviewViewModel @Inject constructor(
             is ProjectOverviewEvent.OnTemplateClick -> {
                 sendUiEvent(UiEvent.Navigate(Routes.CREATION + "?projectTemplateId=${event.id}" ))
             }
+
         }
     }
 

@@ -26,7 +26,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.pseandroid2.dailydata.util.ui.ProjectNavigation
+import com.pseandroid2.dailydata.ui.navigation.ProjectNavigation
 import kotlinx.coroutines.InternalCoroutinesApi
 
 @InternalCoroutinesApi

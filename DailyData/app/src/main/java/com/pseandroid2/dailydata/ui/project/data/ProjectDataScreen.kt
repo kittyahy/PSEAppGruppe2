@@ -20,11 +20,14 @@
 
 package com.pseandroid2.dailydata.ui.project.data
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pseandroid2.dailydata.ui.composables.TopNavigationBar
 import com.pseandroid2.dailydata.ui.project.data.graph.ProjectDataGraphScreen
@@ -54,13 +57,13 @@ fun ProjectDataScreen(
         Box(
             modifier = Modifier.padding(it)
         ) {
-            var onNavigate : (UiEvent.Navigate) -> Unit = { tab ->
-                var index = DataTabs.values().indexOf(DataTabs.valueOf(tab.route))
+            val onNavigate : (UiEvent.Navigate) -> Unit = { tab ->
+                val index = DataTabs.values().indexOf(DataTabs.valueOf(tab.route))
                 viewModel.onEvent(ProjectDataScreenEvent.OnTabChange(index))
             }
 
             when(viewModel.tabs[viewModel.tab]) {
-                DataTabs.GRAPHS     -> ProjectDataGraphScreen(projectId = viewModel.projectId, onNavigate = onNavigate)
+                DataTabs.GRAPHS     -> ProjectDataGraphScreen(projectId = viewModel.projectId)
                 DataTabs.INPUT      -> ProjectDataInputScreen(projectId = viewModel.projectId, onNavigate = onNavigate)
                 DataTabs.SETTINGS   -> ProjectDataSettingsScreen(
                     projectId = viewModel.projectId,

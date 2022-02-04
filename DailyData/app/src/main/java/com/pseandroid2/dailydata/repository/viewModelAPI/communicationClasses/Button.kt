@@ -20,7 +20,6 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
-import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.project.ProjectBuilder
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.model.uielements.UIElementType
@@ -28,6 +27,7 @@ import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.runBlocking
+import com.pseandroid2.dailydata.model.project.Project as ModelProject
 
 class Button(
     override val id: Int,
@@ -36,6 +36,7 @@ class Button(
     val value: Int
 ) : Identifiable, Convertible<UIElement> {
     override lateinit var executeQueue: ExecuteQueue
+    override lateinit var project: Project
 
     constructor(uiElement: UIElement, columnId: Int) : this(
         uiElement.id,
@@ -71,7 +72,7 @@ class Button(
         return flow
     }
 
-    fun increaseValue() {
+    suspend fun increaseValue() {
         setValue(value + 1)
     }
 
@@ -84,7 +85,7 @@ class Button(
         return flow
     }
 
-    fun decreaseValue() {
+    suspend fun decreaseValue() {
         setValue(value - 1)
     }
 
@@ -97,11 +98,11 @@ class Button(
         return flow
     }
 
-    fun setValue(value: Int) {
+    suspend fun setValue(value: Int) {
         TODO("setValue")
     }
 
-    override fun addYourself(builder: ProjectBuilder<out Project>) {
+    override fun addYourself(builder: ProjectBuilder<out ModelProject>) {
         TODO("Not yet implemented")
     }
 }

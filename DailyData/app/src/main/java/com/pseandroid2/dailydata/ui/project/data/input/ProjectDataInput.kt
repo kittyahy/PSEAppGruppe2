@@ -13,7 +13,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
@@ -43,7 +42,6 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Ro
 import com.pseandroid2.dailydata.ui.project.creation.AppDialog
 import com.pseandroid2.dailydata.util.ui.UiEvent
 import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.flow.collect
 import java.util.Calendar
 
 @InternalCoroutinesApi
@@ -54,10 +52,10 @@ fun ProjectDataInputScreen(
     viewModel: ProjectDataInputScreenViewModel = hiltViewModel()
 ) {
 
-    var scrollState = rememberScrollState()
+    val scrollState = rememberScrollState()
     val context = LocalContext.current
-    var members = viewModel.members
-    var table = viewModel.table
+    val members = viewModel.members
+    val table = viewModel.table
 
     LaunchedEffect(key1 = true) {
         viewModel.onEvent(ProjectDataInputScreenEvent.OnCreate(projectId = projectId))
@@ -126,7 +124,7 @@ fun ProjectHeader(
     members : List<String>,
     memberColor : Color
 ) {
-    Column() {
+    Column {
         Surface(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -154,7 +152,7 @@ fun ProjectHeader(
                 }
                 if (isOnlineProject) {
                     Spacer(modifier = Modifier.padding(4.dp))
-                    Row() {
+                    Row {
                         LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                             items(members) { member ->
                                 Box(
@@ -336,8 +334,7 @@ fun TableColumn (
                 val hour = calendar[Calendar.HOUR_OF_DAY]
                 val minute = calendar[Calendar.MINUTE]
                 var time by remember { mutableStateOf("$hour:$minute") }
-                val timePickerDialog = TimePickerDialog( context,
-                    {_, hour : Int, minute: Int ->
+                val timePickerDialog = TimePickerDialog(context, {_, hour : Int, minute: Int ->
                         time = "$hour:$minute"
                         onValueChange(time)
                     }, hour, minute, true
@@ -448,7 +445,7 @@ fun RowDialog(
     onDeleteClick : () -> Unit
 ) {
     AppDialog(isOpen = isOpen, onDismissRequest = onDismissRequest) {
-        Column() {
+        Column {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
