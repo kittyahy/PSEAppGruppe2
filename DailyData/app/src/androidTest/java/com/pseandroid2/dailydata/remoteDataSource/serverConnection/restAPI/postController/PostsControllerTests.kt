@@ -11,6 +11,7 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
+/*
 class PostsControllerTests {
     private var restAPI: RESTAPI = RESTAPI()
     private val serverManager = ServerManager(restAPI)
@@ -71,6 +72,4 @@ class PostsControllerTests {
 
         Assert.assertTrue(restAPI.removePost(postID, authToken))
     }
-
-    //TODO Tests auskommentieren
-}
+}*/

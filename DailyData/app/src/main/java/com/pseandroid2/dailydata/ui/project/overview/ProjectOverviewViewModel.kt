@@ -21,16 +21,17 @@
 package com.pseandroid2.dailydata.ui.project.overview
 
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
+import com.pseandroid2.dailydata.ui.navigation.Routes
 import com.pseandroid2.dailydata.util.ui.UiEvent
-import com.pseandroid2.dailydata.util.ui.Routes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -63,6 +64,7 @@ class ProjectOverviewViewModel @Inject constructor(
             is ProjectOverviewEvent.OnTemplateClick -> {
                 sendUiEvent(UiEvent.Navigate(Routes.CREATION + "?projectTemplateId=${event.id}" ))
             }
+
         }
     }
 

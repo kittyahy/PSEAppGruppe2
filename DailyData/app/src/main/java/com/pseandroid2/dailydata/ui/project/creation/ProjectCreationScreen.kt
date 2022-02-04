@@ -22,19 +22,21 @@ package com.pseandroid2.dailydata.ui.project.creation
 
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material.Divider
+import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.pseandroid2.dailydata.util.ui.UiEvent
 import com.pseandroid2.dailydata.R
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
@@ -42,6 +44,7 @@ import com.pseandroid2.dailydata.ui.composables.ListInput
 import com.pseandroid2.dailydata.ui.composables.SaveButton
 import com.pseandroid2.dailydata.ui.composables.TextInput
 import com.pseandroid2.dailydata.ui.composables.WallpaperElement
+import com.pseandroid2.dailydata.util.ui.UiEvent
 import kotlinx.coroutines.InternalCoroutinesApi
 
 @InternalCoroutinesApi
@@ -72,12 +75,8 @@ fun ProjectCreationScreen(
     BackDialog(
         isOpen = viewModel.isBackDialogOpen,
         onDismissRequest = { viewModel.onEvent(ProjectCreationEvent.OnShowBackDialog(false)) },
-        onOkClick = {
-            viewModel.onEvent(ProjectCreationEvent.OnNavigateBack)
-        },
-        onCancelClick = {
-            viewModel.onEvent(ProjectCreationEvent.OnShowBackDialog(false))
-        }
+        onOkClick = { viewModel.onEvent(ProjectCreationEvent.OnNavigateBack) },
+        onCancelClick = { viewModel.onEvent(ProjectCreationEvent.OnShowBackDialog(false)) }
     )
 
     Scaffold(
@@ -97,7 +96,6 @@ fun ProjectCreationScreen(
                 placeholder = "Add Title",
                 value = viewModel.title,
                 onValueChange = { viewModel.onEvent(ProjectCreationEvent.OnTitleChange(it)) }
-
             )
             Divider()
             TextInput(
@@ -191,7 +189,7 @@ fun ProjectCreationScreen(
                 label = "Add Graph",
                 mainIcon = ImageVector.vectorResource(id = R.drawable.ic_chart),
                 onClick = { viewModel.onEvent(ProjectCreationEvent.OnShowGraphDialog(true)) },
-                onClickItem = { viewModel.onEvent(ProjectCreationEvent.OnButtonRemove(index = it)) },
+                onClickItem = { viewModel.onEvent(ProjectCreationEvent.OnGraphRemove(index = it)) },
                 elements = viewModel.graphs.map { it.typeName }
             )
         }

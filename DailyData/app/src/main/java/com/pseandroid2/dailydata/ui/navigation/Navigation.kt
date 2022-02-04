@@ -18,7 +18,7 @@
 
 */
 
-package com.pseandroid2.dailydata.util.ui
+package com.pseandroid2.dailydata.ui.navigation
 
 import android.os.Bundle
 import androidx.compose.runtime.Composable
@@ -31,11 +31,11 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.pseandroid2.dailydata.ui.server.ServerScreen
 import com.pseandroid2.dailydata.ui.project.ProjectScreen
 import com.pseandroid2.dailydata.ui.project.creation.ProjectCreationScreen
 import com.pseandroid2.dailydata.ui.project.data.ProjectDataScreen
 import com.pseandroid2.dailydata.ui.project.overview.ProjectOverviewScreen
+import com.pseandroid2.dailydata.ui.server.ServerScreen
 import com.pseandroid2.dailydata.ui.templates.TemplatesScreen
 import kotlinx.coroutines.InternalCoroutinesApi
 
@@ -55,11 +55,7 @@ fun Navigation(navController: NavHostController) {
             )
         }
         composable(Routes.TEMPLATES) {
-            TemplatesScreen(
-                onNavigate = {
-                    navController.navigate(it.route)
-                }
-            )
+            TemplatesScreen()
         }
         composable(Routes.SERVER) {
             ServerScreen(
@@ -87,7 +83,7 @@ fun ProjectNavigation(
             arguments = listOf(
                 navArgument(name = "projectTemplateId") {
                     type = NavType.IntType
-                    defaultValue = -1;
+                    defaultValue = -1
                 }
             )
         ) {
@@ -112,7 +108,7 @@ fun ProjectNavigation(
             arguments = listOf(
                 navArgument(name = "projectId") {
                     type = NavType.IntType
-                    defaultValue = -1;
+                    defaultValue = -1
                 }
             )
         ) {

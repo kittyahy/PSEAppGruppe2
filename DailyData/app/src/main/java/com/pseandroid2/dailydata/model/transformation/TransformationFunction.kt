@@ -21,6 +21,11 @@
 package com.pseandroid2.dailydata.model.transformation
 
 import com.google.gson.Gson
+import com.pseandroid2.dailydata.model.transformation.DateTimeLineChartTransformation.Companion.LINE_CHART_TYPE_DATE_TIME
+import com.pseandroid2.dailydata.model.transformation.FloatLineChartTransformation.Companion.LINE_CHART_TYPE_FLOAT
+import com.pseandroid2.dailydata.model.transformation.IntLineChartTransformation.Companion.LINE_CHART_TYPE_INT
+import com.pseandroid2.dailydata.model.transformation.LineChartTransformation.Companion.CHART_TYPE_LINE
+import com.pseandroid2.dailydata.model.transformation.PieChartTransformation.Companion.CHART_TYPE_PIE
 import com.pseandroid2.dailydata.model.transformation.Sum.Companion.TYPE_FLOAT
 import com.pseandroid2.dailydata.model.transformation.Sum.Companion.TYPE_INT
 
@@ -31,8 +36,6 @@ abstract class TransformationFunction<O : Any> protected constructor(
     companion object {
         const val SUM_ID = "SUM"
         const val IDENTITY_ID = "ID"
-        const val CHART_TYPE_LINE = "LINECHART"
-        const val CHART_TYPE_PIE = "PIECHART"
 
         fun parse(functionString: String): TransformationFunction<out Any> {
             var tableType = functionString.substringBefore("::", "")
@@ -75,16 +78,34 @@ abstract class TransformationFunction<O : Any> protected constructor(
                             transform
                         }
                     }
-                    CHART_TYPE_LINE -> {
-                        when (transform) {
-                            is FloatIdentity -> LineChartTransformation(
+                    LINE_CHART_TYPE_FLOAT + CHART_TYPE_LINE -> {
+                        if (transform is FloatIdentity) {
+                            FloatLineChartTransformation(
                                 transform,
-                                (Gson().fromJson(
-                                    function.substringAfter("%"),
-                                    List::class.java
-                                ) ?: listOf<Float>()) as List<Float>
+                                function.substringAfter("%").toInt()
                             )
-                            else -> throw IllegalArgumentException("Could not create LineChartTransformation from ${transform.javaClass.canonicalName}")
+                        } else {
+                            throw IllegalArgumentException("Could not create LineChartTransformation from ${transform.javaClass.canonicalName}")
+                        }
+                    }
+                    LINE_CHART_TYPE_INT + CHART_TYPE_LINE -> {
+                        if (transform is FloatIdentity) {
+                            FloatLineChartTransformation(
+                                transform,
+                                function.substringAfter("%").toInt()
+                            )
+                        } else {
+                            throw IllegalArgumentException("Could not create LineChartTransformation from ${transform.javaClass.canonicalName}")
+                        }
+                    }
+                    LINE_CHART_TYPE_DATE_TIME + CHART_TYPE_LINE -> {
+                        if (transform is FloatIdentity) {
+                            FloatLineChartTransformation(
+                                transform,
+                                function.substringAfter("%").toInt()
+                            )
+                        } else {
+                            throw IllegalArgumentException("Could not create LineChartTransformation from ${transform.javaClass.canonicalName}")
                         }
                     }
                     else -> transform

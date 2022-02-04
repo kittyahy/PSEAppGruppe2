@@ -10,6 +10,7 @@ import com.pseandroid2.dailydata.util.ui.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -38,13 +39,25 @@ class LoginScreenViewModel @Inject constructor(
             }
             is LoginScreenEvent.Login -> {
                 //i assume model checks if valid
-                repository.serverHandler.login(email = userEmail, password = userPassword)
+                viewModelScope.launch {
+                    if (repository.serverHandler.loginIsPossible().first()) {
+                        repository.serverHandler.login(email = userEmail, password = userPassword)
+                    } else {
+                        sendUiEvent(UiEvent.ShowToast("Could not log in"))
+                    }
+                }
             }
             is LoginScreenEvent.LoginGoogle -> {
-
+                sendUiEvent(UiEvent.ShowToast("This feature is not ready yet"))
             }
             is LoginScreenEvent.SignUp -> {
-                repository.serverHandler.signUp(email = event.email, password = event.password)
+                viewModelScope.launch {
+                    if (repository.serverHandler.signUpIsPossible().first()) {
+                        repository.serverHandler.signUp(email = event.email, password = event.password)
+                    } else {
+                        sendUiEvent(UiEvent.ShowToast("Could not sign up"))
+                    }
+                }
             }
             is LoginScreenEvent.ShowSignUpDialog -> {
                 isSignUpDialogOpen = event.isOpen

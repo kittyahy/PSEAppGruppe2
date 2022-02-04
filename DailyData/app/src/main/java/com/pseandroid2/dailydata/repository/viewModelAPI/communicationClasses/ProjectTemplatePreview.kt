@@ -24,6 +24,7 @@ class ProjectTemplatePreview(
     )
 
     override lateinit var executeQueue: ExecuteQueue
+    override lateinit var project: Project
 
     override fun deleteIsPossible(): Flow<Boolean> {
         TODO("Not yet implemented")

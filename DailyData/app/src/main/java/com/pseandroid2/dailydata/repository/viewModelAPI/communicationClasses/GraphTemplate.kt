@@ -21,12 +21,42 @@
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import com.pseandroid2.dailydata.model.graph.GraphType
+import com.pseandroid2.dailydata.model.settings.Settings
+import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
+import kotlinx.coroutines.flow.Flow
+import  com.pseandroid2.dailydata.model.graph.GraphTemplate as ModelTemplate
 
 
 class GraphTemplate(
     var title: String,
     var image: Bitmap?,
-    var id: Int
-) {
-    //TODO Implementierung
+    override var id: Int,
+    var descrition: String,
+    var color: Int,
+    var settings: Settings,
+    var type: GraphType
+) : Identifiable, Template() {
+    constructor(modelTemplate: ModelTemplate) : this(
+        modelTemplate.name,
+        BitmapFactory.decodeFile(modelTemplate.path),
+        modelTemplate.id,
+        modelTemplate.desc,
+        modelTemplate.background,
+        modelTemplate.customizing,
+        modelTemplate.type
+    )
+    // beschreibung farbe SettingsObj, Typ, erstellung onlineId
+
+    override lateinit var executeQueue: ExecuteQueue
+    override lateinit var project: Project
+
+    override fun deleteIsPossible(): Flow<Boolean> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun delete() {
+        TODO("Not yet implemented")
+    }
 }

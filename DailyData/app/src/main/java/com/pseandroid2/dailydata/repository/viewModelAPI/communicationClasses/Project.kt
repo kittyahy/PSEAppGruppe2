@@ -21,17 +21,25 @@
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
 import com.pseandroid2.dailydata.model.database.entities.ProjectData
+import com.pseandroid2.dailydata.model.project.ProjectBuilder
+import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
+import com.pseandroid2.dailydata.repository.commandCenter.commands.AddButton
+import com.pseandroid2.dailydata.repository.commandCenter.commands.AddColumn
+import com.pseandroid2.dailydata.repository.commandCenter.commands.AddGraph
+import com.pseandroid2.dailydata.repository.commandCenter.commands.AddMember
+import com.pseandroid2.dailydata.repository.commandCenter.commands.AddNotification
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddRow
 import com.pseandroid2.dailydata.repository.commandCenter.commands.IllegalOperationException
 import com.pseandroid2.dailydata.repository.commandCenter.commands.ProjectCommand
+import com.pseandroid2.dailydata.repository.commandCenter.commands.PublishProject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlin.reflect.KClass
+import com.pseandroid2.dailydata.model.project.Project as ModelProject
 
 class Project(
     override var id: Int = 0,
@@ -40,47 +48,80 @@ class Project(
     var title: String = "title missing",
     var description: String = "description missing",
     var wallpaper: Int = 0,
-    var table: List<Column> = ArrayList(),
-    var data: List<Row> = ArrayList(),
-    var buttons: List<Button> = ArrayList(),
-    var notifications: List<Notification> = ArrayList(),
-    var graphs: List<Graph> = ArrayList(),
-    var members: List<Member> = ArrayList()
-) : Identifiable {
+    var table: List<Column> = ArrayList<Column>(),
+    var data: List<Row> = ArrayList<Row>(),
+    var buttons: List<Button> = ArrayList<Button>(),
+    var notifications: List<Notification> = ArrayList<Notification>(),
+    var graphs: List<Graph> = ArrayList<Graph>(),
+    var members: List<Member> = ArrayList<Member>(),
+    val repositoryViewModelAPI: RepositoryViewModelAPI
+) : Identifiable, Convertible<ModelProject> {
+    //Todo wish Flows erstellen, die Commands erlauben dynamisch ihre isPossible Funktionen upzudaten
     override lateinit var executeQueue: ExecuteQueue
+    override lateinit var project: Project
     private val scope = CoroutineScope(Dispatchers.IO)
 
-    private val isPossible = mutableMapOf<KClass<out ProjectCommand>, MutableSharedFlow<Boolean>>(
-        Pair(AddRow::class, MutableSharedFlow())
+    private val supportedCommands = listOf<KClass<out ProjectCommand>>(
+        AddRow::class,
+        AddButton::class,
+        AddNotification::class,
+        AddGraph::class,
+        AddMember::class,
+        PublishProject::class
     )
+    private val isPossible = mutableMapOf<KClass<out ProjectCommand>, MutableSharedFlow<Boolean>>()
+
+    //addColumns is handled separately, because whether a column might not be added depends on its
+    // DataType
+    private val isPossibleAddColumn = mutableMapOf<DataType, MutableSharedFlow<Boolean>>()
 
     init {
+        @Suppress("DEPRECATION")
+        connectToProject(this)
+        for (id in getIntefiableChildred()) {
+            @Suppress("DEPRECATION")
+            id.connectToProject(this)
+        }
+        @Suppress("DEPRECATION")
+        connectToRepository(repositoryViewModelAPI)
+        for (commandClass in supportedCommands) {
+            isPossible[commandClass] = MutableSharedFlow<Boolean>()
+        }
         for (pair in isPossible) {
             runBlocking { //Todo runBlocking weg
                 pair.value.emit(pair.key.members.single {
-                    it.name == "IsPossible"
+                    it.name == "isPossible"
                 }.call(this) as Boolean)
             }
         }
+        for (type in DataType.values()) {
+            isPossibleAddColumn[type] = MutableSharedFlow()
+            @Suppress("DEPRECATION")
+            AddColumn.isPossible(project, type)
+        }
     }
 
-
+    @Deprecated("Internal function, should not be used outside the RepositoryViewModelAPI")
     fun update(projectData: ProjectData) {
         TODO("not yet implemented")
     }
 
+    //TODO Deli: Bitte über allen IsPossible Funktionen in diesem Package einfügen.
+    /**
+     * If false, it would be imprudent to use the corresponding "manipulation" fun.
+     * Thus it should be used to block input options from being used if false.
+     * e.g. If manipulationIsPossible.first() is false,
+     *      users should not be able to call manipulation().
+     */
     fun addGraphIsPossible(): Flow<Boolean> {
-        //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
-        runBlocking {
-            flow.emit(true)
-        }
-        return flow
+        return isPossible[AddGraph::class]!!
     }
 
 
-    fun addGraph(graph: Graph) {
-
+    suspend fun addGraph(graph: Graph) {
+        isPossible[AddGraph::class]!!.emit(false)
+        @Suppress("DEPRECATION")
+        executeQueue.add(AddGraph(id, graph))
     }
 
     fun addRowIsPossible(): Flow<Boolean> {
@@ -88,8 +129,10 @@ class Project(
     }
 
     //@throws IllegalOperationException
-    fun addRow(row: Row) {
-        TODO("addRow")
+    suspend fun addRow(row: Row) {
+        isPossible[AddRow::class]!!.emit(false)
+        @Suppress("DEPRECATION")
+        executeQueue.add(AddRow(id, row))
     }
 
     fun deleteRowIsPossible(row: Row): Flow<Boolean> {
@@ -102,26 +145,33 @@ class Project(
     }
 
     //@throws IllegalOperationException
-    fun deleteRow(row: Row) {
+    suspend fun deleteRow(row: Row) {
         if (row in data) {
-            scope.launch { row.delete() }
+            row.delete()
         } else {
             throw IllegalOperationException()
         }
     }
 
-    fun addColumnIsPossible(): Flow<Boolean> {
-        //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
-        runBlocking {
-            flow.emit(true)
-        }
-        return flow
+    /**
+     * If false, it would be imprudent to use the corresponding "manipulation" fun.
+     * Thus it should be used to block input options from being used if false.
+     * Because the result heavily depends on the columns DataType a map is returned, containing a
+     * separate Flow (value) for each DataType (key).
+     * e.g. If manipulationIsPossible.first() is false,
+     *      users should not be able to call manipulation().
+     */
+    fun addColumnIsPossible(): Map<DataType, Flow<Boolean>> {
+        return isPossibleAddColumn
     }
 
     //@throws IllegalOperationException
-    fun addColumn(column: Column) {
-        TODO("addColumn")
+    suspend fun addColumn(column: Column) {
+        for (type in DataType.values()) {
+            isPossibleAddColumn[type]!!.emit(false)
+        }
+        @Suppress("DEPRECATION")
+        executeQueue.add(AddColumn(id, column))
     }
 
     fun deleteColumnIsPossible(column: Column): Flow<Boolean> {
@@ -134,9 +184,9 @@ class Project(
     }
 
     //@throws IllegalOperationException
-    fun deleteColumn(column: Column) {
+    suspend fun deleteColumn(column: Column) {
         if (column in table) {
-            scope.launch { column.delete() }
+            column.delete()
         } else {
             throw IllegalOperationException()
         }
@@ -144,18 +194,15 @@ class Project(
 
 
     fun addButtonIsPossible(): Flow<Boolean> {
-        //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
-        runBlocking {
-            flow.emit(true)
-        }
-        return flow
+        return isPossible[AddButton::class]!!
     }
 
 
     //@throws IllegalOperationException
-    fun addButton(button: Button) {
-        TODO("addButton")
+    suspend fun addButton(button: Button) {
+        isPossible[AddButton::class]!!.emit(false)
+        @Suppress("DEPRECATION")
+        executeQueue.add(AddButton(id, button))
     }
 
 
@@ -170,7 +217,7 @@ class Project(
 
 
     //@throws IllegalOperationException
-    fun deleteButton(button: Button) {
+    suspend fun deleteButton(button: Button) {
         TODO("deleteButton")
     }
 
@@ -183,37 +230,16 @@ class Project(
         TODO("deleteProj")
     }
 
-
-    fun setCellIsPossible(): Flow<Boolean> {
-        //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
-        runBlocking {
-            flow.emit(true)
-        }
-        return flow
-    }
-
-    //@throws IllegalOperationException
-    fun setCell(indexRow: Int, indexColumn: Int, content: String) {
-        if (indexRow >= 0 && indexRow < data.size) {
-            data[indexRow].setCell(indexColumn, content)
-        }
-        throw IllegalOperationException()
-    }
-
     fun addMemberIsPossible(): Flow<Boolean> {
-        //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
-        runBlocking {
-            flow.emit(true)
-        }
-        return flow
+        return isPossible[AddMember::class]!!
     }
 
-    fun addMember(member: Member) {
+    suspend fun addMember(member: Member) {
         //Todo If bedingung schöner machen, keine Magic numbers und aussagekräftigere Exceptions werfen
-        if (member !in members && members.size < 25 && isOnlineProject) {
-            TODO("addMember")
+        if (member !in members && members.size < 24 && isOnlineProject) {
+            isPossible[AddMember::class]!!.emit(false)
+            @Suppress("DEPRECATION")
+            executeQueue.add(AddMember(id, member))
         } else {
             throw IllegalOperationException()
         }
@@ -228,7 +254,7 @@ class Project(
         return flow//return isOnlineProject
     }
 
-    fun leaveOnlineProject() {
+    suspend fun leaveOnlineProject() {
         TODO("leaveOnlineProject")
     }
 
@@ -241,7 +267,7 @@ class Project(
         return flow
     }
 
-    fun deleteMember(member: Member) {
+    suspend fun deleteMember(member: Member) {
         if (member in members && members.size > 1) {
             TODO("deleteMember")
         } else {
@@ -258,7 +284,7 @@ class Project(
         return flow
     }
 
-    fun setAdmin(member: Member) {
+    suspend fun setAdmin(member: Member) {
         TODO("setAdmin")
     }
 
@@ -272,7 +298,7 @@ class Project(
     }
 
 
-    fun changeWallpaper(image: Int) {
+    suspend fun changeWallpaper(image: Int) {
         TODO("changeWallpaper")
     }
 
@@ -285,7 +311,7 @@ class Project(
         return flow
     }
 
-    fun setNotification(notification: Notification) {
+    suspend fun setNotification(notification: Notification) {
         TODO("setNotification")
     }
 
@@ -298,22 +324,19 @@ class Project(
         return flow
     }
 
-    fun deleteNotification(notification: Notification) {
-        scope.launch { notification.delete() }
+    suspend fun deleteNotification(notification: Notification) {
+        notification.delete()
     }
 
     fun addNotificationIsPossible(): Flow<Boolean> {
-        //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
-        runBlocking {
-            flow.emit(true)
-        }
-        return flow
+        return isPossible[AddNotification::class]!!
     }
 
 
-    fun addNotification(notification: Notification) {
-
+    suspend fun addNotification(notification: Notification) {
+        isPossible[AddNotification::class]!!.emit(false)
+        @Suppress("DEPRECATION")
+        executeQueue.add(AddNotification(id, notification))
     }
 
     fun setNameIsPossible(): Flow<Boolean> {
@@ -325,7 +348,7 @@ class Project(
         return flow
     }
 
-    fun setName(name: String) {
+    suspend fun setName(name: String) {
         TODO("setNameProj")
     }
 
@@ -340,16 +363,18 @@ class Project(
     }
 
     @JvmName("setDescription1")
-    fun setDescription(description: String) {
+    suspend fun setDescription(description: String) {
         TODO("setDescriptionProj")
     }
 
     fun publishIsPossible(): Flow<Boolean> {
-        TODO("publishIsPossibleProj")
+        return isPossible[PublishProject::class]!!
     }
 
-    fun publish() {
-        TODO("Proj")
+    suspend fun publish() {
+        isPossible[AddGraph::class]!!.emit(false)
+        @Suppress("DEPRECATION")
+        executeQueue.add(PublishProject(id, this))
     }
 
     fun setButtonIsPossible(): Flow<Boolean> {
@@ -361,11 +386,21 @@ class Project(
         return flow
     }
 
-    fun setButton(button: Button) {
+    suspend fun setButton(button: Button) {
         TODO("setButton")
     }
 
-    override fun connectToDB(executeQueue: ExecuteQueue) {
+    @Suppress("DEPRECATION")
+    override fun connectToRepository(repositoryViewModelAPI: RepositoryViewModelAPI) {
+        for (id in getIntefiableChildred()) {
+            @Suppress("DEPRECATION")
+            id.connectToRepository(repositoryViewModelAPI)
+        }
+        @Suppress("DEPRECATION")
+        super.connectToRepository(repositoryViewModelAPI)
+    }
+
+    private fun getIntefiableChildred(): List<Identifiable> {
         val i = ArrayList<Identifiable>()
         i.addAll(table)
         i.addAll(data)
@@ -373,6 +408,14 @@ class Project(
         i.addAll(notifications)
         i.addAll(graphs)
         i.addAll(members)
-        super.connectToDB(executeQueue)
+        return i
+    }
+
+    override fun toDBEquivalent(): ModelProject {
+        TODO("Not yet implemented")
+    }
+
+    override fun addYourself(builder: ProjectBuilder<out ModelProject>) {
+        TODO("Not yet implemented")
     }
 }

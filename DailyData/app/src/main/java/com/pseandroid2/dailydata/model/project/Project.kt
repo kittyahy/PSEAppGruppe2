@@ -21,7 +21,6 @@
 package com.pseandroid2.dailydata.model.project
 
 import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import com.pseandroid2.dailydata.model.graph.Graph
 import com.pseandroid2.dailydata.model.graph.GraphTemplate
 import com.pseandroid2.dailydata.model.notifications.Notification

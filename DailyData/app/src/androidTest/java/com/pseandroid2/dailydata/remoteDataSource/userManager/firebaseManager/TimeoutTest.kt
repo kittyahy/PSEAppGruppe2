@@ -6,6 +6,7 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
+/*
 class TimeoutTest {
     private val fm = FirebaseManager(0)
     private var email = "test@student.kit.edu"
@@ -25,4 +26,4 @@ class TimeoutTest {
     fun emailSignInTimeout() {
         Assert.assertEquals(FirebaseReturnOptions.TIMEOUT, fm.signInWithEmailAndPassword(email, password))
     }
-}
+}*/

@@ -4,26 +4,23 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Button
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Column
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Member
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Row
 import com.pseandroid2.dailydata.util.ui.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flatMapConcat
-import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.time.LocalTime
 import javax.inject.Inject
 
 @InternalCoroutinesApi
@@ -37,8 +34,6 @@ class ProjectDataInputScreenViewModel @Inject constructor(
 
     private lateinit var initialProject : Project
     var isOnlineProject = false
-        private set
-    var isAdmin = false
         private set
 
     var title = ""
@@ -73,32 +68,51 @@ class ProjectDataInputScreenViewModel @Inject constructor(
                         table = project.data
                         buttons = project.buttons
                         members = project.members
-                        isAdmin = project.isAdmin
                         isOnlineProject = project.isOnlineProject
                         initialProject = project
                     }
                 }
+
             }
             is ProjectDataInputScreenEvent.OnDescriptionClick -> {
                 isDescriptionUnfolded = !isDescriptionUnfolded
             }
             is ProjectDataInputScreenEvent.OnButtonClickInc -> {
-                var button = buttons.find { it.id == event.id }!!
-                button.increaseValue()
+                val button = buttons.find { it.id == event.id }!!
+                viewModelScope.launch {
+                    if (button.increaseValueIsPossible().first()) {
+                        button.increaseValue()
+                    } else {
+                        sendUiEvent(UiEvent.ShowToast("Could not increase value"))
+                    }
+                }
+
             }
             is ProjectDataInputScreenEvent.OnButtonClickDec -> {
-                var button = buttons.find { it.id == event.id }!!
-                button.decreaseValue()
+                val button = buttons.find { it.id == event.id }!!
+                viewModelScope.launch {
+                    if (button.decreaseValueIsPossible().first()) {
+                        button.decreaseValue()
+                    }else {
+                        sendUiEvent(UiEvent.ShowToast("Could not decrease value"))
+                    }
+                }
             }
             is ProjectDataInputScreenEvent.OnButtonClickAdd -> {
-                var button = buttons.find { it.id == event.id }!!
-                var mutable = columnValues.toMutableList()
+                val button = buttons.find { it.id == event.id }!!
+                val mutable = columnValues.toMutableList()
                 mutable[columns.indexOfFirst { it.id == event.id }] = button.value.toString()
                 columnValues = mutable.toList()
-                button.setValue(0)
+                viewModelScope.launch {
+                    if (button.setValueIsPossible().first()) {
+                        button.setValue(0)
+                    }else {
+                        sendUiEvent(UiEvent.ShowToast("Could not reset button value"))
+                    }
+                }
             }
             is ProjectDataInputScreenEvent.OnColumnChange -> {
-                var mutable = columnValues.toMutableList()
+                val mutable = columnValues.toMutableList()
                 mutable[event.index] = event.value
                 columnValues = mutable.toList()
             }
@@ -109,7 +123,23 @@ class ProjectDataInputScreenViewModel @Inject constructor(
                         return
                     }
                 }
-                initialProject.addRow(Row(id = 0, elements = columnValues))
+                viewModelScope.launch {
+                    if (initialProject.addRowIsPossible().first()) {
+                        initialProject.addRow(Row(id = 0, elements = columnValues))
+                        val mutable = columnValues.toMutableList()
+                        val currentTime = LocalTime.now()
+                        for (index in mutable.indices) {
+                            if(columns[index].dataType != DataType.TIME) {
+                                mutable[index] = columns[index].dataType.initialValue
+                            } else {
+                                mutable[index] = LocalTime.of(currentTime.hour, currentTime.minute).toString()
+                            }
+                        }
+                        columnValues = mutable.toList()
+                    }else {
+                        sendUiEvent(UiEvent.ShowToast("Could not add row"))
+                    }
+                }
             }
             is ProjectDataInputScreenEvent.OnRowDialogShow -> {
                 if(isOnlineProject) {
@@ -122,15 +152,20 @@ class ProjectDataInputScreenViewModel @Inject constructor(
             }
             is ProjectDataInputScreenEvent.OnRowModifyClick -> {
                 columnValues = table[rowEdit].elements
+                isRowDialogOpen = false
             }
             is ProjectDataInputScreenEvent.OnRowDeleteClick -> {
-                initialProject.deleteRow(table[rowEdit])
+                viewModelScope.launch {
+                    if (initialProject.deleteRowIsPossible(table[rowEdit]).first()) {
+                        initialProject.deleteRow(table[rowEdit])
+                        isRowDialogOpen = false
+                    } else {
+                        sendUiEvent(UiEvent.ShowToast("Could not delete row"))
+                    }
+                }
             }
         }
     }
-
-    private suspend fun <T> Flow<List<T>>.flattenToList() =
-        flatMapConcat { it.asFlow() }.toList()
 
     private fun sendUiEvent(event : UiEvent) {
         viewModelScope.launch {

@@ -10,6 +10,7 @@ import org.junit.Before
 import org.junit.Test
 import retrofit2.http.GET
 
+/*
 class ProjectParticipantsTests {
 
     private val restAPI: RESTAPI = RESTAPI()
@@ -105,13 +106,15 @@ class ProjectParticipantsTests {
         Assert.assertFalse(serverManager.isProjectParticipant(authToken, projectID, userID2))
     }
 
-    /* TODO: Implement this in quality control phase
+    */
+/* TODO: Implement this in quality control phase
     @Test
     fun getParticipantsFromNotExistingProject() {
         restAPI.getProjectParticipants(authToken, -1)
         Assert.assertNotEquals(mutableListOf<List<String>>(), restAPI.getProjectParticipants(authToken, -1))
     }
-    */
+    *//*
+
 
     @Test
     fun getProjectAdmin() {
@@ -159,13 +162,15 @@ class ProjectParticipantsTests {
         Assert.assertTrue(restAPI.removeUser(userID, projectID2, authToken))
     }
 
-    /* TODO: Implement this in quality control phase
+    */
+/* TODO: Implement this in quality control phase
     @Test
     fun userIsNoProjectMember() {
         Assert.assertNotEquals(mutableListOf<List<String>>(), restAPI.getProjectParticipants(authToken, projectID))
         Assert.assertNotEquals("", restAPI.getProjectAdmin(authToken, projectID))
     }
-    */
+    *//*
+
 
     @Test
     fun removeUserWhileNotBeingAdmin() {
@@ -174,6 +179,4 @@ class ProjectParticipantsTests {
 
         Assert.assertFalse(restAPI.removeUser(authToken2, projectID, authToken3))
     }
-
-    //TODO Tests auskommentieren
-}
+}*/

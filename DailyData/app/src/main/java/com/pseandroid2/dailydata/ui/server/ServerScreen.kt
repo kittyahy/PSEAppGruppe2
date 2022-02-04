@@ -22,9 +22,9 @@ package com.pseandroid2.dailydata.ui.server
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.pseandroid2.dailydata.util.ui.UiEvent
 import com.pseandroid2.dailydata.ui.server.login.LoginScreen
 import com.pseandroid2.dailydata.ui.server.templates.ServerTemplatesScreen
+import com.pseandroid2.dailydata.util.ui.UiEvent
 
 @Composable
 fun ServerScreen(

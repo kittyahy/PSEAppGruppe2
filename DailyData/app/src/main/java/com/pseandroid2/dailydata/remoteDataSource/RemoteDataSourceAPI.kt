@@ -124,7 +124,7 @@ class RemoteDataSourceAPI @Inject constructor(uAccount: UserAccount?, sManager: 
      * @return Boolean: If a server connection possible return true, else return false
      */
     fun connectionToServerPossible(): Boolean {
-        return serverManager.greet()
+        return serverManager.connectionToServerPossible()
     }
 
     // -----------------------------PostsController-------------------------------

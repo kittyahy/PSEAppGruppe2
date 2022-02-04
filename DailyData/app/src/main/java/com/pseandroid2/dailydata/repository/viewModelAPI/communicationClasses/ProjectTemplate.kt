@@ -24,15 +24,13 @@ package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import com.pseandroid2.dailydata.model.notifications.TimeNotification
-import com.pseandroid2.dailydata.model.project.ProjectTemplate as ModelProjectTemplate
-import com.pseandroid2.dailydata.model.table.TableLayout
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.forRepoReturns.TemplateDetailWithPicture
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import kotlinx.coroutines.flow.Flow
+import com.pseandroid2.dailydata.model.project.ProjectTemplate as ModelProjectTemplate
 
 
-class ProjectTemplate(
-    val onlineId: Long = -1
-) : Identifiable {
+class ProjectTemplate : Identifiable, Template {
     lateinit var titel: String
     lateinit var description: String
     var wallpaper: Int = 0
@@ -43,16 +41,16 @@ class ProjectTemplate(
     var image: Bitmap? = null
 
     constructor(
-        titel: String,
-        description: String,
-        wallpaper: Int,
-        table: List<Column>,
-        buttons: List<Button>,
-        notifications: List<Notification>,
-        graphTemplates: List<GraphTemplate>,
-        image: Bitmap
-    ) : this() {
-        this.titel = titel
+        title: String = "<empty>",
+        description: String = "<empty>",
+        wallpaper: Int = 0,
+        table: List<Column> = ArrayList(),
+        buttons: List<Button> = ArrayList(),
+        notifications: List<Notification> = ArrayList(),
+        graphTemplates: List<GraphTemplate> = ArrayList(),
+        image: Bitmap? = null
+    ) {
+        this.titel = title
         this.description = description
         this.wallpaper = wallpaper
         this.table = table
@@ -62,7 +60,12 @@ class ProjectTemplate(
         this.image = image
     }
 
-    constructor(template: ModelProjectTemplate) : this(template.onlineId) {
+    constructor(
+        templateDetailWithPicture: TemplateDetailWithPicture,
+        graphTemplates: List<GraphTemplate>
+    )
+
+    constructor(template: ModelProjectTemplate) {
         this.titel = template.name
         this.description = template.desc
         this.wallpaper = template.color
@@ -84,12 +87,13 @@ class ProjectTemplate(
         this.notifications = notifs
         val graphs = mutableListOf<GraphTemplate>()
         for (graph in template.graphs) {
-            graphs.add(GraphTemplate(TODO(), TODO(), TODO()))
+            graphs.add(GraphTemplate(graph))
         }
         this.image = BitmapFactory.decodeFile(template.path)
     }
 
     override lateinit var executeQueue: ExecuteQueue
+    override lateinit var project: Project
     override val id: Int
         get() = TODO("Not yet implemented")
 

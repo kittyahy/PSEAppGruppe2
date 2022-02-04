@@ -7,6 +7,7 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
+/*
 class FirebaseUserData {
     private val fm = FirebaseManager(null)
     private var email = "test@student.kit.edu"
@@ -49,4 +50,4 @@ class FirebaseUserData {
         Assert.assertEquals(FirebaseReturnOptions.SINGED_IN, fm.signInWithEmailAndPassword(email, password))
         Assert.assertEquals("4hpJh32YaAWrAYoVvo047q7Ey183", fm.getUserID())
     }
-}
+}*/

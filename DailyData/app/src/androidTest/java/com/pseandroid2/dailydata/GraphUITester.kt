@@ -33,7 +33,7 @@ import com.pseandroid2.dailydata.model.graph.PieChart as GraphPieChart
 import com.pseandroid2.dailydata.model.graph.LineChart as GraphLineChart
 
 class GraphUITester {
-
+/*
     @get:Rule
     val composeRule = createComposeRule()
 
@@ -196,5 +196,5 @@ class GraphUITester {
             }
             delay(10000)
         }
-    }
+    }*/
 }
