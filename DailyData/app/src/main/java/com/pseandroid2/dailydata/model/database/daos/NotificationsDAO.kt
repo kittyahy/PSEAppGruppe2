@@ -88,14 +88,14 @@ abstract class NotificationsDAO {
 
     /*========================SHOULD ONLY BE CALLED FROM INSIDE THE MODEL=========================*/
 
-   /**
+    /**
      * It returns all notifications from a specified project.
      */
     @Deprecated("Should only be used from inside the model. Use getNotifications instead.")
     @Query("SELECT * FROM notification WHERE projectId = :projectId")
     abstract fun getNotificationEntities(projectId: Int): Flow<List<NotificationEntity>>
 
-   /**
+    /**
      * It inserts a given Notification to the Table.
      */
     @Deprecated("Should only be used from inside the model. Use insertNotification instead.")
@@ -109,7 +109,7 @@ abstract class NotificationsDAO {
     @Delete
     abstract suspend fun deleteNotificationEntity(notificationEntity: NotificationEntity)
 
-     /**
+    /**
      * It deletes all notification from a given project.
      */
     @Deprecated("Should only be used from inside the model.")
