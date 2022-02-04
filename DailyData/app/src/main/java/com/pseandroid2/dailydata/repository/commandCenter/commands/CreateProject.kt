@@ -1,6 +1,7 @@
 package com.pseandroid2.dailydata.repository.commandCenter.commands
 
 import com.pseandroid2.dailydata.model.project.SimpleProjectBuilder
+import com.pseandroid2.dailydata.model.users.SimpleUser
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Button
@@ -61,6 +62,10 @@ class CreateProject(
         notification.forEach { notification -> notification.addYourself(pb) }
 
         val project: ModelProject = pb.build()
+        project.admin = SimpleUser(
+            repositoryViewModelAPI.remoteDataSourceAPI.getUserID(),
+            repositoryViewModelAPI.remoteDataSourceAPI.getUserName()
+        )
         val prod = repositoryViewModelAPI.appDataBase.projectCDManager().insertProject(project)
         projectID = prod.id
         projectIDReturn?.emit(prod.id)
