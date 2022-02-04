@@ -153,6 +153,4 @@ class DeltaControllerGetDeltaTests {
     fun getRemoveTime() {
         Assert.assertNotEquals(-1, restAPI.getRemoveTime(authToken))
     }
-
-    //TODO Tests auskommentieren
 }

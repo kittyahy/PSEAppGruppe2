@@ -96,7 +96,7 @@ class FetchRequestControllerTests {
 
     @Test
     fun getFetchRequests() {
-        val requestsToSend = mutableListOf<String>("request information 1", "request information 2")
+        val requestsToSend = mutableListOf("request information 1", "request information 2")
         Assert.assertTrue(restAPI.demandOldData(projectID, requestsToSend.elementAt(0), authToken))
         Assert.assertTrue(restAPI.demandOldData(projectID, requestsToSend.elementAt(1), authToken))
 
@@ -126,6 +126,5 @@ class FetchRequestControllerTests {
     }
     */
 
-    // TODO: Test Ideas: 1. getFetchrequests from the same account who send them, 2.
-
+    // TODO: Test Ideas for quality control: 1. getFetchrequests from the same account who send them
 }

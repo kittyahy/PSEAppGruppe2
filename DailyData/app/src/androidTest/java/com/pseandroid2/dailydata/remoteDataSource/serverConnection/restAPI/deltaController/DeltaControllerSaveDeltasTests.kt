@@ -82,5 +82,4 @@ class DeltaControllerSaveDeltasTests {
         Assert.assertEquals(projectCommand, projectCommand)
     }
     */
-    //TODO Tests auskommentieren
 }

@@ -50,6 +50,7 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
     private val fetchRequestQueue: FetchRequestQueue = FetchRequestQueue()
     private val projectCommandQueue: ProjectCommandQueue = ProjectCommandQueue()
 
+    private val emptyBitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
 
     // ------------------------------ServerLogic--------------------------------
     // ----------------------------------GreetingController--------------------------------
@@ -197,6 +198,9 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @return ByteArray:   The converted byte array
      */
     private fun byteArrayToBitmap(toConvert: ByteArray): Bitmap {
+        if (toConvert.isEmpty()) {
+            return emptyBitmap
+        }
         return BitmapFactory.decodeByteArray(toConvert, 0, toConvert.size)
     }
 

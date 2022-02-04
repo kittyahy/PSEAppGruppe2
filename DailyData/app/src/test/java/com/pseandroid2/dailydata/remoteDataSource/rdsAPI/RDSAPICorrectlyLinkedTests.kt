@@ -31,7 +31,7 @@ class RDSAPICorrectlyLinkedTests {
 
         val serverManager = mockk<ServerManager>()
 
-        every { serverManager.greet() } returns true
+        every { serverManager.connectionToServerPossible() } returns true
         every { serverManager.getAllPostPreview("") } returns postPreviewList
         every { serverManager.getPostDetail(1, "") } returns postDetailList
         every { serverManager.getProjectTemplate(1, "") } returns "ProjectTemplate"
