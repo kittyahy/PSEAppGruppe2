@@ -12,6 +12,7 @@ import org.junit.Before
 import org.junit.Test
 
 
+/*
 class ServerManagerConnectedTests {
     private val serverManager: ServerManager = ServerManager(RESTAPI())
     private val fm = FirebaseManager(null)
@@ -113,4 +114,4 @@ class ServerManagerConnectedTests {
         Assert.assertEquals("project template title to test", postPreview.elementAt(0).title)
         Assert.assertEquals("graph template title to test", postPreview.elementAt(1).title)
     }
-}
+}*/
