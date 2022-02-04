@@ -12,8 +12,8 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.pseandroid2.dailydata.ui.composables.ProjectTemplateDialog
 import com.pseandroid2.dailydata.ui.composables.PreviewCard
+import com.pseandroid2.dailydata.ui.composables.ProjectTemplateDialog
 import com.pseandroid2.dailydata.util.ui.UiEvent
 
 
@@ -52,9 +52,9 @@ fun ServerTemplatesScreen(
              PreviewCard(
                  title = post.title,
                  image = post.image.asImageBitmap(),
-                 imageClickable = false,
+                 imageClickable = true,
                  onImageClick = { viewModel.onEvent(ServerTemplateScreenEvent.OnShowDialog(index = index)) },
-                 onIconClick = { viewModel.onEvent(ServerTemplateScreenEvent.OnPostDownload(post.id)) },
+                 onIconClick = { viewModel.onEvent(ServerTemplateScreenEvent.OnPostDownload(id = post.id)) },
                  icon = Icons.Default.Download
              )
         }

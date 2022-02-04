@@ -40,9 +40,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
-import com.pseandroid2.dailydata.util.ui.Wallpapers
 import com.pseandroid2.dailydata.ui.composables.EnumDropDownMenu
-import java.lang.NumberFormatException
+import com.pseandroid2.dailydata.util.ui.Wallpapers
 import java.time.LocalTime
 import java.util.Calendar
 

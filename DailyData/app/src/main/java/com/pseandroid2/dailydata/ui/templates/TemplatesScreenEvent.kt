@@ -1,7 +1,6 @@
 package com.pseandroid2.dailydata.ui.templates
 
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.GraphTemplate
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ProjectTemplate
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ProjectTemplatePreview
 
 sealed class TemplatesScreenEvent {

@@ -39,7 +39,10 @@ class ServerTemplateScreenViewModel @Inject constructor(
             is ServerTemplateScreenEvent.OnCloseDialog -> {
                 isProjectTemplateDialogOpen = false
             }
+
             is ServerTemplateScreenEvent.OnPostDownload -> {
+                var post = posts.find { it.id == event.id }!!
+
                 //download post TODO()
                 viewModelScope.launch {
                     if (repository.serverHandler.downloadProjectTemplateIsPossible().first()) {
@@ -51,6 +54,8 @@ class ServerTemplateScreenViewModel @Inject constructor(
             }
 
             is ServerTemplateScreenEvent.OnPostEntryDownload -> {
+                var template = post.postEntries.find { it.id == event.id}!!
+
                 //download post entry TODO()
                 viewModelScope.launch {
                     if (repository.serverHandler.downloadGraphTemplateIsPossible().first()) {

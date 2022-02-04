@@ -33,7 +33,7 @@ class GraphTemplate(
     var descrition: String,
     var color: Int,
     var settings: Settings,
-    var type
+    var type : String
 ) : Identifiable, Template() {
     // beschreibung farbe SettingsObj, Typ, erstellung onlineId
 

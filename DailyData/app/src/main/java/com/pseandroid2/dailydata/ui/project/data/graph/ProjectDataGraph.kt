@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
@@ -16,6 +18,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Checkbox
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -37,13 +40,13 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pseandroid2.dailydata.R
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Column
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DotSize
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.GraphTemplate
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.LineChart
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.LineType
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.PieChart
@@ -61,6 +64,8 @@ fun ProjectDataGraphScreen(
     projectId : Int,
     viewModel: ProjectDataGraphScreenViewModel = hiltViewModel()
 ) {
+    var templates : List<GraphTemplate> = listOf()
+
     val coroutineScope = rememberCoroutineScope()
     LaunchedEffect(Unit) {
         viewModel.onEvent(ProjectDataGraphScreenEvent.OnCreate(projectId = projectId))
@@ -70,7 +75,8 @@ fun ProjectDataGraphScreen(
             isOpen = viewModel.isDialogOpen,
             onDismissRequest = { viewModel.onEvent(ProjectDataGraphScreenEvent.OnCloseGraphDialog) },
             graph = viewModel.graphs[viewModel.dialogIndex],
-            table = viewModel.table
+            table = viewModel.table,
+            templates = templates
         )
     }
 
@@ -110,26 +116,56 @@ fun ProjectGraphDialog(
     isOpen : Boolean,
     onDismissRequest : () -> Unit,
     graph : Graph,
-    table : List<Column>
+    table : List<Column>,
+    templates : List<GraphTemplate>
 ) {
+    var isDialogOpen by remember { mutableStateOf(false) }
+    AppDialog(isOpen = isDialogOpen, onDismissRequest = onDismissRequest, padding = 0.dp) {
+        Column(modifier = Modifier.width(200.dp)) {
+            templates.filter { it.type == graph.typeName }.forEachIndexed { index, graphTemplate ->
+                Box(modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth()
+                        .height(32.dp)
+                        .clickable {
+                            //graph.apply template
+                            isDialogOpen = false
+                        },
+                    contentAlignment = Alignment.CenterStart
+                ) {
+                    Text(text = graphTemplate.title)
+                }
+                if (index < templates.lastIndex)
+                    Divider()
+            }
+        }
+    }
+
+
     AppDialog(isOpen = isOpen, onDismissRequest = onDismissRequest) {
         Column(
             modifier = Modifier.width(300.dp)
         ) {
-           when(graph) {
+            when(graph) {
                 is LineChart -> {
                     LineChartDialog(
-                        onDismissRequest = onDismissRequest,
                         graph = graph,
                         table = table
                     )
                 }
                 is PieChart -> {
                     PieChartDialog(
-                        onDismissRequest = onDismissRequest,
                         graph = graph,
                         table = table
                     )
+                }
+            }
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                TextButton(onClick = {isDialogOpen = true}) {
+                    Text(text = "Apply Template")
+                }
+                TextButton(onClick = onDismissRequest) {
+                    Text(text = "OK")
                 }
             }
         }
@@ -138,7 +174,6 @@ fun ProjectGraphDialog(
 
 @Composable
 fun PieChartDialog(
-    onDismissRequest: () -> Unit,
     graph : PieChart,
     table : List<Column>
 ) {
@@ -233,17 +268,11 @@ fun PieChartDialog(
             })
             Text(text = "Show Percentages")
         }
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-            TextButton(onClick = onDismissRequest) {
-                Text(text = "OK")
-            }
-        }
     }
 }
 
 @Composable
 fun LineChartDialog(
-    onDismissRequest: () -> Unit,
     graph : LineChart,
     table : List<Column>
 ) {
@@ -357,11 +386,6 @@ fun LineChartDialog(
                     }
                 }
             )
-        }
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-            TextButton(onClick = onDismissRequest) {
-                Text(text = "OK")
-            }
         }
     }
 }

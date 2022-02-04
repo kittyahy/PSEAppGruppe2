@@ -26,13 +26,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.GraphTemplate
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ProjectTemplate
-import com.pseandroid2.dailydata.util.ui.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -48,7 +43,7 @@ class TemplatesScreenViewModel @Inject constructor(
     var tab by mutableStateOf(0)
         private set
 
-    var graphTemplates = repository.projectHandler.getGraphTemplates(0) //TODO Arne Where do we get that id from?
+    var graphTemplates = repository.projectHandler.getGraphTemplates()
         private set
     var projectTemplates = repository.projectHandler.getProjectTemplatePreviews()
         private set
@@ -61,14 +56,14 @@ class TemplatesScreenViewModel @Inject constructor(
             is TemplatesScreenEvent.OnDeleteGraphTemplate -> {
                 viewModelScope.launch {
                     if (event.template.deleteIsPossible().first()) {
-                        event.template.delete() //TODO
+                        event.template.delete()
                     }
                 }
             }
             is TemplatesScreenEvent.OnDeleteProjectTemplate -> {
                 viewModelScope.launch {
                     if (event.template.deleteIsPossible().first()) {
-                        event.template.delete() //TODO
+                        event.template.delete()
                     }
                 }
             }
