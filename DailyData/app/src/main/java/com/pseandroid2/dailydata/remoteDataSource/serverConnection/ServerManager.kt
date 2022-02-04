@@ -58,7 +58,7 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      *
      * @return Boolean: If a server connection possible return true, else return false
      */
-    fun greet(): Boolean {
+    fun connectionToServerPossible(): Boolean {
         return restAPI.greet()
     }
 
