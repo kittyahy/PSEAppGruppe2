@@ -16,8 +16,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 */
-package com.pseandroid2.dailydata.remoteDataSource.appLinks
-
+package com.pseandroid2.dailydata.ui.link.appLinks
 import android.util.Log
 
 class JoinProjectLinkManager {

@@ -2,6 +2,7 @@ package com.pseandroid2.dailydata.util
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.os.Environment
 import android.util.Log
@@ -9,8 +10,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TableLayout
 import com.pseandroid2.dailydata.DailyDataApp
+import com.pseandroid2.dailydata.model.graph.Generator
 import com.pseandroid2.dailydata.ui.project.data.input.Table
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
 
@@ -64,7 +67,7 @@ class IOUtil {
 
             //Save the Bitmap to the File
             try {
-                val os: FileOutputStream = FileOutputStream(file)
+                val os = FileOutputStream(file)
                 bitmap.compress(Bitmap.CompressFormat.PNG, 90, os)
                 os.flush()
                 os.close()
@@ -75,6 +78,15 @@ class IOUtil {
                         ?: "An Error occurred during saving operations to file ${file.canonicalPath}")
                 )
             }
+        }
+
+        fun getGraphImage(name: String, context: Context): Bitmap? {
+            val dir = File(
+                context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+                Generator.GRAPH_DIR_NAME
+            )
+            val file = File(dir, "$name.png")
+            return BitmapFactory.decodeFile(file.canonicalPath)
         }
     }
 }

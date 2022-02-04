@@ -232,7 +232,7 @@ fun EnumDropDownMenu(
     var textFieldSize by remember { mutableStateOf(Size.Zero)}
     val icon = if (expanded) Icons.Filled.ArrowDropUp else Icons.Filled.ArrowDropDown
 
-    Column() {
+    Column {
         Button(
             onClick = { expanded = !expanded },
             modifier = Modifier

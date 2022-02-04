@@ -20,31 +20,33 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
-import com.pseandroid2.dailydata.model.database.entities.ProjectData
+import android.graphics.Bitmap
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.forRepoReturns.TemplateDetailWithPicture
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import kotlinx.coroutines.flow.Flow
 
-class ProjectPreview(
+class PostEntry(
     override val id: Int,
-    val name: String,
-    val image: String
+    val title: String = "template detail",
+    val detailImage: Bitmap,
+    val isProjectTemplate: Boolean = false
 ) : Identifiable {
+    constructor(templateDetailWithPicture: TemplateDetailWithPicture) : this(
+        templateDetailWithPicture.id,
+        templateDetailWithPicture.title,
+        templateDetailWithPicture.detailImage,
+        templateDetailWithPicture.projectTemplate
+    )
 
     override lateinit var executeQueue: ExecuteQueue
     override lateinit var project: Project
 
-    constructor(projectData: ProjectData) : this(
-        projectData.id,
-        projectData.name,
-        projectData.wallpaper
-    )
+    override fun deleteIsPossible(): Flow<Boolean> {
+        TODO("Not yet implemented")
+    }
 
-    //@throws IllegalOperationException
     override suspend fun delete() {
         TODO("Not yet implemented")
     }
 
-    override fun deleteIsPossible(): Flow<Boolean> {
-        TODO("Not yet implemented")
-    }
 }

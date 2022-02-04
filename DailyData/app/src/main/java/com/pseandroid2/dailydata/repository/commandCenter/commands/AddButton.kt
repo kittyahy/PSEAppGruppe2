@@ -2,24 +2,23 @@ package com.pseandroid2.dailydata.repository.commandCenter.commands
 
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Button
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Row
 
-class AddRow(private val projectId: Int, private val row: Row) :
-    ProjectCommand(projectID = projectId) {
+class AddButton(val id: Int, val button: Button) : ProjectCommand() {
     companion object {
         fun isPossible(project: Project): Boolean {
             return ProjectCommand.isPossible(project)
         }
     }
-
-    override val publishable: Boolean = true
+    override val publishable: Boolean = false
 
     override suspend fun execute(
         repositoryViewModelAPI: RepositoryViewModelAPI,
         publishQueue: PublishQueue
     ) {
-        repositoryViewModelAPI.appDataBase.tableContentDAO().insertRow(row.toDBEquivalent(), projectId)
+        val uiElement = button.toDBEquivalent()
+        repositoryViewModelAPI.appDataBase.uiElementDAO().insertUIElement(id, button.columnId, uiElement)
         super.execute(repositoryViewModelAPI, publishQueue)
     }
 

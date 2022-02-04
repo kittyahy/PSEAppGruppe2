@@ -17,9 +17,11 @@ class CommandWrapper(command: ProjectCommand) {
         private fun jsonFrom(command: ProjectCommand): String {
             return Gson().toJson(command)
         }
+
         @JvmStatic
-        fun fromJson(commandWrapperJsonString: String) : ProjectCommand {
-            val wrapper : CommandWrapper = Gson().fromJson(commandWrapperJsonString, CommandWrapper::class.java)
+        fun fromJson(commandWrapperJsonString: String): ProjectCommand {
+            val wrapper: CommandWrapper =
+                Gson().fromJson(commandWrapperJsonString, CommandWrapper::class.java)
             return wrapper.unwrap()
         }
     }
@@ -30,7 +32,8 @@ class CommandWrapper(command: ProjectCommand) {
 
     private fun unwrap(): ProjectCommand {
         //Cast cannot fail, because constructor ensures that commandCanonicalName is the canonical name of a child of ProjectCommand
-        val type: Class<out ProjectCommand> = Class.forName(commandCanonicalName) as Class<out ProjectCommand>
+        val type: Class<out ProjectCommand> =
+            Class.forName(commandCanonicalName) as Class<out ProjectCommand>
         return Gson().fromJson(commandJson, type)
     }
 

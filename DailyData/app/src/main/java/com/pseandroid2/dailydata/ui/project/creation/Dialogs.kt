@@ -32,11 +32,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
@@ -46,33 +44,6 @@ import com.pseandroid2.dailydata.ui.composables.EnumDropDownMenu
 import java.lang.NumberFormatException
 import java.time.LocalTime
 import java.util.Calendar
-
-
-@Preview(showBackground = true)
-@Composable
-fun Prev() {
-    Card(modifier = Modifier
-        .clickable { }) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(60.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column(modifier = Modifier
-                .size(40.dp)
-                .wrapContentSize(Alignment.CenterStart)) {
-                Box(
-                    modifier = Modifier
-                        .size((20.dp))
-                        .clip(CircleShape)
-                        .background(color = Color.Green)
-                )
-            }
-            Text(text = "Green")
-        }
-    }
-}
 
 @Composable
 fun AppDialog(

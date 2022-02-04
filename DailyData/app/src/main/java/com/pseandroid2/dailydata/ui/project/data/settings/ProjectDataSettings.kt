@@ -186,8 +186,8 @@ fun ProjectDataSettingsScreen(
                 onClick = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnShowButtonsDialog(true)) },
                 onClickItem = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnButtonRemove(index = it)) },
                 elements = viewModel.buttons.map { button ->
-                    var columnName = viewModel.table.find { it.id == button.columnId} ?: ""
-                    "${button.name} in ${columnName}"
+                    val columnName = viewModel.table.find { it.id == button.columnId} ?: ""
+                    "${button.name} in $columnName"
                 }
             )
             Divider()

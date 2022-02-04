@@ -1,12 +1,9 @@
 package com.pseandroid2.dailydata.ui.server.templates
 
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pseandroid2.dailydata.ui.composables.ProjectTemplateDialog
@@ -28,9 +25,9 @@ fun ServerTemplatesScreen(
             }
         }
     }
-
+    /*
     if(posts.isNotEmpty() && posts[viewModel.dialogTemplateIndex].projectTemplate != null) {
-        var template = posts[viewModel.dialogTemplateIndex].projectTemplate!!
+        val template = posts[viewModel.dialogTemplateIndex].projectTemplate!!
         ProjectTemplateDialog(
             isOpen = viewModel.isProjectTemplateDialogOpen,
             onDismissRequest = { viewModel.onEvent(ServerTemplateScreenEvent.OnCloseDialog) },
@@ -55,5 +52,5 @@ fun ServerTemplatesScreen(
                  }
              )
         }
-    }
+    }*/
 }

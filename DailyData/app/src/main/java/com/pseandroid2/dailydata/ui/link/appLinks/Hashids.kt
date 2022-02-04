@@ -1,4 +1,4 @@
-package com.pseandroid2.dailydata.remoteDataSource.appLinks
+package com.pseandroid2.dailydata.ui.link.appLinks
 
 import java.lang.Long.toHexString
 import kotlin.math.ceil
@@ -96,6 +96,7 @@ class Hashids(
             }
         }
     }
+
 
     private fun guardIndex(numbersHash: Int, returnString: String, index: Int): Int =
         (numbersHash + returnString.toCharArray()[index].code) % finalGuards.length
@@ -220,8 +221,8 @@ class Hashids(
 
     private fun extractLotteryCharAndHashArray(initialSplit: List<String>): Pair<Char, List<String>> {
         val separatorsRegex = "[$finalSeparators]".toRegex()
-        val i = when {
-            initialSplit.size == 2 || initialSplit.size == 3 -> 1
+        val i = when (initialSplit.size) {
+            2, 3 -> 1
             else -> 0
         }
         val ithElementOfSplit = initialSplit[i]
