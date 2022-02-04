@@ -31,6 +31,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 
 class ServerHandler(private val appDataBase: AppDataBase, private val api: RemoteDataSourceAPI) {
@@ -52,9 +53,10 @@ class ServerHandler(private val appDataBase: AppDataBase, private val api: Remot
         TODO("getProjectTemplateById")
     }
 
-    suspend fun amILoggedIn(): Boolean {
+    fun amILoggedIn() = flow {
         val string = api.getUserName()
-        return string != ""
+        emit(string != "")
+        kotlinx.coroutines.delay(500)
     }
 
     /**

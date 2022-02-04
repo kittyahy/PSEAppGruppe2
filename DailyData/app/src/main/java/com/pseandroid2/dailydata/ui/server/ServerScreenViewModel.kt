@@ -41,9 +41,9 @@ class ServerScreenViewModel @Inject constructor(val repository: RepositoryViewMo
 
     init {
         viewModelScope.launch {
-            loggedIn = repository.serverHandler.amILoggedIn()
+            repository.serverHandler.amILoggedIn().collect {
+                loggedIn = it
+            }
         }
     }
-
-
 }

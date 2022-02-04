@@ -43,6 +43,7 @@ class LoginScreenViewModel @Inject constructor(
                 viewModelScope.launch {
                     if (repository.serverHandler.loginIsPossible().first()) {
                         repository.serverHandler.login(email = userEmail, password = userPassword)
+
                     } else {
                         sendUiEvent(UiEvent.ShowToast("Could not log in"))
                     }
