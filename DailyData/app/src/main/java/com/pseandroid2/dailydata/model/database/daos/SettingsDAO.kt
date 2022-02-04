@@ -138,11 +138,7 @@ abstract class SettingsDAO {
     /*========================SHOULD ONLY BE CALLED FROM INSIDE THE MODEL=========================*/
 
 
-   
-    @Query("SELECT * FROM projectSetting WHERE projectId = :projectId")
-    abstract fun getProjectSettingEntities(projectId: Int): Flow<List<ProjectSettingEntity>>
 
-    
 
    /**
      * It provides all ProjectSettingEntities form a specified project.
