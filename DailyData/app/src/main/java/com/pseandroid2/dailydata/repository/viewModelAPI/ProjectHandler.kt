@@ -23,7 +23,9 @@ package com.pseandroid2.dailydata.repository.viewModelAPI
 
 import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
+import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
+import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
 import com.pseandroid2.dailydata.repository.commandCenter.commands.CreateProject
 import com.pseandroid2.dailydata.repository.commandCenter.commands.JoinOnlineProject
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Button
@@ -48,13 +50,17 @@ import kotlinx.coroutines.runBlocking
 
 @InternalCoroutinesApi
 class ProjectHandler(
-    private val appDataBase: AppDataBase,
-    private val rds: RemoteDataSourceAPI,
-    val executeQueue: ExecuteQueue
+    private val repositoryViewModelAPI: RepositoryViewModelAPI
 ) {
+    val executeQueue: ExecuteQueue =
+        ExecuteQueue(repositoryViewModelAPI, PublishQueue(repositoryViewModelAPI))
+
+    private val appDataBase: AppDataBase = repositoryViewModelAPI.appDataBase
+    private val rds: RemoteDataSourceAPI = repositoryViewModelAPI.remoteDataSourceAPI
+
     fun getProjectPreviews() = ProjectPreviewFlow(appDataBase, executeQueue).getPreviews()
 
-    fun getProjectByID(id: Int) = ProjectFlow(appDataBase, rds, executeQueue, id).getProject()
+    fun getProjectByID(id: Int) = ProjectFlow(repositoryViewModelAPI, id).getProject()
 
     fun getGraphs(projectId: Int) = GraphFlow(appDataBase, executeQueue, projectId).getGraphs()
 
@@ -68,7 +74,7 @@ class ProjectHandler(
         ProjectTemplateFlow(appDataBase, executeQueue, id).getProjectTemplate()
 
 
-    private suspend fun newProjectAsync(
+    suspend fun newProjectAsync(
         name: String,
         description: String,
         wallpaper: Int,

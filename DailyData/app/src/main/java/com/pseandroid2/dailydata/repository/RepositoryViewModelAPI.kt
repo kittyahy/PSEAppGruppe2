@@ -42,12 +42,5 @@ class RepositoryViewModelAPI(
 
     @InternalCoroutinesApi
     @Suppress("DEPRECATION")
-    val projectHandler = ProjectHandler(
-        appDataBase,
-        remoteDataSourceAPI,
-        ExecuteQueue(
-            this,
-            PublishQueue(this)
-        )
-    )
+    val projectHandler = ProjectHandler(this)
 }

@@ -25,12 +25,12 @@ class Post : Identifiable {
         this.postEntries = postEntries
     }
 
-    fun getProjectTemplate(): ProjectTemplate {
-        TODO()
+    fun downloadProjectTemplate() {
+        TODO("downloadProjectTemplate")
     }
 
-    fun getGraphTemplate(id: Int): GraphTemplate {
-        TODO()
+    fun downloadGraphTemplate(id: Int) {
+        TODO("downloadGraphTemplate")
     }
 
     override lateinit var executeQueue: ExecuteQueue

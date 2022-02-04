@@ -26,13 +26,12 @@ class PublishProject(private val id: Int, private val project: Project) : Projec
     ) {
         repositoryViewModelAPI.appDataBase.projectDataDAO().setOnlineID(
             project.id,
-            repositoryViewModelAPI.remoteDataSourceAPI.addProject()
+            repositoryViewModelAPI.remoteDataSourceAPI.createNewOnlineProject("")
         ) //Todo Fehlerbehandlung, falls publishen fehl schlägt
         project.isOnlineProject = true
         if (publish(repositoryViewModelAPI, publishQueue)) {
             publishQueue.add(
                 CreateProject(
-                    repositoryViewModelAPI.remoteDataSourceAPI.getUserID(), //Todo mit Arne Absprechen, was wir nehmen
                     project.title,
                     project.description,
                     project.wallpaper,
