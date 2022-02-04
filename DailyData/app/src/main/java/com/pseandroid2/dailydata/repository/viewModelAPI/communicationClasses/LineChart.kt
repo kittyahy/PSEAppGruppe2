@@ -42,7 +42,7 @@ import com.pseandroid2.dailydata.model.graph.Graph as ModelGraph
 
 class LineChart(
     override val id: Int,
-    override val image: Bitmap?,
+    //override val image: Bitmap?,
     val dotSize: DotSize,
     val dotColor: Int,
     val lineType: LineType,

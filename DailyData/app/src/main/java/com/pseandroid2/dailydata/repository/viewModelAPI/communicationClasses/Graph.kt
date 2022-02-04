@@ -64,7 +64,7 @@ abstract class Graph : Identifiable, Convertible<ModelGraph<*, *>> {
 
 
     abstract override val id: Int
-    abstract val image: Bitmap?
+    //abstract val image: Bitmap?
     abstract val typeName: String
     abstract var appDataBase: AppDataBase
 
@@ -92,7 +92,7 @@ abstract class Graph : Identifiable, Convertible<ModelGraph<*, *>> {
     suspend fun show(context: Context): View {
         val graph: ModelGraph<*, *> = TODO("aus DB holen") // Todo richtiger graph typ
         val view = Generator.generateChart(graph, context)
-        image = IOUtil.getGraphImage(graph.getCustomizing()[Generator.GRAPH_NAME_KEY], context)
+        //image = IOUtil.getGraphImage(graph.getCustomizing()[Generator.GRAPH_NAME_KEY], context)
         return view
     }
 }
@@ -131,7 +131,7 @@ fun ModelGraph<*, *>.toViewGraph(layout: TableLayout): Graph {
             }
             LineChart(
                 this.id,
-                this.getImage()!!, //TODO
+                //this.getImage()!!, //TODO
                 DotSize.MEDIUM, //TODO
                 dotColor,
                 lineStyle,
