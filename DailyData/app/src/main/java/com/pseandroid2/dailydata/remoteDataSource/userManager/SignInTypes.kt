@@ -25,5 +25,5 @@ package com.pseandroid2.dailydata.remoteDataSource.userManager
  */
 enum class SignInTypes {
     EMAIL,
-    GOOGLE
+    GOOGLE // NOTE: Google log in is not implemented! (wish criteria)
 }

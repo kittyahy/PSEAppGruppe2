@@ -43,6 +43,8 @@ import lombok.Setter;
 
 import java.util.Arrays;
 
+import com.google.cloud.ByteArray;
+
 /**
  * A class, which contains an image, the title and the id of the post, where the postPreview belongs to.
  * Serves as Response object for  getAllPostPreview.
@@ -55,7 +57,6 @@ public class PostPreview {
     private int id;
     private String preview;
     private Byte[] previewImage;
-
 
     /**
      * The constructor, to create an object, which contains a postPreview and the corresponding id.
