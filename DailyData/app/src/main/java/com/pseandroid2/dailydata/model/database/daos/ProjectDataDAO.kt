@@ -31,17 +31,32 @@ import com.pseandroid2.dailydata.model.database.entities.ProjectUserMap
 import com.pseandroid2.dailydata.model.users.User
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * This class provides Methods and Queries to mange meta information for a project.
+ * The meta data are information how the project looks like and which users participate in the project.
+ * It also manges where Deltas may be missing.
+ */
 @Dao
 abstract class ProjectDataDAO {
     /*===================================PROJECT RELATED STUFF====================================*/
+    /**
+     * It returns all meta information (id, name, description, wallpaper, onlineId and color) for every project.
+     */
     @Query("SELECT id, name, description, wallpaper, onlineId, color FROM project")
     abstract fun getAllProjectData(): Flow<List<ProjectData>>
 
+    /**
+     * It returns all meta information (id, name, description, wallpaper, onlineId and color) for all specified projects.
+     */
     @Query("SELECT id, name, description, wallpaper, onlineId, color FROM project WHERE id IN (:ids)")
     abstract fun getProjectDataByIds(vararg ids: Int): Flow<List<ProjectData>>
 
+    /**
+    * It returns all meta information (id, name, description, wallpaper, onlineId and color) a specified project.
+    */
     @Query("SELECT id, name, description, wallpaper, onlineId, color FROM project WHERE id = :id")
     abstract fun getProjectData(id: Int): Flow<ProjectData?>
+
 
     @Query("SELECT layout FROM project WHERE id = :id")
     abstract suspend fun getCurrentLayout(id: Int): String
@@ -55,67 +70,125 @@ abstract class ProjectDataDAO {
     @Query("SELECT id FROM project WHERE onlineId = :onlineId LIMIT 1")
     abstract fun getIdForOnlineId(onlineId: Long): Int
 
+
+   /**
+     * It changes the name of a specified project if it is available.
+     */
     @Query("UPDATE project SET name = :name WHERE id = :id")
     abstract suspend fun setName(id: Int, name: String)
 
+    /**
+     * It changes the description of a specified project if it is available.
+     */
     @Query("UPDATE project SET description = :description WHERE id = :id")
     abstract suspend fun setDescription(id: Int, description: String)
 
+    /**
+     * It changes the wallpaper of a specified project if it is available.
+     */
     @Query("UPDATE project SET wallpaper = :wallpaper WHERE id = :id")
     abstract suspend fun setWallpaper(id: Int, wallpaper: String)
 
+    /**
+     * It changes the onlineID of a specified project if it is available.
+     */
     @Query("UPDATE project SET onlineId = :onlineID WHERE id = :id")
     abstract suspend fun setOnlineID(id: Int, onlineID: Long)
 
+    /**
+     * It changes the color of a specified project if it is available.
+     */
     @Query("UPDATE project SET color = :color WHERE id = :id")
     abstract suspend fun setColor(id: Int, color: Int)
 
     /*=====================================USER RELATED STUFF=====================================*/
+    /**
+     * It returns all users from all specified projects.
+     */
     @Query("SELECT * FROM user WHERE projectId IN (:ids)")
     abstract fun getUsersByIds(vararg ids: Int): Flow<List<ProjectUserMap>>
 
+    /**
+     * It returns the admin from all specified projects.
+     */
     @Query("SELECT id AS projectId, admin AS user FROM project WHERE id IN (:ids)")
     abstract fun getAdminByIds(vararg ids: Int): Flow<List<ProjectUserMap>>
 
+    /**
+     * It adds a specified user to the given project.
+     */
     suspend fun addUser(projectId: Int, user: User) {
         insertProjectUserMap(ProjectUserMap(projectId, user))
     }
 
+    /**
+     * It removes all specified users from a given project.
+     */
     suspend fun removeUsers(projectId: Int, vararg users: User) {
         for (user: User in users) {
             deleteProjectUserMap(ProjectUserMap(projectId, user))
         }
     }
 
+    /**
+     * It changes the admin to the specified user in the given project.
+     */
     @Query("UPDATE project SET admin = :admin WHERE id = :projectId")
     abstract suspend fun changeAdmin(projectId: Int, admin: User)
 
     /*=====================================DELTA RELATED STUFF====================================*/
+    /**
+     * It adds the given missingSlotEntity.
+     */
     @Insert
     abstract suspend fun insertMissingSlot(slot: MissingSlotEntity)
 
+    /**
+     * It deletes the given missingSlotEntity.
+     */
     @Delete
     abstract suspend fun deleteMissingSlot(slot: MissingSlotEntity)
 
+    /**
+     * It returns all missingSlotEntities from a specified project.
+     */
     @Query("SELECT * FROM missingSlot WHERE projectId = :projectId")
     abstract fun getMissingSlots(projectId: Int): List<MissingSlotEntity>
 
     /*========================SHOULD ONLY BE CALLED FROM INSIDE THE MODEL=========================*/
+    /**
+     * It saves the given projectEntity to the table.
+     */
     @Insert
     abstract suspend fun insertProjectEntity(entity: ProjectEntity)
 
+    /**
+     * It deletes  the given projectEntity from the table.
+     */
     @Delete
     abstract suspend fun deleteProjectEntity(entity: ProjectEntity)
 
+    /**
+     * It deletes a projectEntity by their given id.
+     */
     @Query("DELETE FROM project WHERE id = :id")
     abstract suspend fun deleteProjectEntityById(id: Int)
 
+    /**
+     * It saves the given projectUserMap to the table.
+     */
     @Insert
     abstract suspend fun insertProjectUserMap(userMap: ProjectUserMap)
 
+    /**
+     * It deletes the given projectUsermap from the table.
+     */
     @Delete
     abstract suspend fun deleteProjectUserMap(userMap: ProjectUserMap)
 
+    /**
+     * It deletes all users from the specified project.
+     */
     @Query("DELETE FROM user WHERE projectId = :projectId")
     abstract suspend fun deleteAllUsers(projectId: Int)
 }
