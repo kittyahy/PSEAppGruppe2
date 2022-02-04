@@ -25,7 +25,7 @@ import com.pseandroid2.dailydata.model.database.entities.RowEntity
 
 class ArrayListRow(
     private val values: MutableList<Any>,
-    var rowMetaData: RowMetaData
+    private var rowMetaData: RowMetaData = RowMetaData()
 ) : Row {
 
     companion object {

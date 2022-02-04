@@ -45,7 +45,7 @@ interface Table {
 
     fun getColumn(col: Int): List<Any>
 
-    fun addColumn(typeString: String, name: String, unit: String, default: Any)
+    fun addColumn(typeString: String, name: String, unit: String = "", default: Any)
 
     fun deleteColumn(col: Int)
 
@@ -72,7 +72,7 @@ interface TableLayout : Iterable<ColumnData> {
 
     operator fun get(col: Int): ColumnData
 
-    fun addColumn(typeString: String, name: String, unit: String)
+    fun addColumn(typeString: String, name: String, unit: String = "")
 
     fun deleteColumn(col: Int)
 
