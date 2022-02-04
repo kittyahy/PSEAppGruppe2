@@ -20,10 +20,12 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows
 
+import android.util.Log
 import com.google.gson.Gson
 import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.model.notifications.TimeNotification
 import com.pseandroid2.dailydata.model.table.ArrayListLayout
+import com.pseandroid2.dailydata.model.users.NullUser
 import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
@@ -35,6 +37,7 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Pr
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Row
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.toColumnList
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.toViewGraph
+import com.pseandroid2.dailydata.util.Consts.LOG_TAG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.coroutineScope
@@ -92,7 +95,12 @@ class ProjectFlow(
             Project(
                 project.id,
                 project.isOnline,
-                rds.getUserID() == project.admin.getId(),
+                if (project.admin is NullUser) {
+                    Log.w(LOG_TAG, "Getting a NullUser from the Database")
+                    false
+                } else {
+                    rds.getUserID() == project.admin.getId()
+                },
                 project.name,
                 project.desc,
                 project.color,

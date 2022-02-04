@@ -39,6 +39,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.runBlocking
 import kotlin.reflect.KClass
+import kotlin.reflect.full.companionObject
 import com.pseandroid2.dailydata.model.project.Project as ModelProject
 
 class Project(
@@ -89,9 +90,9 @@ class Project(
         }
         for (pair in isPossible) {
             runBlocking { //Todo runBlocking weg
-                pair.value.emit(pair.key.members.single {
+                pair.value.emit((pair.key.companionObject?.members?.single {
                     it.name == "isPossible"
-                }.call(this) as Boolean)
+                }?.call(this) ?: false) as Boolean)
             }
         }
         for (type in DataType.values()) {

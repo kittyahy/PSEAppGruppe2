@@ -18,6 +18,7 @@ import com.pseandroid2.dailydata.util.Consts.LOG_TAG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
@@ -39,6 +40,7 @@ class ProjectFlowProvider(val projId: Int, private val db: AppDataBase) :
                     project.onlineId = it.onlineId
                     project.path = it.wallpaper
                     project.color = it.color
+                    project.admin = db.projectDataDAO().getAdminByIds(it.id).first()[0].user
                     mutableFlow.emit(project)
                 } else {
                     Log.d(LOG_TAG, "ProjectData was null")

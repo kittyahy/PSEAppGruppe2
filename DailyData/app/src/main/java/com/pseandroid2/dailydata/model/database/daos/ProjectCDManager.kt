@@ -21,6 +21,7 @@
 package com.pseandroid2.dailydata.model.database.daos
 
 
+import android.util.Log
 import androidx.room.withTransaction
 import com.pseandroid2.dailydata.model.graph.Graph
 import com.pseandroid2.dailydata.model.database.AppDataBase
@@ -33,7 +34,9 @@ import com.pseandroid2.dailydata.model.project.ProjectSkeleton
 import com.pseandroid2.dailydata.model.project.ProjectTemplate
 import com.pseandroid2.dailydata.model.table.TableLayout
 import com.pseandroid2.dailydata.model.uielements.UIElement
+import com.pseandroid2.dailydata.model.users.NullUser
 import com.pseandroid2.dailydata.model.users.User
+import com.pseandroid2.dailydata.util.Consts.LOG_TAG
 import com.pseandroid2.dailydata.util.SortedIntListUtil
 import java.time.LocalDateTime
 import java.util.SortedSet
