@@ -55,11 +55,7 @@ fun Navigation(navController: NavHostController) {
             )
         }
         composable(Routes.TEMPLATES) {
-            TemplatesScreen(
-                onNavigate = {
-                    navController.navigate(it.route)
-                }
-            )
+            TemplatesScreen()
         }
         composable(Routes.SERVER) {
             ServerScreen(

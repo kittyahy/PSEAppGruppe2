@@ -62,7 +62,6 @@ fun ProjectDataGraphScreen(
     viewModel: ProjectDataGraphScreenViewModel = hiltViewModel()
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val context = LocalContext.current
     LaunchedEffect(Unit) {
         viewModel.onEvent(ProjectDataGraphScreenEvent.OnCreate(projectId = projectId))
     }
@@ -79,9 +78,12 @@ fun ProjectDataGraphScreen(
     LazyColumn {
         itemsIndexed(viewModel.graphs) { index, graph ->
             coroutineScope.launch {
+                /* TODO()
                 if(graph.image == null && graph.showIsPossible().first()) {
                     graph.show(context = context)
                 }
+
+                 */
             }
             if(graph.image != null) {
                 Image(

@@ -43,9 +43,6 @@ class TemplatesScreenViewModel @Inject constructor(
     val repository: RepositoryViewModelAPI
 ) : ViewModel() {
 
-    private val _uiEvent = MutableSharedFlow<UiEvent>()
-    val uiEvent = _uiEvent.asSharedFlow()
-
     var tabs by mutableStateOf(listOf<TemplateTabs>())
         private set
     var tab by mutableStateOf(0)
@@ -53,25 +50,25 @@ class TemplatesScreenViewModel @Inject constructor(
 
     var graphTemplates = repository.projectHandler.getGraphTemplates(0) //TODO Arne Where do we get that id from?
         private set
-    var projectTemplates = repository.projectHandler.getProjectTemplatePreviews() //TODO Arne
+    var projectTemplates = repository.projectHandler.getProjectTemplatePreviews()
         private set
 
-    fun onEvent(event: TemplatesScreenEvent) {
+    fun onEvent(event : TemplatesScreenEvent) {
         when (event) {
             is TemplatesScreenEvent.OnTabChange -> {
                 tab = event.index
             }
-            is TemplatesScreenEvent.OnGraphTemplateDelete -> {
+            is TemplatesScreenEvent.OnDeleteGraphTemplate -> {
                 viewModelScope.launch {
                     if (event.template.deleteIsPossible().first()) {
-                        event.template.delete()
+                        event.template.delete() //TODO
                     }
                 }
             }
-            is TemplatesScreenEvent.OnProjectTemplateDelete -> {
+            is TemplatesScreenEvent.OnDeleteProjectTemplate -> {
                 viewModelScope.launch {
                     if (event.template.deleteIsPossible().first()) {
-                        event.template.delete()
+                        event.template.delete() //TODO
                     }
                 }
             }

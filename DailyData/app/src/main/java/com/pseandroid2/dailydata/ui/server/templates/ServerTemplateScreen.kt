@@ -36,12 +36,12 @@ fun ServerTemplatesScreen(
     }
 
     if(posts.isNotEmpty()) {
-        val templates = posts[viewModel.dialogTemplateIndex].getPostDetail().toList()
+        val templates = viewModel.post.postEntries
         ProjectTemplateDialog(
             isOpen = viewModel.isProjectTemplateDialogOpen,
             onDismissRequest = { viewModel.onEvent(ServerTemplateScreenEvent.OnCloseDialog) },
-            onIconClick = {
-                //Download template
+            onIconClick = { id ->
+                //download post entry TODO()
                           },
             templates = templates
         )
@@ -57,7 +57,7 @@ fun ServerTemplatesScreen(
                  imageClickable = false,
                  onImageClick = { viewModel.onEvent(ServerTemplateScreenEvent.OnShowDialog(index = index)) },
                  onIconClick = {
-                     viewModel.onEvent(ServerTemplateScreenEvent.OnTemplateDownload(post.id))
+                     viewModel.onEvent(ServerTemplateScreenEvent.OnPostDownload(post.id))
                  },
                  icon = Icons.Default.Download
              )

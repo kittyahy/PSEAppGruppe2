@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
@@ -19,6 +20,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.PostEntry
@@ -28,7 +30,7 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Pr
 fun ProjectTemplateDialog(
     isOpen : Boolean,
     onDismissRequest : () -> Unit,
-    onIconClick: (Int) -> Unit,
+    onIconClick: (id : Int) -> Unit,
     templates : List<PostEntry>
 ) {
     if(isOpen) {
@@ -41,8 +43,7 @@ fun ProjectTemplateDialog(
                 modifier = Modifier.padding(10.dp)
             ) {
                 LazyColumn {
-
-                    itemsIndexed(templates) { index, postEntry ->
+                    items(templates) { postEntry ->
                         Column (
                             modifier = Modifier.padding(10.dp),
                             verticalArrangement = Arrangement.spacedBy(5.dp)
@@ -60,7 +61,7 @@ fun ProjectTemplateDialog(
                                 Icon(
                                     imageVector = Icons.Default.Delete,
                                     contentDescription = "",
-                                    modifier = Modifier.clickable { onIconClick(index) }
+                                    modifier = Modifier.clickable { onIconClick(postEntry.id) }
                                 )
                             }
                         }
@@ -69,4 +70,10 @@ fun ProjectTemplateDialog(
             }
         }
     }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun Prev() {
+
 }

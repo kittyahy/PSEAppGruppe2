@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Post
 import com.pseandroid2.dailydata.util.ui.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -24,33 +25,22 @@ class ServerTemplateScreenViewModel @Inject constructor(
 
     var posts = repository.serverHandler.getPostPreviews().toList()
         private set
-    var isProjectTemplateDialogOpen by mutableStateOf(false)
+    lateinit var post : Post
         private set
-    var dialogTemplateIndex by mutableStateOf(0 )
+    var isProjectTemplateDialogOpen by mutableStateOf(false)
         private set
 
     fun onEvent(event : ServerTemplateScreenEvent) {
         when (event) {
-            is ServerTemplateScreenEvent.OnGraphTemplateDownload -> {
-                viewModelScope.launch {
-                    if (repository.serverHandler.downloadGraphTemplateIsPossible().first()) {
-                        repository.serverHandler.downloadGraphTemplate(event.projectId, event.graphId)
-                        isProjectTemplateDialogOpen = false
-                        dialogTemplateIndex = 0
-                    } else {
-                        sendUiEvent(UiEvent.ShowToast("Could not download graph template"))
-                    }
-                }
+            is ServerTemplateScreenEvent.OnShowDialog -> {
+                post = repository.serverHandler.getPost(posts[event.index].id)
+                isProjectTemplateDialogOpen = true
             }
             is ServerTemplateScreenEvent.OnCloseDialog -> {
                 isProjectTemplateDialogOpen = false
             }
-            is ServerTemplateScreenEvent.OnShowDialog -> {
-
-                isProjectTemplateDialogOpen = true
-                dialogTemplateIndex = event.index
-            }
-            is ServerTemplateScreenEvent.OnTemplateDownload -> {
+            is ServerTemplateScreenEvent.OnPostDownload -> {
+                //download post TODO()
                 viewModelScope.launch {
                     if (repository.serverHandler.downloadProjectTemplateIsPossible().first()) {
                         repository.serverHandler.downloadProjectTemplate(id = event.id)
@@ -59,6 +49,20 @@ class ServerTemplateScreenViewModel @Inject constructor(
                     }
                 }
             }
+
+            is ServerTemplateScreenEvent.OnPostEntryDownload -> {
+                //download post entry TODO()
+                viewModelScope.launch {
+                    if (repository.serverHandler.downloadGraphTemplateIsPossible().first()) {
+                        repository.serverHandler.downloadGraphTemplate(event.projectId, event.graphId)
+                        isProjectTemplateDialogOpen = false
+                    } else {
+                        sendUiEvent(UiEvent.ShowToast("Could not download graph template"))
+                    }
+                }
+            }
+
+
         }
     }
 
