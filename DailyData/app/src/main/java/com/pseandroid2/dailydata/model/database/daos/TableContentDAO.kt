@@ -32,8 +32,15 @@ import com.pseandroid2.dailydata.model.table.toRowEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
+/**
+ * This class provides Methods and Queries to saves and change and remove Rows to their given tables.
+ */
 @Dao
 abstract class TableContentDAO {
+
+    /**
+     * It provides the by their id recommended rows.
+     */
     fun getRowsById(id: Int): Flow<List<Row>> {
         @Suppress("Deprecation")
         return getRowEntitiesById(id).map {
@@ -45,11 +52,17 @@ abstract class TableContentDAO {
         }
     }
 
+    /**
+     * It adds the given row to the specified project.
+     */
     suspend fun insertRow(row: Row, projectId: Int) {
         @Suppress("Deprecation")
         insertRowEntity(row.toRowEntity(projectId))
     }
 
+    /**
+     * It deletes the given rows from the specified project.
+     */
     suspend fun deleteRows(projectId: Int, vararg rows: Row) {
         for (row: Row in rows) {
             @Suppress("Deprecation")
@@ -57,6 +70,9 @@ abstract class TableContentDAO {
         }
     }
 
+    /**
+     * It changes the given rows in the specified project.
+     */
     suspend fun changeRows(projectId: Int, vararg rows: Row) {
         for (row: Row in rows) {
             @Suppress("Deprecation")
@@ -65,6 +81,9 @@ abstract class TableContentDAO {
     }
 
     /*========================SHOULD ONLY BE CALLED FROM INSIDE THE MODEL=========================*/
+    /**
+     * It inserts the specified RowEntity to the table.
+     */
     @Deprecated(
         "Shouldn't be used outside the Model, use insertRow instead",
         ReplaceWith("insertRow()")
@@ -72,6 +91,9 @@ abstract class TableContentDAO {
     @Insert
     abstract suspend fun insertRowEntity(row: RowEntity)
 
+    /**
+     * It provides the recommended RowEntities from a specified project.
+     */
     @Deprecated(
         "Shouldn't be used outside the Model, use getRowsById instead",
         ReplaceWith("getRowsById()")
@@ -79,6 +101,9 @@ abstract class TableContentDAO {
     @Query("SELECT * FROM `row` WHERE projectId = :id")
     abstract fun getRowEntitiesById(id: Int): Flow<List<RowEntity>>
 
+    /**
+     * It deletes all given RowEntities.
+     */
     @Deprecated(
         "Shouldn't be used outside the Model, use deleteRows instead",
         ReplaceWith("deleteRows()")
@@ -86,6 +111,9 @@ abstract class TableContentDAO {
     @Delete
     abstract suspend fun deleteRowEntities(vararg rows: RowEntity)
 
+    /**
+     * It changes all specified RowEntities to the given RowEntites.
+     */
     @Deprecated(
         "Shouldn't be used outside the Model, use changeRows instead",
         ReplaceWith("changeRows()")

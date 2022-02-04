@@ -28,24 +28,42 @@ import com.pseandroid2.dailydata.model.database.entities.GraphData
 import com.pseandroid2.dailydata.model.database.entities.GraphEntity
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * This class provides Methods and Queries to saves and change and remove Graphs for their table.
+ */
 @Dao
 abstract class GraphDAO {
+    /**
+     * It provides information of a specified graph.
+     */
     @Query("SELECT id, dataTransformation, type, path FROM graph WHERE projectId = :id")
     abstract fun getGraphDataForProject(id: Int): Flow<List<GraphData>>
 
+    /**
+     * It changes the @param path of a picture of a specified graph in a specified project.
+     */
     @Query("UPDATE graph SET path = :path WHERE projectId = :projectId AND id = :id")
     abstract suspend fun changePath(projectId: Int, id: Int, path: String)
 
     /*========================SHOULD ONLY BE CALLED FROM INSIDE THE MODEL=========================*/
 
+    /**
+     * It inserts a new Graph to the Table graph.
+     */
     @Deprecated("This method should only be used from within the model, use GraphCDManager.insertGraph instead")
     @Insert
     abstract suspend fun insertGraph(graph: GraphEntity)
 
+    /**
+     * It deletes the specified graph from the Table graph.
+     */
     @Deprecated("This method should only be used from within the model, use GraphCDManager.deleteGraph instead")
     @Delete
     abstract suspend fun deleteGraph(graph: GraphEntity)
 
+    /**
+     * It deletes all graphs from a given project.
+     */
     @Deprecated("This method should only be used from within the model")
     @Query("DELETE FROM graph WHERE projectId = :projectId")
     abstract suspend fun deleteAllGraphs(projectId: Int)
