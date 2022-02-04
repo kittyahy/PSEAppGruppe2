@@ -21,18 +21,29 @@
 package com.pseandroid2.dailydata.ui.server
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.util.ui.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ServerScreenViewModel @Inject constructor() : ViewModel() {
+class ServerScreenViewModel @Inject constructor(val repository: RepositoryViewModelAPI) :
+    ViewModel() {
 
     private val _uiEvent = MutableSharedFlow<UiEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
-
-    var loggedIn = true
+    var loggedIn = false
         private set
+
+    init {
+        viewModelScope.launch {
+            loggedIn = repository.serverHandler.amILoggedIn()
+        }
+    }
+
+
 }
