@@ -69,7 +69,6 @@ import com.pseandroid2.dailydata.model.database.entities.UIElementMap
 @TypeConverters(
     DateTimeConversion::class,
     UserConversion::class,
-    TransformationConversion::class,
     GraphTypeConversion::class,
     UIElementTypeConversion::class
 )
