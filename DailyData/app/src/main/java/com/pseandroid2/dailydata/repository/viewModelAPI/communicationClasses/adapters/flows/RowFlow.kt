@@ -25,6 +25,10 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 
 @InternalCoroutinesApi
+@Deprecated(
+    "Rows only ever make sense in conjunction with a project",
+    level = DeprecationLevel.ERROR
+)
 class RowFlow(flow: Flow<List<Row>>) :
     FlowAdapter<Row, com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Row>(
         flow

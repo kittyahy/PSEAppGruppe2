@@ -75,7 +75,7 @@ internal class ServerManagerIsProjectCommandQueueCorrectlyLinkedTests {
         // Convert deltas into ProjectCommandObjects
         for (i in deltaList.indices) {
             val delta: Delta = deltaList.elementAt(i)
-            val projectCommand = ProjectCommandInfo(delta.user, delta.admin, delta.projectCommand)
+            val projectCommand = ProjectCommandInfo(delta.user, delta.admin, delta.projectCommand, delta.addedToServerS)
             projectCommands.add(projectCommand)
         }
 

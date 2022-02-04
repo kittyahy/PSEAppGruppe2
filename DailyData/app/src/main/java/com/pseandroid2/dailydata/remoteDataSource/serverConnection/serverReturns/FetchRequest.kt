@@ -27,7 +27,9 @@ package com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturn
  * @param project:      The ProjectID of the project to which the fetchRequest belongs
  * @param requestInfo:  The FetchRequest as JSON
  */
-data class FetchRequest(val id: Int = -1,
-                        val user: String = "",
-                        val project: Long = -1,
-                        val requestInfo: String = "fetch request")
+data class FetchRequest(
+    val id: Int = -1,
+    val user: String = "",
+    val project: Long = -1,
+    val requestInfo: String = "fetch request"
+)

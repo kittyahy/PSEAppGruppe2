@@ -20,4 +20,6 @@ class IntLineChart(
         }
         return list
     }
+
+    override fun getType() = GraphType.INT_LINE_CHART
 }

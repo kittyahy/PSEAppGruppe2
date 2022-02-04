@@ -61,9 +61,10 @@ interface GraphTemplate {
     val path: String
     val background: Int
 
-    fun getWallpaper(): Bitmap
+    fun getWallpaper(): Bitmap?
 
-    fun getCustomizing(): Settings
+    var customizing: Settings
+    fun addSetting(key: String, value: String)
 
     val type: GraphType
 
@@ -75,7 +76,9 @@ interface GraphTemplate {
 
 enum class GraphType {
 
-    LINE_CHART,
+    INT_LINE_CHART,
+    FLOAT_LINE_CHART,
+    TIME_LINE_CHART,
     PIE_CHART
 
 }

@@ -20,6 +20,7 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
+import com.pseandroid2.dailydata.model.table.TableLayout
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import kotlinx.coroutines.flow.Flow
 /**
@@ -40,4 +41,19 @@ class Column(
     override suspend fun delete() {
         TODO("Not yet implemented")
     }
+}
+
+fun TableLayout.toColumnList(): List<Column> {
+    val columns = mutableListOf<Column>()
+    for (i in 0 until this.getSize()) {
+        columns.add(
+            Column(
+                i,
+                this[i].name,
+                this[i].unit,
+                DataType.fromSerializableClassName(this[i].type)
+            )
+        )
+    }
+    return columns.toList()
 }

@@ -19,6 +19,7 @@
 */
 package com.pseandroid2.dailydataserver;
 
+import com.google.firebase.auth.FirebaseAuthException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -42,21 +43,29 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String token = request.getHeader("token"); //da der Token jetzt in den Header kommt.
-//only for test: name als Header falls ein bestimmter usergebraucht ist
-        if(token.equals("MeinToken")){
-            request.setAttribute("user", request.getHeader("name"));
-            return HandlerInterceptor.super.preHandle(request, response, handler);
-        }
-        //Ende Test workaround
+        String token = request.getHeader("token");
 
-        
+        //only for testing:
+        testAuth(token,request);
+
+        String userID = "";
         // Firebase token authentication
-        String userID = firebaseManager.getUserIDFromToken(token);
-        log.info(userID);
+        try {
+            userID = firebaseManager.getUserIDFromToken(token);
+        } catch (FirebaseAuthException e) {
+            return false;
+        }
         // Update attribute with the computed UserID
         request.setAttribute("user", userID);
-
+        System.out.println(request.getAttribute("user"));
         return HandlerInterceptor.super.preHandle(request, response, handler);
+    }
+
+
+    @Deprecated(since = "Only for testing")
+    private void testAuth(String token,HttpServletRequest request ){
+        if (token.equals("MeinToken")) {
+            request.setAttribute("user", request.getHeader("name"));
+        }
     }
 }

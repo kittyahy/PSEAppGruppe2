@@ -30,6 +30,7 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ad
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectTemplateFlow
 import kotlinx.coroutines.InternalCoroutinesApi
 
+
 class RepositoryViewModelAPI(
     @Deprecated("Internal function, should not be used outside the RepositoryViewModelAPI")
     val appDataBase: AppDataBase,
@@ -42,13 +43,12 @@ class RepositoryViewModelAPI(
     @InternalCoroutinesApi
     @Suppress("DEPRECATION")
     val projectHandler = ProjectHandler(
-        ProjectPreviewFlow(appDataBase.projectDataDAO().getAllProjectData()),
-        ProjectTemplateFlow(TODO("ProjectTemplateFlowParameter")),
-        TODO("GraphTemplateFlow"),
         appDataBase,
+        remoteDataSourceAPI,
         ExecuteQueue(
-            ,
-            PublishQueue()
+            appDataBase,
+            remoteDataSourceAPI,
+            PublishQueue(appDataBase, remoteDataSourceAPI)
         )
     )
 }

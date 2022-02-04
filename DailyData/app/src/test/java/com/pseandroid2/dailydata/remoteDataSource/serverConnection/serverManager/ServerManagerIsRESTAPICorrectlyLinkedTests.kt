@@ -27,8 +27,6 @@ import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParamet
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.TemplateDetailWrapper
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.Delta
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
-import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.PostPreview
-import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.TemplateDetail
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -39,8 +37,6 @@ import java.time.LocalDateTime
 
 internal class ServerManagerIsRESTAPICorrectlyLinkedTests {
 
-    private var postPreviewList: List<PostPreview> = listOf(PostPreview())
-    private var postDetailList: List<TemplateDetail> = listOf(TemplateDetail(id = 1))
     private var deltaList: Collection<Delta> = listOf(Delta(projectCommand = "ProjectCommand"))
     private var fetchRequestList: Collection<FetchRequest> =
         listOf(FetchRequest(requestInfo = "FetchRequest"))
@@ -54,8 +50,6 @@ internal class ServerManagerIsRESTAPICorrectlyLinkedTests {
         restAPI = mockk()
         every { restAPI.greet() } returns true
 
-        every { restAPI.getAllPostsPreview("") } returns postPreviewList
-        every { restAPI.getPostDetail(1, "") } returns postDetailList
         every { restAPI.getProjectTemplate(1, "") } returns "ProjectTemplate"
         every { restAPI.getGraphTemplate(1, 1, "") } returns "GraphTemplate"
         every {
@@ -105,16 +99,6 @@ internal class ServerManagerIsRESTAPICorrectlyLinkedTests {
     fun restAPILinked() {
         // Test if serverManager returns the expected outputs
         Assert.assertTrue(serverManager.greet())
-
-        Assert.assertEquals(
-            postPreviewList.elementAt(0),
-            serverManager.getAllPostPreview("").elementAt(0)
-        )
-
-        Assert.assertEquals(
-            postDetailList.elementAt(0),
-            serverManager.getPostDetail(1, "").elementAt(0)
-        )
 
         Assert.assertEquals("ProjectTemplate", serverManager.getProjectTemplate(1, ""))
 

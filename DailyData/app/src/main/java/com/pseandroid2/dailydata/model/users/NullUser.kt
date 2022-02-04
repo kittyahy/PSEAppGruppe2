@@ -25,8 +25,8 @@ import java.lang.NullPointerException
 class NullUser : User {
     companion object {
         const val NPE_STRING =
-            "This User has not been set (perhaps you tried to get an admin " +
-                    "from a non-online project?)"
+            "This User has not been set (perhaps you tried to save a Project to the " +
+                    "database without setting an acutal User as Admin?)"
     }
 
     override fun getId(): String {

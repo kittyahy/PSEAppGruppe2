@@ -35,11 +35,20 @@ class DeltaControllerGetDeltaTests {
     @Before
     fun setup() {
         // Generate valid firebase authentication tokens
-        Assert.assertEquals(FirebaseReturnOptions.SINGED_IN, fm.signInWithEmailAndPassword(email3, password3))
+        Assert.assertEquals(
+            FirebaseReturnOptions.SINGED_IN,
+            fm.signInWithEmailAndPassword(email3, password3)
+        )
         authToken3 = fm.getToken()
-        Assert.assertEquals(FirebaseReturnOptions.SINGED_IN, fm.signInWithEmailAndPassword(email2, password2))
+        Assert.assertEquals(
+            FirebaseReturnOptions.SINGED_IN,
+            fm.signInWithEmailAndPassword(email2, password2)
+        )
         authToken2 = fm.getToken()
-        Assert.assertEquals(FirebaseReturnOptions.SINGED_IN, fm.signInWithEmailAndPassword(email, password))
+        Assert.assertEquals(
+            FirebaseReturnOptions.SINGED_IN,
+            fm.signInWithEmailAndPassword(email, password)
+        )
         authToken = fm.getToken()
 
         // Create new project
@@ -49,11 +58,14 @@ class DeltaControllerGetDeltaTests {
         Assert.assertEquals("project details", restAPI.addUser(projectID, authToken3))
 
         // Save a delta to the server
-        Assert.assertEquals(listOf(projectCommandToSend), serverManager.sendCommandsToServer(projectID, listOf(projectCommandToSend), authToken))
+        Assert.assertEquals(
+            listOf(projectCommandToSend),
+            serverManager.sendCommandsToServer(projectID, listOf(projectCommandToSend), authToken)
+        )
         setTeardown(restAPI, projectID, authToken, userID, userID2, userID3)
     }
 
-    companion object Teardown{
+    companion object Teardown {
         private var restAPI: RESTAPI? = null
         private var projectID: Long = -1
         private var authToken: String = ""
@@ -61,7 +73,14 @@ class DeltaControllerGetDeltaTests {
         private var userToRemove2: String = ""
         private var userToRemove3: String = ""
 
-        fun setTeardown(restapi: RESTAPI, projectID: Long, authToken: String, userToRemove1: String, userToRemove2: String, userToRemove3: String) {
+        fun setTeardown(
+            restapi: RESTAPI,
+            projectID: Long,
+            authToken: String,
+            userToRemove1: String,
+            userToRemove2: String,
+            userToRemove3: String
+        ) {
             restAPI = restapi
             Teardown.projectID = projectID
             Teardown.authToken = authToken
@@ -71,7 +90,8 @@ class DeltaControllerGetDeltaTests {
         }
 
         @AfterClass
-        @JvmStatic fun teardown() {
+        @JvmStatic
+        fun teardown() {
             // Remove all users from project so that the project gets removed
             restAPI?.removeUser(userToRemove3, projectID, authToken)
             restAPI?.removeUser(userToRemove2, projectID, authToken)
@@ -82,7 +102,7 @@ class DeltaControllerGetDeltaTests {
 
     @Test
     fun getDeltaFromServer() {
-        val downloadedDeltas = restAPI.getDelta(projectID, authToken)as MutableList
+        val downloadedDeltas = restAPI.getDelta(projectID, authToken) as MutableList
         Assert.assertNotEquals(0, downloadedDeltas.size)
 
         var deltaFound = false

@@ -25,17 +25,19 @@ import java.time.LocalDateTime
  * A dataclass which will be received from the server. It stores the details of a single project command
  * (A Delta is a ProjectCommand)
  *
- * @param addedToServerS:  the time, when the Delta initially was added to the server. (so the user can recreate,
- *                        when the change was made)
+ * @param addedToServerS: The time, when the Delta initially was added to the server. (so the user can recreate,
+ *                          when the change was made)
  * @param user:           The UserID of the user who uploaded the delta
  * @param projectCommand: The projectCommand as JSON
  * @param project:        The ProjectID of the project to which this delta belongs
  * @param admin:          Was the creator of the delta an admin
  * @param requestedBy:    The participant, who needs this Delta
  */
-data class Delta(val addedToServerS: LocalDateTime = LocalDateTime.parse("0001-01-01T01:01:01.123456"),
-                 val user: String = "",
-                 val projectCommand: String = "",
-                 val project: Long = -1,
-                 val requestedBy: String = "",
-                 val admin: Boolean = false)
+data class Delta(
+    val addedToServerS: LocalDateTime = LocalDateTime.parse("0001-01-01T01:01:01.123456"),
+    val user: String = "",
+    val projectCommand: String = "",
+    val project: Long = -1,
+    val requestedBy: String = "",
+    val admin: Boolean = false
+)

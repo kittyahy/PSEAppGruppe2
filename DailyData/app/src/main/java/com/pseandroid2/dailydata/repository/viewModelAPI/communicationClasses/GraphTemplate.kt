@@ -21,6 +21,7 @@
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
 import android.graphics.Bitmap
+import com.pseandroid2.dailydata.model.graph.GraphType
 import com.pseandroid2.dailydata.model.settings.Settings
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import kotlinx.coroutines.flow.Flow
@@ -33,7 +34,7 @@ class GraphTemplate(
     var descrition: String,
     var color: Int,
     var settings: Settings,
-    var type
+    var type: GraphType
 ) : Identifiable, Template() {
     // beschreibung farbe SettingsObj, Typ, erstellung onlineId
 

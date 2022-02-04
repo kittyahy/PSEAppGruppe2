@@ -43,12 +43,11 @@ class SimpleProjectBuilder : ProjectBuilder<SimpleProject> {
                 "",
                 "",
                 Color.BLACK,
-                mutableListOf(),
                 MapSettings(),
                 mutableListOf()
             ),
             ArrayListTable(ArrayListLayout()),
-            userList = mutableListOf()
+            users = mutableListOf()
         )
 
     override fun reset(id: Int): ProjectBuilder<SimpleProject> {
@@ -61,12 +60,11 @@ class SimpleProjectBuilder : ProjectBuilder<SimpleProject> {
                 "",
                 "",
                 Color.BLACK,
-                mutableListOf(),
                 MapSettings(),
                 mutableListOf()
             ),
             ArrayListTable(ArrayListLayout()),
-            userList = mutableListOf()
+            users = mutableListOf()
         )
         return this
     }
@@ -102,7 +100,7 @@ class SimpleProjectBuilder : ProjectBuilder<SimpleProject> {
     }
 
     override fun addGraphs(graphs: List<Graph<*, *>>): ProjectBuilder<SimpleProject> {
-        project.addGraphs(graphs)
+        project.graphs.addAll(graphs)
         return this
     }
 

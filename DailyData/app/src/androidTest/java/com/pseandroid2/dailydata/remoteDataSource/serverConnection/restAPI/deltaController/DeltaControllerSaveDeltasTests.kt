@@ -21,9 +21,9 @@ class DeltaControllerSaveDeltasTests {
     @Before
     fun setup() {
         // Generate valid firebase authentication token
-        val fm: FirebaseManager = FirebaseManager(null)
-        var email = "test@student.kit.edu"
-        var password = "PSEistsuper"
+        val fm = FirebaseManager(null)
+        val email = "test@student.kit.edu"
+        val password = "PSEistsuper"
 
         Assert.assertEquals(
             FirebaseReturnOptions.SINGED_IN,

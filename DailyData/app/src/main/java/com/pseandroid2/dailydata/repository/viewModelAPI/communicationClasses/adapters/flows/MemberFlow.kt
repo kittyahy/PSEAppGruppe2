@@ -26,6 +26,10 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 
 @InternalCoroutinesApi
+@Deprecated(
+    "Members only ever make sense in conjunction with a project",
+    level = DeprecationLevel.ERROR
+)
 class MemberFlow(flow: Flow<List<User>>) : FlowAdapter<User, Member>(flow) {
     override fun provide(i: User): Member {
         return Member(i)

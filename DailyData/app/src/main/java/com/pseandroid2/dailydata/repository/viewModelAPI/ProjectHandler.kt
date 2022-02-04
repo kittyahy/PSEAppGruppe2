@@ -22,6 +22,7 @@ package com.pseandroid2.dailydata.repository.viewModelAPI
 
 
 import com.pseandroid2.dailydata.model.database.AppDataBase
+import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import com.pseandroid2.dailydata.repository.commandCenter.commands.CreateProject
 import com.pseandroid2.dailydata.repository.commandCenter.commands.JoinOnlineProject
@@ -30,14 +31,16 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Co
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Notification
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.GraphFlow
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.GraphTemplateFlow
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectFlow
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectPreviewFlow
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectTemplateFlow
-import kotlinx.coroutines.CoroutineScope
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectTemplatePreviewFlow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
@@ -45,18 +48,27 @@ import kotlinx.coroutines.runBlocking
 
 @InternalCoroutinesApi
 class ProjectHandler(
-    val projectPreviewFlow: ProjectPreviewFlow,
-    val projectTemplateFlow: ProjectTemplateFlow,
-    val graphTemplateFlow: GraphTemplateFlow,
     private val appDataBase: AppDataBase,
+    private val rds: RemoteDataSourceAPI,
     val executeQueue: ExecuteQueue
 ) {
-    private val scope = CoroutineScope(Dispatchers.IO)
-    fun getProjectByID(id: Int): Flow<Project> {
-        return ProjectFlow(appDataBase, id).getProjectFlow()
-    }
+    fun getProjectPreviews() = ProjectPreviewFlow(appDataBase, executeQueue).getPreviews()
 
-    suspend fun newProjectAsync(
+    fun getProjectByID(id: Int) = ProjectFlow(appDataBase, rds, executeQueue, id).getProject()
+
+    fun getGraphs(projectId: Int) = GraphFlow(appDataBase, executeQueue, projectId).getGraphs()
+
+    fun getGraphTemplates(projectTemplateId: Int) =
+        GraphTemplateFlow(appDataBase, executeQueue, projectTemplateId).getTemplates()
+
+    fun getProjectTemplatePreviews() =
+        ProjectTemplatePreviewFlow(appDataBase, executeQueue).getTemplatePreviews()
+
+    fun getProjectTemplate(id: Int) =
+        ProjectTemplateFlow(appDataBase, executeQueue, id).getProjectTemplate()
+
+
+    private suspend fun newProjectAsync(
         name: String,
         description: String,
         wallpaper: Int,
@@ -64,35 +76,36 @@ class ProjectHandler(
         buttons: List<Button>,
         notification: List<Notification>,
         graphs: List<Graph>
-    ) = scope.async {
-
-        val idFlow = MutableSharedFlow<Int>()
-        val createProject = CreateProject(
-            "User1",
-            name,
-            description,
-            wallpaper,
-            table,
-            buttons,
-            notification,
-            graphs,
-            idFlow
-        )
-        executeQueue.add(createProject)
-        return@async idFlow.first()
-
+    ) = coroutineScope {
+        async(Dispatchers.IO) {
+            val idFlow = MutableSharedFlow<Int>()
+            val createProject = CreateProject(
+                name,
+                description,
+                wallpaper,
+                table,
+                buttons,
+                notification,
+                graphs,
+                idFlow
+            )
+            executeQueue.add(createProject)
+            return@async idFlow.first()
+        }
     }
 
-    suspend fun newProjectAsync(project: Project) = scope.async {
-        return@async newProjectAsync(
-            project.title,
-            project.description,
-            project.wallpaper,
-            project.table,
-            project.buttons,
-            project.notifications,
-            project.graphs
-        )
+    suspend fun newProjectAsync(project: Project) = coroutineScope {
+        async(Dispatchers.IO) {
+            return@async newProjectAsync(
+                project.title,
+                project.description,
+                project.wallpaper,
+                project.table,
+                project.buttons,
+                project.notifications,
+                project.graphs
+            )
+        }
     }
 
     /**
@@ -109,9 +122,11 @@ class ProjectHandler(
         return flow
     }
 
+
     suspend fun joinOnlineProject(onlineID: Long): Flow<Int> {
         val idFlow = MutableSharedFlow<Int>()
         executeQueue.add(JoinOnlineProject(onlineID, idFlow))
         return idFlow
+
     }
 }

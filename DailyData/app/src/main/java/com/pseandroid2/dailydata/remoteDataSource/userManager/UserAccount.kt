@@ -27,22 +27,28 @@ import javax.inject.Inject
  * Manages all the user related features
  */
 class UserAccount @Inject constructor(fm: FirebaseManager) {
-    private val firebaseManager: FirebaseManager = fm // Get the FirebaseManager via dependency injection
+    private val firebaseManager: FirebaseManager =
+        fm // Get the FirebaseManager via dependency injection
 
     /**
      * Registers a new user with the requested sign in type.
      * Note: The registration will also fail, if there already exists an account with the registration parameters
      *
-     * @param eMail: The email of the user that should be registered
+     * @param eMail:    The email of the user that should be registered
      * @param password: The password of the user that should be registered
-     * @param type: Through which method should the user be register (eg email)
+     * @param type:     Through which method should the user be register (eg email)
      */
     fun registerUser(eMail: String, password: String, type: SignInTypes): FirebaseReturnOptions {
         // Choose the correct registration method
-        when(type)
-        {
-            SignInTypes.EMAIL -> return firebaseManager.registerUserWithEmailAndPassword(eMail, password)
-            SignInTypes.GOOGLE -> Log.d("SignIn: ", "SignInType not implemented") // You could add google registration here, if implemented
+        when (type) {
+            SignInTypes.EMAIL -> return firebaseManager.registerUserWithEmailAndPassword(
+                eMail,
+                password
+            )
+            SignInTypes.GOOGLE -> Log.d(
+                "SignIn: ",
+                "SignInType not implemented"
+            ) // You could add google registration here, if implemented
         }
         return FirebaseReturnOptions.REGISTRATION_FAILED
     }
@@ -50,16 +56,18 @@ class UserAccount @Inject constructor(fm: FirebaseManager) {
     /**
      * Signs in an already existing user with the passed sign in parameters
      *
-     * @param eMail: The email of the user that should be signed in
+     * @param eMail:    The email of the user that should be signed in
      * @param password: The password of the user that should be signed in
-     * @param type: Through which method should the user be signed in (eg email)
+     * @param type:     Through which method should the user be signed in (eg email)
      */
     fun signInUser(eMail: String, password: String, type: SignInTypes): FirebaseReturnOptions {
         // choose the correct sign in method
-        when(type)
-        {
+        when (type) {
             SignInTypes.EMAIL -> return firebaseManager.signInWithEmailAndPassword(eMail, password)
-            SignInTypes.GOOGLE -> Log.d("SignIn: ", "SignInType not implemented") // You could add google sign in here, if implemented
+            SignInTypes.GOOGLE -> Log.d(
+                "SignIn: ",
+                "SignInType not implemented"
+            ) // You could add google sign in here, if implemented
         }
         return FirebaseReturnOptions.REGISTRATION_FAILED
     }

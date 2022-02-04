@@ -1,8 +1,6 @@
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI.fetchRequestController
 
-import android.util.Log
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
-import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
 import org.junit.AfterClass
@@ -31,12 +29,21 @@ class FetchRequestControllerTests {
 
     @Before
     fun setup() {
-        Assert.assertEquals(FirebaseReturnOptions.SINGED_IN, fm.signInWithEmailAndPassword(email3, password3))
+        Assert.assertEquals(
+            FirebaseReturnOptions.SINGED_IN,
+            fm.signInWithEmailAndPassword(email3, password3)
+        )
         authToken3 = fm.getToken()
         // Generate valid firebase authentication tokens
-        Assert.assertEquals(FirebaseReturnOptions.SINGED_IN, fm.signInWithEmailAndPassword(email2, password2))
+        Assert.assertEquals(
+            FirebaseReturnOptions.SINGED_IN,
+            fm.signInWithEmailAndPassword(email2, password2)
+        )
         authToken2 = fm.getToken()
-        Assert.assertEquals(FirebaseReturnOptions.SINGED_IN, fm.signInWithEmailAndPassword(email, password))
+        Assert.assertEquals(
+            FirebaseReturnOptions.SINGED_IN,
+            fm.signInWithEmailAndPassword(email, password)
+        )
         authToken = fm.getToken()
 
         // Create new project
@@ -48,7 +55,7 @@ class FetchRequestControllerTests {
         setTeardown(restAPI, projectID, authToken, userID, userID2, userID3)
     }
 
-    companion object Teardown{
+    companion object Teardown {
         private var restAPI: RESTAPI? = null
         private var projectID: Long = -1
         private var authToken: String = ""
@@ -56,7 +63,14 @@ class FetchRequestControllerTests {
         private var userToRemove2: String = ""
         private var userToRemove3: String = ""
 
-        fun setTeardown(restapi: RESTAPI, projectID: Long, authToken: String, userToRemove1: String, userToRemove2: String, userToRemove3: String) {
+        fun setTeardown(
+            restapi: RESTAPI,
+            projectID: Long,
+            authToken: String,
+            userToRemove1: String,
+            userToRemove2: String,
+            userToRemove3: String
+        ) {
             restAPI = restapi
             Teardown.projectID = projectID
             Teardown.authToken = authToken
@@ -66,7 +80,8 @@ class FetchRequestControllerTests {
         }
 
         @AfterClass
-        @JvmStatic fun teardown() {
+        @JvmStatic
+        fun teardown() {
             // Remove all users from project so that the project gets removed
             restAPI?.removeUser(userToRemove3, projectID, authToken)
             restAPI?.removeUser(userToRemove2, projectID, authToken)
@@ -81,11 +96,14 @@ class FetchRequestControllerTests {
 
     @Test
     fun getFetchRequests() {
-        var requestsToSend = mutableListOf<String>("request information 1", "request information 2")
+        val requestsToSend = mutableListOf<String>("request information 1", "request information 2")
         Assert.assertTrue(restAPI.demandOldData(projectID, requestsToSend.elementAt(0), authToken))
         Assert.assertTrue(restAPI.demandOldData(projectID, requestsToSend.elementAt(1), authToken))
 
-        val downloadedFetchRequests = restAPI.getFetchRequests(projectID, authToken2) // User 2 wants to receive the uploaded fetch requests
+        val downloadedFetchRequests = restAPI.getFetchRequests(
+            projectID,
+            authToken2
+        ) // User 2 wants to receive the uploaded fetch requests
         Assert.assertNotEquals(0, downloadedFetchRequests.size)
 
         downloadedFetchRequests.forEach {
@@ -93,7 +111,10 @@ class FetchRequestControllerTests {
                 requestsToSend.remove(it.requestInfo) // removes correctly received requests
             }
         }
-        Assert.assertEquals(0, requestsToSend.size) // The send fetch requests from user1 were received by user2
+        Assert.assertEquals(
+            0,
+            requestsToSend.size
+        ) // The send fetch requests from user1 were received by user2
     }
 
     /* TODO: Implement this in the quality control phase
@@ -104,12 +125,6 @@ class FetchRequestControllerTests {
         Assert.assertEquals(0, restAPI.getFetchRequests(projectID, authToken3).size)
     }
     */
-
-    /*
-
-     */
-
-
 
     // TODO: Test Ideas: 1. getFetchrequests from the same account who send them, 2.
 

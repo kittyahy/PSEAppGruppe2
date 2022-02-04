@@ -25,7 +25,7 @@ import com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.UpdatedByO
 
 class FetchRequestQueueObserverForTesting(toUpdate: UpdatedByObserverForTesting) :
     FetchRequestQueueObserver {
-    var toUpdateObject = toUpdate
+    private var toUpdateObject = toUpdate
 
     @Override
     override fun update() {

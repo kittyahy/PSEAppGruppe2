@@ -18,16 +18,22 @@
 
 */
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter
-import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.PostPreviewWrapper
 
 /**
  * A dataclass which will be send to the server for adding posts. Contains the parameters needed to the server for adding a new post
  *
- * @param postPreview: The post preview as a PostPreviewWrapper object
- * @param projectTemplate: The project template. The first entry is the Template, the second is the detailView of the template
- * @param graphTemplates: The graph templates. The first entry of the Pair is the Template, the second is the detailView of the template
+ * @param postPreview:      The post preview as a PostPreviewWrapper object
+ * @param projectTemplate:  The project template. The first entry is the Template, the second is the detailView of the template
+ * @param graphTemplates:   The graph templates. The first entry of the Pair is the Template, the second is the detailView of the template
  */
 
-data class AddPostParameter(val postPreview: PostPreviewWrapper =  PostPreviewWrapper(),
-                            val projectTemplate: Pair<String, TemplateDetailWrapper> = Pair("", TemplateDetailWrapper()),
-                            val graphTemplates: List<Pair<String, TemplateDetailWrapper>> = listOf(Pair("", TemplateDetailWrapper())))
+data class AddPostParameter(
+    val postPreview: PostPreviewWrapper = PostPreviewWrapper(),
+    val projectTemplate: Pair<String, TemplateDetailWrapper> = Pair("", TemplateDetailWrapper()),
+    val graphTemplates: List<Pair<String, TemplateDetailWrapper>> = listOf(
+        Pair(
+            "",
+            TemplateDetailWrapper()
+        )
+    )
+)

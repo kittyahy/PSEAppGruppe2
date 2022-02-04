@@ -20,25 +20,39 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows
 
-import com.pseandroid2.dailydata.model.graph.GraphType
+import com.google.gson.Gson
+import com.pseandroid2.dailydata.model.database.AppDataBase
+import com.pseandroid2.dailydata.model.table.ArrayListLayout
+import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import com.pseandroid2.dailydata.model.graph.Graph as ModelGraph
 
-@InternalCoroutinesApi
-class GraphFlow(flow: Flow<List<ModelGraph<*, *>>>) : FlowAdapter<ModelGraph<*, *>, Graph>(flow) {
-    override fun provide(i: com.pseandroid2.dailydata.model.graph.Graph<*, *>): Graph {
-        return when (i.getType()) {
-            GraphType.LINE_CHART -> {
-                TODO("LineChart") //LineChart()
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.toViewGraph
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+
+class GraphFlow(
+    private val db: AppDataBase,
+    private val eq: ExecuteQueue,
+    private val projectId: Int
+) {
+
+    fun getGraphs(): Flow<List<Graph>> {
+        return GraphFlowProvider(projectId, db).provideFlow.distinctUntilChanged().map { graphs ->
+            val graphList = mutableListOf<Graph>()
+            for (graph in graphs) {
+                val addGraph = graph.toViewGraph(
+                    Gson().fromJson(
+                        db.projectDataDAO().getCurrentLayout(projectId),
+                        ArrayListLayout::class.java
+                    )
+                )
+                addGraph.executeQueue = eq
+                graphList.add(addGraph)
             }
-            GraphType.PIE_CHART -> {
-                TODO("PieChart") //PieChart()
-            }
-            else -> {
-                throw IllegalArgumentException()
-            }
+            graphList.toList()
         }
     }
 }

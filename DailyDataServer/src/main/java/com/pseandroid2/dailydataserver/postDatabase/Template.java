@@ -51,7 +51,7 @@ public class Template {
     private String templateInitial;
     private boolean isProjectTemplate;
     private String detailViewTitle;
-    private byte[] detailViewImage;
+    private Byte[] detailViewImage;
 
     /**
      * The constructor, which should be used to create a template.
@@ -64,7 +64,7 @@ public class Template {
      * @param detailViewImage   the image, which the user can see, before they download the template.
      */
     public Template(int post, int templateNumber, String templateInitial, boolean isProjectTemplate,
-                    String detailViewTitle, byte[] detailViewImage) {
+                    String detailViewTitle, Byte[] detailViewImage) {
         this.post = post;
         this.templateNumber = templateNumber;
         this.templateInitial = templateInitial;

@@ -23,12 +23,14 @@ class LayoutTester {
             layoutList = ArrayList(
                 mutableListOf(
                     ColumnData(
+                        0,
                         String::class.getSerializableClassName(),
                         "Test",
                         "Test",
                         mutableListOf(UIElement(0, UIElementType.BUTTON, "Test", "0"))
                     ),
                     ColumnData(
+                        1,
                         String::class.getSerializableClassName(),
                         "Test",
                         "Test",

@@ -56,20 +56,17 @@ public class FirebaseManager {
 
     }
 
+
     /**
      * Returns the userID of the user that belongs to the authentication token
      *
      * @param authToken The authentication Token
-     * @return String The UserID of the user who send this token. Returns "" on error / invalid token
+     * @return The UserID of the user who send this token.
+     * @throws FirebaseAuthException if the token is invalid
      */
-    public String getUserIDFromToken(String authToken) {
-        try {
-            FirebaseToken firebaseToken = FirebaseAuth.getInstance().verifyIdToken(authToken);
-            log.info(firebaseToken.getEmail());
-            return firebaseToken.getUid();
-        } catch (FirebaseAuthException e) {
-            e.printStackTrace();
-        }
-        return "";
+    public String getUserIDFromToken(String authToken) throws FirebaseAuthException {
+        FirebaseToken firebaseToken = FirebaseAuth.getInstance().verifyIdToken(authToken);
+        return firebaseToken.getUid();
     }
+
 }

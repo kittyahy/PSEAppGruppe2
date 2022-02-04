@@ -107,6 +107,7 @@ abstract class AppDataBase protected constructor() : RoomDatabase() {
     abstract fun settingsDAO(): SettingsDAO
 
     abstract fun templateDAO(): TemplateDAO
+
     /**
      * @throws NullPointerException when database creation fails
      */
@@ -119,6 +120,7 @@ abstract class AppDataBase protected constructor() : RoomDatabase() {
         }
         return _graphCDManager!!
     }
+
     /**
      * @throws NullPointerException when database creation fails
      */

@@ -20,101 +20,256 @@
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection
 
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.AddPostParameter
-import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.DemandOldDataParameter
-
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.ProvideOldDataParameter
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.Delta
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.PostPreview
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.TemplateDetail
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
-import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.Delta
-import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
-
-import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.ProvideOldDataParameter
-import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.RemoveUserParameter
-import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.SaveDeltaParameter
-import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.PostPreview
-import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.TemplateDetail
-import retrofit2.http.Header
 import retrofit2.http.Query
-import java.time.LocalDateTime
 
 /**
  * Declares all possible REST server calls
  */
-interface ServerEndpoints
-{
+interface ServerEndpoints {
     // TODO: Java docs für Methoden im Interface
 
-    // Greeting Controller
+    // Greeting Controller -----------------------------------------------------------------------
+    /**
+     * Returns "Hello", to make sure the server is available
+     *
+     * @return Greeting to signalise, the server is reachable
+     */
     @GET("greet")
     fun greet(): Call<String>
 
-    // TEST TODO: Wahrscheinlich entfernen
+    // TODO: This is a method for testing -> Probably remove or change it's path later
+    /**
+     * Returns all uploaded posts from a user
+     *
+     * @param token: The authentication token
+     * @return The postIDs of the uploaded posts
+     */
     @GET("test")
     fun getPostsFromUser(@Header("token") token: String): Call<List<Int>>
 
-    // Post Controller
-    @GET("Posts"+"/allPreview")
+    // Post Controller ---------------------------------------------------------------------------
+    /**
+     * Provides all PostsPreviews (title and image) with their PostIds
+     *
+     * @param token: The authentication token
+     * @return A list with PostPreview, which contains postPreviews and the Post ids
+     */
+    @GET("Posts" + "/allPreview")
     fun getAllPostPreview(@Header("token") token: String): Call<List<PostPreview>>
 
-    @GET("Posts"+"/detail/{post}")
-    fun getPostDetail(@Header("token") token: String, @Path("post") fromPost: Int): Call<List<TemplateDetail>>
+    /**
+     * Provides all Templates details from fromPost. Returns the identifier and the DetailView (image and title) from
+     * a template.
+     * For every template is declared if it's a project template or not
+     *
+     * @param token:    The authentication token
+     * @param fromPost: Declares from which post the postDetail is recommended
+     * @return A list of the template Details
+     */
+    @GET("Posts" + "/detail/{post}")
+    fun getPostDetail(
+        @Header("token") token: String,
+        @Path("post") fromPost: Int
+    ): Call<List<TemplateDetail>>
 
-    @GET("Posts"+"/{post}/projectTemplate")
-    fun getProjectTemplate(@Header("token") token: String, @Path("post") fromPost: Int): Call<String>
+    /**
+     * Provides the projectTemplate from the post fromPost
+     *
+     * @param token:    The authentication token
+     * @param fromPost: Declares from which post the projectTemplate is recommended (provided by the client)
+     * @return The projectTemplate as JSON
+     */
+    @GET("Posts" + "/{post}/projectTemplate")
+    fun getProjectTemplate(
+        @Header("token") token: String,
+        @Path("post") fromPost: Int
+    ): Call<String>
 
-    @GET("Posts"+"/{post}/{template}")
-    fun getGraphTemplate(@Header("token") token: String, @Path("post") fromPost: Int,
-                         @Path("template") templateNumber: Int): Call<String>
+    /**
+     * Provides a specified GraphTemplate from a specified post
+     *
+     * @param token:          The authentication token
+     * @param fromPost:       Declares from which project the graph template is recommended
+     * @param templateNumber: Declares which template is recommended
+     * @return The GraphTemplate as JSON
+     */
+    @GET("Posts" + "/{post}/{template}")
+    fun getGraphTemplate(
+        @Header("token") token: String, @Path("post") fromPost: Int,
+        @Path("template") templateNumber: Int
+    ): Call<String>
 
-    @POST("Posts"+"/add")
+    /**
+     * Adds a new Post. If there is more than allowed from the same user, they can not create a new one
+     *
+     * @param token:  The authentication token
+     * @param params: The data, which are recommended to add a new post. {@link AddPostParameter} specifies
+     *                   this parameter
+     * @return The postID of the new post or 0 if the user has too many posts and can't add a new one
+     */
+    @POST("Posts" + "/add")
     fun addPost(@Header("token") token: String, @Body params: AddPostParameter): Call<Int>
 
-    @DELETE("Posts"+"/remove/{post}")
+    /**
+     * Removes a post if the user is allowed to remove it
+     *
+     * @param token:    The authentication token
+     * @param postID:   Which Post should be removed
+     * @return if the post could be removed
+     */
+    @DELETE("Posts" + "/remove/{post}")
     fun removePost(@Header("token") token: String, @Path("post") postID: Int): Call<Boolean>
 
 
-    // ProjectParticipantsController
-    @POST("OnlineDatabase"+"/addUser/{id}")
+    // ProjectParticipantsController ---------------------------------------------------------------------------
+    /**
+     * Adds a user to a project, if it's possible. If a user tries to join a project, where they already participate,
+     * they also get the initial for the project
+     *
+     * @param token:    The authentication token
+     * @param projectId The project, where the user wants to participate
+     * @return The initial for the project, if the user participates now in the project, if not, it returns an empty
+     * String ("")
+     */
+    @POST("OnlineDatabase" + "/addUser/{id}")
     fun addUser(@Header("token") token: String, @Path("id") projectId: Long): Call<String>
 
-    @DELETE("OnlineDatabase"+"/removeUser/{id}")
-    fun removeUser(@Header("token") token: String, @Path("id") projectId: Long,
-                    @Query("userToRemove") userToRemove: String): Call<Boolean>
+    /**
+     * Removes a user from a project. A user can remove himself.
+     * The method also checks if the user is an admin, if he wants to remove another person from the project.
+     * If the user is the last user in the project, and they can remove themselves, the project gets deleted eminently
+     *
+     * @param token:    The authentication token
+     * @param projectId    The project, where a user should be removed from
+     * @param userToRemove All information, which are necessary to remove a user from a project
+     * @return True, if the user is removed, false if it was not possible
+     */
+    @DELETE("OnlineDatabase" + "/removeUser/{id}")
+    fun removeUser(
+        @Header("token") token: String, @Path("id") projectId: Long,
+        @Query("userToRemove") userToRemove: String
+    ): Call<Boolean>
 
-    @POST("OnlineDatabase"+"/newProject")
+    /**
+     * Adds a new project. The user, who initializes the project is the admin
+     *
+     * @param token:            The authentication token
+     * @param projectDetails:   The initial for the project, which are needed for the client
+     * @return The projectId for the new project
+     */
+    @POST("OnlineDatabase" + "/newProject")
     fun addProject(@Header("token") token: String, @Body projectDetails: String): Call<Long>
 
-    // TODO: Create RDSAPI Methods
-    @GET("OnlineDatabase"+"/{id}/participants")
-    fun getParticipants(@Header("token") token: String, @Path("id") projectId: Long): Call<List<String>>
+    /**
+     * Returns all user of the project, which currently participate.
+     *
+     * @param token:        The authentication token
+     * @param projectId:    The id, from which project the participants were recommended.
+     * @return A list with users.
+     */
+    @GET("OnlineDatabase" + "/{id}/participants")
+    fun getParticipants(
+        @Header("token") token: String,
+        @Path("id") projectId: Long
+    ): Call<List<String>>
 
-    @GET("OnlineDatabase"+"/{id}/admin")
+    /**
+     * Gets the project admin
+     *
+     * @param token:        The authentication token
+     * @param projectId:    The id from which the admin is recommended
+     * @return The userID of the project admin
+     */
+    @GET("OnlineDatabase" + "/{id}/admin")
     fun getAdmin(@Header("token") token: String, @Path("id") projectId: Long): Call<String>
 
-    // DeltaController
-    @POST("OnlineDatabase/Delta"+"/save/{id}")
-    suspend fun saveDelta(@Header("token") token: String, @Path("id") projectId: Long,
-                  @Body command: String): Boolean
+    // DeltaController -----------------------------------------------------------------------------
+    /**
+     * Creates a new delta for a project to save one command.
+     *
+     * @param token:        The authentication token
+     * @param projectId:    Declares to which projects the command belongs
+     * @param command:      The command, which should be saved
+     * @return True, if the delta could be saved. false if not
+     */
+    @POST("OnlineDatabase/Delta" + "/save/{id}")
+    suspend fun saveDelta(
+        @Header("token") token: String, @Path("id") projectId: Long,
+        @Body command: String
+    ): Boolean
 
-    @GET("OnlineDatabase/Delta"+"/get/{id}")
+    /**
+     * Provides all new Deltas which belongs to a project, which the user don't have, and all old deltas which
+     * belongs to the user
+     *
+     * @param token:        The authentication token
+     * @param projectId:    Declares from which project the delta is recommended (provided in the URL by the client)
+     * @return a list of recommended Deltas
+     */
+    @GET("OnlineDatabase/Delta" + "/get/{id}")
     fun getDelta(@Header("token") token: String, @Path("id") projectId: Long): Call<List<Delta>>
 
-    @POST("OnlineDatabase/Delta"+"/provide/{id}")
-    fun provideOldData(@Header("token") token: String, @Path(value = "id") projectId: Long,
-                       @Body params: ProvideOldDataParameter): Call<Boolean>
+    /**
+     * Recreates an old Delta, for a defined person and project
+     *
+     * @param token:        The authentication token
+     * @param projectId:    To which project the delta belongs
+     * @param params:       The data which are recommended to save an old delta. {@link ProvideOldDataParameter}
+     *                          specifies all parameters
+     */
+    @POST("OnlineDatabase/Delta" + "/provide/{id}")
+    fun provideOldData(
+        @Header("token") token: String, @Path(value = "id") projectId: Long,
+        @Body params: ProvideOldDataParameter
+    ): Call<Boolean>
 
-    @GET("OnlineDatabase/Delta"+"/time")
+    /**
+     * Returns the period length, after which a new delta gets deleted (in Minutes)
+     *
+     * @param token: The authentication token
+     * @return period length, after which a delta gets deleted.
+     */
+    @GET("OnlineDatabase/Delta" + "/time")
     fun getRemoveTime(@Header("token") token: String): Call<Long>
 
 
-    // FetchRequestController
-    @POST("OnlineDatabase/request"+"/need/{id}")
-    fun demandOldData(@Header("token") token: String, @Path("id") projectID: Long,
-        @Body requestInfo: String): Call<Boolean>
+    // FetchRequestController --------------------------------------------------------------------
+    /**
+     * Saves a request for old Data by the client.
+     * Another participant of the same can fetch such requests
+     *
+     * @param token:      The authentication token
+     * @param projectID   The project to which the request belongs (provided by the client)
+     * @param requestInfo All information, which are necessary to save a fetchRequest.  specifies all parameters
+     */
+    @POST("OnlineDatabase/request" + "/need/{id}")
+    fun demandOldData(
+        @Header("token") token: String, @Path("id") projectID: Long,
+        @Body requestInfo: String
+    ): Call<Boolean>
 
-    @GET("OnlineDatabase/request"+"/provide/{id}")
-    fun getFetchRequest(@Header("token") token: String, @Path("id") projectId: Long): Call<Collection<FetchRequest>>
+    /**
+     * Provides all {@link FetchRequest}, which belongs to the project
+     *
+     * @param token:        The authentication token
+     * @param projectId:    The project, to which the requests belong (provided by the client)
+     * @return A list of {@link FetchRequest}
+     */
+    @GET("OnlineDatabase/request" + "/provide/{id}")
+    fun getFetchRequest(
+        @Header("token") token: String,
+        @Path("id") projectId: Long
+    ): Call<Collection<FetchRequest>>
 }
