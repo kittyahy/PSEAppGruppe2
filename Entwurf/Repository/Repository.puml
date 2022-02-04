@@ -32,15 +32,32 @@ package ViewModelInterface {
         'teplate downloaden via postid + index des graph temlates im Post
         +getGraphTemplate((id: String, index: int): void
     }
-    class "CommandFactory" as repoCommandFactory <<singleton>> {
-        +operationPossible(): FlowShared<Map<String, Boolean>>
-        +addRow(projectID: ProjectID, index: int, content: List<Any>)
-     }
+
     'Overleaf
     class "ProjectHandler" as repoProjectHandler {
-        -projectPreviews: Collection<ProjectPreview>
-        +getProjectPreviews(): SharedFlow<Collection<ProjectPreview>>
-        +getProjectByID(id: int):SharedFlow<Project>
+        +getProjectPreviews():  Flow<List<ProjectPreview>>
+        +getProjectByID(id: int):Flow<Project>
+        + getGraphs(projectId: Int) : Flow<List<Graph>>
+        + getGraphTemplates(projectTemplateId: Int) :  Flow<List<GraphTemplate>>
+        +  getProjectTemplatePreviews() : Flow<List<ProjectTemplatePreview>>
+        + getProjectTemplate(id: Int) : Flow<ProjectTemplate>
+        + newProjectAsync(project: Project) :  Deferred<Deferred<Int>>
+        + joinOnlineProject(onlineID: Long): Int
+        + getProjectTemplateByID() : int
+        + deleteProjectTemplate(id: Int)
+        + deleteGraphTemplate(id: Int)
+
+    }
+    class "ServerHandler" as repoServerHandler {
+    + getPostPreviews(): List<Post>
+    +getPostDetail(postId: int): PostDetail
+    +getProjectTemplate(postId: int) : ProjectTemplate
+    +getGraphTemplate(postId: int, index: int): GraphTemplate
+    +isServerCurrentlyReachable(): boolean
+    + login(email: String, password: String)
+    +signUp(email: String, password: String)
+    + downloadProjectTemplate(id : Int)
+    +downloadGraphTemplate(projectId : Int, graphId : Int)
     }
     package CommunicationClasses {
     class "Column" as repoColumn {
@@ -172,15 +189,44 @@ package ViewModelInterface {
   'Overleaf deprecated
   package CommandCenter {
     'Overleaf deprecated
-    class "CommandInbox" as repoCommandInbox {
-        -commandQueue: List<ProjectCommand>
-        +addFromJson(commandWrapperJson: String) throws JsonSyntaxException
-    }
+
     'Overleaf deprecated
      class "CommandUtility" as CommandUtility <<static>> {
         +{static} setServerInfo(ProjectCommand, serverInfo: ServerInfo):ProjectCommand
         +{static} toNewCommand(ProjectCommand): ProjectCommand
      }
+
+     class CommandQueue <<abstract>> {
+     + appDataBase: AppDataBase
+     + remoteDataSourceAPI: RemoteDataSourceAPI
+
+     <<abstract>> performCommandAction(command: ProjectCommand)
+     <<abstract>> commandActionSucceedsProbably() : Boolean
+     <<abstract>> beforeCommandActionAttempt(command: ProjectCommand)
+     <<abstract>> commandFailedAction(command: ProjectCommand)
+     add(projectCommand: ProjectCommand)
+     }
+
+     class ExecuteQueue extends CommandQueue{
+     +appDataBase: AppDataBase
+     +remoteDataSourceAPI: RemoteDataSourceAPI
+     + performCommandAction(command: ProjectCommand)
+     + commandActionSucceedsProbably(): Boolean
+     + beforeCommandActionAttempt(command: ProjectCommand)
+     + commandFailedAction(command: ProjectCommand)
+     + update()
+     }
+
+     class PublishQueue extends CommandQueue{
+    + appDataBase: AppDataBase
+    + remoteDataSourceAPI: RemoteDataSourceAPI
+
+    + performCommandAction(command: ProjectCommand)
+    + commandActionSucceedsProbably(): Boolean
+    + beforeCommandActionAttempt(command: ProjectCommand)
+    + commandFailedAction(command: ProjectCommand)
+     }
+
    '-----------------------------------------------------------------------------------------------'
      'Overleaf deprecated
      package UpToDater {
@@ -346,6 +392,7 @@ package ViewModelInterface {
     PLACEHOLDER ^---- CreateProject
     PLACEHOLDER ^---- SetIsOnlineProject
 
+ExecuteQueue -- PublishQueue
   }
 
 }
