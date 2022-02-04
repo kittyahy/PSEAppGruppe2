@@ -14,5 +14,4 @@ class GreetTest {
 
         Assert.assertTrue(restAPI.greet())
     }
-    //TODO Tests auskommentieren
 }

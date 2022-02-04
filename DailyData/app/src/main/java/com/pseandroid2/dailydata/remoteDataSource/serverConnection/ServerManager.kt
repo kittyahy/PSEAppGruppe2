@@ -50,7 +50,6 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
     private val fetchRequestQueue: FetchRequestQueue = FetchRequestQueue()
     private val projectCommandQueue: ProjectCommandQueue = ProjectCommandQueue()
 
-
     // ------------------------------ServerLogic--------------------------------
     // ----------------------------------GreetingController--------------------------------
     /**
@@ -58,7 +57,7 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      *
      * @return Boolean: If a server connection possible return true, else return false
      */
-    fun greet(): Boolean {
+    fun connectionToServerPossible(): Boolean {
         return restAPI.greet()
     }
 
@@ -197,6 +196,10 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @return ByteArray:   The converted byte array
      */
     private fun byteArrayToBitmap(toConvert: ByteArray): Bitmap {
+        val emptyBitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+        if (toConvert.isEmpty()) {
+            return emptyBitmap
+        }
         return BitmapFactory.decodeByteArray(toConvert, 0, toConvert.size)
     }
 

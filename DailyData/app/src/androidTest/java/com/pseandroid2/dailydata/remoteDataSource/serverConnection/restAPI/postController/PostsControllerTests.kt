@@ -71,6 +71,4 @@ class PostsControllerTests {
 
         Assert.assertTrue(restAPI.removePost(postID, authToken))
     }
-
-    //TODO Tests auskommentieren
 }

@@ -110,6 +110,4 @@ class PostsControllerPostContentTests {
         Assert.assertEquals("", restAPI.getGraphTemplate(-1, 1, authToken))
     }
     */
-
-    //TODO Tests auskommentieren
 }

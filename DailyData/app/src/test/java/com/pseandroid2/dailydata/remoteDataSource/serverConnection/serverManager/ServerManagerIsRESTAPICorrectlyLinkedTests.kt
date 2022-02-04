@@ -98,7 +98,7 @@ internal class ServerManagerIsRESTAPICorrectlyLinkedTests {
     @Test
     fun restAPILinked() {
         // Test if serverManager returns the expected outputs
-        Assert.assertTrue(serverManager.greet())
+        Assert.assertTrue(serverManager.connectionToServerPossible())
 
         Assert.assertEquals("ProjectTemplate", serverManager.getProjectTemplate(1, ""))
 
