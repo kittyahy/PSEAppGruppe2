@@ -33,7 +33,10 @@ import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParamet
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.TemplateDetailWrapper
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.Delta
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -57,7 +60,7 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      *
      * @return Boolean: If a server connection possible return true, else return false
      */
-    fun connectionToServerPossible(): Boolean {
+    suspend fun connectionToServerPossible(): Boolean {
         return restAPI.greet()
     }
 
@@ -68,7 +71,7 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param authToken: The authentication token
      * @return Collection<PostPreviewWithPicture>: The previews of the posts
      */
-    fun getAllPostPreview(authToken: String): Collection<PostPreviewWithPicture> {
+    suspend fun getAllPostPreview(authToken: String): Collection<PostPreviewWithPicture> {
         //convert PostPreview from PostPreviewWithPicture
         val postPreviews = restAPI.getAllPostsPreview(authToken)
         val postPreviewWithPicture = mutableListOf<PostPreviewWithPicture>()
@@ -91,7 +94,10 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param authToken:    The authentication token
      * @return Collection<TemplateDetail>: Returns the detailed post belonging to the post id
      */
-    fun getPostDetail(fromPost: Int, authToken: String): Collection<TemplateDetailWithPicture> {
+    suspend fun getPostDetail(
+        fromPost: Int,
+        authToken: String
+    ): Collection<TemplateDetailWithPicture> {
         //convert TemplateDetail to TemplateDetailWithPicture
         val templateDetails = restAPI.getPostDetail(fromPost, authToken)
         val templateDetailsWithPicture = mutableListOf<TemplateDetailWithPicture>()
@@ -115,7 +121,7 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param authToken:    The authentication token
      * @return String - The requested project template as JSON
      */
-    fun getProjectTemplate(fromPost: Int, authToken: String): String {
+    suspend fun getProjectTemplate(fromPost: Int, authToken: String): String {
         return restAPI.getProjectTemplate(fromPost, authToken)
     }
 
@@ -127,7 +133,7 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param authToken:        The authentication token
      * @return String - The requested graph template as JSON
      */
-    fun getGraphTemplate(fromPost: Int, templateNumber: Int, authToken: String): String {
+    suspend fun getGraphTemplate(fromPost: Int, templateNumber: Int, authToken: String): String {
         return restAPI.getGraphTemplate(fromPost, templateNumber, authToken)
     }
 
@@ -143,7 +149,7 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      *                              The inner Pair has as it first element the template detail image and as its second element the title of the template
      * @return Int: The PostID of the new post. -1 if the call didn't succeed, 0 if the user reached his limit of uploaded posts.
      */
-    fun addPost(
+    suspend fun addPost(
         postPreview: Pair<Bitmap, String>,
         projectTemplate: Pair<String, Pair<Bitmap, String>>,
         graphTemplates: List<Pair<String, Pair<Bitmap, String>>>,
@@ -212,7 +218,7 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param authToken:    The authentication token
      * @return Boolean: Did the server call succeed
      */
-    fun removePost(postID: Int, authToken: String): Boolean {
+    suspend fun removePost(postID: Int, authToken: String): Boolean {
         return restAPI.removePost(postID, authToken)
     }
 
@@ -224,7 +230,7 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param authToken: The authentication token
      * @return String: Returns the project information as a JSON. (Returns "" on error)
      */
-    fun addUser(projectID: Long, authToken: String): String {
+    suspend fun addUser(projectID: Long, authToken: String): String {
         return restAPI.addUser(projectID, authToken)
     }
 
@@ -236,7 +242,7 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param authToken:    The authentication token
      * @return Did the task succeed?
      */
-    fun removeUser(userToRemove: String, projectID: Long, authToken: String): Boolean {
+    suspend fun removeUser(userToRemove: String, projectID: Long, authToken: String): Boolean {
         return restAPI.removeUser(userToRemove, projectID, authToken)
     }
 
@@ -247,7 +253,7 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param projectDetails:   The details of a project (project name, project description, table format, ...) as JSON
      * @return LONG: Returns the id of the created project. Returns -1 if an error occurred
      */
-    fun addProject(authToken: String, projectDetails: String): Long {
+    suspend fun addProject(authToken: String, projectDetails: String): Long {
         return restAPI.addProject(authToken, projectDetails)
     }
 
@@ -258,7 +264,7 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      *  @param projectID: The id of the project whose user should be returned
      *  @return Collection<String>: The participants of the project. Returns empty list on error
      */
-    fun getProjectParticipants(authToken: String, projectID: Long): Collection<String> {
+    suspend fun getProjectParticipants(authToken: String, projectID: Long): Collection<String> {
         return restAPI.getProjectParticipants(authToken, projectID)
     }
 
@@ -270,7 +276,7 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param userID:       The userID of the user, that should be checked, if it is part of the project
      * @return Boolean: True if the server call succeed and the user is part of the project. Otherwise false
      */
-    fun isProjectParticipant(authToken: String, projectID: Long, userID: String): Boolean {
+    suspend fun isProjectParticipant(authToken: String, projectID: Long, userID: String): Boolean {
         val projectParticipants = restAPI.getProjectParticipants(authToken, projectID)
         projectParticipants.forEach {
             if (it == userID) {
@@ -287,7 +293,7 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param projectID: The id of the project whose admin should be returned
      * @return String: The UserID of the admin. Returns "" on error
      */
-    fun getProjectAdmin(authToken: String, projectID: Long): String {
+    suspend fun getProjectAdmin(authToken: String, projectID: Long): String {
         return restAPI.getProjectAdmin(authToken, projectID)
     }
 
@@ -300,34 +306,38 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param authToken:        The authentication token
      * @return Collection<String>: The successfully uploaded project commands (as JSONs)
      */
-    fun sendCommandsToServer(
+    suspend fun sendCommandsToServer(
         projectID: Long,
         projectCommands: Collection<String>,
         authToken: String
-    ): Collection<String> {
-        val successfullyUploaded: MutableList<String> = mutableListOf()
+    ): Collection<String> = coroutineScope {
+        val deffered = async(Dispatchers.IO) {
+            val successfullyUploaded: MutableList<String> = mutableListOf()
 
-        if (projectCommands.isEmpty()) {
-            return successfullyUploaded
-        }
-
-        val jobs: MutableList<Job> = mutableListOf()
-        runBlocking { // this: CoroutineScope
-            projectCommands.forEach { // Calls saveDelta in parallel
-                // Send each project command in parallel
-                val job = launch {
-                    val uploadedSuccessfully: Boolean = restAPI.saveDelta(projectID, it, authToken)
-
-                    if (uploadedSuccessfully) {
-                        successfullyUploaded.add(it)
-                    }
-                }
-                jobs.add(job)
+            if (projectCommands.isEmpty()) {
+                return@async successfullyUploaded
             }
-            jobs.joinAll()
-        }
 
-        return successfullyUploaded
+            val jobs: MutableList<Job> = mutableListOf()
+            runBlocking { // this: CoroutineScope
+                projectCommands.forEach { // Calls saveDelta in parallel
+                    // Send each project command in parallel
+                    val job = launch {
+                        val uploadedSuccessfully: Boolean =
+                            restAPI.saveDelta(projectID, it, authToken)
+
+                        if (uploadedSuccessfully) {
+                            successfullyUploaded.add(it)
+                        }
+                    }
+                    jobs.add(job)
+                }
+                jobs.joinAll()
+            }
+
+            return@async successfullyUploaded
+        }
+        deffered.await()
     }
 
     /**
@@ -336,7 +346,7 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param projectID: The id of the project whose deltas (projectCommands) you want to load into the FetchRequestQueue
      * @param authToken: The authentication token
      */
-    fun getProjectCommandsFromServer(projectID: Long, authToken: String) {
+    suspend fun getProjectCommandsFromServer(projectID: Long, authToken: String) {
         val receivedProjectCommands: Collection<Delta> = restAPI.getDelta(projectID, authToken)
         receivedProjectCommands.forEach {
             // Transform Delta into an Project Command
@@ -361,7 +371,7 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param authToken:        The authentication token
      * @return Boolean: Did the server call succeed
      */
-    fun provideOldData(
+    suspend fun provideOldData(
         projectCommand: String,
         forUser: String,
         initialAddedDate: LocalDateTime,
@@ -387,7 +397,7 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param authToken: The authentication token
      * @return Long: The time how long an project command can remain on the server until it gets deleted by the server. On error returns -1
      */
-    fun getRemoveTime(authToken: String): Long {
+    suspend fun getRemoveTime(authToken: String): Long {
         return restAPI.getRemoveTime(authToken)
     }
 
@@ -400,7 +410,7 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param authToken:    The authentication token
      * @return Boolean: Did the server call succeed
      */
-    fun demandOldData(projectID: Long, requestInfo: String, authToken: String): Boolean {
+    suspend fun demandOldData(projectID: Long, requestInfo: String, authToken: String): Boolean {
         return restAPI.demandOldData(projectID, requestInfo, authToken)
     }
 
@@ -410,7 +420,7 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param projectID: The id of the project from which the fetch requests should be downloaded
      * @param authToken: The authentication token
      */
-    fun getFetchRequests(projectID: Long, authToken: String) {
+    suspend fun getFetchRequests(projectID: Long, authToken: String) {
         val receivedFetchRequests: Collection<FetchRequest> =
             restAPI.getFetchRequests(projectID, authToken)
         receivedFetchRequests.forEach {
@@ -422,28 +432,28 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
     /**
      * @param observer: The observer that should be added to the FetchRequestQueue
      */
-    fun addObserverToFetchRequestQueue(observer: FetchRequestQueueObserver) {
+    suspend fun addObserverToFetchRequestQueue(observer: FetchRequestQueueObserver) {
         fetchRequestQueue.registerObserver(observer)
     }
 
     /**
      * @param observer: The observer that should be removed from the FetchRequestQueue
      */
-    fun unregisterObserverFromFetchRequestQueue(observer: FetchRequestQueueObserver) {
+    suspend fun unregisterObserverFromFetchRequestQueue(observer: FetchRequestQueueObserver) {
         fetchRequestQueue.unregisterObserver(observer)
     }
 
     /**
      * @param observer: The observer that should be added to the ProjectCommandQueue
      */
-    fun addObserverToProjectCommandQueue(observer: ProjectCommandQueueObserver) {
+    suspend fun addObserverToProjectCommandQueue(observer: ProjectCommandQueueObserver) {
         projectCommandQueue.registerObserver(observer)
     }
 
     /**
      * @param observer: The observer that should be removed from the ProjectCommandQueue
      */
-    fun unregisterObserverFromProjectCommandQueue(observer: ProjectCommandQueueObserver) {
+    suspend fun unregisterObserverFromProjectCommandQueue(observer: ProjectCommandQueueObserver) {
         projectCommandQueue.unregisterObserver(observer)
     }
 
@@ -479,7 +489,7 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
     /** // TODO This method is just for testing
      * Deletes all Posts from User
      */
-    fun deleteAllPostsFromUser(authToken: String) {
+    suspend fun deleteAllPostsFromUser(authToken: String) {
         val postIds: List<Int> = restAPI.getPostsFromUser(authToken)
         postIds.forEach {
             if (it > 0) {
