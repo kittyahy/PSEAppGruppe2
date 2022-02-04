@@ -60,114 +60,241 @@ package ViewModelInterface {
     +downloadGraphTemplate(projectId : Int, graphId : Int)
     }
     package CommunicationClasses {
-    class "Column" as repoColumn {
-            id : GZ
+
+    class "Post" as repoPost{
+    + title : String
+    + image : Bitmap
+    + id : int
+    + graphTemplate : GraphTemplate
+    + projectTemplate : ProjectTemplate
+    }
+
+    class PostDetail{
+    }
+
+
+class "ProjectTemplate" as repoProjectTemplate implements Identifiable {
++ onlineID: Long
++ title: String
++ description: String
++  wallpaper: Int
++ table: List<Column>
++ buttons: List<Button>
++ notifications: List<Notification>
++ graphTemplates: List<GraphTemplate>
+}
+
+
+    class "Column" as repoColumn implements Identifiable{
+            id : int
             name : String
             unit : String
             datatype : DataType
 
         }
 
-        class "Button" as repoButton{
-            id : GZ
+    class ProjectTemplatePreview implements Identifiable{
+    + name : String
+    + desc: String
+    + color : int
+    + layout : List<Column>
+    + image: Bitmap
+    }
+
+        class "GraphTemplate" as repoGraphTemplate {
+        + title: String
+        +image: Bitmap
+        + id: int
+        }
+
+        class "Button"  as repoButton implements Identifiable, Convertible{
+            id : Int
             name : String
-            columnId : GZ
-            value : GZ
+            columnId : int
+            value : int
+
+            +increaseValue()
+            +decreaseValueIsPossible(): Flow<Boolean>
+            +decreaseValue()
+            + setValueIsPossible(): Flow<Boolean>
+            +setValue(value: Int)
         }
 
-        class "Notification" as repoNotification {
-            id : GZ
-            message : String
-            time : Time
+        class "Notification" as repoNotification implements Identifiable, Convertible{
+           + message : String
+            +time : Time
+            +timeNotification: TimeNotification
         }
 
-        class "Time" as repoTime {
-            hour : GZ
-            minute : GZ
-            second : GZ
-        }
 
-        class "Member" as repoMember {
-            id : GZ
+
+        class "Member" as repoMember implements Identifiable, Convertible {
             name : String
+            user: User
         }
 
-        class "ProjectPreview" as repoProjectPreview {
-            id : GZ
+        class "ProjectPreview" as repoProjectPreview implements Identifiable{
             name : String
-            image : Image
+            image : String
         }
 
-        class "Graph" as repoGraph {
-            id : GZ
-            image : Image
+       abstract class "Graph"  as Graph implements Identifiable, Convertible {
+          {abstract}  image : Bitmap
+          {abstract} typeName : String
+
+           + {static} createFromType(graph: String) Graph
+           + {static} fun createFromTemplate(graph: GraphTemplate):Graph
         }
 
-        class "LineChart" as LineChart {
+        class "LineChart" as repoLineChart extends Graph{
             dotSize : DotSize
-            dotColor : Color
+            dotColor : int
             lineType : LineType
             mappingVertical : List<Column>
-            mappingHorizontal : Column
+
+           +  addVerticalMappingIsPossible(): Flow<Boolean>
+           +  addVerticalMapping(column: Column)
+           +  deleteVerticalMappingIsPossible(): Flow<Boolean>
+           +  deleteVerticalMapping(index: Int)
+           +  changeDotSizeIsPossible(): Flow<Boolean>
+           +   changeDotSize(dotSize: DotSize)
+           +  changeDotColorIsPossible(): Flow<Boolean>
+           + changeDotColor(color: Int)
+           + changeLineTypeIsPossible(): Flow<Boolean>
+           + changeLineType(lineType: LineType)
+           + showIsPossible(): Flow<Boolean>
+           + show(context: Context): View
+
         }
 
         enum "DotSize" as repoDotSize <<Enum>> {
+        +representation: String
+        + size: Float
+        ..
             SMALL
             MEDIUM
             BIG
         }
 
         enum "LineType" as repoLineType <<Enum>> {
+        + representation : String
+        ..
             DOTTED
             NONE
             CONTINUOUS
         }
 
-        class "PieChart" as repoPieChart {
-            color : List<Color>
+        class "PieChart" as repoPieChart extends Graph{
+            color : List<Int>
             mapping : List<Column>
             showPercentages : Boolean
+             + addMappingColorIsPossible(): Flow<Boolean>
+             + addMapping(color: Int, column: Column)
+             + addMappingIsPossible(): Flow<Boolean>
+             + addMapping(column: Column)
+             + showPercentagesIsPossible(): Flow<Boolean>
+             + showPercentages(show: Boolean)
+        }
+
+        enum PieChartColors{
+        + value : long
+        + representation : String
+        ..
+        ORANGE
+        GREEN
+        BLUE
         }
 
 
+
         enum "DataType" as repoDataType <<Enum>> {
+       + representation: String,
+            + regex: String,
+            + serializableClassName: String
+..
             WHOLE_NUMBER
             FLOATING_POINT_NUMBER
             TIME
             STRING
+            {static} fromString(rep: String): DataType
+            {static} fromSerializableClassName(rep: String): DataType
         }
 
-        class "Project" as repoProject {
-            id : GZ
-            isOnlineProject : Boolean
-            isAdmin : Boolean
-            title : String
-            description : String
-            wallpaper : Image
-            table : List<Column>
-            data : List<Row>
-            buttons : List<Button>
-            notifications : List<Notification>
-            graphs : List<Graph>
-            members : List<Member>
+        class "Project" as repoProject implements Identifiable{
+
+           + isOnlineProject : Boolean
+            +isAdmin : Boolean
+            +title : String
+           + description : String
+           + wallpaper : int
+           + table : List<Column>
+           + data : List<Row>
+           + buttons : List<Button>
+           + notifications : List<Notification>
+          +  graphs : List<Graph>
+          + members : List<Member>
+
+          +update(projectData: ProjectData)
+          + publish()
+
+          + addGraph(graph: Graph)
+          + addRow(row: Row)
+          + deleteRow(row: Row)
+          + addColumn(column: Column)
+          + deleteColumn(column: Column)
+          + addButton(button: Button)
+          + deleteButton(button: Button)
+          + setCell(indexRow: Int, indexColumn: Int, content: String)
+          + addMember(member: Member)
+          + leaveOnlineProject()
+          +  deleteMember(member: Member)
+          + setAdmin(member: Member)
+          + changeWallpaper(image: Int)
+          + setNotification(notification: Notification)
+          +deleteNotification(notification: Notification)
+          + addNotification(notification: Notification)
+          + setName(name: String)
+          + setDescription(description: String)
+       + setButton(button: Button)
+
+
+
+
+
+        }
+
+        note left of repoProject::addGraph{
+        every method below has its
+        methodIsPossible:Flow<Boolean>
+
         }
 
         class "Row" as repoRow {
-            id : GZ
-            elements : List<String>
+          +  elements : List<String>
++ setCellIsPossible(): Flow<Boolean>
++ setCell(indexColumn: Int, content: String)
 
-            getId() : GZ
-            getElements() : List<String>
-            setId(id : GZ)
-            setElements(elements : List<String>)
+
+
         }
 
-        repoGraph <|-- repoLineChart
-        repoGraph <|-- repoPieChart
+        interface "Convertible<I>" as Convertible{
+        + toDBEquivalent(): I
+        + fun addYourself(builder: ProjectBuilder<Project>)
+        }
+
+        interface Identifiable{
+        +id : int
+        + executionQueue: ExecuteQueue
+        + deleteIsPossible(): Flow<Boolean>
+        + delete()
+        + connectToDB(executeQueue: ExecuteQueue)
+        }
+
 
         repoProject ..> repoColumn
         repoProject ..> repoRow
-        repoProject ..> repoGraph
+        repoProject ..> Graph
         repoProject ..> repoButton
         repoProject ..> repoMember
         repoProject ..> repoNotification
@@ -178,10 +305,15 @@ package ViewModelInterface {
 
         repoPieChart ..> repoColumn
 
-        repoNotification ..> repoTime
-
         repoColumn ..> repoDataType
+
+        repoPost ..> repoGraphTemplate
+        repoPost ..> repoProjectTemplate
+
+        PieChartColors <.. repoPieChart
+        ProjectTemplatePreview ..> repoColumn
     }
+
 
 }
 
