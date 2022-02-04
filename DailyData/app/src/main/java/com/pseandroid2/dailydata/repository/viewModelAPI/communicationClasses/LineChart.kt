@@ -22,21 +22,23 @@ package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
 import android.graphics.Bitmap
 import com.pseandroid2.dailydata.model.database.AppDataBase
+import com.pseandroid2.dailydata.model.graph.DateTimeLineChart
 import com.pseandroid2.dailydata.model.graph.FloatLineChart
 import com.pseandroid2.dailydata.model.graph.Generator
-import com.pseandroid2.dailydata.model.graph.LineChart
+import com.pseandroid2.dailydata.model.graph.IntLineChart
 import com.pseandroid2.dailydata.model.settings.MapSettings
+import com.pseandroid2.dailydata.model.transformation.DateTimeLineChartTransformation
 import com.pseandroid2.dailydata.model.transformation.FloatIdentity
-import com.pseandroid2.dailydata.model.transformation.FloatSum
-import com.pseandroid2.dailydata.model.transformation.LineChartTransformation
-import com.pseandroid2.dailydata.model.transformation.PieChartTransformation
+import com.pseandroid2.dailydata.model.transformation.FloatLineChartTransformation
+import com.pseandroid2.dailydata.model.transformation.IntLineChartTransformation
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType.FLOATING_POINT_NUMBER
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType.TIME
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType.WHOLE_NUMBER
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.runBlocking
 import com.pseandroid2.dailydata.model.graph.Graph as ModelGraph
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.LineChart as ModelLineChart
 
 class LineChart(
     override val id: Int,
@@ -69,16 +71,35 @@ class LineChart(
         for (col in mappingVertical) {
             mappingInt.add(col.id)
         }
-        val id = FloatIdentity()
-        val trafo = LineChartTransformation(id, TODO("xValues"))
-        val dataTrapo = com.pseandroid2.dailydata.model.project.Project.DataTransformation<Float>()
+        val identity = FloatIdentity()
         val settings = MapSettings()
         settings[Generator.GRAPH_NAME_KEY] = id.toString()
-        var line: ModelLineChart
+
+        @Suppress("Deprecation")
+        val modelProject = project.toDBEquivalent()
         return when (mappingVertical[0].dataType) {
-            FLOATING_POINT_NUMBER -> FloatLineChart(id, dataTrapo, settings)
+            FLOATING_POINT_NUMBER -> {
+                val trafo = FloatLineChartTransformation(identity)
+                val dataTrafo = modelProject.createDataTransformation(trafo, mappingInt)
+                FloatLineChart(id, dataTrafo, settings)
+            }
+            WHOLE_NUMBER -> {
+                val trafo = IntLineChartTransformation(identity)
+                val dataTrafo = modelProject.createDataTransformation(trafo, mappingInt)
+                IntLineChart(id, dataTrafo, settings)
+            }
+            TIME -> {
+                val trafo = DateTimeLineChartTransformation(identity)
+                val dataTrafo = modelProject.createDataTransformation(trafo, mappingInt)
+                DateTimeLineChart(id, dataTrafo, settings)
+            }
+            else -> {
+                throw IllegalArgumentException(
+                    "Could not create Line Chart for X-Axis values of " +
+                            "type ${mappingVertical[0].dataType}"
+                )
+            }
         }
-        return LineChart(id, dataTrapo, settings)
     }
 
     fun addVerticalMappingIsPossible(): Flow<Boolean> {
