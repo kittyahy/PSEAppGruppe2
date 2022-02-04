@@ -35,9 +35,14 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.No
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.GraphFlow
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.GraphTemplateFlow
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.GraphTemplateFlowProvider
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectFlow
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectFlowProvider
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectPreviewFlow
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectPreviewFlowProvider
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectTemplateDataFlowProvider
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectTemplateFlow
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectTemplateFlowProvider
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectTemplatePreviewFlow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -46,6 +51,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 @InternalCoroutinesApi
@@ -55,23 +61,61 @@ class ProjectHandler(
     val executeQueue: ExecuteQueue =
         ExecuteQueue(repositoryViewModelAPI, PublishQueue(repositoryViewModelAPI))
 
+    var previewsInitialized = false
+
     private val appDataBase: AppDataBase = repositoryViewModelAPI.appDataBase
     private val rds: RemoteDataSourceAPI = repositoryViewModelAPI.remoteDataSourceAPI
 
-    fun getProjectPreviews() = ProjectPreviewFlow(appDataBase, executeQueue).getPreviews()
+    private lateinit var projectPreviewProvider: ProjectPreviewFlowProvider
+    private lateinit var graphTemplateProvider: GraphTemplateFlowProvider
+    private lateinit var projectTemplateDataProvider: ProjectTemplateDataFlowProvider
+    private val projectFlows = mutableMapOf<Int, ProjectFlowProvider>()
+    private val templateFlows = mutableMapOf<Int, ProjectTemplateFlowProvider>()
 
-    fun getProjectByID(id: Int) = ProjectFlow(repositoryViewModelAPI, id).getProject()
+    suspend fun initializePreviews() = coroutineScope {
+        launch {
+            projectPreviewProvider = ProjectPreviewFlowProvider(appDataBase)
+            projectPreviewProvider.initialize()
+        }
+        launch {
+            graphTemplateProvider = GraphTemplateFlowProvider(appDataBase)
+            graphTemplateProvider.initialize()
+        }
+        launch {
+            projectTemplateDataProvider = ProjectTemplateDataFlowProvider(appDataBase)
+            projectTemplateDataProvider.initialize()
+        }
+        previewsInitialized = true
+    }
 
-    fun getGraphs(projectId: Int) = GraphFlow(appDataBase, executeQueue, projectId).getGraphs()
+    suspend fun initializeProjectProvider(id: Int) = coroutineScope {
+        launch {
+            projectFlows[id] = ProjectFlowProvider(id, appDataBase)
+            projectFlows[id]!!.initialize()
+        }
+    }
 
-    fun getGraphTemplates(projectTemplateId: Int) =
-        GraphTemplateFlow(appDataBase, executeQueue, projectTemplateId).getTemplates()
+    suspend fun initializeProjectTemplateProvider(id: Int) = coroutineScope {
+        launch {
+            templateFlows[id] = ProjectTemplateFlowProvider(id, appDataBase)
+            templateFlows[id]!!.initialize()
+        }
+    }
+
+    fun getProjectPreviews() =
+        ProjectPreviewFlow(projectPreviewProvider, appDataBase, executeQueue).getPreviews()
+
+    fun getProjectByID(id: Int) =
+        ProjectFlow(repositoryViewModelAPI, projectFlows[id]!!).getProject()
+
+    fun getGraphTemplates() =
+        GraphTemplateFlow(appDataBase, executeQueue, graphTemplateProvider).getTemplates()
 
     fun getProjectTemplatePreviews() =
-        ProjectTemplatePreviewFlow(appDataBase, executeQueue).getTemplatePreviews()
+        ProjectTemplatePreviewFlow(projectTemplateDataProvider, executeQueue).getTemplatePreviews()
 
     fun getProjectTemplate(id: Int) =
-        ProjectTemplateFlow(appDataBase, executeQueue, id).getProjectTemplate()
+        ProjectTemplateFlow(appDataBase, executeQueue, templateFlows[id]!!).getProjectTemplate()
 
 
     suspend fun newProjectAsync(

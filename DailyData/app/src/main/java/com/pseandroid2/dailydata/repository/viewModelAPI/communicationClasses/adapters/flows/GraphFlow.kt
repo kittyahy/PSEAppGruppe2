@@ -36,11 +36,12 @@ import kotlinx.coroutines.flow.map
 class GraphFlow(
     private val db: AppDataBase,
     private val eq: ExecuteQueue,
+    private val provider: GraphFlowProvider,
     private val projectId: Int
 ) {
 
     fun getGraphs(): Flow<List<Graph>> {
-        return GraphFlowProvider(projectId, db).provideFlow.distinctUntilChanged().map { graphs ->
+        return provider.provideFlow.distinctUntilChanged().map { graphs ->
             val graphList = mutableListOf<Graph>()
             for (graph in graphs) {
                 val addGraph = graph.toViewGraph(
@@ -49,6 +50,7 @@ class GraphFlow(
                         ArrayListLayout::class.java
                     )
                 )
+                @Suppress("Deprecation")
                 addGraph.executeQueue = eq
                 graphList.add(addGraph)
             }
