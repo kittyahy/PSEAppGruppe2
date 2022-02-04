@@ -92,6 +92,7 @@ public class ProjectParticipantsController {
 
     /**
      * Adds a new project. The user, who initializes the project is the admin.
+     * All projects, which are outdated going to be deleted.
      *
      * @param user           who wants to create a project.
      * @param projectDetails the initial for the project, which are needed for the client.

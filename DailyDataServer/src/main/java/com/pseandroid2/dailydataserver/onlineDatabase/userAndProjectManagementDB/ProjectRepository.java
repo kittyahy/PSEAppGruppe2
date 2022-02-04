@@ -22,6 +22,9 @@ package com.pseandroid2.dailydataserver.onlineDatabase.userAndProjectManagementD
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 /**
  * The repository for projects.
  * <p>
@@ -29,4 +32,12 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface ProjectRepository extends JpaRepository<Project, Long> {
+    /**
+     * Provides all projects, which are not updated for a given time.
+     *
+     * @param lastUpdated the time, since when the project is not updated.
+     * @return all recommended projects.
+     */
+    List<Project> findByLastUpdatedIsBefore(LocalDateTime lastUpdated);
+
 }
