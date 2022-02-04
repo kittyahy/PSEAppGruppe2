@@ -71,7 +71,7 @@ fun ProjectDataGraphScreen(
         itemsIndexed(viewModel.graphs) { index, graph ->
             Image(
                 //useResource("image.png") { loadImageBitmap(it) }
-                bitmap = graph.image.asImageBitmap(),
+                bitmap = TODO("graph.image.asImageBitmap()"),
                 contentDescription = "",
                 modifier = Modifier
                     .fillMaxWidth()
@@ -124,7 +124,7 @@ fun PieChartDialog(
     Column() {
         //useResource("image.png") { loadImageBitmap(it) }
         Image(
-            bitmap = graph.image.asImageBitmap(),
+            bitmap = TODO("graph.image.asImageBitmap()"),
             contentDescription = "",
             modifier = Modifier.fillMaxWidth()
         )

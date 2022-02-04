@@ -25,7 +25,7 @@ fun ServerTemplatesScreen(
             }
         }
     }
-
+    /*
     if(posts.isNotEmpty() && posts[viewModel.dialogTemplateIndex].projectTemplate != null) {
         val template = posts[viewModel.dialogTemplateIndex].projectTemplate!!
         ProjectTemplateDialog(
@@ -52,5 +52,5 @@ fun ServerTemplatesScreen(
                  }
              )
         }
-    }
+    }*/
 }

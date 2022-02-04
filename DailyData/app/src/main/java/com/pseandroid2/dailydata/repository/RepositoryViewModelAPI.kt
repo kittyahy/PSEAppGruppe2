@@ -29,9 +29,10 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.ServerHandler
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectPreviewFlow
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectTemplateFlow
 import kotlinx.coroutines.InternalCoroutinesApi
+import javax.inject.Inject
 
 
-class RepositoryViewModelAPI(
+class RepositoryViewModelAPI @Inject constructor(
     @Deprecated("Internal function, should not be used outside the RepositoryViewModelAPI")
     val appDataBase: AppDataBase,
     @Deprecated("Internal function, should not be used outside the RepositoryViewModelAPI")
