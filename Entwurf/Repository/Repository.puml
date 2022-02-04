@@ -359,6 +359,8 @@ class "ProjectTemplate" as repoProjectTemplate implements Identifiable {
     + commandFailedAction(command: ProjectCommand)
      }
 
+    class ServerUnreachableException implements Throwable{}
+
    '-----------------------------------------------------------------------------------------------'
      'Overleaf deprecated
      package UpToDater {
@@ -378,106 +380,121 @@ class "ProjectTemplate" as repoProjectTemplate implements Identifiable {
 
    abstract class "ProjectCommand" as repoProjectCommand <<abstract>>{
        +projectID: ProjectID
-       +OnlineProjectID: OnlineProjectID?
-       {field}+wentOnline: DateTime?
-       {field}+serverRemoveTime: DateTime?
-       +commandByUser: String?
-       +isProjectAdmin: boolean?
+       +OnlineProjectID: OnlineProjectID
+       +wentOnline: LocalDateTime
+       +serverRemoveTime: DateTime
+       +commandByUser: String
+       +isProjectAdmin: boolean
+       + cameFromServer: boolean
 
-       {abstract}+execute() throws IllegalOperationException
+       +{static} isPossible(project:Project):Boolean
+       {abstract}+execute() throws ServerUnreachableException
+       {abstract}+publish()
    }
 
    <>PLACEHOLDER
 
-   class AddRow {
-      +index: Int
-      +content: List<Any>
 
-      +execute()
+   class AddMember extends PLACEHOLDER{
+      + {static} isPossible(project: Project): boolean
+   }
+   class AddRow {
+        + {static} isPossible(project: Project): boolean
+
    }
    class DeleteRow {
       +index: Int
-      +execute()
+
    }
    class DeleteColumn {
       +index: Int
-      +execute()
+
    }
    class AddColumn {
-      +index(): Int
-      +type: DataType
-      +execute()
+      +projectID: int
+      + column: Column
+      {static} isPossible(project: Project, type: DataType): boolean
+   }
+
+   class AddButton extends PLACEHOLDER{
+   + id: int
+   + button : Button
+
+   + {static} isPossible(project: Project): boolean
    }
    class SetCell {
       +indexColumn: Int
       +indexRow: Int
-      +execute()
+
    }
    class SetAdmin {
       +UserID: String
-      +execute()
-   }
-   class AddUser {
-      +UserID: String
-      +execute()
+
    }
 
    class RemoveUser {
       +UserID: String
-      +execute()
+
    }
-   class CreateGraph {
-      'TODO Felder'
-      +execute()
+   class AddGraph {
+      + id: int
+      + graph: Graph
+      + {static} isPossible(project: Project): boolean
+
    }
    class SetCalculationFunction {
-      'TODO Felder'
-      +execute()
+
    }
    class SetTransformationFunctionComposition {
-      'TODO Felder'
-      +execute()
+
    }
    class SetSetting {
       +name: String
       +value: String
-      +execute()
+
    }
    class SetProjectName {
       +value: String
-      +execute()
+
    }
    class SetProjectDescription {
       +value: String
-      +execute()
+
    }
    class SetWallpaper {
       +value: Drawable
-      +execute()
+
    }
-   class SetNotification {
-      'TODO: Felder'
-      +execute()
+   class AddNotification extends PLACEHOLDER{
+      + id : int
+      + notification : Notification
+      + {static} isPossible(project: Project): boolean
+
    }
    class DeleteNotification {
       +notificationID: String
-      +execute()
+
    }
    class SetUIElement {
-      'TODO: Felder'
-      +execute()
+
    }
    class RequestOldData {
       +from: DateTime
       +to: DateTime
-      +execute()
+      
    }
-   class SetIsOnlineProject {
-      +value: boolean
-      +execute()
+   class PublishProject extends PLACEHOLDER {
+
+         + {static} isPossible(project: Project): boolean
+
    }
    class CreateProject {
-      +execute()
+        + {static} isPossible(project: Project): boolean
+
+   }
+   class JoinOnlineProject extends PLACEHOLDER{
+      + {static} isPossible(project: Project): boolean
+
    }
    class CommandWrapper {
    +commandCanonicalName: String
@@ -508,21 +525,18 @@ class "ProjectTemplate" as repoProjectTemplate implements Identifiable {
     PLACEHOLDER ^-- DeleteColumn
     PLACEHOLDER ^-- SetCell
     PLACEHOLDER ^-- SetAdmin
-    PLACEHOLDER ^-- AddUser
     PLACEHOLDER ^--- RemoveUser
-    PLACEHOLDER ^--- CreateGraph
+    PLACEHOLDER ^--- AddGraph
     PLACEHOLDER ^--- SetCalculationFunction
     PLACEHOLDER ^--- SetTransformationFunctionComposition
     PLACEHOLDER ^--- SetSetting
     PLACEHOLDER ^--- SetProjectName
     PLACEHOLDER ^--- SetProjectDescription
     PLACEHOLDER ^---- SetWallpaper
-    PLACEHOLDER ^---- SetNotification
     PLACEHOLDER ^---- DeleteNotification
     PLACEHOLDER ^---- SetUIElement
     PLACEHOLDER ^---- RequestOldData
     PLACEHOLDER ^---- CreateProject
-    PLACEHOLDER ^---- SetIsOnlineProject
 
 ExecuteQueue -- PublishQueue
   }
