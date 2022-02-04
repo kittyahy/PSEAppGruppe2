@@ -47,6 +47,9 @@ import com.pseandroid2.dailydata.model.database.entities.ProjectUserMap
 import com.pseandroid2.dailydata.model.database.entities.RowEntity
 import com.pseandroid2.dailydata.model.database.entities.UIElementMap
 
+/**
+ * Room Database Class. Creation should be done via getInstance() instead of Constructor.
+ */
 @Database(
     entities = [
         ProjectEntity::class,
