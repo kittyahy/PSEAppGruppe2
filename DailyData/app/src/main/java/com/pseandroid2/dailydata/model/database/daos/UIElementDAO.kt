@@ -31,13 +31,22 @@ import kotlinx.coroutines.flow.Flow
 import java.util.SortedSet
 import java.util.TreeSet
 
+/**
+ * This class provides Methods and Queries to saves and change and remove UIElements for their table.
+ */
 @Dao
 abstract class UIElementDAO {
     private val existingIds: MutableMap<Int, out SortedSet<Int>> = mutableMapOf<Int, TreeSet<Int>>()
 
+    /**
+     * It provides all UiElements which belong to the given project.
+     */
     @Query("SELECT * FROM uiElement WHERE projectId = :projectId")
     abstract fun getUIElements(projectId: Int): Flow<List<UIElementMap>>
 
+    /**
+     * It saves the given UiElement and returns its id.
+     */
     suspend fun insertUIElement(
         projectId: Int,
         columnId: Int,
@@ -57,22 +66,43 @@ abstract class UIElementDAO {
         return id
     }
 
+    /**
+     * It deletes  UiElements specified by their ids, which belong to a specified project.
+     */
     @Query("DELETE FROM uiElement WHERE projectId = :projectId AND id IN (:ids)")
     abstract suspend fun removeUIElements(projectId: Int, vararg ids: Int)
 
+    /**
+     * It changes the state to the given state of a specified UiElement in a specified project.
+     */
     @Query("UPDATE uiElement SET state = :state WHERE projectId = :projectId AND id = :id")
     abstract suspend fun changeUIElementState(projectId: Int, id: Int, state: String)
 
+    /**
+     * It changes the name to the given name  of a specified UiElement in a specified project.
+     */
     @Query("UPDATE uiElement SET name = :name WHERE projectId = :projectId AND id = :id")
     abstract suspend fun changeUIElementName(projectId: Int, id: Int, name: String)
 
     /*========================SHOULD ONLY BE CALLED FROM INSIDE THE MODEL=========================*/
+    /**
+     * It removes the given UiElementMap from the table.
+     */
+    @Deprecated("This method should only be used from within the model, use removeUIElements instead")
     @Delete
     abstract suspend fun removeUIElementMap(vararg uiElements: UIElementMap)
 
+    /**
+     * It inserts the given UiElementMap to the table.
+     */
+    @Deprecated("This method should only be used from within the model, use insertUIElement instead")
     @Insert
     abstract suspend fun insertUIElementMap(uiElement: UIElementMap)
 
+    /**
+     * It deletes all UIElements, which belong to the specified project.
+     */
+    @Deprecated("This method should only be used from within the model")
     @Query("DELETE FROM uiElement WHERE projectId = :projectId")
     abstract suspend fun deleteAllUIElements(projectId: Int)
 
