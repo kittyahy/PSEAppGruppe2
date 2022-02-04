@@ -33,8 +33,15 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.util.TreeMap
 
+
+/**
+ * This class provides Methods and Queries to saves and change and remove Settings for Projects and Graphs to their tables.
+ */
 @Dao
 abstract class SettingsDAO {
+    /**
+     * It provides the settings for a specified project.
+     */
     fun getProjectSettings(projectId: Int): Flow<Settings> {
         @Suppress("Deprecation")
         return getProjectSettingEntities(projectId).map {
@@ -46,6 +53,9 @@ abstract class SettingsDAO {
         }
     }
 
+    /**
+     * It provides the settings for a specified graph in the specified project.
+     */
     fun getGraphSettings(projectId: Int, graphId: Int): Flow<Settings> {
         @Suppress("Deprecation")
         return getGraphSettingEntities(projectId, graphId).map {
@@ -57,6 +67,7 @@ abstract class SettingsDAO {
         }
     }
 
+
     suspend fun getSingleGraphSettings(projectId: Int, graphId: Int): Settings {
         @Suppress("Deprecation")
         val settings = getSingleGraphSettingsEntities(projectId, graphId)
@@ -67,50 +78,87 @@ abstract class SettingsDAO {
         return MapSettings(map)
     }
 
+
+     /**
+     * It changes a setting, which is specified by the key, to the value in a given project.
+     */
     suspend fun changeProjectSetting(projectId: Int, key: String, value: String) {
         @Suppress("Deprecation")
         changeProjectSettingEntity(ProjectSettingEntity(projectId, key, value))
     }
 
+    /**
+     * It changes a setting, which is specified by the key, to the value in a given graph and project.
+     */
     suspend fun changeGraphSetting(projectId: Int, graphId: Int, key: String, value: String) {
         @Suppress("Deprecation")
         changeGraphSettingEntity(GraphSettingEntity(projectId, graphId, key, value))
     }
 
+    /**
+     * It creates a new setting for a specified project and saves it to the table.
+     */
     suspend fun createProjectSetting(projectId: Int, key: String, value: String) {
         @Suppress("Deprecation")
         insertProjectSettingEntity(ProjectSettingEntity(projectId, key, value))
     }
 
+    /**
+     * It creates a new setting for a specified project and graph and saves it to the table.
+     */
     suspend fun createGraphSetting(projectId: Int, graphId: Int, key: String, value: String) {
         @Suppress("Deprecation")
         insertGraphSettingsEntity(GraphSettingEntity(projectId, graphId, key, value))
     }
 
+    /**
+     * It deletes a specified setting form a specified project.
+     */
     @Query("DELETE FROM projectSetting WHERE projectId = :projectId AND settingKey = :key")
     abstract suspend fun deleteProjectSetting(projectId: Int, key: String)
 
+    /**
+     * It deletes all settings form a specified project.
+     */
     @Query("DELETE FROM projectSetting WHERE projectId = :projectId")
     abstract suspend fun deleteAllProjectSettings(projectId: Int)
 
+    /**
+     * It deletes a specified setting form a specified project and graph.
+     */
     @Query("DELETE FROM graphSetting WHERE projectId = :projectId AND graphId = :graphId AND settingKey = :key")
     abstract suspend fun deleteGraphSetting(projectId: Int, graphId: Int, key: String)
 
+    /**
+     * It deletes all settings form a specified project and graph.
+     */
     @Query("DELETE FROM graphSetting WHERE projectId = :projectId AND graphId = :graphId")
     abstract suspend fun deleteAllGraphSettings(projectId: Int, graphId: Int)
 
     /*========================SHOULD ONLY BE CALLED FROM INSIDE THE MODEL=========================*/
+
+
+
+
+   /**
+     * It provides all ProjectSettingEntities form a specified project.
+     */
     @Deprecated("Should only be used from inside the model. Use getProjectSettings() instead")
     @Query("SELECT * FROM projectSetting WHERE projectId = :projectId")
     abstract fun getProjectSettingEntities(projectId: Int): Flow<List<ProjectSettingEntity>>
 
+  /**
+     * It provides all GraphSettingeEntities form a specified project and graph.
+     */
     @Deprecated("Should only be used from inside the model. Use getGraphSettings() instead")
+
     @Query("SELECT * FROM graphSetting WHERE projectId = :projectId AND graphId = :graphId")
     abstract fun getGraphSettingEntities(
         projectId: Int,
         graphId: Int
     ): Flow<List<GraphSettingEntity>>
-
+  
+  
     @Deprecated("Should only be used from inside the model. Use getSingleGraphSettings() instead")
     @Query("SELECT * FROM graphSetting WHERE projectId = :projectId AND graphId = :graphId")
     abstract suspend fun getSingleGraphSettingsEntities(
@@ -118,26 +166,44 @@ abstract class SettingsDAO {
         graphId: Int
     ): List<GraphSettingEntity>
 
+  /**
+     * It changes a specified ProjectSettingEntity to the given Entity.
+     */
     @Deprecated("Should only be used from inside the model. Use changeProjectSetting() instead")
     @Update
     abstract suspend fun changeProjectSettingEntity(setting: ProjectSettingEntity)
-
+    
+ /**
+     * It changes a specified GraphSettingEntity to the given Entity.
+     */
     @Deprecated("Should only be used from inside the model. Use changeGraphSetting() instead")
     @Update
     abstract suspend fun changeGraphSettingEntity(setting: GraphSettingEntity)
 
+    /**
+     * It adds a new ProjectSettingEntity to the table.
+     */
     @Deprecated("Should only be used from inside the model. Use createProjectSetting() instead")
     @Insert
     abstract suspend fun insertProjectSettingEntity(setting: ProjectSettingEntity)
-
+    
+/**
+     * It adds a new Graph SettingEntity to the table.
+     */
     @Deprecated("Should only be used from inside the model. Use createGraphSetting() instead")
     @Insert
     abstract suspend fun insertGraphSettingsEntity(setting: GraphSettingEntity)
 
+     /**
+     * It deletes the specified ProjectSettingEntity from the table.
+     */
     @Deprecated("Should only be used from inside the model. Use deleteProjectSetting() instead")
     @Delete
     abstract suspend fun deleteProjectSettingEntity(setting: ProjectSettingEntity)
 
+    /**
+     * It deletes the specified GraphSettingEntity from the table.
+     */
     @Deprecated("Should only be used from inside the model. Use deleteGraphSetting() instead")
     @Delete
     abstract suspend fun deleteGraphSettingEntity(setting: GraphSettingEntity)
