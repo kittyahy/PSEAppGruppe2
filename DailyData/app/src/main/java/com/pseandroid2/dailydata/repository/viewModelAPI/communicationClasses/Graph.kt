@@ -34,7 +34,9 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.runBlocking
 import com.pseandroid2.dailydata.model.graph.Graph as ModelGraph
 
-
+/**
+ * Graph class that handles its specific interaction with ViewModel.
+ */
 abstract class Graph : Identifiable, Convertible<ModelGraph<*, *>> {
     companion object {
         val availableGraphs: MutableList<String> = ArrayList<String>()

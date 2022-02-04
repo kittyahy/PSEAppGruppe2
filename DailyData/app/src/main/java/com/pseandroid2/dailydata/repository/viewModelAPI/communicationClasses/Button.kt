@@ -28,7 +28,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.runBlocking
 import com.pseandroid2.dailydata.model.project.Project as ModelProject
-
+/**
+ * Button class that handles its specific interaction with ViewModel.
+ */
 class Button(
     override val id: Int,
     val name: String,

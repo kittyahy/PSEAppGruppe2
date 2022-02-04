@@ -22,7 +22,9 @@ package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import kotlinx.coroutines.flow.Flow
-
+/**
+ * Column class that handles its specific interaction with ViewModel.
+ */
 class Column(
     override val id: Int,
     val name: String,
