@@ -66,7 +66,7 @@ class RESTAPI {
      *
      * @return Boolean: Returns true, if the server could be successfully reached. Otherwise return false
      */
-    fun greet(): Boolean {
+    suspend fun greet(): Boolean {
         val greetingCall: Call<String> = server.greet()
 
         val response: Response<String> = greetingCall.execute()
@@ -85,7 +85,7 @@ class RESTAPI {
      * @param authToken: The authentication token
      * @return Collection<PostPreview>: The previews of the posts
      */
-    fun getAllPostsPreview(authToken: String): Collection<PostPreview> {
+    suspend fun getAllPostsPreview(authToken: String): Collection<PostPreview> {
         val call: Call<List<PostPreview>> = server.getAllPostPreview(authToken)
 
         return call.execute().body() ?: emptyList()
@@ -98,7 +98,7 @@ class RESTAPI {
      * @param authToken:    The authentication token
      * @return Collection<TemplateDetail>: Returns the detailed post belonging to the post id
      */
-    fun getPostDetail(fromPost: Int, authToken: String): Collection<TemplateDetail> {
+    suspend fun getPostDetail(fromPost: Int, authToken: String): Collection<TemplateDetail> {
         val call: Call<List<TemplateDetail>> = server.getPostDetail(authToken, fromPost)
 
         return call.execute().body() ?: emptyList()
@@ -111,7 +111,7 @@ class RESTAPI {
      * @param authToken:    The authentication token
      * @return String - The requested project template as JSON
      */
-    fun getProjectTemplate(fromPost: Int, authToken: String): String {
+    suspend fun getProjectTemplate(fromPost: Int, authToken: String): String {
         val call: Call<String> = server.getProjectTemplate(authToken, fromPost)
 
         return call.execute().body() ?: ""
@@ -125,7 +125,7 @@ class RESTAPI {
      * @param authToken:        The authentication token
      * @return String - The requested graph template as JSON
      */
-    fun getGraphTemplate(fromPost: Int, templateNumber: Int, authToken: String): String {
+    suspend fun getGraphTemplate(fromPost: Int, templateNumber: Int, authToken: String): String {
         val call: Call<String> = server.getGraphTemplate(authToken, fromPost, templateNumber)
 
         return call.execute().body() ?: ""
@@ -141,7 +141,7 @@ class RESTAPI {
      * @param authToken:        The authentication token
      * @return Int: The PostID of the new post. -1 if the call didn't succeed, 0 if the user reached his limit of uploaded posts.
      */
-    fun addPost(
+    suspend fun addPost(
         postPreview: PostPreviewWrapper,
         projectTemplate: Pair<String, TemplateDetailWrapper>,
         graphTemplates: List<Pair<String, TemplateDetailWrapper>>,
@@ -161,7 +161,7 @@ class RESTAPI {
      * @param authToken:    The authentication token
      * @return Boolean:     Did the server call succeed
      */
-    fun removePost(postID: Int, authToken: String): Boolean {
+    suspend fun removePost(postID: Int, authToken: String): Boolean {
         val call: Call<Boolean> = server.removePost(authToken, postID)
 
         return call.execute().body() ?: false
@@ -176,7 +176,7 @@ class RESTAPI {
      * @param authToken: The authentication token
      * @return String: Returns the project information as a JSON. (Returns "" on error)
      */
-    fun addUser(projectID: Long, authToken: String): String {
+    suspend fun addUser(projectID: Long, authToken: String): String {
         val call: Call<String> = server.addUser(authToken, projectID)
 
         return call.execute().body() ?: ""
@@ -190,7 +190,7 @@ class RESTAPI {
      * @param authToken:    The authentication token
      * @return Boolean: Did the server call succeed
      */
-    fun removeUser(userToRemove: String, projectID: Long, authToken: String): Boolean {
+    suspend fun removeUser(userToRemove: String, projectID: Long, authToken: String): Boolean {
         val call: Call<Boolean> =
             server.removeUser(authToken, projectID, userToRemove = userToRemove)
 
@@ -204,7 +204,7 @@ class RESTAPI {
      * @param projectDetails:   The details of a project (project name, project description, table format, ...) as JSON
      * @return LONG: Returns the id of the created project. Returns -1 if an error occurred
      */
-    fun addProject(authToken: String, projectDetails: String): Long {
+    suspend fun addProject(authToken: String, projectDetails: String): Long {
         val call: Call<Long> = server.addProject(authToken, projectDetails)
 
         return call.execute().body() ?: -1
@@ -217,7 +217,7 @@ class RESTAPI {
      *  @param projectID: The id of the project whose user should be returned
      *  @return Collection<String>: The participants of the project. Returns empty list on error
      */
-    fun getProjectParticipants(authToken: String, projectID: Long): Collection<String> {
+    suspend fun getProjectParticipants(authToken: String, projectID: Long): Collection<String> {
         val call: Call<List<String>> = server.getParticipants(authToken, projectID)
 
         return call.execute().body() ?: listOf()
@@ -230,7 +230,7 @@ class RESTAPI {
      * @param projectID: The id of the project whose admin should be returned
      * @return String: The UserID of the admin. Returns "" on error
      */
-    fun getProjectAdmin(authToken: String, projectID: Long): String {
+    suspend fun getProjectAdmin(authToken: String, projectID: Long): String {
         val call: Call<String> = server.getAdmin(authToken, projectID)
 
         return call.execute().body() ?: ""
@@ -255,7 +255,7 @@ class RESTAPI {
      * @param projectID: The id of the project whose delta (projectCommands) you want to load into the FetchRequestQueue
      * @param authToken: The authentication token
      */
-    fun getDelta(projectID: Long, authToken: String): Collection<Delta> {
+    suspend fun getDelta(projectID: Long, authToken: String): Collection<Delta> {
         val call: Call<List<Delta>> = server.getDelta(token = authToken, projectID)
 
         return call.execute().body() ?: return mutableListOf()
@@ -272,7 +272,7 @@ class RESTAPI {
      * @param authToken:        The authentication token
      * @return Boolean: Did the server call succeed
      */
-    fun provideOldData(
+    suspend fun provideOldData(
         projectCommand: String,
         forUser: String,
         initialAdded: LocalDateTime,
@@ -296,7 +296,7 @@ class RESTAPI {
      * @param authToken: The authentication token
      * @return Long: The time how long an project command can remain on the server until it gets deleted by the server. On error returns -1
      */
-    fun getRemoveTime(authToken: String): Long {
+    suspend fun getRemoveTime(authToken: String): Long {
         val call: Call<Long> = server.getRemoveTime(authToken)
 
         return call.execute().body() ?: -1
@@ -311,7 +311,7 @@ class RESTAPI {
      * @param authToken:    The authentication token
      * @return Boolean: Did the server call succeed
      */
-    fun demandOldData(projectID: Long, requestInfo: String, authToken: String): Boolean {
+    suspend fun demandOldData(projectID: Long, requestInfo: String, authToken: String): Boolean {
         val call: Call<Boolean> =
             server.demandOldData(token = authToken, projectID, requestInfo = requestInfo)
 
@@ -324,7 +324,7 @@ class RESTAPI {
      * @param projectID: The id of the project from which the fetch requests should be downloaded
      * @param authToken: The authentication token
      */
-    fun getFetchRequests(projectID: Long, authToken: String): Collection<FetchRequest> {
+    suspend fun getFetchRequests(projectID: Long, authToken: String): Collection<FetchRequest> {
         val call: Call<Collection<FetchRequest>> = server.getFetchRequest(authToken, projectID)
 
         return call.execute().body() ?: emptyList()
@@ -337,7 +337,7 @@ class RESTAPI {
      * @param authToken:    The authentication token
      * @return List<Int>:   The postIDs from the posts
      */
-    fun getPostsFromUser(authToken: String): List<Int> {
+    suspend fun getPostsFromUser(authToken: String): List<Int> {
         val call: Call<List<Int>> = server.getPostsFromUser(authToken)
 
         return call.execute().body() ?: emptyList()
