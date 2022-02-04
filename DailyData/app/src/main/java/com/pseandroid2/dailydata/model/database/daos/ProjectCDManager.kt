@@ -35,6 +35,7 @@ import com.pseandroid2.dailydata.model.table.TableLayout
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.util.SortedIntListUtil
+import java.time.LocalDateTime
 import java.util.SortedSet
 import java.util.TreeSet
 
@@ -161,7 +162,8 @@ class ProjectCDManager(
     }
 
     private fun getNextId(): Int {
-        return SortedIntListUtil.getFirstMissingInt(ArrayList(existingIds))
+        return LocalDateTime.now().hashCode()
+        //return SortedIntListUtil.getFirstMissingInt(ArrayList(existingIds))
     }
 
 }
