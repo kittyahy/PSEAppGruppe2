@@ -29,18 +29,19 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.ServerHandler
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectPreviewFlow
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectTemplateFlow
 import kotlinx.coroutines.InternalCoroutinesApi
+import javax.inject.Inject
 
-class RepositoryViewModelAPI(appDataBase: AppDataBase, remoteDataSourceAPI: RemoteDataSourceAPI) {
+
+class RepositoryViewModelAPI @Inject constructor(
+    @Deprecated("Internal function, should not be used outside the RepositoryViewModelAPI")
+    val appDataBase: AppDataBase,
+    @Deprecated("Internal function, should not be used outside the RepositoryViewModelAPI")
+    val remoteDataSourceAPI: RemoteDataSourceAPI
+) {
+    @Suppress("DEPRECATION")
     val serverHandler = ServerHandler(appDataBase, remoteDataSourceAPI)
 
     @InternalCoroutinesApi
-    val projectHandler = ProjectHandler(
-        appDataBase,
-        remoteDataSourceAPI,
-        ExecuteQueue(
-            appDataBase,
-            remoteDataSourceAPI,
-            PublishQueue(appDataBase, remoteDataSourceAPI)
-        )
-    )
+    @Suppress("DEPRECATION")
+    val projectHandler = ProjectHandler(this)
 }

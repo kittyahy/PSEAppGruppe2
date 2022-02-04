@@ -20,8 +20,6 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
-import com.pseandroid2.dailydata.model.database.entities.UIElementMap
-import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.project.ProjectBuilder
 import com.pseandroid2.dailydata.model.table.ArrayListRow
 import com.pseandroid2.dailydata.model.table.Row
@@ -29,15 +27,15 @@ import com.pseandroid2.dailydata.model.table.RowMetaData
 import com.pseandroid2.dailydata.model.users.SimpleUser
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.runBlocking
 import java.time.LocalDateTime
+import com.pseandroid2.dailydata.model.project.Project as ModelProject
 
 class Row(
     override val id: Int,
     val elements: List<String>
 ) : Identifiable, Convertible<Row> {
     override lateinit var executeQueue: ExecuteQueue
+    override lateinit var project: Project
 
     constructor(row: Row) : this(
         row.getMetaData().createdOn.hashCode(), //TODO Richtige ID
@@ -60,23 +58,6 @@ class Row(
         TODO("Not yet implemented")
     }
 
-    fun setCellIsPossible(): Flow<Boolean> {
-        //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
-        runBlocking {
-            flow.emit(true)
-        }
-        return flow
-    }
-
-    //@throws IllegalOperationException
-    fun setCell(indexColumn: Int, content: String) {
-        if (indexColumn >= 0 && indexColumn < elements.size) {
-            TODO("setCell")
-        }
-        TODO("setCell2")
-    }
-
     override fun toDBEquivalent(): Row {
         val rowMetaData = RowMetaData(
             LocalDateTime.now(),
@@ -88,7 +69,7 @@ class Row(
         return ArrayListRow(elementList, rowMetaData)
     }
 
-    override fun addYourself(builder: ProjectBuilder<out Project>) {
+    override fun addYourself(builder: ProjectBuilder<out ModelProject>) {
         TODO("Not yet implemented")
     }
 }

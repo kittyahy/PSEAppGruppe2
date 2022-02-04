@@ -23,8 +23,11 @@ package com.pseandroid2.dailydata.repository.viewModelAPI
 
 import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
+import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
+import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
 import com.pseandroid2.dailydata.repository.commandCenter.commands.CreateProject
+import com.pseandroid2.dailydata.repository.commandCenter.commands.JoinOnlineProject
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Button
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Column
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
@@ -40,18 +43,24 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 
 @InternalCoroutinesApi
 class ProjectHandler(
-    private val appDataBase: AppDataBase,
-    private val rds: RemoteDataSourceAPI,
-    private val executeQueue: ExecuteQueue
+    private val repositoryViewModelAPI: RepositoryViewModelAPI
 ) {
+    val executeQueue: ExecuteQueue =
+        ExecuteQueue(repositoryViewModelAPI, PublishQueue(repositoryViewModelAPI))
+
+    private val appDataBase: AppDataBase = repositoryViewModelAPI.appDataBase
+    private val rds: RemoteDataSourceAPI = repositoryViewModelAPI.remoteDataSourceAPI
+
     fun getProjectPreviews() = ProjectPreviewFlow(appDataBase, executeQueue).getPreviews()
 
-    fun getProjectByID(id: Int) = ProjectFlow(appDataBase, rds, executeQueue, id).getProject()
+    fun getProjectByID(id: Int) = ProjectFlow(repositoryViewModelAPI, id).getProject()
 
     fun getGraphs(projectId: Int) = GraphFlow(appDataBase, executeQueue, projectId).getGraphs()
 
@@ -65,7 +74,7 @@ class ProjectHandler(
         ProjectTemplateFlow(appDataBase, executeQueue, id).getProjectTemplate()
 
 
-    private suspend fun newProjectAsync(
+    suspend fun newProjectAsync(
         name: String,
         description: String,
         wallpaper: Int,
@@ -77,15 +86,14 @@ class ProjectHandler(
         async(Dispatchers.IO) {
             val idFlow = MutableSharedFlow<Int>()
             val createProject = CreateProject(
-                idFlow,
-                "User1",
                 name,
                 description,
                 wallpaper,
                 table,
                 buttons,
                 notification,
-                graphs
+                graphs,
+                idFlow
             )
             executeQueue.add(createProject)
             return@async idFlow.first()
@@ -106,21 +114,25 @@ class ProjectHandler(
         }
     }
 
-    fun joinOnlineProject(onlineID: Long): Int {
-        return TODO("joinOnlineProject")
+    /**
+     * If false, it would be imprudent to use the corresponding "manipulation" fun.
+     * Thus it should be used to block input options from being used if false.
+     * e.g. If manipulationIsPossible.first() is false,
+     *      users should not be able to call manipulation().
+     */
+    fun joinOnlineProjectIsPossible(): Flow<Boolean> {
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(JoinOnlineProject.isPossible())
+        }
+        return flow
     }
 
-    fun getProjectTemplateByID() {
-        TODO("getProjectTemplateByID")
-    }
 
-    //TODO("Robin changes")
-    fun deleteProjectTemplate(id: Int) {
-
-    }
-
-    //TODO("Robin changes")
-    fun deleteGraphTemplate(id: Int) {
+    suspend fun joinOnlineProject(onlineID: Long): Flow<Int> {
+        val idFlow = MutableSharedFlow<Int>()
+        executeQueue.add(JoinOnlineProject(onlineID, idFlow))
+        return idFlow
 
     }
 }

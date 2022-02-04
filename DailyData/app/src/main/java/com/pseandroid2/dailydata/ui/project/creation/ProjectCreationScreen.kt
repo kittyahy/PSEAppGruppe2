@@ -72,12 +72,8 @@ fun ProjectCreationScreen(
     BackDialog(
         isOpen = viewModel.isBackDialogOpen,
         onDismissRequest = { viewModel.onEvent(ProjectCreationEvent.OnShowBackDialog(false)) },
-        onOkClick = {
-            viewModel.onEvent(ProjectCreationEvent.OnNavigateBack)
-        },
-        onCancelClick = {
-            viewModel.onEvent(ProjectCreationEvent.OnShowBackDialog(false))
-        }
+        onOkClick = { viewModel.onEvent(ProjectCreationEvent.OnNavigateBack) },
+        onCancelClick = { viewModel.onEvent(ProjectCreationEvent.OnShowBackDialog(false)) }
     )
 
     Scaffold(
@@ -97,7 +93,6 @@ fun ProjectCreationScreen(
                 placeholder = "Add Title",
                 value = viewModel.title,
                 onValueChange = { viewModel.onEvent(ProjectCreationEvent.OnTitleChange(it)) }
-
             )
             Divider()
             TextInput(

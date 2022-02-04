@@ -39,18 +39,13 @@ class ServerTemplateScreenViewModel @Inject constructor(
                 isProjectTemplateDialogOpen = false
             }
             is ServerTemplateScreenEvent.OnShowDialog -> {
+
                 isProjectTemplateDialogOpen = true
                 dialogTemplateIndex = event.index
             }
             is ServerTemplateScreenEvent.OnTemplateDownload -> {
                 repository.serverHandler.downloadProjectTemplate(id = event.id)
             }
-        }
-    }
-
-    private fun sendUiEvent(event : UiEvent) {
-        viewModelScope.launch {
-            _uiEvent.emit(event)
         }
     }
 }

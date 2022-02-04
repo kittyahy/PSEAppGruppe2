@@ -54,13 +54,13 @@ fun ProjectDataScreen(
         Box(
             modifier = Modifier.padding(it)
         ) {
-            var onNavigate : (UiEvent.Navigate) -> Unit = { tab ->
-                var index = DataTabs.values().indexOf(DataTabs.valueOf(tab.route))
+            val onNavigate : (UiEvent.Navigate) -> Unit = { tab ->
+                val index = DataTabs.values().indexOf(DataTabs.valueOf(tab.route))
                 viewModel.onEvent(ProjectDataScreenEvent.OnTabChange(index))
             }
 
             when(viewModel.tabs[viewModel.tab]) {
-                DataTabs.GRAPHS     -> ProjectDataGraphScreen(projectId = viewModel.projectId, onNavigate = onNavigate)
+                DataTabs.GRAPHS     -> ProjectDataGraphScreen(projectId = viewModel.projectId)
                 DataTabs.INPUT      -> ProjectDataInputScreen(projectId = viewModel.projectId, onNavigate = onNavigate)
                 DataTabs.SETTINGS   -> ProjectDataSettingsScreen(
                     projectId = viewModel.projectId,

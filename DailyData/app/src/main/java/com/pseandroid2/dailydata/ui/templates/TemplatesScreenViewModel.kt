@@ -26,8 +26,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.GraphTemplate
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ProjectTemplate
 import com.pseandroid2.dailydata.util.ui.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -61,10 +59,16 @@ class TemplatesScreenViewModel @Inject constructor(
                 tab = event.index
             }
             is TemplatesScreenEvent.OnGraphTemplateDelete -> {
+                //TODO
+                /*
                 repository.projectHandler.deleteGraphTemplate(event.id)
+                 */
             }
             is TemplatesScreenEvent.OnProjectTemplateDelete -> {
+                //TODO
+                /*
                 repository.projectHandler.deleteProjectTemplate(event.id)
+                 */
             }
         }
     }
