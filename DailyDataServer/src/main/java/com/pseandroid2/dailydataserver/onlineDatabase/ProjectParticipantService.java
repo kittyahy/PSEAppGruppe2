@@ -39,6 +39,7 @@ import java.util.List;
 @Service
 public class ProjectParticipantService {
     private static final int MAX_PARTICIPANTS = 24;
+    private static final long INACTIVE_PROJECT_TIME = 5;
     private final ProjectParticipantsRepository ppRepo;
     private final ProjectRepository projectRepo;
     private long projectIDGenerator;
@@ -59,12 +60,14 @@ public class ProjectParticipantService {
 
     /**
      * a new project is going to be created. The user, who creates the project gets the admin.
+     * All updated projects going to be deleted.
      *
      * @param user        the user, who creates the project.
      * @param projectInfo the initial for the project.
      * @return the id for the new project.
      */
     public long addProject(String user, String projectInfo) {
+        removeOutDatedProjects();
         Project project = new Project(projectIDGenerator, projectInfo);
         projectIDGenerator++;
         projectRepo.save(project);
@@ -187,5 +190,16 @@ public class ProjectParticipantService {
      */
     public String getAdmin(long projectId) {
         return ppRepo.findByProjectAndRoleIs(projectId, Role.ADMIN).getUser();
+    }
+
+    private void removeOutDatedProjects() {
+        List<Project> toRemove =
+                projectRepo.findByLastUpdatedIsBefore(LocalDateTime.now().minusDays(INACTIVE_PROJECT_TIME));
+
+        for (Project project : toRemove) {
+            List<ProjectParticipant> participantsToRemove = ppRepo.findByProject(project.getProjectId());
+            ppRepo.deleteAll(participantsToRemove);
+            projectRepo.delete(project);
+        }
     }
 }
