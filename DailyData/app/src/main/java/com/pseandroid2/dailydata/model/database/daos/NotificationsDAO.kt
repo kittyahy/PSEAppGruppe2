@@ -44,6 +44,7 @@ abstract class NotificationsDAO {
      * It returns all notifications, which belong to a specified project as notifications, and not entities.
      */
     fun getNotifications(projectId: Int): Flow<List<Notification>> {
+        @Suppress("Deprecation")
         return getNotificationEntities(projectId).map {
             val list: MutableList<Notification> = ArrayList()
             for (entity: NotificationEntity in it) {
@@ -58,6 +59,7 @@ abstract class NotificationsDAO {
      */
     suspend fun insertNotification(projectId: Int, notification: Notification): Int {
         val id = getNextId(projectId)
+        @Suppress("Deprecation")
         insertNotificationEntity(
             NotificationEntity(
                 projectId,
@@ -85,27 +87,33 @@ abstract class NotificationsDAO {
     abstract suspend fun setNotificationMessage(projectId: Int, id: Int, message: String)
 
     /*========================SHOULD ONLY BE CALLED FROM INSIDE THE MODEL=========================*/
-    /**
+
+   /**
      * It returns all notifications from a specified project.
      */
+    @Deprecated("Should only be used from inside the model. Use getNotifications instead.")
     @Query("SELECT * FROM notification WHERE projectId = :projectId")
     abstract fun getNotificationEntities(projectId: Int): Flow<List<NotificationEntity>>
 
-    /**
+   /**
      * It inserts a given Notification to the Table.
      */
+    @Deprecated("Should only be used from inside the model. Use insertNotification instead.")
     @Insert
     abstract suspend fun insertNotificationEntity(notificationEntity: NotificationEntity)
 
     /**
      * It deletes a  specified notification.
      */
+    @Deprecated("Should only be used from inside the model. Use deleteNotifications instead.")
     @Delete
     abstract suspend fun deleteNotificationEntity(notificationEntity: NotificationEntity)
 
-    /**
+     /**
      * It deletes all notification from a given project.
      */
+    @Deprecated("Should only be used from inside the model.")
+
     @Query("DELETE FROM notification WHERE projectId = :projectId")
     abstract suspend fun deleteAllNotifications(projectId: Int)
 

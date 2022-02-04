@@ -25,7 +25,7 @@ import android.graphics.Bitmap
 
 class GraphTemplate(
     var title: String,
-    var image: Bitmap,
+    var image: Bitmap?,
     var id: Int
 ) {
     //TODO Implementierung

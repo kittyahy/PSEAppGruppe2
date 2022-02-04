@@ -12,4 +12,6 @@ class FloatLineChart(
     override fun xToFloat(maps: List<Map<Float, Float>>): List<Map<Float, Float>> {
         return maps
     }
+
+    override fun getType() = GraphType.FLOAT_LINE_CHART
 }

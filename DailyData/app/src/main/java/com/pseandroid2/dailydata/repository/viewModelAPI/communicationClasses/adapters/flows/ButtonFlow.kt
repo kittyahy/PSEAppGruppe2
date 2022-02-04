@@ -27,6 +27,10 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 
 @InternalCoroutinesApi
+@Deprecated(
+    "Buttons only ever make sense in conjunction with a project",
+    level = DeprecationLevel.ERROR
+)
 class ButtonFlow(flow: Flow<List<UIElementMap>>) : FlowAdapter<UIElementMap, Button>(flow) {
     override fun provide(i: UIElementMap): Button {
         return Button(TODO("ButtonParam"), TODO("ButtonParam2"))

@@ -20,6 +20,7 @@
 
 package com.pseandroid2.dailydata.model
 
+import com.pseandroid2.dailydata.model.transformation.FloatIdentity
 import com.pseandroid2.dailydata.model.transformation.Identity
 import com.pseandroid2.dailydata.model.transformation.IntSum
 import com.pseandroid2.dailydata.model.transformation.Sum
@@ -32,7 +33,7 @@ import org.junit.Test
 class DataTransformationTester {
     private lateinit var transform1: Sum<Int>
     private lateinit var transform2: Sum<Int>
-    private lateinit var transformId: Identity
+    private lateinit var transformId: FloatIdentity
     private val testSet1 = listOf(listOf(2, 3))
     private val testSet2 = listOf(
         listOf(2, 3, -1), listOf(9, 21, -20), listOf(234, 92, -10000), listOf(3)
@@ -40,9 +41,9 @@ class DataTransformationTester {
 
     @Before
     fun setup() {
-        transform1 = IntSum(listOf(0))
-        transform2 = IntSum(listOf(0, 1, 3))
-        transformId = Identity()
+        transform1 = IntSum()
+        transform2 = IntSum()
+        transformId = FloatIdentity()
     }
 
     @Test
@@ -53,15 +54,14 @@ class DataTransformationTester {
 
         assertNotEquals(0, result1.size)
         assertEquals(5, result1[0])
-        assertEquals(3, result2.size)
-        val cols = listOf(0, 1, 3)
-        for (i in 0..2) {
-            assertEquals(testSet2[cols[i]].sum(), result2[i])
+        assertEquals(4, result2.size)
+        for (i in 0..3) {
+            assertEquals(testSet2[i].sum(), result2[i])
         }
 
         for (i in testSet2.indices) {
             for (j in testSet2[i].indices) {
-                assertEquals(testSet2[i][j], result3[i][j])
+                assertEquals(testSet2[i][j].toFloat(), result3[i][j])
             }
         }
     }
@@ -69,11 +69,11 @@ class DataTransformationTester {
     @Test
     fun testToText() {
         assertEquals(
-            "${TransformationFunction.SUM_ID}|col=[0];type=INT",
+            "${TransformationFunction.SUM_ID}|type=INT",
             transform1.toCompleteString()
         )
         assertEquals(
-            "${TransformationFunction.SUM_ID}|col=[0, 1, 3];type=INT",
+            "${TransformationFunction.SUM_ID}|type=INT",
             transform2.toCompleteString()
         )
     }

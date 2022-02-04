@@ -17,8 +17,8 @@
 
 */
 package com.pseandroid2.dailydata.remoteDataSource.appLinks
+
 import android.util.Log
-import com.pseandroid2.dailydata.remoteDataSource.appLinks.Hashids
 
 class JoinProjectLinkManager {
     // Hash function
@@ -35,14 +35,14 @@ class JoinProjectLinkManager {
         if (encodedLong == "") {
             return ""
         }
-        return "https://https://www.dailydata.com/?projectid="+encodeLong(postID)
+        return "https://https://www.dailydata.com/?projectid=" + encodeLong(postID)
     }
 
 
     /**
      * Encodes the postID into a hash
      *
-     * @param postIDToEncode: The Long that should be encoded. It has to be in [1, uLongsize-1] // TODO rework comment
+     * @param postIDToEncode: The Long that should be encoded. It has to be in [1, size of max uLong-1]
      * @return String: returns the encoded long as a hash. Returns "" if error
      */
     private fun encodeLong(postIDToEncode: Long): String {
@@ -68,7 +68,10 @@ class JoinProjectLinkManager {
         } catch (ex: Exception) {
             when (ex) {
                 is NoSuchElementException, is ArrayIndexOutOfBoundsException -> {
-                    Log.e("JoinProjectLinkError","There is no project ID that belongs to the input")
+                    Log.e(
+                        "JoinProjectLinkError",
+                        "There is no project ID that belongs to the input"
+                    )
                 }
                 else -> throw ex
             }

@@ -48,8 +48,6 @@ abstract class LineChart<T : Any>(
 
     override fun getPath() = path
 
-    override fun getType() = GraphType.LINE_CHART
-
     override fun getCalculationFunction() = transformation
 
     abstract fun xToFloat(maps: List<Map<T, Float>>): List<Map<Float, Float>>

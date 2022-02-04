@@ -78,9 +78,16 @@ abstract class TemplateDAO {
         return mapToGraphTemplateData(getGraphTemplateEntities(*ids))
     }
 
+
     /**
      * It provides GraphTemplateData specified by the creator of the GraphTemplate
      */
+    fun getGraphTemplatesForProjectTemplate(id: Int): Flow<List<GraphTemplateData>> {
+        @Suppress("Deprecation")
+        return mapToGraphTemplateData(getGraphTemplateEntitiesForTemplate(id))
+    }
+
+
     fun getGraphTemplateDataByCreator(creator: User): Flow<List<GraphTemplateData>> {
         @Suppress("Deprecation")
         return mapToGraphTemplateData(getGraphTemplateEntitiesByCreator(creator))
@@ -204,7 +211,7 @@ abstract class TemplateDAO {
      * It provides all GraphTemplateEntities with one of the given ids.
      */
     @Deprecated(
-        "Should only be used from inside the model. Use getProjectTemplateData() instead",
+        "Should only be used from inside the model. Use getGraphTemplateData() instead",
         ReplaceWith("getGraphTemplateData()")
     )
     @Query("SELECT * FROM graphTemplate WHERE id IN (:ids)")
@@ -213,6 +220,13 @@ abstract class TemplateDAO {
     /**
      * It provides all GraphTemplateEntities, with the specified creator.
      */
+    @Deprecated(
+        "Should only be used from inside the model. Use getGraphTemplatesForProjectTemplate() instead",
+        ReplaceWith("getGraphTemplatesForProjectTemplate()")
+    )
+    @Query("SELECT * FROM graphTemplate WHERE projectTemplateId = :id")
+    abstract fun getGraphTemplateEntitiesForTemplate(id: Int): Flow<List<GraphTemplateEntity>>
+
     @Deprecated(
         "Should only be used from inside the model. Use getProjectTemplateData() instead",
         ReplaceWith("getGraphTemplateDataByCreator()")
@@ -252,10 +266,13 @@ abstract class TemplateDAO {
                 dataList.add(
                     GraphTemplateData(
                         template.id,
+                        template.projectTemplateId,
                         template.name,
                         template.description,
                         template.type,
-                        template.createdBy
+                        template.color,
+                        template.createdBy,
+                        template.onlineId
                     )
                 )
             }

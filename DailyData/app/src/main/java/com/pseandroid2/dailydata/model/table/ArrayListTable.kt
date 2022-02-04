@@ -67,11 +67,29 @@ class ArrayListTable(private var layout: TableLayout = ArrayListLayout()) : Tabl
     }
 
     private fun assertLayout(row: Row): Boolean {
-        for (i in 0..layout.getSize()) {
+        for (i in 0 until layout.getSize()) {
             if (row.getCell(i).javaClass == layout.getColumnType(i)) {
                 return false
             }
         }
         return true
     }
+
+    @Deprecated("Shouldn't be used from outside the model. Iterate over the Table instead")
+    fun getAllRows() = table.toList()
+
+    override fun iterator() = ArrayListTableIterator(this)
+}
+
+class ArrayListTableIterator(table: ArrayListTable) :
+    Iterator<Row> {
+    @Suppress("Deprecation")
+    val iterator = table.getAllRows().iterator()
+
+    override fun hasNext() = iterator.hasNext()
+
+    override fun next(): Row {
+        return iterator.next()
+    }
+
 }

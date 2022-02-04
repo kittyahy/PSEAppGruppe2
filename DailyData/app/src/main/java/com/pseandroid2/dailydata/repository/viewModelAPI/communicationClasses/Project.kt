@@ -40,12 +40,12 @@ class Project(
     var title: String = "title missing",
     var description: String = "description missing",
     var wallpaper: Int = 0,
-    var table: List<Column> = ArrayList<Column>(),
-    var data: List<Row> = ArrayList<Row>(),
-    var buttons: List<Button> = ArrayList<Button>(),
-    var notifications: List<Notification> = ArrayList<Notification>(),
-    var graphs: List<Graph> = ArrayList<Graph>(),
-    var members: List<Member> = ArrayList<Member>()
+    var table: List<Column> = ArrayList(),
+    var data: List<Row> = ArrayList(),
+    var buttons: List<Button> = ArrayList(),
+    var notifications: List<Notification> = ArrayList(),
+    var graphs: List<Graph> = ArrayList(),
+    var members: List<Member> = ArrayList()
 ) : Identifiable {
     override lateinit var executeQueue: ExecuteQueue
     private val scope = CoroutineScope(Dispatchers.IO)

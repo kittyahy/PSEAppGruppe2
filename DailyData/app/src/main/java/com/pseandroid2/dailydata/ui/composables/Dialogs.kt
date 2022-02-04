@@ -1,5 +1,7 @@
 package com.pseandroid2.dailydata.ui.composables
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -25,12 +27,12 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Pr
 
 @Composable
 fun ProjectTemplateDialog(
-    isOpen : Boolean,
-    onDismissRequest : () -> Unit,
+    isOpen: Boolean,
+    onDismissRequest: () -> Unit,
     onIconClick: (Int) -> Unit,
-    template : ProjectTemplate
+    template: ProjectTemplate
 ) {
-    if(isOpen) {
+    if (isOpen) {
         Dialog(
             onDismissRequest = onDismissRequest
         ) {
@@ -41,12 +43,13 @@ fun ProjectTemplateDialog(
             ) {
                 LazyColumn {
                     itemsIndexed(template.graphTemplates) { index, graphTemplate ->
-                        Column (
+                        Column(
                             modifier = Modifier.padding(10.dp),
                             verticalArrangement = Arrangement.spacedBy(5.dp)
-                        ){
+                        ) {
                             Image(
-                                bitmap = graphTemplate.image.asImageBitmap(),
+                                bitmap = graphTemplate.image?.asImageBitmap()
+                                    ?: TODO("Probably should include some kind of fallback"),
                                 contentDescription = "",
                                 modifier = Modifier.fillMaxWidth()
                             )

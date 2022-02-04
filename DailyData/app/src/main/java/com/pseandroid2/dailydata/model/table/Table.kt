@@ -29,7 +29,7 @@ import com.pseandroid2.dailydata.util.Quadruple
 import java.time.LocalDateTime
 import kotlin.reflect.KClass
 
-interface Table {
+interface Table : Iterable<Row> {
 
     fun getCell(row: Int, col: Int): Any
 
@@ -45,7 +45,7 @@ interface Table {
 
     fun getColumn(col: Int): List<Any>
 
-    fun addColumn(typeString: String, name: String, unit: String, default: Any)
+    fun addColumn(typeString: String, name: String, unit: String = "", default: Any)
 
     fun deleteColumn(col: Int)
 
@@ -72,7 +72,7 @@ interface TableLayout : Iterable<ColumnData> {
 
     operator fun get(col: Int): ColumnData
 
-    fun addColumn(typeString: String, name: String, unit: String)
+    fun addColumn(typeString: String, name: String, unit: String = "")
 
     fun deleteColumn(col: Int)
 
@@ -118,6 +118,7 @@ data class RowMetaData(
  * @param type Serializable Name of a kotlin class (as obtained by KClass.getSerializableName())
  */
 data class ColumnData(
+    val id: Int,
     val type: String,
     val name: String,
     val unit: String,

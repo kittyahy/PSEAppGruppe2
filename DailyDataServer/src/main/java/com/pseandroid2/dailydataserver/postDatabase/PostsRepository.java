@@ -40,7 +40,7 @@ public interface PostsRepository extends JpaRepository<Post, Integer> {
      */
     long countByCreatedBy(String createdBy);
 
-    // #TODO MERLIN TEST
+    @Deprecated(since = "Only for testing")
     List<Post> findByCreatedBy(String createdBy);
 
 
