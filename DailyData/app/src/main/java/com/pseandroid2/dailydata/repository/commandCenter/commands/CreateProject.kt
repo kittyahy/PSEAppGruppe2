@@ -53,7 +53,7 @@ class CreateProject(
         publishQueue: PublishQueue
     ): Boolean {
         //ReserveServerSlot
-        onlineProjectID = remoteDataSourceAPI.createNewOnlineProject("") //TODO Add project details as JSON here
+        onlineProjectID = remoteDataSourceAPI.createNewOnlineProject("")
         //Make Created Project Online Project
         appDataBase.projectDataDAO().setOnlineID(projectID!!, onlineProjectID!!)
         return super.publish(appDataBase, remoteDataSourceAPI, publishQueue)

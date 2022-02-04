@@ -6,6 +6,10 @@ import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
 import java.time.LocalDateTime
 
+/**
+ * This class defines what a projectCommand has. A project command contains any change, what changes
+ * were made in the project.
+ */
 abstract class ProjectCommand(
     var projectID: Int? = null,
     var onlineProjectID: Long? = null,
@@ -31,6 +35,9 @@ abstract class ProjectCommand(
         }
     }
 
+    /**
+     * It published the command to the server.
+     */
     open suspend fun publish(
         appDataBase: AppDataBase,
         remoteDataSourceAPI: RemoteDataSourceAPI,
