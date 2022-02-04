@@ -50,9 +50,9 @@ class TemplatesScreenViewModel @Inject constructor(
     var tab by mutableStateOf(0)
         private set
 
-    var graphTemplates = repository.projectHandler.getGraphTemplates(0) //TODO Arne Where do we get that id from?
+    var graphTemplates = repository.projectHandler.getGraphTemplates(0)
         private set
-    var projectTemplates = repository.projectHandler.getProjectTemplatePreviews() //TODO Arne
+    var projectTemplates = repository.projectHandler.getProjectTemplatePreviews()
         private set
 
     fun onEvent(event: TemplatesScreenEvent) {
