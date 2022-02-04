@@ -40,9 +40,7 @@ fun ServerTemplatesScreen(
         ProjectTemplateDialog(
             isOpen = viewModel.isProjectTemplateDialogOpen,
             onDismissRequest = { viewModel.onEvent(ServerTemplateScreenEvent.OnCloseDialog) },
-            onIconClick = { id ->
-                //download post entry TODO()
-                          },
+            onIconClick = { viewModel.onEvent(ServerTemplateScreenEvent.OnPostEntryDownload(id = it)) },
             templates = templates
         )
     }
@@ -56,9 +54,7 @@ fun ServerTemplatesScreen(
                  image = post.image.asImageBitmap(),
                  imageClickable = false,
                  onImageClick = { viewModel.onEvent(ServerTemplateScreenEvent.OnShowDialog(index = index)) },
-                 onIconClick = {
-                     viewModel.onEvent(ServerTemplateScreenEvent.OnPostDownload(post.id))
-                 },
+                 onIconClick = { viewModel.onEvent(ServerTemplateScreenEvent.OnPostDownload(post.id)) },
                  icon = Icons.Default.Download
              )
         }

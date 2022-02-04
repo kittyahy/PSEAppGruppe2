@@ -43,7 +43,7 @@ class TemplatesScreenViewModel @Inject constructor(
     val repository: RepositoryViewModelAPI
 ) : ViewModel() {
 
-    var tabs by mutableStateOf(listOf<TemplateTabs>())
+    var tabs = TemplateTabs.values().toList()
         private set
     var tab by mutableStateOf(0)
         private set
