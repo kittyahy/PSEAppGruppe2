@@ -33,6 +33,7 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Co
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Notification
+import com.pseandroid2.dailydata.ui.navigation.Routes
 import com.pseandroid2.dailydata.util.ui.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -83,17 +84,14 @@ class ProjectCreationScreenViewModel @Inject constructor(
         val id = savedStateHandle.get<Int>("projectTemplateId")!!
         if(id != -1) {
             viewModelScope.launch {
-                /* TODO
-                val template = repository.serverHandler.getProjectTemplate(postId = id)
-                title = template.titel
+                val template = repository.serverHandler.getProjectTemplateById(id = id).toProject()
+                title = template.title
                 description = template.description
                 wallpaper = Color(template.wallpaper)
                 table = template.table
                 buttons = template.buttons
                 notifications = template.notifications
-                graphs = template.graphTemplates.map { Graph.createFromTemplate(it) }
-
-                 */
+                graphs = template.graphs
             }
         }
     }
@@ -168,7 +166,6 @@ class ProjectCreationScreenViewModel @Inject constructor(
                     table.isEmpty() -> sendUiEvent(UiEvent.ShowToast("Please Enter a column"))
                     else            -> {
                         viewModelScope.launch {
-                            /*TODO()
                             val newProject = repository.projectHandler.newProjectAsync(
                                 name = title,
                                 description = description,
@@ -181,8 +178,6 @@ class ProjectCreationScreenViewModel @Inject constructor(
                             val id = newProject.await()
                             sendUiEvent(UiEvent.PopBackStack)
                             sendUiEvent(UiEvent.Navigate(Routes.DATA + "?projectId=$id"))
-
-                             */
                         }
                     }
                 }

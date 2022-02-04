@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,14 +25,12 @@ class LinkScreenViewModel @Inject constructor(
         when(event) {
             is LinkScreenEvent.OnButtonClick -> {
                 viewModelScope.launch {
-                    /* TODO()
                     if(repository.projectHandler.joinOnlineProjectIsPossible().first()) {
                         repository.projectHandler.joinOnlineProject(onlineID = event.id)
+                        event.onJoinLink()
                     } else {
                         sendUiEvent(UiEvent.ShowToast("Could not join project"))
                     }
-
-                     */
                 }
             }
         }

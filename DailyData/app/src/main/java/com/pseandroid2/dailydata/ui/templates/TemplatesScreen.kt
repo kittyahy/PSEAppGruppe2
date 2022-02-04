@@ -53,13 +53,18 @@ fun TemplatesScreen(
             TemplateTabs.GRAPHS -> {
                 LazyColumn {
                     items(graphTemplates.value) { template ->
-                        PreviewCard(
-                            title = template.title,
-                            image = template.image.asImageBitmap(),
-                            imageClickable = false,
-                            onIconClick = { viewModel.onEvent(TemplatesScreenEvent.OnDeleteGraphTemplate(template)) },
-                            icon = Icons.Default.Delete
-                        )
+                        val image = template.image
+                            if (image != null) {
+                                PreviewCard(
+                                    title = template.title,
+                                    image = image.asImageBitmap(),
+                                    imageClickable = false,
+                                    onIconClick = { viewModel.onEvent(TemplatesScreenEvent.OnDeleteGraphTemplate(template)) },
+                                    icon = Icons.Default.Delete
+                                )
+                            }
+
+
                     }
                 }
             }

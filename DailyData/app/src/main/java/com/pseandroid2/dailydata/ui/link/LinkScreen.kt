@@ -56,10 +56,7 @@ fun LinkScreen(
 
         }
         Text(text = "Title")
-        Button(onClick = {
-            viewModel.onEvent(LinkScreenEvent.OnButtonClick(id = pID))
-            onJoinClick()
-        }
+        Button(onClick = { viewModel.onEvent(LinkScreenEvent.OnButtonClick(id = pID, onJoinLink = onJoinClick)) }
             ) {
             Text(text = "Join Project")
         }

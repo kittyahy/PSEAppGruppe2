@@ -41,33 +41,17 @@ class ServerTemplateScreenViewModel @Inject constructor(
             }
 
             is ServerTemplateScreenEvent.OnPostDownload -> {
-                var post = posts.find { it.id == event.id }!!
-
-                //download post TODO()
-                viewModelScope.launch {
-                    if (repository.serverHandler.downloadProjectTemplateIsPossible().first()) {
-                        repository.serverHandler.downloadProjectTemplate(id = event.id)
-                    } else {
-                        sendUiEvent(UiEvent.ShowToast("Could not download project template"))
-                    }
+                var post = repository.serverHandler.getPost(posts.find { it.id == event.id }!!.id)
+                post.downloadProjectTemplate()
+                for (i in 1 until post.postEntries.size) {
+                    post.downloadGraphTemplate(i)
                 }
             }
 
             is ServerTemplateScreenEvent.OnPostEntryDownload -> {
-                var template = post.postEntries.find { it.id == event.id}!!
-
-                //download post entry TODO()
-                viewModelScope.launch {
-                    if (repository.serverHandler.downloadGraphTemplateIsPossible().first()) {
-                        repository.serverHandler.downloadGraphTemplate(event.projectId, event.graphId)
-                        isProjectTemplateDialogOpen = false
-                    } else {
-                        sendUiEvent(UiEvent.ShowToast("Could not download graph template"))
-                    }
-                }
+                var postTemp = repository.serverHandler.getPost(post.id)
+                postTemp.downloadGraphTemplate(event.id)
             }
-
-
         }
     }
 

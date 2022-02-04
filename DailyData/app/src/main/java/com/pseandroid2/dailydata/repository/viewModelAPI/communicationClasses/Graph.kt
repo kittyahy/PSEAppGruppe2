@@ -62,7 +62,7 @@ abstract class Graph : Identifiable, Convertible<ModelGraph<*, *>> {
 
 
     abstract override val id: Int
-    //abstract val image: Bitmap?
+    abstract val image: Bitmap?
     abstract val typeName: String
     abstract var appDataBase: AppDataBase
 

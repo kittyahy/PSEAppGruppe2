@@ -43,7 +43,7 @@ class TemplatesScreenViewModel @Inject constructor(
     var tab by mutableStateOf(0)
         private set
 
-    var graphTemplates = repository.projectHandler.getGraphTemplates()
+    var graphTemplates = repository.projectHandler.getGraphTemplates(0) //TODO
         private set
     var projectTemplates = repository.projectHandler.getProjectTemplatePreviews()
         private set

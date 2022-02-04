@@ -41,6 +41,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.core.view.drawToBitmap
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pseandroid2.dailydata.R
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Column
@@ -57,6 +58,7 @@ import com.pseandroid2.dailydata.util.ui.Wallpapers
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 @InternalCoroutinesApi
 @Composable
@@ -65,8 +67,9 @@ fun ProjectDataGraphScreen(
     viewModel: ProjectDataGraphScreenViewModel = hiltViewModel()
 ) {
     var templates : List<GraphTemplate> = listOf()
-
     val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
+
     LaunchedEffect(Unit) {
         viewModel.onEvent(ProjectDataGraphScreenEvent.OnCreate(projectId = projectId))
     }
@@ -84,12 +87,17 @@ fun ProjectDataGraphScreen(
     LazyColumn {
         itemsIndexed(viewModel.graphs) { index, graph ->
             coroutineScope.launch {
-                /* TODO()
-                if(graph.image == null && graph.showIsPossible().first()) {
-                    graph.show(context = context)
+                val bitmap = runBlocking {
+                    if (graph.image == null && graph.showIsPossible().first()) {
+                        graph.show(context = context).drawToBitmap()
+                    } else {
+                        if (graph.image != null) {
+                            graph.image
+                        } else {
+                            Toast.makeText(context, "Could not load image", Toast.LENGTH_SHORT).show()
+                        }
+                    }
                 }
-
-                 */
             }
             if(graph.image != null) {
                 Image(
@@ -122,7 +130,7 @@ fun ProjectGraphDialog(
     var isDialogOpen by remember { mutableStateOf(false) }
     AppDialog(isOpen = isDialogOpen, onDismissRequest = onDismissRequest, padding = 0.dp) {
         Column(modifier = Modifier.width(200.dp)) {
-            templates.filter { it.type == graph.typeName }.forEachIndexed { index, graphTemplate ->
+            templates.filter { it.type.representation == graph.typeName }.forEachIndexed { index, graphTemplate ->
                 Box(modifier = Modifier
                         .padding(8.dp)
                         .fillMaxWidth()

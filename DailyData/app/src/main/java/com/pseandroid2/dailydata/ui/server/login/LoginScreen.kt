@@ -204,10 +204,3 @@ fun SignUpDialog(
         )
     }
 }
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun Prev() {
-
-
-}
