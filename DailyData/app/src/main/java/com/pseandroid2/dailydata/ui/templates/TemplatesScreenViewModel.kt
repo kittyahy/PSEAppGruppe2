@@ -45,17 +45,17 @@ class TemplatesScreenViewModel @Inject constructor(
     private val _uiEvent = MutableSharedFlow<UiEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
 
-    var tabs by mutableStateOf( listOf<TemplateTabs>())
+    var tabs by mutableStateOf(listOf<TemplateTabs>())
         private set
     var tab by mutableStateOf(0)
         private set
 
-    var graphTemplates = repository.projectHandler.graphTemplateFlow.templates
+    var graphTemplates = repository.projectHandler.getGraphTemplates(0) //TODO Arne Where do we get that id from?
         private set
-    var projectTemplates = repository.projectHandler.projectTemplateFlow.getFlow()
+    var projectTemplates = repository.projectHandler.getProjectTemplatePreviews() //TODO Arne
         private set
 
-    fun onEvent(event : TemplatesScreenEvent) {
+    fun onEvent(event: TemplatesScreenEvent) {
         when (event) {
             is TemplatesScreenEvent.OnTabChange -> {
                 tab = event.index
@@ -69,13 +69,13 @@ class TemplatesScreenViewModel @Inject constructor(
         }
     }
 
-    private fun sendUiEvent(event : UiEvent) {
+    private fun sendUiEvent(event: UiEvent) {
         viewModelScope.launch {
             _uiEvent.emit(event)
         }
     }
 }
 
-enum class TemplateTabs(val representation : String) {
+enum class TemplateTabs(val representation: String) {
     GRAPHS("Graphs"), PROJECTS("Projects")
 }

@@ -43,6 +43,7 @@ class ArrayListLayout(input: String = "") : TableLayout {
     override fun getUnit(col: Int) = layout[col].third
 
     override fun get(col: Int) = ColumnData(
+        col,
         layout[col].first,
         layout[col].second,
         layout[col].third,
@@ -61,22 +62,24 @@ class ArrayListLayout(input: String = "") : TableLayout {
         return Gson().toJson(layout)
     }
 
-    override fun iterator() = ArrayListLayoutIterator(this)
+    override fun iterator() = ArrayListLayoutIterator(layout)
 
-    @Deprecated("Shouldn't be used outside of ArrayListLayoutIterator, iterate over the layout instead")
+    @Deprecated(
+        "Shouldn't be used outside of ArrayListLayoutIterator, iterate over the layout instead",
+        level = DeprecationLevel.ERROR
+    )
     fun getList() = layout
 }
 
-class ArrayListLayoutIterator(layout: ArrayListLayout) :
+class ArrayListLayoutIterator(private val layoutList: List<Quadruple<String, String, String, List<UIElement>>>) :
     Iterator<ColumnData> {
-    @Suppress("Deprecation")
-    val iterator = layout.getList().iterator()
+    var index = 0
 
-    override fun hasNext() = iterator.hasNext()
+    override fun hasNext() = (index + 1) in layoutList.indices
 
     override fun next(): ColumnData {
-        val next = iterator.next()
-        return ColumnData(next.first, next.second, next.third, next.fourth.toList())
+        val next = layoutList[++index]
+        return ColumnData(index, next.first, next.second, next.third, next.fourth.toList())
     }
 
 }

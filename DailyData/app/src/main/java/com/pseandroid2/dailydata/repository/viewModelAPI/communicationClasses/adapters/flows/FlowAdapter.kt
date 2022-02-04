@@ -29,8 +29,9 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @InternalCoroutinesApi
-abstract class FlowAdapter <I, O> (private val flow: Flow<List<I>>){
+abstract class FlowAdapter<I, O>(private val flow: Flow<List<I>>) {
     private val sharedFlow = MutableSharedFlow<List<O>>()
+
     init {
         GlobalScope.launch {
             adapt()
@@ -41,6 +42,7 @@ abstract class FlowAdapter <I, O> (private val flow: Flow<List<I>>){
     fun getFlow(): Flow<List<O>> {
         return sharedFlow
     }
+
     @InternalCoroutinesApi
     open suspend fun adapt() {
         flow.collect { list ->
@@ -52,5 +54,6 @@ abstract class FlowAdapter <I, O> (private val flow: Flow<List<I>>){
             sharedFlow.emit(listO)
         }
     }
+
     abstract fun provide(i: I): O
 }

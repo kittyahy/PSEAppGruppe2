@@ -45,7 +45,7 @@ object Generator {
         context: Context
     ): View {
         return when (graph.getType()) {
-            GraphType.LINE_CHART -> {
+            GraphType.INT_LINE_CHART, GraphType.TIME_LINE_CHART, GraphType.FLOAT_LINE_CHART -> {
                 //graph is a Line Chart and thus will always return LineDataSets
                 @Suppress("Unchecked_Cast")
                 generateLineChart(

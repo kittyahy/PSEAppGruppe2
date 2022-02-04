@@ -20,9 +20,9 @@
 
 package com.pseandroid2.dailydata.model.transformation
 
-class FloatSum(cols: List<Int>) : Sum<Float>(cols) {
+class FloatSum : Sum<Float>() {
 
-    override var functionString = "$SUM_ID|col=$cols;type=${TYPE_FLOAT}"
+    override var functionString = "$SUM_ID|type=${TYPE_FLOAT}"
 
     override fun unsafeSum(list: List<Any>): Float {
         var sum: Float = 0.0f

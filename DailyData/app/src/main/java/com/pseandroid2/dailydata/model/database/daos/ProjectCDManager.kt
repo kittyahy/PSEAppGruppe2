@@ -61,12 +61,12 @@ class ProjectCDManager(
         val newID: Int = insertProjectEntity(project)
         project.id = newID
 
-        for (graph: Graph<*, *> in project.getGraphs()) {
+        for (graph: Graph<*, *> in project.graphs) {
             val newGraphId: Int = graphManager.insertGraph(newID, graph)
             graph.id = newGraphId
         }
 
-        for (notif: Notification in project.getNotifications()) {
+        for (notif: Notification in project.notifications) {
             val newNotifId: Int = notifDAO.insertNotification(newID, notif)
             notif.id = newNotifId
         }
@@ -79,7 +79,7 @@ class ProjectCDManager(
             }
         }
 
-        for (user: User in project.getUsers()) {
+        for (user: User in project.users) {
             projectDAO.addUser(newID, user)
         }
 
@@ -97,7 +97,7 @@ class ProjectCDManager(
         val id = project.getProjectSkeleton().id
         @Suppress("Deprecation")
         graphDAO.deleteAllGraphs(id)
-
+        @Suppress("Deprecation")
         notifDAO.deleteAllNotifications(id)
 
         uiDAO.deleteAllUIElements(id)
@@ -153,7 +153,7 @@ class ProjectCDManager(
         val skeleton: ProjectSkeletonEntity =
             createSkeleton(id, project.getProjectSkeleton(), project.table.getLayout())
         val admin: User = project.admin
-        val entity = ProjectEntity(skeleton, admin)
+        val entity = ProjectEntity(skeleton, admin, project.isOnline)
 
         projectDAO.insertProjectEntity(entity)
 

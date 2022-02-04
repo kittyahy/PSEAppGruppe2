@@ -22,8 +22,8 @@ package com.pseandroid2.dailydata.model.transformation
 
 import kotlin.reflect.KClass
 
-abstract class Sum<N : Number>(private val cols: List<Int>) :
-    TransformationFunction<N>(functionString = "$SUM_ID|col=$cols") {
+abstract class Sum<N : Number> :
+    TransformationFunction<N>(functionString = "$SUM_ID") {
     companion object {
         const val TYPE_INT = "INT"
         const val TYPE_FLOAT = "FLOAT"
@@ -31,10 +31,8 @@ abstract class Sum<N : Number>(private val cols: List<Int>) :
 
     override fun execute(input: List<List<Any>>): List<N> {
         val result = mutableListOf<N>()
-        for (i in cols) {
-            if (i < input.size) {
-                result.add(unsafeSum(input[i]))
-            }
+        for (i in input.indices) {
+            result.add(unsafeSum(input[i]))
         }
         return result
     }

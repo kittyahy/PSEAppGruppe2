@@ -41,8 +41,8 @@ class DataTransformationTester {
 
     @Before
     fun setup() {
-        transform1 = IntSum(listOf(0))
-        transform2 = IntSum(listOf(0, 1, 3))
+        transform1 = IntSum()
+        transform2 = IntSum()
         transformId = FloatIdentity()
     }
 
@@ -54,10 +54,9 @@ class DataTransformationTester {
 
         assertNotEquals(0, result1.size)
         assertEquals(5, result1[0])
-        assertEquals(3, result2.size)
-        val cols = listOf(0, 1, 3)
-        for (i in 0..2) {
-            assertEquals(testSet2[cols[i]].sum(), result2[i])
+        assertEquals(4, result2.size)
+        for (i in 0..3) {
+            assertEquals(testSet2[i].sum(), result2[i])
         }
 
         for (i in testSet2.indices) {
@@ -70,11 +69,11 @@ class DataTransformationTester {
     @Test
     fun testToText() {
         assertEquals(
-            "${TransformationFunction.SUM_ID}|col=[0];type=INT",
+            "${TransformationFunction.SUM_ID}|type=INT",
             transform1.toCompleteString()
         )
         assertEquals(
-            "${TransformationFunction.SUM_ID}|col=[0, 1, 3];type=INT",
+            "${TransformationFunction.SUM_ID}|type=INT",
             transform2.toCompleteString()
         )
     }

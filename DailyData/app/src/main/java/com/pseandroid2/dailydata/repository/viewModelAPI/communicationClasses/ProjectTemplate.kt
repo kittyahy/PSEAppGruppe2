@@ -22,13 +22,17 @@ package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
 
 import android.graphics.Bitmap
-import com.pseandroid2.dailydata.model.database.entities.ProjectTemplateData
+import android.graphics.BitmapFactory
+import com.pseandroid2.dailydata.model.notifications.TimeNotification
+import com.pseandroid2.dailydata.model.project.ProjectTemplate as ModelProjectTemplate
 import com.pseandroid2.dailydata.model.table.TableLayout
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import kotlinx.coroutines.flow.Flow
 
 
-class ProjectTemplate : Identifiable {
+class ProjectTemplate(
+    val onlineId: Long = -1
+) : Identifiable {
     lateinit var titel: String
     lateinit var description: String
     var wallpaper: Int = 0
@@ -36,7 +40,7 @@ class ProjectTemplate : Identifiable {
     lateinit var buttons: List<Button>
     lateinit var notifications: List<Notification>
     lateinit var graphTemplates: List<GraphTemplate>
-    lateinit var image: Bitmap
+    var image: Bitmap? = null
 
     constructor(
         titel: String,
@@ -47,7 +51,7 @@ class ProjectTemplate : Identifiable {
         notifications: List<Notification>,
         graphTemplates: List<GraphTemplate>,
         image: Bitmap
-    ) {
+    ) : this() {
         this.titel = titel
         this.description = description
         this.wallpaper = wallpaper
@@ -58,28 +62,31 @@ class ProjectTemplate : Identifiable {
         this.image = image
     }
 
-    constructor(projectTemplateData: ProjectTemplateData) {
-        this.titel = projectTemplateData.name
-        this.description = projectTemplateData.description
-        this.wallpaper = TODO("projectTemplateData.wallpaper")//projectTemplateData.wallpaper
-        val layout = projectTemplateData.layout
-        val buttons = ArrayList<Button>()
-        val table = ArrayList<Column>()
+    constructor(template: ModelProjectTemplate) : this(template.onlineId) {
+        this.titel = template.name
+        this.description = template.desc
+        this.wallpaper = template.color
+        val layout = template.getTableLayout()
+        this.table = layout.toColumnList()
+        val uiElements = mutableListOf<Button>()
         for (i in 0 until layout.getSize()) {
-            val columnData = layout[i]
-            for (uIElement in columnData.uiElements) {
-                buttons.add(Button(uIElement, i))
+            for (element in layout.getUIElements(i)) {
+                uiElements.add(Button(element, i))
             }
-            table.add(
-                Column(
-                    i,
-                    columnData.name,
-                    columnData.unit,
-                    DataType.fromSerializableClassName(columnData.type)
-                )
-            )
         }
-
+        this.buttons = uiElements.toList()
+        val notifs = mutableListOf<Notification>()
+        for (notification in template.notifications) {
+            if (notification is TimeNotification) {
+                notifs.add(Notification(notification))
+            }
+        }
+        this.notifications = notifs
+        val graphs = mutableListOf<GraphTemplate>()
+        for (graph in template.graphs) {
+            graphs.add(GraphTemplate(TODO(), TODO(), TODO()))
+        }
+        this.image = BitmapFactory.decodeFile(template.path)
     }
 
     override lateinit var executeQueue: ExecuteQueue

@@ -26,6 +26,10 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 
 @InternalCoroutinesApi
+@Deprecated(
+    "Notifications only ever make sense in conjunction with a project",
+    level = DeprecationLevel.ERROR
+)
 class NotificationFlow(flow: Flow<List<Notification>>) :
     FlowAdapter<Notification, com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Notification>(
         flow
