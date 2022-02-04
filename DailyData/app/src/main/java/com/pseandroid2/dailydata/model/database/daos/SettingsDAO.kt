@@ -79,7 +79,7 @@ abstract class SettingsDAO {
     }
 
 
-     /**
+    /**
      * It changes a setting, which is specified by the key, to the value in a given project.
      */
     suspend fun changeProjectSetting(projectId: Int, key: String, value: String) {
@@ -138,17 +138,15 @@ abstract class SettingsDAO {
     /*========================SHOULD ONLY BE CALLED FROM INSIDE THE MODEL=========================*/
 
 
-
-
-   /**
+    /**
      * It provides all ProjectSettingEntities form a specified project.
      */
     @Deprecated("Should only be used from inside the model. Use getProjectSettings() instead")
     @Query("SELECT * FROM projectSetting WHERE projectId = :projectId")
     abstract fun getProjectSettingEntities(projectId: Int): Flow<List<ProjectSettingEntity>>
 
-  /**
-     * It provides all GraphSettingeEntities form a specified project and graph.
+    /**
+     * It provides all GraphSettingsEntities form a specified project and graph as flow.
      */
     @Deprecated("Should only be used from inside the model. Use getGraphSettings() instead")
 
@@ -157,8 +155,11 @@ abstract class SettingsDAO {
         projectId: Int,
         graphId: Int
     ): Flow<List<GraphSettingEntity>>
-  
-  
+
+
+    /**
+     * It provides all GraphSettingEntities from a specified project and graph.
+     */
     @Deprecated("Should only be used from inside the model. Use getSingleGraphSettings() instead")
     @Query("SELECT * FROM graphSetting WHERE projectId = :projectId AND graphId = :graphId")
     abstract suspend fun getSingleGraphSettingsEntities(
@@ -166,14 +167,14 @@ abstract class SettingsDAO {
         graphId: Int
     ): List<GraphSettingEntity>
 
-  /**
+    /**
      * It changes a specified ProjectSettingEntity to the given Entity.
      */
     @Deprecated("Should only be used from inside the model. Use changeProjectSetting() instead")
     @Update
     abstract suspend fun changeProjectSettingEntity(setting: ProjectSettingEntity)
-    
- /**
+
+    /**
      * It changes a specified GraphSettingEntity to the given Entity.
      */
     @Deprecated("Should only be used from inside the model. Use changeGraphSetting() instead")
@@ -186,15 +187,15 @@ abstract class SettingsDAO {
     @Deprecated("Should only be used from inside the model. Use createProjectSetting() instead")
     @Insert
     abstract suspend fun insertProjectSettingEntity(setting: ProjectSettingEntity)
-    
-/**
+
+    /**
      * It adds a new Graph SettingEntity to the table.
      */
     @Deprecated("Should only be used from inside the model. Use createGraphSetting() instead")
     @Insert
     abstract suspend fun insertGraphSettingsEntity(setting: GraphSettingEntity)
 
-     /**
+    /**
      * It deletes the specified ProjectSettingEntity from the table.
      */
     @Deprecated("Should only be used from inside the model. Use deleteProjectSetting() instead")

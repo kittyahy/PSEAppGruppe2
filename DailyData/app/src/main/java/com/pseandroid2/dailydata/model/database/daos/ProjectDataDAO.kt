@@ -52,8 +52,8 @@ abstract class ProjectDataDAO {
     abstract fun getProjectDataByIds(vararg ids: Int): Flow<List<ProjectData>>
 
     /**
-    * It returns all meta information (id, name, description, wallpaper, onlineId and color) a specified project.
-    */
+     * It returns all meta information (id, name, description, wallpaper, onlineId and color) a specified project.
+     */
     @Query("SELECT id, name, description, wallpaper, onlineId, color FROM project WHERE id = :id")
     abstract fun getProjectData(id: Int): Flow<ProjectData?>
 
@@ -63,7 +63,7 @@ abstract class ProjectDataDAO {
 
     @Query("SELECT isOnline FROM project WHERE id = :id")
     abstract fun isOnline(id: Int): Flow<Boolean>
-  
+
     @Query("SELECT onlineId FROM project WHERE id = :id")
     abstract fun getOnlineId(id: Int): Long
 
@@ -71,7 +71,7 @@ abstract class ProjectDataDAO {
     abstract fun getIdForOnlineId(onlineId: Long): Int
 
 
-   /**
+    /**
      * It changes the name of a specified project if it is available.
      */
     @Query("UPDATE project SET name = :name WHERE id = :id")
@@ -159,36 +159,42 @@ abstract class ProjectDataDAO {
     /**
      * It saves the given projectEntity to the table.
      */
+    @Deprecated("This method should only be used from within the model, use ProjectCDManager.insertProject instead")
     @Insert
     abstract suspend fun insertProjectEntity(entity: ProjectEntity)
 
     /**
      * It deletes  the given projectEntity from the table.
      */
+    @Deprecated("This method should only be used from within the model, use ProjectCDManager.deleteProject instead")
     @Delete
     abstract suspend fun deleteProjectEntity(entity: ProjectEntity)
 
     /**
      * It deletes a projectEntity by their given id.
      */
+    @Deprecated("This method should only be used from within the model, use GraphCDManager.deleteProject instead")
     @Query("DELETE FROM project WHERE id = :id")
     abstract suspend fun deleteProjectEntityById(id: Int)
 
     /**
      * It saves the given projectUserMap to the table.
      */
+    @Deprecated("This method should only be used from within the model, use addUser instead")
     @Insert
     abstract suspend fun insertProjectUserMap(userMap: ProjectUserMap)
 
     /**
      * It deletes the given projectUsermap from the table.
      */
+    @Deprecated("This method should only be used from within the model, use removeUsers instead")
     @Delete
     abstract suspend fun deleteProjectUserMap(userMap: ProjectUserMap)
 
     /**
      * It deletes all users from the specified project.
      */
+    @Deprecated("This method should only be used from within the model")
     @Query("DELETE FROM user WHERE projectId = :projectId")
     abstract suspend fun deleteAllUsers(projectId: Int)
 }

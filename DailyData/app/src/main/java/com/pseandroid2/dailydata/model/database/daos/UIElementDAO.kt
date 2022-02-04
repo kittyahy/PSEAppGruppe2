@@ -88,18 +88,21 @@ abstract class UIElementDAO {
     /**
      * It removes the given UiElementMap from the table.
      */
+    @Deprecated("This method should only be used from within the model, use removeUIElements instead")
     @Delete
     abstract suspend fun removeUIElementMap(vararg uiElements: UIElementMap)
 
     /**
      * It inserts the given UiElementMap to the table.
      */
+    @Deprecated("This method should only be used from within the model, use insertUIElement instead")
     @Insert
     abstract suspend fun insertUIElementMap(uiElement: UIElementMap)
 
     /**
      * It deletes all UIElements, which belong to the specified project.
      */
+    @Deprecated("This method should only be used from within the model")
     @Query("DELETE FROM uiElement WHERE projectId = :projectId")
     abstract suspend fun deleteAllUIElements(projectId: Int)
 

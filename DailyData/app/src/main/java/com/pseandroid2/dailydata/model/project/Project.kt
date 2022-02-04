@@ -153,7 +153,7 @@ interface Project {
         }
 
         fun toFunctionString(): String {
-            return table.getLayout().toJSON() + "|#|" + function.toCompleteString()
+            return function.toCompleteString()
         }
 
         private fun map(table: Table): List<List<Any>> {
