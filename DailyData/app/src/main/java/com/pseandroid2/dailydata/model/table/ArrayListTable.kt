@@ -74,4 +74,22 @@ class ArrayListTable(private var layout: TableLayout = ArrayListLayout()) : Tabl
         }
         return true
     }
+
+    @Deprecated("Shouldn't be used from outside the model. Iterate over the Table instead")
+    fun getAllRows() = table.toList()
+
+    override fun iterator() = ArrayListTableIterator(this)
+}
+
+class ArrayListTableIterator(table: ArrayListTable) :
+    Iterator<Row> {
+    @Suppress("Deprecation")
+    val iterator = table.getAllRows().iterator()
+
+    override fun hasNext() = iterator.hasNext()
+
+    override fun next(): Row {
+        return iterator.next()
+    }
+
 }

@@ -121,7 +121,7 @@ class GraphUITester {
             }
             every { lineMock.recalculate() } returns maps
 
-            val pieFunc = PieChartTransformation(FloatSum(listOf(0, 1)))
+            val pieFunc = PieChartTransformation(FloatSum())
             val pieTransform = project.createDataTransformation(pieFunc)
 
             val lineFunc = LineChartTransformation(FloatIdentity(), listOf(0, 1, 2, 3))

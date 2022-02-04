@@ -20,83 +20,91 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows
 
+import com.google.gson.Gson
 import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.model.database.entities.ProjectData
+import com.pseandroid2.dailydata.model.notifications.TimeNotification
+import com.pseandroid2.dailydata.model.table.ArrayListLayout
+import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
+import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Button
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Member
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Notification
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Row
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.toColumnList
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.toViewGraph
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 @InternalCoroutinesApi
 class ProjectFlow(
-    private val appDataBase: AppDataBase,
+    private val db: AppDataBase,
+    private val rds: RemoteDataSourceAPI,
+    private val eq: ExecuteQueue,
     private val projectId: Int
-) : FlowAdapter<Void, Project>(MutableSharedFlow()) {
-    private lateinit var sharedFlow: Flow<Project>
-    private val buttonFlow: Flow<List<Button>> = ButtonFlow(
-        appDataBase.uiElementDAO().getUIElements(projectId)
-    ).getFlow() //Todo Arne fragen passt so
-    private val graphFlow: Flow<List<Graph>> =
-        GraphFlow(TODO("GraphFlow")).getFlow() //appDataBase.graphDAO().getGraphDataForProject(projectId)
-    private val memberFlow: Flow<List<Member>> = MemberFlow(TODO("MemberFlow")).getFlow()
-    private val notificationFlow: Flow<List<Notification>> =
-        NotificationFlow(appDataBase.notificationsDAO().getNotifications(projectId)).getFlow()
-    private val projectDataFlow: Flow<ProjectData?> =
-        appDataBase.projectDataDAO().getProjectData(projectId)
-    private val settingsFlow: Flow<Map<String, String>> = TODO("settingsFlow")
-    private val rowFlow: Flow<List<Row>> =
-        RowFlow(appDataBase.tableContentDAO().getRowsById(projectId)).getFlow()
-
-    init {
-        GlobalScope.launch {
-            adapt()
-        }
-    }
-
-    fun getProjectFlow(): Flow<Project> {
-        return sharedFlow
-    }
-
-    @InternalCoroutinesApi
-    override suspend fun adapt() {
-        val emptyProject = Project()
-        val emptyFlow = MutableSharedFlow<Project>()
-        emptyFlow.emit(emptyProject)
-        sharedFlow = emptyFlow.combine(buttonFlow) { project, buttonList ->
-            project.buttons = buttonList
-            project
-        }.combine(graphFlow) { project, graphList ->
-            project.graphs = graphList
-            project
-        }.combine(memberFlow) { project, memberList ->
-            project.members = memberList
-            project
-        }.combine(notificationFlow) { project, notificationList ->
-            project.notifications = notificationList
-            project
-        }.combine(projectDataFlow) { project, projectData ->
-            projectData!! //Todo überprüfen, ob man diese Assertion hier so verwenden darf
-            project.update(projectData)
-            project
-        }.combine(settingsFlow) { project, settingsMap ->
-            //Todo project.update(settingsMap)
-            project
-        }.combine(rowFlow) { project, rowList ->
-            project.data = rowList
-            project
-        }
-    }
-
-    override fun provide(i: Void): Project {
-        //unreachable code, because it is never used by overwritten adapt fun
-        return Project()
+) {
+    fun getProject(): Flow<Project> {
+        return ProjectFlowProvider(projectId, db).provideFlow.distinctUntilChanged()
+            .map { project ->
+                val ret = if (project == null) {
+                    Project()
+                } else {
+                    val rows = mutableListOf<Row>()
+                    for (row in project.table) {
+                        rows.add(Row(row))
+                    }
+                    val buttons = mutableListOf<Button>()
+                    for (col in project.table.getLayout()) {
+                        for (uiElement in col.uiElements) {
+                            buttons.add(Button(uiElement, col.id))
+                        }
+                    }
+                    val notifications = mutableListOf<Notification>()
+                    for (notif in project.notifications) {
+                        if (notif is TimeNotification) {
+                            notifications.add(Notification(notif))
+                        }
+                    }
+                    val graphs = mutableListOf<Graph>()
+                    for (graph in project.graphs) {
+                        graphs.add(
+                            graph.toViewGraph(
+                                Gson().fromJson(
+                                    db.projectDataDAO().getCurrentLayout(projectId),
+                                    ArrayListLayout::class.java
+                                )
+                            )
+                        )
+                    }
+                    val members = mutableListOf<Member>()
+                    for (user in project.users) {
+                        members.add(Member(user))
+                    }
+                    Project(
+                        project.id,
+                        project.isOnline,
+                        rds.getUserID() == project.admin.getId(),
+                        project.name,
+                        project.desc,
+                        project.color,
+                        project.table.getLayout().toColumnList(),
+                        rows.toList(),
+                        buttons.toList(),
+                        notifications.toList(),
+                        graphs.toList(),
+                        members.toList()
+                    )
+                }
+                ret.executeQueue = eq
+                return@map ret
+            }
     }
 }

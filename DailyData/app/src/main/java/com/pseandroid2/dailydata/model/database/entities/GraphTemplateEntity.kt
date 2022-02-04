@@ -28,9 +28,11 @@ import com.pseandroid2.dailydata.model.users.User
 @Entity(tableName = "graphTemplate")
 data class GraphTemplateEntity(
     @PrimaryKey val id: Int,
+    val projectTemplateId: Int,
     val name: String,
     val description: String,
     val type: GraphType,
+    val color: Int,
     val createdBy: User,
     val onlineId: Long
 )

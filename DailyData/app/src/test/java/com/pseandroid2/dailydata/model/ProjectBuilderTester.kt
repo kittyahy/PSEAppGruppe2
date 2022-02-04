@@ -23,16 +23,16 @@ class ProjectBuilderTester {
 
         assertEquals(false, project.isOnline)
         assertTrue(project.admin is NullUser)
-        assertTrue(project.getUsers().isEmpty())
+        assertTrue(project.users.isEmpty())
         @Suppress("Deprecation")
         val skeleton = project.getProjectSkeleton()
         assertEquals(3, skeleton.id)
         assertEquals(3, skeleton.onlineId)
         assertEquals("Test", skeleton.name)
         assertEquals("Test", skeleton.desc)
-        assertTrue(skeleton.getGraphs().isEmpty())
+        assertTrue(project.graphs.isEmpty())
         @Suppress("Deprecation")
-        assertTrue(skeleton.getProjectSettings().getAllSettings().isEmpty())
-        assertTrue(skeleton.getNotifications().isEmpty())
+        assertTrue(project.settings.getAllSettings().isEmpty())
+        assertTrue(project.notifications.isEmpty())
     }
 }
