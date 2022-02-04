@@ -46,9 +46,8 @@ class RepositoryViewModelAPI(
         appDataBase,
         remoteDataSourceAPI,
         ExecuteQueue(
-            appDataBase,
-            remoteDataSourceAPI,
-            PublishQueue(appDataBase, remoteDataSourceAPI)
+            this,
+            PublishQueue(this)
         )
     )
 }
