@@ -19,32 +19,47 @@
 */
 package com.pseandroid2.dailydataserver.onlineDatabase;
 
+import com.pseandroid2.dailydataserver.postDatabase.PostService;
+import com.pseandroid2.dailydataserver.postDatabase.Request.PostPreviewWrapper;
+import com.pseandroid2.dailydataserver.postDatabase.Request.TemplateDetailWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.util.Pair;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-
+/**
+ * Preloads data to the database.
+ */
 @Configuration
 public class PreLoad {
     private static final Logger log = LoggerFactory.getLogger(PreLoad.class);
 
+    /**
+     * It initialises the table with a post and logs it.
+     *
+     * @return the command line runner to initializes the database.
+     */
     @Bean
-    CommandLineRunner initDatabase(ProjectParticipantService ppservice, DeltaOrganisationService deltaService) {
+    CommandLineRunner initDatabase(PostService postService) {
 
-        LocalDateTime t = LocalDateTime.now();
+        PostPreviewWrapper postPreview = new PostPreviewWrapper(new Byte[]{1, 2, 3}, "Title of post");
+        TemplateDetailWrapper projectTemplateDetail = new TemplateDetailWrapper(new Byte[]{2, 3, 4},
+                "projectTemplate title");
+        TemplateDetailWrapper graphTemplateDetail = new TemplateDetailWrapper(new Byte[]{3, 4, 5},
+                "graph template title");
+        Pair<String, TemplateDetailWrapper> projectTemplate = Pair.of("the Template", projectTemplateDetail);
+        Pair<String, TemplateDetailWrapper> graphTemplate = Pair.of("the Graph template", graphTemplateDetail);
+        List<Pair<String, TemplateDetailWrapper>> allGraphTemplates = new ArrayList<>();
+        allGraphTemplates.add(graphTemplate);
+
+
         return args -> {
-           log.info("New Project: "+ ppservice.addProject("Ella", "Info"));
-           log.info("Add Participant: "+ppservice.addUser("Tom",1));
-           log.info("Add Delta: "+ deltaService.saveDelta(1,"Ella","derCommand"));
-
-           log.info("AddOldData: "+ deltaService.addOldDelta(1,"Tom","Ella","alter command",t,false));
-           log.info("GetOldDelta: "+ deltaService.getOldDelta(1,"Ella"));
-            log.info("GetNewDelta: "+deltaService.getNewDelta(1,"Tom"));
-            log.info("GetOldDelta: "+ deltaService.getOldDelta(1,"Ella"));
+            log.info("New Post: " + postService.addPost(postPreview, projectTemplate, allGraphTemplates, "admin"));
 
         };
     }
