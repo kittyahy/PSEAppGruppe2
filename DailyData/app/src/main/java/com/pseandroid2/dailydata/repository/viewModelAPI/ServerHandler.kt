@@ -24,7 +24,6 @@ import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
 import com.pseandroid2.dailydata.remoteDataSource.userManager.SignInTypes
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Post
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.PostEntry
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.PostPreview
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ProjectTemplate
 import kotlinx.coroutines.Dispatchers
@@ -32,12 +31,13 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 
 class ServerHandler(private val appDataBase: AppDataBase, private val api: RemoteDataSourceAPI) {
-    suspend fun getPostPreviews(): Collection<PostPreview> = coroutineScope{
+    suspend fun getPostPreviews(): Collection<PostPreview> = coroutineScope {
         val arrayList = ArrayList<PostPreview>()
-        val postPreviews = async(Dispatchers.IO) {api.getPostPreviews()}
+        val postPreviews = async(Dispatchers.IO) { api.getPostPreviews() }
         for (serverPreview in postPreviews.await()) {
             arrayList.add(PostPreview(serverPreview, api))
         }
@@ -49,8 +49,14 @@ class ServerHandler(private val appDataBase: AppDataBase, private val api: Remot
     }
 
 
-    fun getProjectTemplateById(id : Int) : ProjectTemplate {
+    fun getProjectTemplateById(id: Int): ProjectTemplate {
         TODO("getProjectTemplateById")
+    }
+
+    fun amILoggedIn() = flow {
+        val string = api.getUserName()
+        emit(string != "")
+        kotlinx.coroutines.delay(500)
     }
 
     /**
