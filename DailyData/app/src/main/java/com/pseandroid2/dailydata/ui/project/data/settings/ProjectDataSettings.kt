@@ -24,16 +24,19 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material.Divider
+import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.ClipboardManager
@@ -41,7 +44,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.pseandroid2.dailydata.util.ui.UiEvent
 import com.pseandroid2.dailydata.R
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
@@ -56,6 +58,7 @@ import com.pseandroid2.dailydata.ui.project.creation.GraphDialog
 import com.pseandroid2.dailydata.ui.project.creation.NotificationDialog
 import com.pseandroid2.dailydata.ui.project.creation.TableDialog
 import com.pseandroid2.dailydata.ui.project.creation.WallpaperDialog
+import com.pseandroid2.dailydata.util.ui.UiEvent
 import kotlinx.coroutines.InternalCoroutinesApi
 
 @SuppressLint("ServiceCast")
@@ -219,7 +222,7 @@ fun ProjectDataSettingsScreen(
                 label = "Add Graph",
                 mainIcon = ImageVector.vectorResource(id = R.drawable.ic_chart),
                 onClick = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnShowGraphDialog(true)) },
-                onClickItem = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnButtonRemove(index = it)) },
+                onClickItem = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnGraphRemove(index = it)) },
                 elements = viewModel.graphs.map { it.typeName }
             )
             ButtonElement(

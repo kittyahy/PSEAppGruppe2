@@ -26,11 +26,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
-import com.pseandroid2.dailydata.util.ui.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -40,42 +38,35 @@ class TemplatesScreenViewModel @Inject constructor(
     val repository: RepositoryViewModelAPI
 ) : ViewModel() {
 
-    private val _uiEvent = MutableSharedFlow<UiEvent>()
-    val uiEvent = _uiEvent.asSharedFlow()
-
-    var tabs by mutableStateOf(listOf<TemplateTabs>())
+    var tabs = TemplateTabs.values().toList()
         private set
     var tab by mutableStateOf(0)
         private set
 
-    var graphTemplates = repository.projectHandler.getGraphTemplates(0)
+    var graphTemplates = repository.projectHandler.getGraphTemplates(0) //TODO
         private set
     var projectTemplates = repository.projectHandler.getProjectTemplatePreviews()
         private set
 
-    fun onEvent(event: TemplatesScreenEvent) {
+    fun onEvent(event : TemplatesScreenEvent) {
         when (event) {
             is TemplatesScreenEvent.OnTabChange -> {
                 tab = event.index
             }
-            is TemplatesScreenEvent.OnGraphTemplateDelete -> {
-                //TODO
-                /*
-                repository.projectHandler.deleteGraphTemplate(event.id)
-                 */
+            is TemplatesScreenEvent.OnDeleteGraphTemplate -> {
+                viewModelScope.launch {
+                    if (event.template.deleteIsPossible().first()) {
+                        event.template.delete()
+                    }
+                }
             }
-            is TemplatesScreenEvent.OnProjectTemplateDelete -> {
-                //TODO
-                /*
-                repository.projectHandler.deleteProjectTemplate(event.id)
-                 */
+            is TemplatesScreenEvent.OnDeleteProjectTemplate -> {
+                viewModelScope.launch {
+                    if (event.template.deleteIsPossible().first()) {
+                        event.template.delete()
+                    }
+                }
             }
-        }
-    }
-
-    private fun sendUiEvent(event: UiEvent) {
-        viewModelScope.launch {
-            _uiEvent.emit(event)
         }
     }
 }

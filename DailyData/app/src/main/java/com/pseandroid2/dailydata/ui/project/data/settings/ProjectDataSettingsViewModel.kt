@@ -22,6 +22,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -187,14 +188,18 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
 
             is ProjectDataSettingsScreenEvent.OnLeaveProject -> {
                 viewModelScope.launch {
-                    initialProject.leaveOnlineProject()
-                    sendUiEvent(UiEvent.PopBackStack)
+                    if (initialProject.leaveOnlineProjectIsPossible().first()) {
+                        initialProject.leaveOnlineProject()
+                        sendUiEvent(UiEvent.PopBackStack)
+                    }
                 }
             }
             is ProjectDataSettingsScreenEvent.OnDeleteProject -> {
                 viewModelScope.launch {
-                    initialProject.delete()
-                    sendUiEvent(UiEvent.PopBackStack)
+                    if (initialProject.deleteIsPossible().first()) {
+                        initialProject.delete()
+                        sendUiEvent(UiEvent.PopBackStack)
+                    }
                 }
             }
 
@@ -204,53 +209,68 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
                     table.isEmpty() -> sendUiEvent(UiEvent.ShowToast("Please Enter a column"))
                     else            -> {
                         viewModelScope.launch {
-                            initialProject.setName(name = title)
-                            initialProject.setDescription(description = description)
-                            initialProject.changeWallpaper(image = wallpaper.toArgb())
+                            if (initialProject.setNameIsPossible().first()) {
+                                initialProject.setName(name = title)
+                            } else {
+                                sendUiEvent(UiEvent.ShowToast("Could not change title"))
+                            }
+                            if (initialProject.setDescriptionIsPossible().first()) {
+                                initialProject.setDescription(description = description)
+                            } else {
+                                sendUiEvent(UiEvent.ShowToast("Could not change description"))
+                            }
+                            if (initialProject.changeWallpaperIsPossible().first()) {
+                                initialProject.changeWallpaper(image = wallpaper.toArgb())
+                            } else {
+                                sendUiEvent(UiEvent.ShowToast("Could not change wallpaper"))
+                            }
                             for (column in initialProject.table) {
-                                if(!table.contains(column)) {
+                                if(!table.contains(column) && initialProject.deleteColumnIsPossible(column = column).first()) {
                                     initialProject.deleteColumn(column = column)
                                 }
                             }
                             for (column in table) {
-                                if(!initialProject.table.contains(column)) {
+                                                                                                                    //i assume there is a value
+                                if(!initialProject.table.contains(column) && initialProject.addColumnIsPossible()[column.dataType]!!.first()) {
                                     initialProject.addColumn(column = column)
                                 }
                             }
                             for (button in initialProject.buttons) {
-                                if(!buttons.contains(button)) {
+                                if(!buttons.contains(button) && initialProject.deleteButtonIsPossible(button = button).first()) {
                                     initialProject.deleteButton(button = button)
                                 }
                             }
                             for (button in buttons) {
-                                if(!initialProject.buttons.contains(button)) {
+                                if(!initialProject.buttons.contains(button) && initialProject.addButtonIsPossible().first()) {
                                     initialProject.addButton(button = button)
                                 }
                             }
                             for (member in initialProject.members) {
-                                if(!members.contains(member)) {
+                                if(!members.contains(member) && initialProject.deleteMemberIsPossible(member = member).first()) {
                                     initialProject.deleteMember(member = member)
                                 }
                             }
                             for (notification in initialProject.notifications) {
-                                if(!notifications.contains(notification)) {
+                                if(!notifications.contains(notification) && initialProject.deleteNotificationIsPossible(notification = notification).first()) {
                                     initialProject.deleteNotification(notification = notification)
                                 }
                             }
                             for (notification in notifications) {
-                                if(!initialProject.notifications.contains(notification)) {
+                                if(!initialProject.notifications.contains(notification) && initialProject.addNotificationIsPossible().first()) {
                                     initialProject.addNotification(notification = notification)
                                 }
                             }
                             for (graph in initialProject.graphs) {
                                 if(!graphs.contains(graph)) {
                                     viewModelScope.launch {
-                                        graph.delete()
+                                        if (graph.deleteIsPossible().first() && graph.deleteIsPossible().first()) {
+                                            graph.delete()
+                                        }
                                     }
                                 }
                             }
                             for (graph in graphs) {
-                                if(!initialProject.graphs.contains(graph)) {
+                                if(!initialProject.graphs.contains(graph) && initialProject.addGraphIsPossible().first()) {
                                     initialProject.addGraph(graph = graph)
                                 }
                             }

@@ -36,7 +36,7 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Pr
 
 class PieChart(
     override val id: Int = -1,
-    //override val image: Bitmap?,
+    override val image: Bitmap?,
     val color: List<Int>,
     val mapping: MutableList<Column>,
     val showPercentages: Boolean
@@ -74,6 +74,10 @@ class PieChart(
         }
         settings[Generator.GRAPH_NAME_KEY] = id.toString()
         return PieChart(id, dataTrapo, settings)
+    }
+
+    fun addMappingColor(index : Int, color : Int) {
+        //Todo(von Robin)
     }
 
     fun addMappingColorIsPossible(): Flow<Boolean> {

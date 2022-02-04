@@ -27,6 +27,7 @@ import java.time.LocalDateTime
 enum class DataType(
     val representation: String,
     val regex: String,
+    val initialValue : String,
     val serializableClassName: String,
     /**
      * Describes the amount of space in byte an AddRow ProjectCommand gains in its json form
@@ -39,23 +40,27 @@ enum class DataType(
     WHOLE_NUMBER(
         "Whole Number",
         "",
+        "0",
         Int::class.getSerializableClassName(),
         Int.MAX_VALUE.toString().length * DataType.charSizeInString
     ),
     FLOATING_POINT_NUMBER(
         "Floating Point Number",
         "",
+        "0",
         Float::class.getSerializableClassName(),
         Float.MAX_VALUE.toString().length * DataType.charSizeInString
     ),
     TIME(
         "Time",
         "",
+        "00:00",
         LocalDateTime::class.getSerializableClassName(),
         LocalDateTime.MAX.toString().length * DataType.charSizeInString
     ),
     STRING(
         "String",
+        "",
         "",
         String::class.getSerializableClassName(),
         150 * DataType.charSizeInString //Todo Magic Int

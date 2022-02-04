@@ -1,7 +1,5 @@
 package com.pseandroid2.dailydata.ui.composables
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -10,7 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -23,16 +21,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ProjectTemplate
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.PostEntry
 
 @Composable
 fun ProjectTemplateDialog(
-    isOpen: Boolean,
-    onDismissRequest: () -> Unit,
-    onIconClick: (Int) -> Unit,
-    template: ProjectTemplate
+    isOpen : Boolean,
+    onDismissRequest : () -> Unit,
+    onIconClick: (id : Int) -> Unit,
+    templates : List<PostEntry>
 ) {
-    if (isOpen) {
+    if(isOpen) {
         Dialog(
             onDismissRequest = onDismissRequest
         ) {
@@ -42,15 +40,13 @@ fun ProjectTemplateDialog(
                 modifier = Modifier.padding(10.dp)
             ) {
                 LazyColumn {
-
-                    itemsIndexed(template.graphTemplates) { index, graphTemplate ->
-                        Column(
+                    items(templates) { postEntry ->
+                        Column (
                             modifier = Modifier.padding(10.dp),
                             verticalArrangement = Arrangement.spacedBy(5.dp)
-                        ) {
+                        ){
                             Image(
-                                bitmap = graphTemplate.image?.asImageBitmap()
-                                    ?: TODO("Probably should include some kind of fallback"),
+                                bitmap = postEntry.detailImage.asImageBitmap(),
                                 contentDescription = "",
                                 modifier = Modifier.fillMaxWidth()
                             )
@@ -58,11 +54,11 @@ fun ProjectTemplateDialog(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
-                                Text(text = graphTemplate.title)
+                                Text(text = postEntry.title)
                                 Icon(
                                     imageVector = Icons.Default.Delete,
                                     contentDescription = "",
-                                    modifier = Modifier.clickable { onIconClick(index) }
+                                    modifier = Modifier.clickable { onIconClick(postEntry.id) }
                                 )
                             }
                         }

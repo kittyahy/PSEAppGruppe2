@@ -26,6 +26,7 @@ import com.pseandroid2.dailydata.remoteDataSource.userManager.SignInTypes
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Post
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.PostEntry
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.PostPreview
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ProjectTemplate
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.runBlocking
@@ -40,10 +41,13 @@ class ServerHandler(private val appDataBase: AppDataBase, private val api: Remot
     }
 
     fun getPost(postId: Int): Post {
-
         return Post(postId, api.getPostDetail(postId))
     }
 
+
+    fun getProjectTemplateById(id : Int) : ProjectTemplate {
+        TODO("getProjectTemplateById")
+    }
 
     /**
      * If false, it would be imprudent to use the corresponding "manipulation" fun.

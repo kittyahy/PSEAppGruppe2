@@ -18,7 +18,7 @@
 
 */
 
-package com.pseandroid2.dailydata.util.ui
+package com.pseandroid2.dailydata.ui.navigation
 
 object Routes {
 

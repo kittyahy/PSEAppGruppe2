@@ -33,7 +33,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.runBlocking
 import com.pseandroid2.dailydata.model.graph.Graph as ModelGraph
-
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import com.google.gson.Gson
@@ -42,7 +41,6 @@ import com.pseandroid2.dailydata.model.graph.LineChart.Companion.DOT_COLOR_KEY
 import com.pseandroid2.dailydata.model.graph.LineChart.Companion.LINE_STYLE_KEY
 import com.pseandroid2.dailydata.model.graph.LineChart.Companion.LINE_STYLE_NONE
 import com.pseandroid2.dailydata.model.graph.LineChart.Companion.LINE_STYLE_SOLID
-import com.pseandroid2.dailydata.model.table.ArrayListLayout
 import com.pseandroid2.dailydata.model.table.TableLayout
 /**
  * Graph class that handles its specific interaction with ViewModel.
@@ -52,11 +50,11 @@ abstract class Graph : Identifiable, Convertible<ModelGraph<*, *>> {
         val availableGraphs: MutableList<String> = ArrayList<String>()
 
 
-        fun createFromType(graph: String): Graph {
+        fun createFromType(graph: String): com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph {
             TODO("createFromType")
         }
 
-        fun createFromTemplate(graph: GraphTemplate): Graph {
+        fun createFromTemplate(graph: GraphTemplate): com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph {
             TODO("createFromTemplate")
         }
 
@@ -64,7 +62,7 @@ abstract class Graph : Identifiable, Convertible<ModelGraph<*, *>> {
 
 
     abstract override val id: Int
-    //abstract val image: Bitmap?
+    abstract val image: Bitmap?
     abstract val typeName: String
     abstract var appDataBase: AppDataBase
 
@@ -131,7 +129,7 @@ fun ModelGraph<*, *>.toViewGraph(layout: TableLayout): Graph {
             }
             LineChart(
                 this.id,
-                //this.getImage()!!, //TODO
+                this.getImage()!!, //TODO
                 DotSize.MEDIUM, //TODO
                 dotColor,
                 lineStyle,

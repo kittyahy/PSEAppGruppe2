@@ -35,13 +35,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
-import com.pseandroid2.dailydata.util.ui.Wallpapers
 import com.pseandroid2.dailydata.ui.composables.EnumDropDownMenu
-import java.lang.NumberFormatException
+import com.pseandroid2.dailydata.util.ui.Wallpapers
 import java.time.LocalTime
 import java.util.Calendar
 
@@ -49,6 +49,7 @@ import java.util.Calendar
 fun AppDialog(
     isOpen: Boolean,
     onDismissRequest: () -> Unit,
+    padding : Dp = 16.dp,
     Content : @Composable () -> Unit
 ) {
     if(isOpen) {
@@ -59,7 +60,7 @@ fun AppDialog(
                 shape = MaterialTheme.shapes.medium,
                 elevation = 8.dp
             ) {
-                Surface(modifier = Modifier.padding(16.dp)) {
+                Surface(modifier = Modifier.padding(padding)) {
                     Content()
                 }
             }
@@ -259,11 +260,12 @@ fun NotificationDialog(
         var message by remember { mutableStateOf("") }
         var messageError by remember { mutableStateOf(false) }
 
+        val currentTime = LocalTime.now()
         val context = LocalContext.current
         val calendar = Calendar.getInstance()
         val hour = calendar[Calendar.HOUR_OF_DAY]
         val minute = calendar[Calendar.MINUTE]
-        var time by remember { mutableStateOf(LocalTime.now()) }
+        var time by remember { mutableStateOf(LocalTime.of(currentTime.hour, currentTime.minute)) }
         val timePickerDialog = TimePickerDialog( context,
             {_, hour : Int, minute: Int ->
                 time = LocalTime.of(hour, minute)
@@ -315,11 +317,12 @@ fun GraphDialog(
     onDismissRequest: () -> Unit,
     onClick: (String) -> Unit
 ) {
-    AppDialog(isOpen = isOpen, onDismissRequest = onDismissRequest) {
+    AppDialog(isOpen = isOpen, onDismissRequest = onDismissRequest, padding = 0.dp) {
         Column(modifier = Modifier.width(200.dp)) {
             Graph.availableGraphs.forEachIndexed { index, graph ->
                 Box(
                     modifier = Modifier
+                        .padding(8.dp)
                         .fillMaxWidth()
                         .height(32.dp)
                         .clickable { onClick(graph) },

@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Button
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Column
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Member
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Row
@@ -17,7 +18,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.time.LocalTime
 import javax.inject.Inject
 
 @InternalCoroutinesApi
@@ -69,6 +72,7 @@ class ProjectDataInputScreenViewModel @Inject constructor(
                         initialProject = project
                     }
                 }
+
             }
             is ProjectDataInputScreenEvent.OnDescriptionClick -> {
                 isDescriptionUnfolded = !isDescriptionUnfolded
@@ -76,14 +80,22 @@ class ProjectDataInputScreenViewModel @Inject constructor(
             is ProjectDataInputScreenEvent.OnButtonClickInc -> {
                 val button = buttons.find { it.id == event.id }!!
                 viewModelScope.launch {
-                    button.increaseValue()
+                    if (button.increaseValueIsPossible().first()) {
+                        button.increaseValue()
+                    } else {
+                        sendUiEvent(UiEvent.ShowToast("Could not increase value"))
+                    }
                 }
 
             }
             is ProjectDataInputScreenEvent.OnButtonClickDec -> {
                 val button = buttons.find { it.id == event.id }!!
                 viewModelScope.launch {
-                    button.decreaseValue()
+                    if (button.decreaseValueIsPossible().first()) {
+                        button.decreaseValue()
+                    }else {
+                        sendUiEvent(UiEvent.ShowToast("Could not decrease value"))
+                    }
                 }
             }
             is ProjectDataInputScreenEvent.OnButtonClickAdd -> {
@@ -92,7 +104,11 @@ class ProjectDataInputScreenViewModel @Inject constructor(
                 mutable[columns.indexOfFirst { it.id == event.id }] = button.value.toString()
                 columnValues = mutable.toList()
                 viewModelScope.launch {
-                    button.setValue(0)
+                    if (button.setValueIsPossible().first()) {
+                        button.setValue(0)
+                    }else {
+                        sendUiEvent(UiEvent.ShowToast("Could not reset button value"))
+                    }
                 }
             }
             is ProjectDataInputScreenEvent.OnColumnChange -> {
@@ -108,7 +124,21 @@ class ProjectDataInputScreenViewModel @Inject constructor(
                     }
                 }
                 viewModelScope.launch {
-                    initialProject.addRow(Row(id = 0, elements = columnValues))
+                    if (initialProject.addRowIsPossible().first()) {
+                        initialProject.addRow(Row(id = 0, elements = columnValues))
+                        val mutable = columnValues.toMutableList()
+                        val currentTime = LocalTime.now()
+                        for (index in mutable.indices) {
+                            if(columns[index].dataType != DataType.TIME) {
+                                mutable[index] = columns[index].dataType.initialValue
+                            } else {
+                                mutable[index] = LocalTime.of(currentTime.hour, currentTime.minute).toString()
+                            }
+                        }
+                        columnValues = mutable.toList()
+                    }else {
+                        sendUiEvent(UiEvent.ShowToast("Could not add row"))
+                    }
                 }
             }
             is ProjectDataInputScreenEvent.OnRowDialogShow -> {
@@ -122,10 +152,16 @@ class ProjectDataInputScreenViewModel @Inject constructor(
             }
             is ProjectDataInputScreenEvent.OnRowModifyClick -> {
                 columnValues = table[rowEdit].elements
+                isRowDialogOpen = false
             }
             is ProjectDataInputScreenEvent.OnRowDeleteClick -> {
                 viewModelScope.launch {
-                    initialProject.deleteRow(table[rowEdit])
+                    if (initialProject.deleteRowIsPossible(table[rowEdit]).first()) {
+                        initialProject.deleteRow(table[rowEdit])
+                        isRowDialogOpen = false
+                    } else {
+                        sendUiEvent(UiEvent.ShowToast("Could not delete row"))
+                    }
                 }
             }
         }

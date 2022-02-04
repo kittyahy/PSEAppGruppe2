@@ -34,7 +34,7 @@ class JoinProjectLinkManager {
         if (encodedLong == "") {
             return ""
         }
-        return "https://https://www.dailydata.com/?projectid=" + encodeLong(postID)
+        return "https://https://www.dailydata.com/?projectid="+encodeLong(postID)
     }
 
 
@@ -67,10 +67,7 @@ class JoinProjectLinkManager {
         } catch (ex: Exception) {
             when (ex) {
                 is NoSuchElementException, is ArrayIndexOutOfBoundsException -> {
-                    Log.e(
-                        "JoinProjectLinkError",
-                        "There is no project ID that belongs to the input"
-                    )
+                    Log.e("JoinProjectLinkError","There is no project ID that belongs to the input")
                 }
                 else -> throw ex
             }

@@ -35,7 +35,7 @@ class ProjectDataScreenViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    var tabs by mutableStateOf( listOf<DataTabs>())
+    var tabs = DataTabs.values().toList()
         private set
     var tab by mutableStateOf(1)
         private set
@@ -49,7 +49,6 @@ class ProjectDataScreenViewModel @Inject constructor(
                 projectId = id
             }
         }
-        tabs = DataTabs.values().toList()
     }
 
     fun onEvent(event : ProjectDataScreenEvent) {
