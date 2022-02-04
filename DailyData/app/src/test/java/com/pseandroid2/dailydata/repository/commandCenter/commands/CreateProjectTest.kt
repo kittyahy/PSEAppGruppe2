@@ -59,7 +59,7 @@ class CreateProjectTest {
             appDataBase.projectDataDAO()
         } returns projectDataDAO
         val remoteDataSourceAPI = mockk<RemoteDataSourceAPI>()
-        every { remoteDataSourceAPI.addProject() } returns testOnlineID
+        every { remoteDataSourceAPI.createNewOnlineProject("") } returns testOnlineID // TODO add project details
         val publishQueue : PublishQueue= mockk()
         coEvery { publishQueue.add(any<ProjectCommand>()) } returns Unit
         val task = async {

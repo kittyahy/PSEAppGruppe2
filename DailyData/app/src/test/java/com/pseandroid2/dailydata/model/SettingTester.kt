@@ -31,7 +31,7 @@ class SettingTester {
     @Test
     fun checkMapSettings() {
         val map =
-            mutableMapOf<String, String>(Pair("Test1", "3"), Pair("Test2", "5"), Pair("Test3", "0"))
+            mutableMapOf(Pair("Test1", "3"), Pair("Test2", "5"), Pair("Test3", "0"))
         val settings = MapSettings(map)
 
         Assert.assertEquals("3", settings["Test1"])

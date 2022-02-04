@@ -37,6 +37,7 @@ abstract class NotificationsDAO {
     private val existingIds: MutableMap<Int, out SortedSet<Int>> = mutableMapOf<Int, TreeSet<Int>>()
 
     fun getNotifications(projectId: Int): Flow<List<Notification>> {
+        @Suppress("Deprecation")
         return getNotificationEntities(projectId).map {
             val list: MutableList<Notification> = ArrayList()
             for (entity: NotificationEntity in it) {
@@ -48,6 +49,7 @@ abstract class NotificationsDAO {
 
     suspend fun insertNotification(projectId: Int, notification: Notification): Int {
         val id = getNextId(projectId)
+        @Suppress("Deprecation")
         insertNotificationEntity(
             NotificationEntity(
                 projectId,
@@ -69,15 +71,19 @@ abstract class NotificationsDAO {
     abstract suspend fun setNotificationMessage(projectId: Int, id: Int, message: String)
 
     /*========================SHOULD ONLY BE CALLED FROM INSIDE THE MODEL=========================*/
+    @Deprecated("Should only be used from inside the model. Use getNotifications instead.")
     @Query("SELECT * FROM notification WHERE projectId = :projectId")
     abstract fun getNotificationEntities(projectId: Int): Flow<List<NotificationEntity>>
 
+    @Deprecated("Should only be used from inside the model. Use insertNotification instead.")
     @Insert
     abstract suspend fun insertNotificationEntity(notificationEntity: NotificationEntity)
 
+    @Deprecated("Should only be used from inside the model. Use deleteNotifications instead.")
     @Delete
     abstract suspend fun deleteNotificationEntity(notificationEntity: NotificationEntity)
 
+    @Deprecated("Should only be used from inside the model.")
     @Query("DELETE FROM notification WHERE projectId = :projectId")
     abstract suspend fun deleteAllNotifications(projectId: Int)
 

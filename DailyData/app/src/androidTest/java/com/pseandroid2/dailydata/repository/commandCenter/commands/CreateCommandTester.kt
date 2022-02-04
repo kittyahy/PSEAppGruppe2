@@ -54,7 +54,7 @@ class CreateCommandTester {
         val context = ApplicationProvider.getApplicationContext<Context>()
         db = Room.inMemoryDatabaseBuilder(context, AppDataBase::class.java).build()
         remoteDataSourceAPI = mockk<RemoteDataSourceAPI>()
-        every { remoteDataSourceAPI.addProject() } returns testOnlineID
+        every { remoteDataSourceAPI.createNewOnlineProject("") } returns testOnlineID
     }/*
     @InternalCoroutinesApi
     @ExperimentalCoroutinesApi

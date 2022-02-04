@@ -25,6 +25,8 @@ class DateTimeLineChart(
         return floatMaps
     }
 
+    override fun getType() = GraphType.TIME_LINE_CHART
+
     private fun findMin(dates: Set<LocalDateTime>): LocalDateTime {
         var min = LocalDateTime.MAX
         for (date in dates) {

@@ -20,6 +20,10 @@
 
 package com.pseandroid2.dailydata.model.transformation
 
+import com.google.gson.Gson
+import com.pseandroid2.dailydata.model.transformation.Sum.Companion.TYPE_FLOAT
+import com.pseandroid2.dailydata.model.transformation.Sum.Companion.TYPE_INT
+
 abstract class TransformationFunction<O : Any> protected constructor(
     protected open var functionString: String
 ) {
@@ -27,9 +31,11 @@ abstract class TransformationFunction<O : Any> protected constructor(
     companion object {
         const val SUM_ID = "SUM"
         const val IDENTITY_ID = "ID"
+        const val CHART_TYPE_LINE = "LINECHART"
+        const val CHART_TYPE_PIE = "PIECHART"
 
         fun parse(functionString: String): TransformationFunction<out Any> {
-            var tableType = functionString.substringBefore("::")
+            var tableType = functionString.substringBefore("::", "")
             var function: String = functionString.substringAfter("::").substringBefore('|')
             var args: String = functionString.substringAfter("::").substringAfter('|', "")
 
@@ -39,18 +45,13 @@ abstract class TransformationFunction<O : Any> protected constructor(
                 function = function.substringBefore('|')
             }
 
-            val transform: TransformationFunction<out Any> = when (function) {
+
+            var transform: TransformationFunction<out Any> = when (function.substringBefore("%")) {
                 SUM_ID -> {
-                    val split = args.split(";")
-                    val argCols = split[0].substringAfter('=', "")
-                    val colStrings = argCols.substring(1, argCols.length - 1).split(", ")
-                    val cols = mutableListOf<Int>()
-                    for (string in colStrings) {
-                        cols.add(string.toInt())
-                    }
-                    when (split[1].substringAfter('=', "")) {
-                        Sum.TYPE_INT -> IntSum(cols)
-                        else -> throw IllegalArgumentException("No such Sum function: ${split[1]}")
+                    when (args.substringAfter('=', "")) {
+                        TYPE_INT -> IntSum()
+                        TYPE_FLOAT -> FloatSum()
+                        else -> throw IllegalArgumentException("No such Sum function: ${args}")
                     }
                 }
                 IDENTITY_ID -> {
@@ -63,6 +64,31 @@ abstract class TransformationFunction<O : Any> protected constructor(
                     }
                 }
                 else -> throw IllegalArgumentException("No such function: $function")
+            }
+            if (tableType != "") {
+                @Suppress("Unchecked_Cast")
+                transform = when (tableType) {
+                    CHART_TYPE_PIE -> {
+                        if (transform is Sum) {
+                            PieChartTransformation(transform)
+                        } else {
+                            transform
+                        }
+                    }
+                    CHART_TYPE_LINE -> {
+                        when (transform) {
+                            is FloatIdentity -> LineChartTransformation(
+                                transform,
+                                (Gson().fromJson(
+                                    function.substringAfter("%"),
+                                    List::class.java
+                                ) ?: listOf<Float>()) as List<Float>
+                            )
+                            else -> throw IllegalArgumentException("Could not create LineChartTransformation from ${transform.javaClass.canonicalName}")
+                        }
+                    }
+                    else -> transform
+                }
             }
             return transform
         }
