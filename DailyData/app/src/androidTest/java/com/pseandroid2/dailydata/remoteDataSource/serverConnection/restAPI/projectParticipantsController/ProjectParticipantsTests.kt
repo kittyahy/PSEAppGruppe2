@@ -12,7 +12,7 @@ import retrofit2.http.GET
 
 /*
 class ProjectParticipantsTests {
-
+    /*
     private val restAPI: RESTAPI = RESTAPI()
     private val serverManager: ServerManager = ServerManager(RESTAPI())
     private val fm = FirebaseManager(null)
@@ -179,4 +179,9 @@ class ProjectParticipantsTests {
 
         Assert.assertFalse(restAPI.removeUser(authToken2, projectID, authToken3))
     }
+<<<<<<< Updated upstream
 }*/
+=======
+    */
+}
+>>>>>>> Stashed changes

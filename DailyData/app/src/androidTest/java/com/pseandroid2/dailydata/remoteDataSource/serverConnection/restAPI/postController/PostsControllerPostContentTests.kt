@@ -13,8 +13,9 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
-/*
+
 class PostsControllerPostContentTests {
+    /*
     private val restAPI: RESTAPI = RESTAPI()
     private val serverManager = ServerManager(restAPI)
     private lateinit var authToken: String
@@ -51,11 +52,9 @@ class PostsControllerPostContentTests {
         setTeardown(restAPI, postID, authToken)
     }
 
-    */
-/**
+    /**
      * Converts Ints into an byte array
-     *//*
-
+    */
     private fun byteArrayOfInts(vararg ints: Int) =
         ByteArray(ints.size) { pos -> ints[pos].toByte() }
 
@@ -101,9 +100,9 @@ class PostsControllerPostContentTests {
         val graphTemplate: String = restAPI.getGraphTemplate(fromPost = postID, 1, authToken)
         Assert.assertEquals("graph template", graphTemplate)
     }
-
     */
-/* TODO: In the quality phase
+
+    /* TODO: In the quality phase
     @Test
     fun getFromWrongPostID() {
         Assert.assertEquals(
@@ -113,6 +112,5 @@ class PostsControllerPostContentTests {
         Assert.assertEquals("", restAPI.getProjectTemplate(-1, authToken))
         Assert.assertEquals("", restAPI.getGraphTemplate(-1, 1, authToken))
     }
-    *//*
-
-}*/
+    */
+}
