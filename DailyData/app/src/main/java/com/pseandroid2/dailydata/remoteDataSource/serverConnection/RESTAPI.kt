@@ -32,7 +32,6 @@ import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.PostPreview
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.TemplateDetail
 import retrofit2.Call
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
@@ -68,13 +67,20 @@ class RESTAPI {
      * @return Boolean: Returns true, if the server could be successfully reached. Otherwise return false
      */
     suspend fun greet(): Boolean {
-        val greetingCall: Call<String> = server.greet()
+        val call: Call<String> = server.greet()
 
-        val response: Response<String> = greetingCall.execute()
-        val body: String = response.body() ?: ""
-
-        if (body == "Hello") {
-            return true
+        try {
+            @Suppress("BlockingMethodInNonBlockingContext") // It's planned that the thread which calls this method will be blocked
+            val response = call.execute().body() ?: ""
+            if (response == "Hello") {
+                return true
+            }
+        } catch (e: java.io.IOException) {
+            //TODO
+            Log.e("RDS: ", "A problem occurred when talking to the server")
+        } catch (e2: RuntimeException) {
+            //TODO
+            Log.e("RDS: ", "Runtime exception when talking to the server")
         }
         return false
     }
@@ -89,7 +95,17 @@ class RESTAPI {
     suspend fun getAllPostsPreview(authToken: String): Collection<PostPreview> {
         val call: Call<List<PostPreview>> = server.getAllPostPreview(authToken)
 
-        return call.execute().body() ?: emptyList()
+        try {
+            @Suppress("BlockingMethodInNonBlockingContext") // It's planned that the thread which calls this method will be blocked
+            return call.execute().body() ?: emptyList()
+        } catch (e: java.io.IOException) {
+            //TODO
+            Log.e("RDS: ", "A problem occurred when talking to the server")
+        } catch (e2: RuntimeException) {
+            //TODO
+            Log.e("RDS: ", "Runtime exception when talking to the server")
+        }
+        return emptyList()
     }
 
     /**
@@ -102,7 +118,17 @@ class RESTAPI {
     suspend fun getPostDetail(fromPost: Int, authToken: String): Collection<TemplateDetail> {
         val call: Call<List<TemplateDetail>> = server.getPostDetail(authToken, fromPost)
 
-        return call.execute().body() ?: emptyList()
+        try {
+            @Suppress("BlockingMethodInNonBlockingContext") // It's planned that the thread which calls this method will be blocked
+            return call.execute().body() ?: emptyList()
+        } catch (e: java.io.IOException) {
+            //TODO
+            Log.e("RDS: ", "A problem occurred when talking to the server")
+        } catch (e2: RuntimeException) {
+            //TODO
+            Log.e("RDS: ", "Runtime exception when talking to the server")
+        }
+        return emptyList()
     }
 
     /**
@@ -115,7 +141,17 @@ class RESTAPI {
     suspend fun getProjectTemplate(fromPost: Int, authToken: String): String {
         val call: Call<String> = server.getProjectTemplate(authToken, fromPost)
 
-        return call.execute().body() ?: ""
+        try {
+            @Suppress("BlockingMethodInNonBlockingContext") // It's planned that the thread which calls this method will be blocked
+            return call.execute().body() ?: ""
+        } catch (e: java.io.IOException) {
+            //TODO
+            Log.e("RDS: ", "A problem occurred when talking to the server")
+        } catch (e2: RuntimeException) {
+            //TODO
+            Log.e("RDS: ", "Runtime exception when talking to the server")
+        }
+        return ""
     }
 
     /**
@@ -129,7 +165,18 @@ class RESTAPI {
     suspend fun getGraphTemplate(fromPost: Int, templateNumber: Int, authToken: String): String {
         val call: Call<String> = server.getGraphTemplate(authToken, fromPost, templateNumber)
 
-        return call.execute().body() ?: ""
+        try {
+            @Suppress("BlockingMethodInNonBlockingContext") // It's planned that the thread which calls this method will be blocked
+            return call.execute().body() ?: ""
+        } catch (e: java.io.IOException) {
+            //TODO
+            Log.e("RDS: ", "A problem occurred when talking to the server")
+        } catch (e2: RuntimeException) {
+            //TODO
+            Log.e("RDS: ", "Runtime exception when talking to the server")
+        }
+        return ""
+
     }
 
     // Wish-criteria
@@ -151,7 +198,17 @@ class RESTAPI {
         val params = AddPostParameter(postPreview, projectTemplate, graphTemplates)
         val call: Call<Int> = server.addPost(authToken, params)
 
-        return call.execute().body() ?: -1
+        try {
+            @Suppress("BlockingMethodInNonBlockingContext") // It's planned that the thread which calls this method will be blocked
+            return call.execute().body() ?: -1
+        } catch (e: java.io.IOException) {
+            //TODO
+            Log.e("RDS: ", "A problem occurred when talking to the server")
+        } catch (e2: RuntimeException) {
+            //TODO
+            Log.e("RDS: ", "Runtime exception when talking to the server")
+        }
+        return -1
     }
 
     // Wish-criteria
@@ -165,7 +222,17 @@ class RESTAPI {
     suspend fun removePost(postID: Int, authToken: String): Boolean {
         val call: Call<Boolean> = server.removePost(authToken, postID)
 
-        return call.execute().body() ?: false
+        try {
+            @Suppress("BlockingMethodInNonBlockingContext") // It's planned that the thread which calls this method will be blocked
+            return call.execute().body() ?: false
+        } catch (e: java.io.IOException) {
+            //TODO
+            Log.e("RDS: ", "A problem occurred when talking to the server")
+        } catch (e2: RuntimeException) {
+            //TODO
+            Log.e("RDS: ", "Runtime exception when talking to the server")
+        }
+        return false
     }
 
 
@@ -180,7 +247,17 @@ class RESTAPI {
     suspend fun addUser(projectID: Long, authToken: String): String {
         val call: Call<String> = server.addUser(authToken, projectID)
 
-        return call.execute().body() ?: ""
+        try {
+            @Suppress("BlockingMethodInNonBlockingContext") // It's planned that the thread which calls this method will be blocked
+            return call.execute().body() ?: ""
+        } catch (e: java.io.IOException) {
+            //TODO
+            Log.e("RDS: ", "A problem occurred when talking to the server")
+        } catch (e2: RuntimeException) {
+            //TODO
+            Log.e("RDS: ", "Runtime exception when talking to the server")
+        }
+        return ""
     }
 
     /**
@@ -195,7 +272,17 @@ class RESTAPI {
         val call: Call<Boolean> =
             server.removeUser(authToken, projectID, userToRemove = userToRemove)
 
-        return call.execute().body() ?: false
+        try {
+            @Suppress("BlockingMethodInNonBlockingContext") // It's planned that the thread which calls this method will be blocked
+            return call.execute().body() ?: false
+        } catch (e: java.io.IOException) {
+            //TODO
+            Log.e("RDS: ", "A problem occurred when talking to the server")
+        } catch (e2: RuntimeException) {
+            //TODO
+            Log.e("RDS: ", "Runtime exception when talking to the server")
+        }
+        return false
     }
 
     /**
@@ -208,7 +295,17 @@ class RESTAPI {
     suspend fun addProject(authToken: String, projectDetails: String): Long {
         val call: Call<Long> = server.addProject(authToken, projectDetails)
 
-        return call.execute().body() ?: -1
+        try {
+            @Suppress("BlockingMethodInNonBlockingContext") // It's planned that the thread which calls this method will be blocked
+            return call.execute().body() ?: -1
+        } catch (e: java.io.IOException) {
+            //TODO
+            Log.e("RDS: ", "A problem occurred when talking to the server")
+        } catch (e2: RuntimeException) {
+            //TODO
+            Log.e("RDS: ", "Runtime exception when talking to the server")
+        }
+        return -1
     }
 
     /**
@@ -221,7 +318,17 @@ class RESTAPI {
     suspend fun getProjectParticipants(authToken: String, projectID: Long): Collection<String> {
         val call: Call<List<String>> = server.getParticipants(authToken, projectID)
 
-        return call.execute().body() ?: listOf()
+        try {
+            @Suppress("BlockingMethodInNonBlockingContext") // It's planned that the thread which calls this method will be blocked
+            return call.execute().body() ?: listOf()
+        } catch (e: java.io.IOException) {
+            //TODO
+            Log.e("RDS: ", "A problem occurred when talking to the server")
+        } catch (e2: RuntimeException) {
+            //TODO
+            Log.e("RDS: ", "Runtime exception when talking to the server")
+        }
+        return listOf()
     }
 
     /**
@@ -234,7 +341,17 @@ class RESTAPI {
     suspend fun getProjectAdmin(authToken: String, projectID: Long): String {
         val call: Call<String> = server.getAdmin(authToken, projectID)
 
-        return call.execute().body() ?: ""
+        try {
+            @Suppress("BlockingMethodInNonBlockingContext") // It's planned that the thread which calls this method will be blocked
+            return call.execute().body() ?: ""
+        } catch (e: java.io.IOException) {
+            //TODO
+            Log.e("RDS: ", "A problem occurred when talking to the server")
+        } catch (e2: RuntimeException) {
+            //TODO
+            Log.e("RDS: ", "Runtime exception when talking to the server")
+        }
+        return ""
     }
 
     //------------------------------------- Delta Controller -------------------------------------
@@ -259,7 +376,17 @@ class RESTAPI {
     suspend fun getDelta(projectID: Long, authToken: String): Collection<Delta> {
         val call: Call<List<Delta>> = server.getDelta(token = authToken, projectID)
 
-        return call.execute().body() ?: return mutableListOf()
+        try {
+            @Suppress("BlockingMethodInNonBlockingContext") // It's planned that the thread which calls this method will be blocked
+            return call.execute().body() ?: listOf()
+        } catch (e: java.io.IOException) {
+            //TODO
+            Log.e("RDS: ", "A problem occurred when talking to the server")
+        } catch (e2: RuntimeException) {
+            //TODO
+            Log.e("RDS: ", "Runtime exception when talking to the server")
+        }
+        return listOf()
     }
 
     /**
@@ -283,12 +410,24 @@ class RESTAPI {
         authToken: String
     ): Boolean {
         val params =
-            ProvideOldDataParameter(command = projectCommand, forUser =  forUser, initialAdded = initialAdded.toString(),
-                initialAddedBy = initialAddedBy, wasAdmin = wasAdmin)
+            ProvideOldDataParameter(
+                command = projectCommand, forUser = forUser, initialAdded = initialAdded.toString(),
+                initialAddedBy = initialAddedBy, wasAdmin = wasAdmin
+            )
 
         val call: Call<Boolean> = server.provideOldData(authToken, projectID, params)
 
-        return call.execute().body() ?: false
+        try {
+            @Suppress("BlockingMethodInNonBlockingContext") // It's planned that the thread which calls this method will be blocked
+            return call.execute().body() ?: false
+        } catch (e: java.io.IOException) {
+            //TODO
+            Log.e("RDS: ", "A problem occurred when talking to the server")
+        } catch (e2: RuntimeException) {
+            //TODO
+            Log.e("RDS: ", "Runtime exception when talking to the server")
+        }
+        return false
     }
 
     /**
@@ -300,7 +439,17 @@ class RESTAPI {
     suspend fun getRemoveTime(authToken: String): Long {
         val call: Call<Long> = server.getRemoveTime(authToken)
 
-        return call.execute().body() ?: -1
+        try {
+            @Suppress("BlockingMethodInNonBlockingContext") // It's planned that the thread which calls this method will be blocked
+            return call.execute().body() ?: -1
+        } catch (e: java.io.IOException) {
+            //TODO
+            Log.e("RDS: ", "A problem occurred when talking to the server")
+        } catch (e2: RuntimeException) {
+            //TODO
+            Log.e("RDS: ", "Runtime exception when talking to the server")
+        }
+        return -1
     }
 
     //------------------------------------- FetchRequestController -------------------------------------
@@ -316,7 +465,17 @@ class RESTAPI {
         val call: Call<Boolean> =
             server.demandOldData(token = authToken, projectID, requestInfo = requestInfo)
 
-        return call.execute().body() ?: false
+        try {
+            @Suppress("BlockingMethodInNonBlockingContext") // It's planned that the thread which calls this method will be blocked
+            return call.execute().body() ?: false
+        } catch (e: java.io.IOException) {
+            //TODO
+            Log.e("RDS: ", "A problem occurred when talking to the server")
+        } catch (e2: RuntimeException) {
+            //TODO
+            Log.e("RDS: ", "Runtime exception when talking to the server")
+        }
+        return false
     }
 
     /**
@@ -328,7 +487,17 @@ class RESTAPI {
     suspend fun getFetchRequests(projectID: Long, authToken: String): Collection<FetchRequest> {
         val call: Call<Collection<FetchRequest>> = server.getFetchRequest(authToken, projectID)
 
-        return call.execute().body() ?: emptyList()
+        try {
+            @Suppress("BlockingMethodInNonBlockingContext") // It's planned that the thread which calls this method will be blocked
+            return call.execute().body() ?: emptyList()
+        } catch (e: java.io.IOException) {
+            //TODO
+            Log.e("RDS: ", "A problem occurred when talking to the server")
+        } catch (e2: RuntimeException) {
+            //TODO
+            Log.e("RDS: ", "Runtime exception when talking to the server")
+        }
+        return emptyList()
     }
 
     /**
@@ -341,6 +510,16 @@ class RESTAPI {
     suspend fun getPostsFromUser(authToken: String): List<Int> {
         val call: Call<List<Int>> = server.getPostsFromUser(authToken)
 
-        return call.execute().body() ?: emptyList()
+        try {
+            @Suppress("BlockingMethodInNonBlockingContext") // It's planned that the thread which calls this method will be blocked
+            return call.execute().body() ?: emptyList()
+        } catch (e: java.io.IOException) {
+            //TODO
+            Log.e("RDS: ", "A problem occurred when talking to the server")
+        } catch (e2: RuntimeException) {
+            //TODO
+            Log.e("RDS: ", "Runtime exception when talking to the server")
+        }
+        return emptyList()
     }
 }

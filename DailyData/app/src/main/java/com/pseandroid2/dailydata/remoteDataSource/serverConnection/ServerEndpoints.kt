@@ -38,7 +38,6 @@ import retrofit2.http.Query
  * Declares all possible REST server calls
  */
 interface ServerEndpoints {
-    // TODO: Java docs für Methoden im Interface
 
     // Greeting Controller -----------------------------------------------------------------------
     /**
