@@ -44,7 +44,7 @@ import java.time.LocalDateTime
 class RESTAPI {
     /*private var baseUrl: String =
         "http://261ee33a-ba27-4828-b5df-f5f8718defe8.ka.bw-cloud-instance.org:8080" // The URL from our server */
-    private var baseUrl: String = ""
+    private var baseUrl: String = "http://www.google.com" //Hotfix(Server URL)
 
     private val gson: Gson = GsonBuilder()
         .setLenient()
