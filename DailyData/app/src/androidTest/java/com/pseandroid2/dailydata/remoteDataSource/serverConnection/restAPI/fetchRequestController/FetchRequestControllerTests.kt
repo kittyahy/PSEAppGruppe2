@@ -8,8 +8,9 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
-/*
+
 class FetchRequestControllerTests {
+    /*
     private var restAPI: RESTAPI = RESTAPI()
     private lateinit var authToken: String
     private lateinit var authToken2: String
@@ -117,17 +118,16 @@ class FetchRequestControllerTests {
             requestsToSend.size
         ) // The send fetch requests from user1 were received by user2
     }
-
     */
-/* TODO: Implement this in the quality control phase
+
+    /* TODO: Implement this in the quality control phase
     @Test
     fun getFetchRequestsWhenNoProjectMember() {
         Assert.assertTrue(restAPI.demandOldData(projectID, "request information", authToken))
         //User 3 is no project member
         Assert.assertEquals(0, restAPI.getFetchRequests(projectID, authToken3).size)
     }
-    *//*
-
 
     // TODO: Test Ideas for quality control: 1. getFetchrequests from the same account who send them
-}*/
+    */
+}
