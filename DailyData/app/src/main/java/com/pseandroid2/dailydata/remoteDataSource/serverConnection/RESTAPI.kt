@@ -43,9 +43,13 @@ import java.time.LocalDateTime
  */
 class RESTAPI {
 
-    /*private var baseUrl: String =
-        "http://261ee33a-ba27-4828-b5df-f5f8718defe8.ka.bw-cloud-instance.org:8080" // The URL from our server */
-    private var baseUrl: String = "http://www.google.com" //Hotfix(Server URL)
+    /* Das ist der echte Server: Finger Weg
+     private var baseUrl: String =
+       "http://261ee33a-ba27-4828-b5df-f5f8718defe8.ka.bw-cloud-instance.org:8080" // The URL from our server   */
+
+    // Das ist ein TestServer, have fun !! sehen sehr gleich aus die Links.
+    private var baseUrl: String =
+        "00495284-8fb3-4727-9bf9-10353bd82b99.ka.bw-cloud-instance.org:8080"
 
 
     private val gson: Gson = GsonBuilder()
@@ -285,8 +289,10 @@ class RESTAPI {
         authToken: String
     ): Boolean {
         val params =
-            ProvideOldDataParameter(command = projectCommand, forUser =  forUser, initialAdded = initialAdded.toString(),
-                initialAddedBy = initialAddedBy, wasAdmin = wasAdmin)
+            ProvideOldDataParameter(
+                command = projectCommand, forUser = forUser, initialAdded = initialAdded.toString(),
+                initialAddedBy = initialAddedBy, wasAdmin = wasAdmin
+            )
 
         val call: Call<Boolean> = server.provideOldData(authToken, projectID, params)
 
