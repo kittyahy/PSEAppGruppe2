@@ -163,13 +163,13 @@ class ProjectParticipantsTests {
     }
 
     */
-/* TODO: Implement this in quality control phase
+    /* TODO: Implement this in quality control phase
     @Test
     fun userIsNoProjectMember() {
         Assert.assertNotEquals(mutableListOf<List<String>>(), restAPI.getProjectParticipants(authToken, projectID))
         Assert.assertNotEquals("", restAPI.getProjectAdmin(authToken, projectID))
     }
-    *//*
+    */
 
 
     @Test
@@ -179,4 +179,4 @@ class ProjectParticipantsTests {
 
         Assert.assertFalse(restAPI.removeUser(authToken2, projectID, authToken3))
     }
-}*/*/
+}*/

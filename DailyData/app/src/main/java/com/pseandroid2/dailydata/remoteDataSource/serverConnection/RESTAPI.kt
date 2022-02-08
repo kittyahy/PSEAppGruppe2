@@ -20,7 +20,6 @@
 
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection
 
-import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.AddPostParameter
@@ -63,6 +62,8 @@ class RESTAPI(baseUrl: String = "http://www.google.com") {
      * Checks if it possible to connect to our server
      *
      * @return Boolean: Returns true, if the server could be successfully reached. Otherwise return false
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     suspend fun greet(): Boolean {
         try {
@@ -73,10 +74,7 @@ class RESTAPI(baseUrl: String = "http://www.google.com") {
                     return true
                 }
             }
-        } catch (e: java.io.IOException) {
-            //TODO
-            Log.e("RDS: ", "A problem occurred when talking to the server")
-        } catch (e2: RuntimeException) {
+        } catch (e: RuntimeException) {
             throw ServerNotReachableException()
         }
         return false
@@ -88,6 +86,8 @@ class RESTAPI(baseUrl: String = "http://www.google.com") {
      *
      * @param authToken: The authentication token
      * @return Collection<PostPreview>: The previews of the posts
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     suspend fun getAllPostsPreview(authToken: String): Collection<PostPreview> {
         try {
@@ -96,11 +96,7 @@ class RESTAPI(baseUrl: String = "http://www.google.com") {
             if (call.isSuccessful && call.body() != null) {
                 return call.body()!!
             }
-        }
-        catch (e: java.io.IOException) {
-            //TODO
-            Log.e("RDS: ", "A problem occurred when talking to the server")
-        } catch (e2: RuntimeException) {
+        } catch (e: RuntimeException) {
             throw ServerNotReachableException()
         }
         return emptyList()
@@ -112,6 +108,8 @@ class RESTAPI(baseUrl: String = "http://www.google.com") {
      * @param fromPost:     The id from the searched post
      * @param authToken:    The authentication token
      * @return Collection<TemplateDetail>: Returns the detailed post belonging to the post id
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     suspend fun getPostDetail(fromPost: Int, authToken: String): Collection<TemplateDetail> {
         try {
@@ -120,10 +118,7 @@ class RESTAPI(baseUrl: String = "http://www.google.com") {
             if (call.isSuccessful && call.body() != null) {
                 return call.body()!!
             }
-        } catch (e: java.io.IOException) {
-            //TODO
-            Log.e("RDS: ", "A problem occurred when talking to the server")
-        } catch (e2: RuntimeException) {
+        } catch (e: RuntimeException) {
             throw ServerNotReachableException()
         }
         return emptyList()
@@ -135,6 +130,8 @@ class RESTAPI(baseUrl: String = "http://www.google.com") {
      * @param fromPost:     The post from which the project template should be downloaded
      * @param authToken:    The authentication token
      * @return String - The requested project template as JSON
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     suspend fun getProjectTemplate(fromPost: Int, authToken: String): String {
         try {
@@ -142,10 +139,7 @@ class RESTAPI(baseUrl: String = "http://www.google.com") {
             if (call.isSuccessful && call.body() != null) {
                 return call.body()!!
             }
-        } catch (e: java.io.IOException) {
-            //TODO
-            Log.e("RDS: ", "A problem occurred when talking to the server")
-        } catch (e2: RuntimeException) {
+        } catch (e: RuntimeException) {
             throw ServerNotReachableException()
         }
         return ""
@@ -158,6 +152,8 @@ class RESTAPI(baseUrl: String = "http://www.google.com") {
      * @param templateNumber:   Which graph template should be downloaded from the post
      * @param authToken:        The authentication token
      * @return String - The requested graph template as JSON
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     suspend fun getGraphTemplate(fromPost: Int, templateNumber: Int, authToken: String): String {
         try {
@@ -165,10 +161,7 @@ class RESTAPI(baseUrl: String = "http://www.google.com") {
             if (call.isSuccessful && call.body() != null) {
                 return call.body()!!
             }
-        } catch (e: java.io.IOException) {
-            //TODO
-            Log.e("RDS: ", "A problem occurred when talking to the server")
-        } catch (e2: RuntimeException) {
+        } catch (e: RuntimeException) {
             throw ServerNotReachableException()
         }
         return ""
@@ -182,7 +175,9 @@ class RESTAPI(baseUrl: String = "http://www.google.com") {
      * @param projectTemplate:  The project template. The first element of the Pair is the template as a JSON, the second one is the detailView of the template
      * @param graphTemplates:   The graph templates. The first element of a Pair is the template as a JSON, the second one is the detailView of the template
      * @param authToken:        The authentication token
-     * @return Int: The PostID of the new post. -1 if the call didn't succeed, 0 if the user reached his limit of uploaded posts.
+     * @return Int: The PostID of the new post. -1 if the call didn't succeed, 0 if the user reached his limit of uploaded posts
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     suspend fun addPost(
         postPreview: PostPreviewWrapper,
@@ -197,10 +192,7 @@ class RESTAPI(baseUrl: String = "http://www.google.com") {
             if (call.isSuccessful && call.body() != null) {
                 return call.body()!!
             }
-        } catch (e: java.io.IOException) {
-            //TODO
-            Log.e("RDS: ", "A problem occurred when talking to the server")
-        } catch (e2: RuntimeException) {
+        } catch (e: RuntimeException) {
             throw ServerNotReachableException()
         }
         return -1
@@ -213,6 +205,8 @@ class RESTAPI(baseUrl: String = "http://www.google.com") {
      * @param postID:       The id of the post that should be removed from the server
      * @param authToken:    The authentication token
      * @return Boolean:     Did the server call succeed
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     suspend fun removePost(postID: Int, authToken: String): Boolean {
         try {
@@ -220,10 +214,7 @@ class RESTAPI(baseUrl: String = "http://www.google.com") {
             if (call.isSuccessful && call.body() != null) {
                 return call.body()!!
             }
-        } catch (e: java.io.IOException) {
-            //TODO
-            Log.e("RDS: ", "A problem occurred when talking to the server")
-        } catch (e2: RuntimeException) {
+        } catch (e: RuntimeException) {
             throw ServerNotReachableException()
         }
         return false
@@ -237,17 +228,16 @@ class RESTAPI(baseUrl: String = "http://www.google.com") {
      * @param projectID: The id of the project to which the user is to be added
      * @param authToken: The authentication token
      * @return String: Returns the project information as a JSON. (Returns "" on error)
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     suspend fun addUser(projectID: Long, authToken: String): String {
         try {
-            val call =  server.addUser(authToken, projectID)
+            val call = server.addUser(authToken, projectID)
             if (call.isSuccessful && call.body() != null) {
                 return call.body()!!
             }
-        } catch (e: java.io.IOException) {
-            //TODO
-            Log.e("RDS: ", "A problem occurred when talking to the server")
-        } catch (e2: RuntimeException) {
+        } catch (e: RuntimeException) {
             throw ServerNotReachableException()
         }
         return ""
@@ -260,6 +250,8 @@ class RESTAPI(baseUrl: String = "http://www.google.com") {
      * @param projectID:    The id of the project from which the user should be removed
      * @param authToken:    The authentication token
      * @return Boolean: Did the server call succeed
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     suspend fun removeUser(userToRemove: String, projectID: Long, authToken: String): Boolean {
         try {
@@ -267,10 +259,7 @@ class RESTAPI(baseUrl: String = "http://www.google.com") {
             if (call.isSuccessful && call.body() != null) {
                 return call.body()!!
             }
-        } catch (e: java.io.IOException) {
-            //TODO
-            Log.e("RDS: ", "A problem occurred when talking to the server")
-        } catch (e2: RuntimeException) {
+        } catch (e: RuntimeException) {
             throw ServerNotReachableException()
         }
         return false
@@ -282,6 +271,8 @@ class RESTAPI(baseUrl: String = "http://www.google.com") {
      * @param authToken:        The authentication token
      * @param projectDetails:   The details of a project (project name, project description, table format, ...) as JSON
      * @return LONG: Returns the id of the created project. Returns -1 if an error occurred
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     suspend fun addProject(authToken: String, projectDetails: String): Long {
         try {
@@ -289,21 +280,20 @@ class RESTAPI(baseUrl: String = "http://www.google.com") {
             if (call.isSuccessful && call.body() != null) {
                 return call.body()!!
             }
-        } catch (e: java.io.IOException) {
-            //TODO
-            Log.e("RDS: ", "A problem occurred when talking to the server")
-        } catch (e2: RuntimeException) {
+        } catch (e: RuntimeException) {
             throw ServerNotReachableException()
         }
         return -1
     }
 
     /**
-     *  Gets all the project members
+     * Gets all the project members
      *
-     *  @param authToken: The authentication token
-     *  @param projectID: The id of the project whose user should be returned
-     *  @return Collection<String>: The participants of the project. Returns empty list on error
+     * @param authToken: The authentication token
+     * @param projectID: The id of the project whose user should be returned
+     * @return Collection<String>: The participants of the project. Returns empty list on error
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     suspend fun getProjectParticipants(authToken: String, projectID: Long): Collection<String> {
         try {
@@ -311,10 +301,7 @@ class RESTAPI(baseUrl: String = "http://www.google.com") {
             if (call.isSuccessful && call.body() != null) {
                 return call.body()!!
             }
-        } catch (e: java.io.IOException) {
-            //TODO
-            Log.e("RDS: ", "A problem occurred when talking to the server")
-        } catch (e2: RuntimeException) {
+        } catch (e: RuntimeException) {
             throw ServerNotReachableException()
         }
         return listOf()
@@ -326,6 +313,8 @@ class RESTAPI(baseUrl: String = "http://www.google.com") {
      * @param authToken: The authentication token
      * @param projectID: The id of the project whose admin should be returned
      * @return String: The UserID of the admin. Returns "" on error
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     suspend fun getProjectAdmin(authToken: String, projectID: Long): String {
         try {
@@ -333,10 +322,7 @@ class RESTAPI(baseUrl: String = "http://www.google.com") {
             if (call.isSuccessful && call.body() != null) {
                 return call.body()!!
             }
-        } catch (e: java.io.IOException) {
-            //TODO
-            Log.e("RDS: ", "A problem occurred when talking to the server")
-        } catch (e2: RuntimeException) {
+        } catch (e: RuntimeException) {
             throw ServerNotReachableException()
         }
         return ""
@@ -350,6 +336,8 @@ class RESTAPI(baseUrl: String = "http://www.google.com") {
      * @param projectCommand:   The project command that should be send to the server (as JSON)
      * @param authToken:        The authentication token
      * @return Boolean: True if uploaded successfully, otherwise false
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     suspend fun saveDelta(projectID: Long, projectCommand: String, authToken: String): Boolean {
         try {
@@ -357,10 +345,7 @@ class RESTAPI(baseUrl: String = "http://www.google.com") {
             if (call.isSuccessful && call.body() != null) {
                 return call.body()!!
             }
-        } catch (e: java.io.IOException) {
-            //TODO
-            Log.e("RDS: ", "A problem occurred when talking to the server")
-        } catch (e2: RuntimeException) {
+        } catch (e: RuntimeException) {
             throw ServerNotReachableException()
         }
         return false
@@ -371,6 +356,8 @@ class RESTAPI(baseUrl: String = "http://www.google.com") {
      *
      * @param projectID: The id of the project whose delta (projectCommands) you want to load into the FetchRequestQueue
      * @param authToken: The authentication token
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     suspend fun getDelta(projectID: Long, authToken: String): Collection<Delta> {
         try {
@@ -378,10 +365,7 @@ class RESTAPI(baseUrl: String = "http://www.google.com") {
             if (call.isSuccessful && call.body() != null) {
                 return call.body()!!
             }
-        } catch (e: java.io.IOException) {
-            //TODO
-            Log.e("RDS: ", "A problem occurred when talking to the server")
-        } catch (e2: RuntimeException) {
+        } catch (e: RuntimeException) {
             throw ServerNotReachableException()
         }
         return listOf()
@@ -397,6 +381,8 @@ class RESTAPI(baseUrl: String = "http://www.google.com") {
      * @param wasAdmin:         Was the user a project administrator when the command was created
      * @param authToken:        The authentication token
      * @return Boolean: Did the server call succeed
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     suspend fun provideOldData(
         projectCommand: String,
@@ -418,10 +404,7 @@ class RESTAPI(baseUrl: String = "http://www.google.com") {
             if (call.isSuccessful && call.body() != null) {
                 return call.body()!!
             }
-        } catch (e: java.io.IOException) {
-            //TODO
-            Log.e("RDS: ", "A problem occurred when talking to the server")
-        } catch (e2: RuntimeException) {
+        } catch (e: RuntimeException) {
             throw ServerNotReachableException()
         }
         return false
@@ -432,6 +415,8 @@ class RESTAPI(baseUrl: String = "http://www.google.com") {
      *
      * @param authToken: The authentication token
      * @return Long: The time how long an project command can remain on the server until it gets deleted by the server. On error returns -1
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     suspend fun getRemoveTime(authToken: String): Long {
         try {
@@ -439,10 +424,7 @@ class RESTAPI(baseUrl: String = "http://www.google.com") {
             if (call.isSuccessful && call.body() != null) {
                 return call.body()!!
             }
-        } catch (e: java.io.IOException) {
-            //TODO
-            Log.e("RDS: ", "A problem occurred when talking to the server")
-        } catch (e2: RuntimeException) {
+        } catch (e: RuntimeException) {
             throw ServerNotReachableException()
         }
         return -1
@@ -456,6 +438,8 @@ class RESTAPI(baseUrl: String = "http://www.google.com") {
      * @param requestInfo:  The fetch request as JSON
      * @param authToken:    The authentication token
      * @return Boolean: Did the server call succeed
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     suspend fun demandOldData(projectID: Long, requestInfo: String, authToken: String): Boolean {
         try {
@@ -463,10 +447,7 @@ class RESTAPI(baseUrl: String = "http://www.google.com") {
             if (call.isSuccessful && call.body() != null) {
                 return call.body()!!
             }
-        } catch (e: java.io.IOException) {
-            //TODO
-            Log.e("RDS: ", "A problem occurred when talking to the server")
-        } catch (e2: RuntimeException) {
+        } catch (e: RuntimeException) {
             throw ServerNotReachableException()
         }
         return false
@@ -477,6 +458,8 @@ class RESTAPI(baseUrl: String = "http://www.google.com") {
      *
      * @param projectID: The id of the project from which the fetch requests should be downloaded
      * @param authToken: The authentication token
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     suspend fun getFetchRequests(projectID: Long, authToken: String): Collection<FetchRequest> {
         try {
@@ -484,10 +467,7 @@ class RESTAPI(baseUrl: String = "http://www.google.com") {
             if (call.isSuccessful && call.body() != null) {
                 return call.body()!!
             }
-        } catch (e: java.io.IOException) {
-            //TODO
-            Log.e("RDS: ", "A problem occurred when talking to the server")
-        } catch (e2: RuntimeException) {
+        } catch (e: RuntimeException) {
             throw ServerNotReachableException()
         }
         return emptyList()
@@ -499,6 +479,8 @@ class RESTAPI(baseUrl: String = "http://www.google.com") {
      *
      * @param authToken:    The authentication token
      * @return List<Int>:   The postIDs from the posts
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     suspend fun getPostsFromUser(authToken: String): List<Int> {
         try {
@@ -506,10 +488,7 @@ class RESTAPI(baseUrl: String = "http://www.google.com") {
             if (call.isSuccessful && call.body() != null) {
                 return call.body()!!
             }
-        } catch (e: java.io.IOException) {
-            //TODO
-            Log.e("RDS: ", "A problem occurred when talking to the server")
-        } catch (e2: RuntimeException) {
+        } catch (e: RuntimeException) {
             throw ServerNotReachableException()
         }
         return emptyList()

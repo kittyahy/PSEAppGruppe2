@@ -9,12 +9,11 @@ import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOpti
 import com.pseandroid2.dailydata.remoteDataSource.userManager.SignInTypes
 import com.pseandroid2.dailydata.remoteDataSource.userManager.UserAccount
 import io.mockk.coEvery
-import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import retrofit2.SkipCallbackExecutor
 import java.time.LocalDateTime
 
 class RDSAPICorrectlyLinkedTests {
@@ -30,7 +29,6 @@ class RDSAPICorrectlyLinkedTests {
 
     @Before
     fun setup() {
-
         val serverManager = mockk<ServerManager>()
 
         coEvery { serverManager.connectionToServerPossible() } returns true
@@ -77,33 +75,33 @@ class RDSAPICorrectlyLinkedTests {
 
         // mock UserAccount
         val userAccount = mockk<UserAccount>()
-        every {
+        coEvery {
             userAccount.registerUser(
                 "",
                 "",
                 SignInTypes.EMAIL
             )
         } returns FirebaseReturnOptions.REGISTERED
-        every {
+        coEvery {
             userAccount.signInUser(
                 "",
                 "",
                 SignInTypes.EMAIL
             )
         } returns FirebaseReturnOptions.SINGED_IN
-        every { userAccount.signOut() } returns FirebaseReturnOptions.SINGED_OUT
-        every { userAccount.getUserID() } returns "userID"
-        every { userAccount.getUserName() } returns "userName"
-        every { userAccount.getUserEMail() } returns "userEmail"
-        every { userAccount.getUserPhotoUrl() } returns "photo"
-        every { userAccount.getToken() } returns ""
+        coEvery { userAccount.signOut() } returns FirebaseReturnOptions.SINGED_OUT
+        coEvery { userAccount.getUserID() } returns "userID"
+        coEvery { userAccount.getUserName() } returns "userName"
+        coEvery { userAccount.getUserEMail() } returns "userEmail"
+        coEvery { userAccount.getUserPhotoUrl() } returns "photo"
+        coEvery { userAccount.getToken() } returns ""
 
         // Create RDS with mocked serverManager and mocked FirebaseManager
         rdsAPI = RemoteDataSourceAPI(userAccount, serverManager)
     }
-    /*
+
     @Test
-    fun serverManagerCorrectlyLinked() {
+    fun serverManagerCorrectlyLinked() = runBlocking {
         Assert.assertTrue(rdsAPI.connectionToServerPossible())
         Assert.assertEquals(postPreviewList.elementAt(0), rdsAPI.getPostPreviews().elementAt(0))
         Assert.assertEquals(postDetailList.elementAt(0), rdsAPI.getPostDetail(1).elementAt(0))
@@ -143,7 +141,7 @@ class RDSAPICorrectlyLinkedTests {
     }
 
     @Test
-    fun userAccountCorrectlyLinked() {
+    fun userAccountCorrectlyLinked() = runBlocking {
         Assert.assertEquals(
             FirebaseReturnOptions.REGISTERED,
             rdsAPI.registerUser("", "", SignInTypes.EMAIL)
@@ -157,5 +155,5 @@ class RDSAPICorrectlyLinkedTests {
         Assert.assertEquals("userName", rdsAPI.getUserName())
         Assert.assertEquals("userEmail", rdsAPI.getUserEMail())
         Assert.assertEquals("photo", rdsAPI.getUserPhotoUrl())
-    }*/
+    }
 }
