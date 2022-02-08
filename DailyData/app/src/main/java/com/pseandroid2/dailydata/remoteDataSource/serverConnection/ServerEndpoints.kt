@@ -47,7 +47,7 @@ interface ServerEndpoints {
      * @return Greeting to signalise, the server is reachable
      */
     @GET("greet")
-    fun greet(): Response<String>
+    suspend fun greet(): Response<String>
 
     // TODO: This is a method for testing -> Probably remove or change it's path later
     /**
@@ -57,7 +57,7 @@ interface ServerEndpoints {
      * @return The postIDs of the uploaded posts
      */
     @GET("test")
-    fun getPostsFromUser(@Header("token") token: String): Call<List<Int>>
+    suspend fun getPostsFromUser(@Header("token") token: String): Call<List<Int>>
 
     // Post Controller ---------------------------------------------------------------------------
     /**
@@ -67,7 +67,7 @@ interface ServerEndpoints {
      * @return A list with PostPreview, which contains postPreviews and the Post ids
      */
     @GET("Posts" + "/allPreview")
-    fun getAllPostPreview(@Header("token") token: String): Call<List<PostPreview>>
+    suspend fun getAllPostPreview(@Header("token") token: String): Call<List<PostPreview>>
 
     /**
      * Provides all Templates details from fromPost. Returns the identifier and the DetailView (image and title) from
@@ -79,7 +79,7 @@ interface ServerEndpoints {
      * @return A list of the template Details
      */
     @GET("Posts" + "/detail/{post}")
-    fun getPostDetail(
+    suspend fun getPostDetail(
         @Header("token") token: String,
         @Path("post") fromPost: Int
     ): Call<List<TemplateDetail>>
@@ -92,7 +92,7 @@ interface ServerEndpoints {
      * @return The projectTemplate as JSON
      */
     @GET("Posts" + "/{post}/projectTemplate")
-    fun getProjectTemplate(
+    suspend fun getProjectTemplate(
         @Header("token") token: String,
         @Path("post") fromPost: Int
     ): Call<String>
@@ -106,7 +106,7 @@ interface ServerEndpoints {
      * @return The GraphTemplate as JSON
      */
     @GET("Posts" + "/{post}/{template}")
-    fun getGraphTemplate(
+    suspend fun getGraphTemplate(
         @Header("token") token: String, @Path("post") fromPost: Int,
         @Path("template") templateNumber: Int
     ): Call<String>
@@ -120,7 +120,7 @@ interface ServerEndpoints {
      * @return The postID of the new post or 0 if the user has too many posts and can't add a new one
      */
     @POST("Posts" + "/add")
-    fun addPost(@Header("token") token: String, @Body params: AddPostParameter): Call<Int>
+    suspend fun addPost(@Header("token") token: String, @Body params: AddPostParameter): Call<Int>
 
     /**
      * Removes a post if the user is allowed to remove it
@@ -130,7 +130,7 @@ interface ServerEndpoints {
      * @return if the post could be removed
      */
     @DELETE("Posts" + "/remove/{post}")
-    fun removePost(@Header("token") token: String, @Path("post") postID: Int): Call<Boolean>
+    suspend fun removePost(@Header("token") token: String, @Path("post") postID: Int): Call<Boolean>
 
 
     // ProjectParticipantsController ---------------------------------------------------------------------------
@@ -144,7 +144,7 @@ interface ServerEndpoints {
      * String ("")
      */
     @POST("OnlineDatabase" + "/addUser/{id}")
-    fun addUser(@Header("token") token: String, @Path("id") projectId: Long): Call<String>
+    suspend fun addUser(@Header("token") token: String, @Path("id") projectId: Long): Call<String>
 
     /**
      * Removes a user from a project. A user can remove himself.
@@ -157,7 +157,7 @@ interface ServerEndpoints {
      * @return True, if the user is removed, false if it was not possible
      */
     @DELETE("OnlineDatabase" + "/removeUser/{id}")
-    fun removeUser(
+    suspend fun removeUser(
         @Header("token") token: String, @Path("id") projectId: Long,
         @Query("userToRemove") userToRemove: String
     ): Call<Boolean>
@@ -170,7 +170,7 @@ interface ServerEndpoints {
      * @return The projectId for the new project
      */
     @POST("OnlineDatabase" + "/newProject")
-    fun addProject(@Header("token") token: String, @Body projectDetails: String): Call<Long>
+    suspend fun addProject(@Header("token") token: String, @Body projectDetails: String): Call<Long>
 
     /**
      * Returns all user of the project, which currently participate.
@@ -180,7 +180,7 @@ interface ServerEndpoints {
      * @return A list with users.
      */
     @GET("OnlineDatabase" + "/{id}/participants")
-    fun getParticipants(
+    suspend fun getParticipants(
         @Header("token") token: String,
         @Path("id") projectId: Long
     ): Call<List<String>>
@@ -193,7 +193,7 @@ interface ServerEndpoints {
      * @return The userID of the project admin
      */
     @GET("OnlineDatabase" + "/{id}/admin")
-    fun getAdmin(@Header("token") token: String, @Path("id") projectId: Long): Call<String>
+    suspend fun getAdmin(@Header("token") token: String, @Path("id") projectId: Long): Call<String>
 
     // DeltaController -----------------------------------------------------------------------------
     /**
@@ -219,7 +219,7 @@ interface ServerEndpoints {
      * @return a list of recommended Deltas
      */
     @GET("OnlineDatabase/Delta" + "/get/{id}")
-    fun getDelta(@Header("token") token: String, @Path("id") projectId: Long): Call<List<Delta>>
+    suspend fun getDelta(@Header("token") token: String, @Path("id") projectId: Long): Call<List<Delta>>
 
     /**
      * Recreates an old Delta, for a defined person and project
@@ -230,7 +230,7 @@ interface ServerEndpoints {
      *                          specifies all parameters
      */
     @POST("OnlineDatabase/Delta" + "/provide/{id}")
-    fun provideOldData(
+    suspend fun provideOldData(
         @Header("token") token: String, @Path(value = "id") projectId: Long,
         @Body params: ProvideOldDataParameter
     ): Call<Boolean>
@@ -242,7 +242,7 @@ interface ServerEndpoints {
      * @return period length, after which a delta gets deleted.
      */
     @GET("OnlineDatabase/Delta" + "/time")
-    fun getRemoveTime(@Header("token") token: String): Call<Long>
+    suspend fun getRemoveTime(@Header("token") token: String): Call<Long>
 
 
     // FetchRequestController --------------------------------------------------------------------
@@ -255,7 +255,7 @@ interface ServerEndpoints {
      * @param requestInfo All information, which are necessary to save a fetchRequest.  specifies all parameters
      */
     @POST("OnlineDatabase/request" + "/need/{id}")
-    fun demandOldData(
+    suspend fun demandOldData(
         @Header("token") token: String, @Path("id") projectID: Long,
         @Body requestInfo: String
     ): Call<Boolean>
@@ -268,7 +268,7 @@ interface ServerEndpoints {
      * @return A list of {@link FetchRequest}
      */
     @GET("OnlineDatabase/request" + "/provide/{id}")
-    fun getFetchRequest(
+    suspend fun getFetchRequest(
         @Header("token") token: String,
         @Path("id") projectId: Long
     ): Call<Collection<FetchRequest>>
