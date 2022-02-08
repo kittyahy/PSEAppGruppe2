@@ -10,6 +10,7 @@ import org.junit.Before
 import org.junit.Test
 
 class DeltaControllerGetDeltaTests {
+    /*
     private var restAPI: RESTAPI = RESTAPI()
     private lateinit var authToken: String
     private lateinit var authToken2: String
@@ -115,13 +116,15 @@ class DeltaControllerGetDeltaTests {
         Assert.assertTrue(deltaFound)
     }
 
-    /* TODO: Implement this in the quality control phase
+    */
+/* TODO: Implement this in the quality control phase
     @Test
     fun getDeltaWhenNoProjectMember() {
         val downloadedDeltas = restAPI.getDelta(projectID, authToken2) as MutableList
         Assert.assertEquals(0, downloadedDeltas.size)
     }
-    */
+    *//*
+
 
     @Test
     fun getSameDeltaTwice() {
@@ -153,6 +156,5 @@ class DeltaControllerGetDeltaTests {
     fun getRemoveTime() {
         Assert.assertNotEquals(-1, restAPI.getRemoveTime(authToken))
     }
-
-    //TODO Tests auskommentieren
+    */
 }

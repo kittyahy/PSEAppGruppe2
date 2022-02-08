@@ -33,15 +33,15 @@ class ProjectTemplateFlowProvider(private val templateId: Int, private val db: A
                     template.settings = settings
                     mutableFlow.emit(template)
                 }
-        }
+        }/*
         //Observe GraphTemplates for Template
         launch(Dispatchers.IO) {
-            GraphTemplateFlowProvider(templateId, db).provideFlow.distinctUntilChanged()
+            GraphTemplateFlowProvider(db).provideFlow.distinctUntilChanged()
                 .collect { graphs ->
                     template.graphs = graphs.toMutableList()
                     mutableFlow.emit(template)
                 }
-        }
+        }*/
         //Observe Notifications for Template
         launch(Dispatchers.IO) {
             db.notificationsDAO().getNotifications(templateId).distinctUntilChanged()

@@ -1,7 +1,6 @@
 package com.pseandroid2.dailydata.repository.commandCenter
 
-import com.pseandroid2.dailydata.model.database.AppDataBase
-import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
+import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.commands.CommandWrapper
 import com.pseandroid2.dailydata.repository.commandCenter.commands.IllegalOperationException
 import com.pseandroid2.dailydata.repository.commandCenter.commands.ProjectCommand
@@ -9,10 +8,9 @@ import kotlinx.coroutines.delay
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.temporal.TemporalAmount
-import java.time.temporal.TemporalUnit
 
-class PublishQueue(appDataBase: AppDataBase, remoteDataSourceAPI: RemoteDataSourceAPI) :
-    CommandQueue(appDataBase, remoteDataSourceAPI) {
+class PublishQueue(override val repositoryViewModelAPI: RepositoryViewModelAPI) :
+    CommandQueue(repositoryViewModelAPI) {
 
     private var lastServerConnection: LocalDateTime = LocalDateTime.MIN
     private var serverConnectionTolerance: TemporalAmount = Duration.ZERO.plusMinutes(5)
@@ -23,7 +21,10 @@ class PublishQueue(appDataBase: AppDataBase, remoteDataSourceAPI: RemoteDataSour
         if (command.onlineProjectID == null) {
             throw IllegalOperationException()
         }
-        remoteDataSourceAPI.sendCommandsToServer(command.onlineProjectID!!, listOf(commandJson))
+        repositoryViewModelAPI.remoteDataSourceAPI.sendCommandsToServer(
+            command.onlineProjectID!!,
+            listOf(commandJson)
+        )
     }
 
 
@@ -31,7 +32,7 @@ class PublishQueue(appDataBase: AppDataBase, remoteDataSourceAPI: RemoteDataSour
         if (lastServerConnection.plus(serverConnectionTolerance) > LocalDateTime.now()) {
             return true
         }
-        if (remoteDataSourceAPI.connectionToServerPossible()) {
+        if (repositoryViewModelAPI.remoteDataSourceAPI.connectionToServerPossible()) {
             lastServerConnection = LocalDateTime.now()
             return true
         }

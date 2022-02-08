@@ -23,8 +23,11 @@ package com.pseandroid2.dailydata.repository.viewModelAPI
 
 import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
+import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
+import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
 import com.pseandroid2.dailydata.repository.commandCenter.commands.CreateProject
+import com.pseandroid2.dailydata.repository.commandCenter.commands.JoinOnlineProject
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Button
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Column
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
@@ -32,40 +35,90 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.No
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.GraphFlow
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.GraphTemplateFlow
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.GraphTemplateFlowProvider
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectFlow
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectFlowProvider
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectPreviewFlow
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectPreviewFlowProvider
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectTemplateDataFlowProvider
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectTemplateFlow
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectTemplateFlowProvider
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectTemplatePreviewFlow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 @InternalCoroutinesApi
 class ProjectHandler(
-    private val appDataBase: AppDataBase,
-    private val rds: RemoteDataSourceAPI,
-    private val executeQueue: ExecuteQueue
+    private val repositoryViewModelAPI: RepositoryViewModelAPI
 ) {
-    fun getProjectPreviews() = ProjectPreviewFlow(appDataBase, executeQueue).getPreviews()
+    val executeQueue: ExecuteQueue =
+        ExecuteQueue(repositoryViewModelAPI, PublishQueue(repositoryViewModelAPI))
 
-    fun getProjectByID(id: Int) = ProjectFlow(appDataBase, rds, executeQueue, id).getProject()
+    var previewsInitialized = false
 
-    fun getGraphs(projectId: Int) = GraphFlow(appDataBase, executeQueue, projectId).getGraphs()
+    private val appDataBase: AppDataBase = repositoryViewModelAPI.appDataBase
+    private val rds: RemoteDataSourceAPI = repositoryViewModelAPI.remoteDataSourceAPI
 
-    fun getGraphTemplates(projectTemplateId: Int) =
-        GraphTemplateFlow(appDataBase, executeQueue, projectTemplateId).getTemplates()
+    private lateinit var projectPreviewProvider: ProjectPreviewFlowProvider
+    private lateinit var graphTemplateProvider: GraphTemplateFlowProvider
+    private lateinit var projectTemplateDataProvider: ProjectTemplateDataFlowProvider
+    private val projectFlows = mutableMapOf<Int, ProjectFlowProvider>()
+    private val templateFlows = mutableMapOf<Int, ProjectTemplateFlowProvider>()
+
+    suspend fun initializePreviews() = coroutineScope {
+        launch {
+            projectPreviewProvider = ProjectPreviewFlowProvider(appDataBase)
+            projectPreviewProvider.initialize()
+        }
+        launch {
+            graphTemplateProvider = GraphTemplateFlowProvider(appDataBase)
+            graphTemplateProvider.initialize()
+        }
+        launch {
+            projectTemplateDataProvider = ProjectTemplateDataFlowProvider(appDataBase)
+            projectTemplateDataProvider.initialize()
+        }
+        previewsInitialized = true
+    }
+
+    suspend fun initializeProjectProvider(id: Int) = coroutineScope {
+        launch {
+            projectFlows[id] = ProjectFlowProvider(id, appDataBase)
+            projectFlows[id]!!.initialize()
+        }
+    }
+
+    suspend fun initializeProjectTemplateProvider(id: Int) = coroutineScope {
+        launch {
+            templateFlows[id] = ProjectTemplateFlowProvider(id, appDataBase)
+            templateFlows[id]!!.initialize()
+        }
+    }
+
+    fun getProjectPreviews() =
+        ProjectPreviewFlow(projectPreviewProvider, appDataBase, executeQueue).getPreviews()
+
+    fun getProjectByID(id: Int) =
+        ProjectFlow(repositoryViewModelAPI, projectFlows[id]!!).getProject()
+
+    fun getGraphTemplates() =
+        GraphTemplateFlow(appDataBase, executeQueue, graphTemplateProvider).getTemplates()
 
     fun getProjectTemplatePreviews() =
-        ProjectTemplatePreviewFlow(appDataBase, executeQueue).getTemplatePreviews()
+        ProjectTemplatePreviewFlow(projectTemplateDataProvider, executeQueue).getTemplatePreviews()
 
     fun getProjectTemplate(id: Int) =
-        ProjectTemplateFlow(appDataBase, executeQueue, id).getProjectTemplate()
+        ProjectTemplateFlow(appDataBase, executeQueue, templateFlows[id]!!).getProjectTemplate()
 
 
-    private suspend fun newProjectAsync(
+    suspend fun newProjectAsync(
         name: String,
         description: String,
         wallpaper: Int,
@@ -77,15 +130,14 @@ class ProjectHandler(
         async(Dispatchers.IO) {
             val idFlow = MutableSharedFlow<Int>()
             val createProject = CreateProject(
-                idFlow,
-                "User1",
                 name,
                 description,
                 wallpaper,
                 table,
                 buttons,
                 notification,
-                graphs
+                graphs,
+                idFlow
             )
             executeQueue.add(createProject)
             return@async idFlow.first()
@@ -106,21 +158,25 @@ class ProjectHandler(
         }
     }
 
-    fun joinOnlineProject(onlineID: Long): Int {
-        return TODO("joinOnlineProject")
+    /**
+     * If false, it would be imprudent to use the corresponding "manipulation" fun.
+     * Thus it should be used to block input options from being used if false.
+     * e.g. If manipulationIsPossible.first() is false,
+     *      users should not be able to call manipulation().
+     */
+    fun joinOnlineProjectIsPossible(): Flow<Boolean> {
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(JoinOnlineProject.isPossible())
+        }
+        return flow
     }
 
-    fun getProjectTemplateByID() {
-        TODO("getProjectTemplateByID")
-    }
 
-    //TODO("Robin changes")
-    fun deleteProjectTemplate(id: Int) {
-
-    }
-
-    //TODO("Robin changes")
-    fun deleteGraphTemplate(id: Int) {
+    suspend fun joinOnlineProject(onlineID: Long): Flow<Int> {
+        val idFlow = MutableSharedFlow<Int>()
+        executeQueue.add(JoinOnlineProject(onlineID, idFlow))
+        return idFlow
 
     }
 }

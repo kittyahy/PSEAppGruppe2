@@ -20,16 +20,36 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
+import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 
 interface Identifiable {
     val id: Int
+
+    @Deprecated("Internal function, should not be used outside the RepositoryViewModelAPI")
     var executeQueue: ExecuteQueue
+
+    @Deprecated("Internal function, should not be used outside the RepositoryViewModelAPI")
+    var project: Project
     fun deleteIsPossible(): Flow<Boolean>
+
     //@throws IllegalOperationException
     suspend fun delete()
-    fun connectToDB(executeQueue: ExecuteQueue) {
-        this.executeQueue= executeQueue
+
+    @Deprecated("Internal function, should not be used outside the RepositoryViewModelAPI")
+    @OptIn(InternalCoroutinesApi::class) //Todo dringend FlowAdapter reparieren, dann fällt das weg
+    fun connectToRepository(repositoryViewModelAPI: RepositoryViewModelAPI) {
+        @Suppress("DEPRECATION")
+        this.executeQueue = repositoryViewModelAPI.projectHandler.executeQueue
+    }
+
+    @Deprecated("Internal function, should not be used outside the RepositoryViewModelAPI")
+    fun connectToProject(project: Project) {
+        @Suppress("DEPRECATION")
+        this.project = project
+        @Suppress("DEPRECATION")
+        this.connectToRepository(project.repositoryViewModelAPI)
     }
 }

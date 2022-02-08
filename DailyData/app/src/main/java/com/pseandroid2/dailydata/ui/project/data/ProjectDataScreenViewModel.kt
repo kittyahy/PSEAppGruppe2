@@ -26,11 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
-import com.pseandroid2.dailydata.util.ui.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -39,7 +35,7 @@ class ProjectDataScreenViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    var tabs by mutableStateOf( listOf<DataTabs>())
+    var tabs = DataTabs.values().toList()
         private set
     var tab by mutableStateOf(1)
         private set
@@ -53,7 +49,6 @@ class ProjectDataScreenViewModel @Inject constructor(
                 projectId = id
             }
         }
-        tabs = DataTabs.values().toList()
     }
 
     fun onEvent(event : ProjectDataScreenEvent) {

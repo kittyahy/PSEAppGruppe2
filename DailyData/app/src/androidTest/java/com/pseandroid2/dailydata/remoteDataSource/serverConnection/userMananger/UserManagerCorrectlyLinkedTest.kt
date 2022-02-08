@@ -10,6 +10,7 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
+/*
 class UserManagerCorrectlyLinkedTest {
 
     private val fm: FirebaseManager = FirebaseManager(null)
@@ -50,4 +51,4 @@ class UserManagerCorrectlyLinkedTest {
 
         Assert.assertEquals(FirebaseReturnOptions.REGISTERED, mockedUserAccount.registerUser("", "", SignInTypes.EMAIL))
     }
-}
+}*/

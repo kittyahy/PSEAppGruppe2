@@ -11,13 +11,13 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 
-class GraphTemplateFlowProvider(private val templateId: Int, private val db: AppDataBase) :
+class GraphTemplateFlowProvider(private val db: AppDataBase) :
     FlowProvider<List<GraphTemplate>>() {
     private var templates = mutableListOf<GraphTemplate>()
     override suspend fun initialize() = coroutineScope {
         //Observe GraphTemplateData
         launch(Dispatchers.IO) {
-            db.templateDAO().getGraphTemplatesForProjectTemplate(templateId).distinctUntilChanged()
+            db.templateDAO().getAllGraphTemplateData().distinctUntilChanged()
                 .collect { templateData ->
                     for (data in templateData) {
                         templates.add(SimpleGraphTemplate(data))

@@ -6,6 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Post
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.PostPreview
 import com.pseandroid2.dailydata.util.ui.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -15,40 +17,60 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ServerTemplateScreenViewModel @Inject constructor(
-    val repository : RepositoryViewModelAPI
+    val repository: RepositoryViewModelAPI
 ) : ViewModel() {
 
     private val _uiEvent = MutableSharedFlow<UiEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
 
-    var posts = repository.serverHandler.getPostPreviews()
+    var posts = listOf<PostPreview>()
+        private set
+    lateinit var post: Post
         private set
     var isProjectTemplateDialogOpen by mutableStateOf(false)
         private set
-    var dialogTemplateIndex by mutableStateOf(0 )
-        private set
 
-    fun onEvent(event : ServerTemplateScreenEvent) {
+    init {
+        viewModelScope.launch {
+            posts = repository.serverHandler.getPostPreviews().toList()
+        }
+    }
+
+    fun onEvent(event: ServerTemplateScreenEvent) {
         when (event) {
-            is ServerTemplateScreenEvent.OnGraphTemplateDownload -> {
-                repository.serverHandler.downloadGraphTemplate(event.projectId, event.graphId)
-                isProjectTemplateDialogOpen = false
-                dialogTemplateIndex = 0
+            is ServerTemplateScreenEvent.OnShowDialog -> {
+                viewModelScope.launch {
+                    post = repository.serverHandler.getPost(posts[event.index].id)
+                }
+                isProjectTemplateDialogOpen = true
             }
             is ServerTemplateScreenEvent.OnCloseDialog -> {
                 isProjectTemplateDialogOpen = false
             }
-            is ServerTemplateScreenEvent.OnShowDialog -> {
-                isProjectTemplateDialogOpen = true
-                dialogTemplateIndex = event.index
+
+            is ServerTemplateScreenEvent.OnPostDownload -> {
+                viewModelScope.launch {
+                    var post =
+                        repository.serverHandler.getPost(posts.find { it.id == event.id }!!.id)
+                    post.downloadProjectTemplate()
+                    for (i in 1 until post.postEntries.size) {
+                        post.downloadGraphTemplate(i)
+                    }
+                }
+
             }
-            is ServerTemplateScreenEvent.OnTemplateDownload -> {
-                repository.serverHandler.downloadProjectTemplate(id = event.id)
+
+            is ServerTemplateScreenEvent.OnPostEntryDownload -> {
+                viewModelScope.launch {
+                    var postTemp = repository.serverHandler.getPost(post.id)
+                    postTemp.downloadGraphTemplate(event.id)
+                }
+
             }
         }
     }
 
-    private fun sendUiEvent(event : UiEvent) {
+    private fun sendUiEvent(event: UiEvent) {
         viewModelScope.launch {
             _uiEvent.emit(event)
         }

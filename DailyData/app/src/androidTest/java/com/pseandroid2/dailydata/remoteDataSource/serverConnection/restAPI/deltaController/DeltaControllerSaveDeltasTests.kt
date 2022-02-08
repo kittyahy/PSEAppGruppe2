@@ -8,7 +8,9 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
+
 class DeltaControllerSaveDeltasTests {
+    /*
     private var restAPI: RESTAPI = RESTAPI()
     private lateinit var authToken: String
 
@@ -46,7 +48,8 @@ class DeltaControllerSaveDeltasTests {
     }
 
     //TODO: We have currently a problem that the server can't handle too many uploaded deltas at a time.
-    /*
+    */
+/*
     @Test
     fun saveTenDeltas() {
         val projectCommands: MutableList<String> = mutableListOf()
@@ -82,5 +85,4 @@ class DeltaControllerSaveDeltasTests {
         Assert.assertEquals(projectCommand, projectCommand)
     }
     */
-    //TODO Tests auskommentieren
 }

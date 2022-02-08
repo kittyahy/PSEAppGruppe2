@@ -1,12 +1,26 @@
 package com.pseandroid2.dailydata.repository.commandCenter.commands
 
+import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
+import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Row
 
-class AddRow : ProjectCommand() {
+class AddRow(private val projectId: Int, private val row: Row) :
+    ProjectCommand(projectID = projectId) {
     companion object {
-        fun isPossible(project: Project) : Boolean {
-            return true
+        fun isPossible(project: Project): Boolean {
+            return ProjectCommand.isPossible(project)
         }
+    }
+
+    override val publishable: Boolean = true
+
+    override suspend fun execute(
+        repositoryViewModelAPI: RepositoryViewModelAPI,
+        publishQueue: PublishQueue
+    ) {
+        repositoryViewModelAPI.appDataBase.tableContentDAO().insertRow(row.toDBEquivalent(), projectId)
+        super.execute(repositoryViewModelAPI, publishQueue)
     }
 
 }

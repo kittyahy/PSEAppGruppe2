@@ -27,12 +27,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.GraphTemplate
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ProjectTemplate
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ProjectTemplatePreview
 import com.pseandroid2.dailydata.util.ui.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -42,29 +44,37 @@ class TemplatesScreenViewModel @Inject constructor(
     val repository: RepositoryViewModelAPI
 ) : ViewModel() {
 
-    private val _uiEvent = MutableSharedFlow<UiEvent>()
-    val uiEvent = _uiEvent.asSharedFlow()
-
-    var tabs by mutableStateOf(listOf<TemplateTabs>())
+    var tabs = TemplateTabs.values().toList()
         private set
     var tab by mutableStateOf(0)
         private set
 
-    var graphTemplates = repository.projectHandler.getGraphTemplates(0)
+    private val _uiEvent = MutableSharedFlow<UiEvent>()
+    val uiEvent = _uiEvent.asSharedFlow()
+
+    var graphTemplates = getGraphTemplateFlow()
         private set
-    var projectTemplates = repository.projectHandler.getProjectTemplatePreviews()
+    var projectTemplates = getProjectTemplateFlow()
         private set
 
-    fun onEvent(event: TemplatesScreenEvent) {
+    fun onEvent(event : TemplatesScreenEvent) {
         when (event) {
             is TemplatesScreenEvent.OnTabChange -> {
                 tab = event.index
             }
-            is TemplatesScreenEvent.OnGraphTemplateDelete -> {
-                repository.projectHandler.deleteGraphTemplate(event.id)
+            is TemplatesScreenEvent.OnDeleteGraphTemplate -> {
+                viewModelScope.launch {
+                    if (event.template.deleteIsPossible().first()) {
+                        event.template.delete()
+                    }
+                }
             }
-            is TemplatesScreenEvent.OnProjectTemplateDelete -> {
-                repository.projectHandler.deleteProjectTemplate(event.id)
+            is TemplatesScreenEvent.OnDeleteProjectTemplate -> {
+                viewModelScope.launch {
+                    if (event.template.deleteIsPossible().first()) {
+                        event.template.delete()
+                    }
+                }
             }
         }
     }
@@ -73,6 +83,24 @@ class TemplatesScreenViewModel @Inject constructor(
         viewModelScope.launch {
             _uiEvent.emit(event)
         }
+    }
+
+    private fun getGraphTemplateFlow(): Flow<List<GraphTemplate>> {
+        if (!repository.projectHandler.previewsInitialized) {
+            viewModelScope.launch {
+                repository.projectHandler.initializePreviews()
+            }
+        }
+        return repository.projectHandler.getGraphTemplates()
+    }
+
+    private fun getProjectTemplateFlow(): Flow<List<ProjectTemplatePreview>> {
+        if (!repository.projectHandler.previewsInitialized) {
+            viewModelScope.launch {
+                repository.projectHandler.initializePreviews()
+            }
+        }
+        return repository.projectHandler.getProjectTemplatePreviews()
     }
 }
 

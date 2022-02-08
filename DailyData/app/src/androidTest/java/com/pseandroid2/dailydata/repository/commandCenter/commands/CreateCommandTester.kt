@@ -43,7 +43,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-
+/*
 class CreateCommandTester {
     private var testOnlineID: Long = 0
     private lateinit var db: AppDataBase
@@ -79,4 +79,4 @@ class CreateCommandTester {
     }*/
 
 }
-
+*/

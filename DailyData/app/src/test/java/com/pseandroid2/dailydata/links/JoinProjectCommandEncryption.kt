@@ -1,7 +1,6 @@
 package com.pseandroid2.dailydata.links
 
-import android.util.Log
-import com.pseandroid2.dailydata.remoteDataSource.appLinks.JoinProjectLinkManager
+import com.pseandroid2.dailydata.ui.link.appLinks.JoinProjectLinkManager
 import org.junit.Assert
 import org.junit.Test
 

@@ -23,49 +23,116 @@ package com.pseandroid2.dailydata.repository.viewModelAPI
 import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
 import com.pseandroid2.dailydata.remoteDataSource.userManager.SignInTypes
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.GraphTemplate
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Post
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.PostDetail
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.PostPreview
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ProjectTemplate
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.runBlocking
 
 class ServerHandler(private val appDataBase: AppDataBase, private val api: RemoteDataSourceAPI) {
-    //TODO("Anton changes")
-    fun getPostPreviews(): List<Post> {
-        return TODO("getPostPreviews") // Implementierung
+    suspend fun getPostPreviews(): Collection<PostPreview> = coroutineScope {
+        val arrayList = ArrayList<PostPreview>()
+        val postPreviews = async(Dispatchers.IO) { api.getPostPreviews() }
+        for (serverPreview in postPreviews.await()) {
+            arrayList.add(PostPreview(serverPreview, api))
+        }
+        return@coroutineScope arrayList
     }
 
-    fun getPostDetail(postId: Int): PostDetail {
-        return TODO("getPostDetail")
+    suspend fun getPost(postId: Int): Post {
+        return Post(postId, api.getPostDetail(postId))
     }
 
-    fun getProjectTemplate(postId: Int): ProjectTemplate {
-        return TODO("getProjectTemplate")
+
+    fun getProjectTemplateById(id: Int): ProjectTemplate {
+        TODO("getProjectTemplateById")
     }
 
-    fun getGraphTemplate(postId: Int, index: Int): GraphTemplate {
-        return TODO("getGraphTemplate")
+    fun amILoggedIn() = flow {
+        val string = api.getUserName()
+        emit(string != "")
+        kotlinx.coroutines.delay(500)
     }
 
-    fun isServerCurrentlyReachable(): Boolean {
-        return api.connectionToServerPossible()
+    /**
+     * If false, it would be imprudent to use the corresponding "manipulation" fun.
+     * Thus it should be used to block input options from being used if false.
+     * e.g. If manipulationIsPossible.first() is false,
+     *      users should not be able to call manipulation().
+     */
+    fun loginIsPossible(): Flow<Boolean> {
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
     }
 
-    fun login(email: String, password: String) { //Todo erweiterbarkeit
+    suspend fun login(email: String, password: String) { //Todo erweiterbarkeit
         api.signInUser(email, password, SignInTypes.EMAIL)
     }
 
-    fun signUp(email: String, password: String) { //Todo erweiterbarkeit
+    /**
+     * If false, it would be imprudent to use the corresponding "manipulation" fun.
+     * Thus it should be used to block input options from being used if false.
+     * e.g. If manipulationIsPossible.first() is false,
+     *      users should not be able to call manipulation().
+     */
+    fun signUpIsPossible(): Flow<Boolean> {
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
+    }
+
+    suspend fun signUp(email: String, password: String) { //Todo erweiterbarkeit
         api.registerUser(email, password, SignInTypes.EMAIL)
     }
 
-    fun downloadProjectTemplate(id : Int) {
-
+    /**
+     * If false, it would be imprudent to use the corresponding "manipulation" fun.
+     * Thus it should be used to block input options from being used if false.
+     * e.g. If manipulationIsPossible.first() is false,
+     *      users should not be able to call manipulation().
+     */
+    fun downloadProjectTemplateIsPossible(): Flow<Boolean> {
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
     }
 
-    fun downloadGraphTemplate(projectId : Int, graphId : Int) {
+    fun downloadProjectTemplate(id: Int) {
+        return TODO("downloadProjectTemplate")
+    }
 
+    /**
+     * If false, it would be imprudent to use the corresponding "manipulation" fun.
+     * Thus it should be used to block input options from being used if false.
+     * e.g. If manipulationIsPossible.first() is false,
+     *      users should not be able to call manipulation().
+     */
+    fun downloadGraphTemplateIsPossible(): Flow<Boolean> {
+        //Todo replace with valid proof
+        val flow = MutableSharedFlow<Boolean>()
+        runBlocking {
+            flow.emit(true)
+        }
+        return flow
+    }
+
+    fun downloadGraphTemplate(projectId: Int, graphId: Int) {
+        return TODO("downloadGraphTemplate")
     }
 
 }

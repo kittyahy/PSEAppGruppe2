@@ -74,11 +74,11 @@ interface GraphTemplate {
 
 }
 
-enum class GraphType {
-
-    INT_LINE_CHART,
-    FLOAT_LINE_CHART,
-    TIME_LINE_CHART,
-    PIE_CHART
+//TODO(Robin hat geändert)
+enum class GraphType(val representation : String) {
+    INT_LINE_CHART("Line Chart"),
+    FLOAT_LINE_CHART("Line Chart"),
+    TIME_LINE_CHART("Line Chart"),
+    PIE_CHART("Pie Chart")
 
 }

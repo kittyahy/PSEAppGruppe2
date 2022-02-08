@@ -6,20 +6,42 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material.Divider
+import androidx.compose.material.Icon
+import androidx.compose.material.OutlinedButton
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,7 +65,6 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Ro
 import com.pseandroid2.dailydata.ui.project.creation.AppDialog
 import com.pseandroid2.dailydata.util.ui.UiEvent
 import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.flow.collect
 import java.util.Calendar
 
 @InternalCoroutinesApi
@@ -54,10 +75,10 @@ fun ProjectDataInputScreen(
     viewModel: ProjectDataInputScreenViewModel = hiltViewModel()
 ) {
 
-    var scrollState = rememberScrollState()
+    val scrollState = rememberScrollState()
     val context = LocalContext.current
-    var members = viewModel.members
-    var table = viewModel.table
+    val members = viewModel.members
+    val table = viewModel.table
 
     LaunchedEffect(key1 = true) {
         viewModel.onEvent(ProjectDataInputScreenEvent.OnCreate(projectId = projectId))
@@ -126,7 +147,7 @@ fun ProjectHeader(
     members : List<String>,
     memberColor : Color
 ) {
-    Column() {
+    Column {
         Surface(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -154,7 +175,7 @@ fun ProjectHeader(
                 }
                 if (isOnlineProject) {
                     Spacer(modifier = Modifier.padding(4.dp))
-                    Row() {
+                    Row {
                         LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                             items(members) { member ->
                                 Box(
@@ -336,8 +357,7 @@ fun TableColumn (
                 val hour = calendar[Calendar.HOUR_OF_DAY]
                 val minute = calendar[Calendar.MINUTE]
                 var time by remember { mutableStateOf("$hour:$minute") }
-                val timePickerDialog = TimePickerDialog( context,
-                    {_, hour : Int, minute: Int ->
+                val timePickerDialog = TimePickerDialog(context, {_, hour : Int, minute: Int ->
                         time = "$hour:$minute"
                         onValueChange(time)
                     }, hour, minute, true
@@ -448,7 +468,7 @@ fun RowDialog(
     onDeleteClick : () -> Unit
 ) {
     AppDialog(isOpen = isOpen, onDismissRequest = onDismissRequest) {
-        Column() {
+        Column {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()

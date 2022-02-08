@@ -25,19 +25,23 @@ import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.model.table.ArrayListLayout
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.toViewGraph
+
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import com.pseandroid2.dailydata.model.graph.Graph as ModelGraph
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.toViewGraph
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
 class GraphFlow(
     private val db: AppDataBase,
     private val eq: ExecuteQueue,
+    private val provider: GraphFlowProvider,
     private val projectId: Int
 ) {
 
     fun getGraphs(): Flow<List<Graph>> {
-        return GraphFlowProvider(projectId, db).provideFlow.distinctUntilChanged().map { graphs ->
+        return provider.provideFlow.distinctUntilChanged().map { graphs ->
             val graphList = mutableListOf<Graph>()
             for (graph in graphs) {
                 val addGraph = graph.toViewGraph(
@@ -46,6 +50,7 @@ class GraphFlow(
                         ArrayListLayout::class.java
                     )
                 )
+                @Suppress("Deprecation")
                 addGraph.executeQueue = eq
                 graphList.add(addGraph)
             }
