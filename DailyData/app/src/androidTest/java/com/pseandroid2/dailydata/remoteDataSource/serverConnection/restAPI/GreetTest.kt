@@ -5,9 +5,11 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Assert
 import org.junit.Test
 import kotlinx.coroutines.test.runTest
+import org.junit.After
+import org.junit.Before
 
 class GreetTest {
-
+    /*
     @ExperimentalCoroutinesApi
     @Test
     fun greet() = runTest {
@@ -16,6 +18,6 @@ class GreetTest {
         
         Assert.assertTrue(restAPI.greet())
     }
-
+    */
 }
 
