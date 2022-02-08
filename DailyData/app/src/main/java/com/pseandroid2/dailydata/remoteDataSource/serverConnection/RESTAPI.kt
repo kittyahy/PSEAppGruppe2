@@ -67,13 +67,13 @@ class RESTAPI {
      * @return Boolean: Returns true, if the server could be successfully reached. Otherwise return false
      */
     suspend fun greet(): Boolean {
-        val call: Call<String> = server.greet()
+        val call = server.greet()
 
         try {
-            @Suppress("BlockingMethodInNonBlockingContext") // It's planned that the thread which calls this method will be blocked
-            val response = call.execute().body() ?: ""
-            if (response == "Hello") {
-                return true
+            if (call.isSuccessful && call.body() != null) {
+                if (call.body() == "Hello") {
+                    return true
+                }
             }
         } catch (e: java.io.IOException) {
             //TODO
@@ -342,7 +342,7 @@ class RESTAPI {
         val call: Call<String> = server.getAdmin(authToken, projectID)
 
         try {
-            @Suppress("BlockingMethodInNonBlockingContext") // It's planned that the thread which calls this method will be blocked
+            //@Suppress("BlockingMethodInNonBlockingContext") // It's planned that the thread which calls this method will be blocked
             return call.execute().body() ?: ""
         } catch (e: java.io.IOException) {
             //TODO

@@ -26,6 +26,7 @@ import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.PostPreview
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.TemplateDetail
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -46,7 +47,7 @@ interface ServerEndpoints {
      * @return Greeting to signalise, the server is reachable
      */
     @GET("greet")
-    fun greet(): Call<String>
+    fun greet(): Response<String>
 
     // TODO: This is a method for testing -> Probably remove or change it's path later
     /**
