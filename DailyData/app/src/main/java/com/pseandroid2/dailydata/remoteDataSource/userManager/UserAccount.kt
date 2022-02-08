@@ -86,7 +86,7 @@ class UserAccount @Inject constructor(fm: FirebaseManager) {
      *
      * @return String: The firebase ID of the signed in user. If no user is signed in return ""
      */
-    suspend fun getUserID(): String {
+    fun getUserID(): String {
         return firebaseManager.getUserID()
     }
 
@@ -95,7 +95,7 @@ class UserAccount @Inject constructor(fm: FirebaseManager) {
      *
      * @return String: The username of the signed in user. If no user is signed in return ""
      */
-    suspend fun getUserName(): String {
+    fun getUserName(): String {
         return firebaseManager.getUserName()
     }
 
@@ -104,7 +104,7 @@ class UserAccount @Inject constructor(fm: FirebaseManager) {
      *
      * @return String: The email of the signed in user (if existing). If no user is signed in return ""
      */
-    suspend fun getUserEMail(): String {
+    fun getUserEMail(): String {
         return firebaseManager.getUserEMail()
     }
 
@@ -113,7 +113,7 @@ class UserAccount @Inject constructor(fm: FirebaseManager) {
      *
      * @return String: The photoURL of the signed in user (if existing). If no user is signed in return ""
      */
-    suspend fun getUserPhotoUrl(): String {
+    fun getUserPhotoUrl(): String {
         return firebaseManager.getUserPhotoUrl()
     }
 

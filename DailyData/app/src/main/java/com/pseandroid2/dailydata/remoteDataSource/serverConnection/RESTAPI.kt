@@ -37,10 +37,10 @@ import java.time.LocalDateTime
 
 /**
  * Carries out all calls to our server
- * Die baseURL vom Testserver: "00495284-8fb3-4727-9bf9-10353bd82b99.ka.bw-cloud-instance.org:8080"
- * Die baseURL vom echtem Server: "http://261ee33a-ba27-4828-b5df-f5f8718defe8.ka.bw-cloud-instance.org:8080"
+ * Die baseURL vom Testserver: "http://00495284-8fb3-4727-9bf9-10353bd82b99.ka.bw-cloud-instance.org:8080"
+ * Die baseURL vom echtem Server: "http://261ee33a-ba27-4828-b5df-f5f8718defe8.ka.bw-cloud-instance.org:8080"  NICHT ANFASSEN - Verbrennungsgefahr!
  */
-class RESTAPI(baseUrl: String = "00495284-8fb3-4727-9bf9-10353bd82b99.ka.bw-cloud-instance.org:8080") {
+class RESTAPI(baseUrl: String = "http://00495284-8fb3-4727-9bf9-10353bd82b99.ka.bw-cloud-instance.org:8080") {
     private val gson: Gson = GsonBuilder()
         .setLenient()
         .create()

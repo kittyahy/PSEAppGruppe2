@@ -125,7 +125,7 @@ class FirebaseManager(timeout: Long?) {
      *
      * @return String: The firebase ID of the signed in user. If no user is signed in return ""
      */
-    suspend fun getUserID(): String {
+    fun getUserID(): String {
         if (auth.currentUser == null) {
             return ""
         }
@@ -137,7 +137,7 @@ class FirebaseManager(timeout: Long?) {
      *
      * @return String: The username of the signed in user. If no user is signed in return ""
      */
-    suspend fun getUserName(): String {
+    fun getUserName(): String {
         val user = auth.currentUser
         if (user == null || user.displayName == null) {
             return ""
@@ -150,7 +150,7 @@ class FirebaseManager(timeout: Long?) {
      *
      * @return String: The email of the signed in user (if existing). If no user is signed in return ""
      */
-    suspend fun getUserEMail(): String {
+    fun getUserEMail(): String {
         val user = auth.currentUser
         if (user == null || user.email == null) {
             return ""
@@ -163,7 +163,7 @@ class FirebaseManager(timeout: Long?) {
      *
      * @return String: The photoURL of the signed in user (if existing). If no user is signed in return ""
      */
-    suspend fun getUserPhotoUrl(): String {
+    fun getUserPhotoUrl(): String {
         val user = auth.currentUser
         if (user == null || user.photoUrl == null) {
             return ""

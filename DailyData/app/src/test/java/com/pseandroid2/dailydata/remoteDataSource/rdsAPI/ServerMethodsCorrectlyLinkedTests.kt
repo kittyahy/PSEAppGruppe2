@@ -2,7 +2,6 @@ package com.pseandroid2.dailydata.remoteDataSource.rdsAPI
 
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
 import io.github.infeez.kotlinmockserver.dsl.http.mock
-import io.github.infeez.kotlinmockserver.dsl.http.okhttp.okHttpMockServer
 import io.github.infeez.kotlinmockserver.server.ServerConfiguration
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest

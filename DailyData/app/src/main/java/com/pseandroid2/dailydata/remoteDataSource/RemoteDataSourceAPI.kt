@@ -102,7 +102,7 @@ class RemoteDataSourceAPI @Inject constructor(uAccount: UserAccount?, sManager: 
      * @throws java.io.IOException: Input for server or server output was wrong
      * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
-    suspend fun getUserID(): String {
+    fun getUserID(): String {
         return userAccount.getUserID()
     }
 
@@ -113,7 +113,7 @@ class RemoteDataSourceAPI @Inject constructor(uAccount: UserAccount?, sManager: 
      * @throws java.io.IOException: Input for server or server output was wrong
      * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
-    suspend fun getUserName(): String {
+    fun getUserName(): String {
         return userAccount.getUserName()
     }
 
@@ -124,7 +124,7 @@ class RemoteDataSourceAPI @Inject constructor(uAccount: UserAccount?, sManager: 
      * @throws java.io.IOException: Input for server or server output was wrong
      * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
-    suspend fun getUserEMail(): String {
+    fun getUserEMail(): String {
         return userAccount.getUserEMail()
     }
 
@@ -135,7 +135,7 @@ class RemoteDataSourceAPI @Inject constructor(uAccount: UserAccount?, sManager: 
      * @throws java.io.IOException: Input for server or server output was wrong
      * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
-    suspend fun getUserPhotoUrl(): String {
+    fun getUserPhotoUrl(): String {
         return userAccount.getUserPhotoUrl()
     }
 

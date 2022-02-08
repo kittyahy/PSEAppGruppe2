@@ -9,7 +9,6 @@ import org.junit.After
 import org.junit.Before
 
 class GreetTest {
-    /*
     @ExperimentalCoroutinesApi
     @Test
     fun greet() = runTest {
@@ -18,6 +17,5 @@ class GreetTest {
         
         Assert.assertTrue(restAPI.greet())
     }
-    */
 }
 
