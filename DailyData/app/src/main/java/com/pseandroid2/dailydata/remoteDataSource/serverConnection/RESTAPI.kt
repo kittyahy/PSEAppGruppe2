@@ -49,7 +49,7 @@ class RESTAPI {
 
     // Das ist ein TestServer, have fun !! sehen sehr gleich aus die Links.
     private var baseUrl: String =
-        "00495284-8fb3-4727-9bf9-10353bd82b99.ka.bw-cloud-instance.org:8080"
+        "http://00495284-8fb3-4727-9bf9-10353bd82b99.ka.bw-cloud-instance.org:8080"
 
 
     private val gson: Gson = GsonBuilder()
