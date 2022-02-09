@@ -53,10 +53,6 @@ class LineChart(
     override lateinit var appDataBase: AppDataBase
     override val typeName: String = "Line Chart" //TODO Magic String
 
-    init {
-        availableGraphs.add(typeName)
-    }
-
     override fun deleteIsPossible(): Flow<Boolean> {
         TODO("Not yet implemented")
     }

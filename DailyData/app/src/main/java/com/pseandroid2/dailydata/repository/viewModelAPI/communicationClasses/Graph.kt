@@ -42,19 +42,23 @@ import com.pseandroid2.dailydata.model.graph.LineChart.Companion.LINE_STYLE_KEY
 import com.pseandroid2.dailydata.model.graph.LineChart.Companion.LINE_STYLE_NONE
 import com.pseandroid2.dailydata.model.graph.LineChart.Companion.LINE_STYLE_SOLID
 import com.pseandroid2.dailydata.model.table.TableLayout
+
 /**
  * Graph class that handles its specific interaction with ViewModel.
  */
-abstract class Graph : Identifiable, Convertible<ModelGraph<*, *>> {
+sealed class Graph : Identifiable, Convertible<ModelGraph<*, *>> {
     companion object {
-        val availableGraphs: MutableList<String> = ArrayList<String>()
+        val availableGraphs: MutableList<String> = mutableListOf(
+            "Pie Chart",
+            "Line Chart"
+        ) //TODO Anton Die typeName Variablen müssen wahrscheinlich ins Companion Objekt, oder? Dann geht das auch mit Refleciton
 
 
-        fun createFromType(graph: String): com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph {
+        fun createFromType(graph: String): Graph {
             TODO("createFromType")
         }
 
-        fun createFromTemplate(graph: GraphTemplate): com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph {
+        fun createFromTemplate(graph: GraphTemplate): Graph {
             TODO("createFromTemplate")
         }
 
