@@ -3,6 +3,7 @@ package com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI.fetc
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
+import kotlinx.coroutines.runBlocking
 import org.junit.AfterClass
 import org.junit.Assert
 import org.junit.Before
@@ -10,7 +11,7 @@ import org.junit.Test
 
 
 class FetchRequestControllerTests {
-    /*
+
     private var restAPI: RESTAPI = RESTAPI()
     private lateinit var authToken: String
     private lateinit var authToken2: String
@@ -29,8 +30,10 @@ class FetchRequestControllerTests {
 
     private var projectID: Long = -1
 
+    /*
+
     @Before
-    fun setup() {
+    fun setup() = runBlocking {
         Assert.assertEquals(
             FirebaseReturnOptions.SINGED_IN,
             fm.signInWithEmailAndPassword(email3, password3)
@@ -83,7 +86,7 @@ class FetchRequestControllerTests {
 
         @AfterClass
         @JvmStatic
-        fun teardown() {
+        fun teardown() = runBlocking {
             // Remove all users from project so that the project gets removed
             restAPI?.removeUser(userToRemove3, projectID, authToken)
             restAPI?.removeUser(userToRemove2, projectID, authToken)
@@ -92,12 +95,12 @@ class FetchRequestControllerTests {
     }
 
     @Test
-    fun demandOldData() {
+    fun demandOldData() = runTest {
         Assert.assertTrue(restAPI.demandOldData(projectID, "request information", authToken))
     }
 
     @Test
-    fun getFetchRequests() {
+    fun getFetchRequests() = runTest {
         val requestsToSend = mutableListOf("request information 1", "request information 2")
         Assert.assertTrue(restAPI.demandOldData(projectID, requestsToSend.elementAt(0), authToken))
         Assert.assertTrue(restAPI.demandOldData(projectID, requestsToSend.elementAt(1), authToken))
@@ -122,7 +125,7 @@ class FetchRequestControllerTests {
 
     /* TODO: Implement this in the quality control phase
     @Test
-    fun getFetchRequestsWhenNoProjectMember() {
+    fun getFetchRequestsWhenNoProjectMember() = runTest {
         Assert.assertTrue(restAPI.demandOldData(projectID, "request information", authToken))
         //User 3 is no project member
         Assert.assertEquals(0, restAPI.getFetchRequests(projectID, authToken3).size)
@@ -130,4 +133,5 @@ class FetchRequestControllerTests {
 
     // TODO: Test Ideas for quality control: 1. getFetchrequests from the same account who send them
     */
+
 }

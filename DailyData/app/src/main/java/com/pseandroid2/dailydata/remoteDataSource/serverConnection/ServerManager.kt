@@ -59,6 +59,8 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * Checks if it possible to connect to our server
      *
      * @return Boolean: If a server connection possible return true, else return false
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     suspend fun connectionToServerPossible(): Boolean {
         return restAPI.greet()
@@ -70,6 +72,8 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      *
      * @param authToken: The authentication token
      * @return Collection<PostPreviewWithPicture>: The previews of the posts
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     suspend fun getAllPostPreview(authToken: String): Collection<PostPreviewWithPicture> {
         //convert PostPreview from PostPreviewWithPicture
@@ -93,6 +97,8 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param fromPost:     The id from the searched post
      * @param authToken:    The authentication token
      * @return Collection<TemplateDetail>: Returns the detailed post belonging to the post id
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     suspend fun getPostDetail(
         fromPost: Int,
@@ -120,6 +126,8 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param fromPost:     The post from which the project template should be downloaded
      * @param authToken:    The authentication token
      * @return String - The requested project template as JSON
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     suspend fun getProjectTemplate(fromPost: Int, authToken: String): String {
         return restAPI.getProjectTemplate(fromPost, authToken)
@@ -132,6 +140,8 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param templateNumber:   Which graph template should be downloaded from the post
      * @param authToken:        The authentication token
      * @return String - The requested graph template as JSON
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     suspend fun getGraphTemplate(fromPost: Int, templateNumber: Int, authToken: String): String {
         return restAPI.getGraphTemplate(fromPost, templateNumber, authToken)
@@ -147,7 +157,9 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param graphTemplates:   The graph templates. Every list element is a graph template.
      *                              The first element of the outer Pair is the template as a JSON and the second element is the inner Pair.
      *                              The inner Pair has as it first element the template detail image and as its second element the title of the template
-     * @return Int: The PostID of the new post. -1 if the call didn't succeed, 0 if the user reached his limit of uploaded posts.
+     * @return Int: The PostID of the new post. -1 if the call didn't succeed, 0 if the user reached his limit of uploaded posts
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     suspend fun addPost(
         postPreview: Pair<Bitmap, String>,
@@ -188,6 +200,8 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      *
      * @param toConvert:    The bitmap that should be converted
      * @return ByteArray:   The converted Bitmap
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     private fun bitmapToByteArray(toConvert: Bitmap): ByteArray {
         val stream = ByteArrayOutputStream()
@@ -200,6 +214,8 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * Converts a byte array into a bitmap
      * @param toConvert:    The byte array that should be converted
      * @return ByteArray:   The converted byte array
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     private fun byteArrayToBitmap(toConvert: ByteArray): Bitmap {
         val emptyBitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
@@ -217,6 +233,8 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param postID:       The id of the post that should be removed from the server
      * @param authToken:    The authentication token
      * @return Boolean: Did the server call succeed
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     suspend fun removePost(postID: Int, authToken: String): Boolean {
         return restAPI.removePost(postID, authToken)
@@ -229,6 +247,8 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param projectID: The id of the project to which the user is to be added
      * @param authToken: The authentication token
      * @return String: Returns the project information as a JSON. (Returns "" on error)
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     suspend fun addUser(projectID: Long, authToken: String): String {
         return restAPI.addUser(projectID, authToken)
@@ -241,6 +261,8 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param projectID:    The id of the project from which the user should be removed
      * @param authToken:    The authentication token
      * @return Did the task succeed?
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     suspend fun removeUser(userToRemove: String, projectID: Long, authToken: String): Boolean {
         return restAPI.removeUser(userToRemove, projectID, authToken)
@@ -252,17 +274,21 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param authToken:        The authentication token
      * @param projectDetails:   The details of a project (project name, project description, table format, ...) as JSON
      * @return LONG: Returns the id of the created project. Returns -1 if an error occurred
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     suspend fun addProject(authToken: String, projectDetails: String): Long {
         return restAPI.addProject(authToken, projectDetails)
     }
 
     /**
-     *  Gets all the project members
+     * Gets all the project members
      *
-     *  @param authToken: The authentication token
-     *  @param projectID: The id of the project whose user should be returned
-     *  @return Collection<String>: The participants of the project. Returns empty list on error
+     * @param authToken: The authentication token
+     * @param projectID: The id of the project whose user should be returned
+     * @return Collection<String>: The participants of the project. Returns empty list on error
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     suspend fun getProjectParticipants(authToken: String, projectID: Long): Collection<String> {
         return restAPI.getProjectParticipants(authToken, projectID)
@@ -275,6 +301,8 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param authToken:    The token from the currently logged in user
      * @param userID:       The userID of the user, that should be checked, if it is part of the project
      * @return Boolean: True if the server call succeed and the user is part of the project. Otherwise false
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     suspend fun isProjectParticipant(authToken: String, projectID: Long, userID: String): Boolean {
         val projectParticipants = restAPI.getProjectParticipants(authToken, projectID)
@@ -292,6 +320,8 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param authToken: The authentication token
      * @param projectID: The id of the project whose admin should be returned
      * @return String: The UserID of the admin. Returns "" on error
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     suspend fun getProjectAdmin(authToken: String, projectID: Long): String {
         return restAPI.getProjectAdmin(authToken, projectID)
@@ -305,6 +335,8 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param projectCommands:  The project commands that should be send to the server (as JSON)
      * @param authToken:        The authentication token
      * @return Collection<String>: The successfully uploaded project commands (as JSONs)
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     suspend fun sendCommandsToServer(
         projectID: Long,
@@ -345,6 +377,8 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      *
      * @param projectID: The id of the project whose deltas (projectCommands) you want to load into the FetchRequestQueue
      * @param authToken: The authentication token
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     suspend fun getProjectCommandsFromServer(projectID: Long, authToken: String) {
         val receivedProjectCommands: Collection<Delta> = restAPI.getDelta(projectID, authToken)
@@ -370,6 +404,8 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param wasAdmin:         Was the user a project administrator when the command was created
      * @param authToken:        The authentication token
      * @return Boolean: Did the server call succeed
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     suspend fun provideOldData(
         projectCommand: String,
@@ -396,6 +432,8 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      *
      * @param authToken: The authentication token
      * @return Long: The time how long an project command can remain on the server until it gets deleted by the server. On error returns -1
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     suspend fun getRemoveTime(authToken: String): Long {
         return restAPI.getRemoveTime(authToken)
@@ -409,6 +447,8 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      * @param requestInfo:  The fetch request as JSON
      * @param authToken:    The authentication token
      * @return Boolean: Did the server call succeed
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     suspend fun demandOldData(projectID: Long, requestInfo: String, authToken: String): Boolean {
         return restAPI.demandOldData(projectID, requestInfo, authToken)
@@ -419,6 +459,8 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
      *
      * @param projectID: The id of the project from which the fetch requests should be downloaded
      * @param authToken: The authentication token
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     suspend fun getFetchRequests(projectID: Long, authToken: String) {
         val receivedFetchRequests: Collection<FetchRequest> =
@@ -432,28 +474,28 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
     /**
      * @param observer: The observer that should be added to the FetchRequestQueue
      */
-    suspend fun addObserverToFetchRequestQueue(observer: FetchRequestQueueObserver) {
+    fun addObserverToFetchRequestQueue(observer: FetchRequestQueueObserver) {
         fetchRequestQueue.registerObserver(observer)
     }
 
     /**
      * @param observer: The observer that should be removed from the FetchRequestQueue
      */
-    suspend fun unregisterObserverFromFetchRequestQueue(observer: FetchRequestQueueObserver) {
+    fun unregisterObserverFromFetchRequestQueue(observer: FetchRequestQueueObserver) {
         fetchRequestQueue.unregisterObserver(observer)
     }
 
     /**
      * @param observer: The observer that should be added to the ProjectCommandQueue
      */
-    suspend fun addObserverToProjectCommandQueue(observer: ProjectCommandQueueObserver) {
+    fun addObserverToProjectCommandQueue(observer: ProjectCommandQueueObserver) {
         projectCommandQueue.registerObserver(observer)
     }
 
     /**
      * @param observer: The observer that should be removed from the ProjectCommandQueue
      */
-    suspend fun unregisterObserverFromProjectCommandQueue(observer: ProjectCommandQueueObserver) {
+    fun unregisterObserverFromProjectCommandQueue(observer: ProjectCommandQueueObserver) {
         projectCommandQueue.unregisterObserver(observer)
     }
 

@@ -45,11 +45,12 @@ class FirebaseManager(timeout: Long?) {
      * @param email:    The email of the user that should be registered
      * @param password: The password of the user that should be registered
      */
-    fun registerUserWithEmailAndPassword(email: String, password: String): FirebaseReturnOptions {
+    suspend fun registerUserWithEmailAndPassword(email: String, password: String): FirebaseReturnOptions {
         if (email == "" || password == "") {
             return FirebaseReturnOptions.WRONG_INPUT_PARAMETERS
         }
         var returnParameter = FirebaseReturnOptions.TIMEOUT
+
         val startTime = System.currentTimeMillis()
 
         val task = auth.createUserWithEmailAndPassword(email, password)
@@ -78,7 +79,7 @@ class FirebaseManager(timeout: Long?) {
      * @param email:    The email of the user that should be signed in
      * @param password: The password of the user that should be signed in
      */
-    fun signInWithEmailAndPassword(email: String, password: String): FirebaseReturnOptions {
+    suspend fun signInWithEmailAndPassword(email: String, password: String): FirebaseReturnOptions {
         if (email == "" || password == "") {
             return FirebaseReturnOptions.WRONG_INPUT_PARAMETERS
         }
@@ -111,7 +112,7 @@ class FirebaseManager(timeout: Long?) {
      *
      * @return FirebaseReturnOptions: The success status of the request
      */
-    fun signOut(): FirebaseReturnOptions {
+    suspend fun signOut(): FirebaseReturnOptions {
         auth.signOut()
 
         refreshIdToken(true)
@@ -175,7 +176,7 @@ class FirebaseManager(timeout: Long?) {
      *
      * @return String: The token of the signed in user. If no user is signed in return ""
      */
-    fun getToken(): String {
+    suspend fun getToken(): String {
         refreshIdToken(false)
         return idToken
     }
@@ -185,7 +186,7 @@ class FirebaseManager(timeout: Long?) {
      *
      * @param forceRefresh: Should the returned firebase token be forcefully refreshed
      */
-    private fun refreshIdToken(forceRefresh: Boolean) {
+    suspend private fun refreshIdToken(forceRefresh: Boolean) {
         val user: FirebaseUser? = auth.currentUser
         val startTime = System.currentTimeMillis()
 
