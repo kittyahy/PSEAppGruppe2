@@ -20,12 +20,11 @@
 
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverManager
 
-import android.util.Log
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
 import io.mockk.coEvery
-import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -70,9 +69,8 @@ internal class SendCommandsToServerInParallel {
         }
     }
 
-/*
     @Test
-    fun sendOneCommand() {
+    fun sendOneCommand() = runBlocking {
         Assert.assertEquals(
             listOf(validCommands.elementAt(0)),
             serverManager.sendCommandsToServer(1, listOf(validCommands.elementAt(0)), "")
@@ -80,24 +78,23 @@ internal class SendCommandsToServerInParallel {
     }
 
     @Test
-    fun sendEmptyCommand() {
+    fun sendEmptyCommand() = runBlocking {
         Assert.assertEquals(listOf<String>(), serverManager.sendCommandsToServer(1, listOf(), ""))
     }
 
     @Test
-    fun sendTenCommands() {
+    fun sendTenCommands() = runBlocking {
         val commandsToSend = validCommands.toMutableList()
         val commandsSend = serverManager.sendCommandsToServer(1, commandsToSend, "")
         Assert.assertEquals(10, commandsSend.size)
         commandsSend.forEach {
             Assert.assertTrue(commandsToSend.remove(it))
-            Log.d("DEBUGParallel", it)
         }
         Assert.assertTrue(commandsToSend.isEmpty())
     }
 
     @Test
-    fun sendOneCommandError() {
+    fun sendOneCommandError() = runBlocking {
         // The invalid command should not be returned
         Assert.assertEquals(
             listOf<String>(),
@@ -106,7 +103,7 @@ internal class SendCommandsToServerInParallel {
     }
 
     @Test
-    fun sendCommandsWithOneError() {
+    fun sendCommandsWithOneError() = runBlocking {
         val commandsToSend = validCommands.toMutableList()
         commandsToSend.add(invalidCommand)
         val commandsSend = serverManager.sendCommandsToServer(1, commandsToSend, "")
@@ -115,5 +112,5 @@ internal class SendCommandsToServerInParallel {
             Assert.assertTrue(commandsToSend.remove(it))
         }
         Assert.assertEquals(1, commandsToSend.size)
-    }*/
+    }
 }
