@@ -38,7 +38,7 @@ class UserAccount @Inject constructor(fm: FirebaseManager) {
      * @param password: The password of the user that should be registered
      * @param type:     Through which method should the user be register (eg email)
      */
-    fun registerUser(eMail: String, password: String, type: SignInTypes): FirebaseReturnOptions {
+    suspend fun registerUser(eMail: String, password: String, type: SignInTypes): FirebaseReturnOptions {
         // Choose the correct registration method
         when (type) {
             SignInTypes.EMAIL -> return firebaseManager.registerUserWithEmailAndPassword(
@@ -60,7 +60,7 @@ class UserAccount @Inject constructor(fm: FirebaseManager) {
      * @param password: The password of the user that should be signed in
      * @param type:     Through which method should the user be signed in (eg email)
      */
-    fun signInUser(eMail: String, password: String, type: SignInTypes): FirebaseReturnOptions {
+    suspend fun signInUser(eMail: String, password: String, type: SignInTypes): FirebaseReturnOptions {
         // choose the correct sign in method
         when (type) {
             SignInTypes.EMAIL -> return firebaseManager.signInWithEmailAndPassword(eMail, password)
@@ -77,7 +77,7 @@ class UserAccount @Inject constructor(fm: FirebaseManager) {
      *
      * @return FirebaseReturnOptions: The success status of the request
      */
-    fun signOut(): FirebaseReturnOptions {
+    suspend fun signOut(): FirebaseReturnOptions {
         return firebaseManager.signOut()
     }
 
@@ -122,7 +122,7 @@ class UserAccount @Inject constructor(fm: FirebaseManager) {
      *
      * @return String: The token of the signed in user. If no user is signed in return ""
      */
-    fun getToken(): String {
+    suspend fun getToken(): String {
         return firebaseManager.getToken()
     }
 }
