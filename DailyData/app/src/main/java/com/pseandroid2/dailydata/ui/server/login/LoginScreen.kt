@@ -87,6 +87,8 @@ fun LoginScreen(
                 },
                 onClick = {
                     viewModel.onEvent(LoginScreenEvent.Login)
+                    //TODO Robin Login Screen doesn't close (although the above onEvent function
+                    //doesn't run into an infinite loop anymore)
                     //viewModel.signInWithEmailAndPassword(userEmail.trim(), userPassword.trim())
                 }
             )
