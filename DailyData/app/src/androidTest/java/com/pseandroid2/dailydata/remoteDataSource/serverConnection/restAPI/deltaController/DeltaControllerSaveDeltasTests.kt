@@ -4,13 +4,16 @@ import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
+import org.junit.AfterClass
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
 
 class DeltaControllerSaveDeltasTests {
-    /*
     private var restAPI: RESTAPI = RESTAPI()
     private lateinit var authToken: String
 
@@ -21,11 +24,12 @@ class DeltaControllerSaveDeltasTests {
     private val commandLimit = 128 // number of commands a user can upload for a project in one day
 
     @Before
-    fun setup() {
+    fun setup() = runBlocking {
         // Generate valid firebase authentication token
         val fm = FirebaseManager(null)
         val email = "test@student.kit.edu"
         val password = "PSEistsuper"
+        val uId = "4hpJh32YaAWrAYoVvo047q7Ey183"
 
         Assert.assertEquals(
             FirebaseReturnOptions.SINGED_IN,
@@ -36,10 +40,42 @@ class DeltaControllerSaveDeltasTests {
         // Create new project
         projectID = restAPI.addProject(authToken, "project details")
         Assert.assertTrue(projectID > 0)
+
+        setTeardown(restAPI, projectID, authToken, uId)
     }
 
+    companion object Teardown {
+        private var restAPI: RESTAPI? = null
+        private var projectID: Long = -1
+        private var authToken: String = ""
+        private var userToRemove1: String = ""
+
+        fun setTeardown(
+            restapi: RESTAPI,
+            projectID: Long,
+            authToken: String,
+            userToRemove1: String
+        ) {
+            restAPI = restapi
+            Teardown.projectID = projectID
+            Teardown.authToken = authToken
+            Teardown.userToRemove1 = userToRemove1
+        }
+
+        @AfterClass
+        @JvmStatic
+        fun teardown() {
+            runBlocking {
+                // Remove all users from project so that the project gets removed
+                restAPI?.removeUser(userToRemove1, projectID, authToken)
+            }
+        }
+    }
+
+
+    @ExperimentalCoroutinesApi
     @Test
-    fun saveDelta() {
+    fun saveDelta() = runTest {
         // Save a delta to the server
         Assert.assertEquals(
             listOf("projectCommand"),
@@ -47,11 +83,11 @@ class DeltaControllerSaveDeltasTests {
         )
     }
 
-    //TODO: We have currently a problem that the server can't handle too many uploaded deltas at a time.
-    */
-/*
+    //TODO: We have currently a problem that the server can't handle too many uploaded deltas at a time
+    /*
+    @ExperimentalCoroutinesApi
     @Test
-    fun saveTenDeltas() {
+    fun saveTenDeltas() = runTest {
         val projectCommands: MutableList<String> = mutableListOf()
         for (i in 1..10) {
             projectCommands.add("command$i")
@@ -63,8 +99,9 @@ class DeltaControllerSaveDeltasTests {
         }
     }
 
+    @ExperimentalCoroutinesApi
     @Test
-    fun exceedCommandUploadLimit() {
+    fun exceedCommandUploadLimit() = runTest {
         val projectID2 = restAPI.addProject(authToken, "new project details")
         Assert.assertTrue(projectID2 > 0)
 

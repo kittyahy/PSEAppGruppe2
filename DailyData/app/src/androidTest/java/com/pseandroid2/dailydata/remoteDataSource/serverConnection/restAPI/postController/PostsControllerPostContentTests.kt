@@ -8,6 +8,9 @@ import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParamet
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.TemplateDetail
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.AfterClass
 import org.junit.Assert
 import org.junit.Before
@@ -15,7 +18,6 @@ import org.junit.Test
 
 
 class PostsControllerPostContentTests {
-    /*
     private val restAPI: RESTAPI = RESTAPI()
     private val serverManager = ServerManager(restAPI)
     private lateinit var authToken: String
@@ -23,7 +25,7 @@ class PostsControllerPostContentTests {
     private var postID: Int = -1
 
     @Before
-    fun setup() {
+    fun setup() = runBlocking {
         // Generate valid firebase authentication token
         val fm = FirebaseManager(null)
         val email = "test@student.kit.edu"
@@ -73,14 +75,16 @@ class PostsControllerPostContentTests {
         @AfterClass
         @JvmStatic
         fun teardown() {
-            restAPI!!.removePost(postID, authToken)
-            Log.d("Teardown", "Complete")
+            runBlocking {
+                restAPI!!.removePost(postID, authToken)
+                Log.d("Teardown", "Complete")
+            }
         }
     }
 
-
+    @ExperimentalCoroutinesApi
     @Test
-    fun getPostDetail() {
+    fun getPostDetail() = runTest {
         val templateDetails: List<TemplateDetail> =
             restAPI.getPostDetail(postID, authToken) as List<TemplateDetail>
         Assert.assertNotEquals(emptyList<TemplateDetail>(), templateDetails)
@@ -89,22 +93,24 @@ class PostsControllerPostContentTests {
         }
     }
 
+    @ExperimentalCoroutinesApi
     @Test
-    fun getProjectTemplate() {
+    fun getProjectTemplate() = runTest {
         val projectTemplate: String = restAPI.getProjectTemplate(postID, authToken)
         Assert.assertEquals("project template", projectTemplate)
     }
 
+    @ExperimentalCoroutinesApi
     @Test
-    fun getGraphTemplate() {
+    fun getGraphTemplate() = runTest {
         val graphTemplate: String = restAPI.getGraphTemplate(fromPost = postID, 1, authToken)
         Assert.assertEquals("graph template", graphTemplate)
     }
-    */
 
     /* TODO: In the quality phase
+    @ExperimentalCoroutinesApi
     @Test
-    fun getFromWrongPostID() {
+    fun getFromWrongPostID() = runTest {
         Assert.assertEquals(
             emptyList<TemplateDetail>(),
             restAPI.getPostDetail(fromPost = -1, authToken) as List<TemplateDetail>
