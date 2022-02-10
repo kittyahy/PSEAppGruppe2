@@ -31,7 +31,7 @@ import java.time.LocalDateTime
 import com.pseandroid2.dailydata.model.project.Project as ModelProject
 
 class Row(
-    override val id: Int,
+    override var id: Int,
     val elements: List<String>
 ) : Identifiable, Convertible<Row> {
     override lateinit var executeQueue: ExecuteQueue

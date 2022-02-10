@@ -35,11 +35,11 @@ import kotlinx.coroutines.runBlocking
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
 
 class PieChart(
-    override val id: Int = -1,
-    override val image: Bitmap?,
-    val color: List<Int>,
-    val mapping: MutableList<Column>,
-    val showPercentages: Boolean
+    override var id: Int = -1,
+    override var image: Bitmap? = null,
+    var color: List<Int> = ArrayList(),
+    var mapping: MutableList<Column> = ArrayList(),
+    var showPercentages: Boolean = false
 ) : Graph() {
     private val columnColors = mutableMapOf<Int, String>()
     override lateinit var executeQueue: ExecuteQueue

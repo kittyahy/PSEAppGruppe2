@@ -25,7 +25,7 @@ import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import kotlinx.coroutines.flow.Flow
 
 class ProjectPreview(
-    override val id: Int,
+    override var id: Int,
     val name: String,
     val image: String
 ) : Identifiable {
