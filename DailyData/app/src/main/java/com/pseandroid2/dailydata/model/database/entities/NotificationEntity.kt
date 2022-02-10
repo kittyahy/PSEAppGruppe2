@@ -23,6 +23,9 @@ package com.pseandroid2.dailydata.model.database.entities
 import androidx.room.Entity
 import com.pseandroid2.dailydata.model.notifications.Notification
 
+/**
+ * This class represents notification in their Database. Every notification belongs to a project and has an id.
+ */
 @Entity(tableName = "notification", primaryKeys = ["projectId", "id"])
 data class NotificationEntity(
     val projectId: Int,

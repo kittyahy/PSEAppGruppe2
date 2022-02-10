@@ -20,14 +20,27 @@
 
 package com.pseandroid2.dailydata.model.settings
 
+/**
+ *  This interface defines how settings should be handled. It stores settings.
+ */
 interface Settings : Iterable<Pair<String, String>> {
 
+    /**
+     * It provides all settings, which are saved.
+     */
     @Deprecated("Should not be used outside the model. Use get or iterate over Settings directly")
     fun getAllSettings(): Map<String, String>
 
+    /**
+     * It provides a setting to the given key.
+     */
     operator fun get(key: String): String
 
+    /**
+     * It checks if a key is in the map
+     */
     fun containsKey(key: String): Boolean
+
 
     operator fun set(key: String, value: String)
 

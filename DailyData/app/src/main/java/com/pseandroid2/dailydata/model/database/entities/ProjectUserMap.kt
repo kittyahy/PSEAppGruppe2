@@ -23,6 +23,9 @@ package com.pseandroid2.dailydata.model.database.entities
 import androidx.room.Entity
 import com.pseandroid2.dailydata.model.users.User
 
+/**
+ * This class maps a user and a project together in a database.
+ */
 @Entity(tableName = "user", primaryKeys = ["projectId", "user"])
 data class ProjectUserMap(
     val projectId: Int,

@@ -20,6 +20,9 @@
 
 package com.pseandroid2.dailydata.model.database.entities
 
+/**
+ * This class contains all components from a project, which the can be used outside the model.
+ */
 data class ProjectData(
     val id: Int,
     val name: String,

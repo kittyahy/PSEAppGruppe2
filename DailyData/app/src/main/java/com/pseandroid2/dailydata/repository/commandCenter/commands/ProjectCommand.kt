@@ -14,6 +14,7 @@ import java.time.LocalDateTime
  * How long it stayed on the Server at max (serverRemoveTime)
  * Who first performed the action (commandByUser) and whether this person had administrator rights
  * at this time (isProjectAdmin).
+
  */
 abstract class ProjectCommand(
     var projectID: Int? = null,
@@ -59,9 +60,11 @@ abstract class ProjectCommand(
     }
 
     /**
+
      * Specifies the condition on which to add the command to the publish queue. May be overridden
      * if a command needs special conditions to be added.
      * Conditions may depend on the given publishQueue and repositoryViewModelAPI.
+
      */
     open suspend fun publish(
         repositoryViewModelAPI: RepositoryViewModelAPI,

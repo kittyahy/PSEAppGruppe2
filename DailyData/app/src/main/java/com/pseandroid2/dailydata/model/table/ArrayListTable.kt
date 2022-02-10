@@ -20,6 +20,9 @@
 
 package com.pseandroid2.dailydata.model.table
 
+/**
+ *
+ */
 class ArrayListTable(private var layout: TableLayout = ArrayListLayout()) : Table {
     private val table: MutableList<ArrayListRow> = mutableListOf()
     override fun getCell(row: Int, col: Int) = table[row][col]

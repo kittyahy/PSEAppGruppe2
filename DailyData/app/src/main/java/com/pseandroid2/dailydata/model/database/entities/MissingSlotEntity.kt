@@ -23,6 +23,10 @@ package com.pseandroid2.dailydata.model.database.entities
 import androidx.room.Entity
 import java.time.LocalDateTime
 
+/**
+ * This class represents the slot, where online deltas are missing, in their Database.
+ * To find a specified slot, they need their project and between to times.
+ */
 @Entity(tableName = "missingSlot", primaryKeys = ["projectId", "from", "until"])
 data class MissingSlotEntity(
     val projectId: Long,
