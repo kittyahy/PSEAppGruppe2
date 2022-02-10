@@ -139,7 +139,7 @@ object Generator {
         lineChart.data = LineData(data)
 
         //Remove X-Axis as that is not currently in use
-        lineChart.xAxis.isEnabled = false
+        //lineChart.xAxis.isEnabled = false
         //Disable Description
         lineChart.description.isEnabled = false
 

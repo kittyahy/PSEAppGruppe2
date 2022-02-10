@@ -79,7 +79,7 @@ class GraphUITester {
         lateinit var lineChartMock: FloatLineChart
 
         lateinit var pieChart: GraphPieChart
-        lateinit var lineChart: IntLineChart
+        lateinit var lineChart: FloatLineChart
 
         @JvmStatic
         @BeforeClass
@@ -126,8 +126,8 @@ class GraphUITester {
             val pieFunc = PieChartTransformation(FloatSum())
             val pieTransform = project.createDataTransformation(pieFunc)
 
-            val lineFunc = IntLineChartTransformation(FloatIdentity())
-            val lineTransform = project.createDataTransformation(lineFunc, listOf(0, 1, 2, 3))
+            val lineFunc = FloatLineChartTransformation(FloatIdentity())
+            val lineTransform = project.createDataTransformation(lineFunc, listOf(0, 1))
 
             val pieSettingsMock = MapSettings(pieSettingsMapMock)
             val lineSettingsMock = MapSettings(lineSettingsMapMock)
@@ -137,7 +137,7 @@ class GraphUITester {
             pieChartMock = GraphPieChart(0, transformationMock, pieSettingsMock, "")
             lineChartMock = FloatLineChart(1, lineMock, lineSettingsMock, "")
             pieChart = GraphPieChart(2, pieTransform, pieSettings, "")
-            lineChart = IntLineChart(3, lineTransform, lineSettings, "")
+            lineChart = FloatLineChart(3, lineTransform, lineSettings, "")
         }
     }
 
@@ -196,7 +196,7 @@ class GraphUITester {
                     }, modifier = Modifier.size(500.dp, 500.dp)
                 )
             }
-            delay(1000)
+            delay(10000)
         }
     }
 }
