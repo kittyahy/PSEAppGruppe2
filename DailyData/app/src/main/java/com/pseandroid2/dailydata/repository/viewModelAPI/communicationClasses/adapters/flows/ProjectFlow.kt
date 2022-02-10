@@ -57,10 +57,12 @@ class ProjectFlow(
     @Suppress("DEPRECATION")
     private val rds: RemoteDataSourceAPI = repositoryViewModelAPI.remoteDataSourceAPI
     private val eq: ExecuteQueue = repositoryViewModelAPI.projectHandler.executeQueue
-    fun getProject(): Flow<Project> = provider.provideFlow.distinctUntilChanged().map { project ->
+    fun getProject(): Flow<Project> = provider.provideFlow.map { project ->
         val ret = if (project == null) {
+            Log.d(LOG_TAG, "Got null Project from database")
             Project(repositoryViewModelAPI = repositoryViewModelAPI)
         } else {
+            Log.d(LOG_TAG, "Got Project from database: name = ${project.name}, id = ${project.id}")
             val rows = mutableListOf<Row>()
             for (row in project.table) {
                 rows.add(Row(row))

@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 
 abstract class FlowProvider<T : Any?> {
-    protected val mutableFlow = MutableSharedFlow<T>()
+    protected val mutableFlow = MutableSharedFlow<T>(1)
     val provideFlow = mutableFlow.asSharedFlow()
 
     abstract suspend fun initialize()

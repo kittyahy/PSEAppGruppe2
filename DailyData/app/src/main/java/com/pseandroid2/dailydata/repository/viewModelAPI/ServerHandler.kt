@@ -66,16 +66,11 @@ class ServerHandler(private val appDataBase: AppDataBase, private val api: Remot
      * e.g. If manipulationIsPossible.first() is false,
      *      users should not be able to call manipulation().
      */
-    fun loginIsPossible(): Flow<Boolean> {
+    suspend fun loginIsPossible(): Flow<Boolean> = coroutineScope {
         //Todo replace with valid proof
-        /*val flow = MutableSharedFlow<Boolean>()
-        runBlocking {
-            flow.emit(true)
-        }*/
-        //TODO Arne/Anton should this really only ever return true? Also, SharedFlows are Hot Flows,
-        //i.e. they broadcast emissions to whoever is currently listening, but will not send their
-        //latest emission to new subscribers
-        return flow { emit(true) }
+        val flow = MutableSharedFlow<Boolean>(1)
+        flow.emit(true)
+        return@coroutineScope flow
     }
 
     suspend fun login(email: String, password: String) { //Todo erweiterbarkeit

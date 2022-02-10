@@ -27,7 +27,7 @@ import kotlinx.coroutines.flow.Flow
  * Column class that handles its specific interaction with ViewModel.
  */
 class Column(
-    override val id: Int,
+    override var id: Int,
     val name: String,
     val unit: String,
     val dataType: DataType

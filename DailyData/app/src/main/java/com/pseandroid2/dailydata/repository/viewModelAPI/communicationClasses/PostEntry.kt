@@ -26,7 +26,7 @@ import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import kotlinx.coroutines.flow.Flow
 
 class PostEntry(
-    override val id: Int,
+    override var id: Int,
     val title: String = "template detail",
     val detailImage: Bitmap,
     val isProjectTemplate: Boolean = false
