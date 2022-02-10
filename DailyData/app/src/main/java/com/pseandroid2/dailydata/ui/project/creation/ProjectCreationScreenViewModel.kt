@@ -176,6 +176,8 @@ class ProjectCreationScreenViewModel @Inject constructor(
                                 graphs = graphs
                             )
                             val id = newProject.await()
+                            println("Test: after new Project")
+                            println(id)
                             sendUiEvent(UiEvent.PopBackStack)
                             sendUiEvent(UiEvent.Navigate(Routes.DATA + "?projectId=$id"))
                         }

@@ -45,7 +45,7 @@ class PostPreview(
     override lateinit var executeQueue: ExecuteQueue
     override lateinit var project: Project
 
-    fun getPostDetail(): Collection<PostEntry> {
+    suspend fun getPostDetail(): Collection<PostEntry> {
         val postDetail = ArrayList<PostEntry>()
         val serverList = remoteDataSourceAPI.getPostDetail(id)
         for (serverDetail in serverList) {

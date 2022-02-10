@@ -20,10 +20,12 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows
 
+import android.util.Log
 import com.google.gson.Gson
 import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.model.notifications.TimeNotification
 import com.pseandroid2.dailydata.model.table.ArrayListLayout
+import com.pseandroid2.dailydata.model.users.NullUser
 import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
@@ -35,15 +37,19 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Pr
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Row
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.toColumnList
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.toViewGraph
+import com.pseandroid2.dailydata.util.Consts.LOG_TAG
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 @InternalCoroutinesApi
 class ProjectFlow(
     private val repositoryViewModelAPI: RepositoryViewModelAPI,
-    private val projectId: Int
+    private val provider: ProjectFlowProvider
 ) {
     @Suppress("DEPRECATION")
     private val db: AppDataBase = repositoryViewModelAPI.appDataBase
@@ -51,61 +57,65 @@ class ProjectFlow(
     @Suppress("DEPRECATION")
     private val rds: RemoteDataSourceAPI = repositoryViewModelAPI.remoteDataSourceAPI
     private val eq: ExecuteQueue = repositoryViewModelAPI.projectHandler.executeQueue
-    fun getProject(): Flow<Project> {
-        return ProjectFlowProvider(projectId, db).provideFlow.distinctUntilChanged()
-            .map { project ->
-                val ret = if (project == null) {
-                    Project(repositoryViewModelAPI = repositoryViewModelAPI)
-                } else {
-                    val rows = mutableListOf<Row>()
-                    for (row in project.table) {
-                        rows.add(Row(row))
-                    }
-                    val buttons = mutableListOf<Button>()
-                    for (col in project.table.getLayout()) {
-                        for (uiElement in col.uiElements) {
-                            buttons.add(Button(uiElement, col.id))
-                        }
-                    }
-                    val notifications = mutableListOf<Notification>()
-                    for (notif in project.notifications) {
-                        if (notif is TimeNotification) {
-                            notifications.add(Notification(notif))
-                        }
-                    }
-                    val graphs = mutableListOf<Graph>()
-                    for (graph in project.graphs) {
-                        graphs.add(
-                            graph.toViewGraph(
-                                Gson().fromJson(
-                                    db.projectDataDAO().getCurrentLayout(projectId),
-                                    ArrayListLayout::class.java
-                                )
-                            )
-                        )
-                    }
-                    val members = mutableListOf<Member>()
-                    for (user in project.users) {
-                        members.add(Member(user))
-                    }
-                    Project(
-                        project.id,
-                        project.isOnline,
-                        rds.getUserID() == project.admin.getId(),
-                        project.name,
-                        project.desc,
-                        project.color,
-                        project.table.getLayout().toColumnList(),
-                        rows.toList(),
-                        buttons.toList(),
-                        notifications.toList(),
-                        graphs.toList(),
-                        members.toList(),
-                        repositoryViewModelAPI
-                    )
-                }
-                ret.executeQueue = eq
-                return@map ret
+    fun getProject(): Flow<Project> = provider.provideFlow.distinctUntilChanged().map { project ->
+        val ret = if (project == null) {
+            Project(repositoryViewModelAPI = repositoryViewModelAPI)
+        } else {
+            val rows = mutableListOf<Row>()
+            for (row in project.table) {
+                rows.add(Row(row))
             }
+            val buttons = mutableListOf<Button>()
+            for (col in project.table.getLayout()) {
+                for (uiElement in col.uiElements) {
+                    buttons.add(Button(uiElement, col.id))
+                }
+            }
+            val notifications = mutableListOf<Notification>()
+            for (notif in project.notifications) {
+                if (notif is TimeNotification) {
+                    notifications.add(Notification(notif))
+                }
+            }
+            val graphs = mutableListOf<Graph>()
+            for (graph in project.graphs) {
+                graphs.add(
+                    graph.toViewGraph(
+                        Gson().fromJson(
+                            db.projectDataDAO().getCurrentLayout(provider.projId),
+                            ArrayListLayout::class.java
+                        )
+                    )
+                )
+            }
+            val members = mutableListOf<Member>()
+            for (user in project.users) {
+                members.add(Member(user))
+            }
+            Project(
+                project.id,
+                project.isOnline,
+                if (project.admin is NullUser) {
+                    Log.w(LOG_TAG, "Getting a NullUser from the Database")
+                    false
+                } else {
+                    rds.getUserID() == project.admin.getId()
+                },
+                project.name,
+                project.desc,
+                project.color,
+                project.table.getLayout().toColumnList(),
+                rows.toList(),
+                buttons.toList(),
+                notifications.toList(),
+                graphs.toList(),
+                members.toList(),
+                repositoryViewModelAPI
+            )
+        }
+        @Suppress("Deprecation")
+        ret.executeQueue = eq
+        return@map ret
     }
 }
+

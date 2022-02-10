@@ -25,14 +25,15 @@ import com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.fetchReque
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
-import io.mockk.every
+import io.mockk.coEvery
 import io.mockk.mockk
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 
 internal class ServerManagerIsFetchRequestQueueCorrectlyLinkedTests {
-
     private var fetchRequestList: MutableList<FetchRequest> = mutableListOf(
         FetchRequest(project = 1),
         FetchRequest(project = 2),
@@ -48,13 +49,13 @@ internal class ServerManagerIsFetchRequestQueueCorrectlyLinkedTests {
     @Before
     fun setup() {
         restAPI = mockk()
-        every { restAPI.getFetchRequests(1, "") } returns fetchRequestList
+        coEvery { restAPI.getFetchRequests(1, "") } returns fetchRequestList
         // Create ServerManager with mocked RestAPI
         serverManager = ServerManager(restAPI)
     }
 
     @Test
-    fun fetchRequestQueueLinked() {
+    fun fetchRequestQueueLinked() = runBlocking {
         Assert.assertEquals(0, toUpdate.getUpdated())
 
         // Add Observer to queues

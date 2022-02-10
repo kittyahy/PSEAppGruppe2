@@ -20,7 +20,9 @@
 
 package com.pseandroid2.dailydata.model.notifications
 
+import android.util.Log
 import com.pseandroid2.dailydata.model.database.entities.NotificationEntity
+import com.pseandroid2.dailydata.util.Consts.LOG_TAG
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -63,6 +65,7 @@ class TimeNotification(
     }
 
     override fun toFactoryString(): String {
+        Log.d(LOG_TAG, "TIME|$lastSent,$send")
         return "TIME|$lastSent,$send"
     }
 

@@ -20,6 +20,8 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
+import android.util.Log
+import com.google.gson.Gson
 import com.pseandroid2.dailydata.model.database.entities.ProjectData
 import com.pseandroid2.dailydata.model.project.ProjectBuilder
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
@@ -33,12 +35,14 @@ import com.pseandroid2.dailydata.repository.commandCenter.commands.AddRow
 import com.pseandroid2.dailydata.repository.commandCenter.commands.IllegalOperationException
 import com.pseandroid2.dailydata.repository.commandCenter.commands.ProjectCommand
 import com.pseandroid2.dailydata.repository.commandCenter.commands.PublishProject
+import com.pseandroid2.dailydata.util.Consts.LOG_TAG
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.runBlocking
 import kotlin.reflect.KClass
+import kotlin.reflect.full.companionObject
 import com.pseandroid2.dailydata.model.project.Project as ModelProject
 
 class Project(
@@ -89,9 +93,12 @@ class Project(
         }
         for (pair in isPossible) {
             runBlocking { //Todo runBlocking weg
-                pair.value.emit(pair.key.members.single {
-                    it.name == "isPossible"
-                }.call(this) as Boolean)
+                isPossible[AddRow::class]!!.emit(AddRow.isPossible(this@Project))
+                isPossible[AddButton::class]!!.emit(AddButton.isPossible(this@Project))
+                isPossible[AddNotification::class]!!.emit(AddNotification.isPossible(this@Project))
+                isPossible[AddGraph::class]!!.emit(AddGraph.isPossible(this@Project))
+                isPossible[AddMember::class]!!.emit(AddMember.isPossible(this@Project))
+                isPossible[PublishProject::class]!!.emit(PublishProject.isPossible(this@Project))
             }
         }
         for (type in DataType.values()) {

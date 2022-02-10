@@ -8,8 +8,9 @@ import com.pseandroid2.dailydata.remoteDataSource.serverConnection.forRepoReturn
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
 import com.pseandroid2.dailydata.remoteDataSource.userManager.SignInTypes
 import com.pseandroid2.dailydata.remoteDataSource.userManager.UserAccount
-import io.mockk.every
+import io.mockk.coEvery
 import io.mockk.mockk
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -28,15 +29,14 @@ class RDSAPICorrectlyLinkedTests {
 
     @Before
     fun setup() {
-
         val serverManager = mockk<ServerManager>()
 
-        every { serverManager.connectionToServerPossible() } returns true
-        every { serverManager.getAllPostPreview("") } returns postPreviewList
-        every { serverManager.getPostDetail(1, "") } returns postDetailList
-        every { serverManager.getProjectTemplate(1, "") } returns "ProjectTemplate"
-        every { serverManager.getGraphTemplate(1, 1, "") } returns "GraphTemplate"
-        every {
+        coEvery { serverManager.connectionToServerPossible() } returns true
+        coEvery { serverManager.getAllPostPreview("") } returns postPreviewList
+        coEvery { serverManager.getPostDetail(1, "") } returns postDetailList
+        coEvery { serverManager.getProjectTemplate(1, "") } returns "ProjectTemplate"
+        coEvery { serverManager.getGraphTemplate(1, 1, "") } returns "GraphTemplate"
+        coEvery {
             serverManager.addPost(
                 postPreview = Pair(bitmap, ""),
                 projectTemplate = Pair("", Pair(bitmap, "")),
@@ -44,22 +44,22 @@ class RDSAPICorrectlyLinkedTests {
                 authToken = ""
             )
         } returns 1
-        every { serverManager.removePost(1, "") } returns true
-        every { serverManager.addUser(1, "") } returns "project details"
-        every { serverManager.removeUser("", 1, "") } returns true
-        every { serverManager.addProject("", "project details") } returns 0
-        every { serverManager.getProjectParticipants("", 1) } returns listOf("")
-        every { serverManager.isProjectParticipant("", 1, "") } returns true
-        every { serverManager.getProjectAdmin("", 1) } returns ""
+        coEvery { serverManager.removePost(1, "") } returns true
+        coEvery { serverManager.addUser(1, "") } returns "project details"
+        coEvery { serverManager.removeUser("", 1, "") } returns true
+        coEvery { serverManager.addProject("", "project details") } returns 0
+        coEvery { serverManager.getProjectParticipants("", 1) } returns listOf("")
+        coEvery { serverManager.isProjectParticipant("", 1, "") } returns true
+        coEvery { serverManager.getProjectAdmin("", 1) } returns ""
 
-        every {
+        coEvery {
             serverManager.sendCommandsToServer(
                 1,
                 emptyList(),
                 ""
             )
         } returns sendCommandsList // use coEvery for mockking suspend functions
-        every {
+        coEvery {
             serverManager.provideOldData(
                 "",
                 "",
@@ -70,38 +70,38 @@ class RDSAPICorrectlyLinkedTests {
                 ""
             )
         } returns true
-        every { serverManager.getRemoveTime("") } returns 42
-        every { serverManager.demandOldData(1, "", "") } returns true
+        coEvery { serverManager.getRemoveTime("") } returns 42
+        coEvery { serverManager.demandOldData(1, "", "") } returns true
 
         // mock UserAccount
         val userAccount = mockk<UserAccount>()
-        every {
+        coEvery {
             userAccount.registerUser(
                 "",
                 "",
                 SignInTypes.EMAIL
             )
         } returns FirebaseReturnOptions.REGISTERED
-        every {
+        coEvery {
             userAccount.signInUser(
                 "",
                 "",
                 SignInTypes.EMAIL
             )
         } returns FirebaseReturnOptions.SINGED_IN
-        every { userAccount.signOut() } returns FirebaseReturnOptions.SINGED_OUT
-        every { userAccount.getUserID() } returns "userID"
-        every { userAccount.getUserName() } returns "userName"
-        every { userAccount.getUserEMail() } returns "userEmail"
-        every { userAccount.getUserPhotoUrl() } returns "photo"
-        every { userAccount.getToken() } returns ""
+        coEvery { userAccount.signOut() } returns FirebaseReturnOptions.SINGED_OUT
+        coEvery { userAccount.getUserID() } returns "userID"
+        coEvery { userAccount.getUserName() } returns "userName"
+        coEvery { userAccount.getUserEMail() } returns "userEmail"
+        coEvery { userAccount.getUserPhotoUrl() } returns "photo"
+        coEvery { userAccount.getToken() } returns ""
 
         // Create RDS with mocked serverManager and mocked FirebaseManager
         rdsAPI = RemoteDataSourceAPI(userAccount, serverManager)
     }
 
     @Test
-    fun serverManagerCorrectlyLinked() {
+    fun serverManagerCorrectlyLinked() = runBlocking {
         Assert.assertTrue(rdsAPI.connectionToServerPossible())
         Assert.assertEquals(postPreviewList.elementAt(0), rdsAPI.getPostPreviews().elementAt(0))
         Assert.assertEquals(postDetailList.elementAt(0), rdsAPI.getPostDetail(1).elementAt(0))
@@ -141,7 +141,7 @@ class RDSAPICorrectlyLinkedTests {
     }
 
     @Test
-    fun userAccountCorrectlyLinked() {
+    fun userAccountCorrectlyLinked() = runBlocking {
         Assert.assertEquals(
             FirebaseReturnOptions.REGISTERED,
             rdsAPI.registerUser("", "", SignInTypes.EMAIL)

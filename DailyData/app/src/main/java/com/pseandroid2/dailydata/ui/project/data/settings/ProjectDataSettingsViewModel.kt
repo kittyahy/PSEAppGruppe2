@@ -32,7 +32,7 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
     private val repository: RepositoryViewModelAPI
 ) : ViewModel() {
 
-    private lateinit var initialProject : Project
+    private lateinit var initialProject: Project
     private val _uiEvent = MutableSharedFlow<UiEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
 
@@ -44,16 +44,16 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
         private set
     var wallpaper by mutableStateOf(Color.White)
         private set
-    var table by mutableStateOf( listOf<Column>() )
+    var table by mutableStateOf(listOf<Column>())
         private set
-    var buttons by mutableStateOf( listOf<Button>() )
+    var buttons by mutableStateOf(listOf<Button>())
         private set
-    var members by mutableStateOf( listOf<Member>() )
+    var members by mutableStateOf(listOf<Member>())
         private set
 
-    var notifications by mutableStateOf( listOf<Notification>() )
+    var notifications by mutableStateOf(listOf<Notification>())
         private set
-    var graphs by mutableStateOf( listOf<Graph>() )
+    var graphs by mutableStateOf(listOf<Graph>())
         private set
 
     var isWallpaperDialogOpen by mutableStateOf(false)
@@ -74,18 +74,22 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
         when (event) {
             is ProjectDataSettingsScreenEvent.OnCreate -> {
                 viewModelScope.launch {
-                    repository.projectHandler.getProjectByID(id = event.projectId).collect { project ->
-                        title = project.title
-                        description = project.description
-                        wallpaper = Color(project.wallpaper)
-                        table = project.table
-                        buttons = project.buttons
-                        members = project.members
-                        notifications = project.notifications
-                        graphs = project.graphs
-                        isAdmin = isAdmin
-                        initialProject = project
-                    }
+                    repository.projectHandler.initializeProjectProvider(event.projectId)
+                }
+                viewModelScope.launch {
+                    repository.projectHandler.getProjectByID(id = event.projectId)
+                        .collect { project ->
+                            title = project.title
+                            description = project.description
+                            wallpaper = Color(project.wallpaper)
+                            table = project.table
+                            buttons = project.buttons
+                            members = project.members
+                            notifications = project.notifications
+                            graphs = project.graphs
+                            isAdmin = isAdmin
+                            initialProject = project
+                        }
                 }
             }
             is ProjectDataSettingsScreenEvent.OnTitleChange -> {
@@ -104,14 +108,21 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
                     table.last().id + 1
                 }
                 val mutable = table.toMutableList()
-                mutable.add(Column(id = id, name = event.name, unit = event.unit, dataType = event.dataType))
+                mutable.add(
+                    Column(
+                        id = id,
+                        name = event.name,
+                        unit = event.unit,
+                        dataType = event.dataType
+                    )
+                )
                 table = mutable.toList()
             }
             is ProjectDataSettingsScreenEvent.OnTableRemove -> {
                 val mutable = table.toMutableList()
                 val removed = mutable.removeAt(index = event.index)
                 val mutableButtons = buttons.toMutableList()
-                buttons = mutableButtons.filter { it.columnId != removed.id}.toList()
+                buttons = mutableButtons.filter { it.columnId != removed.id }.toList()
                 table = mutable.toList()
             }
             is ProjectDataSettingsScreenEvent.OnButtonAdd -> {
@@ -121,7 +132,14 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
                     buttons.last().id + 1
                 }
                 val mutable = buttons.toMutableList()
-                mutable.add(Button(id = id, name = event.name, columnId = event.columnId, value = event.value))
+                mutable.add(
+                    Button(
+                        id = id,
+                        name = event.name,
+                        columnId = event.columnId,
+                        value = event.value
+                    )
+                )
                 buttons = mutable.toList()
             }
             is ProjectDataSettingsScreenEvent.OnButtonRemove -> {
@@ -166,7 +184,7 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
                 isTableDialogOpen = event.isOpen
             }
             is ProjectDataSettingsScreenEvent.OnShowButtonsDialog -> {
-                if(event.isOpen && table.none { it.dataType == DataType.WHOLE_NUMBER }) {
+                if (event.isOpen && table.none { it.dataType == DataType.WHOLE_NUMBER }) {
                     sendUiEvent(UiEvent.ShowToast("Please Enter a compatible column first"))
                 } else {
                     isButtonsDialogOpen = event.isOpen
@@ -207,7 +225,7 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
                 when {
                     title.isBlank() -> sendUiEvent(UiEvent.ShowToast("Please Enter a title"))
                     table.isEmpty() -> sendUiEvent(UiEvent.ShowToast("Please Enter a column"))
-                    else            -> {
+                    else -> {
                         viewModelScope.launch {
                             if (initialProject.setNameIsPossible().first()) {
                                 initialProject.setName(name = title)
@@ -225,52 +243,71 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
                                 sendUiEvent(UiEvent.ShowToast("Could not change wallpaper"))
                             }
                             for (column in initialProject.table) {
-                                if(!table.contains(column) && initialProject.deleteColumnIsPossible(column = column).first()) {
+                                if (!table.contains(column) && initialProject.deleteColumnIsPossible(
+                                        column = column
+                                    ).first()
+                                ) {
                                     initialProject.deleteColumn(column = column)
                                 }
                             }
-                            for (column in table) {
-                                                                                                                    //i assume there is a value
-                                if(!initialProject.table.contains(column) && initialProject.addColumnIsPossible()[column.dataType]!!.first()) {
+                            for (column in table) {                                                                                                     //i assume there is a value
+                                if (!initialProject.table.contains(column) && initialProject.addColumnIsPossible()[column.dataType]!!.first()) {
                                     initialProject.addColumn(column = column)
                                 }
                             }
                             for (button in initialProject.buttons) {
-                                if(!buttons.contains(button) && initialProject.deleteButtonIsPossible(button = button).first()) {
+                                if (!buttons.contains(button) && initialProject.deleteButtonIsPossible(
+                                        button = button
+                                    ).first()
+                                ) {
                                     initialProject.deleteButton(button = button)
                                 }
                             }
                             for (button in buttons) {
-                                if(!initialProject.buttons.contains(button) && initialProject.addButtonIsPossible().first()) {
+                                if (!initialProject.buttons.contains(button) && initialProject.addButtonIsPossible()
+                                        .first()
+                                ) {
                                     initialProject.addButton(button = button)
                                 }
                             }
                             for (member in initialProject.members) {
-                                if(!members.contains(member) && initialProject.deleteMemberIsPossible(member = member).first()) {
+                                if (!members.contains(member) && initialProject.deleteMemberIsPossible(
+                                        member = member
+                                    ).first()
+                                ) {
                                     initialProject.deleteMember(member = member)
                                 }
                             }
                             for (notification in initialProject.notifications) {
-                                if(!notifications.contains(notification) && initialProject.deleteNotificationIsPossible(notification = notification).first()) {
+                                if (!notifications.contains(notification) && initialProject.deleteNotificationIsPossible(
+                                        notification = notification
+                                    ).first()
+                                ) {
                                     initialProject.deleteNotification(notification = notification)
                                 }
                             }
                             for (notification in notifications) {
-                                if(!initialProject.notifications.contains(notification) && initialProject.addNotificationIsPossible().first()) {
+                                if (!initialProject.notifications.contains(notification) && initialProject.addNotificationIsPossible()
+                                        .first()
+                                ) {
                                     initialProject.addNotification(notification = notification)
                                 }
                             }
                             for (graph in initialProject.graphs) {
-                                if(!graphs.contains(graph)) {
+                                if (!graphs.contains(graph)) {
                                     viewModelScope.launch {
-                                        if (graph.deleteIsPossible().first() && graph.deleteIsPossible().first()) {
+                                        if (graph.deleteIsPossible()
+                                                .first() && graph.deleteIsPossible().first()
+                                        ) {
                                             graph.delete()
                                         }
                                     }
                                 }
                             }
                             for (graph in graphs) {
-                                if(!initialProject.graphs.contains(graph) && initialProject.addGraphIsPossible().first()) {
+                                if (!initialProject.graphs.contains(graph) && initialProject.addGraphIsPossible()
+                                        .first()
+                                ) {
                                     initialProject.addGraph(graph = graph)
                                 }
                             }
@@ -282,7 +319,7 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
         }
     }
 
-    private fun sendUiEvent(event : UiEvent) {
+    private fun sendUiEvent(event: UiEvent) {
         viewModelScope.launch {
             _uiEvent.emit(event)
         }

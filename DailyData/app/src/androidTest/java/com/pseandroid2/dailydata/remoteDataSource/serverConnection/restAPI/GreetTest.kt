@@ -1,18 +1,21 @@
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI
 
-import android.util.Log
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Assert
 import org.junit.Test
-import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
-import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
+import kotlinx.coroutines.test.runTest
+import org.junit.After
+import org.junit.Before
 
-/*
 class GreetTest {
+    @ExperimentalCoroutinesApi
     @Test
-    fun greet() {
-        var restAPI: RESTAPI = RESTAPI()
+    fun greet() = runTest {
+        val restAPI = RESTAPI()
 
+        
         Assert.assertTrue(restAPI.greet())
     }
-}*/
+}
+

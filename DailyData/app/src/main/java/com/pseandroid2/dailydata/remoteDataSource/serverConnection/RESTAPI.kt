@@ -20,7 +20,6 @@
 
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection
 
-import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.AddPostParameter
@@ -31,8 +30,6 @@ import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.PostPreview
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.TemplateDetail
-import retrofit2.Call
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
@@ -40,10 +37,18 @@ import java.time.LocalDateTime
 
 /**
  * Carries out all calls to our server
+ * Die baseURL vom Testserver: "http://00495284-8fb3-4727-9bf9-10353bd82b99.ka.bw-cloud-instance.org:8080"
+ * Die baseURL vom echtem Server: "http://261ee33a-ba27-4828-b5df-f5f8718defe8.ka.bw-cloud-instance.org:8080"  NICHT ANFASSEN - Verbrennungsgefahr!
  */
 class RESTAPI {
+
+    /* Das ist der echte Server: Finger Weg
+     private var baseUrl: String =
+       "http://261ee33a-ba27-4828-b5df-f5f8718defe8.ka.bw-cloud-instance.org:8080" // The URL from our server   */
+
+    // Das ist ein TestServer, have fun !! sehen sehr gleich aus die Links.
     private var baseUrl: String =
-        "http://261ee33a-ba27-4828-b5df-f5f8718defe8.ka.bw-cloud-instance.org:8080" // The URL from our server
+        "http://00495284-8fb3-4727-9bf9-10353bd82b99.ka.bw-cloud-instance.org:8080"
 
     private val gson: Gson = GsonBuilder()
         .setLenient()
@@ -65,15 +70,20 @@ class RESTAPI {
      * Checks if it possible to connect to our server
      *
      * @return Boolean: Returns true, if the server could be successfully reached. Otherwise return false
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
-    fun greet(): Boolean {
-        val greetingCall: Call<String> = server.greet()
+    suspend fun greet(): Boolean {
+        try {
+            val call = server.greet()
 
-        val response: Response<String> = greetingCall.execute()
-        val body: String = response.body() ?: ""
-
-        if (body == "Hello") {
-            return true
+            if (call.isSuccessful && call.body() != null) {
+                if (call.body() == "Hello") {
+                    return true
+                }
+            }
+        } catch (e: RuntimeException) {
+            throw ServerNotReachableException()
         }
         return false
     }
@@ -84,11 +94,20 @@ class RESTAPI {
      *
      * @param authToken: The authentication token
      * @return Collection<PostPreview>: The previews of the posts
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
-    fun getAllPostsPreview(authToken: String): Collection<PostPreview> {
-        val call: Call<List<PostPreview>> = server.getAllPostPreview(authToken)
+    suspend fun getAllPostsPreview(authToken: String): Collection<PostPreview> {
+        try {
+            val call = server.getAllPostPreview(authToken)
 
-        return call.execute().body() ?: emptyList()
+            if (call.isSuccessful && call.body() != null) {
+                return call.body()!!
+            }
+        } catch (e: RuntimeException) {
+            throw ServerNotReachableException()
+        }
+        return emptyList()
     }
 
     /**
@@ -97,11 +116,20 @@ class RESTAPI {
      * @param fromPost:     The id from the searched post
      * @param authToken:    The authentication token
      * @return Collection<TemplateDetail>: Returns the detailed post belonging to the post id
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
-    fun getPostDetail(fromPost: Int, authToken: String): Collection<TemplateDetail> {
-        val call: Call<List<TemplateDetail>> = server.getPostDetail(authToken, fromPost)
+    suspend fun getPostDetail(fromPost: Int, authToken: String): Collection<TemplateDetail> {
+        try {
+            val call = server.getPostDetail(authToken, fromPost)
 
-        return call.execute().body() ?: emptyList()
+            if (call.isSuccessful && call.body() != null) {
+                return call.body()!!
+            }
+        } catch (e: RuntimeException) {
+            throw ServerNotReachableException()
+        }
+        return emptyList()
     }
 
     /**
@@ -110,11 +138,19 @@ class RESTAPI {
      * @param fromPost:     The post from which the project template should be downloaded
      * @param authToken:    The authentication token
      * @return String - The requested project template as JSON
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
-    fun getProjectTemplate(fromPost: Int, authToken: String): String {
-        val call: Call<String> = server.getProjectTemplate(authToken, fromPost)
-
-        return call.execute().body() ?: ""
+    suspend fun getProjectTemplate(fromPost: Int, authToken: String): String {
+        try {
+            val call = server.getProjectTemplate(authToken, fromPost)
+            if (call.isSuccessful && call.body() != null) {
+                return call.body()!!
+            }
+        } catch (e: RuntimeException) {
+            throw ServerNotReachableException()
+        }
+        return ""
     }
 
     /**
@@ -124,11 +160,19 @@ class RESTAPI {
      * @param templateNumber:   Which graph template should be downloaded from the post
      * @param authToken:        The authentication token
      * @return String - The requested graph template as JSON
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
-    fun getGraphTemplate(fromPost: Int, templateNumber: Int, authToken: String): String {
-        val call: Call<String> = server.getGraphTemplate(authToken, fromPost, templateNumber)
-
-        return call.execute().body() ?: ""
+    suspend fun getGraphTemplate(fromPost: Int, templateNumber: Int, authToken: String): String {
+        try {
+            val call = server.getGraphTemplate(authToken, fromPost, templateNumber)
+            if (call.isSuccessful && call.body() != null) {
+                return call.body()!!
+            }
+        } catch (e: RuntimeException) {
+            throw ServerNotReachableException()
+        }
+        return ""
     }
 
     // Wish-criteria
@@ -139,18 +183,27 @@ class RESTAPI {
      * @param projectTemplate:  The project template. The first element of the Pair is the template as a JSON, the second one is the detailView of the template
      * @param graphTemplates:   The graph templates. The first element of a Pair is the template as a JSON, the second one is the detailView of the template
      * @param authToken:        The authentication token
-     * @return Int: The PostID of the new post. -1 if the call didn't succeed, 0 if the user reached his limit of uploaded posts.
+     * @return Int: The PostID of the new post. -1 if the call didn't succeed, 0 if the user reached his limit of uploaded posts
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
-    fun addPost(
+    suspend fun addPost(
         postPreview: PostPreviewWrapper,
         projectTemplate: Pair<String, TemplateDetailWrapper>,
         graphTemplates: List<Pair<String, TemplateDetailWrapper>>,
         authToken: String
     ): Int {
         val params = AddPostParameter(postPreview, projectTemplate, graphTemplates)
-        val call: Call<Int> = server.addPost(authToken, params)
 
-        return call.execute().body() ?: -1
+        try {
+            val call = server.addPost(authToken, params)
+            if (call.isSuccessful && call.body() != null) {
+                return call.body()!!
+            }
+        } catch (e: RuntimeException) {
+            throw ServerNotReachableException()
+        }
+        return -1
     }
 
     // Wish-criteria
@@ -160,11 +213,19 @@ class RESTAPI {
      * @param postID:       The id of the post that should be removed from the server
      * @param authToken:    The authentication token
      * @return Boolean:     Did the server call succeed
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
-    fun removePost(postID: Int, authToken: String): Boolean {
-        val call: Call<Boolean> = server.removePost(authToken, postID)
-
-        return call.execute().body() ?: false
+    suspend fun removePost(postID: Int, authToken: String): Boolean {
+        try {
+            val call = server.removePost(authToken, postID)
+            if (call.isSuccessful && call.body() != null) {
+                return call.body()!!
+            }
+        } catch (e: RuntimeException) {
+            throw ServerNotReachableException()
+        }
+        return false
     }
 
 
@@ -175,11 +236,19 @@ class RESTAPI {
      * @param projectID: The id of the project to which the user is to be added
      * @param authToken: The authentication token
      * @return String: Returns the project information as a JSON. (Returns "" on error)
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
-    fun addUser(projectID: Long, authToken: String): String {
-        val call: Call<String> = server.addUser(authToken, projectID)
-
-        return call.execute().body() ?: ""
+    suspend fun addUser(projectID: Long, authToken: String): String {
+        try {
+            val call = server.addUser(authToken, projectID)
+            if (call.isSuccessful && call.body() != null) {
+                return call.body()!!
+            }
+        } catch (e: RuntimeException) {
+            throw ServerNotReachableException()
+        }
+        return ""
     }
 
     /**
@@ -189,12 +258,19 @@ class RESTAPI {
      * @param projectID:    The id of the project from which the user should be removed
      * @param authToken:    The authentication token
      * @return Boolean: Did the server call succeed
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
-    fun removeUser(userToRemove: String, projectID: Long, authToken: String): Boolean {
-        val call: Call<Boolean> =
-            server.removeUser(authToken, projectID, userToRemove = userToRemove)
-
-        return call.execute().body() ?: false
+    suspend fun removeUser(userToRemove: String, projectID: Long, authToken: String): Boolean {
+        try {
+            val call = server.removeUser(authToken, projectID, userToRemove = userToRemove)
+            if (call.isSuccessful && call.body() != null) {
+                return call.body()!!
+            }
+        } catch (e: RuntimeException) {
+            throw ServerNotReachableException()
+        }
+        return false
     }
 
     /**
@@ -203,24 +279,40 @@ class RESTAPI {
      * @param authToken:        The authentication token
      * @param projectDetails:   The details of a project (project name, project description, table format, ...) as JSON
      * @return LONG: Returns the id of the created project. Returns -1 if an error occurred
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
-    fun addProject(authToken: String, projectDetails: String): Long {
-        val call: Call<Long> = server.addProject(authToken, projectDetails)
-
-        return call.execute().body() ?: -1
+    suspend fun addProject(authToken: String, projectDetails: String): Long {
+        try {
+            val call = server.addProject(authToken, projectDetails)
+            if (call.isSuccessful && call.body() != null) {
+                return call.body()!!
+            }
+        } catch (e: RuntimeException) {
+            throw ServerNotReachableException()
+        }
+        return -1
     }
 
     /**
-     *  Gets all the project members
+     * Gets all the project members
      *
-     *  @param authToken: The authentication token
-     *  @param projectID: The id of the project whose user should be returned
-     *  @return Collection<String>: The participants of the project. Returns empty list on error
+     * @param authToken: The authentication token
+     * @param projectID: The id of the project whose user should be returned
+     * @return Collection<String>: The participants of the project. Returns empty list on error
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
-    fun getProjectParticipants(authToken: String, projectID: Long): Collection<String> {
-        val call: Call<List<String>> = server.getParticipants(authToken, projectID)
-
-        return call.execute().body() ?: listOf()
+    suspend fun getProjectParticipants(authToken: String, projectID: Long): Collection<String> {
+        try {
+            val call = server.getParticipants(authToken, projectID)
+            if (call.isSuccessful && call.body() != null) {
+                return call.body()!!
+            }
+        } catch (e: RuntimeException) {
+            throw ServerNotReachableException()
+        }
+        return listOf()
     }
 
     /**
@@ -229,11 +321,19 @@ class RESTAPI {
      * @param authToken: The authentication token
      * @param projectID: The id of the project whose admin should be returned
      * @return String: The UserID of the admin. Returns "" on error
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
-    fun getProjectAdmin(authToken: String, projectID: Long): String {
-        val call: Call<String> = server.getAdmin(authToken, projectID)
-
-        return call.execute().body() ?: ""
+    suspend fun getProjectAdmin(authToken: String, projectID: Long): String {
+        try {
+            val call = server.getAdmin(authToken, projectID)
+            if (call.isSuccessful && call.body() != null) {
+                return call.body()!!
+            }
+        } catch (e: RuntimeException) {
+            throw ServerNotReachableException()
+        }
+        return ""
     }
 
     //------------------------------------- Delta Controller -------------------------------------
@@ -244,9 +344,19 @@ class RESTAPI {
      * @param projectCommand:   The project command that should be send to the server (as JSON)
      * @param authToken:        The authentication token
      * @return Boolean: True if uploaded successfully, otherwise false
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
     suspend fun saveDelta(projectID: Long, projectCommand: String, authToken: String): Boolean {
-        return server.saveDelta(authToken, projectID, projectCommand)
+        try {
+            val call = server.saveDelta(authToken, projectID, projectCommand)
+            if (call.isSuccessful && call.body() != null) {
+                return call.body()!!
+            }
+        } catch (e: RuntimeException) {
+            throw ServerNotReachableException()
+        }
+        return false
     }
 
     /**
@@ -254,11 +364,19 @@ class RESTAPI {
      *
      * @param projectID: The id of the project whose delta (projectCommands) you want to load into the FetchRequestQueue
      * @param authToken: The authentication token
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
-    fun getDelta(projectID: Long, authToken: String): Collection<Delta> {
-        val call: Call<List<Delta>> = server.getDelta(token = authToken, projectID)
-
-        return call.execute().body() ?: return mutableListOf()
+    suspend fun getDelta(projectID: Long, authToken: String): Collection<Delta> {
+        try {
+            val call = server.getDelta(token = authToken, projectID)
+            if (call.isSuccessful && call.body() != null) {
+                return call.body()!!
+            }
+        } catch (e: RuntimeException) {
+            throw ServerNotReachableException()
+        }
+        return listOf()
     }
 
     /**
@@ -271,8 +389,10 @@ class RESTAPI {
      * @param wasAdmin:         Was the user a project administrator when the command was created
      * @param authToken:        The authentication token
      * @return Boolean: Did the server call succeed
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
-    fun provideOldData(
+    suspend fun provideOldData(
         projectCommand: String,
         forUser: String,
         initialAdded: LocalDateTime,
@@ -282,12 +402,20 @@ class RESTAPI {
         authToken: String
     ): Boolean {
         val params =
-            ProvideOldDataParameter(command = projectCommand, forUser =  forUser, initialAdded = initialAdded.toString(),
-                initialAddedBy = initialAddedBy, wasAdmin = wasAdmin)
+            ProvideOldDataParameter(
+                command = projectCommand, forUser = forUser, initialAdded = initialAdded.toString(),
+                initialAddedBy = initialAddedBy, wasAdmin = wasAdmin
+            )
 
-        val call: Call<Boolean> = server.provideOldData(authToken, projectID, params)
-
-        return call.execute().body() ?: false
+        try {
+            val call = server.provideOldData(authToken, projectID, params)
+            if (call.isSuccessful && call.body() != null) {
+                return call.body()!!
+            }
+        } catch (e: RuntimeException) {
+            throw ServerNotReachableException()
+        }
+        return false
     }
 
     /**
@@ -295,11 +423,19 @@ class RESTAPI {
      *
      * @param authToken: The authentication token
      * @return Long: The time how long an project command can remain on the server until it gets deleted by the server. On error returns -1
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
-    fun getRemoveTime(authToken: String): Long {
-        val call: Call<Long> = server.getRemoveTime(authToken)
-
-        return call.execute().body() ?: -1
+    suspend fun getRemoveTime(authToken: String): Long {
+        try {
+            val call = server.getRemoveTime(authToken)
+            if (call.isSuccessful && call.body() != null) {
+                return call.body()!!
+            }
+        } catch (e: RuntimeException) {
+            throw ServerNotReachableException()
+        }
+        return -1
     }
 
     //------------------------------------- FetchRequestController -------------------------------------
@@ -310,12 +446,19 @@ class RESTAPI {
      * @param requestInfo:  The fetch request as JSON
      * @param authToken:    The authentication token
      * @return Boolean: Did the server call succeed
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
-    fun demandOldData(projectID: Long, requestInfo: String, authToken: String): Boolean {
-        val call: Call<Boolean> =
-            server.demandOldData(token = authToken, projectID, requestInfo = requestInfo)
-
-        return call.execute().body() ?: false
+    suspend fun demandOldData(projectID: Long, requestInfo: String, authToken: String): Boolean {
+        try {
+            val call = server.demandOldData(token = authToken, projectID, requestInfo = requestInfo)
+            if (call.isSuccessful && call.body() != null) {
+                return call.body()!!
+            }
+        } catch (e: RuntimeException) {
+            throw ServerNotReachableException()
+        }
+        return false
     }
 
     /**
@@ -323,11 +466,19 @@ class RESTAPI {
      *
      * @param projectID: The id of the project from which the fetch requests should be downloaded
      * @param authToken: The authentication token
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
-    fun getFetchRequests(projectID: Long, authToken: String): Collection<FetchRequest> {
-        val call: Call<Collection<FetchRequest>> = server.getFetchRequest(authToken, projectID)
-
-        return call.execute().body() ?: emptyList()
+    suspend fun getFetchRequests(projectID: Long, authToken: String): Collection<FetchRequest> {
+        try {
+            val call = server.getFetchRequest(authToken, projectID)
+            if (call.isSuccessful && call.body() != null) {
+                return call.body()!!
+            }
+        } catch (e: RuntimeException) {
+            throw ServerNotReachableException()
+        }
+        return emptyList()
     }
 
     /**
@@ -336,10 +487,18 @@ class RESTAPI {
      *
      * @param authToken:    The authentication token
      * @return List<Int>:   The postIDs from the posts
+     * @throws java.io.IOException: Input for server or server output was wrong
+     * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
-    fun getPostsFromUser(authToken: String): List<Int> {
-        val call: Call<List<Int>> = server.getPostsFromUser(authToken)
-
-        return call.execute().body() ?: emptyList()
+    suspend fun getPostsFromUser(authToken: String): List<Int> {
+        try {
+            val call = server.getPostsFromUser(authToken)
+            if (call.isSuccessful && call.body() != null) {
+                return call.body()!!
+            }
+        } catch (e: RuntimeException) {
+            throw ServerNotReachableException()
+        }
+        return emptyList()
     }
 }

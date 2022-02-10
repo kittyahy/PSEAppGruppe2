@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Column
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
@@ -39,6 +40,9 @@ class ProjectDataGraphScreenViewModel @Inject constructor(
     fun onEvent(event : ProjectDataGraphScreenEvent) {
         when (event) {
             is ProjectDataGraphScreenEvent.OnCreate -> {
+                viewModelScope.launch {
+                    repository.projectHandler.initializeProjectProvider(event.projectId)
+                }
                 viewModelScope.launch {
                     repository.projectHandler.getProjectByID(event.projectId).collect {
                         graphs = it.graphs

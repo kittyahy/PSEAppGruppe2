@@ -26,14 +26,17 @@ import com.pseandroid2.dailydata.remoteDataSource.queue.observerLogic.projectCom
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.Delta
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 
 internal class ServerManagerIsProjectCommandQueueCorrectlyLinkedTests {
-
     private val deltaList: Collection<Delta> =
         listOf(Delta(project = 1), Delta(project = 2), Delta(project = 3))
     private lateinit var restAPI: RESTAPI
@@ -49,15 +52,16 @@ internal class ServerManagerIsProjectCommandQueueCorrectlyLinkedTests {
     fun setup() {
         // Create mocked restAPI
         restAPI = mockk()
-        every { restAPI.getDelta(1, "") } returns deltaList
+        coEvery { restAPI.getDelta(1, "") } returns deltaList
 
         serverManager = ServerManager(restAPI)
 
         Assert.assertEquals(0, toUpdate.getUpdated())
     }
 
+    @ExperimentalCoroutinesApi
     @Test
-    fun projectCommandQueueLinked() {
+    fun projectCommandQueueLinked() = runTest {
         // Add Observer to queues
         serverManager.addObserverToProjectCommandQueue(projectCommandObserver)
 

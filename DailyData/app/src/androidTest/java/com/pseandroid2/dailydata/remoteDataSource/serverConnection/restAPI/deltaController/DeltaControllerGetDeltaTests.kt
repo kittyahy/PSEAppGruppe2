@@ -9,8 +9,8 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
-/*
 class DeltaControllerGetDeltaTests {
+    /*
     private var restAPI: RESTAPI = RESTAPI()
     private lateinit var authToken: String
     private lateinit var authToken2: String
@@ -156,4 +156,5 @@ class DeltaControllerGetDeltaTests {
     fun getRemoveTime() {
         Assert.assertNotEquals(-1, restAPI.getRemoveTime(authToken))
     }
-}*/
+    */
+}

@@ -12,7 +12,7 @@ import retrofit2.http.GET
 
 /*
 class ProjectParticipantsTests {
-
+    /*
     private val restAPI: RESTAPI = RESTAPI()
     private val serverManager: ServerManager = ServerManager(RESTAPI())
     private val fm = FirebaseManager(null)
@@ -163,13 +163,13 @@ class ProjectParticipantsTests {
     }
 
     */
-/* TODO: Implement this in quality control phase
+    /* TODO: Implement this in quality control phase
     @Test
     fun userIsNoProjectMember() {
         Assert.assertNotEquals(mutableListOf<List<String>>(), restAPI.getProjectParticipants(authToken, projectID))
         Assert.assertNotEquals("", restAPI.getProjectAdmin(authToken, projectID))
     }
-    *//*
+    */
 
 
     @Test

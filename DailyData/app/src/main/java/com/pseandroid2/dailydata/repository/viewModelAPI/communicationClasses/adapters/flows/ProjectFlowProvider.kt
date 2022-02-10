@@ -18,10 +18,11 @@ import com.pseandroid2.dailydata.util.Consts.LOG_TAG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
-class ProjectFlowProvider(private val projId: Int, private val db: AppDataBase) :
+class ProjectFlowProvider(val projId: Int, private val db: AppDataBase) :
     FlowProvider<Project?>() {
     private val project = SimpleProjectBuilder().setId(projId).build()
 
@@ -39,6 +40,7 @@ class ProjectFlowProvider(private val projId: Int, private val db: AppDataBase) 
                     project.onlineId = it.onlineId
                     project.path = it.wallpaper
                     project.color = it.color
+                    project.admin = db.projectDataDAO().getAdminByIds(it.id).first()[0].user
                     mutableFlow.emit(project)
                 } else {
                     Log.d(LOG_TAG, "ProjectData was null")
@@ -49,7 +51,11 @@ class ProjectFlowProvider(private val projId: Int, private val db: AppDataBase) 
         //Observe changes to Project Graphs
         launch(Dispatchers.IO) {
             Log.i(LOG_TAG, "Start observing Graphs for Project with id $projId")
-            GraphFlowProvider(projId, db).provideFlow.distinctUntilChanged().collect { graphs ->
+            val provider = GraphFlowProvider(projId, db)
+            launch {
+                provider.initialize()
+            }
+            provider.provideFlow.distinctUntilChanged().collect { graphs ->
                 project.graphs = graphs.toMutableList()
                 mutableFlow.emit(project)
             }

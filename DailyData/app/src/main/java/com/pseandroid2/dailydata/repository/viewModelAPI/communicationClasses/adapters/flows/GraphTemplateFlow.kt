@@ -10,27 +10,26 @@ import kotlinx.coroutines.flow.map
 class GraphTemplateFlow(
     private val db: AppDataBase,
     private val eq: ExecuteQueue,
-    private val templateId: Int
+    private val provider: GraphTemplateFlowProvider
 ) {
     fun getTemplates(): Flow<List<GraphTemplate>> {
-        return GraphTemplateFlowProvider(templateId, db).provideFlow.distinctUntilChanged()
-            .map { templates ->
-                val list = mutableListOf<GraphTemplate>()
-                for (template in templates) {
-                    val addTemplate = GraphTemplate(
-                        template.name,
-                        template.getWallpaper(),
-                        template.id,
-                        template.desc,
-                        template.background,
-                        template.customizing,
-                        template.type
-                    )
-                    //TODO figure out if GraphTemplates should have an executeQueue?
-                    //addTemplate.executeQueue = eq
-                    list.add(addTemplate)
-                }
-                list.toList()
+        return provider.provideFlow.distinctUntilChanged().map { templates ->
+            val list = mutableListOf<GraphTemplate>()
+            for (template in templates) {
+                val addTemplate = GraphTemplate(
+                    template.name,
+                    template.getWallpaper(),
+                    template.id,
+                    template.desc,
+                    template.background,
+                    template.customizing,
+                    template.type
+                )
+                //TODO figure out if GraphTemplates should have an executeQueue?
+                //addTemplate.executeQueue = eq
+                list.add(addTemplate)
             }
+            list.toList()
+        }
     }
 }

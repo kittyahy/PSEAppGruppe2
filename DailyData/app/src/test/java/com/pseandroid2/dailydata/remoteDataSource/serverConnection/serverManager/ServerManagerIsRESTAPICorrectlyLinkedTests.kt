@@ -28,15 +28,15 @@ import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParamet
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.Delta
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.FetchRequest
 import io.mockk.coEvery
-import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import java.time.LocalDateTime
 
 internal class ServerManagerIsRESTAPICorrectlyLinkedTests {
-
     private var deltaList: Collection<Delta> = listOf(Delta(projectCommand = "ProjectCommand"))
     private var fetchRequestList: Collection<FetchRequest> =
         listOf(FetchRequest(requestInfo = "FetchRequest"))
@@ -48,11 +48,11 @@ internal class ServerManagerIsRESTAPICorrectlyLinkedTests {
     @Before
     fun setup() {
         restAPI = mockk()
-        every { restAPI.greet() } returns true
+        coEvery { restAPI.greet() } returns true
 
-        every { restAPI.getProjectTemplate(1, "") } returns "ProjectTemplate"
-        every { restAPI.getGraphTemplate(1, 1, "") } returns "GraphTemplate"
-        every {
+        coEvery { restAPI.getProjectTemplate(1, "") } returns "ProjectTemplate"
+        coEvery { restAPI.getGraphTemplate(1, 1, "") } returns "GraphTemplate"
+        coEvery {
             restAPI.addPost(
                 PostPreviewWrapper(),
                 Pair("", TemplateDetailWrapper()),
@@ -60,13 +60,13 @@ internal class ServerManagerIsRESTAPICorrectlyLinkedTests {
                 ""
             )
         } returns 1
-        every { restAPI.removePost(1, "") } returns true
-        every { restAPI.addUser(1, "") } returns "project details"
-        every { restAPI.removeUser("", 1, "") } returns true
-        every { restAPI.addProject("", "project details") } returns 0
-        every { restAPI.getProjectParticipants("", 1) } returns listOf("")
-        every { restAPI.getProjectParticipants("user", 1) } returns listOf("user", "otherUser")
-        every { restAPI.getProjectAdmin("", 1) } returns ""
+        coEvery { restAPI.removePost(1, "") } returns true
+        coEvery { restAPI.addUser(1, "") } returns "project details"
+        coEvery { restAPI.removeUser("", 1, "") } returns true
+        coEvery { restAPI.addProject("", "project details") } returns 0
+        coEvery { restAPI.getProjectParticipants("", 1) } returns listOf("")
+        coEvery { restAPI.getProjectParticipants("user", 1) } returns listOf("user", "otherUser")
+        coEvery { restAPI.getProjectAdmin("", 1) } returns ""
         coEvery {
             restAPI.saveDelta(
                 1,
@@ -74,8 +74,8 @@ internal class ServerManagerIsRESTAPICorrectlyLinkedTests {
                 ""
             )
         } returns true // use coEvery for mockking suspend functions
-        every { restAPI.getDelta(1, "") } returns deltaList
-        every {
+        coEvery { restAPI.getDelta(1, "") } returns deltaList
+        coEvery {
             restAPI.provideOldData(
                 "",
                 "",
@@ -86,17 +86,18 @@ internal class ServerManagerIsRESTAPICorrectlyLinkedTests {
                 ""
             )
         } returns true
-        every { restAPI.getRemoveTime("") } returns 42
-        every { restAPI.demandOldData(1, "", "") } returns true
-        every { restAPI.getFetchRequests(1, "") } returns fetchRequestList
+        coEvery { restAPI.getRemoveTime("") } returns 42
+        coEvery { restAPI.demandOldData(1, "", "") } returns true
+        coEvery { restAPI.getFetchRequests(1, "") } returns fetchRequestList
 
         // Create ServerManager with mocked RestAPI
         serverManager = ServerManager(restAPI)
     }
 
 
+    @ExperimentalCoroutinesApi
     @Test
-    fun restAPILinked() {
+    fun restAPILinked() = runTest {
         // Test if serverManager returns the expected outputs
         Assert.assertTrue(serverManager.connectionToServerPossible())
 

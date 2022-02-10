@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Button
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Column
@@ -32,7 +33,7 @@ class ProjectDataInputScreenViewModel @Inject constructor(
     private val _uiEvent = MutableSharedFlow<UiEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
 
-    private lateinit var initialProject : Project
+    private lateinit var initialProject: Project
     var isOnlineProject = false
         private set
 
@@ -46,31 +47,35 @@ class ProjectDataInputScreenViewModel @Inject constructor(
         private set
     var columns = listOf<Column>()
         private set
-    var buttons : List<Button> = listOf()
+    var buttons: List<Button> = listOf()
     var table = listOf<Row>()
 
     var isDescriptionUnfolded by mutableStateOf(false)
         private set
     var isRowDialogOpen by mutableStateOf(false)
         private set
-    var columnValues : List<String> = listOf()
+    var columnValues: List<String> = listOf()
         private set
     private var rowEdit = 0
 
     fun onEvent(event: ProjectDataInputScreenEvent) {
-        when(event) {
+        when (event) {
             is ProjectDataInputScreenEvent.OnCreate -> {
                 viewModelScope.launch {
-                    repository.projectHandler.getProjectByID(id = event.projectId).collect { project ->
-                        title = project.title
-                        description = project.description
-                        wallpaper = Color(project.wallpaper)
-                        table = project.data
-                        buttons = project.buttons
-                        members = project.members
-                        isOnlineProject = project.isOnlineProject
-                        initialProject = project
-                    }
+                    repository.projectHandler.initializeProjectProvider(event.projectId)
+                }
+                viewModelScope.launch {
+                    repository.projectHandler.getProjectByID(id = event.projectId)
+                        .collect { project ->
+                            title = project.title
+                            description = project.description
+                            wallpaper = Color(project.wallpaper)
+                            table = project.data
+                            buttons = project.buttons
+                            members = project.members
+                            isOnlineProject = project.isOnlineProject
+                            initialProject = project
+                        }
                 }
 
             }
@@ -142,7 +147,7 @@ class ProjectDataInputScreenViewModel @Inject constructor(
                 }
             }
             is ProjectDataInputScreenEvent.OnRowDialogShow -> {
-                if(isOnlineProject) {
+                if (isOnlineProject) {
                     rowEdit = event.index
                     isRowDialogOpen = true
                 }
@@ -167,7 +172,7 @@ class ProjectDataInputScreenViewModel @Inject constructor(
         }
     }
 
-    private fun sendUiEvent(event : UiEvent) {
+    private fun sendUiEvent(event: UiEvent) {
         viewModelScope.launch {
             _uiEvent.emit(event)
         }

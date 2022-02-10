@@ -8,8 +8,9 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
-/*
+
 class DeltaControllerSaveDeltasTests {
+    /*
     private var restAPI: RESTAPI = RESTAPI()
     private lateinit var authToken: String
 
@@ -83,6 +84,5 @@ class DeltaControllerSaveDeltasTests {
         val projectCommand = listOf("exceeds the upload limit")
         Assert.assertEquals(projectCommand, projectCommand)
     }
-    *//*
-
-}*/
+    */
+}
