@@ -7,6 +7,9 @@ import com.pseandroid2.dailydata.util.fromJson
 import com.pseandroid2.dailydata.util.getSerializableClassName
 import kotlin.reflect.KClass
 
+/**
+ * This is a implementation of a tableLayout with array lists.
+ */
 class ArrayListLayout(input: String = "") : TableLayout {
     private var layout: MutableList<Quadruple<String, String, String, MutableList<UIElement>>> =
         if (input == "") {

@@ -32,7 +32,7 @@ import com.pseandroid2.dailydata.model.project.Project as ModelProject
  * Button class that handles its specific interaction with ViewModel.
  */
 class Button(
-    override val id: Int,
+    override var id: Int,
     val name: String,
     val columnId: Int,
     val value: Int

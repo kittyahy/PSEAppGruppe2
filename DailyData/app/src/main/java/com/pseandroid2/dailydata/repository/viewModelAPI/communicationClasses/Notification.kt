@@ -30,7 +30,7 @@ import com.pseandroid2.dailydata.model.project.Project as ModelProject
 
 
 class Notification(
-    override val id: Int,
+    override var id: Int,
     val message: String,
     val time: LocalTime
 ) : Identifiable, Convertible<Notification> {

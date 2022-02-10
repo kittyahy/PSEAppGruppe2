@@ -157,6 +157,7 @@ class ProjectCDManager(
         val skeleton: ProjectSkeletonEntity =
             createSkeleton(id, project.getProjectSkeleton(), project.table.getLayout())
         val admin: User = project.admin
+        Log.d(LOG_TAG, "Name: ${admin.getName()}, ID: ${admin.getId()}")
         val entity = ProjectEntity(skeleton, admin, project.isOnline)
 
         projectDAO.insertProjectEntity(entity)

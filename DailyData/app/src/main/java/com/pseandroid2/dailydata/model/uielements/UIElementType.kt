@@ -20,6 +20,9 @@
 
 package com.pseandroid2.dailydata.model.uielements
 
+/**
+ * This emum declares all different types of UIElements. A UIElement has a name and a to-String Representation
+ */
 enum class UIElementType {
 
     BUTTON {

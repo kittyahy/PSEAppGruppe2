@@ -29,6 +29,9 @@ import com.pseandroid2.dailydata.util.Quadruple
 import java.time.LocalDateTime
 import kotlin.reflect.KClass
 
+/**
+ * The interface, which specifies what a table should can.
+ */
 interface Table : Iterable<Row> {
 
     fun getCell(row: Int, col: Int): Any
@@ -51,6 +54,9 @@ interface Table : Iterable<Row> {
 
 }
 
+/**
+ * This interface specifies what a table should do and have.
+ */
 interface TableLayout : Iterable<ColumnData> {
 
     companion object {
@@ -80,6 +86,9 @@ interface TableLayout : Iterable<ColumnData> {
 
 }
 
+/**
+ *  This interface specifies what a row can.
+ */
 interface Row {
 
     fun getAll(): List<Any>
@@ -108,6 +117,9 @@ fun Row.toRowEntity(projectId: Int): RowEntity {
     )
 }
 
+/**
+ * It saves all MataData form a row, which is not necessary to provide a row to the view.
+ */
 data class RowMetaData(
     val createdOn: LocalDateTime = LocalDateTime.now(),
     var publishedOn: LocalDateTime = LocalDateTime.now(),

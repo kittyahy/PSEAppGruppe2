@@ -20,6 +20,9 @@
 
 package com.pseandroid2.dailydata.model.uielements
 
+/**
+ * This class represents a UIElement, which can be used outside the model
+ */
 data class UIElement(
     var id: Int,
     val type: UIElementType,

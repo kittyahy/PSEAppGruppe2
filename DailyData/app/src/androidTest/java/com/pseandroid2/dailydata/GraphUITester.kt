@@ -18,7 +18,9 @@ import com.pseandroid2.dailydata.model.table.ArrayListRow
 import com.pseandroid2.dailydata.model.table.ArrayListTable
 import com.pseandroid2.dailydata.model.table.RowMetaData
 import com.pseandroid2.dailydata.model.transformation.FloatIdentity
+import com.pseandroid2.dailydata.model.transformation.FloatLineChartTransformation
 import com.pseandroid2.dailydata.model.transformation.FloatSum
+import com.pseandroid2.dailydata.model.transformation.IntLineChartTransformation
 import com.pseandroid2.dailydata.model.transformation.LineChartTransformation
 import com.pseandroid2.dailydata.model.transformation.PieChartTransformation
 import com.pseandroid2.dailydata.util.getSerializableClassName
@@ -33,7 +35,7 @@ import com.pseandroid2.dailydata.model.graph.PieChart as GraphPieChart
 import com.pseandroid2.dailydata.model.graph.LineChart as GraphLineChart
 
 class GraphUITester {
-/*
+
     @get:Rule
     val composeRule = createComposeRule()
 
@@ -77,7 +79,7 @@ class GraphUITester {
         lateinit var lineChartMock: FloatLineChart
 
         lateinit var pieChart: GraphPieChart
-        lateinit var lineChart: IntLineChart
+        lateinit var lineChart: FloatLineChart
 
         @JvmStatic
         @BeforeClass
@@ -124,8 +126,8 @@ class GraphUITester {
             val pieFunc = PieChartTransformation(FloatSum())
             val pieTransform = project.createDataTransformation(pieFunc)
 
-            val lineFunc = LineChartTransformation(FloatIdentity(), listOf(0, 1, 2, 3))
-            val lineTransform = project.createDataTransformation(lineFunc)
+            val lineFunc = FloatLineChartTransformation(FloatIdentity())
+            val lineTransform = project.createDataTransformation(lineFunc, listOf(0, 1))
 
             val pieSettingsMock = MapSettings(pieSettingsMapMock)
             val lineSettingsMock = MapSettings(lineSettingsMapMock)
@@ -135,7 +137,7 @@ class GraphUITester {
             pieChartMock = GraphPieChart(0, transformationMock, pieSettingsMock, "")
             lineChartMock = FloatLineChart(1, lineMock, lineSettingsMock, "")
             pieChart = GraphPieChart(2, pieTransform, pieSettings, "")
-            lineChart = IntLineChart(3, lineTransform, lineSettings, "")
+            lineChart = FloatLineChart(3, lineTransform, lineSettings, "")
         }
     }
 
@@ -150,7 +152,7 @@ class GraphUITester {
                     modifier = Modifier.size(500.dp, 500.dp)
                 )
             }
-            delay(10000)
+            delay(1000)
         }
     }
 
@@ -165,7 +167,7 @@ class GraphUITester {
                     modifier = Modifier.size(500.dp, 500.dp)
                 )
             }
-            delay(10000)
+            delay(1000)
         }
     }
 
@@ -180,7 +182,7 @@ class GraphUITester {
                     modifier = Modifier.size(500.dp, 500.dp)
                 )
             }
-            delay(10000)
+            delay(1000)
         }
     }
 
@@ -196,5 +198,5 @@ class GraphUITester {
             }
             delay(10000)
         }
-    }*/
+    }
 }

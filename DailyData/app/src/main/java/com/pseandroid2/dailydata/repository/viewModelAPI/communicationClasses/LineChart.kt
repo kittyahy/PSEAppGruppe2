@@ -41,21 +41,17 @@ import kotlinx.coroutines.runBlocking
 import com.pseandroid2.dailydata.model.graph.Graph as ModelGraph
 
 class LineChart(
-    override val id: Int,
-    override val image: Bitmap?,
-    val dotSize: DotSize,
-    val dotColor: Int,
-    val lineType: LineType,
-    val mappingVertical: List<Column>
+    override var id: Int = -1,
+    override var image: Bitmap? = null,
+    var dotSize: DotSize = DotSize.MEDIUM,
+    var dotColor: Int = 0,
+    var lineType: LineType = LineType.CONTINUOUS,
+    var mappingVertical: List<Column> = ArrayList()
 ) : Graph() {
     override lateinit var executeQueue: ExecuteQueue
     override lateinit var project: Project
     override lateinit var appDataBase: AppDataBase
     override val typeName: String = "Line Chart" //TODO Magic String
-
-    init {
-        availableGraphs.add(typeName)
-    }
 
     override fun deleteIsPossible(): Flow<Boolean> {
         TODO("Not yet implemented")
