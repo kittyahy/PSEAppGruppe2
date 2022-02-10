@@ -24,6 +24,9 @@ import androidx.room.Entity
 import com.pseandroid2.dailydata.model.users.User
 import java.time.LocalDateTime
 
+/**
+ * This entity represents a row in their Database. A row is specified by a project, the time, when it is created and who has created it.
+ */
 @Entity(tableName = "row", primaryKeys = ["projectId", "createdOn", "createdBy"])
 data class RowEntity(
     val projectId: Int,
