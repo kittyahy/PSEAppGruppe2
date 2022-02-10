@@ -25,6 +25,9 @@ import androidx.room.PrimaryKey
 import com.pseandroid2.dailydata.model.graph.GraphType
 import com.pseandroid2.dailydata.model.users.User
 
+/**
+ * This class represents a graph Template in their Database. Every graph template has an unique id.
+ */
 @Entity(tableName = "graphTemplate")
 data class GraphTemplateEntity(
     @PrimaryKey val id: Int,

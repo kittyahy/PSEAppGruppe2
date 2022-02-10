@@ -15,7 +15,6 @@ abstract class CommandQueue(open val repositoryViewModelAPI: RepositoryViewModel
 
     init {
         scope.launch {
-            //Todo lösung finden was mit commands passieren soll, die vor beendigen der App nicht ausgeführt werden können
             while (true) {
                 if (commandQueue.isNotEmpty()) {
                     //Blocking only during queue action not during the actual execution

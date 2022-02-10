@@ -24,6 +24,9 @@ import androidx.room.Entity
 import com.pseandroid2.dailydata.model.graph.GraphType
 import com.pseandroid2.dailydata.model.project.Project
 
+/**
+ * This class represents a graph in their Database. Every graph belongs to a project and has an unique id.
+ */
 @Entity(tableName = "graph", primaryKeys = ["id", "projectId"])
 data class GraphEntity(
     val id: Int,

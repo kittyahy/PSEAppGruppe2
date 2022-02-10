@@ -20,6 +20,10 @@
 
 package com.pseandroid2.dailydata.model.database.entities
 
+/**
+ * This class contains all information of a project in their Database.
+ * This class can be used out side the model, because it does not work directly on a database.
+ */
 data class ProjectSkeletonEntity(
     val id: Int,
     val name: String,

@@ -32,6 +32,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.runBlocking
 
 class ServerHandler(private val appDataBase: AppDataBase, private val api: RemoteDataSourceAPI) {
@@ -67,11 +68,14 @@ class ServerHandler(private val appDataBase: AppDataBase, private val api: Remot
      */
     fun loginIsPossible(): Flow<Boolean> {
         //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
+        /*val flow = MutableSharedFlow<Boolean>()
         runBlocking {
             flow.emit(true)
-        }
-        return flow
+        }*/
+        //TODO Arne/Anton should this really only ever return true? Also, SharedFlows are Hot Flows,
+        //i.e. they broadcast emissions to whoever is currently listening, but will not send their
+        //latest emission to new subscribers
+        return flow { emit(true) }
     }
 
     suspend fun login(email: String, password: String) { //Todo erweiterbarkeit
