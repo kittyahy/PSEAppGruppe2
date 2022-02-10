@@ -23,10 +23,14 @@ package com.pseandroid2.dailydata.model.table
 import com.google.gson.Gson
 import com.pseandroid2.dailydata.model.database.entities.RowEntity
 
+/**
+ * This is a implementation of a row with array lists.
+ */
 class ArrayListRow(
     private val values: MutableList<Any>,
     private var rowMetaData: RowMetaData = RowMetaData()
 ) : Row {
+
 
     companion object {
         fun createFromEntity(entity: RowEntity): ArrayListRow {

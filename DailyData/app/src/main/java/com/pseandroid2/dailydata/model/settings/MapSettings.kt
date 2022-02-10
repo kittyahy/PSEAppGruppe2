@@ -22,6 +22,9 @@ package com.pseandroid2.dailydata.model.settings
 
 import com.pseandroid2.dailydata.exceptions.SettingNotFoundException
 
+/**
+ * This class holds Settings and provides them as a Map.
+ */
 class MapSettings(settings: Map<String, String> = mapOf()) : Settings {
     private val settings = settings.toMutableMap()
 
@@ -44,6 +47,9 @@ class MapSettings(settings: Map<String, String> = mapOf()) : Settings {
     override fun containsKey(key: String) = settings.contains(key)
 }
 
+/**
+ * This class iterates over the map settings.
+ */
 class MapSettingsIterator(settings: MapSettings) : Iterator<Pair<String, String>> {
     @Suppress("Deprecation")
     val iterator = settings.getAllSettings().iterator()

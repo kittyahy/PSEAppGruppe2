@@ -25,6 +25,10 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.pseandroid2.dailydata.model.users.User
 
+/**
+ * This class represents a project in their Database. It contains the admin and if it is a online project.
+ * Every other information is stored in another database.
+ */
 @Entity(tableName = "project", primaryKeys = ["id"])
 data class ProjectEntity(
     @Embedded val skeleton: ProjectSkeletonEntity,

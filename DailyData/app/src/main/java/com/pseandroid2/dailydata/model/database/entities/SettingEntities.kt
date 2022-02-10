@@ -22,6 +22,9 @@ package com.pseandroid2.dailydata.model.database.entities
 
 import androidx.room.Entity
 
+/**
+ * This Entity represents a projectSetting in their Database. A setting is specified by their project and a key for the setting.
+ */
 @Entity(tableName = "projectSetting", primaryKeys = ["projectId", "settingKey"])
 data class ProjectSettingEntity(
     val projectId: Int,
@@ -29,6 +32,9 @@ data class ProjectSettingEntity(
     val value: String
 )
 
+/**
+ * This Entity represents a graphSetting in their Database. A setting is specified by their project and a key for the setting.
+ */
 @Entity(tableName = "graphSetting", primaryKeys = ["projectId", "graphId", "settingKey"])
 data class GraphSettingEntity(
     val projectId: Int,

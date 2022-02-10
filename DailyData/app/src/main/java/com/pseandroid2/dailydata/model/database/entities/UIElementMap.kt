@@ -22,6 +22,9 @@ package com.pseandroid2.dailydata.model.database.entities
 
 import androidx.room.Entity
 
+/**
+ * This entity represents a ui element in their Database.
+ */
 @Entity(tableName = "uiElement", primaryKeys = ["projectId", "id"])
 data class UIElementMap(
     val projectId: Int,

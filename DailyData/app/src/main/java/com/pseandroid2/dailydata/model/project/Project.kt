@@ -36,6 +36,7 @@ import com.pseandroid2.dailydata.model.users.User
 interface Project {
 
     /**
+     * returns the skeleton of this project.
      * @return The ProjectSkeleton of this Project
      */
     @Deprecated("Properties of Project should be accessed directly, access via Skeleton is deprecated")
@@ -113,7 +114,9 @@ interface Project {
         @Suppress("Deprecation")
         get() = getProjectSkeleton().notifications
 
-
+    /**
+     * It adds all given notification the the project.
+     */
     fun addNotifications(notificationsToAdd: Collection<Notification>) {
         for (notification in notificationsToAdd) {
             notifications.add(notification)
@@ -127,10 +130,20 @@ interface Project {
     var isOnline: Boolean
 
     var users: MutableList<User>
+
+    /**
+     * It adds all given users to the project.
+     */
     fun addUsers(usersToAdd: Collection<User>) = users.addAll(usersToAdd)
 
+    /**
+     * It creates a transformation for the data of the project from the given String.
+     */
     fun createTransformationFromString(transformationString: String): DataTransformation<out Any>
 
+    /**
+     * It creates a new Data Transformation
+     */
     @Suppress("Deprecation")
     fun <D : Any> createDataTransformation(
         function: TransformationFunction<D>,
@@ -138,6 +151,8 @@ interface Project {
     ) = DataTransformation(table, function, cols)
 
     /**
+     * This class represents the Data transformation. It specifies how the data of a given project should be handled.
+     * Every DataTransformation belongs to a project.
      * @param D Type of the elements that this DataTransformation will output as DataSets
      */
     class DataTransformation<D : Any>
@@ -148,10 +163,16 @@ interface Project {
         val cols: List<Int>
     ) {
 
+        /**
+         * This method reapplied the function to the table.
+         */
         fun recalculate(): List<D> {
             return function.execute(map(table))
         }
 
+        /**
+         * This method returns the function of the transformation as String.
+         */
         fun toFunctionString(): String {
             return function.toCompleteString()
         }
@@ -168,6 +189,9 @@ interface Project {
 
 }
 
+/**
+ * This interface defines what a project should contain.
+ */
 interface ProjectSkeleton {
 
     var id: Int
@@ -178,6 +202,9 @@ interface ProjectSkeleton {
 
     var desc: String
 
+    /**
+     * This methods returns the wallpaper of the instance, which extends the projectSkeleton.
+     */
     fun getWallpaper(): Bitmap?
 
     var path: String
@@ -189,7 +216,14 @@ interface ProjectSkeleton {
 
 }
 
+/**
+ * This interface defines, what a project template can and has.
+ *
+ */
 interface ProjectTemplate {
+    /**
+     * This method returns the project Skeleton of the Project Template
+     */
     @Deprecated("Properties of Project should be accessed directly, access via Skeleton is deprecated")
     fun getProjectSkeleton(): ProjectSkeleton
 
@@ -243,6 +277,9 @@ interface ProjectTemplate {
 
     var graphs: MutableList<GraphTemplate>
 
+    /**
+     * This function adds all given graphTemplates to the projectTemplate
+     */
     fun addGraphs(graphsToAdd: Collection<GraphTemplate>) = graphs.addAll(graphsToAdd)
 
     var settings: Settings
@@ -253,6 +290,9 @@ interface ProjectTemplate {
         @Suppress("Deprecation")
         get() = getProjectSkeleton().settings
 
+    /**
+     * This method adds a new setting to the Template
+     */
     fun addSettings(settingsToAdd: Settings) {
         for (setting in settingsToAdd) {
             settings[setting.first] = setting.second
@@ -267,15 +307,23 @@ interface ProjectTemplate {
         @Suppress("Deprecation")
         get() = getProjectSkeleton().notifications
 
-
+    /**
+     * This method adds a new notification to the Template
+     */
     fun addNotifications(notificationsToAdd: Collection<Notification>) {
         for (notification in notificationsToAdd) {
             notifications.add(notification)
         }
     }
 
+    /**
+     * This method returns the tableLayout of the projectTemplate
+     */
     fun getTableLayout(): TableLayout
 
+    /**
+     * Its provides the creator of the projectTemplate.
+     */
     fun getCreator(): User
 
 }
