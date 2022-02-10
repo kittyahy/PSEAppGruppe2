@@ -59,8 +59,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             DailyDataTheme {
-                joinProjectLink()
+
                 Main()
+                joinProjectLink()
+                println("LINK HELP0")
             }
         }
 
@@ -70,21 +72,26 @@ class MainActivity : ComponentActivity() {
      * Checks if the app was started by a dynamic link.
      * If it was started by an correct link it will call openJoinProjectScreen()
      */
-    fun joinProjectLink() {
+    private fun joinProjectLink() {
+        println("LINK HELP0.1")
         val dynamicLink = Firebase.dynamicLinks.getDynamicLink(intent).addOnSuccessListener(this) { pendingDynamicLinkData ->
+            println("LINK HELP1")
             // Get deep link from result (may be null if no link is found)
             var deepLink: Uri? = null
             if (pendingDynamicLinkData != null) {
                 deepLink = pendingDynamicLinkData.link
             }
 
+            println("LINK HELP2")
             if (deepLink != null) {
                 // get projectID from link
                 var projectIDString: String = deepLink.getQueryParameter("projectid") ?: "-1" // -1 is an invalid projectID
                 val projectID: Long = joinProjectLinkManager.decodePostID(projectIDString)
 
                 // open join project screen when project id is valid
+                println("LINK HELP3")
                 if (projectID > 0) {
+                    println("LINK HELP4")
                     pID = projectID
                 }
             } else {
@@ -134,7 +141,6 @@ fun Main() {
             } else {
                 Navigation(navController = navController)
             }
-
         }
     }
 }

@@ -1,12 +1,18 @@
 package com.pseandroid2.dailydata.links
 
+import android.util.Log
 import com.pseandroid2.dailydata.ui.link.appLinks.JoinProjectLinkManager
 import org.junit.Assert
 import org.junit.Test
 
 class JoinProjectCommandEncryption {
     val joinProjectLinkManager = JoinProjectLinkManager()
-    val linkBeginning = "https://https://www.dailydata.com/?projectid="
+    val linkBeginning = "https://www.dailydata.com/?projectid="
+
+    @Test
+    fun test() {
+        Log.d("HELP", joinProjectLinkManager.createLink(1));
+    }
 
     /*
     @Test
@@ -16,6 +22,7 @@ class JoinProjectCommandEncryption {
         Assert.assertEquals(encrypted, joinProjectLinkManager.createLink(toEncrypt))
         Assert.assertEquals(toEncrypt, joinProjectLinkManager.getProjectID(encrypted))
     }
+    */
 
     @Test
     fun encryptZero() {
@@ -24,6 +31,7 @@ class JoinProjectCommandEncryption {
         Assert.assertEquals("", joinProjectLinkManager.createLink(toEncrypt))
     }
 
+    /*
     @Test
     fun encryptNegative() {
         var toEncrypt: Long = -1
