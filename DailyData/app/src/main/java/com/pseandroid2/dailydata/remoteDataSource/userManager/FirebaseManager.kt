@@ -194,7 +194,6 @@ class FirebaseManager(timeout: Long?) {
         if (user == null) {
             return
         }
-
         val task = user.getIdToken(forceRefresh)
 
 
