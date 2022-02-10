@@ -32,10 +32,27 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.runBlocking
 
 class ServerHandler(private val appDataBase: AppDataBase, private val api: RemoteDataSourceAPI) {
+    private val amILoggedInKey = "amILoggedIn"
+    private val defaultKey = "default"
+    private val loginKey = "login"
+    private val supportedCommands = mapOf<String, Boolean>(
+        Pair(defaultKey, true),
+        Pair(amILoggedInKey, api.getUserName() != ""),
+        Pair(loginKey, api.getUserName() == "")
+    )
+    private val isPossibleMap = mutableMapOf<String, MutableSharedFlow<Boolean>>()
+
+    init {
+        supportedCommands.forEach {
+            val flow = MutableSharedFlow<Boolean>(1)
+            runBlocking { flow.emit(it.value) }//Todo runBlocking weg
+            isPossibleMap[it.key] = flow
+        }
+    }
+
     suspend fun getPostPreviews(): Collection<PostPreview> = coroutineScope {
         val arrayList = ArrayList<PostPreview>()
         val postPreviews = async(Dispatchers.IO) { api.getPostPreviews() }
@@ -54,10 +71,8 @@ class ServerHandler(private val appDataBase: AppDataBase, private val api: Remot
         TODO("getProjectTemplateById")
     }
 
-    fun amILoggedIn() = flow {
-        val string = api.getUserName()
-        emit(string != "")
-        kotlinx.coroutines.delay(500)
+    fun amILoggedIn(): Flow<Boolean> {
+        return isPossibleMap[amILoggedInKey]!!
     }
 
     /**
@@ -66,15 +81,14 @@ class ServerHandler(private val appDataBase: AppDataBase, private val api: Remot
      * e.g. If manipulationIsPossible.first() is false,
      *      users should not be able to call manipulation().
      */
-    suspend fun loginIsPossible(): Flow<Boolean> = coroutineScope {
-        //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>(1)
-        flow.emit(true)
-        return@coroutineScope flow
+    fun loginIsPossible(): Flow<Boolean> {
+        return isPossibleMap[loginKey]!!
     }
 
-    suspend fun login(email: String, password: String) { //Todo erweiterbarkeit
-        api.signInUser(email, password, SignInTypes.EMAIL)
+    suspend fun login(email: String, password: String) {
+        isPossibleMap[amILoggedInKey]!!.emit(true)
+        isPossibleMap[loginKey]!!.emit(false)
+        api.signInUser(email, password, SignInTypes.EMAIL) //Todo erweiterbarkeit
     }
 
     /**
@@ -85,11 +99,7 @@ class ServerHandler(private val appDataBase: AppDataBase, private val api: Remot
      */
     fun signUpIsPossible(): Flow<Boolean> {
         //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
-        runBlocking {
-            flow.emit(true)
-        }
-        return flow
+        return isPossibleMap[defaultKey]!!
     }
 
     suspend fun signUp(email: String, password: String) { //Todo erweiterbarkeit
@@ -104,11 +114,7 @@ class ServerHandler(private val appDataBase: AppDataBase, private val api: Remot
      */
     fun downloadProjectTemplateIsPossible(): Flow<Boolean> {
         //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
-        runBlocking {
-            flow.emit(true)
-        }
-        return flow
+        return isPossibleMap[defaultKey]!!
     }
 
     fun downloadProjectTemplate(id: Int) {
@@ -123,11 +129,7 @@ class ServerHandler(private val appDataBase: AppDataBase, private val api: Remot
      */
     fun downloadGraphTemplateIsPossible(): Flow<Boolean> {
         //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
-        runBlocking {
-            flow.emit(true)
-        }
-        return flow
+        return isPossibleMap[defaultKey]!!
     }
 
     fun downloadGraphTemplate(projectId: Int, graphId: Int) {
