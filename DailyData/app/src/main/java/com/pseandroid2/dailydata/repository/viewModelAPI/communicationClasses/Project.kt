@@ -20,8 +20,6 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
-import android.util.Log
-import com.google.gson.Gson
 import com.pseandroid2.dailydata.model.database.entities.ProjectData
 import com.pseandroid2.dailydata.model.project.ProjectBuilder
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
@@ -35,14 +33,13 @@ import com.pseandroid2.dailydata.repository.commandCenter.commands.AddRow
 import com.pseandroid2.dailydata.repository.commandCenter.commands.IllegalOperationException
 import com.pseandroid2.dailydata.repository.commandCenter.commands.ProjectCommand
 import com.pseandroid2.dailydata.repository.commandCenter.commands.PublishProject
-import com.pseandroid2.dailydata.util.Consts.LOG_TAG
+import com.pseandroid2.dailydata.repository.commandCenter.commands.SetTitle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.runBlocking
 import kotlin.reflect.KClass
-import kotlin.reflect.full.companionObject
 import com.pseandroid2.dailydata.model.project.Project as ModelProject
 
 class Project(
@@ -71,7 +68,8 @@ class Project(
         AddNotification::class,
         AddGraph::class,
         AddMember::class,
-        PublishProject::class
+        PublishProject::class,
+        SetTitle::class
     )
     private val isPossible = mutableMapOf<KClass<out ProjectCommand>, MutableSharedFlow<Boolean>>()
 
@@ -99,6 +97,7 @@ class Project(
                 isPossible[AddGraph::class]!!.emit(AddGraph.isPossible(this@Project))
                 isPossible[AddMember::class]!!.emit(AddMember.isPossible(this@Project))
                 isPossible[PublishProject::class]!!.emit(PublishProject.isPossible(this@Project))
+                isPossible[SetTitle::class]!!.emit(SetTitle.isPossible(this@Project))
             }
         }
         for (type in DataType.values()) {
@@ -156,7 +155,7 @@ class Project(
         if (row in data) {
             row.delete()
         } else {
-            throw IllegalOperationException()
+            throw IllegalOperationException("This command is only usable by project admins and you are no project admin.")
         }
     }
 
@@ -195,7 +194,7 @@ class Project(
         if (column in table) {
             column.delete()
         } else {
-            throw IllegalOperationException()
+            throw IllegalOperationException("This command is only usable by project admins and you are no project admin.")
         }
     }
 
@@ -248,7 +247,7 @@ class Project(
             @Suppress("DEPRECATION")
             executeQueue.add(AddMember(id, member))
         } else {
-            throw IllegalOperationException()
+            throw IllegalOperationException("This command is only usable by project admins and you are no project admin.")
         }
     }
 
@@ -278,7 +277,7 @@ class Project(
         if (member in members && members.size > 1) {
             TODO("deleteMember")
         } else {
-            throw IllegalOperationException()
+            throw IllegalOperationException("This command is only usable by project admins and you are no project admin.")
         }
     }
 

@@ -22,7 +22,7 @@ abstract class ProjectCommand(
     var wentOnline: LocalDateTime? = null,
     var serverRemoveTime: LocalDateTime? = null,
     var commandByUser: String? = null,
-    var isProjectAdmin: Boolean? = null
+    var isProjectAdmin: Boolean = true
 ) {
     companion object {
         /**
