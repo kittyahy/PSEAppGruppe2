@@ -100,7 +100,7 @@ class LineChart(
 
     fun addVerticalMappingIsPossible(): Flow<Boolean> {
         //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
+        val flow = MutableSharedFlow<Boolean>(1)
         runBlocking {
             flow.emit(true)
         }
@@ -114,7 +114,7 @@ class LineChart(
 
     fun deleteVerticalMappingIsPossible(): Flow<Boolean> {
         //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
+        val flow = MutableSharedFlow<Boolean>(1)
         runBlocking {
             flow.emit(true)
         }
@@ -128,7 +128,7 @@ class LineChart(
 
     fun changeDotSizeIsPossible(): Flow<Boolean> {
         //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
+        val flow = MutableSharedFlow<Boolean>(1)
         runBlocking {
             flow.emit(true)
         }
@@ -142,7 +142,7 @@ class LineChart(
 
     fun changeDotColorIsPossible(): Flow<Boolean> {
         //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
+        val flow = MutableSharedFlow<Boolean>(1)
         runBlocking {
             flow.emit(true)
         }
@@ -156,7 +156,7 @@ class LineChart(
 
     fun changeLineTypeIsPossible(): Flow<Boolean> {
         //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
+        val flow = MutableSharedFlow<Boolean>(1)
         runBlocking {
             flow.emit(true)
         }

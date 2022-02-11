@@ -78,7 +78,7 @@ class PieChart(
 
     fun addMappingColorIsPossible(): Flow<Boolean> {
         //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
+        val flow = MutableSharedFlow<Boolean>(1)
         runBlocking {
             flow.emit(true)
         }
@@ -97,7 +97,7 @@ class PieChart(
 
     fun addMappingIsPossible(): Flow<Boolean> {
         //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
+        val flow = MutableSharedFlow<Boolean>(1)
         runBlocking {
             flow.emit(true)
         }
@@ -110,7 +110,7 @@ class PieChart(
 
     fun showPercentagesIsPossible(): Flow<Boolean> {
         //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
+        val flow = MutableSharedFlow<Boolean>(1)
         runBlocking {
             flow.emit(true)
         }

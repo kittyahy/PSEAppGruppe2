@@ -20,8 +20,6 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
-import android.util.Log
-import com.google.gson.Gson
 import com.pseandroid2.dailydata.model.database.entities.ProjectData
 import com.pseandroid2.dailydata.model.project.ProjectBuilder
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
@@ -35,14 +33,13 @@ import com.pseandroid2.dailydata.repository.commandCenter.commands.AddRow
 import com.pseandroid2.dailydata.repository.commandCenter.commands.IllegalOperationException
 import com.pseandroid2.dailydata.repository.commandCenter.commands.ProjectCommand
 import com.pseandroid2.dailydata.repository.commandCenter.commands.PublishProject
-import com.pseandroid2.dailydata.util.Consts.LOG_TAG
+import com.pseandroid2.dailydata.repository.commandCenter.commands.SetTitle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.runBlocking
 import kotlin.reflect.KClass
-import kotlin.reflect.full.companionObject
 import com.pseandroid2.dailydata.model.project.Project as ModelProject
 
 class Project(
@@ -71,7 +68,8 @@ class Project(
         AddNotification::class,
         AddGraph::class,
         AddMember::class,
-        PublishProject::class
+        PublishProject::class,
+        SetTitle::class
     )
     private val isPossible = mutableMapOf<KClass<out ProjectCommand>, MutableSharedFlow<Boolean>>()
 
@@ -89,7 +87,7 @@ class Project(
         @Suppress("DEPRECATION")
         connectToRepository(repositoryViewModelAPI)
         for (commandClass in supportedCommands) {
-            isPossible[commandClass] = MutableSharedFlow<Boolean>()
+            isPossible[commandClass] = MutableSharedFlow<Boolean>(1)
         }
         for (pair in isPossible) {
             runBlocking { //Todo runBlocking weg
@@ -99,10 +97,11 @@ class Project(
                 isPossible[AddGraph::class]!!.emit(AddGraph.isPossible(this@Project))
                 isPossible[AddMember::class]!!.emit(AddMember.isPossible(this@Project))
                 isPossible[PublishProject::class]!!.emit(PublishProject.isPossible(this@Project))
+                isPossible[SetTitle::class]!!.emit(SetTitle.isPossible(this@Project))
             }
         }
         for (type in DataType.values()) {
-            isPossibleAddColumn[type] = MutableSharedFlow()
+            isPossibleAddColumn[type] = MutableSharedFlow(1)
             @Suppress("DEPRECATION")
             AddColumn.isPossible(project, type)
         }
@@ -144,7 +143,7 @@ class Project(
 
     fun deleteRowIsPossible(row: Row): Flow<Boolean> {
         //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
+        val flow = MutableSharedFlow<Boolean>(1)
         runBlocking {
             flow.emit(true)
         }
@@ -156,7 +155,7 @@ class Project(
         if (row in data) {
             row.delete()
         } else {
-            throw IllegalOperationException()
+            throw IllegalOperationException("This command is only usable by project admins and you are no project admin.")
         }
     }
 
@@ -183,7 +182,7 @@ class Project(
 
     fun deleteColumnIsPossible(column: Column): Flow<Boolean> {
         //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
+        val flow = MutableSharedFlow<Boolean>(1)
         runBlocking {
             flow.emit(true)
         }
@@ -195,7 +194,7 @@ class Project(
         if (column in table) {
             column.delete()
         } else {
-            throw IllegalOperationException()
+            throw IllegalOperationException("This command is only usable by project admins and you are no project admin.")
         }
     }
 
@@ -215,7 +214,7 @@ class Project(
 
     fun deleteButtonIsPossible(button: Button): Flow<Boolean> {
         //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
+        val flow = MutableSharedFlow<Boolean>(1)
         runBlocking {
             flow.emit(true)
         }
@@ -248,13 +247,13 @@ class Project(
             @Suppress("DEPRECATION")
             executeQueue.add(AddMember(id, member))
         } else {
-            throw IllegalOperationException()
+            throw IllegalOperationException("This command is only usable by project admins and you are no project admin.")
         }
     }
 
     fun leaveOnlineProjectIsPossible(): Flow<Boolean> {
         //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
+        val flow = MutableSharedFlow<Boolean>(1)
         runBlocking {
             flow.emit(true)
         }
@@ -267,7 +266,7 @@ class Project(
 
     fun deleteMemberIsPossible(member: Member): Flow<Boolean> {
         //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
+        val flow = MutableSharedFlow<Boolean>(1)
         runBlocking {
             flow.emit(true)
         }
@@ -278,13 +277,13 @@ class Project(
         if (member in members && members.size > 1) {
             TODO("deleteMember")
         } else {
-            throw IllegalOperationException()
+            throw IllegalOperationException("This command is only usable by project admins and you are no project admin.")
         }
     }
 
     fun setAdminIsPossible(): Flow<Boolean> {
         //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
+        val flow = MutableSharedFlow<Boolean>(1)
         runBlocking {
             flow.emit(true)
         }
@@ -297,7 +296,7 @@ class Project(
 
     fun changeWallpaperIsPossible(): Flow<Boolean> {
         //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
+        val flow = MutableSharedFlow<Boolean>(1)
         runBlocking {
             flow.emit(true)
         }
@@ -311,7 +310,7 @@ class Project(
 
     fun setNotificationIsPossible(): Flow<Boolean> {
         //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
+        val flow = MutableSharedFlow<Boolean>(1)
         runBlocking {
             flow.emit(true)
         }
@@ -324,7 +323,7 @@ class Project(
 
     fun deleteNotificationIsPossible(notification: Notification): Flow<Boolean> {
         //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
+        val flow = MutableSharedFlow<Boolean>(1)
         runBlocking {
             flow.emit(true)
         }
@@ -348,7 +347,7 @@ class Project(
 
     fun setNameIsPossible(): Flow<Boolean> {
         //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
+        val flow = MutableSharedFlow<Boolean>(1)
         runBlocking {
             flow.emit(true)
         }
@@ -362,7 +361,7 @@ class Project(
 
     fun setDescriptionIsPossible(): Flow<Boolean> {
         //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
+        val flow = MutableSharedFlow<Boolean>(1)
         runBlocking {
             flow.emit(true)
         }
@@ -386,7 +385,7 @@ class Project(
 
     fun setButtonIsPossible(): Flow<Boolean> {
         //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
+        val flow = MutableSharedFlow<Boolean>(1)
         runBlocking {
             flow.emit(true)
         }
