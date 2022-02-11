@@ -2,24 +2,28 @@ package com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI.post
 
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.URLs
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.PostPreviewWrapper
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.TemplateDetailWrapper
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.PostPreview
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
 
 class PostsControllerTests {
-    /*
-    private var restAPI: RESTAPI = RESTAPI()
+    private var restAPI: RESTAPI = RESTAPI(URLs.testServer_BASE_URL)
     private val serverManager = ServerManager(restAPI)
     private lateinit var authToken: String
 
     @Before
-    fun setup() {
+    fun setup() = runBlocking {
+        Assert.assertTrue(restAPI.clearServer())
         // Generate valid firebase authentication token
         val fm = FirebaseManager(null)
         val email = "test@student.kit.edu"
@@ -34,8 +38,9 @@ class PostsControllerTests {
         serverManager.deleteAllPostsFromUser(authToken)
     }
 
+    @ExperimentalCoroutinesApi
     @Test
-    fun getAllPostsPreviewIsNotEmpty() {
+    fun getAllPostsPreviewIsNotEmpty() = runTest {
         // First create a new post, so the post preview is always not empty
         val postID = restAPI.addPost(
             PostPreviewWrapper(),
@@ -62,8 +67,9 @@ class PostsControllerTests {
         }
     }
 
+    @ExperimentalCoroutinesApi
     @Test
-    fun addAndRemovePost() {
+    fun addAndRemovePost() = runTest {
         val postID: Int = restAPI.addPost(
             PostPreviewWrapper(),
             Pair("project template", TemplateDetailWrapper()),
@@ -73,5 +79,4 @@ class PostsControllerTests {
 
         Assert.assertTrue(restAPI.removePost(postID, authToken))
     }
-    */
 }

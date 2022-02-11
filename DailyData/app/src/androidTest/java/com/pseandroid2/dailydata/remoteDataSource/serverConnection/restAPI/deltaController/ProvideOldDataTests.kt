@@ -1,8 +1,12 @@
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI.deltaController
 
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.URLs
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.AfterClass
 import org.junit.Assert
 import org.junit.Before
@@ -10,8 +14,7 @@ import org.junit.Test
 import java.time.LocalDateTime
 
 class ProvideOldDataTests {
-    /*
-    private var restAPI: RESTAPI = RESTAPI()
+    private var restAPI: RESTAPI = RESTAPI(URLs.testServer_BASE_URL)
     private lateinit var authToken: String
     private lateinit var authToken2: String
 
@@ -25,7 +28,8 @@ class ProvideOldDataTests {
     private var projectID: Long = -1
 
     @Before
-    fun setup() {
+    fun setup() = runBlocking {
+        Assert.assertTrue(restAPI.clearServer())
         Assert.assertEquals(
             FirebaseReturnOptions.SINGED_IN,
             fm.signInWithEmailAndPassword(email2, password2)
@@ -72,14 +76,17 @@ class ProvideOldDataTests {
         @AfterClass
         @JvmStatic
         fun teardown() {
-            // Remove all users from project so that the project gets removed
-            restAPI?.removeUser(userToRemove2, projectID, authToken)
-            restAPI?.removeUser(userToRemove1, projectID, authToken)
+            runBlocking {
+                // Remove all users from project so that the project gets removed
+                restAPI?.removeUser(userToRemove2, projectID, authToken)
+                restAPI?.removeUser(userToRemove1, projectID, authToken)
+            }
         }
     }
 
+    @ExperimentalCoroutinesApi
     @Test
-    fun provideOldData() {
+    fun provideOldData() = runTest {
         Assert.assertTrue(
             restAPI.provideOldData(
                 projectCommand = "project Command",
@@ -92,5 +99,4 @@ class ProvideOldDataTests {
             )
         )
     }
-    */
 }
