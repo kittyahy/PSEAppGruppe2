@@ -21,7 +21,6 @@
 package com.pseandroid2.dailydata.model.notifications
 
 import android.util.Log
-import com.pseandroid2.dailydata.model.database.entities.NotificationEntity
 import com.pseandroid2.dailydata.util.Consts.LOG_TAG
 import java.time.LocalDate
 import java.time.LocalTime
@@ -75,5 +74,9 @@ class TimeNotification(
 
     fun setSent(date: LocalDate) {
         lastSent = date
+    }
+
+    fun getSent(): LocalTime { //Todo Arne validieren
+        return LocalTime.from(send)
     }
 }

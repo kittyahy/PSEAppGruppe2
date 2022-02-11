@@ -40,7 +40,7 @@ class Notification(
     constructor(timeNotification: TimeNotification) : this(
         timeNotification.id,
         timeNotification.getMessage(),
-        TODO("timeNotification.send"), //timeNotification.send //Todo arne fragen: HMM kritisch
+        timeNotification.getSent(),
     )
 
     override fun deleteIsPossible(): Flow<Boolean> {

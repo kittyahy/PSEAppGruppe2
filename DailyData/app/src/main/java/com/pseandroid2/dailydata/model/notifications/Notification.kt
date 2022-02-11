@@ -45,7 +45,7 @@ interface Notification {
 
     companion object {
         fun fromString(notificationString: String, message: String, id: Int): Notification {
-            val splitArray = notificationString.split("|")
+            val splitArray = notificationString.split("|") //Todo Arne validieren
             return when (splitArray[0]) {
                 "TIME" -> TimeNotification.fromString(splitArray[1], message, id)
                 else -> {
