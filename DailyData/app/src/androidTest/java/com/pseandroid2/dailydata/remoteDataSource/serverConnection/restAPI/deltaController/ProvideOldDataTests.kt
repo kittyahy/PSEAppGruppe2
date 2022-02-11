@@ -1,6 +1,7 @@
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI.deltaController
 
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.URLs
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -13,7 +14,7 @@ import org.junit.Test
 import java.time.LocalDateTime
 
 class ProvideOldDataTests {
-    private var restAPI: RESTAPI = RESTAPI()
+    private var restAPI: RESTAPI = RESTAPI(URLs.testServer_BASE_URL)
     private lateinit var authToken: String
     private lateinit var authToken2: String
 
@@ -28,6 +29,7 @@ class ProvideOldDataTests {
 
     @Before
     fun setup() = runBlocking {
+        Assert.assertTrue(restAPI.clearServer())
         Assert.assertEquals(
             FirebaseReturnOptions.SINGED_IN,
             fm.signInWithEmailAndPassword(email2, password2)

@@ -2,6 +2,7 @@ package com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI.delt
 
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.URLs
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -13,7 +14,7 @@ import org.junit.Before
 import org.junit.Test
 
 class DeltaControllerGetDeltaTests {
-    private var restAPI: RESTAPI = RESTAPI()
+    private var restAPI: RESTAPI = RESTAPI(URLs.testServer_BASE_URL)
     private lateinit var authToken: String
     private lateinit var authToken2: String
     private lateinit var authToken3: String
@@ -37,6 +38,8 @@ class DeltaControllerGetDeltaTests {
 
     @Before
     fun setup() = runBlocking {
+        Assert.assertTrue(restAPI.clearServer())
+
         // Generate valid firebase authentication tokens
         Assert.assertEquals(
             FirebaseReturnOptions.SINGED_IN,

@@ -3,6 +3,7 @@ package com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI.post
 import android.util.Log
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.URLs
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.PostPreviewWrapper
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverParameter.TemplateDetailWrapper
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.TemplateDetail
@@ -18,7 +19,7 @@ import org.junit.Test
 
 
 class PostsControllerPostContentTests {
-    private val restAPI: RESTAPI = RESTAPI()
+    private val restAPI: RESTAPI = RESTAPI(URLs.testServer_BASE_URL)
     private val serverManager = ServerManager(restAPI)
     private lateinit var authToken: String
 
@@ -26,6 +27,7 @@ class PostsControllerPostContentTests {
 
     @Before
     fun setup() = runBlocking {
+        Assert.assertTrue(restAPI.clearServer())
         // Generate valid firebase authentication token
         val fm = FirebaseManager(null)
         val email = "test@student.kit.edu"

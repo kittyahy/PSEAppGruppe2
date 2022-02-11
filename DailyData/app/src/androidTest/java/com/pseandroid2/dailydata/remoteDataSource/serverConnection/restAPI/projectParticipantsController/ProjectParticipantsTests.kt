@@ -2,6 +2,7 @@ package com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI.proj
 
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.URLs
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -15,7 +16,7 @@ import org.junit.Test
 
 
 class ProjectParticipantsTests {
-    private val restAPI: RESTAPI = RESTAPI()
+    private val restAPI: RESTAPI = RESTAPI(URLs.testServer_BASE_URL)
     private val serverManager: ServerManager = ServerManager(RESTAPI())
     private val fm = FirebaseManager(null)
 
