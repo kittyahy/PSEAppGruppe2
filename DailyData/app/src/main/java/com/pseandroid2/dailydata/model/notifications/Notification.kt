@@ -45,8 +45,9 @@ interface Notification {
 
     companion object {
         fun fromString(notificationString: String, message: String, id: Int): Notification {
-            return when (notificationString.split("|")[0]) {
-                "TIME" -> TimeNotification.fromString(notificationString, message, id)
+            val splitArray = notificationString.split("|")
+            return when (splitArray[0]) {
+                "TIME" -> TimeNotification.fromString(splitArray[1], message, id)
                 else -> {
                     throw IllegalArgumentException()
                 }
