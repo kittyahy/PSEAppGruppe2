@@ -11,7 +11,7 @@ class JoinProjectCommandEncryption {
 
     @Test
     fun test() {
-        Log.d("HELP", joinProjectLinkManager.createLink(1));
+        Log.d("HELP", joinProjectLinkManager.createLink(3));
     }
 
     /*

@@ -17,6 +17,7 @@
 
 */
 package com.pseandroid2.dailydata.ui.link.appLinks
+
 import android.util.Log
 
 class JoinProjectLinkManager {
@@ -30,11 +31,13 @@ class JoinProjectLinkManager {
      *  @return Returns the link. If error returns ""
      */
     fun createLink(postID: Long): String {
+        val linkStart = "https://dailydata.page.link/?link=https://www.dailydata.com/?projectid%3D"
+        val linkEnd = "&apn=com.pseandroid2.dailydata"
         val encodedLong = encodeLong(postID)
         if (encodedLong == "") {
             return ""
         }
-        return "https://https://www.dailydata.com/?projectid="+encodeLong(postID)
+        return linkStart + encodeLong(postID) + linkEnd
     }
 
 
@@ -67,7 +70,10 @@ class JoinProjectLinkManager {
         } catch (ex: Exception) {
             when (ex) {
                 is NoSuchElementException, is ArrayIndexOutOfBoundsException -> {
-                    Log.e("JoinProjectLinkError","There is no project ID that belongs to the input")
+                    Log.e(
+                        "JoinProjectLinkError",
+                        "There is no project ID that belongs to the input"
+                    )
                 }
                 else -> throw ex
             }
