@@ -165,7 +165,7 @@ class ProjectHandler(
      *      users should not be able to call manipulation().
      */
     fun joinOnlineProjectIsPossible(): Flow<Boolean> {
-        val flow = MutableSharedFlow<Boolean>()
+        val flow = MutableSharedFlow<Boolean>(1)
         runBlocking {
             flow.emit(JoinOnlineProject.isPossible())
         }

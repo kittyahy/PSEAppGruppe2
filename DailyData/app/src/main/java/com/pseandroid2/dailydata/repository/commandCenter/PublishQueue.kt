@@ -19,7 +19,7 @@ class PublishQueue(override val repositoryViewModelAPI: RepositoryViewModelAPI) 
         val wrapper = CommandWrapper(command)
         val commandJson = wrapper.toJson()
         if (command.onlineProjectID == null) {
-            throw IllegalOperationException()
+            throw IllegalOperationException("This command is only usable by project admins and you are no project admin.")
         }
         repositoryViewModelAPI.remoteDataSourceAPI.sendCommandsToServer(
             command.onlineProjectID!!,

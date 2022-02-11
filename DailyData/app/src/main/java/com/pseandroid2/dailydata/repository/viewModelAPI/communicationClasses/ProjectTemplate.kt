@@ -94,8 +94,7 @@ class ProjectTemplate : Identifiable, Template {
 
     override lateinit var executeQueue: ExecuteQueue
     override lateinit var project: Project
-    override val id: Int
-        get() = TODO("Not yet implemented")
+    override var id: Int = 0
 
     override fun deleteIsPossible(): Flow<Boolean> {
         TODO("Not yet implemented")

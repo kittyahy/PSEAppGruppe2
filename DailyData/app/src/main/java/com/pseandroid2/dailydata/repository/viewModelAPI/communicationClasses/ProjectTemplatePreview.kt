@@ -6,7 +6,7 @@ import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import kotlinx.coroutines.flow.Flow
 
 class ProjectTemplatePreview(
-    override val id: Int,
+    override var id: Int,
     val name: String,
     val desc: String,
     val color: Int,

@@ -32,7 +32,7 @@ import com.pseandroid2.dailydata.model.project.Project as ModelProject
  * Button class that handles its specific interaction with ViewModel.
  */
 class Button(
-    override val id: Int,
+    override var id: Int,
     val name: String,
     val columnId: Int,
     val value: Int
@@ -67,7 +67,7 @@ class Button(
 
     fun increaseValueIsPossible(): Flow<Boolean> {
         //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
+        val flow = MutableSharedFlow<Boolean>(1)
         runBlocking {
             flow.emit(true)
         }
@@ -80,7 +80,7 @@ class Button(
 
     fun decreaseValueIsPossible(): Flow<Boolean> {
         //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
+        val flow = MutableSharedFlow<Boolean>(1)
         runBlocking {
             flow.emit(true)
         }
@@ -93,7 +93,7 @@ class Button(
 
     fun setValueIsPossible(): Flow<Boolean> {
         //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
+        val flow = MutableSharedFlow<Boolean>(1)
         runBlocking {
             flow.emit(true)
         }
