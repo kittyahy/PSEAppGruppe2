@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 
 class JoinOnlineProject(private val onlineID: Long, private val idFlow: MutableSharedFlow<Int>) :
-    ProjectCommand() {
+    ProjectCommand(onlineProjectID = onlineID) {
     override val publishable: Boolean = false
 
     companion object {
@@ -21,13 +21,13 @@ class JoinOnlineProject(private val onlineID: Long, private val idFlow: MutableS
         publishQueue: PublishQueue
     ) {
         @Suppress("DEPRECATION")
-        repositoryViewModelAPI.remoteDataSourceAPI.joinProject(onlineID)
+        repositoryViewModelAPI.remoteDataSourceAPI.joinProject(onlineProjectID!!)
         val onlineProject = Project(repositoryViewModelAPI = repositoryViewModelAPI)
         val idFlow = MutableSharedFlow<Int>()
         CreateProject(onlineProject, idFlow).execute(repositoryViewModelAPI, publishQueue)
         val id: Int = idFlow.first()
         @Suppress("DEPRECATION")
-        repositoryViewModelAPI.appDataBase.projectDataDAO().setOnlineID(id, onlineID)
+        repositoryViewModelAPI.appDataBase.projectDataDAO().setOnlineID(id, onlineProjectID!!)
         super.execute(repositoryViewModelAPI, publishQueue)
     }
 

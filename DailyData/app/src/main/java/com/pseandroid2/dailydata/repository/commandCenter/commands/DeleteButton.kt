@@ -5,8 +5,8 @@ import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
 
-class DeleteButton(val projectId: Int, val uiElement: UIElement) :
-    ProjectCommand(projectID = projectId) {
+class DeleteButton(projectID: Int, val uiElement: UIElement) :
+    ProjectCommand(projectID = projectID) {
     companion object {
         fun isPossible(project: Project): Boolean {
             return ProjectCommand.isPossible(project)

@@ -4,8 +4,9 @@ import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
 
-class PublishProject(private val id: Int, private val project: Project) : ProjectCommand() {
-    override val publishable: Boolean = true
+class PublishProject(private val project: Project) :
+    ProjectCommand(projectID = project.id) {
+    override val publishable: Boolean = false
 
     override suspend fun publish(
         repositoryViewModelAPI: RepositoryViewModelAPI,
@@ -25,7 +26,7 @@ class PublishProject(private val id: Int, private val project: Project) : Projec
         publishQueue: PublishQueue
     ) {
         repositoryViewModelAPI.appDataBase.projectDataDAO().setOnlineID(
-            project.id,
+            projectID!!,
             repositoryViewModelAPI.remoteDataSourceAPI.createNewOnlineProject("")
         ) //Todo Fehlerbehandlung, falls publishen fehl schlägt
         project.isOnlineProject = true

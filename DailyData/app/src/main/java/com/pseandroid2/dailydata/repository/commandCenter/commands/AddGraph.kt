@@ -5,7 +5,7 @@ import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
 
-class AddGraph(val id: Int, val graph: Graph) : ProjectCommand() {
+class AddGraph(projectID: Int, val graph: Graph) : ProjectCommand(projectID = projectID) {
     companion object {
         fun isPossible(project: Project): Boolean {
             return ProjectCommand.isPossible(project)
@@ -18,7 +18,7 @@ class AddGraph(val id: Int, val graph: Graph) : ProjectCommand() {
         repositoryViewModelAPI: RepositoryViewModelAPI,
         publishQueue: PublishQueue
     ) {
-        repositoryViewModelAPI.appDataBase.graphCDManager().insertGraph(id, graph.toDBEquivalent())
+        repositoryViewModelAPI.appDataBase.graphCDManager().insertGraph(projectID!!, graph.toDBEquivalent())
         super.execute(repositoryViewModelAPI, publishQueue)
     }
 }

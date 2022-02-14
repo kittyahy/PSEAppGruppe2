@@ -5,7 +5,8 @@ import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Member
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
 
-class AddMember(private val id: Int, private val member: Member) : ProjectCommand() {
+class AddMember(projectID: Int, private val member: Member) :
+    ProjectCommand(projectID = projectID) {
     companion object {
         fun isPossible(project: Project): Boolean {
             return project.members.size < 24 && project.isOnlineProject
@@ -17,7 +18,8 @@ class AddMember(private val id: Int, private val member: Member) : ProjectComman
         repositoryViewModelAPI: RepositoryViewModelAPI,
         publishQueue: PublishQueue
     ) {
-        repositoryViewModelAPI.appDataBase.projectDataDAO().addUser(id, member.toDBEquivalent())
+        repositoryViewModelAPI.appDataBase.projectDataDAO()
+            .addUser(projectID!!, member.toDBEquivalent())
         super.execute(repositoryViewModelAPI, publishQueue)
     }
 }

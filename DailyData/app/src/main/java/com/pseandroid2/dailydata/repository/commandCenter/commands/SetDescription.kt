@@ -4,14 +4,14 @@ import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
 
-class SetDescription(project: Project, private val newDescription: String) :
-    OnlineAdminCommand(project) {
+class SetDescription(projectID: Int, private val newDescription: String) :
+    ProjectCommand(projectID = projectID) {
 
     override val publishable = true
 
     companion object {
         fun isPossible(project: Project): Boolean {
-            return OnlineAdminCommand.isPossible(project)
+            return ProjectCommand.isPossible(project)
         }
     }
 

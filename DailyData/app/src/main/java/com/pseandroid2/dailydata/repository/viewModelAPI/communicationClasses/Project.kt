@@ -375,7 +375,7 @@ class Project(
     suspend fun publish() {
         isPossible[AddGraph::class]!!.emit(false)
         @Suppress("DEPRECATION")
-        executeQueue.add(PublishProject(id, this))
+        executeQueue.add(PublishProject(this))
     }
 
     fun setButtonIsPossible(): Flow<Boolean> {
