@@ -26,7 +26,7 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 
 interface Identifiable {
-    val id: Int
+    var id: Int
 
     @Deprecated("Internal function, should not be used outside the RepositoryViewModelAPI")
     var executeQueue: ExecuteQueue

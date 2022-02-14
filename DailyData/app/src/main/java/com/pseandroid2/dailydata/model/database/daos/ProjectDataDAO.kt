@@ -57,7 +57,6 @@ abstract class ProjectDataDAO {
     @Query("SELECT id, name, description, wallpaper, onlineId, color FROM project WHERE id = :id")
     abstract fun getProjectData(id: Int): Flow<ProjectData?>
 
-
     @Query("SELECT layout FROM project WHERE id = :id")
     abstract suspend fun getCurrentLayout(id: Int): String
 
@@ -69,6 +68,9 @@ abstract class ProjectDataDAO {
 
     @Query("SELECT id FROM project WHERE onlineId = :onlineId LIMIT 1")
     abstract fun getIdForOnlineId(onlineId: Long): Int
+
+    @Query("SELECT EXISTS (SELECT * FROM project WHERE id = :id)")
+    abstract fun projectExists(id: Int): Boolean
 
 
     /**

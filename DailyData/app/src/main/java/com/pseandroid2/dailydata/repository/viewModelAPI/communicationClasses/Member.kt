@@ -28,7 +28,7 @@ import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import kotlinx.coroutines.flow.Flow
 
 class Member(
-    override val id: Int,
+    override var id: Int,
     val name: String
 ) : Identifiable, Convertible<User> {
     constructor(user: User) : this(

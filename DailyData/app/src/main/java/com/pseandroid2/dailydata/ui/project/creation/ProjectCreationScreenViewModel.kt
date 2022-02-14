@@ -20,6 +20,7 @@
 
 package com.pseandroid2.dailydata.ui.project.creation
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -34,6 +35,7 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Da
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Notification
 import com.pseandroid2.dailydata.ui.navigation.Routes
+import com.pseandroid2.dailydata.util.Consts.LOG_TAG
 import com.pseandroid2.dailydata.util.ui.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -176,8 +178,7 @@ class ProjectCreationScreenViewModel @Inject constructor(
                                 graphs = graphs
                             )
                             val id = newProject.await()
-                            println("Test: after new Project")
-                            println(id)
+                            Log.d(LOG_TAG, "Test: after new Project $id")
                             sendUiEvent(UiEvent.PopBackStack)
                             sendUiEvent(UiEvent.Navigate(Routes.DATA + "?projectId=$id"))
                         }

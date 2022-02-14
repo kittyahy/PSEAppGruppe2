@@ -1,9 +1,12 @@
 package com.pseandroid2.dailydata.remoteDataSource.serverConnection.restAPI.fetchRequestController
 
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
+import com.pseandroid2.dailydata.remoteDataSource.serverConnection.URLs
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.AfterClass
 import org.junit.Assert
 import org.junit.Before
@@ -12,7 +15,7 @@ import org.junit.Test
 
 class FetchRequestControllerTests {
 
-    private var restAPI: RESTAPI = RESTAPI()
+    private var restAPI: RESTAPI = RESTAPI(URLs.testServer_BASE_URL)
     private lateinit var authToken: String
     private lateinit var authToken2: String
     private lateinit var authToken3: String
@@ -30,10 +33,10 @@ class FetchRequestControllerTests {
 
     private var projectID: Long = -1
 
-    /*
 
     @Before
     fun setup() = runBlocking {
+        Assert.assertTrue(restAPI.clearServer())
         Assert.assertEquals(
             FirebaseReturnOptions.SINGED_IN,
             fm.signInWithEmailAndPassword(email3, password3)
@@ -86,19 +89,23 @@ class FetchRequestControllerTests {
 
         @AfterClass
         @JvmStatic
-        fun teardown() = runBlocking {
-            // Remove all users from project so that the project gets removed
-            restAPI?.removeUser(userToRemove3, projectID, authToken)
-            restAPI?.removeUser(userToRemove2, projectID, authToken)
-            restAPI?.removeUser(userToRemove1, projectID, authToken)
+        fun teardown() {
+            runBlocking {
+                // Remove all users from project so that the project gets removed
+                restAPI?.removeUser(userToRemove3, projectID, authToken)
+                restAPI?.removeUser(userToRemove2, projectID, authToken)
+                restAPI?.removeUser(userToRemove1, projectID, authToken)
+            }
         }
     }
 
+    @ExperimentalCoroutinesApi
     @Test
     fun demandOldData() = runTest {
         Assert.assertTrue(restAPI.demandOldData(projectID, "request information", authToken))
     }
 
+    @ExperimentalCoroutinesApi
     @Test
     fun getFetchRequests() = runTest {
         val requestsToSend = mutableListOf("request information 1", "request information 2")
@@ -121,17 +128,15 @@ class FetchRequestControllerTests {
             requestsToSend.size
         ) // The send fetch requests from user1 were received by user2
     }
-    */
 
     /* TODO: Implement this in the quality control phase
-    @Test
+    @ExperimentalCoroutinesApi@Test
     fun getFetchRequestsWhenNoProjectMember() = runTest {
         Assert.assertTrue(restAPI.demandOldData(projectID, "request information", authToken))
         //User 3 is no project member
         Assert.assertEquals(0, restAPI.getFetchRequests(projectID, authToken3).size)
     }
-
-    // TODO: Test Ideas for quality control: 1. getFetchrequests from the same account who send them
     */
 
+    // TODO: Test Ideas for quality control: 1. getFetchrequests from the same account who send them
 }

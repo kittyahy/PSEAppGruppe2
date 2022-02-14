@@ -30,7 +30,7 @@ import com.pseandroid2.dailydata.model.project.Project as ModelProject
 
 
 class Notification(
-    override val id: Int,
+    override var id: Int,
     val message: String,
     val time: LocalTime
 ) : Identifiable, Convertible<Notification> {
@@ -40,7 +40,7 @@ class Notification(
     constructor(timeNotification: TimeNotification) : this(
         timeNotification.id,
         timeNotification.getMessage(),
-        TODO("timeNotification.send"), //timeNotification.send //Todo arne fragen: HMM kritisch
+        timeNotification.getSent(),
     )
 
     override fun deleteIsPossible(): Flow<Boolean> {

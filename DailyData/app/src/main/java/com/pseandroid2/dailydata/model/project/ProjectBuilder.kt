@@ -6,7 +6,11 @@ import com.pseandroid2.dailydata.model.settings.Settings
 import com.pseandroid2.dailydata.model.table.Table
 import com.pseandroid2.dailydata.model.users.User
 
+/**
+ * This Interface provides all methods to create a new project.
+ */
 interface ProjectBuilder<P : Project> {
+
     fun reset(id: Int): ProjectBuilder<P>
 
     fun setId(id: Int): ProjectBuilder<P>
