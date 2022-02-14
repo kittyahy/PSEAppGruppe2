@@ -33,8 +33,7 @@ import java.util.List;
 /**
  * Logic for the PostsController.
  * <p>
- * The PostService provides methods, to create and delete Posts, get recommended Templates and previews. It also
- * handles the postIds.
+ * The PostService provides methods, to create and delete Posts, get recommended Templates and previews.
  */
 @Service
 public class PostService {
@@ -42,7 +41,6 @@ public class PostService {
     private static final int MAX_POSTS = 5;
     private final TemplateRepository tempRepo;
     private final PostsRepository postRepo;
-    private int postId;
 
     /**
      * Creates a postService Constructor.
@@ -53,7 +51,6 @@ public class PostService {
     public PostService(PostsRepository postRepo, TemplateRepository tempRepo) {
         this.postRepo = postRepo;
         this.tempRepo = tempRepo;
-        postId = 1;
     }
 
     /**
@@ -87,9 +84,9 @@ public class PostService {
     public int addPost(PostPreviewWrapper postPreview, Pair<String, TemplateDetailWrapper> projectTemplate,
                        List<Pair<String, TemplateDetailWrapper>> graphTemplates, String user) {
 
-        Post post = new Post(postId, postPreview.getPreviewPicture(), user, postPreview.getTitle());
+        Post post = new Post(postPreview.getPreviewPicture(), user, postPreview.getTitle());
         postRepo.save(post);
-        postId++;
+
 
         tempRepo.save(new Template(post.getPostId(), post.getTemplateIds(), projectTemplate.getFirst(), true,
                 projectTemplate.getSecond().getTitle(), projectTemplate.getSecond().getTemplateDetailImage()));
