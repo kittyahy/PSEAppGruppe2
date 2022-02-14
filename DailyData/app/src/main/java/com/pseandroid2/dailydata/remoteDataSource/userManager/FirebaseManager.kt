@@ -186,7 +186,7 @@ class FirebaseManager(timeout: Long?) {
      *
      * @param forceRefresh: Should the returned firebase token be forcefully refreshed
      */
-    suspend private fun refreshIdToken(forceRefresh: Boolean) {
+    private suspend fun refreshIdToken(forceRefresh: Boolean) {
         val user: FirebaseUser? = auth.currentUser
         val startTime = System.currentTimeMillis()
 
@@ -194,7 +194,6 @@ class FirebaseManager(timeout: Long?) {
         if (user == null) {
             return
         }
-
         val task = user.getIdToken(forceRefresh)
 
 

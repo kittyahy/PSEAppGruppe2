@@ -48,15 +48,21 @@ interface ServerEndpoints {
     @GET("greet")
     suspend fun greet(): Response<String>
 
-    // TODO: This is a method for testing -> Probably remove or change it's path later
+    // This method is for testing only
     /**
      * Returns all uploaded posts from a user
      *
      * @param token: The authentication token
      * @return The postIDs of the uploaded posts
      */
-    @GET("test")
+    @GET("test/allPosts")
     suspend fun getPostsFromUser(@Header("token") token: String): Response<List<Int>>
+
+    /**
+     * Clears all saved fetchRequsts, deltas and posts from the server
+     */
+    @DELETE("test/deleteAll")
+    suspend fun clearServer(): Response<Boolean>
 
     // Post Controller ---------------------------------------------------------------------------
     /**

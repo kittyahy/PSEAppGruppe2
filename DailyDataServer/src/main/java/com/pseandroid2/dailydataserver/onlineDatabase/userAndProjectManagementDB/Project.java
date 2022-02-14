@@ -23,6 +23,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
@@ -40,6 +41,7 @@ import java.util.Objects;
 @Table(name = "Project_Table")
 public class Project {
     private @Id
+    @GeneratedValue
     long projectId;
     private LocalDateTime lastUpdated;
     private int participantJoin;
@@ -47,13 +49,11 @@ public class Project {
 
 
     /**
-     * the constructor for a project, which should be used, if a new project get instanced.
+     * The constructor for a project, which should be used, if a new project get instanced.
      *
-     * @param projectId   the id for the new Project.
      * @param projectInfo Information for a new Participant, to initialize the project on their device.
      */
-    public Project(long projectId, String projectInfo) {
-        this.projectId = projectId;
+    public Project(String projectInfo) {
         this.lastUpdated = LocalDateTime.now();
         this.participantJoin = 1;
         this.projectInfo = projectInfo;
