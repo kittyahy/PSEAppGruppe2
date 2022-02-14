@@ -24,6 +24,9 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import com.pseandroid2.dailydata.model.users.User
 
+/**
+ * This class represents the project template in their Database. It uses the project Template and the project Skeleton.
+ */
 @Entity(tableName = "projectTemplate", primaryKeys = ["id"])
 data class ProjectTemplateEntity(
     @Embedded val skeleton: ProjectSkeletonEntity,

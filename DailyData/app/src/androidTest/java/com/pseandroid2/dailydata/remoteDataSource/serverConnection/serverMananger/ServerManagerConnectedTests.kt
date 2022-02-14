@@ -6,13 +6,14 @@ import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.forRepoReturns.PostPreviewWithPicture
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.AfterClass
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
-
-/*
 class ServerManagerConnectedTests {
     private val serverManager: ServerManager = ServerManager(RESTAPI())
     private val fm = FirebaseManager(null)
@@ -32,7 +33,7 @@ class ServerManagerConnectedTests {
     )
 
     @Before
-    fun setup() {
+    fun setup() = runBlocking {
         Assert.assertEquals(
             FirebaseReturnOptions.SINGED_IN,
             fm.signInWithEmailAndPassword(email, password)
@@ -85,14 +86,17 @@ class ServerManagerConnectedTests {
         @AfterClass
         @JvmStatic
         fun teardown() {
-            serverManager?.removePost(postID, authToken)
-            // Remove all users from project so that the project gets removed
-            serverManager?.removeUser(userToRemove1, projectID, authToken)
+            runBlocking {
+                serverManager?.removePost(postID, authToken)
+                // Remove all users from project so that the project gets removed
+                serverManager?.removeUser(userToRemove1, projectID, authToken)
+            }
         }
     }
 
+    @ExperimentalCoroutinesApi
     @Test
-    fun getAllPostPreviews() {
+    fun getAllPostPreviews() = runTest {
         // Check if post preview is not empty
         val postPreviews = serverManager.getAllPostPreview(authToken) as MutableList
         Assert.assertNotEquals(0, postPreviews)
@@ -108,10 +112,11 @@ class ServerManagerConnectedTests {
         Assert.assertEquals(postID, postPreview?.id)
     }
 
+    @ExperimentalCoroutinesApi
     @Test
-    fun getPostDetail() {
+    fun getPostDetail() = runTest {
         val postPreview = serverManager.getPostDetail(postID, authToken)
         Assert.assertEquals("project template title to test", postPreview.elementAt(0).title)
         Assert.assertEquals("graph template title to test", postPreview.elementAt(1).title)
     }
-}*/
+}

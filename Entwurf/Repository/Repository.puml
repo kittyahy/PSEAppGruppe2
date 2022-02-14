@@ -481,7 +481,7 @@ class "ProjectTemplate" as repoProjectTemplate implements Identifiable {
    class RequestOldData {
       +from: DateTime
       +to: DateTime
-      
+
    }
    class PublishProject extends PLACEHOLDER {
 
@@ -497,13 +497,11 @@ class "ProjectTemplate" as repoProjectTemplate implements Identifiable {
 
    }
    class CommandWrapper {
-   +commandCanonicalName: String
-   +commandJson: String
++ command : ProjectCommand
 
-   +Constructor(command: ProjectCommand)
-   +toJson(): String
-   +unwrap(): ProjectCommand
-   -jsonFromCommand(ProjectCommand): String
+
+   +{static}JsonFrom(command: ProjectCommand): String
+   + toJson(): String
    }
 
    'Overleaf

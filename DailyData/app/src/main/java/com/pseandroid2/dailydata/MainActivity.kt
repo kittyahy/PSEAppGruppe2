@@ -38,60 +38,73 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
-import com.pseandroid2.dailydata.ui.link.appLinks.JoinProjectLinkManager
-import com.pseandroid2.dailydata.ui.theme.DailyDataTheme
 import com.pseandroid2.dailydata.ui.composables.BottomNavItem
 import com.pseandroid2.dailydata.ui.composables.BottomNavigationBar
 import com.pseandroid2.dailydata.ui.link.LinkScreen
+import com.pseandroid2.dailydata.ui.link.appLinks.JoinProjectLinkManager
 import com.pseandroid2.dailydata.ui.navigation.Navigation
 import com.pseandroid2.dailydata.ui.navigation.Routes
+import com.pseandroid2.dailydata.ui.theme.DailyDataTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.InternalCoroutinesApi
 
-var pID : Long = -1
+var pID: Long = -1
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    val joinProjectLinkManager = JoinProjectLinkManager()
+    private val joinProjectLinkManager = JoinProjectLinkManager()
 
     @InternalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             DailyDataTheme {
-                joinProjectLink()
+                println("LINK_HELP_0")
                 Main()
+                joinProjectLink()
+                println("LINK_HELP_X")
             }
         }
-
     }
 
     /**
      * Checks if the app was started by a dynamic link.
      * If it was started by an correct link it will call openJoinProjectScreen()
      */
-    fun joinProjectLink() {
-        val dynamicLink = Firebase.dynamicLinks.getDynamicLink(intent).addOnSuccessListener(this) { pendingDynamicLinkData ->
-            // Get deep link from result (may be null if no link is found)
-            var deepLink: Uri? = null
-            if (pendingDynamicLinkData != null) {
-                deepLink = pendingDynamicLinkData.link
-            }
-
-            if (deepLink != null) {
-                // get projectID from link
-                var projectIDString: String = deepLink.getQueryParameter("projectid") ?: "-1" // -1 is an invalid projectID
-                val projectID: Long = joinProjectLinkManager.decodePostID(projectIDString)
-
-                // open join project screen when project id is valid
-                if (projectID > 0) {
-                    pID = projectID
+    private fun joinProjectLink() {
+        println("LINK_HELP_0.1")
+        println("LINK_HELP_0.2")
+        val dynamicLink = Firebase.dynamicLinks.getDynamicLink(intent)
+            .addOnSuccessListener(this) { pendingDynamicLinkData ->
+                println("LINK_HELP_1")
+                // Get deep link from result (may be null if no link is found)
+                var deepLink: Uri? = null
+                if (pendingDynamicLinkData != null) {
+                    deepLink = pendingDynamicLinkData.link
                 }
-            } else {
-                Log.d("Link", "no projectID in link")
-            }
 
-        } .addOnFailureListener(this) { e -> Log.w("DynamicLink", "getDynamicLink:onFailure", e) }
+                println("LINK_HELP_2")
+                if (deepLink != null) {
+                    // get projectID from link
+                    val projectIDString: String = deepLink.getQueryParameter("projectid")
+                        ?: "-1" // -1 is an invalid projectID
+                    val projectID: Long = joinProjectLinkManager.decodePostID(projectIDString)
+
+                    // open join project screen when project id is valid
+                    println("LINK_HELP_3")
+                    println("HEEEEEEEELP: " + projectID)
+                    if (projectID > 0) {
+                        println("LINK_HELP_4: " + projectID)
+                        pID = projectID
+                    }
+                } else {
+                    Log.d("Link", "no projectID in link")
+                }
+
+            }
+            .addOnFailureListener(this) {
+                e -> Log.w("DynamicLink", "getDynamicLink:onFailure", e)
+                println("LINK_HELP_-1")}
     }
 }
 
@@ -102,19 +115,22 @@ fun Main() {
     Scaffold(
         bottomBar = {
             BottomNavigationBar(
-                items = listOf (
+                items = listOf(
                     BottomNavItem(
                         name = "Project",
                         route = Routes.PROJECT,
-                        icon = Icons.Default.Home),
+                        icon = Icons.Default.Home
+                    ),
                     BottomNavItem(
                         name = "Templates",
                         route = Routes.TEMPLATES,
-                        icon = Icons.Default.Favorite),
+                        icon = Icons.Default.Favorite
+                    ),
                     BottomNavItem(
                         name = "Server",
                         route = Routes.SERVER,
-                        icon = Icons.Default.Share),
+                        icon = Icons.Default.Share
+                    ),
                 ),
                 navController = navController,
                 onItemClick = {
@@ -129,12 +145,11 @@ fun Main() {
         Box(
             modifier = Modifier.padding(it)
         ) {
-            if(pID > 0) {
-                  LinkScreen(pID = pID, onJoinClick = { pID = -1 })
+            if (pID > 0) {
+                LinkScreen(pID = pID, onJoinClick = { pID = -1 })
             } else {
                 Navigation(navController = navController)
             }
-
         }
     }
 }

@@ -35,21 +35,17 @@ import kotlinx.coroutines.runBlocking
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
 
 class PieChart(
-    override val id: Int = -1,
-    override val image: Bitmap?,
-    val color: List<Int>,
-    val mapping: MutableList<Column>,
-    val showPercentages: Boolean
+    override var id: Int = -1,
+    override var image: Bitmap? = null,
+    var color: List<Int> = ArrayList(),
+    var mapping: MutableList<Column> = ArrayList(),
+    var showPercentages: Boolean = false
 ) : Graph() {
     private val columnColors = mutableMapOf<Int, String>()
     override lateinit var executeQueue: ExecuteQueue
     override lateinit var project: Project
     override lateinit var appDataBase: AppDataBase
     override val typeName: String = "Pie Chart" //TODO Magic String
-
-    init {
-        availableGraphs.add(typeName)
-    }
 
     override fun deleteIsPossible(): Flow<Boolean> {
         TODO("Not yet implemented")
@@ -82,7 +78,7 @@ class PieChart(
 
     fun addMappingColorIsPossible(): Flow<Boolean> {
         //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
+        val flow = MutableSharedFlow<Boolean>(1)
         runBlocking {
             flow.emit(true)
         }
@@ -101,7 +97,7 @@ class PieChart(
 
     fun addMappingIsPossible(): Flow<Boolean> {
         //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
+        val flow = MutableSharedFlow<Boolean>(1)
         runBlocking {
             flow.emit(true)
         }
@@ -114,7 +110,7 @@ class PieChart(
 
     fun showPercentagesIsPossible(): Flow<Boolean> {
         //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>()
+        val flow = MutableSharedFlow<Boolean>(1)
         runBlocking {
             flow.emit(true)
         }

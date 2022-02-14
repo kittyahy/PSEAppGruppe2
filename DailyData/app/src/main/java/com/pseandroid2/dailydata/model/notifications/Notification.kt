@@ -20,27 +20,34 @@
 
 package com.pseandroid2.dailydata.model.notifications
 
+/**
+ * This interface declares, what a notification can. A notification is a message, which is outside the app.
+ */
 interface Notification {
 
     var id: Int
 
     /**
-     * @return the Message that should be delivered by this Notification
+     * It returns the Message that should be delivered by this Notification
      */
     fun getMessage(): String
 
+    /**
+     * It provides, if the notification is sent.
+     */
     fun sendNow(vararg args: Any): Boolean
 
     /**
-     * @return a String from which to recreate this Notification.
+     * It provides a String from which to recreate this Notification.
      * Has to start with an identifier followed by a '|'.
      */
     fun toFactoryString(): String
-    
+
     companion object {
         fun fromString(notificationString: String, message: String, id: Int): Notification {
-            return when (notificationString.split("|")[0]) {
-                "TIME" -> TimeNotification.fromString(notificationString, message, id)
+            val splitArray = notificationString.split("|") //Todo Arne validieren
+            return when (splitArray[0]) {
+                "TIME" -> TimeNotification.fromString(splitArray[1], message, id)
                 else -> {
                     throw IllegalArgumentException()
                 }
