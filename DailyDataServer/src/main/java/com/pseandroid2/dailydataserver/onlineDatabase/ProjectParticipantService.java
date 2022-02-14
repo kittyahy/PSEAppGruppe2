@@ -42,7 +42,6 @@ public class ProjectParticipantService {
     private static final long INACTIVE_PROJECT_TIME = 5;
     private final ProjectParticipantsRepository ppRepo;
     private final ProjectRepository projectRepo;
-    private long projectIDGenerator;
 
     /**
      * The Constructor for the ProjectParticipantsService.
@@ -54,7 +53,6 @@ public class ProjectParticipantService {
     public ProjectParticipantService(ProjectParticipantsRepository ppRepo, ProjectRepository projectRepo) {
         this.ppRepo = ppRepo;
         this.projectRepo = projectRepo;
-        this.projectIDGenerator = 1;
     }
 
 
@@ -68,8 +66,7 @@ public class ProjectParticipantService {
      */
     public long addProject(String user, String projectInfo) {
         removeOutDatedProjects();
-        Project project = new Project(projectIDGenerator, projectInfo);
-        projectIDGenerator++;
+        Project project = new Project(projectInfo);
         projectRepo.save(project);
         ppRepo.save(new ProjectParticipant(user, project.getProjectId(), Role.ADMIN, project.getParticipantJoin()));
         project.setParticipantJoin(project.getParticipantJoin() + 1);

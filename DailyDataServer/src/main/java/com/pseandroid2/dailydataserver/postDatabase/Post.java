@@ -23,6 +23,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Arrays;
@@ -38,6 +39,7 @@ import java.util.Objects;
 @Table(name = "Post_Table")
 public class Post {
     @Id
+    @GeneratedValue
     public int postId;
     private Byte[] postPreviewImage;
     private String previewTitle;
@@ -48,13 +50,11 @@ public class Post {
      * The constructor, which should be used, to create a new Post. The templateIds is initialized with 0, because
      * they start without any templates.
      *
-     * @param postId           the id, which belongs to the post.
      * @param postPreviewImage the image for the postPreview.
      * @param createdBy        the user, who upload the post.
      * @param previewTitle     the title of the post.
      */
-    public Post(int postId,Byte[] postPreviewImage, String createdBy, String previewTitle) {
-        this.postId = postId;
+    public Post(Byte[] postPreviewImage, String createdBy, String previewTitle) {
         this.postPreviewImage = postPreviewImage;
         this.createdBy = createdBy;
         this.previewTitle = previewTitle;
@@ -75,7 +75,6 @@ public class Post {
     public void increaseTemplateIds() {
         templateIds++;
     }
-
 
 
     @Override
