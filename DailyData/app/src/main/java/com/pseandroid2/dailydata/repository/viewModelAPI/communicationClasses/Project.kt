@@ -354,7 +354,7 @@ class Project(
 
     suspend fun setName(name: String) {
         @Suppress("DEPRECATION")
-        executeQueue.add(SetTitle(this, name))
+        executeQueue.add(SetTitle(this.id, name))
     }
 
 
@@ -365,7 +365,7 @@ class Project(
     @JvmName("setDescription1")
     suspend fun setDescription(description: String) {
         @Suppress("DEPRECATION")
-        executeQueue.add(SetDescription(this, description))
+        executeQueue.add(SetDescription(this.id, description))
     }
 
     fun publishIsPossible(): Flow<Boolean> {
