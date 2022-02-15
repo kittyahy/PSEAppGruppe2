@@ -7,8 +7,8 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Vi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 
-class JoinOnlineProject(private val onlineID: Long, private val idFlow: MutableSharedFlow<Int>) :
-    ProjectCommand() {
+class JoinOnlineProject(private val onlineID: Long, private val idFlow: MutableSharedFlow<Int>, api: RepositoryViewModelAPI) :
+    ProjectCommand(onlineProjectID = onlineID, repositoryViewModelAPI = api) {
     override val publishable: Boolean = false
 
     companion object {
@@ -17,10 +17,7 @@ class JoinOnlineProject(private val onlineID: Long, private val idFlow: MutableS
         }
     }
 
-    override suspend fun execute(
-        repositoryViewModelAPI: RepositoryViewModelAPI,
-        publishQueue: PublishQueue
-    ) {
+    override suspend fun execute() {
         @Suppress("DEPRECATION")
         repositoryViewModelAPI.remoteDataSourceAPI.joinProject(onlineID)
         val admin = SimpleUser(
@@ -30,11 +27,11 @@ class JoinOnlineProject(private val onlineID: Long, private val idFlow: MutableS
         val onlineProject =
             ViewModelProject(repositoryViewModelAPI = repositoryViewModelAPI, admin = admin)
         val idFlow = MutableSharedFlow<Int>()
-        CreateProject(onlineProject, idFlow).execute(repositoryViewModelAPI, publishQueue)
+        CreateProject(onlineProject, idFlow).execute()
         val id: Int = idFlow.first()
         @Suppress("DEPRECATION")
-        repositoryViewModelAPI.appDataBase.projectDataDAO().setOnlineID(id, onlineID)
-        super.execute(repositoryViewModelAPI, publishQueue)
+        repositoryViewModelAPI.appDataBase.projectDataDAO().setOnlineID(id, onlineProjectID!!)
+        super.execute()
     }
 
 

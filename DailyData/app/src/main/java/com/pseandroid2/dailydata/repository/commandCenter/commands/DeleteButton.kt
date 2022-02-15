@@ -1,14 +1,14 @@
 package com.pseandroid2.dailydata.repository.commandCenter.commands
 
+import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Button
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ViewModelProject
 
-class AddButton(projectID: Int, val button: Button) : ProjectCommand(projectID = projectID) {
+class DeleteButton(projectID: Int, val uiElement: UIElement) :
+    ProjectCommand(projectID = projectID) {
     companion object {
-        fun isPossible(viewModelProject: ViewModelProject): Boolean {
-            return ProjectCommand.isPossible(viewModelProject)
+        fun isPossible(project: Project): Boolean {
+            return ProjectCommand.isPossible(project)
         }
     }
 
@@ -18,9 +18,8 @@ class AddButton(projectID: Int, val button: Button) : ProjectCommand(projectID =
         repositoryViewModelAPI: RepositoryViewModelAPI,
         publishQueue: PublishQueue
     ) {
-        val uiElement = button.toDBEquivalent()
         repositoryViewModelAPI.appDataBase.uiElementDAO()
-            .insertUIElement(projectID!!, button.columnId, uiElement)
+            .removeUIElements(projectID!!, uiElement.id)
         super.execute(repositoryViewModelAPI, publishQueue)
     }
 
