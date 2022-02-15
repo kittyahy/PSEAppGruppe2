@@ -10,15 +10,25 @@ class AddGraph(projectID: Int, val graph: Graph) : ProjectCommand(projectID = pr
         fun isPossible(project: Project): Boolean {
             return ProjectCommand.isPossible(project)
         }
-    }
 
-    override val publishable: Boolean = false
+        const val issuerNeedsAdminRights: Boolean = false
+
+        const val publishable: Boolean = false
+    }
 
     override suspend fun execute(
         repositoryViewModelAPI: RepositoryViewModelAPI,
         publishQueue: PublishQueue
     ) {
-        repositoryViewModelAPI.appDataBase.graphCDManager().insertGraph(projectID!!, graph.toDBEquivalent())
+        repositoryViewModelAPI.appDataBase.graphCDManager()
+            .insertGraph(projectID!!, graph.toDBEquivalent())
         super.execute(repositoryViewModelAPI, publishQueue)
+    }
+
+    override fun publish(
+        repositoryViewModelAPI: RepositoryViewModelAPI,
+        publishQueue: PublishQueue
+    ): Boolean {
+        return super.publish(repositoryViewModelAPI, publishQueue) && publishable
     }
 }

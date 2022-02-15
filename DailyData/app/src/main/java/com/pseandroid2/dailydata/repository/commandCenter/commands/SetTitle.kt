@@ -7,12 +7,14 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Pr
 class SetTitle(projectID: Int, private val newTitle: String) :
     ProjectCommand(projectID = projectID) {
 
-    override val publishable = true
-
     companion object {
         fun isPossible(project: Project): Boolean {
             return ProjectCommand.isPossible(project)
         }
+
+        const val issuerNeedsAdminRights: Boolean = true
+
+        const val publishable: Boolean = true
     }
 
     override suspend fun execute(
@@ -20,5 +22,12 @@ class SetTitle(projectID: Int, private val newTitle: String) :
         publishQueue: PublishQueue
     ) {
         repositoryViewModelAPI.appDataBase.projectDataDAO().setName(projectID!!, newTitle)
+    }
+
+    override fun publish(
+        repositoryViewModelAPI: RepositoryViewModelAPI,
+        publishQueue: PublishQueue
+    ): Boolean {
+        return super.publish(repositoryViewModelAPI, publishQueue) && publishable
     }
 }

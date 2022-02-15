@@ -11,9 +11,11 @@ class DeleteButton(projectID: Int, val uiElement: UIElement) :
         fun isPossible(project: Project): Boolean {
             return ProjectCommand.isPossible(project)
         }
-    }
 
-    override val publishable: Boolean = false
+        const val issuerNeedsAdminRights: Boolean = false
+
+        const val publishable: Boolean = false
+    }
 
     override suspend fun execute(
         repositoryViewModelAPI: RepositoryViewModelAPI,
@@ -22,6 +24,13 @@ class DeleteButton(projectID: Int, val uiElement: UIElement) :
         repositoryViewModelAPI.appDataBase.uiElementDAO()
             .removeUIElements(projectID!!, uiElement.id)
         super.execute(repositoryViewModelAPI, publishQueue)
+    }
+
+    override fun publish(
+        repositoryViewModelAPI: RepositoryViewModelAPI,
+        publishQueue: PublishQueue
+    ): Boolean {
+        return super.publish(repositoryViewModelAPI, publishQueue) && publishable
     }
 
 }

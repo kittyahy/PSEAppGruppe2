@@ -1,5 +1,6 @@
 package com.pseandroid2.dailydata.repository.commandCenter.commands
 
+import android.util.Log
 import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.model.database.daos.ProjectDataDAO
 import com.pseandroid2.dailydata.model.project.Project
@@ -11,6 +12,7 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Co
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Notification
+import com.pseandroid2.dailydata.util.Consts.LOG_TAG
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -22,6 +24,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
 
 import org.junit.Test
+import kotlin.math.absoluteValue
 
 class CreateProjectTest {
 

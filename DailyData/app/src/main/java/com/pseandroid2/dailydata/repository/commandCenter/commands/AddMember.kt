@@ -11,9 +11,12 @@ class AddMember(projectID: Int, private val member: Member) :
         fun isPossible(project: Project): Boolean {
             return project.members.size < 24 && project.isOnlineProject
         }
+
+        const val issuerNeedsAdminRights: Boolean = true
+
+        const val publishable: Boolean = true
     }
 
-    override val publishable: Boolean = true
     override suspend fun execute(
         repositoryViewModelAPI: RepositoryViewModelAPI,
         publishQueue: PublishQueue
@@ -21,5 +24,12 @@ class AddMember(projectID: Int, private val member: Member) :
         repositoryViewModelAPI.appDataBase.projectDataDAO()
             .addUser(projectID!!, member.toDBEquivalent())
         super.execute(repositoryViewModelAPI, publishQueue)
+    }
+
+    override fun publish(
+        repositoryViewModelAPI: RepositoryViewModelAPI,
+        publishQueue: PublishQueue
+    ): Boolean {
+        return super.publish(repositoryViewModelAPI, publishQueue) && publishable
     }
 }

@@ -10,9 +10,11 @@ class AddButton(projectID: Int, val button: Button) : ProjectCommand(projectID =
         fun isPossible(project: Project): Boolean {
             return ProjectCommand.isPossible(project)
         }
-    }
 
-    override val publishable: Boolean = false
+        const val issuerNeedsAdminRights: Boolean = false
+
+        const val publishable: Boolean = false
+    }
 
     override suspend fun execute(
         repositoryViewModelAPI: RepositoryViewModelAPI,
@@ -22,6 +24,13 @@ class AddButton(projectID: Int, val button: Button) : ProjectCommand(projectID =
         repositoryViewModelAPI.appDataBase.uiElementDAO()
             .insertUIElement(projectID!!, button.columnId, uiElement)
         super.execute(repositoryViewModelAPI, publishQueue)
+    }
+
+    override fun publish(
+        repositoryViewModelAPI: RepositoryViewModelAPI,
+        publishQueue: PublishQueue
+    ): Boolean {
+        return super.publish(repositoryViewModelAPI, publishQueue) && publishable
     }
 
 }

@@ -11,9 +11,11 @@ class AddRow(projectID: Int, private val row: Row) :
         fun isPossible(project: Project): Boolean {
             return ProjectCommand.isPossible(project)
         }
-    }
 
-    override val publishable: Boolean = true
+        const val issuerNeedsAdminRights: Boolean = false
+
+        const val publishable: Boolean = true
+    }
 
     override suspend fun execute(
         repositoryViewModelAPI: RepositoryViewModelAPI,
@@ -22,6 +24,13 @@ class AddRow(projectID: Int, private val row: Row) :
         repositoryViewModelAPI.appDataBase.tableContentDAO()
             .insertRow(row.toDBEquivalent(), projectID!!)
         super.execute(repositoryViewModelAPI, publishQueue)
+    }
+
+    override fun publish(
+        repositoryViewModelAPI: RepositoryViewModelAPI,
+        publishQueue: PublishQueue
+    ): Boolean {
+        return super.publish(repositoryViewModelAPI, publishQueue) && publishable
     }
 
 }
