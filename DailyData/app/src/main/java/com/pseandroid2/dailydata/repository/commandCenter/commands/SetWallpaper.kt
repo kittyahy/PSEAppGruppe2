@@ -1,10 +1,11 @@
 package com.pseandroid2.dailydata.repository.commandCenter.commands
 
+import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
 
-class SetWallpaper(projectID: Int, private val newWallpaper: Int) :
-    ProjectCommand(projectID = projectID) {
+class SetWallpaper(projectID: Int, private val newWallpaper: Int, api: RepositoryViewModelAPI) :
+    ProjectCommand(projectID = projectID, repositoryViewModelAPI = api) {
 
     override val publishable = true
 
@@ -14,10 +15,8 @@ class SetWallpaper(projectID: Int, private val newWallpaper: Int) :
         }
     }
 
-    override suspend fun execute(
-        repositoryViewModelAPI: RepositoryViewModelAPI,
-        publishQueue: PublishQueue
-    ) {
+    override suspend fun execute() {
+        @Suppress("Deprecation")
         repositoryViewModelAPI.appDataBase.projectDataDAO().setColor(projectID!!, newWallpaper)
     }
 }

@@ -27,7 +27,7 @@ class JoinOnlineProject(private val onlineID: Long, private val idFlow: MutableS
         val onlineProject =
             ViewModelProject(repositoryViewModelAPI = repositoryViewModelAPI, admin = admin)
         val idFlow = MutableSharedFlow<Int>()
-        CreateProject(onlineProject, idFlow).execute()
+        CreateProject(onlineProject, idFlow, repositoryViewModelAPI).execute()
         val id: Int = idFlow.first()
         @Suppress("DEPRECATION")
         repositoryViewModelAPI.appDataBase.projectDataDAO().setOnlineID(id, onlineProjectID!!)

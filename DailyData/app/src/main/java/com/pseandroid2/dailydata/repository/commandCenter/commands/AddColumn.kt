@@ -6,7 +6,8 @@ import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ViewModelProject
 
-class AddColumn(projectID: Int, specs: ColumnData) : ProjectCommand(projectID = projectID) {
+class AddColumn(projectID: Int, specs: ColumnData, api: RepositoryViewModelAPI) :
+    ProjectCommand(projectID = projectID, repositoryViewModelAPI = api) {
     override val publishable: Boolean = true
 
     companion object {
@@ -20,13 +21,11 @@ class AddColumn(projectID: Int, specs: ColumnData) : ProjectCommand(projectID = 
         }
     }
 
-    override suspend fun execute(
-        repositoryViewModelAPI: RepositoryViewModelAPI,
-        publishQueue: PublishQueue
-    ) {
+    override suspend fun execute() {
+        @Suppress("Deprecation")
         repositoryViewModelAPI.appDataBase.tableContentDAO()
         TODO("insertColumn(row.toDBEquivalent(), projectId)")
-        super.execute(repositoryViewModelAPI, publishQueue)
+        super.execute()
     }
 
 }

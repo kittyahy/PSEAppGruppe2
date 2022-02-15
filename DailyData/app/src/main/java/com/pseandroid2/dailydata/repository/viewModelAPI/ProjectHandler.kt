@@ -22,6 +22,7 @@ package com.pseandroid2.dailydata.repository.viewModelAPI
 
 
 import com.pseandroid2.dailydata.model.database.AppDataBase
+import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
@@ -115,43 +116,12 @@ class ProjectHandler(
         ProjectTemplateFlow(appDataBase, executeQueue, templateFlows[id]!!).getProjectTemplate()
 
 
-    suspend fun newProjectAsync(
-        name: String,
-        description: String,
-        wallpaper: Int,
-        table: List<Column>,
-        buttons: List<Button>,
-        notification: List<Notification>,
-        graphs: List<Graph>
-    ) = coroutineScope {
+    suspend fun newProjectAsync(project: Project) = coroutineScope {
         async(Dispatchers.IO) {
             val idFlow = MutableSharedFlow<Int>()
-            val createProject = CreateProject(
-                name,
-                description,
-                wallpaper,
-                table,
-                buttons,
-                notification,
-                graphs,
-                idFlow
-            )
+            val createProject = CreateProject(project, idFlow, repositoryViewModelAPI)
             executeQueue.add(createProject)
             return@async idFlow.first()
-        }
-    }
-
-    suspend fun newProjectAsync(viewModelProject: ViewModelProject) = coroutineScope {
-        async(Dispatchers.IO) {
-            return@async newProjectAsync(
-                viewModelProject.title,
-                viewModelProject.desc,
-                viewModelProject.wallpaper,
-                viewModelProject.table,
-                viewModelProject.buttons,
-                viewModelProject.notifications,
-                viewModelProject.graphs
-            )
         }
     }
 
@@ -172,7 +142,7 @@ class ProjectHandler(
 
     suspend fun joinOnlineProject(onlineID: Long): Flow<Int> {
         val idFlow = MutableSharedFlow<Int>()
-        executeQueue.add(JoinOnlineProject(onlineID, idFlow))
+        executeQueue.add(JoinOnlineProject(onlineID, idFlow, repositoryViewModelAPI))
         return idFlow
 
     }

@@ -24,6 +24,7 @@ import android.util.Log
 import com.google.gson.Gson
 import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.model.notifications.TimeNotification
+import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.table.ArrayListLayout
 import com.pseandroid2.dailydata.model.users.NullUser
 import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
@@ -51,7 +52,7 @@ class ProjectFlow(
     @Suppress("DEPRECATION")
     private val rds: RemoteDataSourceAPI = repositoryViewModelAPI.remoteDataSourceAPI
     private val eq: ExecuteQueue = repositoryViewModelAPI.projectHandler.executeQueue
-    fun getProject(): Flow<ViewModelProject> = provider.provideFlow.map { project ->
+    fun getProject(): Flow<Project> = provider.provideFlow.map { project ->
         val ret = if (project == null) {
             Log.d(LOG_TAG, "Got null Project from database")
             ViewModelProject(repositoryViewModelAPI = repositoryViewModelAPI)

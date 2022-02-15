@@ -104,7 +104,7 @@ class ViewModelProject(
     }
 
     suspend fun addUIElements(col: Int, uiElements: List<UIElement>) {
-        table.addUIElements(col, uiElements)
+        table.addUIElement(col, uiElements)
     }
 
     suspend fun deleteUIElement(col: Int, id: Int) {

@@ -5,16 +5,21 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.pseandroid2.dailydata.model.graph.Graph
+import com.pseandroid2.dailydata.model.notifications.Notification
+import com.pseandroid2.dailydata.model.project.Project
+import com.pseandroid2.dailydata.model.table.ArrayListTable
+import com.pseandroid2.dailydata.model.table.ColumnData
+import com.pseandroid2.dailydata.model.table.Table
+import com.pseandroid2.dailydata.model.uielements.UIElement
+import com.pseandroid2.dailydata.model.uielements.UIElementType
+import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Button
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Column
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Member
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Notification
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ViewModelProject
 import com.pseandroid2.dailydata.ui.link.appLinks.JoinProjectLinkManager
 import com.pseandroid2.dailydata.ui.project.data.DataTabs
 import com.pseandroid2.dailydata.util.ui.UiEvent
@@ -22,7 +27,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,7 +36,7 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
     private val repository: RepositoryViewModelAPI
 ) : ViewModel() {
 
-    private lateinit var initialViewModelProject: ViewModelProject
+    lateinit var project: LiveData<Project>
     private val _uiEvent = MutableSharedFlow<UiEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
 
@@ -44,16 +48,16 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
         private set
     var wallpaper by mutableStateOf(Color.White)
         private set
-    var table by mutableStateOf(listOf<Column>())
+    var table by mutableStateOf<Table>(ArrayListTable())
         private set
-    var buttons by mutableStateOf(listOf<Button>())
+    var uiMap by mutableStateOf<MutableMap<Int, Int>>(mutableMapOf())
         private set
-    var members by mutableStateOf(listOf<Member>())
+    var members by mutableStateOf(listOf<User>())
         private set
 
     var notifications by mutableStateOf(listOf<Notification>())
         private set
-    var graphs by mutableStateOf(listOf<Graph>())
+    var graphs by mutableStateOf(listOf<Graph<*, *>>())
         private set
 
     var isWallpaperDialogOpen by mutableStateOf(false)
@@ -70,21 +74,27 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
     var isBackDialogOpen by mutableStateOf(false)
         private set
 
+    fun initialize(projectId: Int) {
+        viewModelScope.launch {
+            project = repository.projectHandler.getProjectByID(projectId).asLiveData()
+        }
+    }
+
+
     fun onEvent(event: ProjectDataSettingsScreenEvent) {
         when (event) {
-            is ProjectDataSettingsScreenEvent.OnCreate -> {
+            is ProjectDataSettingsScreenEvent.OnCreate -> { //TODO this really should go
                 viewModelScope.launch {
                     repository.projectHandler.initializeProjectProvider(event.projectId)
                 }
                 viewModelScope.launch {
                     repository.projectHandler.getProjectByID(id = event.projectId)
                         .collect { project ->
-                            title = project.title
+                            title = project.name
                             description = project.desc
-                            wallpaper = Color(project.wallpaper)
+                            wallpaper = Color(project.color)
                             table = project.table
-                            buttons = project.buttons
-                            members = project.members
+                            members = project.users
                             notifications = project.notifications
                             graphs = project.graphs
                             isAdmin = isAdmin
@@ -93,59 +103,46 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
                 }
             }
             is ProjectDataSettingsScreenEvent.OnTitleChange -> {
-                title = event.title
+                viewModelScope.launch { project.value!!.setName(event.title) }
             }
             is ProjectDataSettingsScreenEvent.OnDescriptionChange -> {
-                description = event.description
+                viewModelScope.launch { project.value!!.setDesc(event.description) }
             }
             is ProjectDataSettingsScreenEvent.OnWallpaperChange -> {
-                wallpaper = event.wallpaper
+                viewModelScope.launch { project.value!!.setColor(event.wallpaper.toArgb()) }
             }
             is ProjectDataSettingsScreenEvent.OnTableAdd -> {
-                val id = if (table.isEmpty()) {
-                    0
-                } else {
-                    table.last().id + 1
-                }
-                val mutable = table.toMutableList()
-                mutable.add(
-                    Column(
-                        id = id,
-                        name = event.name,
-                        unit = event.unit,
-                        dataType = event.dataType
+                viewModelScope.launch {
+                    project.value!!.table.addColumn(
+                        ColumnData(
+                            type = event.dataType,
+                            name = event.name,
+                            unit = event.unit
+                        )
                     )
-                )
-                table = mutable.toList()
+                }
             }
             is ProjectDataSettingsScreenEvent.OnTableRemove -> {
-                val mutable = table.toMutableList()
-                val removed = mutable.removeAt(index = event.index)
-                val mutableButtons = buttons.toMutableList()
-                buttons = mutableButtons.filter { it.columnId != removed.id }.toList()
-                table = mutable.toList()
+                viewModelScope.launch {
+                    project.value!!.table.deleteColumn(event.index)
+                }
             }
             is ProjectDataSettingsScreenEvent.OnButtonAdd -> {
-                val id = if (buttons.isEmpty()) {
-                    0
-                } else {
-                    buttons.last().id + 1
-                }
-                val mutable = buttons.toMutableList()
-                mutable.add(
-                    Button(
-                        id = id,
-                        name = event.name,
-                        columnId = event.columnId,
-                        value = event.value
+                viewModelScope.launch {
+                    project.value!!.table.addUIElement(
+                        event.columnId,
+                        UIElement(
+                            type = UIElementType.BUTTON,
+                            name = event.name,
+                            state = event.value.toString()
+                        )
                     )
-                )
-                buttons = mutable.toList()
+                }
             }
             is ProjectDataSettingsScreenEvent.OnButtonRemove -> {
-                val mutable = buttons.toMutableList()
-                mutable.removeAt(index = event.index)
-                buttons = mutable.toList()
+                viewModelScope.launch {
+                    table.removeUIElement(event.columnId, event.id)
+                }
             }
             is ProjectDataSettingsScreenEvent.OnNotificationAdd -> {
                 val mutable = notifications.toMutableList()

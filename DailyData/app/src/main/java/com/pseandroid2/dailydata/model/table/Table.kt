@@ -59,12 +59,12 @@ interface Table : Iterable<Row> {
      *
      * @return the id of the column after it has been added to the Table
      */
-    suspend fun addColumn(specs: ColumnData, default: Any): Int
+    suspend fun addColumn(specs: ColumnData, default: Any = specs.type.initialValue): Int
 
     suspend fun deleteColumn(col: Int)
 
-    suspend fun addUIElements(col: Int, uiElements: List<UIElement>) =
-        layout.addUIElements(col, uiElements)
+    suspend fun addUIElement(col: Int, uiElement: UIElement) =
+        layout.addUIElement(col, uiElement)
 
     suspend fun removeUIElement(col: Int, id: Int) = layout.removeUIElement(col, id)
 
@@ -87,7 +87,7 @@ interface TableLayout : Iterable<ColumnData> {
     fun getColumnType(col: Int): KClass<out Any>
 
     fun getUIElements(col: Int): List<UIElement>
-    fun addUIElements(col: Int, elements: List<UIElement>)
+    fun addUIElement(col: Int, element: UIElement): Int
     fun removeUIElement(col: Int, id: Int)
 
     fun getName(col: Int): String
@@ -147,9 +147,9 @@ data class RowMetaData(
  * @param type Serializable Name of a kotlin class (as obtained by KClass.getSerializableName())
  */
 data class ColumnData(
-    val id: Int,
+    val id: Int = -1,
     val type: DataType,
     val name: String,
     val unit: String,
-    val uiElements: List<UIElement>
+    val uiElements: List<UIElement> = listOf()
 )

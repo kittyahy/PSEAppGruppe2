@@ -24,7 +24,7 @@ package com.pseandroid2.dailydata.model.uielements
  * This class represents a UIElement, which can be used outside the model
  */
 data class UIElement(
-    var id: Int,
+    var id: Int = -1,
     val type: UIElementType,
     var name: String,
     var state: String

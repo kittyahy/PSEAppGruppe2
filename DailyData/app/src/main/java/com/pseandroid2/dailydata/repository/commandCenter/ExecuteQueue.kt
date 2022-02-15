@@ -12,7 +12,7 @@ class ExecuteQueue(
 ) :
     CommandQueue(repositoryViewModelAPI), ProjectCommandQueueObserver {
     override suspend fun performCommandAction(command: ProjectCommand) {
-        command.execute(repositoryViewModelAPI, publishQueue)
+        command.execute()
     }
 
     //No contingency plan required because execution will always succeed

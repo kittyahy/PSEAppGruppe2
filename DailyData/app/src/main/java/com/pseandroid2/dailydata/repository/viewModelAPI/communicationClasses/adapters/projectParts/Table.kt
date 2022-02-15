@@ -25,7 +25,7 @@ class Table {
                 )
             }
             for (button in buttons) {
-                tableLayout.addUIElements(button.columnId, button.toDBEquivalent())
+                tableLayout.addUIElement(button.columnId, button.toDBEquivalent())
             }
             for (row in rows) {
                 table.addRow(row.toDBEquivalent())

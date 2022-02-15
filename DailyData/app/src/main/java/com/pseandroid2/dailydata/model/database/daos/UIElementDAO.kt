@@ -53,6 +53,7 @@ abstract class UIElementDAO {
         element: UIElement
     ): Int {
         val id: Int = getNextId(projectId)
+        @Suppress("Deprecation")
         insertUIElementMap(
             UIElementMap(
                 projectId,

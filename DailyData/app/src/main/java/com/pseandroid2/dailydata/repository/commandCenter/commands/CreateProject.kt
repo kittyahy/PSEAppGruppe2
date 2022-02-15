@@ -8,9 +8,12 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 
 class CreateProject(
     private val project: Project,
-    private val projectIDReturn: MutableSharedFlow<Int>? = null
+    private val projectIDReturn: MutableSharedFlow<Int>? = null,
+    api: RepositoryViewModelAPI
 ) : ProjectCommand(
-    currentUser = true
+    commandByUser = @Suppress("Deprecation") api.remoteDataSourceAPI.getUserID(),
+    createdByAdmin = true,
+    repositoryViewModelAPI = api
 ) {
 
     companion object {
@@ -21,27 +24,24 @@ class CreateProject(
 
     override val publishable: Boolean = false
 
-    override suspend fun execute(
-        repositoryViewModelAPI: RepositoryViewModelAPI,
-        publishQueue: PublishQueue
-    ) {
+    override suspend fun execute() {
+        @Suppress("Deprecation")
         val prod = repositoryViewModelAPI.appDataBase.projectCDManager().insertProject(project)
         projectID = prod.id
         projectIDReturn?.emit(prod.id)
-        super.execute(repositoryViewModelAPI, publishQueue)
+        super.execute()
     }
 
-    override suspend fun publish(
-        repositoryViewModelAPI: RepositoryViewModelAPI,
-        publishQueue: PublishQueue
-    ): Boolean {
+    override suspend fun publish(): Boolean {
         //ReserveServerSlot
+        @Suppress("Deprecation")
         onlineProjectID =
             repositoryViewModelAPI.remoteDataSourceAPI.createNewOnlineProject("") //TODO Add project details as JSON here
 
         //Make Created Project Online Project
+        @Suppress("Deprecation")
         repositoryViewModelAPI.appDataBase.projectDataDAO()
             .setOnlineID(projectID!!, onlineProjectID!!)
-        return super.publish(repositoryViewModelAPI, publishQueue)
+        return super.publish()
     }
 }

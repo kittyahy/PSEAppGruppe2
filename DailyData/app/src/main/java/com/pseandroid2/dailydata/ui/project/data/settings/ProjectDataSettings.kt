@@ -43,8 +43,10 @@ import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pseandroid2.dailydata.R
+import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
 import com.pseandroid2.dailydata.ui.composables.ButtonElement
@@ -65,23 +67,27 @@ import kotlinx.coroutines.InternalCoroutinesApi
 @InternalCoroutinesApi
 @Composable
 fun ProjectDataSettingsScreen(
-    projectId : Int,
+    projectId: Int,
     onNavigate: (UiEvent.Navigate) -> Unit,
-    onPopBackStack : () -> Unit,
+    onPopBackStack: () -> Unit,
     viewModel: ProjectDataSettingsScreenViewModel = hiltViewModel()
 ) {
     val scrollState = rememberScrollState()
     val context = LocalContext.current
 
     LaunchedEffect(key1 = true) {
-        viewModel.onEvent(ProjectDataSettingsScreenEvent.OnCreate(projectId = projectId))
+        //This screen can only be opened for projects that have been created and saved to the database already
+        viewModel.initialize(projectId)
+        //viewModel.onEvent(ProjectDataSettingsScreenEvent.OnCreate(projectId = projectId))
         viewModel.uiEvent.collect { event ->
-            when(event) {
-                is UiEvent.ShowToast -> Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+            when (event) {
+                is UiEvent.ShowToast -> Toast.makeText(context, event.message, Toast.LENGTH_SHORT)
+                    .show()
                 is UiEvent.Navigate -> onNavigate(event)
                 is UiEvent.PopBackStack -> onPopBackStack()
                 is UiEvent.CopyToClipboard -> {
-                    val clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                    val clipboardManager =
+                        context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                     clipboardManager.setText(AnnotatedString(text = event.message))
                     Toast.makeText(context, "Copied to clipboard", Toast.LENGTH_SHORT).show()
                 }
@@ -122,14 +128,26 @@ fun ProjectDataSettingsScreen(
             TextInput(
                 placeholder = "Add Description",
                 value = viewModel.description,
-                onValueChange = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnDescriptionChange(it)) },
+                onValueChange = {
+                    viewModel.onEvent(
+                        ProjectDataSettingsScreenEvent.OnDescriptionChange(
+                            it
+                        )
+                    )
+                },
                 singleLine = false,
                 icon = ImageVector.vectorResource(id = R.drawable.ic_subject)
             )
             Divider()
             WallpaperDialog(
                 isOpen = viewModel.isWallpaperDialogOpen,
-                onDismissRequest = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnShowWallpaperDialog(false)) },
+                onDismissRequest = {
+                    viewModel.onEvent(
+                        ProjectDataSettingsScreenEvent.OnShowWallpaperDialog(
+                            false
+                        )
+                    )
+                },
                 onWallpaperClick = { wallpaper ->
                     viewModel.onEvent(ProjectDataSettingsScreenEvent.OnWallpaperChange(wallpaper.value))
                     viewModel.onEvent(ProjectDataSettingsScreenEvent.OnShowWallpaperDialog(false))
@@ -138,40 +156,88 @@ fun ProjectDataSettingsScreen(
             WallpaperElement(
                 color = viewModel.wallpaper,
                 label = "Change Wallpaper",
-                onClick = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnShowWallpaperDialog(true)) }
+                onClick = {
+                    viewModel.onEvent(
+                        ProjectDataSettingsScreenEvent.OnShowWallpaperDialog(
+                            true
+                        )
+                    )
+                }
             )
-            if(viewModel.isAdmin) {
+            if (viewModel.isAdmin) {
                 ListInput(
                     label = "Create Link",
                     mainIcon = Icons.Default.AccountCircle,
                     onClick = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnCreateLink) },
-                    onClickItem = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnMemberRemove(index = it)) },
+                    onClickItem = { index, element ->
+                        viewModel.onEvent(
+                            ProjectDataSettingsScreenEvent.OnMemberRemove(
+                                index = it
+                            )
+                        )
+                    },
                     elements = viewModel.members.map { "${it.name} #${it.id}" } //TODO("Repository if the user is listed : make function to get user")
                 )
             }
             Divider()
             TableDialog(
                 isOpen = viewModel.isTableDialogOpen,
-                onDismissRequest = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnShowTableDialog(false)) },
+                onDismissRequest = {
+                    viewModel.onEvent(
+                        ProjectDataSettingsScreenEvent.OnShowTableDialog(
+                            false
+                        )
+                    )
+                },
                 onClick = { name, unit, dataType ->
-                    viewModel.onEvent(ProjectDataSettingsScreenEvent.OnTableAdd(name = name, unit = unit, dataType = dataType))
+                    viewModel.onEvent(
+                        ProjectDataSettingsScreenEvent.OnTableAdd(
+                            name = name,
+                            unit = unit,
+                            dataType = dataType
+                        )
+                    )
                     viewModel.onEvent(ProjectDataSettingsScreenEvent.OnShowTableDialog(false))
                 }
             )
-            if(viewModel.isAdmin) {
+            if (viewModel.isAdmin) {
                 ListInput(
                     label = "Add Table Column",
                     mainIcon = ImageVector.vectorResource(id = R.drawable.ic_table),
-                    onClick = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnShowTableDialog(true)) },
-                    onClickItem = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnTableRemove(index = it)) },
-                    elements = viewModel.table.map { "${it.name} in ${it.unit}" }
+                    onClick = {
+                        viewModel.onEvent(
+                            ProjectDataSettingsScreenEvent.OnShowTableDialog(
+                                true
+                            )
+                        )
+                    },
+                    onClickItem = {
+                        viewModel.onEvent(
+                            ProjectDataSettingsScreenEvent.OnTableRemove(
+                                index = it
+                            )
+                        )
+                    },
+                    elements = viewModel.project.value!!.table.layout.map {
+                        Pair(
+                            it,
+                            "${it.name} in ${it.unit}"
+                        )
+                    }
                 )
             }
             Divider()
             ButtonDialog(
                 isOpen = viewModel.isButtonsDialogOpen,
-                buttons = viewModel.table.filter { it.dataType == DataType.WHOLE_NUMBER }.map { it.name },
-                onDismissRequest = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnShowTableDialog(false)) },
+                buttons = viewModel.table.filter { it.dataType == DataType.WHOLE_NUMBER }
+                    .map { it.name },
+                onDismissRequest = {
+                    viewModel.onEvent(
+                        ProjectDataSettingsScreenEvent.OnShowTableDialog(
+                            false
+                        )
+                    )
+                },
                 onClick = { name, column, value ->
                     viewModel.onEvent(
                         ProjectDataSettingsScreenEvent.OnButtonAdd(
@@ -183,46 +249,118 @@ fun ProjectDataSettingsScreen(
                     viewModel.onEvent(ProjectDataSettingsScreenEvent.OnShowButtonsDialog(false))
                 }
             )
+            val uiElements = mutableListOf<Pair<UIElement, Int>>()
+            for (col in viewModel.project.value!!.table.layout) {
+                for (uiElement in col.uiElements) {
+                    uiElements.add(Pair(uiElement, col.id))
+                }
+            }
             ListInput(
                 label = "Button",
                 mainIcon = ImageVector.vectorResource(id = R.drawable.ic_button),
-                onClick = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnShowButtonsDialog(true)) },
-                onClickItem = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnButtonRemove(index = it)) },
-                elements = viewModel.buttons.map { button ->
-                    val columnName = viewModel.table.find { it.id == button.columnId} ?: ""
-                    "${button.name} in $columnName"
+                onClick = {
+                    viewModel.onEvent(
+                        ProjectDataSettingsScreenEvent.OnShowButtonsDialog(true)
+                    )
+                },
+                onClickItem = { _, element ->
+                    @Suppress("Unchecked_Cast")
+                    val uiElement = element as Pair<UIElement, Int>
+                    viewModel.onEvent(
+                        ProjectDataSettingsScreenEvent.OnButtonRemove(
+                            uiElement.first.id,
+                            uiElement.second
+                        )
+                    )
+                },
+                elements = uiElements.map { pair ->
+                    Pair(
+                        pair,
+                        "${pair.first.name} in ${viewModel.project.value!!.table.layout[pair.second].name}"
+                    )
                 }
             )
             Divider()
             NotificationDialog(
                 isOpen = viewModel.isNotificationDialogOpen,
-                onDismissRequest = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnShowNotificationDialog(false)) },
+                onDismissRequest = {
+                    viewModel.onEvent(
+                        ProjectDataSettingsScreenEvent.OnShowNotificationDialog(
+                            false
+                        )
+                    )
+                },
                 onClick = { message, time ->
-                    viewModel.onEvent(ProjectDataSettingsScreenEvent.OnNotificationAdd(message, time))
-                    viewModel.onEvent(ProjectDataSettingsScreenEvent.OnShowNotificationDialog(false))
+                    viewModel.onEvent(
+                        ProjectDataSettingsScreenEvent.OnNotificationAdd(
+                            message,
+                            time
+                        )
+                    )
+                    viewModel.onEvent(
+                        ProjectDataSettingsScreenEvent.OnShowNotificationDialog(
+                            false
+                        )
+                    )
                 }
             )
             ListInput(
                 label = "Add Notification",
                 mainIcon = Icons.Default.Notifications,
-                onClick = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnShowNotificationDialog(true)) },
-                onClickItem = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnNotificationRemove(index = it)) },
+                onClick = {
+                    viewModel.onEvent(
+                        ProjectDataSettingsScreenEvent.OnShowNotificationDialog(
+                            true
+                        )
+                    )
+                },
+                onClickItem = {
+                    viewModel.onEvent(
+                        ProjectDataSettingsScreenEvent.OnNotificationRemove(
+                            index = it
+                        )
+                    )
+                },
                 elements = viewModel.notifications.map { it.time.toString() }
             )
             Divider()
             GraphDialog(
                 isOpen = viewModel.isGraphDialogOpen,
-                onDismissRequest = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnShowGraphDialog(false)) },
+                onDismissRequest = {
+                    viewModel.onEvent(
+                        ProjectDataSettingsScreenEvent.OnShowGraphDialog(
+                            false
+                        )
+                    )
+                },
                 onClick = { graph ->
-                    viewModel.onEvent(ProjectDataSettingsScreenEvent.OnGraphAdd(Graph.createFromType(graph)))
+                    viewModel.onEvent(
+                        ProjectDataSettingsScreenEvent.OnGraphAdd(
+                            Graph.createFromType(
+                                graph
+                            )
+                        )
+                    )
                     viewModel.onEvent(ProjectDataSettingsScreenEvent.OnShowGraphDialog(false))
                 }
             )
             ListInput(
                 label = "Add Graph",
                 mainIcon = ImageVector.vectorResource(id = R.drawable.ic_chart),
-                onClick = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnShowGraphDialog(true)) },
-                onClickItem = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnGraphRemove(index = it)) },
+                onClick = {
+                    viewModel.onEvent(
+                        ProjectDataSettingsScreenEvent.OnShowGraphDialog(
+                            true
+                        )
+                    )
+                },
+                onClickItem = {
+                    viewModel.onEvent(
+                        ProjectDataSettingsScreenEvent.OnGraphRemove(
+                            index = it
+                        )
+                    )
+                },
                 elements = viewModel.graphs.map { it.typeName }
             )
             ButtonElement(
@@ -237,4 +375,5 @@ fun ProjectDataSettingsScreen(
             )
         }
     }
+}
 }

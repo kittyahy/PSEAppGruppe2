@@ -67,14 +67,14 @@ import com.pseandroid2.dailydata.R
 
 @Composable
 fun InputElement(
-    height : Dp = 60.dp,
-    icon : ImageVector = ImageVector.vectorResource(R.drawable.blank_icon),
-    Content : @Composable () -> Unit
-){
-    Row (
+    height: Dp = 60.dp,
+    icon: ImageVector = ImageVector.vectorResource(R.drawable.blank_icon),
+    Content: @Composable () -> Unit
+) {
+    Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.Top
-    ){
+    ) {
         Column(
             modifier = Modifier.width(height),
             verticalArrangement = Arrangement.Top
@@ -97,18 +97,20 @@ fun InputElement(
 
 @Composable
 fun WallpaperElement(
-    color : Color,
+    color: Color,
     label: String,
     onClick: () -> Unit,
     height: Dp = 60.dp
 ) {
-    Row (
+    Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.Top
-    ){
-        Column(modifier = Modifier
-            .size(height)
-            .wrapContentSize(Alignment.Center)) {
+    ) {
+        Column(
+            modifier = Modifier
+                .size(height)
+                .wrapContentSize(Alignment.Center)
+        ) {
             Box(
                 modifier = Modifier
                     .size((height / 2))
@@ -131,7 +133,7 @@ fun WallpaperElement(
 
 @Composable
 fun ButtonElement(
-    icon : ImageVector = ImageVector.vectorResource(R.drawable.blank_icon),
+    icon: ImageVector = ImageVector.vectorResource(R.drawable.blank_icon),
     label: String,
     onClick: () -> Unit,
     height: Dp = 60.dp
@@ -155,12 +157,12 @@ fun ButtonElement(
 
 @Composable
 fun ListInput(
-    label : String,
-    mainIcon : ImageVector = ImageVector.vectorResource(R.drawable.blank_icon),
-    elementIcon : ImageVector = Icons.Default.Close,
-    onClick : () -> Unit,
-    onClickItem : (index : Int) -> Unit,
-    elements : List<String> = listOf(),
+    label: String,
+    mainIcon: ImageVector = ImageVector.vectorResource(R.drawable.blank_icon),
+    elementIcon: ImageVector = Icons.Default.Close,
+    onClick: () -> Unit,
+    onClickItem: (index: Int, element: Pair<Any, String>) -> Unit,
+    elements: List<Pair<Any, String>> = listOf(),
     height: Dp = 60.dp
 ) {
     InputElement(height = height, icon = mainIcon) {
@@ -173,12 +175,12 @@ fun ListInput(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(text = it)
+                    Text(text = it.second)
                     Box(
                         modifier = Modifier
                             .size(height)
                             .wrapContentSize(Alignment.Center)
-                            .clickable(onClick = { onClickItem(index) })
+                            .clickable(onClick = { onClickItem(index, elements[index]) })
                     ) {
                         Icon(
                             imageVector = elementIcon,
@@ -206,10 +208,10 @@ fun ListInput(
 @Composable
 fun TextInput(
     placeholder: String,
-    value : String,
-    onValueChange : (String) -> Unit,
-    height : Dp = 60.dp,
-    icon : ImageVector = ImageVector.vectorResource(R.drawable.blank_icon),
+    value: String,
+    onValueChange: (String) -> Unit,
+    height: Dp = 60.dp,
+    icon: ImageVector = ImageVector.vectorResource(R.drawable.blank_icon),
     singleLine: Boolean = true
 ) {
     InputElement(height = height, icon = icon) {
@@ -242,12 +244,12 @@ fun TextInput(
 
 @Composable
 fun EnumDropDownMenu(
-    suggestions : List<String>,
-    value : String,
-    onClick : (Int) -> Unit
+    suggestions: List<String>,
+    value: String,
+    onClick: (Int) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
-    var textFieldSize by remember { mutableStateOf(Size.Zero)}
+    var textFieldSize by remember { mutableStateOf(Size.Zero) }
     val icon = if (expanded) Icons.Filled.ArrowDropUp else Icons.Filled.ArrowDropDown
 
     Column {
@@ -275,7 +277,7 @@ fun EnumDropDownMenu(
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
-            modifier = Modifier.width(with(LocalDensity.current){textFieldSize.width.toDp()})
+            modifier = Modifier.width(with(LocalDensity.current) { textFieldSize.width.toDp() })
         ) {
             suggestions.forEachIndexed { index, label ->
                 DropdownMenuItem(

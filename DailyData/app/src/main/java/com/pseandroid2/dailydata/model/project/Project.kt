@@ -74,21 +74,17 @@ interface Project {
 
     suspend fun setDesc(desc: String)
 
-    var path: String
-        set(value) {
-            @Suppress("Deprecation")
-            skeleton.path = value
-        }
+    val path: String
         @Suppress("Deprecation")
         get() = skeleton.path
 
-    var color: Int
-        set(value) {
-            @Suppress("Deprecation")
-            skeleton.color = value
-        }
+    suspend fun setPath(path: String)
+
+    val color: Int
         @Suppress("Deprecation")
         get() = skeleton.color
+
+    suspend fun setColor(color: Int)
 
     var graphs: MutableList<Graph<*, *>>
 

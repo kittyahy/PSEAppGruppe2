@@ -35,13 +35,13 @@ class Column(
 
 fun TableLayout.toColumnList(): List<Column> {
     val columns = mutableListOf<Column>()
-    for (i in 0 until this.getSize()) {
+    for (i in 0 until this.size) {
         columns.add(
             Column(
                 i,
                 this[i].name,
                 this[i].unit,
-                DataType.fromSerializableClassName(this[i].type)
+                this[i].type
             )
         )
     }

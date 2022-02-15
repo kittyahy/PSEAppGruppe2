@@ -1,5 +1,6 @@
 package com.pseandroid2.dailydata.repository.commandCenter.commands
 
+import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
@@ -31,7 +32,7 @@ abstract class ProjectCommand(
          * Shows whether it is impossible to perform the command action on the given project.
          * Must ALWAYS be overridden in the subclass. Default is calling this fun in the superclass.
          */
-        fun isPossible(viewModelProject: ViewModelProject): Boolean {
+        fun isPossible(viewModelProject: Project): Boolean {
             return true
         }
     }

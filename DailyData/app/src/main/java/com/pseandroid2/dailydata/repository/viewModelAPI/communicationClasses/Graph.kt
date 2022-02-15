@@ -134,7 +134,7 @@ fun ModelGraph<*, *>.toViewGraph(layout: TableLayout): Graph {
                         i,
                         layout[i].name,
                         layout[i].unit,
-                        DataType.fromSerializableClassName(layout[i].type)
+                        layout[i].type
                     )
                 )
             }
