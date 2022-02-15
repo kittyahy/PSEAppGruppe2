@@ -28,14 +28,14 @@ import com.pseandroid2.dailydata.model.project.ProjectSkeleton
 import com.pseandroid2.dailydata.model.project.SimpleSkeleton
 import com.pseandroid2.dailydata.model.table.ArrayListTable
 import com.pseandroid2.dailydata.model.table.ColumnData
-import com.pseandroid2.dailydata.model.table.Table
 import com.pseandroid2.dailydata.model.table.Row
+import com.pseandroid2.dailydata.model.table.Table
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddGraph
-import com.pseandroid2.dailydata.repository.commandCenter.commands.AddUser
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddNotification
+import com.pseandroid2.dailydata.repository.commandCenter.commands.AddUser
 import com.pseandroid2.dailydata.repository.commandCenter.commands.IllegalOperationException
 import com.pseandroid2.dailydata.repository.commandCenter.commands.PublishProject
 import com.pseandroid2.dailydata.repository.commandCenter.commands.SetDescription
@@ -55,6 +55,31 @@ class ViewModelProject(
     override var admin: User,
     val repositoryViewModelAPI: RepositoryViewModelAPI
 ) : Project {
+
+    constructor(
+        id: Int = -1,
+        onlineId: Long = -1,
+        name: String = "",
+        desc: String = "",
+        path: String = "",
+        color: Int = -1,
+        notifications: MutableList<Notification> = mutableListOf(),
+        isOnline: Boolean = false,
+        table: Table = ArrayListTable(),
+        graphs: MutableList<Graph<*, *>> = ArrayList(),
+        users: MutableList<User> = mutableListOf(),
+        admin: User,
+        repositoryViewModelAPI: RepositoryViewModelAPI
+    ) : this(
+        SimpleSkeleton(id, onlineId, name, desc, path, color, notifications),
+        isOnline,
+        table,
+        graphs,
+        users,
+        admin,
+        repositoryViewModelAPI
+
+    )
 
     private val mutableIllegalOperation: Map<Operation, MutableSharedFlow<Boolean>>
     override val isIllegalOperation: Map<Operation, Flow<Boolean>>
