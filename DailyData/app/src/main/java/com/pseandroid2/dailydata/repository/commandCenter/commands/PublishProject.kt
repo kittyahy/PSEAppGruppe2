@@ -8,13 +8,6 @@ class PublishProject(private val project: Project) :
     ProjectCommand(projectID = project.id) {
     override val publishable: Boolean = false
 
-    override suspend fun publish(
-        repositoryViewModelAPI: RepositoryViewModelAPI,
-        publishQueue: PublishQueue
-    ): Boolean {
-        return super.publish(repositoryViewModelAPI, publishQueue)
-    }
-
     companion object {
         fun isPossible(project: Project): Boolean {
             return !project.isOnlineProject

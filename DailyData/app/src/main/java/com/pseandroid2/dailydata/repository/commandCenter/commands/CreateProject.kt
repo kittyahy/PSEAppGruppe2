@@ -71,18 +71,4 @@ class CreateProject(
         projectIDReturn?.emit(prod.id)
         super.execute(repositoryViewModelAPI, publishQueue)
     }
-
-    override suspend fun publish(
-        repositoryViewModelAPI: RepositoryViewModelAPI,
-        publishQueue: PublishQueue
-    ): Boolean {
-        //ReserveServerSlot
-        onlineProjectID =
-            repositoryViewModelAPI.remoteDataSourceAPI.createNewOnlineProject("") //TODO Add project details as JSON here
-
-        //Make Created Project Online Project
-        repositoryViewModelAPI.appDataBase.projectDataDAO()
-            .setOnlineID(projectID!!, onlineProjectID!!)
-        return super.publish(repositoryViewModelAPI, publishQueue)
-    }
 }

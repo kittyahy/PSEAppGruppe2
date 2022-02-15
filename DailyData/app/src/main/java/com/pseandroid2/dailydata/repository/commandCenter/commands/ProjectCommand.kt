@@ -66,7 +66,7 @@ abstract class ProjectCommand(
      * Conditions may depend on the given publishQueue and repositoryViewModelAPI.
 
      */
-    open suspend fun publish(
+    fun publish(
         repositoryViewModelAPI: RepositoryViewModelAPI,
         publishQueue: PublishQueue
     ): Boolean {
