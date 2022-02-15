@@ -14,7 +14,6 @@ class GreetTest {
     fun greet() = runTest {
         val restAPI = RESTAPI()
 
-        
         Assert.assertTrue(restAPI.greet())
     }
 }
