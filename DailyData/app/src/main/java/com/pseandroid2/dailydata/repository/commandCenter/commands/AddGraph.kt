@@ -11,6 +11,8 @@ class AddGraph(projectID: Int, val graph: Graph) : ProjectCommand(projectID = pr
             return ProjectCommand.isPossible(project)
         }
 
+        const val issuerNeedsAdminRights: Boolean = false
+
         const val publishable: Boolean = false
     }
 

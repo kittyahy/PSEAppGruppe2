@@ -17,6 +17,8 @@ class AddColumn(projectID: Int, column: Column) : ProjectCommand(projectID = pro
             return total <= DataType.maxStorageSize
         }
 
+        const val issuerNeedsAdminRights: Boolean = true
+
         const val publishable: Boolean = true
     }
 

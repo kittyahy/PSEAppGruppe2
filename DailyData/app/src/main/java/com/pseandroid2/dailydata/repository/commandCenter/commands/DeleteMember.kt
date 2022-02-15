@@ -12,6 +12,8 @@ class DeleteMember(projectID: Int, private val user: User) :
             return project.members.size > 2 && project.isOnlineProject
         }
 
+        const val issuerNeedsAdminRights: Boolean = true
+
         const val publishable: Boolean = true
     }
 

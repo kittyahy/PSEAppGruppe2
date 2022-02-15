@@ -12,6 +12,8 @@ class SetTitle(projectID: Int, private val newTitle: String) :
             return ProjectCommand.isPossible(project)
         }
 
+        const val issuerNeedsAdminRights: Boolean = true
+
         const val publishable: Boolean = true
     }
 

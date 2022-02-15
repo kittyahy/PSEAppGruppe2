@@ -12,6 +12,8 @@ class AddMember(projectID: Int, private val member: Member) :
             return project.members.size < 24 && project.isOnlineProject
         }
 
+        const val issuerNeedsAdminRights: Boolean = true
+
         const val publishable: Boolean = true
     }
 

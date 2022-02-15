@@ -12,6 +12,8 @@ class AddRow(projectID: Int, private val row: Row) :
             return ProjectCommand.isPossible(project)
         }
 
+        const val issuerNeedsAdminRights: Boolean = false
+
         const val publishable: Boolean = true
     }
 

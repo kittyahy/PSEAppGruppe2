@@ -12,6 +12,8 @@ class AddNotification(projectID: Int, val notification: Notification) :
             return ProjectCommand.isPossible(project)
         }
 
+        const val issuerNeedsAdminRights: Boolean = false
+
         const val publishable: Boolean = false
     }
 

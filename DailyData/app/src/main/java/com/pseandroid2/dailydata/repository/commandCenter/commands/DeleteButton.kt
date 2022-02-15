@@ -12,6 +12,8 @@ class DeleteButton(projectID: Int, val uiElement: UIElement) :
             return ProjectCommand.isPossible(project)
         }
 
+        const val issuerNeedsAdminRights: Boolean = false
+
         const val publishable: Boolean = false
     }
 

@@ -13,6 +13,8 @@ class JoinOnlineProject(private val onlineID: Long, private val idFlow: MutableS
             return false
         }
 
+        const val issuerNeedsAdminRights: Boolean = false
+
         const val publishable: Boolean = false
     }
 

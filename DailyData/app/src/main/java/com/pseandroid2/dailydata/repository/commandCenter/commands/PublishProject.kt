@@ -11,6 +11,8 @@ class PublishProject(private val project: Project) :
             return !project.isOnlineProject
         }
 
+        const val issuerNeedsAdminRights: Boolean = false
+
         const val publishable: Boolean = false
     }
 

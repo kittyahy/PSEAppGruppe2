@@ -12,6 +12,8 @@ class SetDescription(projectID: Int, private val newDescription: String) :
             return ProjectCommand.isPossible(project)
         }
 
+        const val issuerNeedsAdminRights: Boolean = true
+
         const val publishable: Boolean = true
     }
 
