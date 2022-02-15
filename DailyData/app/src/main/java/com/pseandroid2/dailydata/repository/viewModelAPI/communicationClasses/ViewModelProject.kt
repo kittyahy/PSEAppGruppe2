@@ -84,7 +84,7 @@ class ViewModelProject(
     suspend fun addGraph(graph: Graph<*, *>) {
         mutableIllegalOperation[Operation.ADD_GRAPH]!!.emit(false)
         @Suppress("DEPRECATION")
-        executeQueue.add(AddGraph(id, graph))
+        executeQueue.add(AddGraph(id, graph, repositoryViewModelAPI))
     }
 
     suspend fun addRow(row: Row) {
@@ -103,8 +103,10 @@ class ViewModelProject(
         table.deleteColumn(column)
     }
 
-    suspend fun addUIElements(col: Int, uiElements: List<UIElement>) {
-        table.addUIElement(col, uiElements)
+    suspend fun addUIElements(col: Int, uiElementList: List<UIElement>) {
+        for (uiElement in uiElementList) {
+            table.addUIElement(col, uiElement)
+        }
     }
 
     suspend fun deleteUIElement(col: Int, id: Int) {
@@ -119,7 +121,7 @@ class ViewModelProject(
         if (user !in users && users.size < Project.MAXIMUM_PROJECT_USERS) {
             mutableIllegalOperation[Operation.ADD_USER]!!.emit(false)
             @Suppress("DEPRECATION")
-            executeQueue.add(AddUser(id, user))
+            executeQueue.add(AddUser(id, user, repositoryViewModelAPI))
         } else {
             throw IllegalOperationException(
                 "Could not add the User ${Gson().toJson(user)} to " +
@@ -146,7 +148,7 @@ class ViewModelProject(
         TODO("setAdmin")
     }
 
-    suspend fun setColor(color: Int) {
+    override suspend fun setColor(color: Int) {
         TODO("changeWallpaper")
     }
 
@@ -162,19 +164,23 @@ class ViewModelProject(
     suspend fun addNotification(notification: Notification) {
         mutableIllegalOperation[Operation.ADD_NOTIFICATION]!!.emit(false)
         @Suppress("DEPRECATION")
-        executeQueue.add(AddNotification(id, notification))
+        executeQueue.add(AddNotification(id, notification, repositoryViewModelAPI))
     }
 
     override suspend fun setName(name: String) {
         mutableIllegalOperation[Operation.SET_PROJECT_NAME]!!.emit(false)
         @Suppress("DEPRECATION")
-        executeQueue.add(SetTitle(this, name))
+        executeQueue.add(SetTitle(this, name, repositoryViewModelAPI))
     }
 
     override suspend fun setDesc(desc: String) {
         mutableIllegalOperation[Operation.SET_PROJECT_DESC]!!.emit(false)
         @Suppress("DEPRECATION")
-        executeQueue.add(SetDescription(this, desc))
+        executeQueue.add(SetDescription(this, desc, repositoryViewModelAPI))
+    }
+
+    override suspend fun setPath(path: String) {
+        TODO("Not yet implemented")
     }
 
     override fun createTransformationFromString(transformationString: String): Project.DataTransformation<out Any> {
@@ -184,6 +190,6 @@ class ViewModelProject(
     suspend fun publish() {
         mutableIllegalOperation[Operation.PUBLISH_PROJECT]!!.emit(false)
         @Suppress("DEPRECATION")
-        executeQueue.add(PublishProject(this))
+        executeQueue.add(PublishProject(this, repositoryViewModelAPI))
     }
 }
