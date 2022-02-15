@@ -31,7 +31,8 @@ class ExecuteQueue(
             val projectCommandInfo =
                 repositoryViewModelAPI.remoteDataSourceAPI.getProjectCommandFromQueue()!!
             var command = CommandWrapper.fromJson(projectCommandInfo.projectCommand)
-            command = CommandUtility.setServerInfo(command, projectCommandInfo)
+            command =
+                CommandUtility.setServerInfo(command, projectCommandInfo, repositoryViewModelAPI)
             scope.launch {
                 add(command)
             }

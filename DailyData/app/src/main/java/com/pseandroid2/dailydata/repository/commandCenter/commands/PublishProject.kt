@@ -4,20 +4,16 @@ import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
 
-class PublishProject(private val id: Int, private val project: Project) : ProjectCommand() {
-    override val publishable: Boolean = true
-
-    override suspend fun publish(
-        repositoryViewModelAPI: RepositoryViewModelAPI,
-        publishQueue: PublishQueue
-    ): Boolean {
-        return super.publish(repositoryViewModelAPI, publishQueue)
-    }
-
+class PublishProject(private val project: Project) :
+    ProjectCommand(projectID = project.id) {
     companion object {
         fun isPossible(project: Project): Boolean {
             return !project.isOnlineProject
         }
+
+        const val issuerNeedsAdminRights: Boolean = false
+
+        const val publishable: Boolean = false
     }
 
     override suspend fun execute(
@@ -25,7 +21,7 @@ class PublishProject(private val id: Int, private val project: Project) : Projec
         publishQueue: PublishQueue
     ) {
         repositoryViewModelAPI.appDataBase.projectDataDAO().setOnlineID(
-            project.id,
+            projectID!!,
             repositoryViewModelAPI.remoteDataSourceAPI.createNewOnlineProject("")
         ) //Todo Fehlerbehandlung, falls publishen fehl schlägt
         project.isOnlineProject = true
@@ -42,6 +38,13 @@ class PublishProject(private val id: Int, private val project: Project) : Projec
                 )
             )
         }
+    }
+
+    override fun publish(
+        repositoryViewModelAPI: RepositoryViewModelAPI,
+        publishQueue: PublishQueue
+    ): Boolean {
+        return super.publish(repositoryViewModelAPI, publishQueue) && publishable
     }
 
 }

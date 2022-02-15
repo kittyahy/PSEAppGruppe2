@@ -1,11 +1,11 @@
 package com.pseandroid2.dailydata.repository.commandCenter.commands
 
+import com.pseandroid2.dailydata.model.notifications.Notification
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Notification
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
 
-class AddNotification(projectID: Int, val notification: Notification) :
+class DeleteNotification(projectID: Int, val notification: Notification) :
     ProjectCommand(projectID = projectID) {
     companion object {
         fun isPossible(project: Project): Boolean {
@@ -21,8 +21,9 @@ class AddNotification(projectID: Int, val notification: Notification) :
         repositoryViewModelAPI: RepositoryViewModelAPI,
         publishQueue: PublishQueue
     ) {
+        @Suppress("DEPRECATION")
         repositoryViewModelAPI.appDataBase.notificationsDAO()
-            .insertNotification(projectID!!, notification.toDBEquivalent())
+            .deleteNotification(projectID!!, notification.id)
         super.execute(repositoryViewModelAPI, publishQueue)
     }
 
