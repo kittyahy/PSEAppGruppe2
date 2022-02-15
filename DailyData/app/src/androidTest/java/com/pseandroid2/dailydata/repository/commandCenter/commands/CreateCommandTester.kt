@@ -20,29 +20,6 @@
 
 package com.pseandroid2.dailydata.repository.commandCenter.commands
 
-import android.content.Context
-import androidx.room.Room
-import androidx.test.core.app.ApplicationProvider
-import com.pseandroid2.dailydata.model.database.AppDataBase
-import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
-import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Button
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Column
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Notification
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
-import io.mockk.every
-import io.mockk.mockk
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
-import org.junit.Before
-import org.junit.Test
 /*
 class CreateCommandTester {
     private var testOnlineID: Long = 0

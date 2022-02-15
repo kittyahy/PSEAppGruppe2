@@ -1,19 +1,19 @@
 package com.pseandroid2.dailydata.repository.commandCenter.commands
 
+import com.pseandroid2.dailydata.model.table.ColumnData
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Column
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ViewModelProject
 
-class AddColumn(projectID: Int, column: Column) : ProjectCommand(projectID = projectID) {
+class AddColumn(projectID: Int, specs: ColumnData) : ProjectCommand(projectID = projectID) {
     override val publishable: Boolean = true
 
     companion object {
-        fun isPossible(project: Project, type: DataType): Boolean {
+        fun isPossible(viewModelProject: ViewModelProject, type: DataType): Boolean {
             var total = DataType.storageSizeBaseline
-            for (col in project.table) {
-                col.dataType.storageSize
+            for (col in viewModelProject.table.layout) {
+                total += col.type.storageSize
             }
             total += type.storageSize
             return total <= DataType.maxStorageSize

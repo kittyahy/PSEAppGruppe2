@@ -41,7 +41,6 @@ class RepositoryViewModelAPI @Inject constructor(
     @Suppress("DEPRECATION")
     val serverHandler = ServerHandler(appDataBase, remoteDataSourceAPI)
 
-    @InternalCoroutinesApi
     @Suppress("DEPRECATION")
     val projectHandler = ProjectHandler(this)
 }

@@ -34,7 +34,6 @@ class SimpleSkeleton(
     override var desc: String = "",
     override var path: String = "",
     override var color: Int = -1,
-    override var settings: Settings = MapSettings(),
     override var notifications: MutableList<Notification> = mutableListOf()
 ) : ProjectSkeleton {
     override fun getWallpaper(): Bitmap? = BitmapFactory.decodeFile(path)

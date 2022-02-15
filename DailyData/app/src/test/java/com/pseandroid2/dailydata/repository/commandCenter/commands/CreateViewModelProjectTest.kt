@@ -1,29 +1,10 @@
 package com.pseandroid2.dailydata.repository.commandCenter.commands
 
-import com.pseandroid2.dailydata.model.database.AppDataBase
-import com.pseandroid2.dailydata.model.database.daos.ProjectDataDAO
-import com.pseandroid2.dailydata.model.project.Project
-import com.pseandroid2.dailydata.model.project.SimpleProject
-import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
-import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Button
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Column
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Notification
-import io.mockk.coEvery
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.slot
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.*
-
 import org.junit.Test
 
-class CreateProjectTest {
+class CreateViewModelProjectTest {
 
     @ExperimentalCoroutinesApi
     @Test

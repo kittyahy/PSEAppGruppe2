@@ -37,7 +37,7 @@ class Member(
     ) //Todo Arne Fragen ob der Cast passt: Nein, User werden über firebaseID identifiziert und die ist ein String
 
     override lateinit var executeQueue: ExecuteQueue
-    override lateinit var project: Project
+    lateinit var viewModelProject: ViewModelProject
     override fun deleteIsPossible(): Flow<Boolean> {
         TODO("Not yet implemented")
     }

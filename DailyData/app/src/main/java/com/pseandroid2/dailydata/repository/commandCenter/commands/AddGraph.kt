@@ -2,13 +2,13 @@ package com.pseandroid2.dailydata.repository.commandCenter.commands
 
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
+import com.pseandroid2.dailydata.model.graph.Graph
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ViewModelProject
 
-class AddGraph(val id: Int, val graph: Graph) : ProjectCommand() {
+class AddGraph(val id: Int, val graph: Graph<*, *>) : ProjectCommand() {
     companion object {
-        fun isPossible(project: Project): Boolean {
-            return ProjectCommand.isPossible(project)
+        fun isPossible(viewModelProject: ViewModelProject): Boolean {
+            return ProjectCommand.isPossible(viewModelProject)
         }
     }
 
@@ -18,7 +18,8 @@ class AddGraph(val id: Int, val graph: Graph) : ProjectCommand() {
         repositoryViewModelAPI: RepositoryViewModelAPI,
         publishQueue: PublishQueue
     ) {
-        repositoryViewModelAPI.appDataBase.graphCDManager().insertGraph(id, graph.toDBEquivalent())
+        @Suppress("Deprecation")
+        repositoryViewModelAPI.appDataBase.graphCDManager().insertGraph(id, graph)
         super.execute(repositoryViewModelAPI, publishQueue)
     }
 }

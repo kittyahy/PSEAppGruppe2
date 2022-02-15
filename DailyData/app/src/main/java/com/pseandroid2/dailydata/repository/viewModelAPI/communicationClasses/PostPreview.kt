@@ -43,7 +43,7 @@ class PostPreview(
     )
 
     override lateinit var executeQueue: ExecuteQueue
-    override lateinit var project: Project
+    lateinit var viewModelProject: ViewModelProject
 
     suspend fun getPostDetail(): Collection<PostEntry> {
         val postDetail = ArrayList<PostEntry>()

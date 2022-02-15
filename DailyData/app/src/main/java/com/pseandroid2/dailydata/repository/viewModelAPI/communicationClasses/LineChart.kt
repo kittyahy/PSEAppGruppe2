@@ -49,7 +49,7 @@ class LineChart(
     var mappingVertical: List<Column> = ArrayList()
 ) : Graph() {
     override lateinit var executeQueue: ExecuteQueue
-    override lateinit var project: Project
+    override lateinit var viewModelProject: ViewModelProject
     override lateinit var appDataBase: AppDataBase
     override val typeName: String = "Line Chart" //TODO Magic String
 
@@ -72,7 +72,7 @@ class LineChart(
         settings[Generator.GRAPH_NAME_KEY] = id.toString()
 
         @Suppress("Deprecation")
-        val modelProject = project.toDBEquivalent()
+        val modelProject = viewModelProject.toDBEquivalent()
         return when (mappingVertical[0].dataType) {
             FLOATING_POINT_NUMBER -> {
                 val trafo = FloatLineChartTransformation(identity)

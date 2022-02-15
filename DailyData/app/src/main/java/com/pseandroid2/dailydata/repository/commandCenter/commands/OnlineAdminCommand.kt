@@ -1,21 +1,16 @@
 package com.pseandroid2.dailydata.repository.commandCenter.commands
 
+/*
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ViewModelProject
 
-abstract class OnlineAdminCommand(project: Project) :
-    ProjectCommand(isProjectAdmin = project.isAdmin, projectID = project.id) {
-    //Todo sicherstellen ob isAdmin wirklich aus einem CommunicationClasses Project ausgelsesn werden sollte
-    init {
-        if (!project.isAdmin) {
-            throw IllegalOperationException("This command is only usable by project admins and you are no project admin.")
-        }
-    }
+abstract class OnlineAdminCommand(viewModelProject: ViewModelProject, api: RepositoryViewModelAPI) :
+    ProjectCommand(projectID = viewModelProject.id, repositoryViewModelAPI = api) {
 
     companion object {
-        fun isPossible(project: Project): Boolean {
-            return project.isAdmin
+        fun isPossible(viewModelProject: ViewModelProject): Boolean {
+            TODO("Admin checks shouldn't run in isPossible")
         }
     }
 
@@ -25,7 +20,6 @@ abstract class OnlineAdminCommand(project: Project) :
         repositoryViewModelAPI: RepositoryViewModelAPI,
         publishQueue: PublishQueue
     ): Boolean {
-
-        return isProjectAdmin
+        return currentUser
     }
-}
+}*/

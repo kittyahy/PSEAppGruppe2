@@ -1,8 +1,9 @@
 package com.pseandroid2.dailydata.repository.commandCenter.commands
 
+import com.pseandroid2.dailydata.model.users.SimpleUser
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ViewModelProject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 
@@ -22,7 +23,12 @@ class JoinOnlineProject(private val onlineID: Long, private val idFlow: MutableS
     ) {
         @Suppress("DEPRECATION")
         repositoryViewModelAPI.remoteDataSourceAPI.joinProject(onlineID)
-        val onlineProject = Project(repositoryViewModelAPI = repositoryViewModelAPI)
+        val admin = SimpleUser(
+            repositoryViewModelAPI.remoteDataSourceAPI.getProjectAdmin(onlineID),
+            "ADMIN"
+        )
+        val onlineProject =
+            ViewModelProject(repositoryViewModelAPI = repositoryViewModelAPI, admin = admin)
         val idFlow = MutableSharedFlow<Int>()
         CreateProject(onlineProject, idFlow).execute(repositoryViewModelAPI, publishQueue)
         val id: Int = idFlow.first()

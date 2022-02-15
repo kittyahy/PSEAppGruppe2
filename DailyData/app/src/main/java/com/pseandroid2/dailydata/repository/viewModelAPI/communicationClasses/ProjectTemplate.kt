@@ -93,7 +93,7 @@ class ProjectTemplate : Identifiable, Template {
     }
 
     override lateinit var executeQueue: ExecuteQueue
-    override lateinit var project: Project
+    lateinit var viewModelProject: ViewModelProject
     override var id: Int = 0
 
     override fun deleteIsPossible(): Flow<Boolean> {
@@ -106,7 +106,7 @@ class ProjectTemplate : Identifiable, Template {
     }
 
     //TODO Implementierung
-    fun toProject(): Project {
+    fun toProject(): ViewModelProject {
         TODO("toProject")
     }
 }

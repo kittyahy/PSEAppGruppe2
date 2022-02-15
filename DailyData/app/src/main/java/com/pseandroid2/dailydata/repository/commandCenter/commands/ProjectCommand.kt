@@ -1,8 +1,9 @@
 package com.pseandroid2.dailydata.repository.commandCenter.commands
 
+import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ViewModelProject
 import java.time.LocalDateTime
 
 /**
@@ -22,14 +23,15 @@ abstract class ProjectCommand(
     var wentOnline: LocalDateTime? = null,
     var serverRemoveTime: LocalDateTime? = null,
     var commandByUser: String? = null,
-    var isProjectAdmin: Boolean = true
+    var createdByAdmin: Boolean = false,
+    var repositoryViewModelAPI: RepositoryViewModelAPI
 ) {
     companion object {
         /**
          * Shows whether it is impossible to perform the command action on the given project.
          * Must ALWAYS be overridden in the subclass. Default is calling this fun in the superclass.
          */
-        fun isPossible(project: Project): Boolean {
+        fun isPossible(viewModelProject: ViewModelProject): Boolean {
             return true
         }
     }
@@ -50,12 +52,10 @@ abstract class ProjectCommand(
      * Contains all the actions that are performed locally on the repositoryViewModelAPI by this
      * command and specifies the publishQueue to which the command might be added afterwards.
      */
-    open suspend fun execute(
-        repositoryViewModelAPI: RepositoryViewModelAPI,
-        publishQueue: PublishQueue
-    ) {
-        if (publish(repositoryViewModelAPI, publishQueue)) {
-            publishQueue.add(this)
+    open suspend fun execute() {
+        if (publish()) {
+            //TODO("PublishQueue should be exposed from RVMAPI")
+            //publishQueue.add(this)
         }
     }
 
@@ -66,10 +66,7 @@ abstract class ProjectCommand(
      * Conditions may depend on the given publishQueue and repositoryViewModelAPI.
 
      */
-    open suspend fun publish(
-        repositoryViewModelAPI: RepositoryViewModelAPI,
-        publishQueue: PublishQueue
-    ): Boolean {
+    open suspend fun publish(): Boolean {
         return onlineProjectID != null && !cameFromServer && publishable
     }
 }

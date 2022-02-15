@@ -2,15 +2,15 @@ package com.pseandroid2.dailydata.repository.commandCenter.commands
 
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ViewModelProject
 
-class SetTitle(project: Project, private val newTitle: String) : OnlineAdminCommand(project) {
+class SetTitle(viewModelProject: ViewModelProject, private val newTitle: String) : OnlineAdminCommand(viewModelProject) {
 
     override val publishable = true
 
     companion object {
-        fun isPossible(project: Project): Boolean {
-            return OnlineAdminCommand.isPossible(project)
+        fun isPossible(viewModelProject: ViewModelProject): Boolean {
+            return OnlineAdminCommand.isPossible(viewModelProject)
         }
     }
 

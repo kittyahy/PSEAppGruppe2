@@ -27,7 +27,7 @@ import java.time.LocalDateTime
 enum class DataType(
     val representation: String,
     val regex: String,
-    val initialValue : String,
+    val initialValue: String,
     val serializableClassName: String,
     /**
      * Describes the amount of space in byte an AddRow ProjectCommand gains in its json form

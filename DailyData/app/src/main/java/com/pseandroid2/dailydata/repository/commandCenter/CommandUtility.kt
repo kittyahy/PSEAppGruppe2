@@ -11,7 +11,7 @@ object CommandUtility {
         projectCommand.cameFromServer = true
         projectCommand.wentOnline = projectCommandInfo.wentOnline
         projectCommand.commandByUser = projectCommandInfo.commandByUser
-        projectCommand.isProjectAdmin = projectCommandInfo.isProjectAdmin
+        projectCommand.createdByAdmin = projectCommandInfo.isProjectAdmin
         projectCommand.projectID =
 
             TODO("ProjectID")

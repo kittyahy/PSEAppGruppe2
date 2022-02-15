@@ -20,20 +20,42 @@
 
 package com.pseandroid2.dailydata.model.table
 
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Operation
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+
 /**
  *
  */
-class ArrayListTable(private var layout: TableLayout = ArrayListLayout()) : Table {
+class ArrayListTable(override val layout: TableLayout = ArrayListLayout()) : Table {
+
+    private val mutableIllegalOperation: Map<Operation, MutableSharedFlow<Boolean>>
+    override val isIllegalOperation: Map<Operation, Flow<Boolean>>
+
+    init {
+        val operations = mutableMapOf<Operation, MutableSharedFlow<Boolean>>()
+        for (operation in Operation.values()) {
+            if (operation.type == Operation.OperationType.TABLE) {
+                operations[operation] = MutableSharedFlow(1)
+            }
+        }
+        mutableIllegalOperation = operations.toMap()
+        val immutableOperation = mutableMapOf<Operation, Flow<Boolean>>()
+        for (entry in mutableIllegalOperation) {
+            immutableOperation[entry.key] = entry.value.asSharedFlow()
+        }
+        isIllegalOperation = immutableOperation.toMap()
+    }
+
     private val table: MutableList<ArrayListRow> = mutableListOf()
     override fun getCell(row: Int, col: Int) = table[row][col]
 
-    override fun getLayout() = layout
-
-    override fun getSize() = table.size * layout.getSize()
+    override fun getSize() = table.size * layout.size
 
     override fun getRow(row: Int) = table[row]
 
-    override fun addRow(row: Row) {
+    override suspend fun addRow(row: Row) {
         if (assertLayout(row)) {
             table.add(row.toArrayListRow())
         } else {
@@ -43,7 +65,7 @@ class ArrayListTable(private var layout: TableLayout = ArrayListLayout()) : Tabl
         }
     }
 
-    override fun deleteRow(row: Int) {
+    override suspend fun deleteRow(row: Int) {
         table.removeAt(row)
     }
 
@@ -55,14 +77,15 @@ class ArrayListTable(private var layout: TableLayout = ArrayListLayout()) : Tabl
         return result
     }
 
-    override fun addColumn(typeString: String, name: String, unit: String, default: Any) {
-        layout.addColumn(typeString, name, unit)
+    override suspend fun addColumn(specs: ColumnData, default: Any): Int {
+        val newId = layout.addColumn(specs.type, specs.name, specs.unit)
         for (row in table) {
             row.createCell(default)
         }
+        return newId
     }
 
-    override fun deleteColumn(col: Int) {
+    override suspend fun deleteColumn(col: Int) {
         layout.deleteColumn(col)
         for (row in table) {
             row.deleteCell(col)
@@ -70,7 +93,7 @@ class ArrayListTable(private var layout: TableLayout = ArrayListLayout()) : Tabl
     }
 
     private fun assertLayout(row: Row): Boolean {
-        for (i in 0 until layout.getSize()) {
+        for (i in 0 until layout.size) {
             if (row.getCell(i).javaClass == layout.getColumnType(i)) {
                 return false
             }

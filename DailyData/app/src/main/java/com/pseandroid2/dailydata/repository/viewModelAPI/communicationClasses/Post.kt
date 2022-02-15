@@ -54,7 +54,7 @@ class Post : Identifiable {
     }
 
     override lateinit var executeQueue: ExecuteQueue
-    override lateinit var project: Project
+    lateinit var viewModelProject: ViewModelProject
 
     override fun deleteIsPossible(): Flow<Boolean> {
         TODO("Not yet implemented")

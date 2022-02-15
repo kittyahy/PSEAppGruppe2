@@ -24,7 +24,6 @@ import android.graphics.Bitmap
 import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.model.graph.Generator
 import com.pseandroid2.dailydata.model.graph.PieChart
-import com.pseandroid2.dailydata.model.project.Project as ModelProject
 import com.pseandroid2.dailydata.model.settings.MapSettings
 import com.pseandroid2.dailydata.model.transformation.FloatSum
 import com.pseandroid2.dailydata.model.transformation.PieChartTransformation
@@ -32,7 +31,6 @@ import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.runBlocking
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
 
 class PieChart(
     override var id: Int = -1,
@@ -43,7 +41,7 @@ class PieChart(
 ) : Graph() {
     private val columnColors = mutableMapOf<Int, String>()
     override lateinit var executeQueue: ExecuteQueue
-    override lateinit var project: Project
+    override lateinit var viewModelProject: ViewModelProject
     override lateinit var appDataBase: AppDataBase
     override val typeName: String = "Pie Chart" //TODO Magic String
 
@@ -63,7 +61,7 @@ class PieChart(
         }
         val sum = FloatSum()
         val trafo = PieChartTransformation(sum)
-        val dataTrapo = project.toDBEquivalent().createDataTransformation(trafo, mappingInt)
+        val dataTrapo = viewModelProject.toDBEquivalent().createDataTransformation(trafo, mappingInt)
         val settings = MapSettings()
         for (pair in columnColors) {
             settings[PieChart.SLICE_COLOR_KEY + pair.key] = pair.value

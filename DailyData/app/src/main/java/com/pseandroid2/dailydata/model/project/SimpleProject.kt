@@ -24,16 +24,21 @@ import com.pseandroid2.dailydata.model.graph.Graph
 import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.model.table.Table
 import com.pseandroid2.dailydata.model.users.NullUser
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Operation
+import kotlinx.coroutines.flow.Flow
 
+@Deprecated("Will no longer be supported as of 2022-02-16")
 class SimpleProject
 @Deprecated("Directly constructing a project is Deprecated, Use ProjectBuilder instead")
 constructor(
-    private val skeleton: ProjectSkeleton,
+    @Deprecated("Access via Skeleton is Deprecated")
+    override val skeleton: ProjectSkeleton,
     override var table: Table,
     override var admin: User = NullUser(),
     override var isOnline: Boolean = false,
     override var users: MutableList<User>,
-    override var graphs: MutableList<Graph<*, *>> = mutableListOf()
+    override var graphs: MutableList<Graph<*, *>> = mutableListOf(),
+    override val isIllegalOperation: Map<Operation, Flow<Boolean>> = mapOf()
 ) : Project {
 
     init {
@@ -42,9 +47,13 @@ constructor(
         }
     }
 
-    @Suppress("Deprecation")
-    @Deprecated("Properties of Project should be accessed directly, access via Skeleton is deprecated")
-    override fun getProjectSkeleton() = skeleton
+    override suspend fun setName(name: String) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun setDesc(desc: String) {
+        TODO("Not yet implemented")
+    }
 
     override fun createTransformationFromString(transformationString: String): Project.DataTransformation<out Any> {
         TODO("Not yet implemented")

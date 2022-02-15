@@ -1,23 +1,26 @@
 package com.pseandroid2.dailydata.repository.commandCenter.commands
 
+import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Member
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ViewModelProject
 
-class AddMember(private val id: Int, private val member: Member) : ProjectCommand() {
+class AddUser(private val id: Int, private val user: User) : ProjectCommand() {
     companion object {
-        fun isPossible(project: Project): Boolean {
-            return project.members.size < 24 && project.isOnlineProject
+        fun isPossible(viewModelProject: ViewModelProject): Boolean {
+            return viewModelProject.users.size < 24 && viewModelProject.isOnline
         }
     }
 
     override val publishable: Boolean = true
+
     override suspend fun execute(
         repositoryViewModelAPI: RepositoryViewModelAPI,
         publishQueue: PublishQueue
     ) {
-        repositoryViewModelAPI.appDataBase.projectDataDAO().addUser(id, member.toDBEquivalent())
+        @Suppress("Deprecation")
+        repositoryViewModelAPI.appDataBase.projectDataDAO().addUser(id, user)
         super.execute(repositoryViewModelAPI, publishQueue)
     }
 }

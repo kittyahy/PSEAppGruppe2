@@ -14,7 +14,7 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Da
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Member
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Notification
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ViewModelProject
 import com.pseandroid2.dailydata.ui.link.appLinks.JoinProjectLinkManager
 import com.pseandroid2.dailydata.ui.project.data.DataTabs
 import com.pseandroid2.dailydata.util.ui.UiEvent
@@ -32,7 +32,7 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
     private val repository: RepositoryViewModelAPI
 ) : ViewModel() {
 
-    private lateinit var initialProject: Project
+    private lateinit var initialViewModelProject: ViewModelProject
     private val _uiEvent = MutableSharedFlow<UiEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
 
@@ -80,7 +80,7 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
                     repository.projectHandler.getProjectByID(id = event.projectId)
                         .collect { project ->
                             title = project.title
-                            description = project.description
+                            description = project.desc
                             wallpaper = Color(project.wallpaper)
                             table = project.table
                             buttons = project.buttons
@@ -88,7 +88,7 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
                             notifications = project.notifications
                             graphs = project.graphs
                             isAdmin = isAdmin
-                            initialProject = project
+                            initialViewModelProject = project
                         }
                 }
             }
@@ -159,7 +159,7 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
             }
             is ProjectDataSettingsScreenEvent.OnCreateLink -> {
                 val manager = JoinProjectLinkManager()
-                val link = manager.createLink(initialProject.id.toLong())
+                val link = manager.createLink(initialViewModelProject.id.toLong())
                 sendUiEvent(UiEvent.CopyToClipboard(link))
             }
             is ProjectDataSettingsScreenEvent.OnGraphAdd -> {
@@ -206,16 +206,16 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
 
             is ProjectDataSettingsScreenEvent.OnLeaveProject -> {
                 viewModelScope.launch {
-                    if (initialProject.leaveOnlineProjectIsPossible().first()) {
-                        initialProject.leaveOnlineProject()
+                    if (initialViewModelProject.leaveOnlineProjectIsPossible().first()) {
+                        initialViewModelProject.leaveOnlineProject()
                         sendUiEvent(UiEvent.PopBackStack)
                     }
                 }
             }
             is ProjectDataSettingsScreenEvent.OnDeleteProject -> {
                 viewModelScope.launch {
-                    if (initialProject.deleteIsPossible().first()) {
-                        initialProject.delete()
+                    if (initialViewModelProject.deleteIsPossible().first()) {
+                        initialViewModelProject.delete()
                         sendUiEvent(UiEvent.PopBackStack)
                     }
                 }
@@ -227,73 +227,73 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
                     table.isEmpty() -> sendUiEvent(UiEvent.ShowToast("Please Enter a column"))
                     else -> {
                         viewModelScope.launch {
-                            if (initialProject.setNameIsPossible().first()) {
-                                initialProject.setName(name = title)
+                            if (initialViewModelProject.setNameIsPossible().first()) {
+                                initialViewModelProject.setName(name = title)
                             } else {
                                 sendUiEvent(UiEvent.ShowToast("Could not change title"))
                             }
-                            if (initialProject.setDescriptionIsPossible().first()) {
-                                initialProject.setDescription(description = description)
+                            if (initialViewModelProject.setDescriptionIsPossible().first()) {
+                                initialViewModelProject.setDescription(description = description)
                             } else {
                                 sendUiEvent(UiEvent.ShowToast("Could not change description"))
                             }
-                            if (initialProject.changeWallpaperIsPossible().first()) {
-                                initialProject.changeWallpaper(image = wallpaper.toArgb())
+                            if (initialViewModelProject.changeWallpaperIsPossible().first()) {
+                                initialViewModelProject.setColor(image = wallpaper.toArgb())
                             } else {
                                 sendUiEvent(UiEvent.ShowToast("Could not change wallpaper"))
                             }
-                            for (column in initialProject.table) {
-                                if (!table.contains(column) && initialProject.deleteColumnIsPossible(
+                            for (column in initialViewModelProject.table) {
+                                if (!table.contains(column) && initialViewModelProject.deleteColumnIsPossible(
                                         column = column
                                     ).first()
                                 ) {
-                                    initialProject.deleteColumn(column = column)
+                                    initialViewModelProject.deleteColumn(column = column)
                                 }
                             }
                             for (column in table) {                                                                                                     //i assume there is a value
-                                if (!initialProject.table.contains(column) && initialProject.addColumnIsPossible()[column.dataType]!!.first()) {
-                                    initialProject.addColumn(column = column)
+                                if (!initialViewModelProject.table.contains(column) && initialViewModelProject.addColumnIsPossible()[column.dataType]!!.first()) {
+                                    initialViewModelProject.addColumn(column = column)
                                 }
                             }
-                            for (button in initialProject.buttons) {
-                                if (!buttons.contains(button) && initialProject.deleteButtonIsPossible(
+                            for (button in initialViewModelProject.buttons) {
+                                if (!buttons.contains(button) && initialViewModelProject.deleteButtonIsPossible(
                                         button = button
                                     ).first()
                                 ) {
-                                    initialProject.deleteButton(button = button)
+                                    initialViewModelProject.deleteUIElement(button = button)
                                 }
                             }
                             for (button in buttons) {
-                                if (!initialProject.buttons.contains(button) && initialProject.addButtonIsPossible()
+                                if (!initialViewModelProject.buttons.contains(button) && initialViewModelProject.addButtonIsPossible()
                                         .first()
                                 ) {
-                                    initialProject.addButton(button = button)
+                                    initialViewModelProject.addUIElement(button = button)
                                 }
                             }
-                            for (member in initialProject.members) {
-                                if (!members.contains(member) && initialProject.deleteMemberIsPossible(
+                            for (member in initialViewModelProject.members) {
+                                if (!members.contains(member) && initialViewModelProject.deleteMemberIsPossible(
                                         member = member
                                     ).first()
                                 ) {
-                                    initialProject.deleteMember(member = member)
+                                    initialViewModelProject.removeUser(member = member)
                                 }
                             }
-                            for (notification in initialProject.notifications) {
-                                if (!notifications.contains(notification) && initialProject.deleteNotificationIsPossible(
+                            for (notification in initialViewModelProject.notifications) {
+                                if (!notifications.contains(notification) && initialViewModelProject.deleteNotificationIsPossible(
                                         notification = notification
                                     ).first()
                                 ) {
-                                    initialProject.deleteNotification(notification = notification)
+                                    initialViewModelProject.deleteNotification(notification = notification)
                                 }
                             }
                             for (notification in notifications) {
-                                if (!initialProject.notifications.contains(notification) && initialProject.addNotificationIsPossible()
+                                if (!initialViewModelProject.notifications.contains(notification) && initialViewModelProject.addNotificationIsPossible()
                                         .first()
                                 ) {
-                                    initialProject.addNotification(notification = notification)
+                                    initialViewModelProject.addNotification(notification = notification)
                                 }
                             }
-                            for (graph in initialProject.graphs) {
+                            for (graph in initialViewModelProject.graphs) {
                                 if (!graphs.contains(graph)) {
                                     viewModelScope.launch {
                                         if (graph.deleteIsPossible()
@@ -305,10 +305,10 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
                                 }
                             }
                             for (graph in graphs) {
-                                if (!initialProject.graphs.contains(graph) && initialProject.addGraphIsPossible()
+                                if (!initialViewModelProject.graphs.contains(graph) && initialViewModelProject.addGraphIsPossible()
                                         .first()
                                 ) {
-                                    initialProject.addGraph(graph = graph)
+                                    initialViewModelProject.addGraph(graph = graph)
                                 }
                             }
                         }

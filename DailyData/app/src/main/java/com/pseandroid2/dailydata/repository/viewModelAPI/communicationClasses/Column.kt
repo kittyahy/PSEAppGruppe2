@@ -27,21 +27,11 @@ import kotlinx.coroutines.flow.Flow
  * Column class that handles its specific interaction with ViewModel.
  */
 class Column(
-    override var id: Int,
+    var id: Int,
     val name: String,
     val unit: String,
     val dataType: DataType
-) : Identifiable {
-    override lateinit var executeQueue: ExecuteQueue
-    override lateinit var project: Project
-    override fun deleteIsPossible(): Flow<Boolean> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun delete() {
-        TODO("Not yet implemented")
-    }
-}
+)
 
 fun TableLayout.toColumnList(): List<Column> {
     val columns = mutableListOf<Column>()

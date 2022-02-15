@@ -88,7 +88,7 @@ class ProjectCreationScreenViewModel @Inject constructor(
             viewModelScope.launch {
                 val template = repository.serverHandler.getProjectTemplateById(id = id).toProject()
                 title = template.title
-                description = template.description
+                description = template.desc
                 wallpaper = Color(template.wallpaper)
                 table = template.table
                 buttons = template.buttons

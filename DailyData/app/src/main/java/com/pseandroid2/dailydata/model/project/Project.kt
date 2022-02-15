@@ -29,90 +29,76 @@ import com.pseandroid2.dailydata.model.table.Table
 import com.pseandroid2.dailydata.model.table.TableLayout
 import com.pseandroid2.dailydata.model.transformation.TransformationFunction
 import com.pseandroid2.dailydata.model.users.User
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Operation
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Contains all data of one specific Project
  */
 interface Project {
 
-    /**
-     * returns the skeleton of this project.
-     * @return The ProjectSkeleton of this Project
-     */
-    @Deprecated("Properties of Project should be accessed directly, access via Skeleton is deprecated")
-    fun getProjectSkeleton(): ProjectSkeleton
+    companion object {
+        const val MAXIMUM_PROJECT_USERS = 24
+    }
+
+    val isIllegalOperation: Map<Operation, Flow<Boolean>>
+
+    @Deprecated("Access via skeleton is deprecated")
+    val skeleton: ProjectSkeleton
 
     var id: Int
         set(value) {
             @Suppress("Deprecation")
-            getProjectSkeleton().id = value
+            skeleton.id = value
         }
         @Suppress("Deprecation")
-        get() = getProjectSkeleton().id
+        get() = skeleton.id
 
     var onlineId: Long
         set(value) {
             @Suppress("Deprecation")
-            getProjectSkeleton().onlineId = value
+            skeleton.onlineId = value
         }
         @Suppress("Deprecation")
-        get() = getProjectSkeleton().onlineId
+        get() = skeleton.onlineId
 
-    var name: String
-        set(value) {
-            @Suppress("Deprecation")
-            getProjectSkeleton().name = value
-        }
+    val name: String
         @Suppress("Deprecation")
-        get() = getProjectSkeleton().name
+        get() = skeleton.name
 
-    var desc: String
-        set(value) {
-            @Suppress("Deprecation")
-            getProjectSkeleton().desc = value
-        }
+    suspend fun setName(name: String)
+
+    val desc: String
         @Suppress("Deprecation")
-        get() = getProjectSkeleton().desc
+        get() = skeleton.desc
+
+    suspend fun setDesc(desc: String)
 
     var path: String
         set(value) {
             @Suppress("Deprecation")
-            getProjectSkeleton().path = value
+            skeleton.path = value
         }
         @Suppress("Deprecation")
-        get() = getProjectSkeleton().path
+        get() = skeleton.path
 
     var color: Int
         set(value) {
             @Suppress("Deprecation")
-            getProjectSkeleton().color = value
+            skeleton.color = value
         }
         @Suppress("Deprecation")
-        get() = getProjectSkeleton().color
+        get() = skeleton.color
 
     var graphs: MutableList<Graph<*, *>>
-
-    var settings: Settings
-        set(value) {
-            @Suppress("Deprecation")
-            getProjectSkeleton().settings = value
-        }
-        @Suppress("Deprecation")
-        get() = getProjectSkeleton().settings
-
-    fun addSettings(settingsToAdd: Settings) {
-        for (setting in settingsToAdd) {
-            settings[setting.first] = setting.second
-        }
-    }
 
     var notifications: MutableList<Notification>
         set(value) {
             @Suppress("Deprecation")
-            getProjectSkeleton().notifications = value
+            skeleton.notifications = value
         }
         @Suppress("Deprecation")
-        get() = getProjectSkeleton().notifications
+        get() = skeleton.notifications
 
     /**
      * It adds all given notification the the project.
@@ -147,7 +133,7 @@ interface Project {
     @Suppress("Deprecation")
     fun <D : Any> createDataTransformation(
         function: TransformationFunction<D>,
-        cols: List<Int> = IntArray(table.getLayout().getSize()) { it }.toList()
+        cols: List<Int> = IntArray(table.layout.size) { it }.toList()
     ) = DataTransformation(table, function, cols)
 
     /**
@@ -210,8 +196,6 @@ interface ProjectSkeleton {
     var path: String
     var color: Int
 
-    var settings: Settings
-
     var notifications: MutableList<Notification>
 
 }
@@ -225,55 +209,55 @@ interface ProjectTemplate {
      * This method returns the project Skeleton of the Project Template
      */
     @Deprecated("Properties of Project should be accessed directly, access via Skeleton is deprecated")
-    fun getProjectSkeleton(): ProjectSkeleton
+    val skeleton: ProjectSkeleton
 
     var id: Int
         set(value) {
             @Suppress("Deprecation")
-            getProjectSkeleton().id = value
+            skeleton.id = value
         }
         @Suppress("Deprecation")
-        get() = getProjectSkeleton().id
+        get() = skeleton.id
 
     var onlineId: Long
         set(value) {
             @Suppress("Deprecation")
-            getProjectSkeleton().onlineId = value
+            skeleton.onlineId = value
         }
         @Suppress("Deprecation")
-        get() = getProjectSkeleton().onlineId
+        get() = skeleton.onlineId
 
     var name: String
         set(value) {
             @Suppress("Deprecation")
-            getProjectSkeleton().name = value
+            skeleton.name = value
         }
         @Suppress("Deprecation")
-        get() = getProjectSkeleton().name
+        get() = skeleton.name
 
     var desc: String
         set(value) {
             @Suppress("Deprecation")
-            getProjectSkeleton().desc = value
+            skeleton.desc = value
         }
         @Suppress("Deprecation")
-        get() = getProjectSkeleton().desc
+        get() = skeleton.desc
 
     var path: String
         set(value) {
             @Suppress("Deprecation")
-            getProjectSkeleton().path = value
+            skeleton.path = value
         }
         @Suppress("Deprecation")
-        get() = getProjectSkeleton().path
+        get() = skeleton.path
 
     var color: Int
         set(value) {
             @Suppress("Deprecation")
-            getProjectSkeleton().color = value
+            skeleton.color = value
         }
         @Suppress("Deprecation")
-        get() = getProjectSkeleton().color
+        get() = skeleton.color
 
     var graphs: MutableList<GraphTemplate>
 
@@ -282,30 +266,13 @@ interface ProjectTemplate {
      */
     fun addGraphs(graphsToAdd: Collection<GraphTemplate>) = graphs.addAll(graphsToAdd)
 
-    var settings: Settings
-        set(value) {
-            @Suppress("Deprecation")
-            getProjectSkeleton().settings = value
-        }
-        @Suppress("Deprecation")
-        get() = getProjectSkeleton().settings
-
-    /**
-     * This method adds a new setting to the Template
-     */
-    fun addSettings(settingsToAdd: Settings) {
-        for (setting in settingsToAdd) {
-            settings[setting.first] = setting.second
-        }
-    }
-
     var notifications: MutableList<Notification>
         set(value) {
             @Suppress("Deprecation")
-            getProjectSkeleton().notifications = value
+            skeleton.notifications = value
         }
         @Suppress("Deprecation")
-        get() = getProjectSkeleton().notifications
+        get() = skeleton.notifications
 
     /**
      * This method adds a new notification to the Template

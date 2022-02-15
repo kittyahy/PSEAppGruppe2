@@ -2,6 +2,7 @@ package com.pseandroid2.dailydata.model.table
 
 import com.google.gson.Gson
 import com.pseandroid2.dailydata.model.uielements.UIElement
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
 import com.pseandroid2.dailydata.util.Quadruple
 import com.pseandroid2.dailydata.util.fromJson
 import com.pseandroid2.dailydata.util.getSerializableClassName
@@ -11,14 +12,17 @@ import kotlin.reflect.KClass
  * This is a implementation of a tableLayout with array lists.
  */
 class ArrayListLayout(input: String = "") : TableLayout {
-    private var layout: MutableList<Quadruple<String, String, String, MutableList<UIElement>>> =
+    override val size: Int
+        get() = layout.size
+
+    private var layout: MutableList<Quadruple<DataType, String, String, MutableList<UIElement>>> =
         if (input == "") {
             mutableListOf()
         } else {
             Gson().fromJson(input)
         }
 
-    constructor(layoutList: ArrayList<ColumnData>) : this("") {
+    constructor(layoutList: List<ColumnData>) : this("") {
         for (col in layoutList) {
             layout.add(
                 Quadruple(
@@ -31,14 +35,17 @@ class ArrayListLayout(input: String = "") : TableLayout {
         }
     }
 
-    override fun getSize() = layout.size
-
-    override fun getColumnType(col: Int) = Class.forName(layout[col].first).kotlin
+    override fun getColumnType(col: Int) =
+        Class.forName(layout[col].first.serializableClassName).kotlin
 
     override fun getUIElements(col: Int): List<UIElement> = layout[col].fourth.toList()
 
-    override fun addUIElements(col: Int, vararg elements: UIElement) {
+    override fun addUIElements(col: Int, elements: List<UIElement>) {
         layout[col].fourth.addAll(elements)
+    }
+
+    override fun removeUIElement(col: Int, id: Int) {
+        layout[col].fourth.removeAll { it.id == id }
     }
 
     override fun getName(col: Int) = layout[col].second
@@ -53,8 +60,9 @@ class ArrayListLayout(input: String = "") : TableLayout {
         layout[col].fourth.toList()
     )
 
-    override fun addColumn(typeString: String, name: String, unit: String) {
-        layout.add(Quadruple(typeString, name, unit, mutableListOf()))
+    override fun addColumn(type: DataType, name: String, unit: String): Int {
+        layout.add(Quadruple(type, name, unit, mutableListOf()))
+        return size - 1
     }
 
     override fun deleteColumn(col: Int) {
@@ -74,7 +82,7 @@ class ArrayListLayout(input: String = "") : TableLayout {
     fun getList() = layout
 }
 
-class ArrayListLayoutIterator(private val layoutList: List<Quadruple<String, String, String, List<UIElement>>>) :
+class ArrayListLayoutIterator(private val layoutList: List<Quadruple<DataType, String, String, List<UIElement>>>) :
     Iterator<ColumnData> {
     var index = 0
 

@@ -33,20 +33,14 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Bu
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Member
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Notification
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ViewModelProject
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Row
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.toColumnList
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.toViewGraph
 import com.pseandroid2.dailydata.util.Consts.LOG_TAG
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 
-@InternalCoroutinesApi
 class ProjectFlow(
     private val repositoryViewModelAPI: RepositoryViewModelAPI,
     private val provider: ProjectFlowProvider
@@ -57,10 +51,10 @@ class ProjectFlow(
     @Suppress("DEPRECATION")
     private val rds: RemoteDataSourceAPI = repositoryViewModelAPI.remoteDataSourceAPI
     private val eq: ExecuteQueue = repositoryViewModelAPI.projectHandler.executeQueue
-    fun getProject(): Flow<Project> = provider.provideFlow.map { project ->
+    fun getProject(): Flow<ViewModelProject> = provider.provideFlow.map { project ->
         val ret = if (project == null) {
             Log.d(LOG_TAG, "Got null Project from database")
-            Project(repositoryViewModelAPI = repositoryViewModelAPI)
+            ViewModelProject(repositoryViewModelAPI = repositoryViewModelAPI)
         } else {
             Log.d(LOG_TAG, "Got Project from database: name = ${project.name}, id = ${project.id}")
             val rows = mutableListOf<Row>()
@@ -94,7 +88,7 @@ class ProjectFlow(
             for (user in project.users) {
                 members.add(Member(user))
             }
-            Project(
+            ViewModelProject(
                 project.id,
                 project.isOnline,
                 if (project.admin is NullUser) {

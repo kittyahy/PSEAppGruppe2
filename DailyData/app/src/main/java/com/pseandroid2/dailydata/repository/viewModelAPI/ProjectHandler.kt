@@ -32,8 +32,7 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Bu
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Column
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Notification
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.GraphFlow
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ViewModelProject
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.GraphTemplateFlow
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.GraphTemplateFlowProvider
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectFlow
@@ -45,7 +44,6 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ad
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectTemplateFlowProvider
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectTemplatePreviewFlow
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -54,7 +52,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-@InternalCoroutinesApi
 class ProjectHandler(
     private val repositoryViewModelAPI: RepositoryViewModelAPI
 ) {
@@ -144,16 +141,16 @@ class ProjectHandler(
         }
     }
 
-    suspend fun newProjectAsync(project: Project) = coroutineScope {
+    suspend fun newProjectAsync(viewModelProject: ViewModelProject) = coroutineScope {
         async(Dispatchers.IO) {
             return@async newProjectAsync(
-                project.title,
-                project.description,
-                project.wallpaper,
-                project.table,
-                project.buttons,
-                project.notifications,
-                project.graphs
+                viewModelProject.title,
+                viewModelProject.desc,
+                viewModelProject.wallpaper,
+                viewModelProject.table,
+                viewModelProject.buttons,
+                viewModelProject.notifications,
+                viewModelProject.graphs
             )
         }
     }

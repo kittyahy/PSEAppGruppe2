@@ -25,32 +25,48 @@ import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.model.database.entities.RowEntity
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.model.users.NullUser
-import com.pseandroid2.dailydata.util.Quadruple
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Operation
+import kotlinx.coroutines.flow.Flow
 import java.time.LocalDateTime
 import kotlin.reflect.KClass
 
 /**
- * The interface, which specifies what a table should can.
+ * The interface, which specifies what a table should be able to do.
  */
 interface Table : Iterable<Row> {
 
-    fun getCell(row: Int, col: Int): Any
+    val isIllegalOperation: Map<Operation, Flow<Boolean>>
 
-    fun getLayout(): TableLayout
+    val layout: TableLayout
+
+    fun getCell(row: Int, col: Int): Any
 
     fun getSize(): Int
 
     fun getRow(row: Int): Row
 
-    fun addRow(row: Row)
+    suspend fun addRow(row: Row)
 
-    fun deleteRow(row: Int)
+    suspend fun deleteRow(row: Int)
 
     fun getColumn(col: Int): List<Any>
 
-    fun addColumn(typeString: String, name: String, unit: String = "", default: Any)
+    /**
+     * specs.id and specs.uiElements will be ignored by this function.
+     * Callers should make sure to update their Column Id to the id that is returned and have to
+     * add UI-Elements separately
+     *
+     * @return the id of the column after it has been added to the Table
+     */
+    suspend fun addColumn(specs: ColumnData, default: Any): Int
 
-    fun deleteColumn(col: Int)
+    suspend fun deleteColumn(col: Int)
+
+    suspend fun addUIElements(col: Int, uiElements: List<UIElement>) =
+        layout.addUIElements(col, uiElements)
+
+    suspend fun removeUIElement(col: Int, id: Int) = layout.removeUIElement(col, id)
 
 }
 
@@ -66,19 +82,20 @@ interface TableLayout : Iterable<ColumnData> {
         }
     }
 
-    fun getSize(): Int
+    val size: Int
 
     fun getColumnType(col: Int): KClass<out Any>
 
     fun getUIElements(col: Int): List<UIElement>
-    fun addUIElements(col: Int, vararg elements: UIElement)
+    fun addUIElements(col: Int, elements: List<UIElement>)
+    fun removeUIElement(col: Int, id: Int)
 
     fun getName(col: Int): String
     fun getUnit(col: Int): String
 
     operator fun get(col: Int): ColumnData
 
-    fun addColumn(typeString: String, name: String, unit: String = "")
+    fun addColumn(type: DataType, name: String, unit: String = ""): Int
 
     fun deleteColumn(col: Int)
 
@@ -131,7 +148,7 @@ data class RowMetaData(
  */
 data class ColumnData(
     val id: Int,
-    val type: String,
+    val type: DataType,
     val name: String,
     val unit: String,
     val uiElements: List<UIElement>

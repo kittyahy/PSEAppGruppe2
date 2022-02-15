@@ -2,9 +2,9 @@ package com.pseandroid2.dailydata.repository.commandCenter.commands
 
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ViewModelProject
 
-class PublishProject(private val id: Int, private val project: Project) : ProjectCommand() {
+class PublishProject(private val viewModelProject: ViewModelProject) : ProjectCommand() {
     override val publishable: Boolean = true
 
     override suspend fun publish(
@@ -15,8 +15,8 @@ class PublishProject(private val id: Int, private val project: Project) : Projec
     }
 
     companion object {
-        fun isPossible(project: Project): Boolean {
-            return !project.isOnlineProject
+        fun isPossible(viewModelProject: ViewModelProject): Boolean {
+            return !viewModelProject.isOnlineProject
         }
     }
 
@@ -25,20 +25,20 @@ class PublishProject(private val id: Int, private val project: Project) : Projec
         publishQueue: PublishQueue
     ) {
         repositoryViewModelAPI.appDataBase.projectDataDAO().setOnlineID(
-            project.id,
+            viewModelProject.id,
             repositoryViewModelAPI.remoteDataSourceAPI.createNewOnlineProject("")
         ) //Todo Fehlerbehandlung, falls publishen fehl schlägt
-        project.isOnlineProject = true
+        viewModelProject.isOnlineProject = true
         if (publish(repositoryViewModelAPI, publishQueue)) {
             publishQueue.add(
                 CreateProject(
-                    project.title,
-                    project.description,
-                    project.wallpaper,
-                    project.table,
-                    project.buttons,
-                    project.notifications,
-                    project.graphs //Todo Problem wenn teilnehmende noch nicht die Verwendeten Graphtypen hätten
+                    viewModelProject.title,
+                    viewModelProject.desc,
+                    viewModelProject.wallpaper,
+                    viewModelProject.table,
+                    viewModelProject.buttons,
+                    viewModelProject.notifications,
+                    viewModelProject.graphs //Todo Problem wenn teilnehmende noch nicht die Verwendeten Graphtypen hätten
                 )
             )
         }

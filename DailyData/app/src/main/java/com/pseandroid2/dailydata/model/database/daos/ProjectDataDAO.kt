@@ -117,6 +117,12 @@ abstract class ProjectDataDAO {
     abstract fun getAdminByIds(vararg ids: Int): Flow<List<ProjectUserMap>>
 
     /**
+     * Gets the current admin of the specified project from the database
+     */
+    @Query("SELECT id AS projectId, admin AS user FROM project WHERE id = :id")
+    abstract suspend fun getCurrentAdmin(id: Int): ProjectUserMap
+
+    /**
      * It adds a specified user to the given project.
      */
     suspend fun addUser(projectId: Int, user: User) {
