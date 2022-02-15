@@ -27,13 +27,11 @@ import com.pseandroid2.dailydata.remoteDataSource.serverConnection.RESTAPI
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.ServerManager
 import com.pseandroid2.dailydata.remoteDataSource.serverConnection.serverReturns.Delta
 import io.mockk.coEvery
-import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 
 internal class ServerManagerIsProjectCommandQueueCorrectlyLinkedTests {
@@ -79,7 +77,12 @@ internal class ServerManagerIsProjectCommandQueueCorrectlyLinkedTests {
         // Convert deltas into ProjectCommandObjects
         for (i in deltaList.indices) {
             val delta: Delta = deltaList.elementAt(i)
-            val projectCommand = ProjectCommandInfo(delta.user, delta.admin, delta.projectCommand, delta.addedToServerS)
+            val projectCommand = ProjectCommandInfo(
+                , delta.user,
+                delta.admin,
+                delta.projectCommand,
+                delta.addedToServerS,
+            )
             projectCommands.add(projectCommand)
         }
 

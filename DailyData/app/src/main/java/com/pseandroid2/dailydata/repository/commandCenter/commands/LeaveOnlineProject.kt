@@ -2,12 +2,9 @@ package com.pseandroid2.dailydata.repository.commandCenter.commands
 
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.first
 
-class LeaveOnlineProject(private val onlineID: Long) :
-    ProjectCommand(onlineProjectID = onlineID) {
+class LeaveOnlineProject(projectID: Int) :
+    ProjectCommand(projectID = projectID) {
     companion object {
         fun isPossible(): Boolean {
             return false
@@ -25,7 +22,7 @@ class LeaveOnlineProject(private val onlineID: Long) :
         @Suppress("DEPRECATION")
         repositoryViewModelAPI.remoteDataSourceAPI.removeUser(
             repositoryViewModelAPI.remoteDataSourceAPI.getUserID(),
-            onlineProjectID!!
+            repositoryViewModelAPI.appDataBase.projectDataDAO().getOnlineId(projectID!!)
         )
         @Suppress("DEPRECATION")
         repositoryViewModelAPI.appDataBase.projectDataDAO().setOnline(false, projectID!!)

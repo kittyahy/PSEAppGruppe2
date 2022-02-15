@@ -11,7 +11,7 @@ class ProjectCommandQueueTests {
 
     private var projectCommandQueue = ProjectCommandQueue()
 
-    private var projectCommand1 = ProjectCommandInfo(projectCommand = "Project Command: 1")
+    private var projectCommand1 = ProjectCommandInfo(, projectCommand = "Project Command: 1",)
 
     @Before
     fun setup() {
@@ -40,7 +40,7 @@ class ProjectCommandQueueTests {
         val projectCommands: MutableList<ProjectCommandInfo> = mutableListOf()
 
         for (idx in 1..10) {
-            val projectCommand1 = ProjectCommandInfo(projectCommand = "Project Command: $idx")
+            val projectCommand1 = ProjectCommandInfo(, projectCommand = "Project Command: $idx",)
             projectCommands.add(projectCommand1)
             projectCommandQueue.addProjectCommand(projectCommand1)
         }

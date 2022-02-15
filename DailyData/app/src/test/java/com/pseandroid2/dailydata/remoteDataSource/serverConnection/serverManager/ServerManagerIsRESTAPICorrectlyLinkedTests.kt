@@ -129,7 +129,12 @@ internal class ServerManagerIsRESTAPICorrectlyLinkedTests {
         serverManager.getProjectCommandsFromServer(1, "")
         val delta: Delta = deltaList.elementAt(0)
         val projectCommandInfoInList =
-            ProjectCommandInfo(delta.user, delta.admin, delta.projectCommand, delta.addedToServerS)
+            ProjectCommandInfo(
+                , delta.user,
+                delta.admin,
+                delta.projectCommand,
+                delta.addedToServerS,
+            )
 
         Assert.assertEquals(projectCommandInfoInList, serverManager.getProjectCommandFromQueue())
 
