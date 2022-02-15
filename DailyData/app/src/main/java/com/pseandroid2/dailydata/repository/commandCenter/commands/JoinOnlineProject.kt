@@ -8,12 +8,12 @@ import kotlinx.coroutines.flow.first
 
 class JoinOnlineProject(private val onlineID: Long, private val idFlow: MutableSharedFlow<Int>) :
     ProjectCommand(onlineProjectID = onlineID) {
-    override val publishable: Boolean = false
-
     companion object {
         fun isPossible(): Boolean {
             return false
         }
+
+        const val publishable: Boolean = false
     }
 
     override suspend fun execute(

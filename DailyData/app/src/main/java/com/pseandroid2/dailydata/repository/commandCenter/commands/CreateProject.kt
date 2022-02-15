@@ -43,9 +43,9 @@ class CreateProject(
         fun isPossible(project: Project): Boolean {
             return ProjectCommand.isPossible(project)
         }
-    }
 
-    override val publishable: Boolean = false
+        const val publishable: Boolean = false
+    }
 
     override suspend fun execute(
         repositoryViewModelAPI: RepositoryViewModelAPI,

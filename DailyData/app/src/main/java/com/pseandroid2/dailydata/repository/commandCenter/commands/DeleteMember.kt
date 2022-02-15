@@ -11,9 +11,10 @@ class DeleteMember(projectID: Int, private val user: User) :
         fun isPossible(project: Project): Boolean {
             return project.members.size > 2 && project.isOnlineProject
         }
+
+        const val publishable: Boolean = true
     }
 
-    override val publishable: Boolean = true
     override suspend fun execute(
         repositoryViewModelAPI: RepositoryViewModelAPI,
         publishQueue: PublishQueue

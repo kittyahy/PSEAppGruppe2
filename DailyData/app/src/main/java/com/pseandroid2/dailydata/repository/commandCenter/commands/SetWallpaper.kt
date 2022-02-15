@@ -7,14 +7,13 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Pr
 class SetWallpaper(projectID: Int, private val newWallpaper: Int) :
     ProjectCommand(projectID = projectID) {
 
-    override val publishable = true
-
     companion object {
         fun isPossible(project: Project): Boolean {
             return ProjectCommand.isPossible(project)
         }
-    }
 
+        const val publishable: Boolean = true
+    }
     override suspend fun execute(
         repositoryViewModelAPI: RepositoryViewModelAPI,
         publishQueue: PublishQueue

@@ -11,9 +11,9 @@ class AddRow(projectID: Int, private val row: Row) :
         fun isPossible(project: Project): Boolean {
             return ProjectCommand.isPossible(project)
         }
-    }
 
-    override val publishable: Boolean = true
+        const val publishable: Boolean = true
+    }
 
     override suspend fun execute(
         repositoryViewModelAPI: RepositoryViewModelAPI,

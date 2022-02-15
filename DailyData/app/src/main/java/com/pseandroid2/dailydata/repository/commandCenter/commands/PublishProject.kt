@@ -6,12 +6,12 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Pr
 
 class PublishProject(private val project: Project) :
     ProjectCommand(projectID = project.id) {
-    override val publishable: Boolean = false
-
     companion object {
         fun isPossible(project: Project): Boolean {
             return !project.isOnlineProject
         }
+
+        const val publishable: Boolean = false
     }
 
     override suspend fun execute(

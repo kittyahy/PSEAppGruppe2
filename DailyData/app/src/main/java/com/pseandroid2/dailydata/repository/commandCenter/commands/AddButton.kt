@@ -10,9 +10,8 @@ class AddButton(projectID: Int, val button: Button) : ProjectCommand(projectID =
         fun isPossible(project: Project): Boolean {
             return ProjectCommand.isPossible(project)
         }
+        const val publishable: Boolean = false
     }
-
-    override val publishable: Boolean = false
 
     override suspend fun execute(
         repositoryViewModelAPI: RepositoryViewModelAPI,

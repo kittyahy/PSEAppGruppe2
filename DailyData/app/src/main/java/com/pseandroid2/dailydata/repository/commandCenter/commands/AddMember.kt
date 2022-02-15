@@ -11,9 +11,10 @@ class AddMember(projectID: Int, private val member: Member) :
         fun isPossible(project: Project): Boolean {
             return project.members.size < 24 && project.isOnlineProject
         }
+
+        const val publishable: Boolean = true
     }
 
-    override val publishable: Boolean = true
     override suspend fun execute(
         repositoryViewModelAPI: RepositoryViewModelAPI,
         publishQueue: PublishQueue

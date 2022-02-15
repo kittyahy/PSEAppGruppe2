@@ -32,13 +32,12 @@ abstract class ProjectCommand(
         fun isPossible(project: Project): Boolean {
             return true
         }
+        /**
+         * Shows whether the implemented command should be send to the server, if performed in an
+         * online project.
+         */
+        const val publishable: Boolean = true
     }
-
-    /**
-     * Shows whether the implemented command should be send to the server, if performed in an
-     * online project.
-     */
-    abstract val publishable: Boolean
 
     /**
      * Must be set to true if a command obj was received from the server and not created by the
