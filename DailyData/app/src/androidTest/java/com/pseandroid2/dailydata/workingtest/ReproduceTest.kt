@@ -9,6 +9,7 @@ import androidx.compose.ui.test.performTextInput
 import com.pseandroid2.dailydata.Main
 import com.pseandroid2.dailydata.MainActivity
 import kotlinx.coroutines.InternalCoroutinesApi
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
@@ -37,6 +38,7 @@ class ReproduceTest {
         composeRule.onNodeWithText("Save").performClick()
     }
 
+    @Ignore
     //@assert(needs a project with name Kresse)
     @InternalCoroutinesApi
     @Test
