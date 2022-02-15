@@ -7,7 +7,7 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
-class ProjectCommandQueueTests {
+class ProjectCommandQueueTests {/*
 
     private var projectCommandQueue = ProjectCommandQueue()
 
@@ -59,5 +59,5 @@ class ProjectCommandQueueTests {
         Assert.assertEquals(null, projectCommandQueue.getProjectCommand())
 
         Assert.assertEquals(0, projectCommandQueue.getQueueLength())
-    }
+    }*/
 }

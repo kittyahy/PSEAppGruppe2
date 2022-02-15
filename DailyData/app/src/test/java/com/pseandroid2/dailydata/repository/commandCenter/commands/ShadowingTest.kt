@@ -29,7 +29,6 @@ class ShadowingTest() {
     }
 
     private fun set(projectCommand: ProjectCommand) {
-        projectCommand.onlineProjectID = 1234
         projectCommand.cameFromServer = false
     }
 }
