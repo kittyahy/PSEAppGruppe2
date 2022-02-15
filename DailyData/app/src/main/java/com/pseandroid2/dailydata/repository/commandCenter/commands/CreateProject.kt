@@ -43,9 +43,11 @@ class CreateProject(
         fun isPossible(project: Project): Boolean {
             return ProjectCommand.isPossible(project)
         }
-    }
 
-    override val publishable: Boolean = false
+        const val issuerNeedsAdminRights: Boolean = false
+
+        const val publishable: Boolean = false
+    }
 
     override suspend fun execute(
         repositoryViewModelAPI: RepositoryViewModelAPI,
@@ -72,17 +74,10 @@ class CreateProject(
         super.execute(repositoryViewModelAPI, publishQueue)
     }
 
-    override suspend fun publish(
+    override fun publish(
         repositoryViewModelAPI: RepositoryViewModelAPI,
         publishQueue: PublishQueue
     ): Boolean {
-        //ReserveServerSlot
-        onlineProjectID =
-            repositoryViewModelAPI.remoteDataSourceAPI.createNewOnlineProject("") //TODO Add project details as JSON here
-
-        //Make Created Project Online Project
-        repositoryViewModelAPI.appDataBase.projectDataDAO()
-            .setOnlineID(projectID!!, onlineProjectID!!)
-        return super.publish(repositoryViewModelAPI, publishQueue)
+        return super.publish(repositoryViewModelAPI, publishQueue) && publishable
     }
 }

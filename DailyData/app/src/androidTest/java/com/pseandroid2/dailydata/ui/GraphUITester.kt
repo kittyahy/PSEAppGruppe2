@@ -196,7 +196,7 @@ class GraphUITester {
                     }, modifier = Modifier.size(500.dp, 500.dp)
                 )
             }
-            delay(10000)
+            delay(1000)
         }
     }
 }

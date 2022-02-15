@@ -8,12 +8,14 @@ import kotlinx.coroutines.flow.first
 
 class JoinOnlineProject(private val onlineID: Long, private val idFlow: MutableSharedFlow<Int>) :
     ProjectCommand() {
-    override val publishable: Boolean = false
-
     companion object {
         fun isPossible(): Boolean {
             return false
         }
+
+        const val issuerNeedsAdminRights: Boolean = false
+
+        const val publishable: Boolean = false
     }
 
     override suspend fun execute(
@@ -29,6 +31,13 @@ class JoinOnlineProject(private val onlineID: Long, private val idFlow: MutableS
         @Suppress("DEPRECATION")
         repositoryViewModelAPI.appDataBase.projectDataDAO().setOnlineID(id, onlineID)
         super.execute(repositoryViewModelAPI, publishQueue)
+    }
+
+    override fun publish(
+        repositoryViewModelAPI: RepositoryViewModelAPI,
+        publishQueue: PublishQueue
+    ): Boolean {
+        return super.publish(repositoryViewModelAPI, publishQueue) && publishable
     }
 
 

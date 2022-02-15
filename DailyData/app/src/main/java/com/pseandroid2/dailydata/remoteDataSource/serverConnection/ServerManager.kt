@@ -385,10 +385,11 @@ class ServerManager @Inject constructor(restapi: RESTAPI) {
         receivedProjectCommands.forEach {
             // Transform Delta into an Project Command
             val queueElement = ProjectCommandInfo(
+                it.project,
                 commandByUser = it.user,
                 isProjectAdmin = it.admin,
                 projectCommand = it.projectCommand,
-                it.addedToServerS
+                it.addedToServerS,
             )
             projectCommandQueue.addProjectCommand(queueElement)
         }

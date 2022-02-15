@@ -1,12 +1,11 @@
 package com.pseandroid2.dailydata.repository.commandCenter.commands
 
+import com.pseandroid2.dailydata.model.graph.Graph
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Notification
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
 
-class AddNotification(projectID: Int, val notification: Notification) :
-    ProjectCommand(projectID = projectID) {
+class DeleteGraph(projectID: Int, val graph: Graph<*, *>) : ProjectCommand(projectID = projectID) {
     companion object {
         fun isPossible(project: Project): Boolean {
             return ProjectCommand.isPossible(project)
@@ -21,8 +20,7 @@ class AddNotification(projectID: Int, val notification: Notification) :
         repositoryViewModelAPI: RepositoryViewModelAPI,
         publishQueue: PublishQueue
     ) {
-        repositoryViewModelAPI.appDataBase.notificationsDAO()
-            .insertNotification(projectID!!, notification.toDBEquivalent())
+        repositoryViewModelAPI.appDataBase.graphCDManager().deleteGraph(projectID!!, graph.id)
         super.execute(repositoryViewModelAPI, publishQueue)
     }
 
@@ -32,5 +30,4 @@ class AddNotification(projectID: Int, val notification: Notification) :
     ): Boolean {
         return super.publish(repositoryViewModelAPI, publishQueue) && publishable
     }
-
 }

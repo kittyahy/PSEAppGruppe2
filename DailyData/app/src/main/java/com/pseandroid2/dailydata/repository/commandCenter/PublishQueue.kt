@@ -18,11 +18,9 @@ class PublishQueue(override val repositoryViewModelAPI: RepositoryViewModelAPI) 
     override suspend fun performCommandAction(command: ProjectCommand) {
         val wrapper = CommandWrapper(command)
         val commandJson = wrapper.toJson()
-        if (command.onlineProjectID == null) {
-            throw IllegalOperationException("This command is only usable by project admins and you are no project admin.")
-        }
+        @Suppress("DEPRECATION")
         repositoryViewModelAPI.remoteDataSourceAPI.sendCommandsToServer(
-            command.onlineProjectID!!,
+            repositoryViewModelAPI.appDataBase.projectDataDAO().getOnlineId(command.projectID!!),
             listOf(commandJson)
         )
     }
