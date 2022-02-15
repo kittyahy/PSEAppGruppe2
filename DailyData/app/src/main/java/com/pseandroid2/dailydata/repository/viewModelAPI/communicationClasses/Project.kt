@@ -33,6 +33,7 @@ import com.pseandroid2.dailydata.repository.commandCenter.commands.AddRow
 import com.pseandroid2.dailydata.repository.commandCenter.commands.IllegalOperationException
 import com.pseandroid2.dailydata.repository.commandCenter.commands.ProjectCommand
 import com.pseandroid2.dailydata.repository.commandCenter.commands.PublishProject
+import com.pseandroid2.dailydata.repository.commandCenter.commands.SetDescription
 import com.pseandroid2.dailydata.repository.commandCenter.commands.SetTitle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -69,7 +70,8 @@ class Project(
         AddGraph::class,
         AddMember::class,
         PublishProject::class,
-        SetTitle::class
+        SetTitle::class,
+        SetDescription::class
     )
     private val isPossible = mutableMapOf<KClass<out ProjectCommand>, MutableSharedFlow<Boolean>>()
 
@@ -98,6 +100,7 @@ class Project(
                 isPossible[AddMember::class]!!.emit(AddMember.isPossible(this@Project))
                 isPossible[PublishProject::class]!!.emit(PublishProject.isPossible(this@Project))
                 isPossible[SetTitle::class]!!.emit(SetTitle.isPossible(this@Project))
+                isPossible[SetDescription::class]!!.emit(SetDescription.isPossible(this@Project))
             }
         }
         for (type in DataType.values()) {
@@ -346,31 +349,23 @@ class Project(
     }
 
     fun setNameIsPossible(): Flow<Boolean> {
-        //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>(1)
-        runBlocking {
-            flow.emit(true)
-        }
-        return flow
+        return isPossible[SetTitle::class]!!
     }
 
     suspend fun setName(name: String) {
-        TODO("setNameProj")
+        @Suppress("DEPRECATION")
+        executeQueue.add(SetTitle(this.id, name))
     }
 
 
     fun setDescriptionIsPossible(): Flow<Boolean> {
-        //Todo replace with valid proof
-        val flow = MutableSharedFlow<Boolean>(1)
-        runBlocking {
-            flow.emit(true)
-        }
-        return flow
+        return isPossible[SetDescription::class]!!
     }
 
     @JvmName("setDescription1")
     suspend fun setDescription(description: String) {
-        TODO("setDescriptionProj")
+        @Suppress("DEPRECATION")
+        executeQueue.add(SetDescription(this.id, description))
     }
 
     fun publishIsPossible(): Flow<Boolean> {
@@ -380,7 +375,7 @@ class Project(
     suspend fun publish() {
         isPossible[AddGraph::class]!!.emit(false)
         @Suppress("DEPRECATION")
-        executeQueue.add(PublishProject(id, this))
+        executeQueue.add(PublishProject(this))
     }
 
     fun setButtonIsPossible(): Flow<Boolean> {

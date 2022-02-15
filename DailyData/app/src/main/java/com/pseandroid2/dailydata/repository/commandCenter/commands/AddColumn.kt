@@ -7,8 +7,6 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Da
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
 
 class AddColumn(projectID: Int, column: Column) : ProjectCommand(projectID = projectID) {
-    override val publishable: Boolean = true
-
     companion object {
         fun isPossible(project: Project, type: DataType): Boolean {
             var total = DataType.storageSizeBaseline
@@ -18,6 +16,10 @@ class AddColumn(projectID: Int, column: Column) : ProjectCommand(projectID = pro
             total += type.storageSize
             return total <= DataType.maxStorageSize
         }
+
+        const val issuerNeedsAdminRights: Boolean = true
+
+        const val publishable: Boolean = true
     }
 
     override suspend fun execute(
@@ -27,6 +29,13 @@ class AddColumn(projectID: Int, column: Column) : ProjectCommand(projectID = pro
         repositoryViewModelAPI.appDataBase.tableContentDAO()
         TODO("insertColumn(row.toDBEquivalent(), projectId)")
         super.execute(repositoryViewModelAPI, publishQueue)
+    }
+
+    override fun publish(
+        repositoryViewModelAPI: RepositoryViewModelAPI,
+        publishQueue: PublishQueue
+    ): Boolean {
+        return super.publish(repositoryViewModelAPI, publishQueue) && publishable
     }
 
 }

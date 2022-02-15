@@ -4,14 +4,17 @@ import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
 
-class SetTitle(project: Project, private val newTitle: String) : OnlineAdminCommand(project) {
-
-    override val publishable = true
+class SetTitle(projectID: Int, private val newTitle: String) :
+    ProjectCommand(projectID = projectID) {
 
     companion object {
         fun isPossible(project: Project): Boolean {
-            return OnlineAdminCommand.isPossible(project)
+            return ProjectCommand.isPossible(project)
         }
+
+        const val issuerNeedsAdminRights: Boolean = true
+
+        const val publishable: Boolean = true
     }
 
     override suspend fun execute(
@@ -19,5 +22,12 @@ class SetTitle(project: Project, private val newTitle: String) : OnlineAdminComm
         publishQueue: PublishQueue
     ) {
         repositoryViewModelAPI.appDataBase.projectDataDAO().setName(projectID!!, newTitle)
+    }
+
+    override fun publish(
+        repositoryViewModelAPI: RepositoryViewModelAPI,
+        publishQueue: PublishQueue
+    ): Boolean {
+        return super.publish(repositoryViewModelAPI, publishQueue) && publishable
     }
 }

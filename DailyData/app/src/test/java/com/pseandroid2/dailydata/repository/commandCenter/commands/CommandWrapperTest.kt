@@ -27,7 +27,6 @@ class CommandWrapperTest : TestCase() {
 }
 
 class TestCommand(projectID: Int) : ProjectCommand( projectID) {
-    override val publishable: Boolean = false
 
     override suspend fun execute(
         repositoryViewModelAPI: RepositoryViewModelAPI,

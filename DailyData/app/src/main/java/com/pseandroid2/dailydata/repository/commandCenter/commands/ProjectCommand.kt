@@ -18,7 +18,6 @@ import java.time.LocalDateTime
  */
 abstract class ProjectCommand(
     var projectID: Int? = null,
-    var onlineProjectID: Long? = null, //Todo Überall noch setzen
     var wentOnline: LocalDateTime? = null,
     var serverRemoveTime: LocalDateTime? = null,
     var commandByUser: String? = null,
@@ -32,13 +31,8 @@ abstract class ProjectCommand(
         fun isPossible(project: Project): Boolean {
             return true
         }
-    }
 
-    /**
-     * Shows whether the implemented command should be send to the server, if performed in an
-     * online project.
-     */
-    abstract val publishable: Boolean
+    }
 
     /**
      * Must be set to true if a command obj was received from the server and not created by the
@@ -66,10 +60,10 @@ abstract class ProjectCommand(
      * Conditions may depend on the given publishQueue and repositoryViewModelAPI.
 
      */
-    open suspend fun publish(
+    open fun publish(
         repositoryViewModelAPI: RepositoryViewModelAPI,
         publishQueue: PublishQueue
     ): Boolean {
-        return onlineProjectID != null && !cameFromServer && publishable
+        return !cameFromServer
     }
 }

@@ -2,14 +2,12 @@ package com.pseandroid2.dailydata.repository.commandCenter.commands
 
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Notification
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Project
 
-class AddNotification(projectID: Int, val notification: Notification) :
+class LeaveOnlineProject(projectID: Int) :
     ProjectCommand(projectID = projectID) {
     companion object {
-        fun isPossible(project: Project): Boolean {
-            return ProjectCommand.isPossible(project)
+        fun isPossible(): Boolean {
+            return false
         }
 
         const val issuerNeedsAdminRights: Boolean = false
@@ -21,8 +19,13 @@ class AddNotification(projectID: Int, val notification: Notification) :
         repositoryViewModelAPI: RepositoryViewModelAPI,
         publishQueue: PublishQueue
     ) {
-        repositoryViewModelAPI.appDataBase.notificationsDAO()
-            .insertNotification(projectID!!, notification.toDBEquivalent())
+        @Suppress("DEPRECATION")
+        repositoryViewModelAPI.remoteDataSourceAPI.removeUser(
+            repositoryViewModelAPI.remoteDataSourceAPI.getUserID(),
+            repositoryViewModelAPI.appDataBase.projectDataDAO().getOnlineId(projectID!!)
+        )
+        @Suppress("DEPRECATION")
+        repositoryViewModelAPI.appDataBase.projectDataDAO().setOnline(false, projectID!!)
         super.execute(repositoryViewModelAPI, publishQueue)
     }
 
@@ -32,5 +35,6 @@ class AddNotification(projectID: Int, val notification: Notification) :
     ): Boolean {
         return super.publish(repositoryViewModelAPI, publishQueue) && publishable
     }
+
 
 }
