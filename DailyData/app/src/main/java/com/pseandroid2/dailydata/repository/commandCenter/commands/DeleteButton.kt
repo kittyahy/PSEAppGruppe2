@@ -24,4 +24,11 @@ class DeleteButton(projectID: Int, val uiElement: UIElement) :
         super.execute(repositoryViewModelAPI, publishQueue)
     }
 
+    override fun publish(
+        repositoryViewModelAPI: RepositoryViewModelAPI,
+        publishQueue: PublishQueue
+    ): Boolean {
+        return super.publish(repositoryViewModelAPI, publishQueue) && publishable
+    }
+
 }

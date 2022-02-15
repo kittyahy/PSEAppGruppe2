@@ -29,4 +29,11 @@ class AddColumn(projectID: Int, column: Column) : ProjectCommand(projectID = pro
         super.execute(repositoryViewModelAPI, publishQueue)
     }
 
+    override fun publish(
+        repositoryViewModelAPI: RepositoryViewModelAPI,
+        publishQueue: PublishQueue
+    ): Boolean {
+        return super.publish(repositoryViewModelAPI, publishQueue) && publishable
+    }
+
 }

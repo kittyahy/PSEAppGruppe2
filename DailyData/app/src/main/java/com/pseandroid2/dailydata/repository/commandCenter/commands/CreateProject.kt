@@ -71,4 +71,11 @@ class CreateProject(
         projectIDReturn?.emit(prod.id)
         super.execute(repositoryViewModelAPI, publishQueue)
     }
+
+    override fun publish(
+        repositoryViewModelAPI: RepositoryViewModelAPI,
+        publishQueue: PublishQueue
+    ): Boolean {
+        return super.publish(repositoryViewModelAPI, publishQueue) && publishable
+    }
 }

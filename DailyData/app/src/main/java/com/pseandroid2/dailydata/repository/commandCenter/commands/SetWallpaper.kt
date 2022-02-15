@@ -14,10 +14,18 @@ class SetWallpaper(projectID: Int, private val newWallpaper: Int) :
 
         const val publishable: Boolean = true
     }
+
     override suspend fun execute(
         repositoryViewModelAPI: RepositoryViewModelAPI,
         publishQueue: PublishQueue
     ) {
         repositoryViewModelAPI.appDataBase.projectDataDAO().setColor(projectID!!, newWallpaper)
+    }
+
+    override fun publish(
+        repositoryViewModelAPI: RepositoryViewModelAPI,
+        publishQueue: PublishQueue
+    ): Boolean {
+        return super.publish(repositoryViewModelAPI, publishQueue) && publishable
     }
 }

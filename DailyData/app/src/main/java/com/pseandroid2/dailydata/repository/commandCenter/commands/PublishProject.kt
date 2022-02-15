@@ -38,4 +38,11 @@ class PublishProject(private val project: Project) :
         }
     }
 
+    override fun publish(
+        repositoryViewModelAPI: RepositoryViewModelAPI,
+        publishQueue: PublishQueue
+    ): Boolean {
+        return super.publish(repositoryViewModelAPI, publishQueue) && publishable
+    }
+
 }

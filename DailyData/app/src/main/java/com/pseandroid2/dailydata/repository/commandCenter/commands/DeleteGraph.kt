@@ -21,4 +21,11 @@ class DeleteGraph(projectID: Int, val graph: Graph<*, *>) : ProjectCommand(proje
         repositoryViewModelAPI.appDataBase.graphCDManager().deleteGraph(projectID!!, graph.id)
         super.execute(repositoryViewModelAPI, publishQueue)
     }
+
+    override fun publish(
+        repositoryViewModelAPI: RepositoryViewModelAPI,
+        publishQueue: PublishQueue
+    ): Boolean {
+        return super.publish(repositoryViewModelAPI, publishQueue) && publishable
+    }
 }

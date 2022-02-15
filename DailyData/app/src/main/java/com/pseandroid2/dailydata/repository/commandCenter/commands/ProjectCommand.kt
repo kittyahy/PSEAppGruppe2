@@ -32,11 +32,7 @@ abstract class ProjectCommand(
         fun isPossible(project: Project): Boolean {
             return true
         }
-        /**
-         * Shows whether the implemented command should be send to the server, if performed in an
-         * online project.
-         */
-        const val publishable: Boolean = true
+
     }
 
     /**
@@ -65,10 +61,10 @@ abstract class ProjectCommand(
      * Conditions may depend on the given publishQueue and repositoryViewModelAPI.
 
      */
-    fun publish(
+    open fun publish(
         repositoryViewModelAPI: RepositoryViewModelAPI,
         publishQueue: PublishQueue
     ): Boolean {
-        return onlineProjectID != null && !cameFromServer && publishable
+        return onlineProjectID != null && !cameFromServer
     }
 }

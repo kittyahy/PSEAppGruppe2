@@ -21,4 +21,11 @@ class SetTitle(projectID: Int, private val newTitle: String) :
     ) {
         repositoryViewModelAPI.appDataBase.projectDataDAO().setName(projectID!!, newTitle)
     }
+
+    override fun publish(
+        repositoryViewModelAPI: RepositoryViewModelAPI,
+        publishQueue: PublishQueue
+    ): Boolean {
+        return super.publish(repositoryViewModelAPI, publishQueue) && publishable
+    }
 }

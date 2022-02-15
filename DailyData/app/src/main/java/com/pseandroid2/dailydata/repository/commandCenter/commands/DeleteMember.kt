@@ -23,4 +23,11 @@ class DeleteMember(projectID: Int, private val user: User) :
             .removeUsers(projectID!!, user)
         super.execute(repositoryViewModelAPI, publishQueue)
     }
+
+    override fun publish(
+        repositoryViewModelAPI: RepositoryViewModelAPI,
+        publishQueue: PublishQueue
+    ): Boolean {
+        return super.publish(repositoryViewModelAPI, publishQueue) && publishable
+    }
 }

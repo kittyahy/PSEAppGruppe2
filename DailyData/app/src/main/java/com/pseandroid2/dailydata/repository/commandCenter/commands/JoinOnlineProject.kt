@@ -31,5 +31,12 @@ class JoinOnlineProject(private val onlineID: Long, private val idFlow: MutableS
         super.execute(repositoryViewModelAPI, publishQueue)
     }
 
+    override fun publish(
+        repositoryViewModelAPI: RepositoryViewModelAPI,
+        publishQueue: PublishQueue
+    ): Boolean {
+        return super.publish(repositoryViewModelAPI, publishQueue) && publishable
+    }
+
 
 }

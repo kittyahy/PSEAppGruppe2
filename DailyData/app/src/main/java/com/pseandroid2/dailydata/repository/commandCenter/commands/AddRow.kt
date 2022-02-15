@@ -24,4 +24,11 @@ class AddRow(projectID: Int, private val row: Row) :
         super.execute(repositoryViewModelAPI, publishQueue)
     }
 
+    override fun publish(
+        repositoryViewModelAPI: RepositoryViewModelAPI,
+        publishQueue: PublishQueue
+    ): Boolean {
+        return super.publish(repositoryViewModelAPI, publishQueue) && publishable
+    }
+
 }

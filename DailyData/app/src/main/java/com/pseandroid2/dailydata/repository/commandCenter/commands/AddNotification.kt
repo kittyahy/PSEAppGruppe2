@@ -24,4 +24,11 @@ class AddNotification(projectID: Int, val notification: Notification) :
         super.execute(repositoryViewModelAPI, publishQueue)
     }
 
+    override fun publish(
+        repositoryViewModelAPI: RepositoryViewModelAPI,
+        publishQueue: PublishQueue
+    ): Boolean {
+        return super.publish(repositoryViewModelAPI, publishQueue) && publishable
+    }
+
 }
