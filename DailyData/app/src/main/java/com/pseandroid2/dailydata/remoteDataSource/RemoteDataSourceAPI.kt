@@ -21,6 +21,8 @@
 package com.pseandroid2.dailydata.remoteDataSource
 
 import android.graphics.Bitmap
+import com.pseandroid2.dailydata.model.users.SimpleUser
+import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.remoteDataSource.queue.FetchRequestQueueObserver
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandInfo
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueueObserver
@@ -96,12 +98,20 @@ class RemoteDataSourceAPI @Inject constructor(uAccount: UserAccount?, sManager: 
 
     // -----------------------------UserDetails-------------------------------
     /**
+     * Get the currently signed in user.
+     */
+    fun getUser(): User {
+        return SimpleUser(getUserID(), getUserName())
+    }
+
+    /**
      * Get the id of the currently signed in user
      *
      * @return String: The firebase ID of the signed in user. If no user is signed in return ""
      * @throws java.io.IOException: Input for server or server output was wrong
      * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
+    @Deprecated("getting userids directly is deprecated", ReplaceWith("getUser()"))
     fun getUserID(): String {
         return userAccount.getUserID()
     }
@@ -113,6 +123,7 @@ class RemoteDataSourceAPI @Inject constructor(uAccount: UserAccount?, sManager: 
      * @throws java.io.IOException: Input for server or server output was wrong
      * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
+    @Deprecated("getting userids directly is deprecated", ReplaceWith("getUser()"))
     fun getUserName(): String {
         return userAccount.getUserName()
     }
@@ -124,6 +135,7 @@ class RemoteDataSourceAPI @Inject constructor(uAccount: UserAccount?, sManager: 
      * @throws java.io.IOException: Input for server or server output was wrong
      * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
+    @Deprecated("getting userids directly is deprecated")
     fun getUserEMail(): String {
         return userAccount.getUserEMail()
     }
@@ -135,6 +147,7 @@ class RemoteDataSourceAPI @Inject constructor(uAccount: UserAccount?, sManager: 
      * @throws java.io.IOException: Input for server or server output was wrong
      * @throws ServerNotReachableException: Timeout when trying to communicate with server
      */
+    @Deprecated("getting userids directly is deprecated")
     fun getUserPhotoUrl(): String {
         return userAccount.getUserPhotoUrl()
     }
