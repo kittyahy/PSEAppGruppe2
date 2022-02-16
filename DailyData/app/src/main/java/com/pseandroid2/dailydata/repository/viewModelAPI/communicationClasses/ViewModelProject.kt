@@ -36,6 +36,7 @@ import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddGraph
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddNotification
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddUser
+import com.pseandroid2.dailydata.repository.commandCenter.commands.DeleteProject
 import com.pseandroid2.dailydata.repository.commandCenter.commands.IllegalOperationException
 import com.pseandroid2.dailydata.repository.commandCenter.commands.PublishProject
 import com.pseandroid2.dailydata.repository.commandCenter.commands.SetDescription
@@ -138,7 +139,13 @@ class ViewModelProject(
     }
 
     suspend fun delete() {
-        TODO("deleteProj")
+        mutableIllegalOperation[Operation.DELETE]!!.emit(true)
+        repositoryViewModelAPI.projectHandler.executeQueue.add(
+            DeleteProject(
+                this,
+                repositoryViewModelAPI
+            )
+        )
     }
 
     suspend fun addUser(user: User) {
