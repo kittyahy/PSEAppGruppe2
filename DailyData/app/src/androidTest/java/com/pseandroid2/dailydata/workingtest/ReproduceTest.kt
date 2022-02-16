@@ -39,6 +39,28 @@ class ReproduceTest {
     }
 
     @Ignore
+    @InternalCoroutinesApi
+    @Test
+    fun addGraphTest() {
+        composeRule.setContent {
+            Main()
+        }
+        composeRule.onNodeWithText("Add new Project").performClick()
+        composeRule.onNodeWithText("Add Title").performTextInput("LiniengraphProjekt")
+        composeRule.onNodeWithText("Add Table Column").performClick()
+        composeRule.onNodeWithText("Name").performTextInput("XAchse")
+        composeRule.onNodeWithText("Unit").performTextInput("X")
+        composeRule.onNodeWithText("OK").performClick()
+        composeRule.onNodeWithText("Button").performClick()
+        composeRule.onNodeWithText("Name").performTextInput("XWert")
+        composeRule.onNodeWithText("Unit").performTextInput("1")
+        composeRule.onNodeWithText("OK").performClick()
+        composeRule.onNodeWithText("Add Graph").performClick()
+        composeRule.onNodeWithText("Line Chart").performClick()
+        composeRule.onNodeWithText("Save").performClick()
+    }
+
+    @Ignore
     //@assert(needs a project with name Kresse)
     @InternalCoroutinesApi
     @Test
