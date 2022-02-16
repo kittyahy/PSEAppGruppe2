@@ -20,9 +20,11 @@ class CreateProject(
         fun isPossible(viewModelProject: ViewModelProject): Boolean {
             return ProjectCommand.isPossible(viewModelProject)
         }
-    }
 
-    override val publishable: Boolean = false
+        const val isAdminOperation: Boolean = false
+
+        const val publishable: Boolean = false
+    }
 
     override suspend fun execute() {
         @Suppress("Deprecation")
@@ -32,6 +34,8 @@ class CreateProject(
         super.execute()
     }
 
+    //TODO which one is the correct one? Commented function is the one on my local branch but as I didnt change anything there it was on main at some point at least...
+/*<<<<<<< HEAD
     override suspend fun publish(): Boolean {
         //ReserveServerSlot
         @Suppress("Deprecation")
@@ -43,5 +47,11 @@ class CreateProject(
         repositoryViewModelAPI.appDataBase.projectDataDAO()
             .setOnlineID(projectID!!, onlineProjectID!!)
         return super.publish()
+=======*/
+    override suspend fun publish(
+        repositoryViewModelAPI: RepositoryViewModelAPI,
+        publishQueue: PublishQueue
+    ): Boolean {
+        return super.publish() && publishable
     }
 }

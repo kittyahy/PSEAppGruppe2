@@ -1,10 +1,7 @@
 package com.pseandroid2.dailydata.repository.commandCenter.commands
 
 import com.pseandroid2.dailydata.model.project.Project
-import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
-import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ViewModelProject
 import java.time.LocalDateTime
 
 /**
@@ -20,7 +17,6 @@ import java.time.LocalDateTime
  */
 abstract class ProjectCommand(
     var projectID: Int? = null,
-    var onlineProjectID: Long? = null, //Todo Überall noch setzen
     var wentOnline: LocalDateTime? = null,
     var serverRemoveTime: LocalDateTime? = null,
     var commandByUser: String? = null,
@@ -35,13 +31,8 @@ abstract class ProjectCommand(
         fun isPossible(viewModelProject: Project): Boolean {
             return true
         }
-    }
 
-    /**
-     * Shows whether the implemented command should be send to the server, if performed in an
-     * online project.
-     */
-    abstract val publishable: Boolean
+    }
 
     /**
      * Must be set to true if a command obj was received from the server and not created by the
@@ -55,7 +46,7 @@ abstract class ProjectCommand(
      */
     open suspend fun execute() {
         if (publish()) {
-            //TODO("PublishQueue should be exposed from RVMAPI")
+            TODO("PublishQueue should be exposed from RVMAPI")
             //publishQueue.add(this)
         }
     }
@@ -68,6 +59,6 @@ abstract class ProjectCommand(
 
      */
     open suspend fun publish(): Boolean {
-        return onlineProjectID != null && !cameFromServer && publishable
+        return !cameFromServer
     }
 }

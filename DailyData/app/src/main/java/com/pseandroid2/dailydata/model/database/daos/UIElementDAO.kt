@@ -20,12 +20,14 @@
 
 package com.pseandroid2.dailydata.model.database.daos
 
+import android.util.Log
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.pseandroid2.dailydata.model.database.entities.UIElementMap
 import com.pseandroid2.dailydata.model.uielements.UIElement
+import com.pseandroid2.dailydata.util.Consts.LOG_TAG
 import com.pseandroid2.dailydata.util.SortedIntListUtil
 import kotlinx.coroutines.flow.Flow
 import java.util.SortedSet
@@ -36,7 +38,7 @@ import java.util.TreeSet
  */
 @Dao
 abstract class UIElementDAO {
-    private val existingIds: MutableMap<Int, out SortedSet<Int>> = mutableMapOf<Int, TreeSet<Int>>()
+    private val existingIds: MutableMap<Int, SortedSet<Int>> = mutableMapOf()
 
     /**
      * It provides all UiElements which belong to the given project.
@@ -64,6 +66,12 @@ abstract class UIElementDAO {
                 element.state
             )
         )
+
+        if (existingIds[projectId] == null) {
+            existingIds[projectId] = sortedSetOf()
+        }
+        existingIds[projectId]!!.add(id)
+
         return id
     }
 
@@ -114,4 +122,5 @@ abstract class UIElementDAO {
         //Get the next missing id
         return SortedIntListUtil.getFirstMissingInt(list)
     }
+
 }

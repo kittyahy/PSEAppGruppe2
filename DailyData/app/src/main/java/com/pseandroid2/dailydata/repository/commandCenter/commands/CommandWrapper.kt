@@ -7,9 +7,6 @@ class CommandWrapper(command: ProjectCommand) {
     private val commandCanonicalName: String = canonicalNameFrom(command)
     private val commandJson: String = jsonFrom(command)
 
-    init {
-        assert(command.onlineProjectID != null)
-    }
 
     companion object {
         @JvmStatic
@@ -36,11 +33,10 @@ class CommandWrapper(command: ProjectCommand) {
 
     private fun unwrap(): ProjectCommand {
         //Cast cannot fail, because constructor ensures that commandCanonicalName is the canonical name of a child of ProjectCommand
+        @Suppress("Unchecked_Cast")
         val type: Class<out ProjectCommand> =
             Class.forName(commandCanonicalName) as Class<out ProjectCommand>
-        val projectCommand = Gson().fromJson(commandJson, type)
-        assert(projectCommand.onlineProjectID != null)
-        return projectCommand
+        return Gson().fromJson(commandJson, type)
     }
 
 }

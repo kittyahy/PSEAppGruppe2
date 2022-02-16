@@ -10,14 +10,20 @@ class AddRow(projectID: Int, private val row: Row, api: RepositoryViewModelAPI) 
         fun isPossible(viewModelProject: ViewModelProject): Boolean {
             return ProjectCommand.isPossible(viewModelProject)
         }
-    }
 
-    override val publishable: Boolean = true
+        const val isAdminOperation: Boolean = false
+
+        const val publishable: Boolean = true
+    }
 
     override suspend fun execute() {
         @Suppress("Deprecation")
         repositoryViewModelAPI.appDataBase.tableContentDAO().insertRow(row, projectID!!)
         super.execute()
+    }
+
+    override suspend fun publish(): Boolean {
+        return super.publish() && publishable
     }
 
 }

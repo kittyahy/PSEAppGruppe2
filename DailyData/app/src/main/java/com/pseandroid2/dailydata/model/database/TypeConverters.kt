@@ -20,6 +20,7 @@
 
 package com.pseandroid2.dailydata.model.database
 
+import android.util.Log
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.pseandroid2.dailydata.model.graph.GraphType
@@ -40,7 +41,7 @@ class DateTimeConversion {
      */
     @TypeConverter
     fun dateTimeToLong(dateTime: LocalDateTime): Long {
-        return dateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+        return  dateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
     }
 
     /**

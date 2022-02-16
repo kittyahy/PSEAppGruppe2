@@ -30,6 +30,7 @@ import java.time.LocalDateTime
  * @param wentOnline:       the time, when the Delta initially was added to the server
  */
 data class ProjectCommandInfo(
+    val onlineProjectID: Long,
     val commandByUser: String = "",
     val isProjectAdmin: Boolean = false,
     val projectCommand: String = "",

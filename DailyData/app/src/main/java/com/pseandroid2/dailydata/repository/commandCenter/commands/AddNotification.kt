@@ -1,8 +1,7 @@
 package com.pseandroid2.dailydata.repository.commandCenter.commands
 
-import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
-import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
 import com.pseandroid2.dailydata.model.notifications.Notification
+import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ViewModelProject
 
 class AddNotification(projectID: Int, val notification: Notification, api: RepositoryViewModelAPI) :
@@ -11,15 +10,21 @@ class AddNotification(projectID: Int, val notification: Notification, api: Repos
         fun isPossible(viewModelProject: ViewModelProject): Boolean {
             return ProjectCommand.isPossible(viewModelProject)
         }
-    }
 
-    override val publishable: Boolean = false
+        const val isAdminOperation: Boolean = false
+
+        const val publishable: Boolean = false
+    }
 
     override suspend fun execute() {
         @Suppress("Deprecation")
         repositoryViewModelAPI.appDataBase.notificationsDAO()
             .insertNotification(projectID!!, notification)
         super.execute()
+    }
+
+    override suspend fun publish(): Boolean {
+        return super.publish() && publishable
     }
 
 }

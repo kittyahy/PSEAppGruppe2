@@ -63,6 +63,9 @@ abstract class ProjectDataDAO {
     @Query("SELECT isOnline FROM project WHERE id = :id")
     abstract fun isOnline(id: Int): Flow<Boolean>
 
+    @Query("UPDATE project SET isOnline = :isOnline WHERE id = :id")
+    abstract fun setOnline(isOnline: Boolean, id: Int)
+
     @Query("SELECT onlineId FROM project WHERE id = :id")
     abstract fun getOnlineId(id: Int): Long
 

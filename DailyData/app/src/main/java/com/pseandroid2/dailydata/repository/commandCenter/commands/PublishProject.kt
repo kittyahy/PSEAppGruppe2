@@ -1,24 +1,23 @@
 package com.pseandroid2.dailydata.repository.commandCenter.commands
 
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
-import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ViewModelProject
 
-class PublishProject(private val viewModelProject: ViewModelProject, api: RepositoryViewModelAPI) : ProjectCommand(projectID = viewModelProject.id, repositoryViewModelAPI = api) {
-
-    override val publishable: Boolean = false
-
-    override suspend fun publish(): Boolean {
-        return super.publish()
-    }
+class PublishProject(private val viewModelProject: ViewModelProject, api: RepositoryViewModelAPI) :
+    ProjectCommand(projectID = viewModelProject.id, repositoryViewModelAPI = api) {
 
     companion object {
         fun isPossible(viewModelProject: ViewModelProject): Boolean {
             return !viewModelProject.isOnline
         }
+
+        const val isAdminOperation: Boolean = false
+
+        const val publishable: Boolean = false
     }
 
     override suspend fun execute() {
+        @Suppress("Deprecation")
         repositoryViewModelAPI.appDataBase.projectDataDAO().setOnlineID(
             viewModelProject.id,
             repositoryViewModelAPI.remoteDataSourceAPI.createNewOnlineProject("")
@@ -38,6 +37,10 @@ class PublishProject(private val viewModelProject: ViewModelProject, api: Reposi
                 )
             )*/
         }
+    }
+
+    override suspend fun publish(): Boolean {
+        return super.publish() && publishable
     }
 
 }

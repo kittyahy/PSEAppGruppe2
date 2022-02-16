@@ -16,15 +16,21 @@ class AddButton(
         fun isPossible(viewModelProject: ViewModelProject): Boolean {
             return ProjectCommand.isPossible(viewModelProject)
         }
-    }
 
-    override val publishable: Boolean = false
+        const val isAdminOperation: Boolean = false
+
+        const val publishable: Boolean = false
+    }
 
     override suspend fun execute() {
         @Suppress("Deprecation")
         repositoryViewModelAPI.appDataBase.uiElementDAO()
             .insertUIElement(projectID!!, col, uiElement)
         super.execute()
+    }
+
+    override suspend fun publish(): Boolean {
+        return super.publish() && publishable
     }
 
 }

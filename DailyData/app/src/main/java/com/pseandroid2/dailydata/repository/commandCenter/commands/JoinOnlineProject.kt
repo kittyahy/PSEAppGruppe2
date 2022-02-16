@@ -6,14 +6,20 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Vi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 
-class JoinOnlineProject(private val onlineID: Long, private val idFlow: MutableSharedFlow<Int>, api: RepositoryViewModelAPI) :
-    ProjectCommand(onlineProjectID = onlineID, repositoryViewModelAPI = api) {
-    override val publishable: Boolean = false
 
+class JoinOnlineProject(
+    private val onlineID: Long,
+    private val idFlow: MutableSharedFlow<Int>,
+    api: RepositoryViewModelAPI
+) : ProjectCommand(repositoryViewModelAPI = api) {
     companion object {
         fun isPossible(): Boolean {
             return false
         }
+
+        const val isAdminOperation: Boolean = false
+
+        const val publishable: Boolean = false
     }
 
     override suspend fun execute() {
@@ -29,8 +35,12 @@ class JoinOnlineProject(private val onlineID: Long, private val idFlow: MutableS
         CreateProject(onlineProject, idFlow, repositoryViewModelAPI).execute()
         val id: Int = idFlow.first()
         @Suppress("DEPRECATION")
-        repositoryViewModelAPI.appDataBase.projectDataDAO().setOnlineID(id, onlineProjectID!!)
+        repositoryViewModelAPI.appDataBase.projectDataDAO().setOnlineID(id, onlineID)
         super.execute()
+    }
+
+    override suspend fun publish(): Boolean {
+        return super.publish() && publishable
     }
 
 

@@ -12,13 +12,23 @@ class DeleteMember(projectID: Int, private val user: User, api: RepositoryViewMo
         fun isPossible(project: Project): Boolean {
             return project.users.size > 2 && project.isOnline
         }
+
+        const val isAdminOperation: Boolean = true
+
+        const val publishable: Boolean = true
     }
 
-    override val publishable: Boolean = true
     override suspend fun execute() {
         @Suppress("Deprecation")
         repositoryViewModelAPI.appDataBase.projectDataDAO()
             .removeUsers(projectID!!, user)
         super.execute()
+    }
+
+    override suspend fun publish(
+        repositoryViewModelAPI: RepositoryViewModelAPI,
+        publishQueue: PublishQueue
+    ): Boolean {
+        return super.publish() && publishable
     }
 }
