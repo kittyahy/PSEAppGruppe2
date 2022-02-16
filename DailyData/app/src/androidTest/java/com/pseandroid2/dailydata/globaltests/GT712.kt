@@ -1,10 +1,8 @@
 package com.pseandroid2.dailydata.globaltests
 
-import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onFirst
-import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
@@ -14,27 +12,12 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
-import java.time.LocalDateTime
-import java.time.LocalTime
 
-class CreateProjectAndChangeSettingsTest {
+class GT712 {
 
     @get:Rule
     val composeRule = createAndroidComposeRule<MainActivity>()
 
-
-    /**
-     * tests: "Projekterstellung öffnen", 7.1.1
-     */
-    @InternalCoroutinesApi
-    @Test
-    fun openProjectCreation() {
-        composeRule.setContent {
-            Main()
-        }
-        composeRule.onNodeWithText("Add new Project").performClick()
-        composeRule.onNodeWithTag("projectCreation").assertIsDisplayed()
-    }
 
     @Ignore
     /**
@@ -81,4 +64,5 @@ class CreateProjectAndChangeSettingsTest {
         composeRule.onNodeWithText("Add new Project").assertExists()
         composeRule.onAllNodes(matcher = hasText("Kresse")).onFirst().assertExists()
     }
+
 }
