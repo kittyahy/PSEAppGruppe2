@@ -54,9 +54,7 @@ abstract class UIElementDAO {
         columnId: Int,
         element: UIElement
     ): Int {
-        Log.d(LOG_TAG, "in insert UI Element")
         val id: Int = getNextId(projectId)
-        Log.d(LOG_TAG, "Element: " + element.name + " ProjektID: " + projectId + " Id: " + id)
         insertUIElementMap(
             UIElementMap(
                 projectId,
@@ -67,8 +65,6 @@ abstract class UIElementDAO {
                 element.state
             )
         )
-
-        Log.d(LOG_TAG, "ExsistingIds" + existingIds[projectId] + " id: " + id)
 
         if (existingIds[projectId] == null) {
             existingIds[projectId] = sortedSetOf()
@@ -122,7 +118,6 @@ abstract class UIElementDAO {
         //Get the List of existing Ids for the project
         val list: List<Int> = ArrayList(existingIds[projectId] ?: sortedSetOf())
 
-        Log.d(LOG_TAG, list.toString())
         //Get the next missing id
         return SortedIntListUtil.getFirstMissingInt(list)
     }
