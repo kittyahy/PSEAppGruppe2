@@ -17,8 +17,8 @@ class CreateProject(
 ) {
 
     companion object {
-        fun isPossible(viewModelProject: ViewModelProject): Boolean {
-            return ProjectCommand.isPossible(viewModelProject)
+        fun isIllegal(viewModelProject: ViewModelProject): Boolean {
+            return ProjectCommand.isIllegal(viewModelProject)
         }
     }
 

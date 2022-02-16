@@ -8,8 +8,8 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Vi
 
 class AddUser(private val id: Int, private val user: User, api: RepositoryViewModelAPI) : ProjectCommand(projectID = id, repositoryViewModelAPI = api) {
     companion object {
-        fun isPossible(viewModelProject: ViewModelProject): Boolean {
-            return viewModelProject.users.size < 24 && viewModelProject.isOnline
+        fun isIllegal(viewModelProject: ViewModelProject): Boolean {
+            return viewModelProject.users.size >= 24 || !viewModelProject.isOnline
         }
     }
 

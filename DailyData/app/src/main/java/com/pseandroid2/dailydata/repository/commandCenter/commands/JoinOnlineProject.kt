@@ -12,8 +12,8 @@ class JoinOnlineProject(private val onlineID: Long, private val idFlow: MutableS
     override val publishable: Boolean = false
 
     companion object {
-        fun isPossible(): Boolean {
-            return false
+        fun isIllegal(): Boolean {
+            return true
         }
     }
 

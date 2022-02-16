@@ -9,8 +9,8 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Vi
 class DeleteMember(projectID: Int, private val user: User, api: RepositoryViewModelAPI) :
     ProjectCommand(projectID = projectID, repositoryViewModelAPI = api) {
     companion object {
-        fun isPossible(project: Project): Boolean {
-            return project.users.size > 2 && project.isOnline
+        fun isIllegal(project: Project): Boolean {
+            return project.users.size < 2 || !project.isOnline
         }
     }
 

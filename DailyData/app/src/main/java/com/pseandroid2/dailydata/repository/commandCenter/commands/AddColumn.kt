@@ -11,13 +11,13 @@ class AddColumn(projectID: Int, specs: ColumnData, api: RepositoryViewModelAPI) 
     override val publishable: Boolean = true
 
     companion object {
-        fun isPossible(viewModelProject: ViewModelProject, type: DataType): Boolean {
+        fun isIllegal(viewModelProject: ViewModelProject, type: DataType): Boolean {
             var total = DataType.storageSizeBaseline
             for (col in viewModelProject.table.layout) {
                 total += col.type.storageSize
             }
             total += type.storageSize
-            return total <= DataType.maxStorageSize
+            return total > DataType.maxStorageSize
         }
     }
 

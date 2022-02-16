@@ -1,10 +1,10 @@
 package com.pseandroid2.dailydata.repository.commandCenter.commands
 
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
-import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ViewModelProject
 
-class PublishProject(private val viewModelProject: ViewModelProject, api: RepositoryViewModelAPI) : ProjectCommand(projectID = viewModelProject.id, repositoryViewModelAPI = api) {
+class PublishProject(private val viewModelProject: ViewModelProject, api: RepositoryViewModelAPI) :
+    ProjectCommand(projectID = viewModelProject.id, repositoryViewModelAPI = api) {
 
     override val publishable: Boolean = false
 
@@ -13,8 +13,8 @@ class PublishProject(private val viewModelProject: ViewModelProject, api: Reposi
     }
 
     companion object {
-        fun isPossible(viewModelProject: ViewModelProject): Boolean {
-            return !viewModelProject.isOnline
+        fun isIllegal(viewModelProject: ViewModelProject): Boolean {
+            return viewModelProject.isOnline
         }
     }
 

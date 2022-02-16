@@ -7,8 +7,8 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Vi
 
 class AddGraph(val id: Int, val graph: Graph<*, *>, api: RepositoryViewModelAPI) : ProjectCommand(projectID = id, repositoryViewModelAPI = api) {
     companion object {
-        fun isPossible(viewModelProject: ViewModelProject): Boolean {
-            return ProjectCommand.isPossible(viewModelProject)
+        fun isIllegal(viewModelProject: ViewModelProject): Boolean {
+            return ProjectCommand.isIllegal(viewModelProject)
         }
     }
 

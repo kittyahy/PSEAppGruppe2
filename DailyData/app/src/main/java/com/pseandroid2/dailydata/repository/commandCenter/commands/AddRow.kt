@@ -7,8 +7,8 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Vi
 class AddRow(projectID: Int, private val row: Row, api: RepositoryViewModelAPI) :
     ProjectCommand(projectID = projectID, repositoryViewModelAPI = api) {
     companion object {
-        fun isPossible(viewModelProject: ViewModelProject): Boolean {
-            return ProjectCommand.isPossible(viewModelProject)
+        fun isIllegal(viewModelProject: ViewModelProject): Boolean {
+            return ProjectCommand.isIllegal(viewModelProject)
         }
     }
 

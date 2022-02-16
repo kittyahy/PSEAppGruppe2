@@ -2,7 +2,6 @@ package com.pseandroid2.dailydata.repository.commandCenter.commands
 
 import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
-import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
 
 class SetWallpaper(projectID: Int, private val newWallpaper: Int, api: RepositoryViewModelAPI) :
     ProjectCommand(projectID = projectID, repositoryViewModelAPI = api) {
@@ -10,8 +9,8 @@ class SetWallpaper(projectID: Int, private val newWallpaper: Int, api: Repositor
     override val publishable = true
 
     companion object {
-        fun isPossible(project: Project): Boolean {
-            return ProjectCommand.isPossible(project)
+        fun isIllegal(project: ViewModelProject): Boolean {
+            return ProjectCommand.isIllegal(project)
         }
     }
 

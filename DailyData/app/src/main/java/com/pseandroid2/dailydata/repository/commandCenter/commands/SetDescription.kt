@@ -1,7 +1,6 @@
 package com.pseandroid2.dailydata.repository.commandCenter.commands
 
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
-import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ViewModelProject
 
 class SetDescription(viewModelProject: ViewModelProject, private val newDescription: String, api: RepositoryViewModelAPI) :
@@ -10,8 +9,8 @@ class SetDescription(viewModelProject: ViewModelProject, private val newDescript
     override val publishable = true
 
     companion object {
-        fun isPossible(project: ViewModelProject): Boolean {
-            return ProjectCommand.isPossible(project)
+        fun isIllegal(project: ViewModelProject): Boolean {
+            return ProjectCommand.isIllegal(project)
         }
     }
 

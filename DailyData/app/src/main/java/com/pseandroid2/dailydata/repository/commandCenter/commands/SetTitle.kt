@@ -1,7 +1,6 @@
 package com.pseandroid2.dailydata.repository.commandCenter.commands
 
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
-import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ViewModelProject
 
 class SetTitle(
@@ -15,8 +14,8 @@ class SetTitle(
 
     companion object {
 
-        fun isPossible(project: ViewModelProject): Boolean {
-            return ProjectCommand.isPossible(project)
+        fun isIllegal(project: ViewModelProject): Boolean {
+            return ProjectCommand.isIllegal(project)
         }
     }
 
