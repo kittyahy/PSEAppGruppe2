@@ -43,17 +43,14 @@ import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pseandroid2.dailydata.R
-import com.pseandroid2.dailydata.model.graph.FloatLineChart
 import com.pseandroid2.dailydata.model.graph.Graph.Companion.LINE_CHART_STR
-import com.pseandroid2.dailydata.model.graph.GraphType
 import com.pseandroid2.dailydata.model.table.ColumnData
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
+import com.pseandroid2.dailydata.model.graph.Graph
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Notification
 import com.pseandroid2.dailydata.ui.composables.ButtonElement
 import com.pseandroid2.dailydata.ui.composables.ListInput
@@ -63,6 +60,7 @@ import com.pseandroid2.dailydata.ui.composables.WallpaperElement
 import com.pseandroid2.dailydata.ui.project.creation.BackDialog
 import com.pseandroid2.dailydata.ui.project.creation.ButtonDialog
 import com.pseandroid2.dailydata.ui.project.creation.GraphDialog
+import com.pseandroid2.dailydata.ui.project.creation.GraphNameDialog
 import com.pseandroid2.dailydata.ui.project.creation.MappingDialog
 import com.pseandroid2.dailydata.ui.project.creation.NotificationDialog
 import com.pseandroid2.dailydata.ui.project.creation.TableDialog
@@ -128,7 +126,7 @@ fun ProjectDataSettingsScreen(
         ) {
             TextInput(
                 placeholder = "Add Title",
-                value = viewModel.title,
+                value = viewModel.project.value!!.name,
                 onValueChange = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnTitleChange(it)) }
 
             )
@@ -179,12 +177,12 @@ fun ProjectDataSettingsScreen(
                     onClick = { viewModel.onEvent(ProjectDataSettingsScreenEvent.OnCreateLink) },
                     onClickItem = { _, user ->
                         viewModel.onEvent(
-                            ProjectDataSettingsScreenEvent.OnMemberRemove((user.first as User).getId())
+                            ProjectDataSettingsScreenEvent.OnUserRemove(user.first as User)
                         )
                     },
                     elements = viewModel.project.value!!.users.map {
                         Pair(it, "${it.getName()} #${it.getId()}")
-                    } //TODO("Repository if the user is listed : make function to get user")
+                    }
                 )
             }
             Divider()
@@ -223,7 +221,7 @@ fun ProjectDataSettingsScreen(
                         @Suppress("Unchecked_Cast")
                         val columnData = col.first as ColumnData
                         viewModel.onEvent(
-                            ProjectDataSettingsScreenEvent.OnTableRemove(columnData.id)
+                            ProjectDataSettingsScreenEvent.OnColumnRemove(columnData.id)
                         )
                     },
                     elements = viewModel.project.value!!.table.layout.map {
@@ -360,6 +358,17 @@ fun ProjectDataSettingsScreen(
                 },
                 layout = viewModel.project.value!!.table.layout
             )
+            GraphNameDialog(
+                isOpen = viewModel.isGraphNameDialogOpen,
+                onDismissRequest = {
+                    viewModel.onEvent(
+                        ProjectDataSettingsScreenEvent.OnShowGraphNameDialog(false)
+                    )
+                },
+                onClick = { name ->
+                    viewModel.onEvent(ProjectDataSettingsScreenEvent.OnChoseGraphName(name))
+                }
+            )
             GraphDialog(
                 isOpen = viewModel.isGraphDialogOpen,
                 onDismissRequest = {
@@ -376,11 +385,7 @@ fun ProjectDataSettingsScreen(
                             ProjectDataSettingsScreenEvent.OnShowMappingDialog(true)
                         )
                     }
-                    viewModel.onEvent(
-                        ProjectDataSettingsScreenEvent.OnGraphAdd(
-                            GraphType.getTypeForRep(graphType)
-                        )
-                    )
+                    viewModel.onEvent(ProjectDataSettingsScreenEvent.OnGraphAdd)
                     viewModel.onEvent(ProjectDataSettingsScreenEvent.OnShowGraphDialog(false))
                 }
             )
@@ -394,14 +399,16 @@ fun ProjectDataSettingsScreen(
                         )
                     )
                 },
-                onClickItem = {
+                onClickItem = { _, graph ->
                     viewModel.onEvent(
                         ProjectDataSettingsScreenEvent.OnGraphRemove(
-                            index = it
+                            (graph.first as Graph<*, *>).id
                         )
                     )
                 },
-                elements = viewModel.graphs.map { it.typeName }
+                elements = viewModel.project.value!!.graphs.map {
+                    Pair(it, it.getType().representation)
+                }
             )
             ButtonElement(
                 icon = Icons.Default.ExitToApp,
@@ -415,5 +422,4 @@ fun ProjectDataSettingsScreen(
             )
         }
     }
-}
 }

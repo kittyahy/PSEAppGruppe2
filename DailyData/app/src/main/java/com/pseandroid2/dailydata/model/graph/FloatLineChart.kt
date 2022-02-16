@@ -4,7 +4,7 @@ import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.settings.Settings
 
 class FloatLineChart(
-    id: Int,
+    id: Int = -1,
     transformation: Project.DataTransformation<Map<Float, Float>>,
     settings: Settings,
     path: String? = null

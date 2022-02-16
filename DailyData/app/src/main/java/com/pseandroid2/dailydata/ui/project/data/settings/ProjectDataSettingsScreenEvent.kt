@@ -18,7 +18,7 @@ sealed class ProjectDataSettingsScreenEvent {
     data class OnTableAdd(val name: String, val unit: String, val dataType: DataType) :
         ProjectDataSettingsScreenEvent()
 
-    data class OnTableRemove(val columnId: Int) : ProjectDataSettingsScreenEvent()
+    data class OnColumnRemove(val columnId: Int) : ProjectDataSettingsScreenEvent()
     data class OnButtonAdd(val name: String, val columnId: Int, val value: Int) :
         ProjectDataSettingsScreenEvent()
 
@@ -28,7 +28,7 @@ sealed class ProjectDataSettingsScreenEvent {
 
     data class OnNotificationRemove(val id: Int) : ProjectDataSettingsScreenEvent()
     object OnGraphAdd : ProjectDataSettingsScreenEvent()
-    data class OnGraphRemove(val index: Int) : ProjectDataSettingsScreenEvent()
+    data class OnGraphRemove(val id: Int) : ProjectDataSettingsScreenEvent()
     object OnSaveClick : ProjectDataSettingsScreenEvent()
 
     //dialogs
@@ -41,15 +41,20 @@ sealed class ProjectDataSettingsScreenEvent {
     data class OnShowXAxisDialog(val isOpen: Boolean, val hasSuccessfullyChosen: Boolean = false) :
         ProjectDataSettingsScreenEvent()
 
-    data class OnShowMappingDialog(val isOpen: Boolean, val hasSuccessfullyChosen: Boolean = false) :
-        ProjectDataSettingsScreenEvent()
+    data class OnShowMappingDialog(
+        val isOpen: Boolean,
+        val hasSuccessfullyChosen: Boolean = false
+    ) : ProjectDataSettingsScreenEvent()
+
+    data class OnShowGraphNameDialog(val isOpen: Boolean) : ProjectDataSettingsScreenEvent()
 
     object OnNavigateBack : ProjectDataSettingsScreenEvent()
-    data class OnMemberRemove(val id: String) : ProjectDataSettingsScreenEvent()
+    data class OnUserRemove(val user: User) : ProjectDataSettingsScreenEvent()
 
     data class OnChoseXAxis(val col: Int) : ProjectDataSettingsScreenEvent()
     data class OnChoseGraphType(val graphType: String) : ProjectDataSettingsScreenEvent()
     data class OnChoseMapping(val mapping: List<Int>) : ProjectDataSettingsScreenEvent()
+    data class OnChoseGraphName(val name: String) : ProjectDataSettingsScreenEvent()
 
     object OnLeaveProject : ProjectDataSettingsScreenEvent()
     object OnDeleteProject : ProjectDataSettingsScreenEvent()

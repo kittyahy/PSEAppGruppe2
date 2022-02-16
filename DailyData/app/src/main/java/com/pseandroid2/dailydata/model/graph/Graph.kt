@@ -83,7 +83,7 @@ interface GraphTemplate {
 
 enum class GraphType(val representation: String) {
     INT_LINE_CHART(LINE_CHART_STR),
-    FLOAT_LINE_CHART(LINE_CHART_STR ),
+    FLOAT_LINE_CHART(LINE_CHART_STR),
     TIME_LINE_CHART(LINE_CHART_STR),
     PIE_CHART(PIE_CHART_STR)
 }

@@ -1,7 +1,14 @@
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
-enum class Operation(val type: OperationType) {
-    SET_PROJECT_NAME(OperationType.PROJECT),
+import com.pseandroid2.dailydata.model.project.Project
+import com.pseandroid2.dailydata.repository.commandCenter.commands.SetTitle
+
+enum class Operation(val type: OperationType, val adminOp: Boolean) {
+    SET_PROJECT_NAME(OperationType.PROJECT, SetTitle.isAdminCommand) {
+        override fun isIllegal(project: Project): Boolean {
+            return !SetTitle.isPossible(project)
+        }
+    },
     SET_PROJECT_DESC(OperationType.PROJECT),
     DELETE(OperationType.PROJECT),
     ADD_GRAPH(OperationType.PROJECT),
@@ -22,4 +29,6 @@ enum class Operation(val type: OperationType) {
         GRAPH,
         TABLE
     }
+
+    abstract fun isIllegal(project: Project): Boolean
 }

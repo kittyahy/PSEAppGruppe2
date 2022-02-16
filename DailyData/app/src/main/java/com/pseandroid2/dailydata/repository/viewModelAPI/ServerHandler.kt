@@ -21,6 +21,7 @@
 package com.pseandroid2.dailydata.repository.viewModelAPI
 
 import com.pseandroid2.dailydata.model.database.AppDataBase
+import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
 import com.pseandroid2.dailydata.remoteDataSource.userManager.SignInTypes
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Post
@@ -44,6 +45,9 @@ class ServerHandler(private val appDataBase: AppDataBase, private val api: Remot
         Pair(loginKey, api.getUserName() == "")
     )
     private val isPossibleMap = mutableMapOf<String, MutableSharedFlow<Boolean>>()
+
+    val loggedIn: User
+        get() = api.getUser()
 
     init {
         supportedCommands.forEach {

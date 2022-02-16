@@ -37,7 +37,7 @@ constructor(
     override var admin: User = NullUser(),
     override var isOnline: Boolean = false,
     override var users: MutableList<User>,
-    override var graphs: MutableList<Graph<*, *>> = mutableListOf(),
+    override val graphs: MutableList<Graph<*, *>> = mutableListOf(),
     override val isIllegalOperation: Map<Operation, Flow<Boolean>> = mapOf()
 ) : Project {
 

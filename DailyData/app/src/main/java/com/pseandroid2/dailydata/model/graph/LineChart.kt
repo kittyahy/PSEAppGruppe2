@@ -9,7 +9,7 @@ import com.pseandroid2.dailydata.model.settings.Settings
 import com.pseandroid2.dailydata.model.project.Project
 
 abstract class LineChart<T : Any>(
-    override var id: Int,
+    override var id: Int = -1,
     private val transformation: Project.DataTransformation<Map<T, Float>>,
     private val settings: Settings,
     private val path: String? = null

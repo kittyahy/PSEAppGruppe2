@@ -1,6 +1,6 @@
 package com.pseandroid2.dailydata.model.transformation
 
-class IntLineChartTransformation(id: Identity<out Number>, xCol: Int = 0) :
+class IntLineChartTransformation(id: Identity<out Number> = FloatIdentity(), xCol: Int = 0) :
     LineChartTransformation<Int>(id, LINE_CHART_TYPE_INT, xCol) {
     companion object {
         const val LINE_CHART_TYPE_INT = "INT"

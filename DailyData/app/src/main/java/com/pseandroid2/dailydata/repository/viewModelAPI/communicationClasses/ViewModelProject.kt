@@ -28,14 +28,14 @@ import com.pseandroid2.dailydata.model.project.ProjectSkeleton
 import com.pseandroid2.dailydata.model.project.SimpleSkeleton
 import com.pseandroid2.dailydata.model.table.ArrayListTable
 import com.pseandroid2.dailydata.model.table.ColumnData
-import com.pseandroid2.dailydata.model.table.Table
 import com.pseandroid2.dailydata.model.table.Row
+import com.pseandroid2.dailydata.model.table.Table
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddGraph
-import com.pseandroid2.dailydata.repository.commandCenter.commands.AddUser
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddNotification
+import com.pseandroid2.dailydata.repository.commandCenter.commands.AddUser
 import com.pseandroid2.dailydata.repository.commandCenter.commands.IllegalOperationException
 import com.pseandroid2.dailydata.repository.commandCenter.commands.PublishProject
 import com.pseandroid2.dailydata.repository.commandCenter.commands.SetDescription
@@ -50,16 +50,22 @@ class ViewModelProject(
     override val skeleton: ProjectSkeleton = SimpleSkeleton(),
     override var isOnline: Boolean = false,
     override var table: Table = ArrayListTable(),
-    override var graphs: MutableList<Graph<*, *>> = ArrayList(),
-    override var users: MutableList<User> = mutableListOf(),
+    private var mutableGraphs: MutableList<Graph<*, *>> = mutableListOf(),
+    private var mutableUsers: MutableList<User> = mutableListOf(),
     override var admin: User,
-    val repositoryViewModelAPI: RepositoryViewModelAPI
+    val repo: RepositoryViewModelAPI
 ) : Project {
 
     private val mutableIllegalOperation: Map<Operation, MutableSharedFlow<Boolean>>
     override val isIllegalOperation: Map<Operation, Flow<Boolean>>
 
-    private val executeQueue = repositoryViewModelAPI.projectHandler.executeQueue
+    private val executeQueue = repo.projectHandler.executeQueue
+
+    override val graphs: List<Graph<*, *>>
+        get() = mutableGraphs
+
+    override val users: List<User>
+        get() = mutableUsers
 
     init {
         val operations = mutableMapOf<Operation, MutableSharedFlow<Boolean>>()
@@ -81,10 +87,35 @@ class ViewModelProject(
         isIllegalOperation = immutableOperations.toMap()
     }
 
-    suspend fun addGraph(graph: Graph<*, *>) {
+    override suspend fun setName(name: String) {
+        mutableIllegalOperation[Operation.SET_PROJECT_NAME]!!.emit(false)
+        executeQueue.add(SetTitle(this, name, repo))
+    }
+
+    override suspend fun setDesc(desc: String) {
+        mutableIllegalOperation[Operation.SET_PROJECT_DESC]!!.emit(false)
+        executeQueue.add(SetDescription(this, desc, repo))
+    }
+
+    override suspend fun setPath(path: String) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun setColor(color: Int) {
+        TODO("changeWallpaper")
+    }
+
+    override suspend fun addGraph(graph: Graph<*, *>) {
         mutableIllegalOperation[Operation.ADD_GRAPH]!!.emit(false)
-        @Suppress("DEPRECATION")
-        executeQueue.add(AddGraph(id, graph))
+        executeQueue.add(AddGraph(id, graph, repo))
+    }
+
+    override suspend fun removeGraph(id: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun createTransformationFromString(transformationString: String): Project.DataTransformation<out Any> {
+        TODO("Not yet implemented")
     }
 
     suspend fun addRow(row: Row) {
@@ -95,31 +126,40 @@ class ViewModelProject(
         table.deleteRow(row)
     }
 
-    suspend fun addColumn(specs: ColumnData, default: Any) {
+    override suspend fun addColumn(specs: ColumnData, default: Any) {
         table.addColumn(specs, default)
     }
 
-    suspend fun deleteColumn(column: Int) {
+    override suspend fun deleteColumn(column: Int) {
         table.deleteColumn(column)
     }
 
-    suspend fun addUIElements(col: Int, uiElements: List<UIElement>) {
-        table.addUIElement(col, uiElements)
+    override suspend fun addUIElements(col: Int, uiElement: UIElement) {
+        table.addUIElement(col, uiElement)
     }
 
-    suspend fun deleteUIElement(col: Int, id: Int) {
+    override suspend fun deleteUIElement(col: Int, id: Int) {
         table.removeUIElement(col, id)
     }
 
-    suspend fun delete() {
-        TODO("deleteProj")
+    override suspend fun addNotification(notification: Notification) {
+        mutableIllegalOperation[Operation.ADD_NOTIFICATION]!!.emit(false)
+        executeQueue.add(AddNotification(id, notification, repo))
     }
 
-    suspend fun addUser(user: User) {
+    override suspend fun changeNotification(id: Int, notification: Notification) {
+        TODO("setNotification")
+    }
+
+    override suspend fun removeNotification(id: Int) {
+        mutableIllegalOperation[Operation.DELETE_NOTIFICATION]!!.emit(false)
+        TODO("Not yet implemented after refactoring")
+    }
+
+    override suspend fun addUser(user: User) {
         if (user !in users && users.size < Project.MAXIMUM_PROJECT_USERS) {
             mutableIllegalOperation[Operation.ADD_USER]!!.emit(false)
-            @Suppress("DEPRECATION")
-            executeQueue.add(AddUser(id, user))
+            executeQueue.add(AddUser(id, user, repo))
         } else {
             throw IllegalOperationException(
                 "Could not add the User ${Gson().toJson(user)} to " +
@@ -129,7 +169,11 @@ class ViewModelProject(
         }
     }
 
-    suspend fun removeUser(user: User) {
+    override suspend fun addUsers(usersToAdd: Collection<User>) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun removeUser(user: User) {
         if (user in users && users.size > 1) {
             TODO("deleteMember")
         } else {
@@ -138,52 +182,21 @@ class ViewModelProject(
         }
     }
 
-    suspend fun leaveOnlineProject() {
-        TODO("leaveOnlineProject")
+    override suspend fun publish() {
+        mutableIllegalOperation[Operation.PUBLISH_PROJECT]!!.emit(false)
+        executeQueue.add(PublishProject(this, repo))
     }
 
-    suspend fun setAdmin(user: User) {
-        TODO("setAdmin")
+    override suspend fun setAdmin(admin: User) {
+        mutableIllegalOperation[Operation.SET_ADMIN]!!.emit(false)
+        executeQueue.add(TODO("Set Admin Command"))
     }
 
-    suspend fun setColor(color: Int) {
-        TODO("changeWallpaper")
-    }
-
-    suspend fun changeNotification(notification: Notification) {
-        TODO("setNotification")
-    }
-
-    suspend fun deleteNotification(notification: Notification) {
-        mutableIllegalOperation[Operation.DELETE_NOTIFICATION]!!.emit(false)
-        TODO("Not yet implemented after refactoring")
-    }
-
-    suspend fun addNotification(notification: Notification) {
-        mutableIllegalOperation[Operation.ADD_NOTIFICATION]!!.emit(false)
-        @Suppress("DEPRECATION")
-        executeQueue.add(AddNotification(id, notification))
-    }
-
-    override suspend fun setName(name: String) {
-        mutableIllegalOperation[Operation.SET_PROJECT_NAME]!!.emit(false)
-        @Suppress("DEPRECATION")
-        executeQueue.add(SetTitle(this, name))
-    }
-
-    override suspend fun setDesc(desc: String) {
-        mutableIllegalOperation[Operation.SET_PROJECT_DESC]!!.emit(false)
-        @Suppress("DEPRECATION")
-        executeQueue.add(SetDescription(this, desc))
-    }
-
-    override fun createTransformationFromString(transformationString: String): Project.DataTransformation<out Any> {
+    override suspend fun unlink() {
         TODO("Not yet implemented")
     }
 
-    suspend fun publish() {
-        mutableIllegalOperation[Operation.PUBLISH_PROJECT]!!.emit(false)
-        @Suppress("DEPRECATION")
-        executeQueue.add(PublishProject(this))
+    override suspend fun delete() {
+        TODO("deleteProj")
     }
 }

@@ -1,5 +1,6 @@
 package com.pseandroid2.dailydata.ui.project.data.settings
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -9,34 +10,33 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.pseandroid2.dailydata.model.graph.DateTimeLineChart
-import com.pseandroid2.dailydata.model.graph.Generator.GRAPH_NAME_KEY
 import com.pseandroid2.dailydata.model.graph.Graph
-import com.pseandroid2.dailydata.model.graph.GraphType
 import com.pseandroid2.dailydata.model.notifications.Notification
 import com.pseandroid2.dailydata.model.notifications.TimeNotification
 import com.pseandroid2.dailydata.model.project.Project
-import com.pseandroid2.dailydata.model.settings.MapSettings
 import com.pseandroid2.dailydata.model.table.ArrayListTable
 import com.pseandroid2.dailydata.model.table.ColumnData
 import com.pseandroid2.dailydata.model.table.Table
-import com.pseandroid2.dailydata.model.transformation.DateTimeLineChartTransformation
-import com.pseandroid2.dailydata.model.transformation.FloatIdentity
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.model.uielements.UIElementType
 import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
+import com.pseandroid2.dailydata.ui.grapthstrategy.FloatLineChartStrategy
+import com.pseandroid2.dailydata.ui.grapthstrategy.GraphCreationStrategy
+import com.pseandroid2.dailydata.ui.grapthstrategy.IntLineChartStrategy
+import com.pseandroid2.dailydata.ui.grapthstrategy.PieChartStrategy
+import com.pseandroid2.dailydata.ui.grapthstrategy.TimeLineChartStrategy
 import com.pseandroid2.dailydata.ui.link.appLinks.JoinProjectLinkManager
 import com.pseandroid2.dailydata.ui.project.data.DataTabs
+import com.pseandroid2.dailydata.util.Consts.LOG_TAG
 import com.pseandroid2.dailydata.util.ui.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
 @InternalCoroutinesApi
@@ -51,8 +51,9 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
 
     var isAdmin = false
         private set
-    var title by mutableStateOf("")
-        private set
+
+    /*var title by mutableStateOf("")
+        private set*/
     var description by mutableStateOf("")
         private set
     var wallpaper by mutableStateOf(Color.White)
@@ -75,6 +76,8 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
         private set
     var mapping by mutableStateOf<List<Int>?>(null)
         private set
+    var graphName by mutableStateOf<String?>(null)
+        private set
 
     var isWallpaperDialogOpen by mutableStateOf(false)
         private set
@@ -90,6 +93,8 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
         private set
     var isMappingDialogOpen by mutableStateOf(false)
         private set
+    var isGraphNameDialogOpen by mutableStateOf(false)
+        private set
 
     var isBackDialogOpen by mutableStateOf(false)
         private set
@@ -103,7 +108,7 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
 
     fun onEvent(event: ProjectDataSettingsScreenEvent) {
         when (event) {
-            is ProjectDataSettingsScreenEvent.OnCreate -> { //TODO this really should go
+            /*is ProjectDataSettingsScreenEvent.OnCreate -> { //TODO this really should go
                 viewModelScope.launch {
                     repository.projectHandler.initializeProjectProvider(event.projectId)
                 }
@@ -121,9 +126,15 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
                             initialViewModelProject = project
                         }
                 }
-            }
+            }*/
             is ProjectDataSettingsScreenEvent.OnTitleChange -> {
-                viewModelScope.launch { project.value!!.setName(event.title) }
+                viewModelScope.launch {
+                    if (event.title.isNotBlank()) {
+                        project.value!!.setName(event.title)
+                    } else {
+                        sendUiEvent(UiEvent.ShowToast("Project title must not be empty"))
+                    }
+                }
             }
             is ProjectDataSettingsScreenEvent.OnDescriptionChange -> {
                 viewModelScope.launch { project.value!!.setDesc(event.description) }
@@ -142,9 +153,13 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
                     )
                 }
             }
-            is ProjectDataSettingsScreenEvent.OnTableRemove -> {
+            is ProjectDataSettingsScreenEvent.OnColumnRemove -> {
                 viewModelScope.launch {
-                    project.value!!.table.deleteColumn(event.columnId)
+                    if (project.value!!.table.layout.size > 1) {
+                        project.value!!.deleteColumn(event.columnId)
+                    } else {
+                        sendUiEvent(UiEvent.ShowToast("Project Table must always have at least one column"))
+                    }
                 }
             }
             is ProjectDataSettingsScreenEvent.OnButtonAdd -> {
@@ -180,55 +195,67 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
                 sendUiEvent(UiEvent.CopyToClipboard(link))
             }
             is ProjectDataSettingsScreenEvent.OnGraphAdd -> {
-                if (currentGraphType != null && mapping != null) {
+                viewModelScope.launch {
+                    if (currentGraphType == null || mapping == null) {
+                        Log.e(
+                            LOG_TAG,
+                            "Could not create Graph because graph type or mapping have not" +
+                                    "been set"
+                        )
+                        return@launch
+                    }
+                    var graphStrategy: GraphCreationStrategy? = null
                     when (currentGraphType) {
                         Graph.LINE_CHART_STR -> {
                             if (xAxis != null) {
                                 when (project.value!!.table.layout[xAxis!!].type) {
-                                    DataType.TIME -> {
-                                        val transformation = DateTimeLineChartTransformation(
-                                            FloatIdentity(), xAxis!!
-                                        )
-                                        project.value!!.graphs.add(
-                                            DateTimeLineChart(
-                                                transformation = project.value!!.createDataTransformation(
-                                                    transformation,
-                                                    mapping!!
-                                                ),
-                                                settings = MapSettings(
-                                                    mutableMapOf(
-                                                        Pair(
-                                                            GRAPH_NAME_KEY, "LineChart${
-                                                                LocalDateTime.now().format(
-                                                                    DateTimeFormatter.ISO_TIME
-                                                                )
-                                                            }"
-                                                        )
-                                                    )
-                                                )
-                                            )
-                                        )
-
+                                    DataType.TIME -> graphStrategy = TimeLineChartStrategy()
+                                    DataType.WHOLE_NUMBER -> graphStrategy = IntLineChartStrategy()
+                                    DataType.FLOATING_POINT_NUMBER -> graphStrategy =
+                                        FloatLineChartStrategy()
+                                    else -> {
+                                        /*Nothing to do here*/
                                     }
                                 }
                             }
                         }
-                        Graph.PIE_CHART_STR -> {
-
-                        }
+                        Graph.PIE_CHART_STR -> graphStrategy = PieChartStrategy()
                     }
+                    if (graphStrategy == null) {
+                        Log.e(
+                            LOG_TAG, "Could not create Graph because the chosen graph type was" +
+                                    "not known or no xAxis value was given for a LineChart"
+                        )
+                        return@launch
+
+                    }
+                    val transformation = try {
+                        graphStrategy.createTransformation(xAxis)
+                    } catch (ex: IllegalArgumentException) {
+                        Log.e(LOG_TAG, ex.message ?: "Could not create TransformationFunction")
+                        return@launch
+                    }
+                    project.value!!.addGraph(
+                        graphStrategy.createGraph(
+                            project.value!!.createDataTransformation(transformation, mapping!!),
+                            graphStrategy.createBaseSettings(graphName)
+                        )
+                    )
                 }
-                project.value!!.graphs.add()
             }
             is ProjectDataSettingsScreenEvent.OnGraphRemove -> {
-                val mutable = graphs.toMutableList()
-                mutable.removeAt(index = event.index)
-                graphs = mutable.toList()
+                viewModelScope.launch {
+                    project.value!!.removeGraph(event.id)
+                }
             }
-            is ProjectDataSettingsScreenEvent.OnMemberRemove -> {
-                val mutable = members.toMutableList()
-                mutable.removeAt(event.index)
-                members = mutable.toList()
+            is ProjectDataSettingsScreenEvent.OnUserRemove -> {
+                viewModelScope.launch {
+                    if (event.user != repository.serverHandler.loggedIn) {
+                        project.value!!.removeUser(event.user)
+                    } else {
+                        sendUiEvent(UiEvent.ShowToast("If you want to leave this project, choose \"Leave Project\""))
+                    }
+                }
             }
 
             is ProjectDataSettingsScreenEvent.OnChoseGraphType -> {
@@ -248,7 +275,7 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
                 isTableDialogOpen = event.isOpen
             }
             is ProjectDataSettingsScreenEvent.OnShowButtonsDialog -> {
-                if (event.isOpen && table.none { it.dataType == DataType.WHOLE_NUMBER }) {
+                if (event.isOpen && project.value!!.table.layout.none { it.type == DataType.WHOLE_NUMBER }) {
                     sendUiEvent(UiEvent.ShowToast("Please Enter a compatible column first"))
                 } else {
                     isButtonsDialogOpen = event.isOpen
@@ -272,8 +299,11 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
             is ProjectDataSettingsScreenEvent.OnShowMappingDialog -> {
                 isMappingDialogOpen = event.isOpen
                 if (!event.isOpen && event.hasSuccessfullyChosen) {
-                    onEvent(ProjectDataSettingsScreenEvent.OnGraphAdd())
+                    onEvent(ProjectDataSettingsScreenEvent.OnShowGraphNameDialog(true))
                 }
+            }
+            is ProjectDataSettingsScreenEvent.OnShowGraphNameDialog -> {
+                isGraphNameDialogOpen = event.isOpen
             }
 
             is ProjectDataSettingsScreenEvent.OnNavigateBack -> {
@@ -282,114 +312,15 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
 
             is ProjectDataSettingsScreenEvent.OnLeaveProject -> {
                 viewModelScope.launch {
-                    if (initialViewModelProject.leaveOnlineProjectIsPossible().first()) {
-                        initialViewModelProject.leaveOnlineProject()
-                        sendUiEvent(UiEvent.PopBackStack)
-                    }
+                    project.value!!.removeUser(repository.serverHandler.loggedIn)
+                    project.value!!.unlink()
+                    sendUiEvent(UiEvent.PopBackStack)
                 }
             }
             is ProjectDataSettingsScreenEvent.OnDeleteProject -> {
                 viewModelScope.launch {
-                    if (initialViewModelProject.deleteIsPossible().first()) {
-                        initialViewModelProject.delete()
-                        sendUiEvent(UiEvent.PopBackStack)
-                    }
-                }
-            }
-
-            is ProjectDataSettingsScreenEvent.OnSaveClick -> {
-                when {
-                    title.isBlank() -> sendUiEvent(UiEvent.ShowToast("Please Enter a title"))
-                    table.isEmpty() -> sendUiEvent(UiEvent.ShowToast("Please Enter a column"))
-                    else -> {
-                        viewModelScope.launch {
-                            if (initialViewModelProject.setNameIsPossible().first()) {
-                                initialViewModelProject.setName(name = title)
-                            } else {
-                                sendUiEvent(UiEvent.ShowToast("Could not change title"))
-                            }
-                            if (initialViewModelProject.setDescriptionIsPossible().first()) {
-                                initialViewModelProject.setDescription(description = description)
-                            } else {
-                                sendUiEvent(UiEvent.ShowToast("Could not change description"))
-                            }
-                            if (initialViewModelProject.changeWallpaperIsPossible().first()) {
-                                initialViewModelProject.setColor(image = wallpaper.toArgb())
-                            } else {
-                                sendUiEvent(UiEvent.ShowToast("Could not change wallpaper"))
-                            }
-                            for (column in initialViewModelProject.table) {
-                                if (!table.contains(column) && initialViewModelProject.deleteColumnIsPossible(
-                                        column = column
-                                    ).first()
-                                ) {
-                                    initialViewModelProject.deleteColumn(column = column)
-                                }
-                            }
-                            for (column in table) {                                                                                                     //i assume there is a value
-                                if (!initialViewModelProject.table.contains(column) && initialViewModelProject.addColumnIsPossible()[column.dataType]!!.first()) {
-                                    initialViewModelProject.addColumn(column = column)
-                                }
-                            }
-                            for (button in initialViewModelProject.buttons) {
-                                if (!buttons.contains(button) && initialViewModelProject.deleteButtonIsPossible(
-                                        button = button
-                                    ).first()
-                                ) {
-                                    initialViewModelProject.deleteUIElement(button = button)
-                                }
-                            }
-                            for (button in buttons) {
-                                if (!initialViewModelProject.buttons.contains(button) && initialViewModelProject.addButtonIsPossible()
-                                        .first()
-                                ) {
-                                    initialViewModelProject.addUIElement(button = button)
-                                }
-                            }
-                            for (member in initialViewModelProject.members) {
-                                if (!members.contains(member) && initialViewModelProject.deleteMemberIsPossible(
-                                        member = member
-                                    ).first()
-                                ) {
-                                    initialViewModelProject.removeUser(member = member)
-                                }
-                            }
-                            for (notification in initialViewModelProject.notifications) {
-                                if (!notifications.contains(notification) && initialViewModelProject.deleteNotificationIsPossible(
-                                        notification = notification
-                                    ).first()
-                                ) {
-                                    initialViewModelProject.deleteNotification(notification = notification)
-                                }
-                            }
-                            for (notification in notifications) {
-                                if (!initialViewModelProject.notifications.contains(notification) && initialViewModelProject.addNotificationIsPossible()
-                                        .first()
-                                ) {
-                                    initialViewModelProject.addNotification(notification = notification)
-                                }
-                            }
-                            for (graph in initialViewModelProject.graphs) {
-                                if (!graphs.contains(graph)) {
-                                    viewModelScope.launch {
-                                        if (graph.deleteIsPossible()
-                                                .first() && graph.deleteIsPossible().first()
-                                        ) {
-                                            graph.delete()
-                                        }
-                                    }
-                                }
-                            }
-                            for (graph in graphs) {
-                                if (!initialViewModelProject.graphs.contains(graph) && initialViewModelProject.addGraphIsPossible()
-                                        .first()
-                                ) {
-                                    initialViewModelProject.addGraph(graph = graph)
-                                }
-                            }
-                        }
-                        sendUiEvent(UiEvent.Navigate(DataTabs.INPUT.toString()))
-                    }
+                    project.value!!.delete()
+                    sendUiEvent(UiEvent.PopBackStack)
                 }
             }
         }

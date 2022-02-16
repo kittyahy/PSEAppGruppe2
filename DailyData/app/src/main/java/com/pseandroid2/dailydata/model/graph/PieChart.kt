@@ -9,7 +9,7 @@ import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.settings.Settings
 
 class PieChart(
-    override var id: Int,
+    override var id: Int = -1,
     private val transformation: Project.DataTransformation<Float>,
     private val settings: Settings,
     private val path: String? = null

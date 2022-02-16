@@ -126,7 +126,7 @@ fun TableDialog(
         var nameError by remember { mutableStateOf(false) }
         var unit by remember { mutableStateOf("") }
         var unitError by remember { mutableStateOf(false) }
-        val suggestions = DataType.values().toList().map { it.representation }
+        val suggestions = DataType.values().toList()
         var dataType by remember { mutableStateOf(suggestions.first()) }
 
         Column(
@@ -156,9 +156,11 @@ fun TableDialog(
             )
             Spacer(modifier = Modifier.padding(10.dp))
             EnumDropDownMenu(
-                suggestions = suggestions,
-                value = dataType,
-                onClick = { dataType = suggestions[it] }
+                suggestions = suggestions.map { Pair(it, it.representation) },
+                value = dataType.representation,
+                onClick = { _, type ->
+                    dataType = type.first as DataType
+                }
             )
             Spacer(modifier = Modifier.padding(10.dp))
             Row(
@@ -176,7 +178,7 @@ fun TableDialog(
                         nameError = true
                     }
                     if (!unitError && !nameError) {
-                        onClick(name, unit, DataType.fromString(dataType))
+                        onClick(name, unit, dataType)
                     }
                 }) {
                     Text(text = "OK")
@@ -402,7 +404,7 @@ fun MappingDialog(
             layout.filter { columnData ->
                 columnData.type == DataType.WHOLE_NUMBER
                         || columnData.type == DataType.FLOATING_POINT_NUMBER
-            }.forEachIndexed { index, columnData ->
+            }.forEachIndexed { _, columnData ->
                 Box(modifier = Modifier
                     .padding(8.dp)
                     .fillMaxWidth()
@@ -425,6 +427,53 @@ fun MappingDialog(
             }
             Button(onClick = { onClick(selected) }) {
 
+            }
+        }
+    }
+}
+
+@Composable
+fun GraphNameDialog(
+    isOpen: Boolean,
+    onDismissRequest: () -> Unit,
+    onClick: (String) -> Unit
+) {
+    var nameError by remember { mutableStateOf(false) }
+    var name by remember { mutableStateOf("") }
+
+    AppDialog(isOpen = isOpen, onDismissRequest = { onDismissRequest }) {
+        Column(modifier = Modifier.width(200.dp)) {
+            OutlinedTextField(
+                label = { Text("Name") },
+                value = "",
+                isError = nameError,
+                onValueChange = {
+                    if (it != "") {
+                        name = it
+                        nameError = false
+                    } else {
+                        nameError = true
+                    }
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                TextButton(onClick = onDismissRequest) {
+                    Text(text = "Cancel")
+                }
+                TextButton(onClick = {
+                    if (name.isBlank()) {
+                        nameError = true
+                    }
+                    if (!nameError) {
+                        onClick(name)
+                    }
+                }) {
+                    Text(text = "OK")
+                }
             }
         }
     }

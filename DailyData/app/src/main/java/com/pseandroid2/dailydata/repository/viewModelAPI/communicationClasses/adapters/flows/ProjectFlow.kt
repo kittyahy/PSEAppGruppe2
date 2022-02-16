@@ -36,7 +36,6 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Me
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Notification
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ViewModelProject
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Row
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.toColumnList
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.toViewGraph
 import com.pseandroid2.dailydata.util.Consts.LOG_TAG
 import kotlinx.coroutines.flow.Flow
@@ -55,7 +54,7 @@ class ProjectFlow(
     fun getProject(): Flow<Project> = provider.provideFlow.map { project ->
         val ret = if (project == null) {
             Log.d(LOG_TAG, "Got null Project from database")
-            ViewModelProject(repositoryViewModelAPI = repositoryViewModelAPI)
+            ViewModelProject(repo = repositoryViewModelAPI)
         } else {
             Log.d(LOG_TAG, "Got Project from database: name = ${project.name}, id = ${project.id}")
             val rows = mutableListOf<Row>()

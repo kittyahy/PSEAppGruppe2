@@ -24,9 +24,11 @@ import android.graphics.Bitmap
 import com.pseandroid2.dailydata.model.graph.Graph
 import com.pseandroid2.dailydata.model.graph.GraphTemplate
 import com.pseandroid2.dailydata.model.notifications.Notification
+import com.pseandroid2.dailydata.model.table.ColumnData
 import com.pseandroid2.dailydata.model.table.Table
 import com.pseandroid2.dailydata.model.table.TableLayout
 import com.pseandroid2.dailydata.model.transformation.TransformationFunction
+import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Operation
 import kotlinx.coroutines.flow.Flow
@@ -85,7 +87,11 @@ interface Project {
 
     suspend fun setColor(color: Int)
 
-    var graphs: MutableList<Graph<*, *>>
+    val graphs: List<Graph<*, *>>
+
+    suspend fun addGraph(graph: Graph<*, *>)
+
+    suspend fun removeGraph(id: Int)
 
     var notifications: MutableList<Notification>
         set(value) {
@@ -98,24 +104,47 @@ interface Project {
     /**
      * It adds the given notification to the the project.
      */
-    suspend fun addNotification(notification: Notification) {
-        notifications.add(notification)
-    }
+    suspend fun addNotification(notification: Notification)
 
     suspend fun removeNotification(id: Int)
 
+    suspend fun changeNotification(id: Int, notification: Notification)
+
     var table: Table
 
-    var admin: User
+    suspend fun addColumn(specs: ColumnData, default: Any)
+
+    suspend fun deleteColumn(column: Int)
+
+    suspend fun addUIElements(col: Int, uiElement: UIElement)
+
+    suspend fun deleteUIElement(col: Int, id: Int)
+
+    val admin: User
+
+    suspend fun setAdmin(admin: User)
 
     var isOnline: Boolean
 
-    var users: MutableList<User>
+    /**
+     * Unlinks this project from synchronisation with the server
+     */
+    suspend fun unlink()
+
+    suspend fun publish()
+
+    val users: List<User>
+
+    suspend fun addUser(user: User)
 
     /**
      * It adds all given users to the project.
      */
-    fun addUsers(usersToAdd: Collection<User>) = users.addAll(usersToAdd)
+    suspend fun addUsers(usersToAdd: Collection<User>)
+
+    suspend fun removeUser(user: User)
+
+    suspend fun delete()
 
     /**
      * It creates a transformation for the data of the project from the given String.
@@ -254,12 +283,14 @@ interface ProjectTemplate {
         @Suppress("Deprecation")
         get() = skeleton.color
 
-    var graphs: MutableList<GraphTemplate>
+    val graphs: List<GraphTemplate>
+
+    fun addGraph(graph: GraphTemplate)
 
     /**
      * This function adds all given graphTemplates to the projectTemplate
      */
-    fun addGraphs(graphsToAdd: Collection<GraphTemplate>) = graphs.addAll(graphsToAdd)
+    fun addGraphs(graphsToAdd: Collection<GraphTemplate>)
 
     var notifications: MutableList<Notification>
         set(value) {

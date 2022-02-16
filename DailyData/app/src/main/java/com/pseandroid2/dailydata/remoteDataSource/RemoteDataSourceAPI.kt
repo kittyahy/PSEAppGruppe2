@@ -21,6 +21,8 @@
 package com.pseandroid2.dailydata.remoteDataSource
 
 import android.graphics.Bitmap
+import com.pseandroid2.dailydata.model.users.SimpleUser
+import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.remoteDataSource.queue.FetchRequestQueueObserver
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandInfo
 import com.pseandroid2.dailydata.remoteDataSource.queue.ProjectCommandQueueObserver
@@ -95,6 +97,10 @@ class RemoteDataSourceAPI @Inject constructor(uAccount: UserAccount?, sManager: 
     }
 
     // -----------------------------UserDetails-------------------------------
+    fun getUser(): User {
+        return SimpleUser(getUserID(), getUserName())
+    }
+
     /**
      * Get the id of the currently signed in user
      *

@@ -29,7 +29,7 @@ import kotlinx.coroutines.flow.Flow
  */
 class Post : Identifiable {
     override var id: Int = -1
-    lateinit var postEntries: List<PostEntry>
+    var postEntries: List<PostEntry>
 
     constructor(id: Int, list: List<PostEntry>) {
         this.id = id
@@ -54,7 +54,7 @@ class Post : Identifiable {
     }
 
     override lateinit var executeQueue: ExecuteQueue
-    lateinit var viewModelProject: ViewModelProject
+    override lateinit var viewModelProject: ViewModelProject
 
     override fun deleteIsPossible(): Flow<Boolean> {
         TODO("Not yet implemented")
