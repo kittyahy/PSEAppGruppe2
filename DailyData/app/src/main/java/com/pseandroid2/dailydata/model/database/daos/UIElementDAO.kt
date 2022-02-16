@@ -20,12 +20,14 @@
 
 package com.pseandroid2.dailydata.model.database.daos
 
+import android.util.Log
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.pseandroid2.dailydata.model.database.entities.UIElementMap
 import com.pseandroid2.dailydata.model.uielements.UIElement
+import com.pseandroid2.dailydata.util.Consts.LOG_TAG
 import com.pseandroid2.dailydata.util.SortedIntListUtil
 import kotlinx.coroutines.flow.Flow
 import java.util.SortedSet
@@ -36,7 +38,7 @@ import java.util.TreeSet
  */
 @Dao
 abstract class UIElementDAO {
-    private val existingIds: MutableMap<Int, out SortedSet<Int>> = mutableMapOf<Int, TreeSet<Int>>()
+    private val existingIds: MutableMap<Int, SortedSet<Int>> = mutableMapOf()
 
     /**
      * It provides all UiElements which belong to the given project.
@@ -52,7 +54,9 @@ abstract class UIElementDAO {
         columnId: Int,
         element: UIElement
     ): Int {
+        Log.d(LOG_TAG, "in insert UI Element")
         val id: Int = getNextId(projectId)
+        Log.d(LOG_TAG, "Element: " + element.name + " ProjektID: " + projectId + " Id: " + id)
         insertUIElementMap(
             UIElementMap(
                 projectId,
@@ -63,6 +67,14 @@ abstract class UIElementDAO {
                 element.state
             )
         )
+
+        Log.d(LOG_TAG, "ExsistingIds" + existingIds[projectId] + " id: " + id)
+
+        if (existingIds[projectId] == null) {
+            existingIds[projectId] = sortedSetOf()
+        }
+        existingIds[projectId]!!.add(id)
+
         return id
     }
 
@@ -110,7 +122,9 @@ abstract class UIElementDAO {
         //Get the List of existing Ids for the project
         val list: List<Int> = ArrayList(existingIds[projectId] ?: sortedSetOf())
 
+        Log.d(LOG_TAG, list.toString())
         //Get the next missing id
         return SortedIntListUtil.getFirstMissingInt(list)
     }
+
 }
