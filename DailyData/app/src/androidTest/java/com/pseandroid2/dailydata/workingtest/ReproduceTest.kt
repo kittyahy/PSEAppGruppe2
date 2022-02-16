@@ -1,5 +1,7 @@
 package com.pseandroid2.dailydata.workingtest
 
+import android.app.Application
+import android.os.Looper
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onFirst
@@ -8,17 +10,25 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import com.pseandroid2.dailydata.Main
 import com.pseandroid2.dailydata.MainActivity
+import com.pseandroid2.dailydata.di.AppModule.provideAppDatabase
 import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
-
+/**
+ * Test to reproduce bugs
+ */
 class ReproduceTest {
 
     @get:Rule
     val composeRule = createAndroidComposeRule<MainActivity>()
 
+    /**
+     * If anything needs a project
+     */
     @InternalCoroutinesApi
     @Test
     fun CreateProjectTest() {
@@ -39,9 +49,22 @@ class ReproduceTest {
     }
 
     @Ignore
+    //@assert(needs a project with name Kresse)
     @InternalCoroutinesApi
     @Test
-    fun addGraphTest() {
+    fun addButtonTest() {
+        composeRule.setContent {
+            Main()
+        }
+        composeRule.onAllNodes(matcher = hasText("Kresse")).onFirst().performClick()
+        composeRule.onNodeWithText("Add").assertExists()
+        composeRule.onNodeWithText("Add").performClick()
+    }
+
+    @Ignore
+    @InternalCoroutinesApi
+    @Test
+    fun addAGraphToAProjectTest() {
         composeRule.setContent {
             Main()
         }
@@ -58,18 +81,5 @@ class ReproduceTest {
         composeRule.onNodeWithText("Add Graph").performClick()
         composeRule.onNodeWithText("Line Chart").performClick()
         composeRule.onNodeWithText("Save").performClick()
-    }
-
-    @Ignore
-    //@assert(needs a project with name Kresse)
-    @InternalCoroutinesApi
-    @Test
-    fun addButtonTest() {
-        composeRule.setContent {
-            Main()
-        }
-        composeRule.onAllNodes(matcher = hasText("Kresse")).onFirst().performClick()
-        composeRule.onNodeWithText("Add").assertExists()
-        composeRule.onNodeWithText("Add").performClick()
     }
 }
