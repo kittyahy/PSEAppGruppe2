@@ -43,6 +43,8 @@ interface Notification {
      */
     fun toFactoryString(): String
 
+    val displayString: String
+
     companion object {
         fun fromString(notificationString: String, message: String, id: Int): Notification {
             val splitArray = notificationString.split("|") //Todo Arne validieren

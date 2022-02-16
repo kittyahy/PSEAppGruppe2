@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -16,7 +17,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Button
 import androidx.compose.material.Card
+import androidx.compose.material.Checkbox
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
@@ -38,6 +41,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.pseandroid2.dailydata.model.graph.GraphType
+import com.pseandroid2.dailydata.model.table.ColumnData
+import com.pseandroid2.dailydata.model.table.TableLayout
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
 import com.pseandroid2.dailydata.ui.composables.EnumDropDownMenu
@@ -49,10 +55,10 @@ import java.util.Calendar
 fun AppDialog(
     isOpen: Boolean,
     onDismissRequest: () -> Unit,
-    padding : Dp = 16.dp,
-    Content : @Composable () -> Unit
+    padding: Dp = 16.dp,
+    Content: @Composable () -> Unit
 ) {
-    if(isOpen) {
+    if (isOpen) {
         Dialog(
             onDismissRequest = onDismissRequest
         ) {
@@ -70,9 +76,9 @@ fun AppDialog(
 
 @Composable
 fun WallpaperDialog(
-    isOpen : Boolean,
+    isOpen: Boolean,
     onDismissRequest: () -> Unit,
-    onWallpaperClick : (Wallpapers) -> Unit
+    onWallpaperClick: (Wallpapers) -> Unit
 ) {
     AppDialog(
         isOpen = isOpen,
@@ -88,9 +94,11 @@ fun WallpaperDialog(
                             .height(60.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Column(modifier = Modifier
-                            .size(40.dp)
-                            .wrapContentSize(Alignment.CenterStart)) {
+                        Column(
+                            modifier = Modifier
+                                .size(40.dp)
+                                .wrapContentSize(Alignment.CenterStart)
+                        ) {
                             Box(
                                 modifier = Modifier
                                     .size((25.dp))
@@ -108,9 +116,9 @@ fun WallpaperDialog(
 
 @Composable
 fun TableDialog(
-    isOpen : Boolean,
+    isOpen: Boolean,
     onDismissRequest: () -> Unit,
-    onClick : (String, String, DataType) -> Unit,
+    onClick: (String, String, DataType) -> Unit,
 ) {
     AppDialog(isOpen = isOpen, onDismissRequest = onDismissRequest) {
 
@@ -153,18 +161,21 @@ fun TableDialog(
                 onClick = { dataType = suggestions[it] }
             )
             Spacer(modifier = Modifier.padding(10.dp))
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
                 TextButton(onClick = onDismissRequest) {
                     Text(text = "Cancel")
                 }
                 TextButton(onClick = {
-                    if(unit.isBlank()) {
+                    if (unit.isBlank()) {
                         unitError = true
                     }
-                    if(name.isBlank()) {
+                    if (name.isBlank()) {
                         nameError = true
                     }
-                    if(!unitError && !nameError) {
+                    if (!unitError && !nameError) {
                         onClick(name, unit, DataType.fromString(dataType))
                     }
                 }) {
@@ -179,9 +190,9 @@ fun TableDialog(
 @Composable
 fun ButtonDialog(
     isOpen: Boolean,
-    buttons : List<String>,
+    buttons: List<Pair<Any, String>>,
     onDismissRequest: () -> Unit,
-    onClick: (String, Int, String) -> Unit
+    onClick: (String, Any, String) -> Unit
 ) {
     AppDialog(isOpen = isOpen, onDismissRequest = onDismissRequest) {
         var name by remember { mutableStateOf("") }
@@ -190,6 +201,7 @@ fun ButtonDialog(
         var valueError by remember { mutableStateOf(false) }
 
         var column by remember { mutableStateOf(0) }
+        var selected by remember { mutableStateOf<Any?>(null) }
 
         Column(
             modifier = Modifier
@@ -220,27 +232,31 @@ fun ButtonDialog(
             Spacer(modifier = Modifier.padding(10.dp))
             EnumDropDownMenu(
                 suggestions = buttons,
-                value = buttons[column],
-                onClick = {
-                    column = it
+                value = buttons[column].second,
+                onClick = { col, value ->
+                    column = col
+                    selected = value
                 }
             )
             Spacer(modifier = Modifier.padding(10.dp))
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
                 TextButton(onClick = onDismissRequest) {
                     Text(text = "Cancel")
                 }
                 TextButton(onClick = {
                     try {
                         value.toInt()
-                    } catch (e : NumberFormatException) {
+                    } catch (e: NumberFormatException) {
                         valueError = true
                     }
-                    if(name.isBlank()) {
+                    if (name.isBlank()) {
                         nameError = true
                     }
-                    if(!valueError && !nameError) {
-                        onClick(name, column, value)
+                    if (!valueError && !nameError && selected != null) {
+                        onClick(name, selected!!, value)
                     }
                 }) {
                     Text(text = "OK")
@@ -266,8 +282,9 @@ fun NotificationDialog(
         val hour = calendar[Calendar.HOUR_OF_DAY]
         val minute = calendar[Calendar.MINUTE]
         var time by remember { mutableStateOf(LocalTime.of(currentTime.hour, currentTime.minute)) }
-        val timePickerDialog = TimePickerDialog( context,
-            {_, hour : Int, minute: Int ->
+        val timePickerDialog = TimePickerDialog(
+            context,
+            { _, hour: Int, minute: Int ->
                 time = LocalTime.of(hour, minute)
             }, hour, minute, true
         )
@@ -290,15 +307,22 @@ fun NotificationDialog(
                 modifier = Modifier.fillMaxWidth(),
 
                 ) {
-                Text(modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Left, text = "Selected Time: $time")
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Left,
+                    text = "Selected Time: $time"
+                )
             }
             Spacer(modifier = Modifier.padding(10.dp))
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
                 TextButton(onClick = onDismissRequest) {
                     Text(text = "Cancel")
                 }
                 TextButton(onClick = {
-                    if(message.isBlank()) {
+                    if (message.isBlank()) {
                         messageError = true
                     } else {
                         onClick(message, time)
@@ -330,8 +354,77 @@ fun GraphDialog(
                 ) {
                     Text(text = graph)
                 }
-                if (index < Graph.availableGraphs.lastIndex)
+                if (index < Graph.availableGraphs.lastIndex) {
                     Divider()
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun XAxisSelectionDialog(
+    isOpen: Boolean,
+    onDismissRequest: () -> Unit,
+    onClick: (Int) -> Unit,
+    columns: TableLayout
+) {
+    AppDialog(isOpen = isOpen, onDismissRequest = onDismissRequest) {
+        Column(modifier = Modifier.width(200.dp)) {
+            columns.forEachIndexed { index, columnData ->
+                Box(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth()
+                        .height(32.dp)
+                        .clickable { onClick(columnData.id) }
+                ) {
+                    Text(text = columnData.name)
+                }
+                if (index < columns.size) {
+                    Divider()
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun MappingDialog(
+    isOpen: Boolean,
+    onDismissRequest: () -> Unit,
+    onClick: (List<Int>) -> Unit,
+    layout: TableLayout
+) {
+    val selected: MutableList<Int> = mutableListOf()
+    AppDialog(isOpen = isOpen, onDismissRequest = { onDismissRequest }) {
+        Column(modifier = Modifier.width(200.dp)) {
+            layout.filter { columnData ->
+                columnData.type == DataType.WHOLE_NUMBER
+                        || columnData.type == DataType.FLOATING_POINT_NUMBER
+            }.forEachIndexed { index, columnData ->
+                Box(modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth()
+                    .height(32.dp)
+                    .clickable { }
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight()
+                    ) {
+                        Checkbox(checked = false, onCheckedChange = { wasSelected ->
+                            if (wasSelected) {
+                                selected.add(columnData.id)
+                            }
+                        })
+                        Text(text = columnData.name)
+                    }
+                }
+            }
+            Button(onClick = { onClick(selected) }) {
+
             }
         }
     }
@@ -345,11 +438,13 @@ fun BackDialog(
     onCancelClick: () -> Unit,
 ) {
     AppDialog(isOpen = isOpen, onDismissRequest = onDismissRequest) {
-        Column(modifier = Modifier.width(300.dp)
+        Column(
+            modifier = Modifier.width(300.dp)
         ) {
             Text(
                 modifier = Modifier.padding(16.dp),
-                text = "All edited data will be lost")
+                text = "All edited data will be lost"
+            )
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween

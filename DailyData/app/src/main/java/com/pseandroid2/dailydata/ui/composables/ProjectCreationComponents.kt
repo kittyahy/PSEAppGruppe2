@@ -244,9 +244,9 @@ fun TextInput(
 
 @Composable
 fun EnumDropDownMenu(
-    suggestions: List<String>,
+    suggestions: List<Pair<Any, String>>,
     value: String,
-    onClick: (Int) -> Unit
+    onClick: (Int, Pair<Any, String>) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
     var textFieldSize by remember { mutableStateOf(Size.Zero) }
@@ -282,11 +282,11 @@ fun EnumDropDownMenu(
             suggestions.forEachIndexed { index, label ->
                 DropdownMenuItem(
                     onClick = {
-                        onClick(index)
+                        onClick(index, suggestions[index])
                         expanded = !expanded
                     }
                 ) {
-                    Text(text = label)
+                    Text(text = label.second)
                 }
             }
         }

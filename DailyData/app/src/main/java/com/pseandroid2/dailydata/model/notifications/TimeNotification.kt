@@ -24,6 +24,7 @@ import android.util.Log
 import com.pseandroid2.dailydata.util.Consts.LOG_TAG
 import java.time.LocalDate
 import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 /**
  * This class represents a notification, which can be sent by a given time. It saves,
@@ -32,10 +33,12 @@ import java.time.LocalTime
 class TimeNotification(
     private val messageString: String,
     private val send: LocalTime,
-    initId: Int
+    initId: Int = -1
 ) : Notification {
     private var lastSent: LocalDate = LocalDate.now()
     override var id: Int = initId
+    override val displayString: String
+        get() = send.format(DateTimeFormatter.ISO_TIME)
 
     companion object {
         fun fromString(paramString: String, message: String, id: Int): TimeNotification {

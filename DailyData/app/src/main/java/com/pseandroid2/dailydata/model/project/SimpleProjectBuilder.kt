@@ -110,7 +110,7 @@ class SimpleProjectBuilder : ProjectBuilder<SimpleProject> {
     }
 
     override fun addNotifications(notifications: List<Notification>): ProjectBuilder<SimpleProject> {
-        project.addNotifications(notifications)
+        project.addNotification(notifications)
         return this
     }
 

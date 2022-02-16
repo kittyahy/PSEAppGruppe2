@@ -24,7 +24,6 @@ import android.graphics.Bitmap
 import com.pseandroid2.dailydata.model.graph.Graph
 import com.pseandroid2.dailydata.model.graph.GraphTemplate
 import com.pseandroid2.dailydata.model.notifications.Notification
-import com.pseandroid2.dailydata.model.settings.Settings
 import com.pseandroid2.dailydata.model.table.Table
 import com.pseandroid2.dailydata.model.table.TableLayout
 import com.pseandroid2.dailydata.model.transformation.TransformationFunction
@@ -97,13 +96,13 @@ interface Project {
         get() = skeleton.notifications
 
     /**
-     * It adds all given notification the the project.
+     * It adds the given notification to the the project.
      */
-    fun addNotifications(notificationsToAdd: Collection<Notification>) {
-        for (notification in notificationsToAdd) {
-            notifications.add(notification)
-        }
+    suspend fun addNotification(notification: Notification) {
+        notifications.add(notification)
     }
+
+    suspend fun removeNotification(id: Int)
 
     var table: Table
 
