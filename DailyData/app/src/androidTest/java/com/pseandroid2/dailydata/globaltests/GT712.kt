@@ -22,13 +22,11 @@ class GT712 {
     val composeRule = createAndroidComposeRule<MainActivity>()
 
 
-    @Ignore
+    @Ignore("Graph error, back to Overview is missing")
     @InternalCoroutinesApi
     @Test
     fun createEmptyProjectTest() {
-        composeRule.setContent {
-            Main()
-        }
+
         composeRule.onNodeWithText("Add new Project").performClick()
 
         composeRule.onNodeWithText("Add Title").performTextInput("Kresse")

@@ -1,19 +1,13 @@
 package com.pseandroid2.dailydata.workingtest
 
-import android.app.Application
-import android.os.Looper
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
-import com.pseandroid2.dailydata.Main
 import com.pseandroid2.dailydata.MainActivity
-import com.pseandroid2.dailydata.di.AppModule.provideAppDatabase
 import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
@@ -21,6 +15,7 @@ import org.junit.Test
 /**
  * Test to reproduce bugs
  */
+
 class ReproduceTest {
 
     @get:Rule
@@ -32,9 +27,7 @@ class ReproduceTest {
     @InternalCoroutinesApi
     @Test
     fun CreateProjectTest() {
-        composeRule.setContent {
-            Main()
-        }
+
         composeRule.onNodeWithText("Add new Project").performClick()
         composeRule.onNodeWithText("Add Title").performTextInput("Kresse")
         composeRule.onNodeWithText("Add Table Column").performClick()
@@ -48,26 +41,20 @@ class ReproduceTest {
         composeRule.onNodeWithText("Save").performClick()
     }
 
-    @Ignore
+    @Ignore("needs a Kresse - Project")
     //@assert(needs a project with name Kresse)
     @InternalCoroutinesApi
     @Test
     fun addButtonTest() {
-        composeRule.setContent {
-            Main()
-        }
         composeRule.onAllNodes(matcher = hasText("Kresse")).onFirst().performClick()
         composeRule.onNodeWithText("Add").assertExists()
         composeRule.onNodeWithText("Add").performClick()
     }
 
-    @Ignore
+    @Ignore("To fix")
     @InternalCoroutinesApi
     @Test
     fun addAGraphToAProjectTest() {
-        composeRule.setContent {
-            Main()
-        }
         composeRule.onNodeWithText("Add new Project").performClick()
         composeRule.onNodeWithText("Add Title").performTextInput("LiniengraphProjekt")
         composeRule.onNodeWithText("Add Table Column").performClick()
