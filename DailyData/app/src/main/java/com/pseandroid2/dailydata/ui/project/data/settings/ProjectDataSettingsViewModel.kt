@@ -9,12 +9,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.pseandroid2.dailydata.model.graph.DateTimeLineChart
+import com.pseandroid2.dailydata.model.graph.Generator.GRAPH_NAME_KEY
 import com.pseandroid2.dailydata.model.graph.Graph
+import com.pseandroid2.dailydata.model.graph.GraphType
 import com.pseandroid2.dailydata.model.notifications.Notification
+import com.pseandroid2.dailydata.model.notifications.TimeNotification
 import com.pseandroid2.dailydata.model.project.Project
+import com.pseandroid2.dailydata.model.settings.MapSettings
 import com.pseandroid2.dailydata.model.table.ArrayListTable
 import com.pseandroid2.dailydata.model.table.ColumnData
 import com.pseandroid2.dailydata.model.table.Table
+import com.pseandroid2.dailydata.model.transformation.DateTimeLineChartTransformation
+import com.pseandroid2.dailydata.model.transformation.FloatIdentity
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.model.uielements.UIElementType
 import com.pseandroid2.dailydata.model.users.User
@@ -28,6 +35,8 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @InternalCoroutinesApi
@@ -60,6 +69,13 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
     var graphs by mutableStateOf(listOf<Graph<*, *>>())
         private set
 
+    var currentGraphType by mutableStateOf<String?>(null)
+        private set
+    var xAxis by mutableStateOf<Int?>(null)
+        private set
+    var mapping by mutableStateOf<List<Int>?>(null)
+        private set
+
     var isWallpaperDialogOpen by mutableStateOf(false)
         private set
     var isTableDialogOpen by mutableStateOf(false)
@@ -69,6 +85,10 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
     var isNotificationDialogOpen by mutableStateOf(false)
         private set
     var isGraphDialogOpen by mutableStateOf(false)
+        private set
+    var isXAxisDialogOpen by mutableStateOf(false)
+        private set
+    var isMappingDialogOpen by mutableStateOf(false)
         private set
 
     var isBackDialogOpen by mutableStateOf(false)
@@ -124,7 +144,7 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
             }
             is ProjectDataSettingsScreenEvent.OnTableRemove -> {
                 viewModelScope.launch {
-                    project.value!!.table.deleteColumn(event.index)
+                    project.value!!.table.deleteColumn(event.columnId)
                 }
             }
             is ProjectDataSettingsScreenEvent.OnButtonAdd -> {
@@ -141,28 +161,64 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
             }
             is ProjectDataSettingsScreenEvent.OnButtonRemove -> {
                 viewModelScope.launch {
-                    table.removeUIElement(event.columnId, event.id)
+                    project.value!!.table.removeUIElement(event.columnId, event.id)
                 }
             }
             is ProjectDataSettingsScreenEvent.OnNotificationAdd -> {
-                val mutable = notifications.toMutableList()
-                mutable.add(Notification(id = 0, message = event.message, time = event.time))
-                notifications = mutable.toList()
+                viewModelScope.launch {
+                    project.value!!.addNotification(TimeNotification(event.message, event.time))
+                }
             }
             is ProjectDataSettingsScreenEvent.OnNotificationRemove -> {
-                val mutable = notifications.toMutableList()
-                mutable.removeAt(index = event.index)
-                notifications = mutable.toList()
+                viewModelScope.launch {
+                    project.value!!.removeNotification(event.id)
+                }
             }
             is ProjectDataSettingsScreenEvent.OnCreateLink -> {
                 val manager = JoinProjectLinkManager()
-                val link = manager.createLink(initialViewModelProject.id.toLong())
+                val link = manager.createLink(project.value!!.id.toLong())
                 sendUiEvent(UiEvent.CopyToClipboard(link))
             }
             is ProjectDataSettingsScreenEvent.OnGraphAdd -> {
-                val mutable = graphs.toMutableList()
-                mutable.add(event.graph)
-                graphs = mutable.toList()
+                if (currentGraphType != null && mapping != null) {
+                    when (currentGraphType) {
+                        Graph.LINE_CHART_STR -> {
+                            if (xAxis != null) {
+                                when (project.value!!.table.layout[xAxis!!].type) {
+                                    DataType.TIME -> {
+                                        val transformation = DateTimeLineChartTransformation(
+                                            FloatIdentity(), xAxis!!
+                                        )
+                                        project.value!!.graphs.add(
+                                            DateTimeLineChart(
+                                                transformation = project.value!!.createDataTransformation(
+                                                    transformation,
+                                                    mapping!!
+                                                ),
+                                                settings = MapSettings(
+                                                    mutableMapOf(
+                                                        Pair(
+                                                            GRAPH_NAME_KEY, "LineChart${
+                                                                LocalDateTime.now().format(
+                                                                    DateTimeFormatter.ISO_TIME
+                                                                )
+                                                            }"
+                                                        )
+                                                    )
+                                                )
+                                            )
+                                        )
+
+                                    }
+                                }
+                            }
+                        }
+                        Graph.PIE_CHART_STR -> {
+
+                        }
+                    }
+                }
+                project.value!!.graphs.add()
             }
             is ProjectDataSettingsScreenEvent.OnGraphRemove -> {
                 val mutable = graphs.toMutableList()
@@ -174,6 +230,17 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
                 mutable.removeAt(event.index)
                 members = mutable.toList()
             }
+
+            is ProjectDataSettingsScreenEvent.OnChoseGraphType -> {
+                currentGraphType = event.graphType
+            }
+            is ProjectDataSettingsScreenEvent.OnChoseXAxis -> {
+                xAxis = event.col
+            }
+            is ProjectDataSettingsScreenEvent.OnChoseMapping -> {
+                mapping = event.mapping
+            }
+
             is ProjectDataSettingsScreenEvent.OnShowWallpaperDialog -> {
                 isWallpaperDialogOpen = event.isOpen
             }
@@ -195,6 +262,18 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
             }
             is ProjectDataSettingsScreenEvent.OnShowBackDialog -> {
                 isBackDialogOpen = event.isOpen
+            }
+            is ProjectDataSettingsScreenEvent.OnShowXAxisDialog -> {
+                isXAxisDialogOpen = event.isOpen
+                if (!event.isOpen && event.hasSuccessfullyChosen) {
+                    onEvent(ProjectDataSettingsScreenEvent.OnShowMappingDialog(true))
+                }
+            }
+            is ProjectDataSettingsScreenEvent.OnShowMappingDialog -> {
+                isMappingDialogOpen = event.isOpen
+                if (!event.isOpen && event.hasSuccessfullyChosen) {
+                    onEvent(ProjectDataSettingsScreenEvent.OnGraphAdd())
+                }
             }
 
             is ProjectDataSettingsScreenEvent.OnNavigateBack -> {

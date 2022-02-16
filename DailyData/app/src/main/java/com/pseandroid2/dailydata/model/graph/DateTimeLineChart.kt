@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 import java.time.ZoneOffset
 
 class DateTimeLineChart(
-    id: Int,
+    id: Int = -1,
     transformation: Project.DataTransformation<Map<LocalDateTime, Float>>,
     settings: Settings,
     path: String? = null

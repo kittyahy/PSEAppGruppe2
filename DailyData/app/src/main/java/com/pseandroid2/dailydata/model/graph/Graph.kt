@@ -21,14 +21,21 @@
 package com.pseandroid2.dailydata.model.graph
 
 import android.graphics.Bitmap
+import androidx.compose.runtime.Composable
 import com.github.mikephil.charting.data.DataSet
 import com.github.mikephil.charting.data.Entry
+import com.pseandroid2.dailydata.model.graph.Graph.Companion.LINE_CHART_STR
+import com.pseandroid2.dailydata.model.graph.Graph.Companion.PIE_CHART_STR
 import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.settings.Settings
 import com.pseandroid2.dailydata.model.users.User
+import java.lang.IllegalArgumentException
 
 interface Graph<T : DataSet<S>, S : Entry> {
     companion object {
+        const val LINE_CHART_STR = "Line Chart"
+        const val PIE_CHART_STR = "Pie Chart"
+
         const val SET_LABEL_KEY = "SET LABEL"
 
         const val ENABLE = "ENABLED"
@@ -74,11 +81,9 @@ interface GraphTemplate {
 
 }
 
-//TODO(Robin hat geändert)
-enum class GraphType(val representation : String) {
-    INT_LINE_CHART("Line Chart"),
-    FLOAT_LINE_CHART("Line Chart"),
-    TIME_LINE_CHART("Line Chart"),
-    PIE_CHART("Pie Chart")
-
+enum class GraphType(val representation: String) {
+    INT_LINE_CHART(LINE_CHART_STR),
+    FLOAT_LINE_CHART(LINE_CHART_STR ),
+    TIME_LINE_CHART(LINE_CHART_STR),
+    PIE_CHART(PIE_CHART_STR)
 }
