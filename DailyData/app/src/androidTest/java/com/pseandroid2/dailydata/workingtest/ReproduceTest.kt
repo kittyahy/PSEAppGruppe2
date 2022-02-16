@@ -22,7 +22,7 @@ class ReproduceTest {
     val composeRule = createAndroidComposeRule<MainActivity>()
 
     /**
-     * If anything needs a project
+     * If anything needs the Kresse - Project
      */
     @InternalCoroutinesApi
     @Test
@@ -41,7 +41,10 @@ class ReproduceTest {
         composeRule.onNodeWithText("Save").performClick()
     }
 
-    @Ignore("needs a Kresse - Project")
+    /**
+     * [Kresse-project] [com.pseandroid2.dailydata.workingtest.ReproduceTest.CreateProjectTest]
+     */
+    @Ignore("needs a KresseProject")
     //@assert(needs a project with name Kresse)
     @InternalCoroutinesApi
     @Test
