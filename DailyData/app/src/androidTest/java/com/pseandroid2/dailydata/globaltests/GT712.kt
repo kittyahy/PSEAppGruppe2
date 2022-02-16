@@ -13,6 +13,9 @@ import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
+/**
+ * testing: "Leeres Projekt erstellen", 7.1.2
+ */
 class GT712 {
 
     @get:Rule
@@ -20,9 +23,6 @@ class GT712 {
 
 
     @Ignore
-    /**
-     * tests: "Leeres Projekt erstellen", 7.1.2
-     */
     @InternalCoroutinesApi
     @Test
     fun createEmptyProjectTest() {
