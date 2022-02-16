@@ -38,7 +38,7 @@ class ReproduceTest {
         composeRule.onNodeWithText("Save").performClick()
     }
 
-    //@Ignore
+    @Ignore
     @InternalCoroutinesApi
     @Test
     fun addGraphTest() {
