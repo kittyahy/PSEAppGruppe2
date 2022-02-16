@@ -1,7 +1,7 @@
 package com.pseandroid2.dailydata.model
 
 import com.pseandroid2.dailydata.model.project.ProjectBuilder
-import com.pseandroid2.dailydata.model.project.SimpleProject
+import com.pseandroid2.dailydata.model.project.CacheOnlyProject
 import com.pseandroid2.dailydata.model.project.SimpleProjectBuilder
 import com.pseandroid2.dailydata.model.users.NullUser
 import org.junit.Assert.assertEquals
@@ -12,7 +12,7 @@ class ProjectBuilderTester {
 
     @Test
     fun `test project creation via Builder`() {
-        val builder: ProjectBuilder<SimpleProject> = SimpleProjectBuilder()
+        val builder: ProjectBuilder<CacheOnlyProject> = SimpleProjectBuilder()
 
         val project = builder
             .setId(3)

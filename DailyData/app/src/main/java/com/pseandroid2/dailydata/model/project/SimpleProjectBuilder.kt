@@ -32,10 +32,10 @@ import com.pseandroid2.dailydata.model.users.NullUser
 import com.pseandroid2.dailydata.model.users.User
 import java.lang.IllegalArgumentException
 
-class SimpleProjectBuilder : ProjectBuilder<SimpleProject> {
+class SimpleProjectBuilder : ProjectBuilder<CacheOnlyProject> {
     @Suppress("Deprecation")
     private var project =
-        SimpleProject(
+        CacheOnlyProject(
             SimpleSkeleton(
                 0,
                 0,
@@ -50,9 +50,9 @@ class SimpleProjectBuilder : ProjectBuilder<SimpleProject> {
             users = mutableListOf()
         )
 
-    override fun reset(id: Int): ProjectBuilder<SimpleProject> {
+    override fun reset(id: Int): ProjectBuilder<CacheOnlyProject> {
         @Suppress("Deprecation")
-        project = SimpleProject(
+        project = CacheOnlyProject(
             SimpleSkeleton(
                 id,
                 0,
@@ -69,52 +69,52 @@ class SimpleProjectBuilder : ProjectBuilder<SimpleProject> {
         return this
     }
 
-    override fun setId(id: Int): ProjectBuilder<SimpleProject> {
+    override fun setId(id: Int): ProjectBuilder<CacheOnlyProject> {
         project.id = id
         return this
     }
 
-    override fun setOnlineId(id: Long): ProjectBuilder<SimpleProject> {
+    override fun setOnlineId(id: Long): ProjectBuilder<CacheOnlyProject> {
         project.onlineId = id
         return this
     }
 
-    override fun setName(name: String): ProjectBuilder<SimpleProject> {
+    override fun setName(name: String): ProjectBuilder<CacheOnlyProject> {
         project.name = name
         return this
     }
 
-    override fun setDescription(desc: String): ProjectBuilder<SimpleProject> {
+    override fun setDescription(desc: String): ProjectBuilder<CacheOnlyProject> {
         project.desc = desc
         return this
     }
 
-    override fun setPath(path: String): ProjectBuilder<SimpleProject> {
+    override fun setPath(path: String): ProjectBuilder<CacheOnlyProject> {
         project.path = path
         return this
     }
 
-    override fun setBackground(color: Int): ProjectBuilder<SimpleProject> {
+    override fun setBackground(color: Int): ProjectBuilder<CacheOnlyProject> {
         project.color = color
         return this
     }
 
-    override fun addGraphs(graphs: List<Graph<*, *>>): ProjectBuilder<SimpleProject> {
+    override fun addGraphs(graphs: List<Graph<*, *>>): ProjectBuilder<CacheOnlyProject> {
         project.graphs.addAll(graphs)
         return this
     }
 
-    override fun addSettings(settings: Settings): ProjectBuilder<SimpleProject> {
+    override fun addSettings(settings: Settings): ProjectBuilder<CacheOnlyProject> {
         project.addSettings(settings)
         return this
     }
 
-    override fun addNotifications(notifications: List<Notification>): ProjectBuilder<SimpleProject> {
+    override fun addNotifications(notifications: List<Notification>): ProjectBuilder<CacheOnlyProject> {
         project.addNotification(notifications)
         return this
     }
 
-    override fun addTable(table: Table): ProjectBuilder<SimpleProject> {
+    override fun addTable(table: Table): ProjectBuilder<CacheOnlyProject> {
         project.table = table
         return this
     }
@@ -122,7 +122,7 @@ class SimpleProjectBuilder : ProjectBuilder<SimpleProject> {
     override fun setOnlineProperties(
         admin: User?,
         isOnline: Boolean
-    ): ProjectBuilder<SimpleProject> {
+    ): ProjectBuilder<CacheOnlyProject> {
         if (admin != null) {
             project.isOnline = isOnline
             project.admin = admin
@@ -135,12 +135,12 @@ class SimpleProjectBuilder : ProjectBuilder<SimpleProject> {
         return this
     }
 
-    override fun addUsers(users: List<User>): ProjectBuilder<SimpleProject> {
+    override fun addUsers(users: List<User>): ProjectBuilder<CacheOnlyProject> {
         project.addUsers(users)
         return this
     }
 
-    override fun build(): SimpleProject {
+    override fun build(): CacheOnlyProject {
         val ret = project
         reset(0)
         return ret

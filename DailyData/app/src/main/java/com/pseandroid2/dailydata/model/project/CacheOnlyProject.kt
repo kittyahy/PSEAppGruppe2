@@ -21,22 +21,23 @@
 package com.pseandroid2.dailydata.model.project
 
 import com.pseandroid2.dailydata.model.graph.Graph
-import com.pseandroid2.dailydata.model.users.User
+import com.pseandroid2.dailydata.model.table.ArrayListTable
 import com.pseandroid2.dailydata.model.table.Table
 import com.pseandroid2.dailydata.model.users.NullUser
+import com.pseandroid2.dailydata.model.users.User
+import com.pseandroid2.dailydata.repository.viewModelAPI.ProjectHandler
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Operation
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.flow.Flow
 
-@Deprecated("Will no longer be supported as of 2022-02-16")
-class SimpleProject
-@Deprecated("Directly constructing a project is Deprecated, Use ProjectBuilder instead")
+class CacheOnlyProject
 constructor(
     @Deprecated("Access via Skeleton is Deprecated")
-    override val skeleton: ProjectSkeleton,
-    override var table: Table,
+    override val skeleton: ProjectSkeleton = SimpleSkeleton(),
+    override var table: Table = ArrayListTable(),
     override var admin: User = NullUser(),
     override var isOnline: Boolean = false,
-    override var users: MutableList<User>,
+    override var users: MutableList<User> = mutableListOf(),
     override var graphs: MutableList<Graph<*, *>> = mutableListOf(),
     override val isIllegalOperation: Map<Operation, Flow<Boolean>> = mapOf()
 ) : Project {
@@ -48,14 +49,35 @@ constructor(
     }
 
     override suspend fun setName(name: String) {
-        TODO("Not yet implemented")
+        @Suppress("DEPRECATION")
+        skeleton.name = name
     }
 
     override suspend fun setDesc(desc: String) {
-        TODO("Not yet implemented")
+        @Suppress("DEPRECATION")
+        skeleton.desc = desc
+    }
+
+    override suspend fun setPath(path: String) {
+        @Suppress("DEPRECATION")
+        skeleton.path = path
+    }
+
+    override suspend fun setColor(color: Int) {
+        @Suppress("DEPRECATION")
+        skeleton.color = color
+    }
+
+    override suspend fun removeNotification(id: Int) {
+        @Suppress("DEPRECATION")
+        skeleton.notifications.removeAt(id)
     }
 
     override fun createTransformationFromString(transformationString: String): Project.DataTransformation<out Any> {
         TODO("Not yet implemented")
+    }
+
+    suspend fun writeToDBAsync(projectHandler: ProjectHandler): Deferred<Int> {
+        return projectHandler.newProjectAsync(this)
     }
 }
