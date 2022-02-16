@@ -40,19 +40,25 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideAppDatabase(app: Application) : AppDataBase {
+    fun provideAppDatabase(app: Application): AppDataBase {
         return AppDataBase.getInstance(app)
     }
+
     @Provides
     @Singleton
     fun provideRemoteDataSourceAPI(): RemoteDataSourceAPI {
         return RemoteDataSourceAPI(
             UserAccount(FirebaseManager(null)),
-            ServerManager(RESTAPI()))
+            ServerManager(RESTAPI())
+        )
     }
+
     @Provides
     @Singleton
-    fun provideRepositoryViewModelAPI(database : AppDataBase, remoteDataBase : RemoteDataSourceAPI): RepositoryViewModelAPI {
+    fun provideRepositoryViewModelAPI(
+        database: AppDataBase,
+        remoteDataBase: RemoteDataSourceAPI
+    ): RepositoryViewModelAPI {
         return RepositoryViewModelAPI(database, remoteDataBase) //hab ich geändert - robin
     }
 }
