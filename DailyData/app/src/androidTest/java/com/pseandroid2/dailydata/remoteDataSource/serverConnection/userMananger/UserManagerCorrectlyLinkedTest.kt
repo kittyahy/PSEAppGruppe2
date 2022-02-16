@@ -4,13 +4,16 @@ import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseManager
 import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOptions
 import com.pseandroid2.dailydata.remoteDataSource.userManager.SignInTypes
 import com.pseandroid2.dailydata.remoteDataSource.userManager.UserAccount
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
-/*
+
 class UserManagerCorrectlyLinkedTest {
 
     private val fm: FirebaseManager = FirebaseManager(null)
@@ -23,24 +26,21 @@ class UserManagerCorrectlyLinkedTest {
 
     @Before
     fun setup() {
-        Assert.assertTrue(userAccount.signOut().success) // Signs out user, if there was still one singed in
-
         // mock fm to test if the registration is linked correctly
-
         mockedFM = mockk()
-        every { mockedFM.registerUserWithEmailAndPassword("", "") } returns FirebaseReturnOptions.REGISTERED
+        coEvery { mockedFM.registerUserWithEmailAndPassword("", "") } returns FirebaseReturnOptions.REGISTERED
         every { mockedFM.getUserID() } returns "userID"
         every { mockedFM.getUserName() } returns "userName"
         every { mockedFM.getUserEMail() } returns "userEmail"
         every { mockedFM.getUserPhotoUrl() } returns "userPhoto"
-        every { mockedFM.getToken() } returns "authToken"
+        coEvery { mockedFM.getToken() } returns "authToken"
         mockedUserAccount = UserAccount(mockedFM)
 
     }
 
+    @ExperimentalCoroutinesApi
     @Test
-    fun userAccountCorrectlyLinked() {
-
+    fun userAccountCorrectlyLinked() = runTest {
         Assert.assertEquals(FirebaseReturnOptions.SINGED_IN, userAccount.signInUser(email, password, SignInTypes.EMAIL))
         Assert.assertEquals("userID", mockedUserAccount.getUserID())
         Assert.assertEquals("userName", mockedUserAccount.getUserName())
@@ -51,4 +51,4 @@ class UserManagerCorrectlyLinkedTest {
 
         Assert.assertEquals(FirebaseReturnOptions.REGISTERED, mockedUserAccount.registerUser("", "", SignInTypes.EMAIL))
     }
-}*/
+}
