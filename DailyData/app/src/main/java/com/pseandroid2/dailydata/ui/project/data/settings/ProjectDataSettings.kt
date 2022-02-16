@@ -43,17 +43,14 @@ import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pseandroid2.dailydata.R
-import com.pseandroid2.dailydata.model.graph.FloatLineChart
 import com.pseandroid2.dailydata.model.graph.Graph.Companion.LINE_CHART_STR
 import com.pseandroid2.dailydata.model.graph.GraphType
 import com.pseandroid2.dailydata.model.table.ColumnData
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Notification
 import com.pseandroid2.dailydata.ui.composables.ButtonElement
 import com.pseandroid2.dailydata.ui.composables.ListInput
@@ -240,18 +237,17 @@ fun ProjectDataSettingsScreen(
                     viewModel.onEvent(
                         ProjectDataSettingsScreenEvent.OnShowTableDialog(false)
                     )
-                },
-                onClick = { name, column, value ->
-                    viewModel.onEvent(
-                        ProjectDataSettingsScreenEvent.OnButtonAdd(
-                            name = name,
-                            columnId = (column as ColumnData).id,
-                            value = value.toInt()
-                        )
-                    )
-                    viewModel.onEvent(ProjectDataSettingsScreenEvent.OnShowButtonsDialog(false))
                 }
-            )
+            ) { name, column, value ->
+                viewModel.onEvent(
+                    ProjectDataSettingsScreenEvent.OnButtonAdd(
+                        name = name,
+                        columnId = column.id,
+                        value = value.toInt()
+                    )
+                )
+                viewModel.onEvent(ProjectDataSettingsScreenEvent.OnShowButtonsDialog(false))
+            }
             val uiElements = mutableListOf<Pair<UIElement, Int>>()
             for (col in viewModel.project.value!!.table.layout) {
                 for (uiElement in col.uiElements) {

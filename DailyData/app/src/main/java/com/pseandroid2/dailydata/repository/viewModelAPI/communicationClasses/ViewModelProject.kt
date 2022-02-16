@@ -78,7 +78,6 @@ class ViewModelProject(
         users,
         admin,
         repositoryViewModelAPI
-
     )
 
     private val mutableIllegalOperation: Map<Operation, MutableSharedFlow<Boolean>>

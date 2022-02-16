@@ -33,7 +33,7 @@ sealed class ProjectCreationEvent {
     data class OnTableAdd(val name : String, val unit : String, val dataType: DataType) : ProjectCreationEvent()
     data class OnTableRemove(val index : Int) : ProjectCreationEvent()
     data class OnButtonAdd(val name : String, val columnId : Int, val value: Int) : ProjectCreationEvent()
-    data class OnButtonRemove(val index : Int) : ProjectCreationEvent()
+    data class OnButtonRemove(val id: Int, val columnID: Int) : ProjectCreationEvent()
     data class OnNotificationAdd(val message : String, val time : LocalTime) : ProjectCreationEvent()
     data class OnNotificationRemove(val index : Int) : ProjectCreationEvent()
     data class OnGraphAdd(val graph: Graph) : ProjectCreationEvent()

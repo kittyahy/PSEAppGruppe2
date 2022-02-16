@@ -190,9 +190,9 @@ fun TableDialog(
 @Composable
 fun ButtonDialog(
     isOpen: Boolean,
-    buttons: List<Pair<Any, String>>,
+    buttons: List<Pair<ColumnData, String>>,
     onDismissRequest: () -> Unit,
-    onClick: (String, Any, String) -> Unit
+    onClick: (String, ColumnData, String) -> Unit
 ) {
     AppDialog(isOpen = isOpen, onDismissRequest = onDismissRequest) {
         var name by remember { mutableStateOf("") }
