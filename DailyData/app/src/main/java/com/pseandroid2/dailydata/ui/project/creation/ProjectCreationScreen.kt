@@ -33,6 +33,7 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
@@ -98,13 +99,13 @@ fun ProjectCreationScreen(
         ) {
             TextInput(
                 placeholder = "Add Title",
-                value = viewModel.title,
+                value = viewModel.project.name,
                 onValueChange = { viewModel.onEvent(ProjectCreationEvent.OnTitleChange(it)) }
             )
             Divider()
             TextInput(
                 placeholder = "Add Description",
-                value = viewModel.description,
+                value = viewModel.project.desc,
                 onValueChange = { viewModel.onEvent(ProjectCreationEvent.OnDescriptionChange(it)) },
                 singleLine = false,
                 icon = ImageVector.vectorResource(id = R.drawable.ic_subject)
@@ -125,7 +126,7 @@ fun ProjectCreationScreen(
                 }
             )
             WallpaperElement(
-                color = viewModel.wallpaper,
+                color = Color(viewModel.project.color),
                 label = "Change Wallpaper",
                 onClick = { viewModel.onEvent(ProjectCreationEvent.OnShowWallpaperDialog(true)) }
             )
@@ -148,19 +149,24 @@ fun ProjectCreationScreen(
                 label = "Add Table Column",
                 mainIcon = ImageVector.vectorResource(id = R.drawable.ic_table),
                 onClick = { viewModel.onEvent(ProjectCreationEvent.OnShowTableDialog(true)) },
-                onClickItem = { index, col ->
+                onClickItem = { _, col ->
                     viewModel.onEvent(
                         ProjectCreationEvent.OnTableRemove(
                             index = (col.first as ColumnData).id
                         )
                     )
                 },
-                elements = viewModel.table.layout.map { Pair(it, "${it.name} in ${it.unit}") }
+                elements = viewModel.project.table.layout.map {
+                    Pair(
+                        it,
+                        "${it.name} in ${it.unit}"
+                    )
+                }
             )
             Divider()
             ButtonDialog(
                 isOpen = viewModel.isButtonsDialogOpen,
-                buttons = viewModel.table.layout.filter { it.type == DataType.WHOLE_NUMBER }
+                buttons = viewModel.project.table.layout.filter { it.type == DataType.WHOLE_NUMBER }
                     .map { Pair(it, it.name) },
                 onDismissRequest = { viewModel.onEvent(ProjectCreationEvent.OnShowTableDialog(false)) },
                 onClick = { name, columnData, value ->
@@ -175,7 +181,7 @@ fun ProjectCreationScreen(
                 }
             )
             val uiElements = mutableListOf<Pair<UIElement, Int>>()
-            for (col in viewModel.table.layout) {
+            for (col in viewModel.project.table.layout) {
                 for (uiElement in col.uiElements) {
                     uiElements.add(Pair(uiElement, col.id))
                 }
@@ -201,7 +207,7 @@ fun ProjectCreationScreen(
                 elements = uiElements.map { pair ->
                     Pair(
                         pair,
-                        "${pair.first.name} in ${viewModel.table.layout[pair.second].name}"
+                        "${pair.first.name} in ${viewModel.project.table.layout[pair.second].name}"
                     )
                 }
             )
@@ -231,7 +237,7 @@ fun ProjectCreationScreen(
                         )
                     )
                 },
-                elements = viewModel.notifications.map { Pair(it, it.displayString) }
+                elements = viewModel.project.notifications.map { Pair(it, it.displayString) }
             )
             Divider()
             GraphDialog(
@@ -247,7 +253,12 @@ fun ProjectCreationScreen(
                 mainIcon = ImageVector.vectorResource(id = R.drawable.ic_chart),
                 onClick = { viewModel.onEvent(ProjectCreationEvent.OnShowGraphDialog(true)) },
                 onClickItem = { viewModel.onEvent(ProjectCreationEvent.OnGraphRemove(index = it)) },
-                elements = viewModel.graphs.map { it.typeName }
+                elements = viewModel.project.graphs.map {
+                    Pair(
+                        it.getType(),
+                        it.getType().representation
+                    )
+                }
             )
         }
     }
