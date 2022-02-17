@@ -104,7 +104,7 @@ interface Project {
     /**
      * Unlinks this project from synchronisation with the server
      */
-    suspend fun unlink()
+    suspend fun unsubscribe()
 
     suspend fun publish()
 

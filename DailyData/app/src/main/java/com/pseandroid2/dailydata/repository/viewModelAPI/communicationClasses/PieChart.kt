@@ -22,11 +22,6 @@ package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
 import android.graphics.Bitmap
 import com.pseandroid2.dailydata.model.database.AppDataBase
-import com.pseandroid2.dailydata.model.graph.Generator
-import com.pseandroid2.dailydata.model.graph.PieChart
-import com.pseandroid2.dailydata.model.settings.MapSettings
-import com.pseandroid2.dailydata.model.transformation.FloatSum
-import com.pseandroid2.dailydata.model.transformation.PieChartTransformation
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -41,7 +36,7 @@ class PieChart(
 ) : Graph() {
     private val columnColors = mutableMapOf<Int, String>()
     override lateinit var executeQueue: ExecuteQueue
-    override lateinit var viewModelProject: ViewModelProject
+    override lateinit var persistentProject: PersistentProject
     override lateinit var appDataBase: AppDataBase
     override val typeName: String = "Pie Chart" //TODO Magic String
 

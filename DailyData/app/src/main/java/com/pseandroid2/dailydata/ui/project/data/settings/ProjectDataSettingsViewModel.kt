@@ -28,7 +28,6 @@ import com.pseandroid2.dailydata.ui.grapthstrategy.IntLineChartStrategy
 import com.pseandroid2.dailydata.ui.grapthstrategy.PieChartStrategy
 import com.pseandroid2.dailydata.ui.grapthstrategy.TimeLineChartStrategy
 import com.pseandroid2.dailydata.ui.link.appLinks.JoinProjectLinkManager
-import com.pseandroid2.dailydata.ui.project.data.DataTabs
 import com.pseandroid2.dailydata.util.Consts.LOG_TAG
 import com.pseandroid2.dailydata.util.ui.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -314,7 +313,7 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
             is ProjectDataSettingsScreenEvent.OnLeaveProject -> {
                 viewModelScope.launch {
                     project.value!!.removeUser(repository.serverHandler.loggedIn)
-                    project.value!!.unlink()
+                    project.value!!.unsubscribe()
                     sendUiEvent(UiEvent.PopBackStack)
                 }
             }

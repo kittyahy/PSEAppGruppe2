@@ -11,7 +11,7 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Bu
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Column
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Member
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ViewModelProject
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.PersistentProject
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Row
 import com.pseandroid2.dailydata.util.ui.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -32,7 +32,7 @@ class ProjectDataInputScreenViewModel @Inject constructor(
     private val _uiEvent = MutableSharedFlow<UiEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
 
-    private lateinit var initialViewModelProject: ViewModelProject
+    private lateinit var initialPersistentProject: PersistentProject
     var isOnlineProject = false
         private set
 
@@ -73,7 +73,7 @@ class ProjectDataInputScreenViewModel @Inject constructor(
                             buttons = project.buttons
                             members = project.members
                             isOnlineProject = project.isOnlineProject
-                            initialViewModelProject = project
+                            initialPersistentProject = project
                         }
                 }
 
@@ -128,8 +128,8 @@ class ProjectDataInputScreenViewModel @Inject constructor(
                     }
                 }
                 viewModelScope.launch {
-                    if (initialViewModelProject.addRowIsPossible().first()) {
-                        initialViewModelProject.addRow(Row(id = 0, elements = columnValues))
+                    if (initialPersistentProject.addRowIsPossible().first()) {
+                        initialPersistentProject.addRow(Row(id = 0, elements = columnValues))
                         val mutable = columnValues.toMutableList()
                         val currentTime = LocalTime.now()
                         for (index in mutable.indices) {
@@ -160,8 +160,8 @@ class ProjectDataInputScreenViewModel @Inject constructor(
             }
             is ProjectDataInputScreenEvent.OnRowDeleteClick -> {
                 viewModelScope.launch {
-                    if (initialViewModelProject.deleteRowIsPossible(table[rowEdit]).first()) {
-                        initialViewModelProject.deleteRow(table[rowEdit])
+                    if (initialPersistentProject.deleteRowIsPossible(table[rowEdit]).first()) {
+                        initialPersistentProject.deleteRow(table[rowEdit])
                         isRowDialogOpen = false
                     } else {
                         sendUiEvent(UiEvent.ShowToast("Could not delete row"))

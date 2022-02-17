@@ -36,7 +36,6 @@ import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddGraph
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddNotification
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddUser
-import com.pseandroid2.dailydata.repository.commandCenter.commands.DeleteProject
 import com.pseandroid2.dailydata.repository.commandCenter.commands.IllegalOperationException
 import com.pseandroid2.dailydata.repository.commandCenter.commands.PublishProject
 import com.pseandroid2.dailydata.repository.commandCenter.commands.SetDescription
@@ -48,42 +47,11 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
-class ViewModelProject(
-    private val skeleton: ProjectSkeleton = SimpleSkeleton(),
-    override var isOnline: Boolean = false,
-    override var table: Table = ArrayListTable(),
-    private var mutableGraphs: MutableList<Graph<*, *>> = mutableListOf(),
-    private var mutableUsers: MutableList<User> = mutableListOf(),
-    override var admin: User,
+class PersistentProject(
+    private val project: Project,
     val repo: RepositoryViewModelAPI,
     scope: CoroutineScope
 ) : Project {
-
-    constructor(
-        id: Int = -1,
-        onlineId: Long = -1,
-        name: String = "",
-        desc: String = "",
-        color: Int = 0,
-        path: String = "",
-        notifications: MutableList<Notification> = mutableListOf(),
-        isOnline: Boolean = false,
-        table: Table = ArrayListTable(),
-        mutableGraphs: MutableList<Graph<*, *>> = mutableListOf(),
-        mutableUsers: MutableList<User> = mutableListOf(),
-        admin: User,
-        repo: RepositoryViewModelAPI,
-        scope: CoroutineScope
-    ) : this(
-        SimpleSkeleton(id, onlineId, name, desc, path, color, notifications),
-        isOnline,
-        table,
-        mutableGraphs,
-        mutableUsers,
-        admin,
-        repo,
-        scope
-    )
 
     private val mutableIllegalOperation: Map<Operation, MutableSharedFlow<Boolean>>
     override val isIllegalOperation: Map<Operation, Flow<Boolean>>
@@ -91,13 +59,13 @@ class ViewModelProject(
     private val executeQueue = repo.projectHandler.executeQueue
 
     override val graphs: List<Graph<*, *>>
-        get() = mutableGraphs
+        get() = project.graphs
 
     override val users: List<User>
-        get() = mutableUsers
+        get() = project.users
 
     override val notifications: List<Notification>
-        get() = skeleton.notifications
+        get() = project.notifications
 
     init {
         val operations = mutableMapOf<Operation, MutableSharedFlow<Boolean>>()
@@ -105,7 +73,7 @@ class ViewModelProject(
             if (operation.type == Operation.OperationType.PROJECT) {
                 operations[operation] = MutableSharedFlow(1)
                 scope.launch(Dispatchers.IO) {
-                    operations[operation]!!.emit(operation.isIllegalByData(this@ViewModelProject))
+                    operations[operation]!!.emit(operation.isIllegalByData(this@PersistentProject))
                 }
             }
         }
@@ -123,13 +91,13 @@ class ViewModelProject(
     }
 
     override var id: Int
-        get() = skeleton.id
+        get() = project.id
         set(value) {
             throw IllegalOperationException("Re-Setting the id of a project is not permitted")
         }
 
     override val name: String
-        get() = skeleton.name
+        get() = project.name
 
     override suspend fun setName(name: String) {
         mutableIllegalOperation[Operation.SET_PROJECT_NAME]!!.emit(false)
@@ -137,7 +105,7 @@ class ViewModelProject(
     }
 
     override val desc: String
-        get() = skeleton.desc
+        get() = project.desc
 
     override suspend fun setDesc(desc: String) {
         mutableIllegalOperation[Operation.SET_PROJECT_DESC]!!.emit(false)
@@ -145,14 +113,14 @@ class ViewModelProject(
     }
 
     override val path: String
-        get() = skeleton.path
+        get() = project.path
 
     override suspend fun setPath(path: String) {
         TODO("Not yet implemented")
     }
 
     override val color: Int
-        get() = skeleton.color
+        get() = project.color
 
     override suspend fun setColor(color: Int) {
         TODO("changeWallpaper")
@@ -201,6 +169,9 @@ class ViewModelProject(
         table.removeUIElement(col, id)
     }
 
+    override val admin: User
+        get() = TODO("Not yet implemented")
+
     override suspend fun addNotification(notification: Notification) {
         mutableIllegalOperation[Operation.ADD_NOTIFICATION]!!.emit(false)
         executeQueue.add(AddNotification(id, notification, repo))
@@ -215,6 +186,9 @@ class ViewModelProject(
     override suspend fun changeNotification(id: Int, notification: Notification) {
         TODO("setNotification")
     }
+
+    override val table: Table
+        get() = PersistentTable(project.table, repo)
 
     override suspend fun removeNotification(id: Int) {
         mutableIllegalOperation[Operation.DELETE_NOTIFICATION]!!.emit(false)
@@ -248,7 +222,7 @@ class ViewModelProject(
     }
 
     override val onlineId: Long
-        get() = skeleton.onlineId
+        get() = project.onlineId
 
     override suspend fun publish() {
         mutableIllegalOperation[Operation.PUBLISH_PROJECT]!!.emit(false)
@@ -260,7 +234,10 @@ class ViewModelProject(
         executeQueue.add(TODO("Set Admin Command"))
     }
 
-    override suspend fun unlink() {
+    override val isOnline: Boolean
+        get() = TODO("Not yet implemented")
+
+    override suspend fun unsubscribe() {
         TODO("Not yet implemented")
     }
 

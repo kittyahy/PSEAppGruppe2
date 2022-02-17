@@ -218,7 +218,7 @@ constructor(
         throw IllegalOperationException("Local Project only. Create an actual project in order to publish it")
     }
 
-    override suspend fun unlink() {
+    override suspend fun unsubscribe() {
         throw IllegalOperationException("Local Project only. Create an actual project in order to unlink it")
     }
 

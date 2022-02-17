@@ -21,12 +21,11 @@
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
 import com.pseandroid2.dailydata.model.uielements.UIElement
-import com.pseandroid2.dailydata.model.uielements.UIElementType
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.runBlocking
-import com.pseandroid2.dailydata.model.project.Project as ModelProject
+
 /**
  * Button class that handles its specific interaction with ViewModel.
  */
@@ -37,7 +36,7 @@ class Button(
     val value: Int
 ) : Identifiable {
     override lateinit var executeQueue: ExecuteQueue
-    override lateinit var viewModelProject: ViewModelProject
+    lateinit var persistentProject: PersistentProject
 
     constructor(uiElement: UIElement, columnId: Int) : this(
         uiElement.id,

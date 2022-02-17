@@ -4,7 +4,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-class CreateViewModelProjectTest {
+class CreatePersistentProjectTest {
 
     @ExperimentalCoroutinesApi
     @Test
