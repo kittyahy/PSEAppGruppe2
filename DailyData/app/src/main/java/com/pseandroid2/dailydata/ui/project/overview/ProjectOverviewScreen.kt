@@ -35,6 +35,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -68,6 +70,7 @@ fun ProjectOverviewScreen(
 
     val projects by viewModel.projects.collectAsState(initial = emptyList())
     val templates by viewModel.templates.collectAsState(initial = emptyList())
+    val state = rememberScrollState()
 
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->
@@ -90,7 +93,8 @@ fun ProjectOverviewScreen(
     Column(
         modifier = Modifier
             .padding(10.dp)
-            .fillMaxSize(),
+            .fillMaxSize()
+            .verticalScroll(state = state),
         verticalArrangement = Arrangement.spacedBy(18.dp, alignment = Alignment.Top),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
