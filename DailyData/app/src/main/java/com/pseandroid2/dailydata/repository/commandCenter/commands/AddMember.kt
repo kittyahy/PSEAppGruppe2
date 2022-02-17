@@ -7,7 +7,7 @@ import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 class AddMember(projectID: Int, private val user: User, api: RepositoryViewModelAPI) :
     ProjectCommand(projectID = projectID, repositoryViewModelAPI = api) {
     companion object {
-        fun isPossible(project: Project): Boolean {
+        fun isIllegal(project: Project): Boolean {
             return project.users.size < 24 && project.isOnline
         }
 

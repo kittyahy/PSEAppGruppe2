@@ -12,8 +12,8 @@ class DeleteNotification(
 ) :
     ProjectCommand(projectID = projectID, repositoryViewModelAPI = api) {
     companion object {
-        fun isPossible(project: Project): Boolean {
-            return ProjectCommand.isPossible(project)
+        fun isIllegal(project: Project): Boolean {
+            return ProjectCommand.isIllegal(project)
         }
 
         const val isAdminOperation: Boolean = false

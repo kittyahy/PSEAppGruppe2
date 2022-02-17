@@ -7,8 +7,8 @@ import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 class SetButton(projectID: Int, val button: UIElement, api: RepositoryViewModelAPI) :
     ProjectCommand(projectID = projectID, repositoryViewModelAPI = api) {
     companion object {
-        fun isPossible(project: Project): Boolean {
-            return ProjectCommand.isPossible(project)
+        fun isIllegal(project: Project): Boolean {
+            return ProjectCommand.isIllegal(project)
         }
 
         const val isAdminOperation: Boolean = false
