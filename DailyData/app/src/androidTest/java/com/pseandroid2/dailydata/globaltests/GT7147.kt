@@ -42,7 +42,7 @@ class GT7147 {
         composeRule.onNodeWithText("Project").performClick()
     }
 
-    //@Ignore("TODO: Lösche das Projekt nach dem Test, sodass es nicht mehrere Projekte mit dem gleichen Namen existieren, da sonst hier ein Error geworfen wird")
+    @Ignore("TODO: Lösche das Projekt nach dem Test, sodass es nicht mehrere Projekte mit dem gleichen Namen existieren, da sonst hier ein Error geworfen wird")
     /**
      * tests: "Zeit zum Öffnen eines Projekts", 7.1.47
      */
