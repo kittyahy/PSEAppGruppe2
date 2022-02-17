@@ -3,14 +3,8 @@ package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.a
 import android.util.Log
 import com.google.gson.Gson
 import com.pseandroid2.dailydata.model.database.AppDataBase
-import com.pseandroid2.dailydata.model.graph.DateTimeLineChart
-import com.pseandroid2.dailydata.model.graph.FloatLineChart
-import com.pseandroid2.dailydata.model.graph.Graph
-import com.pseandroid2.dailydata.model.graph.GraphType
-import com.pseandroid2.dailydata.model.graph.IntLineChart
-import com.pseandroid2.dailydata.model.graph.PieChart
 import com.pseandroid2.dailydata.model.project.Project
-import com.pseandroid2.dailydata.model.project.SimpleProjectBuilder
+import com.pseandroid2.dailydata.model.project.ProjectBuilder
 import com.pseandroid2.dailydata.model.table.ArrayListLayout
 import com.pseandroid2.dailydata.model.table.ArrayListTable
 import com.pseandroid2.dailydata.model.users.User
@@ -20,7 +14,6 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
 
 class ProjectFlowProvider(val projId: Int, private val db: AppDataBase) :
     FlowProvider<Project?>() {
@@ -32,7 +25,7 @@ class ProjectFlowProvider(val projId: Int, private val db: AppDataBase) :
         private const val USER_INIT = "users"
     }
 
-    private val project = SimpleProjectBuilder().setId(projId).build()
+    private val project = ProjectBuilder(projId)
     private var graphProvider = GraphFlowProvider(project, db)
 
     private val initialized = mutableMapOf(
@@ -49,13 +42,11 @@ class ProjectFlowProvider(val projId: Int, private val db: AppDataBase) :
             Log.i(LOG_TAG, "Start observing ProjectData for Project with id $projId.")
             db.projectDataDAO().getProjectData(projId).distinctUntilChanged().collect {
                 if (it != null) {
-                    project.name = it.name
-                    project.desc = it.description
-                    project.onlineId = it.onlineId
-                    project.path = it.wallpaper
-                    project.color = it.color
-                    project.admin = db.projectDataDAO().getAdminByIds(it.id).first()[0].user
-                    Log.d(LOG_TAG, "Trying to emit ProjectData: ${Gson().toJson(initialized)}")
+                    project.setName(it.name)
+                    project.setDesc(it.description)
+                    project.setPath(it.wallpaper)
+                    project.setColor(it.color)
+                    project.setAdmin(db.projectDataDAO().getAdminByIds(it.id).first()[0].user)
                     if (emitData()) {
                         mutableFlow.emit(project)
                         Log.v(LOG_TAG, "Emission of ProjectData: ${Gson().toJson(it)}")
@@ -74,23 +65,10 @@ class ProjectFlowProvider(val projId: Int, private val db: AppDataBase) :
                 graphProvider.initialize()
             }
             graphProvider.provideFlow.distinctUntilChanged().collect { graphs ->
-                project.graphs = graphs.toMutableList()
-                Log.d(LOG_TAG, "Trying to emit Graphs: ${Gson().toJson(initialized)}")
+                project.addGraphs(graphs)
                 if (emitGraphs()) {
                     mutableFlow.emit(project)
                     Log.v(LOG_TAG, "Emission of Graphs: ${Gson().toJson(graphs)}")
-                }
-            }
-        }
-        //Observe changes to Project Settings
-        launch(Dispatchers.IO) {
-            Log.i(LOG_TAG, "Start observing Settings for Project with id $projId.")
-            db.settingsDAO().getProjectSettings(projId).distinctUntilChanged().collect { settings ->
-                project.settings = settings
-                Log.d(LOG_TAG, "Trying to emit Settings: ${Gson().toJson(initialized)}")
-                if (emitSettings()) {
-                    mutableFlow.emit(project)
-                    Log.v(LOG_TAG, "Emission of Settings: ${Gson().toJson(settings)}")
                 }
             }
         }
@@ -99,7 +77,7 @@ class ProjectFlowProvider(val projId: Int, private val db: AppDataBase) :
             Log.i(LOG_TAG, "Start observing Notifications for Project with id $projId.")
             db.notificationsDAO().getNotifications(projId).distinctUntilChanged()
                 .collect { notifications ->
-                    project.notifications = notifications.toMutableList()
+                    project.addNotifications(notifications)
                     Log.d(LOG_TAG, "Trying to emit Notifications: ${Gson().toJson(initialized)}")
                     if (emitNotifs()) {
                         mutableFlow.emit(project)
@@ -116,7 +94,7 @@ class ProjectFlowProvider(val projId: Int, private val db: AppDataBase) :
                 for (row in rows) {
                     table.addRow(row)
                 }
-                project.table = table
+                project.setTable(table)
                 Log.d(LOG_TAG, "Trying to emit Table: ${Gson().toJson(initialized)}")
                 if (emitTable()) {
                     graphProvider = GraphFlowProvider(project, db)
@@ -147,7 +125,7 @@ class ProjectFlowProvider(val projId: Int, private val db: AppDataBase) :
                 for (user in users) {
                     userList.add(user.user)
                 }
-                project.users = userList
+                project.addUsers(userList)
                 Log.d(LOG_TAG, "Trying to emit Users: ${Gson().toJson(initialized)}")
                 if (emitUsers()) {
                     mutableFlow.emit(project)

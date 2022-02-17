@@ -25,10 +25,7 @@ class DeleteMember(projectID: Int, private val user: User, api: RepositoryViewMo
         super.execute()
     }
 
-    override suspend fun publish(
-        repositoryViewModelAPI: RepositoryViewModelAPI,
-        publishQueue: PublishQueue
-    ): Boolean {
+    override suspend fun publish(): Boolean {
         return super.publish() && publishable
     }
 }

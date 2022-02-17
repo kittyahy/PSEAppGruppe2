@@ -29,14 +29,13 @@ class NullUser : User {
     companion object {
         const val NPE_STRING =
             "This User has not been set (perhaps you tried to save a Project to the " +
-                    "database without setting an acutal User as Admin?)"
+                    "database without setting an actual User as Admin?)"
     }
 
-    override fun getId(): String {
-        throw NullPointerException(NPE_STRING)
-    }
+    override val id: String
+        get() = throw NullPointerException(NPE_STRING)
 
-    override fun getName(): String {
-        throw NullPointerException(NPE_STRING)
-    }
+    override val name: String
+        get() = throw NullPointerException(NPE_STRING)
+
 }

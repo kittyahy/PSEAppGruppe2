@@ -50,7 +50,7 @@ class GraphTemplate(
     // beschreibung farbe SettingsObj, Typ, erstellung onlineId
 
     override lateinit var executeQueue: ExecuteQueue
-    lateinit var viewModelProject: ViewModelProject
+    override lateinit var viewModelProject: ViewModelProject
 
     override fun deleteIsPossible(): Flow<Boolean> {
         TODO("Not yet implemented")

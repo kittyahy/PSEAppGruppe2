@@ -25,14 +25,6 @@ class ProjectTemplateFlowProvider(private val templateId: Int, private val db: A
                         mutableFlow.emit(template)
                     }
                 }
-        }
-        //Observe Settings for Template
-        launch(Dispatchers.IO) {
-            db.settingsDAO().getProjectSettings(templateId).distinctUntilChanged()
-                .collect { settings ->
-                    template.settings = settings
-                    mutableFlow.emit(template)
-                }
         }/*
         //Observe GraphTemplates for Template
         launch(Dispatchers.IO) {

@@ -20,15 +20,4 @@
 
 package com.pseandroid2.dailydata.model.users
 
-class SimpleUser(id: String, name: String) : User {
-    var userID: String = id
-    var userName: String = name
-
-    override fun getId(): String {
-        return userID
-    }
-
-    override fun getName(): String {
-        return userName
-    }
-}
+data class SimpleUser(override val id: String, override val name: String) : User

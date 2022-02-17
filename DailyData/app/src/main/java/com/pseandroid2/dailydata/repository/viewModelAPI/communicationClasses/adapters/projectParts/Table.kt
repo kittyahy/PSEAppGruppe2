@@ -8,6 +8,7 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Bu
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Column
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Row
 
+@Deprecated("Deprecated as of 2022-02-16")
 class Table {
     companion object {
         fun extractFrom(
@@ -18,17 +19,17 @@ class Table {
             val tableLayout: TableLayout = ArrayListLayout()
             val table: Table = ArrayListTable(tableLayout)
             for (column in columns) {
-                tableLayout.addColumn(
-                    column.dataType.serializableClassName,
-                    column.name,
-                    column.unit
-                )
+                //tableLayout.addColumn(
+                    //column.dataType.serializableClassName,
+                    //column.name,
+                    //column.unit
+                //)
             }
             for (button in buttons) {
-                tableLayout.addUIElement(button.columnId, button.toDBEquivalent())
+                //tableLayout.addUIElement(button.columnId, button)
             }
             for (row in rows) {
-                table.addRow(row.toDBEquivalent())
+                //table.addRow(row.toDBEquivalent())
             }
             return table
         }

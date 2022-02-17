@@ -28,9 +28,9 @@ class CreateProject(
 
     override suspend fun execute() {
         @Suppress("Deprecation")
-        val prod = repositoryViewModelAPI.appDataBase.projectCDManager().insertProject(project)
-        projectID = prod.id
-        projectIDReturn?.emit(prod.id)
+        val id = repositoryViewModelAPI.appDataBase.projectCDManager().insertProject(project)
+        projectID = id
+        projectIDReturn?.emit(id)
         super.execute()
     }
 
@@ -48,10 +48,7 @@ class CreateProject(
             .setOnlineID(projectID!!, onlineProjectID!!)
         return super.publish()
 =======*/
-    override suspend fun publish(
-        repositoryViewModelAPI: RepositoryViewModelAPI,
-        publishQueue: PublishQueue
-    ): Boolean {
+    override suspend fun publish(): Boolean {
         return super.publish() && publishable
     }
 }

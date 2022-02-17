@@ -27,6 +27,7 @@ import com.pseandroid2.dailydata.model.notifications.TimeNotification
 import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.table.ArrayListLayout
 import com.pseandroid2.dailydata.model.users.NullUser
+import com.pseandroid2.dailydata.model.users.SimpleUser
 import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
@@ -54,63 +55,10 @@ class ProjectFlow(
     fun getProject(): Flow<Project> = provider.provideFlow.map { project ->
         val ret = if (project == null) {
             Log.d(LOG_TAG, "Got null Project from database")
-            ViewModelProject(repo = repositoryViewModelAPI)
+            ViewModelProject(repo = repositoryViewModelAPI, admin = SimpleUser("", ""))
         } else {
-            Log.d(LOG_TAG, "Got Project from database: name = ${project.name}, id = ${project.id}")
-            val rows = mutableListOf<Row>()
-            for (row in project.table) {
-                rows.add(Row(row))
-            }
-            val buttons = mutableListOf<Button>()
-            for (col in project.table.getLayout()) {
-                for (uiElement in col.uiElements) {
-                    buttons.add(Button(uiElement, col.id))
-                }
-            }
-            val notifications = mutableListOf<Notification>()
-            for (notif in project.notifications) {
-                if (notif is TimeNotification) {
-                    notifications.add(Notification(notif))
-                }
-            }
-            val graphs = mutableListOf<Graph>()
-            for (graph in project.graphs) {
-                graphs.add(
-                    graph.toViewGraph(
-                        Gson().fromJson(
-                            db.projectDataDAO().getCurrentLayout(provider.projId),
-                            ArrayListLayout::class.java
-                        )
-                    )
-                )
-            }
-            val members = mutableListOf<Member>()
-            for (user in project.users) {
-                members.add(Member(user))
-            }
-            ViewModelProject(
-                project.id,
-                project.isOnline,
-                if (project.admin is NullUser) {
-                    Log.w(LOG_TAG, "Getting a NullUser from the Database")
-                    false
-                } else {
-                    rds.getUserID() == project.admin.getId()
-                },
-                project.name,
-                project.desc,
-                project.color,
-                project.table.getLayout().toColumnList(),
-                rows.toList(),
-                buttons.toList(),
-                notifications.toList(),
-                graphs.toList(),
-                members.toList(),
-                repositoryViewModelAPI
-            )
+            project
         }
-        @Suppress("Deprecation")
-        ret.executeQueue = eq
         return@map ret
     }
 }

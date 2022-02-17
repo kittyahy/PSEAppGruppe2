@@ -4,25 +4,25 @@ import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.repository.commandCenter.commands.SetTitle
 
 enum class Operation(val type: OperationType, val adminOp: Boolean) {
-    SET_PROJECT_NAME(OperationType.PROJECT, SetTitle.isAdminCommand) {
+    SET_PROJECT_NAME(OperationType.PROJECT, false) {//TODO replace this with actual calculations
         override fun isIllegal(project: Project): Boolean {
             return !SetTitle.isPossible(project)
         }
     },
-    SET_PROJECT_DESC(OperationType.PROJECT),
-    DELETE(OperationType.PROJECT),
-    ADD_GRAPH(OperationType.PROJECT),
-    ADD_USER(OperationType.PROJECT),
-    LEAVE_PROJECT(OperationType.PROJECT),
-    SET_ADMIN(OperationType.PROJECT),
-    SET_COLOR(OperationType.PROJECT),
-    CHANGE_NOTIFICATION(OperationType.PROJECT),
-    ADD_NOTIFICATION(OperationType.PROJECT),
-    DELETE_NOTIFICATION(OperationType.PROJECT),
-    PUBLISH_PROJECT(OperationType.PROJECT),
-    ADD_ROW(OperationType.TABLE),
-    DELETE_ROW(OperationType.TABLE),
-    ADD_COLUMN(OperationType.TABLE);
+    SET_PROJECT_DESC(OperationType.PROJECT, false),
+    DELETE(OperationType.PROJECT, false),
+    ADD_GRAPH(OperationType.PROJECT, false),
+    ADD_USER(OperationType.PROJECT, false),
+    LEAVE_PROJECT(OperationType.PROJECT, false),
+    SET_ADMIN(OperationType.PROJECT, false),
+    SET_COLOR(OperationType.PROJECT, false),
+    CHANGE_NOTIFICATION(OperationType.PROJECT, false),
+    ADD_NOTIFICATION(OperationType.PROJECT, false),
+    DELETE_NOTIFICATION(OperationType.PROJECT, false),
+    PUBLISH_PROJECT(OperationType.PROJECT, false),
+    ADD_ROW(OperationType.TABLE, false),
+    DELETE_ROW(OperationType.TABLE, false),
+    ADD_COLUMN(OperationType.TABLE, false);
 
     enum class OperationType {
         PROJECT,
@@ -30,5 +30,5 @@ enum class Operation(val type: OperationType, val adminOp: Boolean) {
         TABLE
     }
 
-    abstract fun isIllegal(project: Project): Boolean
+    open fun isIllegal(project: Project): Boolean = false
 }

@@ -54,22 +54,6 @@ class PieChart(
         TODO("Not yet implemented")
     }
 
-    override fun toDBEquivalent(): com.pseandroid2.dailydata.model.graph.Graph<*, *> {
-        val mappingInt = ArrayList<Int>()
-        for (col in mapping) {
-            mappingInt.add(col.id)
-        }
-        val sum = FloatSum()
-        val trafo = PieChartTransformation(sum)
-        val dataTrapo = viewModelProject.createDataTransformation(trafo, mappingInt)
-        val settings = MapSettings()
-        for (pair in columnColors) {
-            settings[PieChart.SLICE_COLOR_KEY + pair.key] = pair.value
-        }
-        settings[Generator.GRAPH_NAME_KEY] = id.toString()
-        return PieChart(id, dataTrapo, settings)
-    }
-
     fun addMappingColor(index : Int, color : Int) {
         //Todo(von Robin)
     }

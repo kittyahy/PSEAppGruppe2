@@ -8,7 +8,7 @@ import com.pseandroid2.dailydata.model.users.NullUser
 import com.pseandroid2.dailydata.model.users.User
 
 class SimpleProjectTemplate(
-    private val skeleton: ProjectSkeleton,
+    override val skeleton: ProjectSkeleton,
     private val layout: TableLayout,
     private val creator: User,
     override var graphs: MutableList<GraphTemplate>
@@ -38,9 +38,13 @@ class SimpleProjectTemplate(
         mutableListOf()
     )
 
-    @Suppress("Deprecation")
-    @Deprecated("Properties of Project should be accessed directly, access via Skeleton is deprecated")
-    override fun getProjectSkeleton() = skeleton
+    override fun addGraph(graph: GraphTemplate) {
+        TODO("Not yet implemented")
+    }
+
+    override fun addGraphs(graphsToAdd: Collection<GraphTemplate>) {
+        TODO("Not yet implemented")
+    }
 
     override fun getTableLayout() = layout
 

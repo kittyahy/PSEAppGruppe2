@@ -39,6 +39,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.vectorResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pseandroid2.dailydata.R
+import com.pseandroid2.dailydata.model.table.ColumnData
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
 import com.pseandroid2.dailydata.ui.composables.ListInput
@@ -52,7 +53,7 @@ import kotlinx.coroutines.InternalCoroutinesApi
 @Composable
 fun ProjectCreationScreen(
     onNavigate: (UiEvent.Navigate) -> Unit,
-    onPopBackStack : () -> Unit,
+    onPopBackStack: () -> Unit,
     viewModel: ProjectCreationScreenViewModel = hiltViewModel()
 ) {
 
@@ -61,8 +62,9 @@ fun ProjectCreationScreen(
 
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->
-            when(event) {
-                is UiEvent.ShowToast -> Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+            when (event) {
+                is UiEvent.ShowToast -> Toast.makeText(context, event.message, Toast.LENGTH_SHORT)
+                    .show()
                 is UiEvent.Navigate -> onNavigate(event)
                 is UiEvent.PopBackStack -> onPopBackStack()
                 else -> Unit
@@ -91,7 +93,8 @@ fun ProjectCreationScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(scrollState).testTag("projectCreation")
+                .verticalScroll(scrollState)
+                .testTag("projectCreation")
         ) {
             TextInput(
                 placeholder = "Add Title",
@@ -109,7 +112,13 @@ fun ProjectCreationScreen(
             Divider()
             WallpaperDialog(
                 isOpen = viewModel.isWallpaperDialogOpen,
-                onDismissRequest = { viewModel.onEvent(ProjectCreationEvent.OnShowWallpaperDialog(false)) },
+                onDismissRequest = {
+                    viewModel.onEvent(
+                        ProjectCreationEvent.OnShowWallpaperDialog(
+                            false
+                        )
+                    )
+                },
                 onWallpaperClick = { wallpaper ->
                     viewModel.onEvent(ProjectCreationEvent.OnWallpaperChange(wallpaper.value))
                     viewModel.onEvent(ProjectCreationEvent.OnShowWallpaperDialog(false))
@@ -125,7 +134,13 @@ fun ProjectCreationScreen(
                 isOpen = viewModel.isTableDialogOpen,
                 onDismissRequest = { viewModel.onEvent(ProjectCreationEvent.OnShowTableDialog(false)) },
                 onClick = { name, unit, dataType ->
-                    viewModel.onEvent(ProjectCreationEvent.OnTableAdd(name = name, unit = unit, dataType = dataType))
+                    viewModel.onEvent(
+                        ProjectCreationEvent.OnTableAdd(
+                            name = name,
+                            unit = unit,
+                            dataType = dataType
+                        )
+                    )
                     viewModel.onEvent(ProjectCreationEvent.OnShowTableDialog(false))
                 }
             )
@@ -133,21 +148,29 @@ fun ProjectCreationScreen(
                 label = "Add Table Column",
                 mainIcon = ImageVector.vectorResource(id = R.drawable.ic_table),
                 onClick = { viewModel.onEvent(ProjectCreationEvent.OnShowTableDialog(true)) },
-                onClickItem = { viewModel.onEvent(ProjectCreationEvent.OnTableRemove(index = it)) },
-                elements = viewModel.table.map { "${it.name} in ${it.unit}" }
+                onClickItem = { index, col ->
+                    viewModel.onEvent(
+                        ProjectCreationEvent.OnTableRemove(
+                            index = index
+                        )
+                    )
+                },
+                elements = viewModel.table.map { Pair(it, "${it.name} in ${it.unit}") }
             )
             Divider()
             ButtonDialog(
                 isOpen = viewModel.isButtonsDialogOpen,
-                buttons = viewModel.table.filter { it.dataType == DataType.WHOLE_NUMBER }.map { it.name },
+                buttons = viewModel.table.filter { it.dataType == DataType.WHOLE_NUMBER }
+                    .map { Pair(it, it.name) },
                 onDismissRequest = { viewModel.onEvent(ProjectCreationEvent.OnShowTableDialog(false)) },
                 onClick = { name, column, value ->
                     viewModel.onEvent(
                         ProjectCreationEvent.OnButtonAdd(
                             name = name,
-                            columnId = viewModel.table.filter { it.dataType == DataType.WHOLE_NUMBER }[column].id,
+                            columnId = (column as ColumnData).id,
                             value = value.toInt()
-                        ))
+                        )
+                    )
                     viewModel.onEvent(ProjectCreationEvent.OnShowButtonsDialog(false))
                 }
             )
@@ -155,16 +178,26 @@ fun ProjectCreationScreen(
                 label = "Button",
                 mainIcon = ImageVector.vectorResource(id = R.drawable.ic_button),
                 onClick = { viewModel.onEvent(ProjectCreationEvent.OnShowButtonsDialog(true)) },
-                onClickItem = { viewModel.onEvent(ProjectCreationEvent.OnButtonRemove(index = it)) },
+                onClickItem = { index, button ->
+                    viewModel.onEvent(
+                        ProjectCreationEvent.OnButtonRemove(index = index)
+                    )
+                },
                 elements = viewModel.buttons.map { button ->
                     val name = viewModel.table.find { it.id == button.columnId }!!.name
-                    "${button.name} in $name"
+                    Pair(button, "${button.name} in $name")
                 }
             )
             Divider()
             NotificationDialog(
                 isOpen = viewModel.isNotificationDialogOpen,
-                onDismissRequest = { viewModel.onEvent(ProjectCreationEvent.OnShowNotificationDialog(false)) },
+                onDismissRequest = {
+                    viewModel.onEvent(
+                        ProjectCreationEvent.OnShowNotificationDialog(
+                            false
+                        )
+                    )
+                },
                 onClick = { message, time ->
                     viewModel.onEvent(ProjectCreationEvent.OnNotificationAdd(message, time))
                     viewModel.onEvent(ProjectCreationEvent.OnShowNotificationDialog(false))
@@ -174,8 +207,14 @@ fun ProjectCreationScreen(
                 label = "Add Notification",
                 mainIcon = Icons.Default.Notifications,
                 onClick = { viewModel.onEvent(ProjectCreationEvent.OnShowNotificationDialog(true)) },
-                onClickItem = { viewModel.onEvent(ProjectCreationEvent.OnNotificationRemove(index = it)) },
-                elements = viewModel.notifications.map { it.time.toString() }
+                onClickItem = { index, notif ->
+                    viewModel.onEvent(
+                        ProjectCreationEvent.OnNotificationRemove(
+                            index = index
+                        )
+                    )
+                },
+                elements = viewModel.notifications.map { Pair(it, it.time.toString()) }
             )
             Divider()
             GraphDialog(
@@ -190,8 +229,14 @@ fun ProjectCreationScreen(
                 label = "Add Graph",
                 mainIcon = ImageVector.vectorResource(id = R.drawable.ic_chart),
                 onClick = { viewModel.onEvent(ProjectCreationEvent.OnShowGraphDialog(true)) },
-                onClickItem = { viewModel.onEvent(ProjectCreationEvent.OnGraphRemove(index = it)) },
-                elements = viewModel.graphs.map { it.typeName }
+                onClickItem = { index, graph ->
+                    viewModel.onEvent(
+                        ProjectCreationEvent.OnGraphRemove(
+                            index = index
+                        )
+                    )
+                },
+                elements = viewModel.graphs.map { Pair(it, it.typeName) }
             )
         }
     }

@@ -62,42 +62,6 @@ class LineChart(
         TODO("Not yet implemented")
     }
 
-    override fun toDBEquivalent(): ModelGraph<*, *> {
-        val mappingInt = ArrayList<Int>()
-        for (col in mappingVertical) {
-            mappingInt.add(col.id)
-        }
-        val identity = FloatIdentity()
-        val settings = MapSettings()
-        settings[Generator.GRAPH_NAME_KEY] = id.toString()
-
-        @Suppress("Deprecation")
-        val modelProject = viewModelProject.toDBEquivalent()
-        return when (mappingVertical[0].dataType) {
-            FLOATING_POINT_NUMBER -> {
-                val trafo = FloatLineChartTransformation(identity)
-                val dataTrafo = modelProject.createDataTransformation(trafo, mappingInt)
-                FloatLineChart(id, dataTrafo, settings)
-            }
-            WHOLE_NUMBER -> {
-                val trafo = IntLineChartTransformation(identity)
-                val dataTrafo = modelProject.createDataTransformation(trafo, mappingInt)
-                IntLineChart(id, dataTrafo, settings)
-            }
-            TIME -> {
-                val trafo = DateTimeLineChartTransformation(identity)
-                val dataTrafo = modelProject.createDataTransformation(trafo, mappingInt)
-                DateTimeLineChart(id, dataTrafo, settings)
-            }
-            else -> {
-                throw IllegalArgumentException(
-                    "Could not create Line Chart for X-Axis values of " +
-                            "type ${mappingVertical[0].dataType}"
-                )
-            }
-        }
-    }
-
     fun addVerticalMappingIsPossible(): Flow<Boolean> {
         //Todo replace with valid proof
         val flow = MutableSharedFlow<Boolean>(1)

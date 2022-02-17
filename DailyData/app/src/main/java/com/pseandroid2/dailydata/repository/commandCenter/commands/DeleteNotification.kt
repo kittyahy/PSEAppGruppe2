@@ -28,10 +28,7 @@ class DeleteNotification(
         super.execute()
     }
 
-    override suspend fun publish(
-        repositoryViewModelAPI: RepositoryViewModelAPI,
-        publishQueue: PublishQueue
-    ): Boolean {
+    override suspend fun publish(): Boolean {
         return super.publish() && publishable
     }
 

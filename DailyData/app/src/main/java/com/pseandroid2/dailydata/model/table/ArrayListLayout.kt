@@ -5,8 +5,6 @@ import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
 import com.pseandroid2.dailydata.util.Quadruple
 import com.pseandroid2.dailydata.util.fromJson
-import com.pseandroid2.dailydata.util.getSerializableClassName
-import kotlin.reflect.KClass
 
 /**
  * This is a implementation of a tableLayout with array lists.
@@ -40,8 +38,9 @@ class ArrayListLayout(input: String = "") : TableLayout {
 
     override fun getUIElements(col: Int): List<UIElement> = layout[col].fourth.toList()
 
-    override fun addUIElement(col: Int, elements: List<UIElement>) {
-        layout[col].fourth.addAll(elements)
+    override fun addUIElement(col: Int, element: UIElement): Int {
+        layout[col].fourth.add(element)
+        return layout[col].fourth.size - 1
     }
 
     override fun removeUIElement(col: Int, id: Int) {

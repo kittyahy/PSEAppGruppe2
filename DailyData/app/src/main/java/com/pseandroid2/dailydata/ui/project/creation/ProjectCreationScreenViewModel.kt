@@ -59,13 +59,13 @@ class ProjectCreationScreenViewModel @Inject constructor(
         private set
     var wallpaper by mutableStateOf(Color.White)
         private set
-    var table by mutableStateOf( listOf<Column>() )
+    var table by mutableStateOf(listOf<Column>())
         private set
-    var buttons by mutableStateOf( listOf<Button>() )
+    var buttons by mutableStateOf(listOf<Button>())
         private set
-    var notifications by mutableStateOf( listOf<Notification>() )
+    var notifications by mutableStateOf(listOf<Notification>())
         private set
-    var graphs by mutableStateOf( listOf<Graph>() )
+    var graphs by mutableStateOf(listOf<Graph>())
         private set
 
     var isWallpaperDialogOpen by mutableStateOf(false)
@@ -84,12 +84,12 @@ class ProjectCreationScreenViewModel @Inject constructor(
 
     init {
         val id = savedStateHandle.get<Int>("projectTemplateId")!!
-        if(id != -1) {
+        if (id != -1) {
             viewModelScope.launch {
                 val template = repository.serverHandler.getProjectTemplateById(id = id).toProject()
-                title = template.title
+                title = template.name
                 description = template.desc
-                wallpaper = Color(template.wallpaper)
+                wallpaper = Color(template.color)
                 table = template.table
                 buttons = template.buttons
                 notifications = template.notifications
@@ -117,14 +117,21 @@ class ProjectCreationScreenViewModel @Inject constructor(
                     table.last().id + 1
                 }
                 val mutable = table.toMutableList()
-                mutable.add(Column(id = id, name = event.name, unit = event.unit, dataType = event.dataType))
+                mutable.add(
+                    Column(
+                        id = id,
+                        name = event.name,
+                        unit = event.unit,
+                        dataType = event.dataType
+                    )
+                )
                 table = mutable.toList()
             }
             is ProjectCreationEvent.OnTableRemove -> {
                 val mutable = table.toMutableList()
                 val removed = mutable.removeAt(index = event.index)
                 val mutableButtons = buttons.toMutableList()
-                buttons = mutableButtons.filter { it.columnId != removed.id}.toList()
+                buttons = mutableButtons.filter { it.columnId != removed.id }.toList()
                 table = mutable.toList()
             }
             is ProjectCreationEvent.OnButtonAdd -> {
@@ -134,7 +141,14 @@ class ProjectCreationScreenViewModel @Inject constructor(
                     buttons.last().id + 1
                 }
                 val mutable = buttons.toMutableList()
-                mutable.add(Button(id = id, name = event.name, columnId = table.find {event.columnId == it.id}!!.id, value = event.value))
+                mutable.add(
+                    Button(
+                        id = id,
+                        name = event.name,
+                        columnId = table.find { event.columnId == it.id }!!.id,
+                        value = event.value
+                    )
+                )
                 buttons = mutable.toList()
             }
             is ProjectCreationEvent.OnButtonRemove -> {
@@ -166,7 +180,7 @@ class ProjectCreationScreenViewModel @Inject constructor(
                 when {
                     title.isBlank() -> sendUiEvent(UiEvent.ShowToast("Please Enter a title"))
                     table.isEmpty() -> sendUiEvent(UiEvent.ShowToast("Please Enter a column"))
-                    else            -> {
+                    else -> {
                         viewModelScope.launch {
                             val newProject = repository.projectHandler.newProjectAsync(
                                 name = title,
@@ -193,7 +207,7 @@ class ProjectCreationScreenViewModel @Inject constructor(
                 isTableDialogOpen = event.isOpen
             }
             is ProjectCreationEvent.OnShowButtonsDialog -> {
-                if(event.isOpen && table.none { it.dataType == DataType.WHOLE_NUMBER }) {
+                if (event.isOpen && table.none { it.dataType == DataType.WHOLE_NUMBER }) {
                     sendUiEvent(UiEvent.ShowToast("Please Enter a compatible column first"))
                 } else {
                     isButtonsDialogOpen = event.isOpen
@@ -214,7 +228,7 @@ class ProjectCreationScreenViewModel @Inject constructor(
         }
     }
 
-    private fun sendUiEvent(event : UiEvent) {
+    private fun sendUiEvent(event: UiEvent) {
         viewModelScope.launch {
             _uiEvent.emit(event)
         }

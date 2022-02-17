@@ -52,8 +52,6 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
     var isAdmin = false
         private set
 
-    /*var title by mutableStateOf("")
-        private set*/
     var description by mutableStateOf("")
         private set
     var wallpaper by mutableStateOf(Color.White)
@@ -100,6 +98,9 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
         private set
 
     fun initialize(projectId: Int) {
+        viewModelScope.launch {
+            repository.projectHandler.initializeProjectProvider(projectId)
+        }
         viewModelScope.launch {
             project = repository.projectHandler.getProjectByID(projectId).asLiveData()
         }

@@ -20,7 +20,6 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
-import com.pseandroid2.dailydata.model.project.ProjectBuilder
 import com.pseandroid2.dailydata.model.table.ArrayListRow
 import com.pseandroid2.dailydata.model.table.Row
 import com.pseandroid2.dailydata.model.table.RowMetaData
@@ -33,9 +32,9 @@ import com.pseandroid2.dailydata.model.project.Project as ModelProject
 class Row(
     override var id: Int,
     val elements: List<String>
-) : Identifiable, Convertible<Row> {
+) : Identifiable{
     override lateinit var executeQueue: ExecuteQueue
-    lateinit var viewModelProject: ViewModelProject
+    override lateinit var viewModelProject: ViewModelProject
 
     constructor(row: Row) : this(
         row.getMetaData().createdOn.hashCode(), //TODO Richtige ID
@@ -55,21 +54,6 @@ class Row(
     }
 
     override suspend fun delete() {
-        TODO("Not yet implemented")
-    }
-
-    override fun toDBEquivalent(): Row {
-        val rowMetaData = RowMetaData(
-            LocalDateTime.now(),
-            LocalDateTime.MAX,
-            SimpleUser("0", "No One")
-        ) //Todo werte fixen
-        val elementList: MutableList<Any> = ArrayList<Any>()
-        elementList.addAll(elements)
-        return ArrayListRow(elementList, rowMetaData)
-    }
-
-    override fun addYourself(builder: ProjectBuilder<out ModelProject>) {
         TODO("Not yet implemented")
     }
 }

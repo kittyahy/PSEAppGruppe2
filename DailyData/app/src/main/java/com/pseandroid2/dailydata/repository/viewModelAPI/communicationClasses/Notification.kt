@@ -22,7 +22,6 @@ package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
 import com.pseandroid2.dailydata.model.notifications.Notification
 import com.pseandroid2.dailydata.model.notifications.TimeNotification
-import com.pseandroid2.dailydata.model.project.ProjectBuilder
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalTime
@@ -33,7 +32,7 @@ class Notification(
     override var id: Int,
     val message: String,
     val time: LocalTime
-) : Identifiable, Convertible<Notification> {
+) : Identifiable{
     override lateinit var executeQueue: ExecuteQueue
     override lateinit var viewModelProject: ViewModelProject
 
@@ -50,13 +49,5 @@ class Notification(
     //@throws IllegalOperationException
     override suspend fun delete() {
         TODO("DeleteNotification")
-    }
-
-    override fun toDBEquivalent(): TimeNotification {
-        return TimeNotification(message, time, id)
-    }
-
-    override fun addYourself(builder: ProjectBuilder<out ModelProject>) {
-        builder.addNotifications(listOf(toDBEquivalent()))
     }
 }

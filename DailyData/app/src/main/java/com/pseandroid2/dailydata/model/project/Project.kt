@@ -44,46 +44,23 @@ interface Project {
 
     val isIllegalOperation: Map<Operation, Flow<Boolean>>
 
-    @Deprecated("Access via skeleton is deprecated")
-    val skeleton: ProjectSkeleton
+    val id: Int
 
-    var id: Int
-        set(value) {
-            @Suppress("Deprecation")
-            skeleton.id = value
-        }
-        @Suppress("Deprecation")
-        get() = skeleton.id
-
-    var onlineId: Long
-        set(value) {
-            @Suppress("Deprecation")
-            skeleton.onlineId = value
-        }
-        @Suppress("Deprecation")
-        get() = skeleton.onlineId
+    val onlineId: Long
 
     val name: String
-        @Suppress("Deprecation")
-        get() = skeleton.name
 
     suspend fun setName(name: String)
 
     val desc: String
-        @Suppress("Deprecation")
-        get() = skeleton.desc
 
     suspend fun setDesc(desc: String)
 
     val path: String
-        @Suppress("Deprecation")
-        get() = skeleton.path
 
     suspend fun setPath(path: String)
 
     val color: Int
-        @Suppress("Deprecation")
-        get() = skeleton.color
 
     suspend fun setColor(color: Int)
 
@@ -91,32 +68,30 @@ interface Project {
 
     suspend fun addGraph(graph: Graph<*, *>)
 
+    suspend fun addGraphs(graphsToAdd: Collection<Graph<*, *>>)
+
     suspend fun removeGraph(id: Int)
 
-    var notifications: MutableList<Notification>
-        set(value) {
-            @Suppress("Deprecation")
-            skeleton.notifications = value
-        }
-        @Suppress("Deprecation")
-        get() = skeleton.notifications
+    val notifications: List<Notification>
 
     /**
      * It adds the given notification to the the project.
      */
     suspend fun addNotification(notification: Notification)
 
+    suspend fun addNotifications(notifications: Collection<Notification>)
+
     suspend fun removeNotification(id: Int)
 
     suspend fun changeNotification(id: Int, notification: Notification)
 
-    var table: Table
+    val table: Table
 
     suspend fun addColumn(specs: ColumnData, default: Any)
 
     suspend fun deleteColumn(column: Int)
 
-    suspend fun addUIElements(col: Int, uiElement: UIElement)
+    suspend fun addUIElement(col: Int, uiElement: UIElement)
 
     suspend fun deleteUIElement(col: Int, id: Int)
 
@@ -124,7 +99,7 @@ interface Project {
 
     suspend fun setAdmin(admin: User)
 
-    var isOnline: Boolean
+    val isOnline: Boolean
 
     /**
      * Unlinks this project from synchronisation with the server

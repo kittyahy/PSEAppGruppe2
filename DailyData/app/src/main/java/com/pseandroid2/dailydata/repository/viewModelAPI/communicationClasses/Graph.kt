@@ -32,7 +32,6 @@ import com.pseandroid2.dailydata.model.graph.LineChart.Companion.LINE_STYLE_KEY
 import com.pseandroid2.dailydata.model.graph.LineChart.Companion.LINE_STYLE_NONE
 import com.pseandroid2.dailydata.model.graph.LineChart.Companion.LINE_STYLE_SOLID
 import com.pseandroid2.dailydata.model.project.Project
-import com.pseandroid2.dailydata.model.project.ProjectBuilder
 import com.pseandroid2.dailydata.model.table.TableLayout
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import kotlinx.coroutines.flow.Flow
@@ -43,7 +42,7 @@ import com.pseandroid2.dailydata.model.graph.Graph as ModelGraph
 /**
  * Graph class that handles its specific interaction with ViewModel.
  */
-sealed class Graph : Identifiable, Convertible<ModelGraph<*, *>> {
+sealed class Graph : Identifiable{
     companion object {
         val availableGraphs: MutableList<String> = mutableListOf(
             "Pie Chart",
@@ -82,11 +81,6 @@ sealed class Graph : Identifiable, Convertible<ModelGraph<*, *>> {
         appDataBase = repositoryViewModelAPI.appDataBase
         @Suppress("DEPRECATION")
         super.connectToRepository(repositoryViewModelAPI)
-    }
-
-    override fun addYourself(builder: ProjectBuilder<out Project>) {
-        @Suppress("DEPRECATION")
-        builder.addGraphs(listOf(toDBEquivalent())) //TODO Arne: es kommen Änderungen
     }
 
     fun showIsPossible(): Flow<Boolean> {

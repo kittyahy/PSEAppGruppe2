@@ -63,7 +63,7 @@ class UserConversion {
      */
     @TypeConverter
     fun userToString(user: User): String {
-        return user.getId() + "|" + user.getName()
+        return user.id + "|" + user.name
     }
 
     /**

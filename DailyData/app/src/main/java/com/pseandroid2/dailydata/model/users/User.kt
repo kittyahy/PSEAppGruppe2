@@ -25,14 +25,8 @@ package com.pseandroid2.dailydata.model.users
  */
 interface User {
 
-    /**
-     * This method returns the id of the user.
-     */
-    fun getId(): String
+    val id: String
 
-    /**
-     * This method returns the name of the user.
-     */
-    fun getName(): String
+    val name: String
 
 }

@@ -20,7 +20,6 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
-import com.pseandroid2.dailydata.model.project.ProjectBuilder
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.model.uielements.UIElementType
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
@@ -36,7 +35,7 @@ class Button(
     val name: String,
     val columnId: Int,
     val value: Int
-) : Identifiable, Convertible<UIElement> {
+) : Identifiable {
     override lateinit var executeQueue: ExecuteQueue
     override lateinit var viewModelProject: ViewModelProject
 
@@ -54,15 +53,6 @@ class Button(
     //@throws IllegalOperationException
     override suspend fun delete() {
         TODO("Not yet implemented")
-    }
-
-    override fun toDBEquivalent(): UIElement {
-        return UIElement(
-            id,
-            UIElementType.BUTTON,
-            name,
-            value.toString()
-        )
     }
 
     fun increaseValueIsPossible(): Flow<Boolean> {
@@ -102,9 +92,5 @@ class Button(
 
     suspend fun setValue(value: Int) {
         TODO("setValue")
-    }
-
-    override fun addYourself(builder: ProjectBuilder<out ModelProject>) {
-        TODO("Not yet implemented")
     }
 }

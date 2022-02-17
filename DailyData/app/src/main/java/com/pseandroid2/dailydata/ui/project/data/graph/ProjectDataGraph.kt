@@ -41,12 +41,13 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.core.view.drawToBitmap
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pseandroid2.dailydata.R
+import com.pseandroid2.dailydata.model.graph.Generator
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Column
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DotSize
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
+import com.pseandroid2.dailydata.model.graph.Graph
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.GraphTemplate
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.LineChart
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.LineType
@@ -55,29 +56,30 @@ import com.pseandroid2.dailydata.ui.composables.EnumDropDownMenu
 import com.pseandroid2.dailydata.ui.project.creation.AppDialog
 import com.pseandroid2.dailydata.ui.project.creation.WallpaperDialog
 import com.pseandroid2.dailydata.util.ui.Wallpapers
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
-@InternalCoroutinesApi
 @Composable
 fun ProjectDataGraphScreen(
-    projectId : Int,
+    projectId: Int,
     viewModel: ProjectDataGraphScreenViewModel = hiltViewModel()
 ) {
-    var templates : List<GraphTemplate> = listOf()
+    val templates: List<GraphTemplate> = listOf()
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
-        viewModel.onEvent(ProjectDataGraphScreenEvent.OnCreate(projectId = projectId))
+        viewModel.initialize(projectId)
     }
     if (viewModel.isDialogOpen) {
         ProjectGraphDialog(
             isOpen = viewModel.isDialogOpen,
-            onDismissRequest = { viewModel.onEvent(ProjectDataGraphScreenEvent.OnCloseGraphDialog) },
-            graph = viewModel.graphs[viewModel.dialogIndex],
+            onDismissRequest = {
+                viewModel.onEvent(
+                    ProjectDataGraphScreenEvent.OnShowGraphDialog(false)
+                )
+            },
+            graph = viewModel.currentGraph!!,
             table = viewModel.table,
             templates = templates
         )
@@ -85,67 +87,50 @@ fun ProjectDataGraphScreen(
 
 
     LazyColumn {
-        itemsIndexed(viewModel.graphs) { index, graph ->
-            coroutineScope.launch {
-                val bitmap = runBlocking {
-                    if (graph.image == null && graph.showIsPossible().first()) {
-                        graph.show(context = context).drawToBitmap()
-                    } else {
-                        if (graph.image != null) {
-                            graph.image
-                        } else {
-                            Toast.makeText(context, "Could not load image", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                }
-            }
-            if(graph.image != null) {
-                Image(
-                    //useResource("image.png") { loadImageBitmap(it) }
-                    bitmap = graph.image!!.asImageBitmap(),
-                    contentDescription = "",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            viewModel.onEvent(
-                                ProjectDataGraphScreenEvent.OnShowGraphDialog(
-                                    index = index
-                                )
-                            )
-                        }
-                )
-            }
+        itemsIndexed(viewModel.project.value!!.graphs) { _, graph ->
+            GraphImage(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        viewModel.onEvent(
+                            ProjectDataGraphScreenEvent.OnShowGraphDialog(true, graph)
+                        )
+                    },
+                graph = graph
+            )
         }
     }
 }
 
 @Composable
 fun ProjectGraphDialog(
-    isOpen : Boolean,
-    onDismissRequest : () -> Unit,
-    graph : Graph,
-    table : List<Column>,
-    templates : List<GraphTemplate>
+    isOpen: Boolean,
+    onDismissRequest: () -> Unit,
+    graph: Graph<*, *>,
+    table: List<Column>,
+    templates: List<GraphTemplate>
 ) {
     var isDialogOpen by remember { mutableStateOf(false) }
     AppDialog(isOpen = isDialogOpen, onDismissRequest = onDismissRequest, padding = 0.dp) {
         Column(modifier = Modifier.width(200.dp)) {
-            templates.filter { it.type.representation == graph.typeName }.forEachIndexed { index, graphTemplate ->
-                Box(modifier = Modifier
-                        .padding(8.dp)
-                        .fillMaxWidth()
-                        .height(32.dp)
-                        .clickable {
-                            //graph.apply template
-                            isDialogOpen = false
-                        },
-                    contentAlignment = Alignment.CenterStart
-                ) {
-                    Text(text = graphTemplate.title)
+            templates.filter { it.type.representation == graph.getType().representation }
+                .forEachIndexed { index, graphTemplate ->
+                    Box(
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .fillMaxWidth()
+                            .height(32.dp)
+                            .clickable {
+                                //graph.apply template
+                                isDialogOpen = false
+                            },
+                        contentAlignment = Alignment.CenterStart
+                    ) {
+                        Text(text = graphTemplate.title)
+                    }
+                    if (index < templates.lastIndex)
+                        Divider()
                 }
-                if (index < templates.lastIndex)
-                    Divider()
-            }
         }
     }
 
@@ -154,7 +139,7 @@ fun ProjectGraphDialog(
         Column(
             modifier = Modifier.width(300.dp)
         ) {
-            when(graph) {
+            when (graph) {
                 is LineChart -> {
                     LineChartDialog(
                         graph = graph,
@@ -168,8 +153,11 @@ fun ProjectGraphDialog(
                     )
                 }
             }
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                TextButton(onClick = {isDialogOpen = true}) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                TextButton(onClick = { isDialogOpen = true }) {
                     Text(text = "Apply Template")
                 }
                 TextButton(onClick = onDismissRequest) {
@@ -182,8 +170,8 @@ fun ProjectGraphDialog(
 
 @Composable
 fun PieChartDialog(
-    graph : PieChart,
-    table : List<Column>
+    graph: PieChart,
+    table: List<Column>
 ) {
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -200,7 +188,7 @@ fun PieChartDialog(
             modifier = Modifier.fillMaxWidth()
         )
 
-        if(colorDialogOpen) {
+        if (colorDialogOpen) {
             WallpaperDialog(
                 isOpen = colorDialogOpen,
                 onDismissRequest = { colorDialogOpen = false },
@@ -218,9 +206,10 @@ fun PieChartDialog(
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Column(modifier = Modifier
-                        .size(40.dp)
-                        .wrapContentSize(Alignment.CenterStart)
+                    Column(
+                        modifier = Modifier
+                            .size(40.dp)
+                            .wrapContentSize(Alignment.CenterStart)
                     ) {
                         Box(
                             modifier = Modifier
@@ -244,7 +233,7 @@ fun PieChartDialog(
         }
 
         val suggestions = table.map { it.name }
-        var col by  remember { mutableStateOf( 0 ) }
+        var col by remember { mutableStateOf(0) }
         EnumDropDownMenu(
             suggestions = suggestions,
             value = suggestions[col],
@@ -255,7 +244,8 @@ fun PieChartDialog(
                 if (graph.addMappingIsPossible().first()) {
                     graph.addMapping(column = table[col])
                 } else {
-                    Toast.makeText(context, "Could not change add mapping", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Could not change add mapping", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
         }) {
@@ -269,7 +259,8 @@ fun PieChartDialog(
                     if (graph.showPercentagesIsPossible().first()) {
                         graph.showPercentages(show = it)
                     } else {
-                        Toast.makeText(context, "Could not edit percentages", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Could not edit percentages", Toast.LENGTH_SHORT)
+                            .show()
                     }
                 }
             })
@@ -280,8 +271,8 @@ fun PieChartDialog(
 
 @Composable
 fun LineChartDialog(
-    graph : LineChart,
-    table : List<Column>
+    graph: LineChart,
+    table: List<Column>
 ) {
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -310,7 +301,11 @@ fun LineChartDialog(
                             if (graph.deleteVerticalMappingIsPossible().first()) {
                                 graph.deleteVerticalMapping(index = index)
                             } else {
-                                Toast.makeText(context, "Could not delete mapping", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    context,
+                                    "Could not delete mapping",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         }
                     }
@@ -319,7 +314,7 @@ fun LineChartDialog(
         }
 
         val suggestions = table.map { it.name }
-        var col by  remember { mutableStateOf( 0 ) }
+        var col by remember { mutableStateOf(0) }
         EnumDropDownMenu(
             suggestions = suggestions,
             value = suggestions[col],
@@ -350,7 +345,8 @@ fun LineChartDialog(
                         if (graph.changeDotColorIsPossible().first()) {
                             graph.changeDotSize(dotSize = DotSize.values()[it])
                         } else {
-                            Toast.makeText(context, "Could not change dot size", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Could not change dot size", Toast.LENGTH_SHORT)
+                                .show()
                         }
                     }
                 }
@@ -369,7 +365,11 @@ fun LineChartDialog(
                         if (graph.changeDotColorIsPossible().first()) {
                             graph.changeDotColor(color = Wallpapers.values()[it].value.toArgb())
                         } else {
-                            Toast.makeText(context, "Could not change dot color", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                "Could not change dot color",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
                 }
@@ -388,11 +388,33 @@ fun LineChartDialog(
                         if (graph.changeLineTypeIsPossible().first()) {
                             graph.changeLineType(LineType.values()[it])
                         } else {
-                            Toast.makeText(context, "Could not change line type", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                "Could not change line type",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
                 }
             )
         }
+    }
+}
+
+@Composable
+fun GraphImage(modifier: Modifier, graph: Graph<*, *>) {
+    val bitmap = graph.getImage()
+    if (bitmap != null) {
+        Image(
+            bitmap = bitmap.asImageBitmap(),
+            contentDescription = graph.getCustomizing()[Generator.GRAPH_NAME_KEY],
+            modifier = modifier
+        )
+    } else {
+        AndroidView(
+            factory = {
+                Generator.generateChart(graph, it)
+            }
+        )
     }
 }

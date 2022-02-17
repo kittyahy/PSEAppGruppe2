@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.pseandroid2.dailydata.model.database.AppDataBase
-import com.pseandroid2.dailydata.model.project.SimpleProjectBuilder
 import com.pseandroid2.dailydata.model.users.SimpleUser
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectFlowProvider
 import com.pseandroid2.dailydata.util.Consts.LOG_TAG

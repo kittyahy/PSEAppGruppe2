@@ -11,9 +11,9 @@ class AddUser(private val id: Int, private val user: User, api: RepositoryViewMo
         fun isPossible(viewModelProject: ViewModelProject): Boolean {
             return viewModelProject.users.size < 24 && viewModelProject.isOnline
         }
-    }
 
-    override val publishable: Boolean = true
+        const val publishable: Boolean = true
+    }
 
     override suspend fun execute() {
         @Suppress("Deprecation")

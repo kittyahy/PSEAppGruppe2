@@ -21,7 +21,6 @@
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
 import com.pseandroid2.dailydata.model.project.Project as ModelProject
-import com.pseandroid2.dailydata.model.project.ProjectBuilder
 import com.pseandroid2.dailydata.model.users.SimpleUser
 import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
@@ -30,14 +29,14 @@ import kotlinx.coroutines.flow.Flow
 class Member(
     override var id: Int,
     val name: String
-) : Identifiable, Convertible<User> {
+) : Identifiable {
     constructor(user: User) : this(
-        user.getId().toInt(),
-        user.getName()
+        user.id.toInt(),
+        user.name
     ) //Todo Arne Fragen ob der Cast passt: Nein, User werden über firebaseID identifiziert und die ist ein String
 
     override lateinit var executeQueue: ExecuteQueue
-    lateinit var viewModelProject: ViewModelProject
+    override lateinit var viewModelProject: ViewModelProject
     override fun deleteIsPossible(): Flow<Boolean> {
         TODO("Not yet implemented")
     }
@@ -45,13 +44,5 @@ class Member(
     //@throws IllegalOperationException
     override suspend fun delete() {
         TODO("Not yet implemented. Wish kriterium")
-    }
-
-    override fun toDBEquivalent(): User {
-        return SimpleUser(id.toString(), name)
-    }
-
-    override fun addYourself(builder: ProjectBuilder<out ModelProject>) {
-        builder.addUsers(listOf(this.toDBEquivalent()))
     }
 }

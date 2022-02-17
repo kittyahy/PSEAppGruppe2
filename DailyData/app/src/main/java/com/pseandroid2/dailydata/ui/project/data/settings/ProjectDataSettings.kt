@@ -181,7 +181,7 @@ fun ProjectDataSettingsScreen(
                         )
                     },
                     elements = viewModel.project.value!!.users.map {
-                        Pair(it, "${it.getName()} #${it.getId()}")
+                        Pair(it, "${it.name} #${it.id}")
                     }
                 )
             }

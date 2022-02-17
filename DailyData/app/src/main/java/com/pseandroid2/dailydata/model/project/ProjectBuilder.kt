@@ -1,40 +1,253 @@
+/*
+
+    DailyData is an android app to easily create diagrams from data one has collected
+    Copyright (C) 2022  Antonia Heiming, Anton Kadelbach, Arne Kuchenbecker, Merlin Opp, Robin Amman
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+*/
+
 package com.pseandroid2.dailydata.model.project
 
 import com.pseandroid2.dailydata.model.graph.Graph
 import com.pseandroid2.dailydata.model.notifications.Notification
-import com.pseandroid2.dailydata.model.settings.Settings
+import com.pseandroid2.dailydata.model.table.ArrayListTable
+import com.pseandroid2.dailydata.model.table.ColumnData
 import com.pseandroid2.dailydata.model.table.Table
+import com.pseandroid2.dailydata.model.uielements.UIElement
+import com.pseandroid2.dailydata.model.users.NullUser
 import com.pseandroid2.dailydata.model.users.User
+import com.pseandroid2.dailydata.repository.commandCenter.commands.IllegalOperationException
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Operation
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 
-/**
- * This Interface provides all methods to create a new project.
- */
-interface ProjectBuilder<P : Project> {
+class ProjectBuilder
+constructor(
+    private val skeleton: ProjectSkeleton,
+    initialTable: Table,
+    initialAdmin: User,
+    override var isOnline: Boolean,
+    private val mutableUsers: MutableList<User>,
+    private val mutableGraphs: MutableList<Graph<*, *>>
+) : Project {
 
-    fun reset(id: Int): ProjectBuilder<P>
+    constructor(
+        id: Int,
+        onlineId: Long = -1,
+        name: String = "",
+        desc: String = "",
+        color: Int = 0,
+        path: String = "",
+        notifications: MutableList<Notification> = mutableListOf(),
+        isOnline: Boolean = false,
+        table: Table = ArrayListTable(),
+        mutableGraphs: MutableList<Graph<*, *>> = mutableListOf(),
+        mutableUsers: MutableList<User> = mutableListOf(),
+        admin: User = NullUser()
+    ) : this(
+        SimpleSkeleton(id, onlineId, name, desc, path, color, notifications),
+        table,
+        admin,
+        isOnline,
+        mutableUsers,
+        mutableGraphs,
+    )
 
-    fun setId(id: Int): ProjectBuilder<P>
+    private val mutableIllegalOperation: Map<Operation, MutableSharedFlow<Boolean>>
+    override val isIllegalOperation: Map<Operation, Flow<Boolean>>
 
-    fun setOnlineId(id: Long): ProjectBuilder<P>
+    private var mutableTable: Table = initialTable
+    override val table: Table
+        get() = mutableTable
 
-    fun setName(name: String): ProjectBuilder<P>
+    private var mutableAdmin: User = initialAdmin
+    override val admin: User
+        get() = mutableAdmin
 
-    fun setDescription(desc: String): ProjectBuilder<P>
+    override val graphs: List<Graph<*, *>>
+        get() = mutableGraphs
 
-    fun setPath(path: String): ProjectBuilder<P>
-    fun setBackground(color: Int): ProjectBuilder<P>
+    override val users: List<User>
+        get() = mutableUsers
 
-    fun addGraphs(graphs: List<Graph<*, *>>): ProjectBuilder<P>
+    init {
+        val operations = mutableMapOf<Operation, MutableSharedFlow<Boolean>>()
+        for (operation in Operation.values()) {
+            if (operation.type == Operation.OperationType.PROJECT) {
+                operations[operation] = MutableSharedFlow(1)
+            }
+        }
+        mutableIllegalOperation = operations.toMap()
+        val immutableOperations = mutableMapOf<Operation, Flow<Boolean>>()
+        for (entry in mutableIllegalOperation) {
+            immutableOperations[entry.key] = entry.value.asSharedFlow()
+        }
+        for (operation in Operation.values()) {
+            if (operation.type == Operation.OperationType.TABLE) {
+                immutableOperations[operation] = table.isIllegalOperation[operation]!!
+            }
+        }
+        isIllegalOperation = immutableOperations.toMap()
+    }
 
-    fun addSettings(settings: Settings): ProjectBuilder<P>
+    override val id: Int
+        get() = skeleton.id
 
-    fun addNotifications(notifications: List<Notification>): ProjectBuilder<P>
+    fun setId(id: Int) {
+        skeleton.id = id
+    }
 
-    fun addTable(table: Table): ProjectBuilder<P>
+    override val name: String
+        get() = skeleton.name
 
-    fun setOnlineProperties(admin: User? = null, isOnline: Boolean): ProjectBuilder<P>
+    override suspend fun setName(name: String) {
+        skeleton.name = name
+    }
 
-    fun addUsers(users: List<User>): ProjectBuilder<P>
+    override val desc: String
+        get() = skeleton.desc
 
-    fun build(): P
+    override suspend fun setDesc(desc: String) {
+        skeleton.desc = desc
+    }
+
+    override val path: String
+        get() = skeleton.path
+
+    override suspend fun setPath(path: String) {
+        skeleton.path = path
+    }
+
+    override val color: Int
+        get() = skeleton.color
+
+    override suspend fun setColor(color: Int) {
+        skeleton.color = color
+    }
+
+    override suspend fun addGraph(graph: Graph<*, *>) {
+        for (existingGraph in mutableGraphs) {
+            if (existingGraph.id == graph.id) {
+                return
+            }
+        }
+        mutableGraphs.add(graph)
+    }
+
+    override suspend fun addGraphs(graphsToAdd: Collection<Graph<*, *>>) {
+        for (graph in graphsToAdd) {
+            addGraph(graph)
+        }
+    }
+
+    override suspend fun removeGraph(id: Int) {
+        mutableGraphs.removeIf { graph ->
+            graph.id == id
+        }
+    }
+
+    override val notifications: List<Notification>
+        get() = skeleton.notifications
+
+    override suspend fun addNotification(notification: Notification) {
+        for (notif in skeleton.notifications) {
+            if (notif.id == notification.id) {
+                return
+            }
+        }
+        skeleton.notifications.add(notification)
+    }
+
+    override suspend fun addNotifications(notifications: Collection<Notification>) {
+        for (notif in notifications) {
+            addNotification(notif)
+        }
+    }
+
+    override suspend fun removeNotification(id: Int) {
+        skeleton.notifications.removeIf { notif ->
+            notif.id == id
+        }
+    }
+
+    override suspend fun changeNotification(id: Int, notification: Notification) {
+        removeNotification(id)
+        notification.id = id
+        addNotification(notification)
+    }
+
+    override suspend fun addColumn(specs: ColumnData, default: Any) {
+        table.addColumn(specs, default)
+    }
+
+    override suspend fun deleteColumn(column: Int) {
+        table.deleteColumn(column)
+    }
+
+    override suspend fun addUIElement(col: Int, uiElement: UIElement) {
+        table.layout.addUIElement(col, uiElement)
+    }
+
+    override suspend fun deleteUIElement(col: Int, id: Int) {
+        table.layout.removeUIElement(col, id)
+    }
+
+    override suspend fun setAdmin(admin: User) {
+        mutableAdmin = admin
+    }
+
+    override val onlineId: Long
+        get() = skeleton.onlineId
+
+    override suspend fun publish() {
+        throw IllegalOperationException("Local Project only. Create an actual project in order to publish it")
+    }
+
+    override suspend fun unlink() {
+        throw IllegalOperationException("Local Project only. Create an actual project in order to unlink it")
+    }
+
+    override suspend fun addUser(user: User) {
+        for (existingUser in mutableUsers) {
+            if (existingUser.id == user.id) {
+                return
+            }
+        }
+        mutableUsers.add(user)
+    }
+
+    override suspend fun addUsers(usersToAdd: Collection<User>) {
+        for (user in usersToAdd) {
+            addUser(user)
+        }
+    }
+
+    override suspend fun removeUser(user: User) {
+        mutableUsers.remove(user)
+    }
+
+    override suspend fun delete() {
+        throw IllegalOperationException("Local Project only. Has not been saved to the database and thus can't be removed from it either")
+    }
+
+    override fun createTransformationFromString(transformationString: String): Project.DataTransformation<out Any> {
+        TODO("Not yet implemented")
+    }
+
+    fun setTable(table: Table) {
+        mutableTable = table
+    }
 }

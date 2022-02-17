@@ -72,7 +72,7 @@ class ProjectTemplate : Identifiable, Template {
         val layout = template.getTableLayout()
         this.table = layout.toColumnList()
         val uiElements = mutableListOf<Button>()
-        for (i in 0 until layout.getSize()) {
+        for (i in 0 until layout.size) {
             for (element in layout.getUIElements(i)) {
                 uiElements.add(Button(element, i))
             }
@@ -93,7 +93,7 @@ class ProjectTemplate : Identifiable, Template {
     }
 
     override lateinit var executeQueue: ExecuteQueue
-    lateinit var viewModelProject: ViewModelProject
+    override lateinit var viewModelProject: ViewModelProject
     override var id: Int = 0
 
     override fun deleteIsPossible(): Flow<Boolean> {

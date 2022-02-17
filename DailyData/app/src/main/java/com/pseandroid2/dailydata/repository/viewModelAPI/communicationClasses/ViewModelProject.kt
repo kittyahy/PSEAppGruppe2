@@ -45,9 +45,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 
 class ViewModelProject(
-    @Deprecated("Access via skeleton is deprecated")
-    @Suppress("Deprecation")
-    override val skeleton: ProjectSkeleton = SimpleSkeleton(),
+    private val skeleton: ProjectSkeleton = SimpleSkeleton(),
     override var isOnline: Boolean = false,
     override var table: Table = ArrayListTable(),
     private var mutableGraphs: MutableList<Graph<*, *>> = mutableListOf(),
@@ -55,6 +53,30 @@ class ViewModelProject(
     override var admin: User,
     val repo: RepositoryViewModelAPI
 ) : Project {
+
+    constructor(
+        id: Int,
+        onlineId: Long,
+        name: String,
+        desc: String,
+        color: Int,
+        path: String,
+        notifications: MutableList<Notification>,
+        isOnline: Boolean,
+        table: Table,
+        mutableGraphs: MutableList<Graph<*, *>>,
+        mutableUsers: MutableList<User>,
+        admin: User,
+        repo: RepositoryViewModelAPI
+    ) : this(
+        SimpleSkeleton(id, onlineId, name, desc, path, color, notifications),
+        isOnline,
+        table,
+        mutableGraphs,
+        mutableUsers,
+        admin,
+        repo
+    )
 
     private val mutableIllegalOperation: Map<Operation, MutableSharedFlow<Boolean>>
     override val isIllegalOperation: Map<Operation, Flow<Boolean>>
@@ -66,6 +88,9 @@ class ViewModelProject(
 
     override val users: List<User>
         get() = mutableUsers
+
+    override val notifications: List<Notification>
+        get() = skeleton.notifications
 
     init {
         val operations = mutableMapOf<Operation, MutableSharedFlow<Boolean>>()
@@ -87,19 +112,34 @@ class ViewModelProject(
         isIllegalOperation = immutableOperations.toMap()
     }
 
+    override val id: Int
+        get() = skeleton.id
+
+    override val name: String
+        get() = skeleton.name
+
     override suspend fun setName(name: String) {
         mutableIllegalOperation[Operation.SET_PROJECT_NAME]!!.emit(false)
         executeQueue.add(SetTitle(this, name, repo))
     }
+
+    override val desc: String
+        get() = skeleton.desc
 
     override suspend fun setDesc(desc: String) {
         mutableIllegalOperation[Operation.SET_PROJECT_DESC]!!.emit(false)
         executeQueue.add(SetDescription(this, desc, repo))
     }
 
+    override val path: String
+        get() = skeleton.path
+
     override suspend fun setPath(path: String) {
         TODO("Not yet implemented")
     }
+
+    override val color: Int
+        get() = skeleton.color
 
     override suspend fun setColor(color: Int) {
         TODO("changeWallpaper")
@@ -108,6 +148,12 @@ class ViewModelProject(
     override suspend fun addGraph(graph: Graph<*, *>) {
         mutableIllegalOperation[Operation.ADD_GRAPH]!!.emit(false)
         executeQueue.add(AddGraph(id, graph, repo))
+    }
+
+    override suspend fun addGraphs(graphsToAdd: Collection<Graph<*, *>>) {
+        for (graph in graphsToAdd) {
+            addGraph(graph)
+        }
     }
 
     override suspend fun removeGraph(id: Int) {
@@ -134,7 +180,7 @@ class ViewModelProject(
         table.deleteColumn(column)
     }
 
-    override suspend fun addUIElements(col: Int, uiElement: UIElement) {
+    override suspend fun addUIElement(col: Int, uiElement: UIElement) {
         table.addUIElement(col, uiElement)
     }
 
@@ -145,6 +191,12 @@ class ViewModelProject(
     override suspend fun addNotification(notification: Notification) {
         mutableIllegalOperation[Operation.ADD_NOTIFICATION]!!.emit(false)
         executeQueue.add(AddNotification(id, notification, repo))
+    }
+
+    override suspend fun addNotifications(notifications: Collection<Notification>) {
+        for (notification in notifications) {
+            addNotification(notification)
+        }
     }
 
     override suspend fun changeNotification(id: Int, notification: Notification) {
@@ -181,6 +233,9 @@ class ViewModelProject(
             throw IllegalOperationException("This command is only usable by project admins and you are no project admin.")
         }
     }
+
+    override val onlineId: Long
+        get() = skeleton.onlineId
 
     override suspend fun publish() {
         mutableIllegalOperation[Operation.PUBLISH_PROJECT]!!.emit(false)
