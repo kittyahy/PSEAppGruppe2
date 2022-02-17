@@ -59,7 +59,7 @@ class GT712 {
 
         composeRule.onNodeWithText("Add Graph").performClick()
         composeRule.onNodeWithText("Line Chart").performClick()
-       //TODO("com.pseandroid2.dailydata.workingtest.ReproduceTest.addGraphTest")
+        //TODO("com.pseandroid2.dailydata.workingtest.ReproduceTest.addGraphTest")
 
         composeRule.onNodeWithText("Save").performClick()
         runBlocking {

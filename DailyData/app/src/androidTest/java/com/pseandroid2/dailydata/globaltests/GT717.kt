@@ -23,9 +23,9 @@ import java.time.LocalTime
 
 
 /**
- * testing: "Projektbenachrichtigung ändern", 7.1.6
+ * testing: "Projektbenachrichtigung löschen", 7.1.7
  */
-class GT716 {
+class GT717 {
 
     @get:Rule
     val composeRule = createAndroidComposeRule<MainActivity>()
@@ -37,15 +37,11 @@ class GT716 {
     @Test
     @InternalCoroutinesApi
 
-    fun changeNotification() {
+    fun deleteNotification() {
 
         composeRule.onAllNodesWithText("Kresse").onFirst().performClick()
         composeRule.onNodeWithText("Settings").performClick()
         composeRule.onNodeWithTag("DeleteTime").performClick()
-        composeRule.onNodeWithText("Add Notification").performClick()
-        var time = LocalTime.now()
-        composeRule.onNodeWithText("Name").performTextInput("Meine Kresse")
-        composeRule.onNodeWithText("OK").performClick()
         composeRule.onNodeWithText("Save").performClick()
         TODO("Save does not work yet")
         runBlocking {
@@ -59,10 +55,7 @@ class GT716 {
         }
         composeRule.onAllNodesWithText("Kresse").onFirst().performClick()
         composeRule.onNodeWithText("Settings").performClick()
-        composeRule.onNodeWithText(time.hour.toString() + ":" + time.minute.toString())
-            .assertExists()
+        composeRule.onNodeWithTag("DeleteTime").assertDoesNotExist()
     }
-
-
 }
 

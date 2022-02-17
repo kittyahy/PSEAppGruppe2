@@ -1,6 +1,9 @@
 package com.pseandroid2.dailydata.globaltests
 
 import android.util.Log
+import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.hasSetTextAction
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
@@ -23,9 +26,9 @@ import java.time.LocalTime
 
 
 /**
- * testing: "Projektbenachrichtigung ändern", 7.1.6
+ * testing: "Wallpaper ändern", 7.1.8
  */
-class GT716 {
+class GT718 {
 
     @get:Rule
     val composeRule = createAndroidComposeRule<MainActivity>()
@@ -41,11 +44,8 @@ class GT716 {
 
         composeRule.onAllNodesWithText("Kresse").onFirst().performClick()
         composeRule.onNodeWithText("Settings").performClick()
-        composeRule.onNodeWithTag("DeleteTime").performClick()
-        composeRule.onNodeWithText("Add Notification").performClick()
-        var time = LocalTime.now()
-        composeRule.onNodeWithText("Name").performTextInput("Meine Kresse")
-        composeRule.onNodeWithText("OK").performClick()
+        composeRule.onNodeWithText("Change Wallpaper").performClick()
+        composeRule.onNodeWithText("Blue").performClick().assert(composeRule.onNode(hasText("Blue").also { hasSetTextAction() }))
         composeRule.onNodeWithText("Save").performClick()
         TODO("Save does not work yet")
         runBlocking {
@@ -59,10 +59,7 @@ class GT716 {
         }
         composeRule.onAllNodesWithText("Kresse").onFirst().performClick()
         composeRule.onNodeWithText("Settings").performClick()
-        composeRule.onNodeWithText(time.hour.toString() + ":" + time.minute.toString())
-            .assertExists()
+        composeRule.onNodeWithTag("WallpaperColor").assert(has)
     }
-
-
 }
 
