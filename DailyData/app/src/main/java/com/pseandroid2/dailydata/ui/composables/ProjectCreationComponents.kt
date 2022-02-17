@@ -57,6 +57,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
@@ -178,7 +179,7 @@ fun ListInput(
                         modifier = Modifier
                             .size(height)
                             .wrapContentSize(Alignment.Center)
-                            .clickable(onClick = { onClickItem(index) })
+                            .clickable(onClick = { onClickItem(index) }).testTag("DeleteTime")
                     ) {
                         Icon(
                             imageVector = elementIcon,

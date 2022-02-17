@@ -24,7 +24,7 @@ class GT714 {
     val composeRule = createAndroidComposeRule<MainActivity>()
 
     /**
-     * [Kresse-project] [com.pseandroid2.dailydata.workingtest.ReproduceTest.CreateProjectTest]
+     * [Kresse-project] [com.pseandroid2.dailydata.globaltests.DefaultProject.createProjectTest]
      */
     @Ignore("back to overview is missing, needs a \"Kresse\" Project")
     @Test
