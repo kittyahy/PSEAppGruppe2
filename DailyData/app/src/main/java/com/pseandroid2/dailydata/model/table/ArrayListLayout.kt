@@ -40,7 +40,7 @@ class ArrayListLayout(input: String = "") : TableLayout {
 
     override fun getUIElements(col: Int): List<UIElement> = layout[col].fourth.toList()
 
-    override fun addUIElement(col: Int, element: UIElement): Int {
+    override suspend fun addUIElement(col: Int, element: UIElement): Int {
         layout[col].fourth.add(element)
         return layout[col].fourth.size - 1
     }

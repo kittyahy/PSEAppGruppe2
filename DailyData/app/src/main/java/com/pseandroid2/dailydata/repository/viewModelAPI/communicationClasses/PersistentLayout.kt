@@ -4,11 +4,13 @@ import com.pseandroid2.dailydata.model.table.ColumnData
 import com.pseandroid2.dailydata.model.table.TableLayout
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
+import com.pseandroid2.dailydata.repository.commandCenter.commands.AddUIElement
 import kotlin.reflect.KClass
 
 class PersistentLayout(
     private val l: TableLayout,
-    private val repositoryViewModelAPI: RepositoryViewModelAPI
+    private val repositoryViewModelAPI: RepositoryViewModelAPI,
+    private val projectID: Int
 ) :
     TableLayout {
     override val size: Int
@@ -22,8 +24,16 @@ class PersistentLayout(
         return l.getUIElements(col)
     }
 
-    override fun addUIElement(col: Int, element: UIElement): Int {
-        return TODO()
+    override suspend fun addUIElement(col: Int, element: UIElement): Int {
+        repositoryViewModelAPI.projectHandler.executeQueue.add(
+            AddUIElement(
+                projectID,
+                element,
+                col,
+                repositoryViewModelAPI
+            )
+        )
+        return 0
     }
 
     override fun removeUIElement(col: Int, id: Int) {

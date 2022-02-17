@@ -87,7 +87,7 @@ interface TableLayout : Iterable<ColumnData> {
     fun getColumnType(col: Int): KClass<out Any>
 
     fun getUIElements(col: Int): List<UIElement>
-    fun addUIElement(col: Int, element: UIElement): Int
+    suspend fun addUIElement(col: Int, element: UIElement): Int
     fun removeUIElement(col: Int, id: Int)
 
     fun getName(col: Int): String
