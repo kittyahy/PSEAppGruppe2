@@ -22,9 +22,6 @@ class GT711 {
     @InternalCoroutinesApi
     @Test
     fun openProjectCreation() {
-        composeRule.setContent {
-            Main()
-        }
         composeRule.onNodeWithText("Add new Project").performClick()
         composeRule.onNodeWithTag("projectCreation").assertIsDisplayed()
     }

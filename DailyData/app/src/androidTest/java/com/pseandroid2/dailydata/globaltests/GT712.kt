@@ -1,5 +1,6 @@
 package com.pseandroid2.dailydata.globaltests
 
+import android.util.Log
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onFirst
@@ -8,7 +9,12 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import com.pseandroid2.dailydata.Main
 import com.pseandroid2.dailydata.MainActivity
+import com.pseandroid2.dailydata.util.Consts.LOG_TAG
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
@@ -51,13 +57,25 @@ class GT712 {
         composeRule.onNodeWithText("Name").performTextInput("Meine Kresse")
         composeRule.onNodeWithText("OK").performClick()
 
-        composeRule.onNodeWithText("Add Graph").performClick()
-        composeRule.onNodeWithText("Line Chart").performClick()
+        //composeRule.onNodeWithText("Add Graph").performClick()
+        //composeRule.onNodeWithText("Line Chart").performClick()
 
         composeRule.onNodeWithText("Save").performClick()
-        TODO("com.pseandroid2.dailydata.workingtest.ReproduceTest.addGraphTest")
+        Log.d(LOG_TAG, "Clicked save")
+        //TODO("com.pseandroid2.dailydata.workingtest.ReproduceTest.addGraphTest")
 
-        TODO("return to project overview")
+        runBlocking {
+            delay(3000)
+        }
+        runBlocking {
+            launch(Dispatchers.Main) {
+                composeRule.activity.onBackPressed()
+                Log.d(LOG_TAG, "Hit the Back Button")
+            }
+        }
+        runBlocking {
+            delay(5000)
+        }
 
         composeRule.onNodeWithText("Add new Project").assertExists()
         composeRule.onAllNodes(matcher = hasText("Kresse")).onFirst().assertExists()
