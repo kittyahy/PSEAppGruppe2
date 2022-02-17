@@ -2,8 +2,6 @@ package com.pseandroid2.dailydata.repository.commandCenter.commands
 
 import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
-import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ViewModelProject
 import kotlinx.coroutines.flow.MutableSharedFlow
 
 class CreateProject(
@@ -11,6 +9,7 @@ class CreateProject(
     private val projectIDReturn: MutableSharedFlow<Int>? = null,
     api: RepositoryViewModelAPI
 ) : ProjectCommand(
+    project.id,
     commandByUser = @Suppress("Deprecation") api.remoteDataSourceAPI.getUserID(),
     createdByAdmin = true,
     repositoryViewModelAPI = api

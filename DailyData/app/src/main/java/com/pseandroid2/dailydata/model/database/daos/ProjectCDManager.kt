@@ -23,11 +23,11 @@ package com.pseandroid2.dailydata.model.database.daos
 
 import android.util.Log
 import androidx.room.withTransaction
-import com.pseandroid2.dailydata.model.graph.Graph
 import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.model.database.entities.ProjectEntity
 import com.pseandroid2.dailydata.model.database.entities.ProjectSkeletonEntity
 import com.pseandroid2.dailydata.model.database.entities.ProjectTemplateEntity
+import com.pseandroid2.dailydata.model.graph.Graph
 import com.pseandroid2.dailydata.model.notifications.Notification
 import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.project.ProjectSkeleton
@@ -35,10 +35,8 @@ import com.pseandroid2.dailydata.model.project.ProjectTemplate
 import com.pseandroid2.dailydata.model.project.SimpleSkeleton
 import com.pseandroid2.dailydata.model.table.TableLayout
 import com.pseandroid2.dailydata.model.uielements.UIElement
-import com.pseandroid2.dailydata.model.users.NullUser
 import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.util.Consts.LOG_TAG
-import com.pseandroid2.dailydata.util.SortedIntListUtil
 import java.time.LocalDateTime
 import java.util.SortedSet
 import java.util.TreeSet
@@ -94,11 +92,9 @@ class ProjectCDManager(
      * Deletes a project from the Database. This method does so as a Transaction, i.e. it will roll
      * back any changes if an exception occurs at any point during the deletion process.
      *
-     * @param project The project that is to be deleted
+     * @param id The id of the project that is to be deleted
      */
-    suspend fun deleteProject(project: Project) = db.withTransaction {
-        @Suppress("Deprecation")
-        val id = project.id
+    suspend fun deleteProjectById(id: Int) = db.withTransaction {
         @Suppress("Deprecation")
         graphDAO.deleteAllGraphs(id)
         @Suppress("Deprecation")
@@ -109,6 +105,17 @@ class ProjectCDManager(
         projectDAO.deleteAllUsers(id)
         @Suppress("Deprecation")
         projectDAO.deleteProjectEntityById(id)
+    }
+
+    /**
+     * Deletes a project from the Database. This method does so as a Transaction, i.e. it will roll
+     * back any changes if an exception occurs at any point during the deletion process.
+     *
+     * @param project The project that is to be deleted
+     */
+    suspend fun deleteProject(project: Project) = db.withTransaction {
+        @Suppress("Deprecation")
+        val id = project.id
     }
 
     /**

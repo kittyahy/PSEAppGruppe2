@@ -20,8 +20,8 @@ class SetButton(projectID: Int, val button: UIElement, api: RepositoryViewModelA
         val uIElementDAO =
             @Suppress("DEPRECATION")
             repositoryViewModelAPI.appDataBase.uiElementDAO()
-        uIElementDAO.changeUIElementName(projectID!!, button.id, button.name)
-        uIElementDAO.changeUIElementState(projectID!!, button.id, button.state)
+        uIElementDAO.changeUIElementName(projectID, button.id, button.name)
+        uIElementDAO.changeUIElementState(projectID, button.id, button.state)
 
         super.execute()
     }

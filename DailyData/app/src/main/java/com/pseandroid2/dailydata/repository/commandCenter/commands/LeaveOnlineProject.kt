@@ -19,10 +19,10 @@ class LeaveOnlineProject(projectID: Int, api: RepositoryViewModelAPI) :
         @Suppress("DEPRECATION")
         repositoryViewModelAPI.remoteDataSourceAPI.removeUser(
             repositoryViewModelAPI.remoteDataSourceAPI.getUserID(),
-            repositoryViewModelAPI.appDataBase.projectDataDAO().getOnlineId(projectID!!)
+            repositoryViewModelAPI.appDataBase.projectDataDAO().getOnlineId(projectID)
         )
         @Suppress("DEPRECATION")
-        repositoryViewModelAPI.appDataBase.projectDataDAO().setOnline(false, projectID!!)
+        repositoryViewModelAPI.appDataBase.projectDataDAO().setOnline(false, projectID)
         super.execute()
     }
 

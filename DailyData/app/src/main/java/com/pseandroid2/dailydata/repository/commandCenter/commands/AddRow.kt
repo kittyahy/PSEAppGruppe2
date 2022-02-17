@@ -18,7 +18,7 @@ class AddRow(projectID: Int, private val row: Row, api: RepositoryViewModelAPI) 
 
     override suspend fun execute() {
         @Suppress("Deprecation")
-        repositoryViewModelAPI.appDataBase.tableContentDAO().insertRow(row, projectID!!)
+        repositoryViewModelAPI.appDataBase.tableContentDAO().insertRow(row, projectID)
         super.execute()
     }
 

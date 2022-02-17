@@ -2,10 +2,9 @@ package com.pseandroid2.dailydata.repository.commandCenter.commands
 
 import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ViewModelProject
 
-class DeleteProject(private val viewModelProject: ViewModelProject, api: RepositoryViewModelAPI) :
-    ProjectCommand(projectID = viewModelProject.id, repositoryViewModelAPI = api) {
+class DeleteProject(private val projectId: Int, api: RepositoryViewModelAPI) :
+    ProjectCommand(projectID = projectId, repositoryViewModelAPI = api) {
 
     override suspend fun publish(): Boolean {
         return super.publish() && publishable
@@ -20,7 +19,7 @@ class DeleteProject(private val viewModelProject: ViewModelProject, api: Reposit
 
     override suspend fun execute() {
         @Suppress("DEPRECATION")
-        repositoryViewModelAPI.appDataBase.projectCDManager().deleteProject(viewModelProject)
+        repositoryViewModelAPI.appDataBase.projectCDManager().deleteProjectById(projectID)
     }
 
 }

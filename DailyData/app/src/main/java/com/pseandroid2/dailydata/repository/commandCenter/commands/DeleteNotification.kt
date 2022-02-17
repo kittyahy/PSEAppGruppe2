@@ -3,7 +3,6 @@ package com.pseandroid2.dailydata.repository.commandCenter.commands
 import com.pseandroid2.dailydata.model.notifications.Notification
 import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
-import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
 
 class DeleteNotification(
     projectID: Int,
@@ -24,7 +23,7 @@ class DeleteNotification(
     override suspend fun execute() {
         @Suppress("DEPRECATION")
         repositoryViewModelAPI.appDataBase.notificationsDAO()
-            .deleteNotification(projectID!!, notification.id)
+            .deleteNotification(projectID, notification.id)
         super.execute()
     }
 

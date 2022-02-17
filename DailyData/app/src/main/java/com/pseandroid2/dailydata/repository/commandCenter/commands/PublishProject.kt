@@ -2,10 +2,9 @@ package com.pseandroid2.dailydata.repository.commandCenter.commands
 
 import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ViewModelProject
 
-class PublishProject(private val viewModelProject: ViewModelProject, api: RepositoryViewModelAPI) :
-    ProjectCommand(projectID = viewModelProject.id, repositoryViewModelAPI = api) {
+class PublishProject(projectID: Int, api: RepositoryViewModelAPI) :
+    ProjectCommand(projectID = projectID, repositoryViewModelAPI = api) {
 
     companion object {
         fun isIllegal(project: Project): Boolean {
@@ -20,14 +19,14 @@ class PublishProject(private val viewModelProject: ViewModelProject, api: Reposi
     override suspend fun execute() {
         @Suppress("Deprecation")
         repositoryViewModelAPI.appDataBase.projectDataDAO().setOnlineID(
-            viewModelProject.id,
+            projectID,
             repositoryViewModelAPI.remoteDataSourceAPI.createNewOnlineProject("")
         ) //Todo Fehlerbehandlung, falls publishen fehl schlägt
-        viewModelProject.isOnline = true
+        repositoryViewModelAPI.appDataBase.projectDataDAO().setOnline(true, projectID)
         if (publish()) {
             repositoryViewModelAPI.projectHandler.executeQueue.publishQueue.add(
                 CreateProject(
-                    viewModelProject, null, repositoryViewModelAPI
+                    projectID, null, repositoryViewModelAPI
                 )
             )
         }

@@ -18,7 +18,7 @@ class SetRow(projectID: Int, private val row: Row, api: RepositoryViewModelAPI) 
 
     override suspend fun execute() {
         @Suppress("DEPRECATION")
-        repositoryViewModelAPI.appDataBase.tableContentDAO().changeRows(projectID!!, row)
+        repositoryViewModelAPI.appDataBase.tableContentDAO().changeRows(projectID, row)
         super.execute()
     }
 

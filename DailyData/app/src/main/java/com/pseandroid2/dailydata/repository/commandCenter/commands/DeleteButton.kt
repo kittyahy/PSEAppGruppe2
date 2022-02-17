@@ -19,7 +19,7 @@ class DeleteButton(projectID: Int, val uiElement: UIElement, api: RepositoryView
     override suspend fun execute() {
         @Suppress("Deprecation")
         repositoryViewModelAPI.appDataBase.uiElementDAO()
-            .removeUIElements(projectID!!, uiElement.id)
+            .removeUIElements(projectID, uiElement.id)
         super.execute()
     }
 

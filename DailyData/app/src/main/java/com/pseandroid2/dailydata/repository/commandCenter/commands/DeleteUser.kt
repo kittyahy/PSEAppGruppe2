@@ -3,8 +3,6 @@ package com.pseandroid2.dailydata.repository.commandCenter.commands
 import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
-import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ViewModelProject
 
 class DeleteUser(projectID: Int, private val user: User, api: RepositoryViewModelAPI) :
     ProjectCommand(projectID = projectID, repositoryViewModelAPI = api) {
@@ -21,7 +19,7 @@ class DeleteUser(projectID: Int, private val user: User, api: RepositoryViewMode
     override suspend fun execute() {
         @Suppress("Deprecation")
         repositoryViewModelAPI.appDataBase.projectDataDAO()
-            .removeUsers(projectID!!, user)
+            .removeUsers(projectID, user)
         super.execute()
     }
 

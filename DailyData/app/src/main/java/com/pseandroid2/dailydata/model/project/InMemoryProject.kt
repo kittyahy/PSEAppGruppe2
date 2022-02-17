@@ -47,7 +47,7 @@ constructor(
 ) : Project {
 
     constructor(
-        id: Int,
+        id: Int = -1,
         onlineId: Long = -1,
         name: String = "",
         desc: String = "",

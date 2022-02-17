@@ -19,7 +19,7 @@ class DeleteRow(projectID: Int, private val row: Row, api: RepositoryViewModelAP
     override suspend fun execute() {
         @Suppress("DEPRECATION")
         repositoryViewModelAPI.appDataBase.tableContentDAO()
-            .deleteRows(projectID!!, row)
+            .deleteRows(projectID, row)
         super.execute()
     }
 

@@ -18,7 +18,7 @@ class DeleteGraph(projectID: Int, val graph: Graph<*, *>, api: RepositoryViewMod
 
     override suspend fun execute() {
         @Suppress("Deprecation")
-        repositoryViewModelAPI.appDataBase.graphCDManager().deleteGraph(projectID!!, graph.id)
+        repositoryViewModelAPI.appDataBase.graphCDManager().deleteGraph(projectID, graph.id)
         super.execute()
     }
 
