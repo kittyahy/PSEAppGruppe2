@@ -4,7 +4,7 @@ import android.util.Log
 import com.google.gson.Gson
 import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.model.project.Project
-import com.pseandroid2.dailydata.model.project.ProjectBuilder
+import com.pseandroid2.dailydata.model.project.InMemoryProject
 import com.pseandroid2.dailydata.model.table.ArrayListLayout
 import com.pseandroid2.dailydata.model.table.ArrayListTable
 import com.pseandroid2.dailydata.model.users.User
@@ -25,7 +25,7 @@ class ProjectFlowProvider(val projId: Int, private val db: AppDataBase) :
         private const val USER_INIT = "users"
     }
 
-    private val project = ProjectBuilder(projId)
+    private val project = InMemoryProject(projId)
     private var graphProvider = GraphFlowProvider(project, db)
 
     private val initialized = mutableMapOf(

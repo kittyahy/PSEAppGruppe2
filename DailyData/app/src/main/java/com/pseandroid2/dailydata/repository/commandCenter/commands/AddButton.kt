@@ -1,5 +1,6 @@
 package com.pseandroid2.dailydata.repository.commandCenter.commands
 
+import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
@@ -13,8 +14,8 @@ class AddButton(
     api: RepositoryViewModelAPI
 ) : ProjectCommand(projectID = projectID, repositoryViewModelAPI = api) {
     companion object {
-        fun isPossible(viewModelProject: ViewModelProject): Boolean {
-            return ProjectCommand.isPossible(viewModelProject)
+        fun isIllegal(project: Project): Boolean {
+            return ProjectCommand.isIllegal(project)
         }
 
         const val isAdminOperation: Boolean = false

@@ -5,6 +5,8 @@ import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
 import com.pseandroid2.dailydata.util.Quadruple
 import com.pseandroid2.dailydata.util.fromJson
+import com.pseandroid2.dailydata.util.getSerializableClassName
+import kotlin.reflect.KClass
 
 /**
  * This is a implementation of a tableLayout with array lists.

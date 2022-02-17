@@ -36,13 +36,17 @@ import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddGraph
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddNotification
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddUser
+import com.pseandroid2.dailydata.repository.commandCenter.commands.DeleteProject
 import com.pseandroid2.dailydata.repository.commandCenter.commands.IllegalOperationException
 import com.pseandroid2.dailydata.repository.commandCenter.commands.PublishProject
 import com.pseandroid2.dailydata.repository.commandCenter.commands.SetDescription
 import com.pseandroid2.dailydata.repository.commandCenter.commands.SetTitle
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
 
 class ViewModelProject(
     private val skeleton: ProjectSkeleton = SimpleSkeleton(),
@@ -51,23 +55,25 @@ class ViewModelProject(
     private var mutableGraphs: MutableList<Graph<*, *>> = mutableListOf(),
     private var mutableUsers: MutableList<User> = mutableListOf(),
     override var admin: User,
-    val repo: RepositoryViewModelAPI
+    val repo: RepositoryViewModelAPI,
+    scope: CoroutineScope
 ) : Project {
 
     constructor(
-        id: Int,
-        onlineId: Long,
-        name: String,
-        desc: String,
-        color: Int,
-        path: String,
-        notifications: MutableList<Notification>,
-        isOnline: Boolean,
-        table: Table,
-        mutableGraphs: MutableList<Graph<*, *>>,
-        mutableUsers: MutableList<User>,
+        id: Int = -1,
+        onlineId: Long = -1,
+        name: String = "",
+        desc: String = "",
+        color: Int = 0,
+        path: String = "",
+        notifications: MutableList<Notification> = mutableListOf(),
+        isOnline: Boolean = false,
+        table: Table = ArrayListTable(),
+        mutableGraphs: MutableList<Graph<*, *>> = mutableListOf(),
+        mutableUsers: MutableList<User> = mutableListOf(),
         admin: User,
-        repo: RepositoryViewModelAPI
+        repo: RepositoryViewModelAPI,
+        scope: CoroutineScope
     ) : this(
         SimpleSkeleton(id, onlineId, name, desc, path, color, notifications),
         isOnline,
@@ -75,7 +81,8 @@ class ViewModelProject(
         mutableGraphs,
         mutableUsers,
         admin,
-        repo
+        repo,
+        scope
     )
 
     private val mutableIllegalOperation: Map<Operation, MutableSharedFlow<Boolean>>
@@ -97,6 +104,9 @@ class ViewModelProject(
         for (operation in Operation.values()) {
             if (operation.type == Operation.OperationType.PROJECT) {
                 operations[operation] = MutableSharedFlow(1)
+                scope.launch(Dispatchers.IO) {
+                    operations[operation]!!.emit(operation.isIllegalByData(this@ViewModelProject))
+                }
             }
         }
         mutableIllegalOperation = operations.toMap()

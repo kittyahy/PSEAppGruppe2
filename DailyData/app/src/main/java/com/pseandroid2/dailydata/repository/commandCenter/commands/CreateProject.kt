@@ -17,8 +17,8 @@ class CreateProject(
 ) {
 
     companion object {
-        fun isPossible(viewModelProject: ViewModelProject): Boolean {
-            return ProjectCommand.isPossible(viewModelProject)
+        fun isIllegal(project: Project): Boolean {
+            return ProjectCommand.isIllegal(project)
         }
 
         const val isAdminOperation: Boolean = false

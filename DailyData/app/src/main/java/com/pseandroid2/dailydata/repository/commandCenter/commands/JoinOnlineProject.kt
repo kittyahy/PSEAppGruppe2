@@ -1,5 +1,6 @@
 package com.pseandroid2.dailydata.repository.commandCenter.commands
 
+import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.users.SimpleUser
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ViewModelProject
@@ -13,8 +14,8 @@ class JoinOnlineProject(
     api: RepositoryViewModelAPI
 ) : ProjectCommand(repositoryViewModelAPI = api) {
     companion object {
-        fun isPossible(): Boolean {
-            return false
+        fun isIllegal(project: Project): Boolean {
+            return true
         }
 
         const val isAdminOperation: Boolean = false

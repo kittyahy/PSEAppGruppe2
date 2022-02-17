@@ -1,5 +1,6 @@
 package com.pseandroid2.dailydata.repository.commandCenter.commands
 
+import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ViewModelProject
 
@@ -7,8 +8,8 @@ class PublishProject(private val viewModelProject: ViewModelProject, api: Reposi
     ProjectCommand(projectID = viewModelProject.id, repositoryViewModelAPI = api) {
 
     companion object {
-        fun isPossible(viewModelProject: ViewModelProject): Boolean {
-            return !viewModelProject.isOnline
+        fun isIllegal(project: Project): Boolean {
+            return project.isOnline
         }
 
         const val isAdminOperation: Boolean = false

@@ -20,22 +20,20 @@
 
 package com.pseandroid2.dailydata.ui.project.creation
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pseandroid2.dailydata.model.notifications.TimeNotification
+import com.pseandroid2.dailydata.model.project.InMemoryProject
+import com.pseandroid2.dailydata.model.table.ColumnData
+import com.pseandroid2.dailydata.model.uielements.UIElement
+import com.pseandroid2.dailydata.model.uielements.UIElementType
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Button
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Column
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Notification
-import com.pseandroid2.dailydata.ui.navigation.Routes
-import com.pseandroid2.dailydata.util.Consts.LOG_TAG
 import com.pseandroid2.dailydata.util.ui.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -53,19 +51,7 @@ class ProjectCreationScreenViewModel @Inject constructor(
     private val _uiEvent = MutableSharedFlow<UiEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
 
-    var title by mutableStateOf("")
-        private set
-    var description by mutableStateOf("")
-        private set
-    var wallpaper by mutableStateOf(Color.White)
-        private set
-    var table by mutableStateOf(listOf<Column>())
-        private set
-    var buttons by mutableStateOf(listOf<Button>())
-        private set
-    var notifications by mutableStateOf(listOf<Notification>())
-        private set
-    var graphs by mutableStateOf(listOf<Graph>())
+    var project by mutableStateOf(CacheOnlyProject())
         private set
 
     var isWallpaperDialogOpen by mutableStateOf(false)
@@ -83,118 +69,81 @@ class ProjectCreationScreenViewModel @Inject constructor(
         private set
 
     init {
-        val id = savedStateHandle.get<Int>("projectTemplateId")!!
-        if (id != -1) {
-            viewModelScope.launch {
-                val template = repository.serverHandler.getProjectTemplateById(id = id).toProject()
-                title = template.name
-                description = template.desc
-                wallpaper = Color(template.color)
-                table = template.table
-                buttons = template.buttons
-                notifications = template.notifications
-                graphs = template.graphs
-            }
-        }
+        assert(-1 != savedStateHandle.get<Int>("projectTemplateId")!!)
     }
 
     @InternalCoroutinesApi
     fun onEvent(event: ProjectCreationEvent) {
         when (event) {
             is ProjectCreationEvent.OnTitleChange -> {
-                title = event.title
+                viewModelScope.launch { project.setName(event.title) }
             }
             is ProjectCreationEvent.OnDescriptionChange -> {
-                description = event.description
+                viewModelScope.launch { project.setDesc(event.description) }
             }
             is ProjectCreationEvent.OnWallpaperChange -> {
-                wallpaper = event.wallpaper
+                viewModelScope.launch { project.setColor(event.wallpaper.toArgb()) }
             }
             is ProjectCreationEvent.OnTableAdd -> {
-                val id = if (table.isEmpty()) {
-                    0
-                } else {
-                    table.last().id + 1
-                }
-                val mutable = table.toMutableList()
-                mutable.add(
-                    Column(
-                        id = id,
-                        name = event.name,
-                        unit = event.unit,
-                        dataType = event.dataType
+                viewModelScope.launch {
+                    project.table.addColumn(
+                        ColumnData(
+                            type = event.dataType,
+                            name = event.name,
+                            unit = event.unit
+                        )
                     )
-                )
-                table = mutable.toList()
+                }
             }
-            is ProjectCreationEvent.OnTableRemove -> {
-                val mutable = table.toMutableList()
-                val removed = mutable.removeAt(index = event.index)
-                val mutableButtons = buttons.toMutableList()
-                buttons = mutableButtons.filter { it.columnId != removed.id }.toList()
-                table = mutable.toList()
+            is ProjectCreationEvent.OnTableRemove -> {//TODO Rename
+                viewModelScope.launch { project.table.deleteColumn(event.index) }
+
             }
             is ProjectCreationEvent.OnButtonAdd -> {
-                val id = if (buttons.isEmpty()) {
-                    0
-                } else {
-                    buttons.last().id + 1
-                }
-                val mutable = buttons.toMutableList()
-                mutable.add(
-                    Button(
-                        id = id,
-                        name = event.name,
-                        columnId = table.find { event.columnId == it.id }!!.id,
-                        value = event.value
+                viewModelScope.launch {
+                    project.table.addUIElement(
+                        event.columnId,
+                        UIElement(
+                            name = event.name,
+                            type = UIElementType.BUTTON,
+                            state = event.value.toString()
+                        )
                     )
-                )
-                buttons = mutable.toList()
+                }
             }
             is ProjectCreationEvent.OnButtonRemove -> {
-                val mutable = buttons.toMutableList()
-                mutable.removeAt(index = event.index)
-                buttons = mutable.toList()
+                viewModelScope.launch {
+                    project.table.removeUIElement(event.columnID, event.id)
+                }
             }
             is ProjectCreationEvent.OnNotificationAdd -> {
-                val mutable = notifications.toMutableList()
-                mutable.add(Notification(id = 0, message = event.message, time = event.time))
-                notifications = mutable.toList()
+                viewModelScope.launch {
+                    project.addNotification(
+                        TimeNotification(
+                            initId = 0,
+                            messageString = event.message,
+                            send = event.time
+                        )
+                    )
+                }
             }
             is ProjectCreationEvent.OnNotificationRemove -> {
-                val mutable = notifications.toMutableList()
-                mutable.removeAt(index = event.index)
-                notifications = mutable.toList()
+                viewModelScope.launch { project.removeNotification(event.index) }
             }
             is ProjectCreationEvent.OnGraphAdd -> {
-                val mutable = graphs.toMutableList()
-                mutable.add(event.graph)
-                graphs = mutable.toList()
+                TODO("CacheOnlyProject AddGraph")
             }
             is ProjectCreationEvent.OnGraphRemove -> {
-                val mutable = graphs.toMutableList()
-                mutable.removeAt(index = event.index)
-                graphs = mutable.toList()
+                TODO("CacheOnlyProject RemoveGraph")
             }
             is ProjectCreationEvent.OnSaveClick -> {
+                val default = InMemoryProject()
                 when {
-                    title.isBlank() -> sendUiEvent(UiEvent.ShowToast("Please Enter a title"))
-                    table.isEmpty() -> sendUiEvent(UiEvent.ShowToast("Please Enter a column"))
+                    default.name == project.name -> sendUiEvent(UiEvent.ShowToast("Please Enter a title"))
+                    project.table.layout.size == 0 -> sendUiEvent(UiEvent.ShowToast("Please Enter a column"))
                     else -> {
                         viewModelScope.launch {
-                            val newProject = repository.projectHandler.newProjectAsync(
-                                name = title,
-                                description = description,
-                                wallpaper = wallpaper.hashCode(),
-                                table = table,
-                                buttons = buttons,
-                                notification = notifications,
-                                graphs = graphs
-                            )
-                            val id = newProject.await()
-                            Log.d(LOG_TAG, "Test: after new Project $id")
-                            sendUiEvent(UiEvent.PopBackStack)
-                            sendUiEvent(UiEvent.Navigate(Routes.DATA + "?projectId=$id"))
+                            project.writeToDBAsync(repository.projectHandler)
                         }
                     }
                 }
@@ -207,7 +156,7 @@ class ProjectCreationScreenViewModel @Inject constructor(
                 isTableDialogOpen = event.isOpen
             }
             is ProjectCreationEvent.OnShowButtonsDialog -> {
-                if (event.isOpen && table.none { it.dataType == DataType.WHOLE_NUMBER }) {
+                if (event.isOpen && project.table.layout.none { it.type == DataType.WHOLE_NUMBER }) {
                     sendUiEvent(UiEvent.ShowToast("Please Enter a compatible column first"))
                 } else {
                     isButtonsDialogOpen = event.isOpen

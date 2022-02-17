@@ -5,8 +5,8 @@ import com.pseandroid2.dailydata.repository.commandCenter.commands.SetTitle
 
 enum class Operation(val type: OperationType, val adminOp: Boolean) {
     SET_PROJECT_NAME(OperationType.PROJECT, false) {//TODO replace this with actual calculations
-        override fun isIllegal(project: Project): Boolean {
-            return !SetTitle.isPossible(project)
+        override fun isIllegalByData(project: Project): Boolean {
+            return SetTitle.isIllegal(project)
         }
     },
     SET_PROJECT_DESC(OperationType.PROJECT, false),
@@ -30,5 +30,5 @@ enum class Operation(val type: OperationType, val adminOp: Boolean) {
         TABLE
     }
 
-    open fun isIllegal(project: Project): Boolean = false
+    open fun isIllegalByData(project: Project): Boolean = false
 }

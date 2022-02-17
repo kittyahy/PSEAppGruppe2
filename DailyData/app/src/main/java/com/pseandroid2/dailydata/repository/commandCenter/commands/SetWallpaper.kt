@@ -2,14 +2,13 @@ package com.pseandroid2.dailydata.repository.commandCenter.commands
 
 import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
-import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
 
 class SetWallpaper(projectID: Int, private val newWallpaper: Int, api: RepositoryViewModelAPI) :
     ProjectCommand(projectID = projectID, repositoryViewModelAPI = api) {
 
     companion object {
-        fun isPossible(project: Project): Boolean {
-            return ProjectCommand.isPossible(project)
+         fun isIllegal(project: Project): Boolean {
+            return ProjectCommand.isIllegal(project)
         }
 
         const val isAdminOperation: Boolean = true

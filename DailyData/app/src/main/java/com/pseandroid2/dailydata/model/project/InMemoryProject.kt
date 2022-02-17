@@ -29,12 +29,14 @@ import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.model.users.NullUser
 import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.repository.commandCenter.commands.IllegalOperationException
+import com.pseandroid2.dailydata.repository.viewModelAPI.ProjectHandler
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Operation
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 
-class ProjectBuilder
+class InMemoryProject
 constructor(
     private val skeleton: ProjectSkeleton,
     initialTable: Table,
@@ -249,5 +251,9 @@ constructor(
 
     fun setTable(table: Table) {
         mutableTable = table
+    }
+
+    suspend fun writeToDBAsync(projectHandler: ProjectHandler): Deferred<Int> {
+        return projectHandler.newProjectAsync(this)
     }
 }
