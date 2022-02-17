@@ -1,13 +1,13 @@
 package com.pseandroid2.dailydata.repository.commandCenter.commands
 
+import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ViewModelProject
 
 class DeleteButton(projectID: Int, val uiElement: UIElement, api: RepositoryViewModelAPI) :
     ProjectCommand(projectID = projectID, repositoryViewModelAPI = api) {
     companion object {
-        fun isIllegal(project: ViewModelProject): Boolean {
+        fun isIllegal(project: Project): Boolean {
             return ProjectCommand.isIllegal(project)
         }
     }

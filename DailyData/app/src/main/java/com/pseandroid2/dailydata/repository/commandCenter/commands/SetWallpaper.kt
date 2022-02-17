@@ -9,7 +9,7 @@ class SetWallpaper(projectID: Int, private val newWallpaper: Int, api: Repositor
     override val publishable = true
 
     companion object {
-        fun isIllegal(project: ViewModelProject): Boolean {
+         fun isIllegal(project: Project): Boolean {
             return ProjectCommand.isIllegal(project)
         }
     }

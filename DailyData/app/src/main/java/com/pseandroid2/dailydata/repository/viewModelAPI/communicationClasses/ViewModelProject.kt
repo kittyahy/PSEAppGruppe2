@@ -91,6 +91,7 @@ class ViewModelProject(
         for (operation in Operation.values()) {
             if (operation.type == Operation.OperationType.PROJECT) {
                 operations[operation] = MutableSharedFlow(1)
+                operations[operation]!!.emit(operation.isIllegalDefault(this))
             }
         }
         mutableIllegalOperation = operations.toMap()

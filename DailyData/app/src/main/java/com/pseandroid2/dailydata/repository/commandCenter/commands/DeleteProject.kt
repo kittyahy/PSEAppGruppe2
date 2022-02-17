@@ -1,5 +1,6 @@
 package com.pseandroid2.dailydata.repository.commandCenter.commands
 
+import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ViewModelProject
 
@@ -12,8 +13,8 @@ class DeleteProject(private val viewModelProject: ViewModelProject, api: Reposit
 
     companion object {
         const val publishable: Boolean = false
-        fun isIllegal(viewModelProject: ViewModelProject): Boolean {
-            return ProjectCommand.isIllegal(viewModelProject)
+        fun isIllegal(project: Project): Boolean {
+            return ProjectCommand.isIllegal(project)
         }
     }
 
