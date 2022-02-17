@@ -28,7 +28,7 @@ class GT716 {
     /**
      * [Kresse-project] [com.pseandroid2.dailydata.globaltests.DefaultProject.createProjectTest]
      */
-   // @Ignore("back to overview is missing, needs a \"Kresse\" Project")
+    @Ignore("back to overview is missing, needs a \"Kresse\" Project")
     @Test
     //TODO(needs a project "Kresse")
     @InternalCoroutinesApi
