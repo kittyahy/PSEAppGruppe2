@@ -44,7 +44,7 @@ interface Project {
 
     val isIllegalOperation: Map<Operation, Flow<Boolean>>
 
-    val id: Int
+    var id: Int
 
     val onlineId: Long
 

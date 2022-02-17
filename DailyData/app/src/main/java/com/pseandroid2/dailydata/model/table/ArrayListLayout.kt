@@ -58,7 +58,7 @@ class ArrayListLayout(input: String = "") : TableLayout {
         layout[col].first,
         layout[col].second,
         layout[col].third,
-        layout[col].fourth.toList()
+        layout[col].fourth
     )
 
     override fun addColumn(type: DataType, name: String, unit: String): Int {
@@ -91,7 +91,7 @@ class ArrayListLayoutIterator(private val layoutList: List<Quadruple<DataType, S
 
     override fun next(): ColumnData {
         val next = layoutList[++index]
-        return ColumnData(index, next.first, next.second, next.third, next.fourth.toList())
+        return ColumnData(index, next.first, next.second, next.third, next.fourth.toMutableList())
     }
 
 }

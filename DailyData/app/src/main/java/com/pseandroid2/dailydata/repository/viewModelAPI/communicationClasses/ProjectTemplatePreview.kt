@@ -2,6 +2,7 @@ package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
 import android.graphics.Bitmap
 import com.pseandroid2.dailydata.model.database.entities.ProjectTemplateData
+import com.pseandroid2.dailydata.model.table.ArrayListLayout
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import kotlinx.coroutines.flow.Flow
 
@@ -19,7 +20,7 @@ class ProjectTemplatePreview(
         data.name,
         data.description,
         data.color,
-        data.layout.toColumnList(),
+        ArrayListLayout().toColumnList(),
         bitmap
     )
 

@@ -55,10 +55,60 @@ class ProjectFlow(
     fun getProject(): Flow<Project> = provider.provideFlow.map { project ->
         val ret = if (project == null) {
             Log.d(LOG_TAG, "Got null Project from database")
-            ViewModelProject(repo = repositoryViewModelAPI, admin = SimpleUser("", ""))
+            Project(repositoryViewModelAPI = repositoryViewModelAPI)
         } else {
-            project
+            Log.d(LOG_TAG, "Got Project from database: name = ${project.name}, id = ${project.id}")
+            val rows = mutableListOf<Row>()
+            for (row in project.table) {
+                rows.add(Row(row))
+            }
+            val buttons = mutableListOf<Button>()
+            for (col in project.table.layout) {
+                for (uiElement in col.uiElements) {
+                    buttons.add(Button(uiElement, col.id))
+                }
+            }
+            val notifications = mutableListOf<Notification>()
+            for (notif in project.notifications) {
+                if (notif is TimeNotification) {
+                    notifications.add(Notification(notif))
+                }
+            }
+            val graphs = mutableListOf<Graph>()
+            for (graph in project.graphs) {
+                graphs.add(
+                    graph.toViewGraph(
+                        TODO()
+                    )
+                )
+            }
+            val members = mutableListOf<Member>()
+            for (user in project.users) {
+                members.add(Member(user))
+            }
+            Project(
+                project.id,
+                project.isOnline,
+                if (project.admin is NullUser) {
+                    Log.w(LOG_TAG, "Getting a NullUser from the Database")
+                    false
+                } else {
+                    rds.getUserID() == project.admin.getId()
+                },
+                project.name,
+                project.desc,
+                project.color,
+                project.table.getLayout().toColumnList(),
+                rows.toList(),
+                buttons.toList(),
+                notifications.toList(),
+                graphs.toList(),
+                members.toList(),
+                repositoryViewModelAPI
+            )
         }
+        @Suppress("Deprecation")
+        ret.executeQueue = eq
         return@map ret
     }
 }

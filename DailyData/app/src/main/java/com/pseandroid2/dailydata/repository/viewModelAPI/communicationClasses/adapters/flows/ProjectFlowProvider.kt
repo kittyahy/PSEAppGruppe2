@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class ProjectFlowProvider(val projId: Int, private val db: AppDataBase) :
+class ProjectFlowProvider(private val projId: Int, private val db: AppDataBase) :
     FlowProvider<Project?>() {
 
     companion object {
@@ -89,7 +89,7 @@ class ProjectFlowProvider(val projId: Int, private val db: AppDataBase) :
         launch(Dispatchers.IO) {
             Log.i(LOG_TAG, "Start observing the Table of Project with id $projId")
             db.tableContentDAO().getRowsById(projId).distinctUntilChanged().collect { rows ->
-                val layout = ArrayListLayout(db.projectDataDAO().getCurrentLayout(projId))
+                val layout = ArrayListLayout(db.layoutDAO().getCurrentColumns(projId))
                 val table = ArrayListTable(layout)
                 for (row in rows) {
                     table.addRow(row)

@@ -151,5 +151,5 @@ data class ColumnData(
     val type: DataType,
     val name: String,
     val unit: String,
-    val uiElements: List<UIElement> = listOf()
+    val uiElements: MutableList<UIElement> = mutableListOf()
 )
