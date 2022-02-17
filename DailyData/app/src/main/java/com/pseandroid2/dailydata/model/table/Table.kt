@@ -134,5 +134,5 @@ data class ColumnData(
     val type: String,
     val name: String,
     val unit: String,
-    val uiElements: List<UIElement>
+    val uiElements: MutableList<UIElement>
 )

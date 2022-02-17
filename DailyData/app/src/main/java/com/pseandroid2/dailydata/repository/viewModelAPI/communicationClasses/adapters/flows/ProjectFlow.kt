@@ -83,10 +83,7 @@ class ProjectFlow(
             for (graph in project.graphs) {
                 graphs.add(
                     graph.toViewGraph(
-                        Gson().fromJson(
-                            db.projectDataDAO().getCurrentLayout(provider.projId),
-                            ArrayListLayout::class.java
-                        )
+                        TODO()
                     )
                 )
             }

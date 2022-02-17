@@ -18,7 +18,7 @@ class ArrayListLayout(input: String = "") : TableLayout {
             Gson().fromJson(input)
         }
 
-    constructor(layoutList: ArrayList<ColumnData>) : this("") {
+    constructor(layoutList: List<ColumnData>) : this("") {
         for (col in layoutList) {
             layout.add(
                 Quadruple(
@@ -50,7 +50,7 @@ class ArrayListLayout(input: String = "") : TableLayout {
         layout[col].first,
         layout[col].second,
         layout[col].third,
-        layout[col].fourth.toList()
+        layout[col].fourth
     )
 
     override fun addColumn(typeString: String, name: String, unit: String) {
@@ -82,7 +82,7 @@ class ArrayListLayoutIterator(private val layoutList: List<Quadruple<String, Str
 
     override fun next(): ColumnData {
         val next = layoutList[++index]
-        return ColumnData(index, next.first, next.second, next.third, next.fourth.toList())
+        return ColumnData(index, next.first, next.second, next.third, next.fourth.toMutableList())
     }
 
 }

@@ -38,6 +38,7 @@ import com.pseandroid2.dailydata.model.users.NullUser
 import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.util.Consts.LOG_TAG
 import com.pseandroid2.dailydata.util.SortedIntListUtil
+import kotlinx.coroutines.flow.Flow
 import java.time.LocalDateTime
 import java.util.SortedSet
 import java.util.TreeSet
@@ -51,6 +52,7 @@ class ProjectCDManager(
     private val notifDAO: NotificationsDAO = db.notificationsDAO()
     private val graphDAO: GraphDAO = db.graphDAO()
     private val graphManager: GraphCDManager = db.graphCDManager()
+    private val layoutDAO: LayoutDAO = db.layoutDAO()
     private val existingIds: SortedSet<Int> = TreeSet()
 
     /**
@@ -82,6 +84,7 @@ class ProjectCDManager(
                 uiElement.id = newUiId
             }
         }
+        insertLayout(newID, layout)
 
         for (user: User in project.users) {
             projectDAO.addUser(newID, user)
@@ -103,12 +106,14 @@ class ProjectCDManager(
         graphDAO.deleteAllGraphs(id)
         @Suppress("Deprecation")
         notifDAO.deleteAllNotifications(id)
-
+        @Suppress("Deprecation")
         uiDAO.deleteAllUIElements(id)
-
+        @Suppress("Deprecation")
         projectDAO.deleteAllUsers(id)
-
+        @Suppress("Deprecation")
         projectDAO.deleteProjectEntityById(id)
+        @Suppress("Deprecation")
+        layoutDAO.removeAllColumns(id)
     }
 
     /**
@@ -121,10 +126,11 @@ class ProjectCDManager(
 
         @Suppress("Deprecation")
         val skeleton =
-            createSkeleton(newId, template.getProjectSkeleton(), template.getTableLayout())
+            createSkeleton(newId, template.getProjectSkeleton())
         val ent = ProjectTemplateEntity(skeleton, template.getCreator())
         @Suppress("Deprecation")
         templateDAO.insertProjectTemplate(ent)
+        insertLayout(template.id, template.getTableLayout())
         return newId
     }
 
@@ -139,15 +145,14 @@ class ProjectCDManager(
 
     private fun createSkeleton(
         id: Int,
-        skeleton: ProjectSkeleton,
-        layout: TableLayout
+        skeleton: ProjectSkeleton
     ): ProjectSkeletonEntity {
         val name: String = skeleton.name
         val desc: String = skeleton.desc
         val wallpaper: String = skeleton.path
         val color: Int = skeleton.color
         val onlineId: Long = skeleton.onlineId
-        return ProjectSkeletonEntity(id, name, desc, wallpaper, color, layout.toJSON(), onlineId)
+        return ProjectSkeletonEntity(id, name, desc, wallpaper, color, onlineId)
     }
 
     private suspend fun insertProjectEntity(project: Project): Int {
@@ -155,14 +160,21 @@ class ProjectCDManager(
 
         @Suppress("Deprecation")
         val skeleton: ProjectSkeletonEntity =
-            createSkeleton(id, project.getProjectSkeleton(), project.table.getLayout())
+            createSkeleton(id, project.getProjectSkeleton())
         val admin: User = project.admin
         Log.d(LOG_TAG, "Name: ${admin.getName()}, ID: ${admin.getId()}")
         val entity = ProjectEntity(skeleton, admin, project.isOnline)
 
+        @Suppress("Deprecation")
         projectDAO.insertProjectEntity(entity)
 
         return id
+    }
+
+    private suspend fun insertLayout(id: Int, tableLayout: TableLayout) {
+        for (column in tableLayout) {
+            layoutDAO.addColumn(id, column)
+        }
     }
 
     private fun getNextId(): Int {
