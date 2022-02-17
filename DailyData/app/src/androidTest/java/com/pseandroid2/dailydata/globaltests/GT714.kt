@@ -7,10 +7,15 @@ import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.performTextReplacement
 import com.pseandroid2.dailydata.Main
 import com.pseandroid2.dailydata.MainActivity
 import com.pseandroid2.dailydata.util.Consts.LOG_TAG
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
@@ -26,17 +31,25 @@ class GT714 {
     /**
      * [Kresse-project] [com.pseandroid2.dailydata.globaltests.DefaultProject.createProjectTest]
      */
-    @Ignore("back to overview is missing, needs a \"Kresse\" Project")
+    @Ignore(" needs a \"Kresse\" Project, save does not work")
     @Test
-    //TODO(braucht ein Projekt "Kresse")
     @InternalCoroutinesApi
-    fun changeProjectName(){
+    fun changeProjectName() {
 
         composeRule.onAllNodesWithText("Kresse").onFirst().performClick()
         composeRule.onNodeWithText("Settings").performClick()
-        composeRule.onNodeWithText("Kresse").performTextInput("Neue Kresse")
+        composeRule.onNodeWithText("Kresse").performTextReplacement("Neue Kresse")
+        TODO("Save does not work yet")
         composeRule.onNodeWithText("Save").performClick()
-        TODO("Back to overview")
+        runBlocking {
+            launch(Dispatchers.Main) {
+                composeRule.activity.onBackPressed()
+                Log.d(LOG_TAG, "Hit the Back Button")
+            }
+        }
+        runBlocking {
+            delay(2000)
+        }
         composeRule.onNodeWithText("Neue Kresse").assertExists()
     }
 
