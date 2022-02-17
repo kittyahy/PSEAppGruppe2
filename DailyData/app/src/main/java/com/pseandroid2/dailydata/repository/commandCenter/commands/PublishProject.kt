@@ -25,23 +25,17 @@ class PublishProject(private val viewModelProject: ViewModelProject, api: Reposi
         ) //Todo Fehlerbehandlung, falls publishen fehl schlägt
         viewModelProject.isOnline = true
         if (publish()) {
-            TODO("Publish Queue not yet accessible")
-            /*publishQueue.add(
+            repositoryViewModelAPI.projectHandler.executeQueue.publishQueue.add(
                 CreateProject(
-                    viewModelProject.title,
-                    viewModelProject.desc,
-                    viewModelProject.wallpaper,
-                    viewModelProject.table,
-                    viewModelProject.buttons,
-                    viewModelProject.notifications,
-                    viewModelProject.graphs //Todo Problem wenn teilnehmende noch nicht die Verwendeten Graphtypen hätten
+                    viewModelProject, null, repositoryViewModelAPI
                 )
-            )*/
+            )
         }
+
+
     }
 
     override suspend fun publish(): Boolean {
         return super.publish() && publishable
     }
-
 }

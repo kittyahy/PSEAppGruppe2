@@ -34,20 +34,6 @@ class CreateProject(
         super.execute()
     }
 
-    //TODO which one is the correct one? Commented function is the one on my local branch but as I didnt change anything there it was on main at some point at least...
-/*<<<<<<< HEAD
-    override suspend fun publish(): Boolean {
-        //ReserveServerSlot
-        @Suppress("Deprecation")
-        onlineProjectID =
-            repositoryViewModelAPI.remoteDataSourceAPI.createNewOnlineProject("") //TODO Add project details as JSON here
-
-        //Make Created Project Online Project
-        @Suppress("Deprecation")
-        repositoryViewModelAPI.appDataBase.projectDataDAO()
-            .setOnlineID(projectID!!, onlineProjectID!!)
-        return super.publish()
-=======*/
     override suspend fun publish(): Boolean {
         return super.publish() && publishable
     }
