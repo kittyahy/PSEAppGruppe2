@@ -5,5 +5,6 @@ import com.pseandroid2.dailydata.model.graph.Graph
 sealed class ProjectDataGraphScreenEvent {
 
     data class OnCreate(val projectId: Int) : ProjectDataGraphScreenEvent()
-    data class OnShowGraphDialog(val isOpen: Boolean, val graph: Graph<*, *>? = null) : ProjectDataGraphScreenEvent()
+    data class OnShowGraphDialog(val isOpen: Boolean, val graph: Graph<*, *>? = null) :
+        ProjectDataGraphScreenEvent()
 }

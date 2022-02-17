@@ -30,7 +30,7 @@ class ProjectDataGraphScreenViewModel @Inject constructor(
     var table = listOf<Column>()
         private set
 
-    var isDialogOpen by mutableStateOf(false)
+    var isGraphDialogOpen by mutableStateOf(false)
         private set
     var currentGraph by mutableStateOf<Graph<*, *>?>(null)
         private set
@@ -59,10 +59,10 @@ class ProjectDataGraphScreenViewModel @Inject constructor(
             }*/
             is ProjectDataGraphScreenEvent.OnShowGraphDialog -> {
                 if (event.graph != null) {
-                    isDialogOpen = event.isOpen
+                    isGraphDialogOpen = event.isOpen
                     currentGraph = event.graph
                 } else {
-                    isDialogOpen = false
+                    isGraphDialogOpen = false
                 }
             }
         }

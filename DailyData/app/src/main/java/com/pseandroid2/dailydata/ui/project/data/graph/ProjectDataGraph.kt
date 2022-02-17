@@ -48,15 +48,16 @@ import com.pseandroid2.dailydata.model.graph.Generator
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Column
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DotSize
 import com.pseandroid2.dailydata.model.graph.Graph
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.GraphTemplate
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.LineChart
+import com.pseandroid2.dailydata.model.graph.GraphTemplate
+import com.pseandroid2.dailydata.model.graph.GraphType
+import com.pseandroid2.dailydata.model.graph.LineChart
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.LineType
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.PieChart
+import com.pseandroid2.dailydata.model.graph.PieChart
+import com.pseandroid2.dailydata.model.table.Table
 import com.pseandroid2.dailydata.ui.composables.EnumDropDownMenu
 import com.pseandroid2.dailydata.ui.project.creation.AppDialog
 import com.pseandroid2.dailydata.ui.project.creation.WallpaperDialog
 import com.pseandroid2.dailydata.util.ui.Wallpapers
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 @Composable
@@ -71,16 +72,16 @@ fun ProjectDataGraphScreen(
     LaunchedEffect(Unit) {
         viewModel.initialize(projectId)
     }
-    if (viewModel.isDialogOpen) {
+    if (viewModel.isGraphDialogOpen) {
         ProjectGraphDialog(
-            isOpen = viewModel.isDialogOpen,
+            isOpen = viewModel.isGraphDialogOpen,
             onDismissRequest = {
                 viewModel.onEvent(
                     ProjectDataGraphScreenEvent.OnShowGraphDialog(false)
                 )
             },
             graph = viewModel.currentGraph!!,
-            table = viewModel.table,
+            table = viewModel.project.value!!.table,
             templates = templates
         )
     }
@@ -107,11 +108,11 @@ fun ProjectGraphDialog(
     isOpen: Boolean,
     onDismissRequest: () -> Unit,
     graph: Graph<*, *>,
-    table: List<Column>,
+    table: Table,
     templates: List<GraphTemplate>
 ) {
-    var isDialogOpen by remember { mutableStateOf(false) }
-    AppDialog(isOpen = isDialogOpen, onDismissRequest = onDismissRequest, padding = 0.dp) {
+    var isTemplateDialogOpen by remember { mutableStateOf(false) }
+    AppDialog(isOpen = isTemplateDialogOpen, onDismissRequest = onDismissRequest, padding = 0.dp) {
         Column(modifier = Modifier.width(200.dp)) {
             templates.filter { it.type.representation == graph.getType().representation }
                 .forEachIndexed { index, graphTemplate ->
@@ -121,12 +122,12 @@ fun ProjectGraphDialog(
                             .fillMaxWidth()
                             .height(32.dp)
                             .clickable {
-                                //graph.apply template
-                                isDialogOpen = false
+                                graph.applyTemplateSettings(graphTemplate)
+                                isTemplateDialogOpen = false
                             },
                         contentAlignment = Alignment.CenterStart
                     ) {
-                        Text(text = graphTemplate.title)
+                        Text(text = graphTemplate.name)
                     }
                     if (index < templates.lastIndex)
                         Divider()
@@ -139,16 +140,16 @@ fun ProjectGraphDialog(
         Column(
             modifier = Modifier.width(300.dp)
         ) {
-            when (graph) {
-                is LineChart -> {
+            when (graph.getType()) {
+                GraphType.FLOAT_LINE_CHART, GraphType.TIME_LINE_CHART, GraphType.INT_LINE_CHART -> {
                     LineChartDialog(
-                        graph = graph,
+                        graph = graph as LineChart<*>,
                         table = table
                     )
                 }
-                is PieChart -> {
+                GraphType.PIE_CHART -> {
                     PieChartDialog(
-                        graph = graph,
+                        graph = graph as PieChart,
                         table = table
                     )
                 }
@@ -157,7 +158,7 @@ fun ProjectGraphDialog(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                TextButton(onClick = { isDialogOpen = true }) {
+                TextButton(onClick = { isTemplateDialogOpen = true }) {
                     Text(text = "Apply Template")
                 }
                 TextButton(onClick = onDismissRequest) {
@@ -171,27 +172,21 @@ fun ProjectGraphDialog(
 @Composable
 fun PieChartDialog(
     graph: PieChart,
-    table: List<Column>
+    table: Table
 ) {
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
-    var colorDialogOpen by remember { mutableStateOf(false) }
+    var iscolorDialogOpen by remember { mutableStateOf(false) }
     var colorIndex = 0
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        //useResource("image.png") { loadImageBitmap(it) }
-        Image(
-            //cannot be null cause image is already shown in preview
-            bitmap = graph.image!!.asImageBitmap(),
-            contentDescription = "",
-            modifier = Modifier.fillMaxWidth()
-        )
+        GraphImage(modifier = Modifier.fillMaxWidth(), graph = graph)
 
-        if (colorDialogOpen) {
+        if (iscolorDialogOpen) {
             WallpaperDialog(
-                isOpen = colorDialogOpen,
-                onDismissRequest = { colorDialogOpen = false },
+                isOpen = iscolorDialogOpen,
+                onDismissRequest = { iscolorDialogOpen = false },
                 onWallpaperClick = {
                     graph.addMappingColor(index = colorIndex, it.value.toArgb())
                 }
@@ -217,7 +212,7 @@ fun PieChartDialog(
                                 .clip(CircleShape)
                                 .background(color = Color(graph.color[index]))
                                 .clickable {
-                                    colorDialogOpen = true
+                                    iscolorDialogOpen = true
                                     colorIndex = index
                                 }
                         )

@@ -56,6 +56,8 @@ interface Graph<T : DataSet<S>, S : Entry> {
 
     fun getCalculationFunction(): Project.DataTransformation<out Any>
 
+    fun applyTemplateSettings(template: GraphTemplate)
+
 }
 
 interface GraphTemplate {
