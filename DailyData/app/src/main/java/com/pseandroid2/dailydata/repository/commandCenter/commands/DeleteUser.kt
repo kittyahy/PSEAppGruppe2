@@ -6,7 +6,7 @@ import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ViewModelProject
 
-class DeleteMember(projectID: Int, private val user: User, api: RepositoryViewModelAPI) :
+class DeleteUser(projectID: Int, private val user: User, api: RepositoryViewModelAPI) :
     ProjectCommand(projectID = projectID, repositoryViewModelAPI = api) {
     companion object {
         fun isIllegal(project: Project): Boolean {
