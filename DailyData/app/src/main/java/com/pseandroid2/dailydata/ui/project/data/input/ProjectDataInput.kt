@@ -203,6 +203,13 @@ fun IncButtons(
     onClickDec : (id : Int) -> Unit,
     onClickAdd : (id : Int) -> Unit
 ) {
+    IncButton(
+        name = "Coffee",
+        value = 0,
+        onClickInc = {  },
+        onClickDec = {  },
+        onClickAdd = {  }
+    )
     Column(
         modifier = Modifier
             .padding(horizontal = 16.dp)

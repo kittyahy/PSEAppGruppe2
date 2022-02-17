@@ -3,20 +3,24 @@ package com.pseandroid2.dailydata.globaltests
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import com.pseandroid2.dailydata.MainActivity
 import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
 
 /**
- * testing: "Ändere Projektnamen", 7.1.2
+ * testing: "Projektbenachrichtigung ändern", 7.1.6
  */
-class GT715 {
+class GT716 {
 
     @get:Rule
     val composeRule = createAndroidComposeRule<MainActivity>()
@@ -29,10 +33,13 @@ class GT715 {
     //TODO(needs a project "Kresse")
     @InternalCoroutinesApi
 
-    fun changeProjectDescription() {
+    fun changeNotification() {
         composeRule.onAllNodesWithText("Kresse").onFirst().performClick()
         composeRule.onNodeWithText("Settings").performClick()
-        composeRule.onNodeWithText("Add Description").performTextInput("Das ist meine Kresse")
+        composeRule.onNodeWithTag("DeleteTime",).performClick()
+        composeRule.onNodeWithText("Add Notification").performClick()
+        composeRule.onNodeWithText("Name").performTextInput("Meine Kresse")
+        composeRule.onNodeWithText("OK").performClick()
         composeRule.onNodeWithText("Save").performClick()
         TODO("Back to overview")
         composeRule.onNodeWithText("Neue Kresse").assertExists()
@@ -40,3 +47,4 @@ class GT715 {
 
 
 }
+
