@@ -86,9 +86,24 @@ enum class Operation(val type: OperationType, val adminOp: Boolean) {
             return DeleteRow.isIllegal(project)
         }
     },
-    ADD_COLUMN(OperationType.TABLE, false) {
+    ADD_COLUMN_WHOLE_NUMBER(OperationType.TABLE, false) {
         override fun isIllegalByData(project: Project): Boolean {
-            return AddColumn.isIllegal(project, DataType.WHOLE_NUMBER) //Todo Type beachten
+            return AddColumn.isIllegal(project, DataType.WHOLE_NUMBER)
+        }
+    },
+    ADD_COLUMN_TIME(OperationType.TABLE, false) {
+        override fun isIllegalByData(project: Project): Boolean {
+            return AddColumn.isIllegal(project, DataType.TIME)
+        }
+    },
+    ADD_COLUMN_FLOATING_POINT_NUMBER(OperationType.TABLE, false) {
+        override fun isIllegalByData(project: Project): Boolean {
+            return AddColumn.isIllegal(project, DataType.FLOATING_POINT_NUMBER)
+        }
+    },
+    ADD_COLUMN_STRING(OperationType.TABLE, false) {
+        override fun isIllegalByData(project: Project): Boolean {
+            return AddColumn.isIllegal(project, DataType.STRING)
         }
     };
 

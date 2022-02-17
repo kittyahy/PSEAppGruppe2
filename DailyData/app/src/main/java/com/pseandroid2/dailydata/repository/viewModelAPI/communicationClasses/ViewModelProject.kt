@@ -122,15 +122,18 @@ class ViewModelProject(
         isIllegalOperation = immutableOperations.toMap()
     }
 
-    override val id: Int
+    override var id: Int
         get() = skeleton.id
+        set(value) {
+            throw IllegalOperationException("Re-Setting the id of a project is not permitted")
+        }
 
     override val name: String
         get() = skeleton.name
 
     override suspend fun setName(name: String) {
         mutableIllegalOperation[Operation.SET_PROJECT_NAME]!!.emit(false)
-        executeQueue.add(SetTitle(this, name, repo))
+        executeQueue.add(SetTitle(id, name, repo))
     }
 
     override val desc: String
@@ -138,7 +141,7 @@ class ViewModelProject(
 
     override suspend fun setDesc(desc: String) {
         mutableIllegalOperation[Operation.SET_PROJECT_DESC]!!.emit(false)
-        executeQueue.add(SetDescription(this, desc, repo))
+        executeQueue.add(SetDescription(id, desc, repo))
     }
 
     override val path: String
@@ -249,7 +252,7 @@ class ViewModelProject(
 
     override suspend fun publish() {
         mutableIllegalOperation[Operation.PUBLISH_PROJECT]!!.emit(false)
-        executeQueue.add(PublishProject(this, repo))
+        executeQueue.add(PublishProject(id, repo))
     }
 
     override suspend fun setAdmin(admin: User) {

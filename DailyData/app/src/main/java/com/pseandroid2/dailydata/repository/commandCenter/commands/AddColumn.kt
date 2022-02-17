@@ -24,9 +24,7 @@ class AddColumn(projectID: Int, private val specs: ColumnData, api: RepositoryVi
 
     override suspend fun execute() {
         @Suppress("Deprecation")
-        repositoryViewModelAPI.appDataBase.tableContentDAO()
-        TODO("insertColumn(row.toDBEquivalent(), projectId)")
-        super.execute()
+        repositoryViewModelAPI.appDataBase.layoutDAO().addColumn(projectID, specs)
     }
 
     override suspend fun publish(): Boolean {
