@@ -2,6 +2,7 @@ package com.pseandroid2.dailydata.globaltests
 
 import android.util.Log
 import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -36,7 +37,7 @@ class GT718 {
     /**
      * [Kresse-project] [com.pseandroid2.dailydata.globaltests.DefaultProject.createProjectTest]
      */
-    @Ignore("needs a \"Kresse\" Project")
+    @Ignore("needs a \"Kresse\" Project, save does not work, background check is missing")
     @Test
     @InternalCoroutinesApi
 
@@ -45,7 +46,7 @@ class GT718 {
         composeRule.onAllNodesWithText("Kresse").onFirst().performClick()
         composeRule.onNodeWithText("Settings").performClick()
         composeRule.onNodeWithText("Change Wallpaper").performClick()
-        composeRule.onNodeWithText("Blue").performClick().assert(composeRule.onNode(hasText("Blue").also { hasSetTextAction() }))
+        composeRule.onNodeWithText("Blue").performClick()
         composeRule.onNodeWithText("Save").performClick()
         TODO("Save does not work yet")
         runBlocking {
@@ -59,7 +60,8 @@ class GT718 {
         }
         composeRule.onAllNodesWithText("Kresse").onFirst().performClick()
         composeRule.onNodeWithText("Settings").performClick()
-        composeRule.onNodeWithTag("WallpaperColor").assert(has)
+        composeRule.onNodeWithTag("WallpaperColor").assertIsDisplayed()
+        TODO("find out how to check the background")
     }
 }
 
