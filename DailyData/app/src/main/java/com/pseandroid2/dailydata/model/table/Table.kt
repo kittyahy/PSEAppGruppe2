@@ -52,7 +52,7 @@ interface Table : Iterable<Row> {
 
     suspend fun addRow(row: Row)
 
-    suspend fun deleteRow(row: Int)
+    suspend fun deleteRow(row: Row)
 
     fun getColumn(col: Int): List<Any>
 
@@ -72,6 +72,7 @@ interface Table : Iterable<Row> {
 
     suspend fun removeUIElement(col: Int, id: Int) = layout.removeUIElement(col, id)
 
+    suspend fun setRow(row: Row)
 }
 
 /**

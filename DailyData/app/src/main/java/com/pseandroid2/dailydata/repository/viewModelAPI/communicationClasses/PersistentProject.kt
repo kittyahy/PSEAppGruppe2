@@ -148,7 +148,7 @@ class PersistentProject(
         table.addRow(row)
     }
 
-    suspend fun deleteRow(row: Int) {
+    suspend fun deleteRow(row: Row) {
         table.deleteRow(row)
     }
 

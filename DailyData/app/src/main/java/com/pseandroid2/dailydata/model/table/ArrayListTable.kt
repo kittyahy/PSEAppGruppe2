@@ -65,8 +65,12 @@ class ArrayListTable(override val layout: TableLayout = ArrayListLayout()) : Tab
         }
     }
 
-    override suspend fun deleteRow(row: Int) {
-        table.removeAt(row)
+    override suspend fun setRow(row: Row) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteRow(row: Row) {
+        table.remove(row)
     }
 
     override fun getColumn(col: Int): List<Any> {
