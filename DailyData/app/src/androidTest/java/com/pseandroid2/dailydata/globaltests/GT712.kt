@@ -28,7 +28,7 @@ class GT712 {
     val composeRule = createAndroidComposeRule<MainActivity>()
 
 
-    @Ignore("Graph error, back to Overview is missing")
+    @Ignore("Graph error")
     @InternalCoroutinesApi
     @Test
     fun createEmptyProjectTest() {
@@ -57,13 +57,11 @@ class GT712 {
         composeRule.onNodeWithText("Name").performTextInput("Meine Kresse")
         composeRule.onNodeWithText("OK").performClick()
 
-        //composeRule.onNodeWithText("Add Graph").performClick()
-        //composeRule.onNodeWithText("Line Chart").performClick()
-
-        composeRule.onNodeWithText("Save").performClick()
-        Log.d(LOG_TAG, "Clicked save")
+        composeRule.onNodeWithText("Add Graph").performClick()
+        composeRule.onNodeWithText("Line Chart").performClick()
         //TODO("com.pseandroid2.dailydata.workingtest.ReproduceTest.addGraphTest")
 
+        composeRule.onNodeWithText("Save").performClick()
         runBlocking {
             delay(3000)
         }
@@ -74,7 +72,7 @@ class GT712 {
             }
         }
         runBlocking {
-            delay(5000)
+            delay(2000)
         }
 
         composeRule.onNodeWithText("Add new Project").assertExists()
