@@ -95,7 +95,7 @@ interface TableLayout : Iterable<ColumnData> {
 
     fun getUIElements(col: Int): List<UIElement>
     suspend fun addUIElement(col: Int, element: UIElement): Int
-    fun removeUIElement(col: Int, id: Int)
+    suspend fun removeUIElement(col: Int, id: Int)
 
     fun getName(col: Int): String
     fun getUnit(col: Int): String

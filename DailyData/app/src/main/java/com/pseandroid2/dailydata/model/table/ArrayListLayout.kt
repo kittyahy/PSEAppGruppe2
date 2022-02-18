@@ -45,7 +45,7 @@ class ArrayListLayout(input: String = "") : TableLayout {
         return layout[col].fourth.size - 1
     }
 
-    override fun removeUIElement(col: Int, id: Int) {
+    override suspend fun removeUIElement(col: Int, id: Int) {
         layout[col].fourth.removeAll { it.id == id }
     }
 

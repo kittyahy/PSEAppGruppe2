@@ -4,7 +4,7 @@ import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 
-class DeleteButton(projectID: Int, val uiElement: UIElement, api: RepositoryViewModelAPI) :
+class DeleteUIElement(projectID: Int, val uiElement: Int, api: RepositoryViewModelAPI) :
     ProjectCommand(projectID = projectID, repositoryViewModelAPI = api) {
     companion object {
         fun isIllegal(project: Project): Boolean {
@@ -19,7 +19,7 @@ class DeleteButton(projectID: Int, val uiElement: UIElement, api: RepositoryView
     override suspend fun execute() {
         @Suppress("Deprecation")
         repositoryViewModelAPI.appDataBase.uiElementDAO()
-            .removeUIElements(projectID, uiElement.id)
+            .removeUIElements(projectID, uiElement)
         super.execute()
     }
 

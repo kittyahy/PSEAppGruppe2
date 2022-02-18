@@ -5,27 +5,29 @@ import com.pseandroid2.dailydata.model.table.TableLayout
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddUIElement
+import com.pseandroid2.dailydata.repository.commandCenter.commands.DeleteUIElement
+import com.pseandroid2.dailydata.repository.commandCenter.commands.ProjectCommand
 import kotlin.reflect.KClass
 
 class PersistentLayout(
-    private val l: TableLayout,
+    private val tableLayout: TableLayout,
     private val repositoryViewModelAPI: RepositoryViewModelAPI,
     private val projectID: Int
 ) :
     TableLayout {
     override val size: Int
-        get() = l.size
+        get() = tableLayout.size
 
     override fun getColumnType(col: Int): KClass<out Any> {
-        return l.getColumnType(col)
+        return tableLayout.getColumnType(col)
     }
 
     override fun getUIElements(col: Int): List<UIElement> {
-        return l.getUIElements(col)
+        return tableLayout.getUIElements(col)
     }
 
     override suspend fun addUIElement(col: Int, element: UIElement): Int {
-        repositoryViewModelAPI.projectHandler.executeQueue.add(
+        s(
             AddUIElement(
                 projectID,
                 element,
@@ -33,23 +35,24 @@ class PersistentLayout(
                 repositoryViewModelAPI
             )
         )
+
         return 0
     }
 
-    override fun removeUIElement(col: Int, id: Int) {
-        return TODO()
+    override suspend fun removeUIElement(col: Int, id: Int) {
+        s(DeleteUIElement(projectID, id, repositoryViewModelAPI))
     }
 
     override fun getName(col: Int): String {
-        return l.getName(col)
+        return tableLayout.getName(col)
     }
 
     override fun getUnit(col: Int): String {
-        return l.getUnit(col)
+        return tableLayout.getUnit(col)
     }
 
     override fun get(col: Int): ColumnData {
-        return l.get(col)
+        return tableLayout.get(col)
     }
 
     override fun addColumn(type: DataType, name: String, unit: String): Int {
@@ -61,11 +64,15 @@ class PersistentLayout(
     }
 
     override fun toJSON(): String {
-        return l.toJSON()
+        return tableLayout.toJSON()
     }
 
     override fun iterator(): Iterator<ColumnData> {
-        return l.iterator()
+        return tableLayout.iterator()
+    }
+
+    private suspend fun s(projectCommand: ProjectCommand) {
+        repositoryViewModelAPI.projectHandler.executeQueue.add(projectCommand)
     }
 
 }
