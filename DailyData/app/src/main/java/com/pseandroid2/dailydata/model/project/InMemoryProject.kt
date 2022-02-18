@@ -105,12 +105,11 @@ constructor(
         isIllegalOperation = immutableOperations.toMap()
     }
 
-    override val id: Int
+    override var id: Int
         get() = skeleton.id
-
-    fun setId(id: Int) {
-        skeleton.id = id
-    }
+        set(value) {
+            skeleton.id = value
+        }
 
     override val name: String
         get() = skeleton.name

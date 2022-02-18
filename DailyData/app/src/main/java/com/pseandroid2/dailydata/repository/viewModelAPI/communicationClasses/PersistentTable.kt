@@ -5,17 +5,20 @@ import com.pseandroid2.dailydata.model.table.Row
 import com.pseandroid2.dailydata.model.table.Table
 import com.pseandroid2.dailydata.model.table.TableLayout
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 
 class PersistentTable(
     private val table: Table,
-    private val repositoryViewModelAPI: RepositoryViewModelAPI
-) :
-    Table {
+    private val repositoryViewModelAPI: RepositoryViewModelAPI,
+    scope: CoroutineScope,
+    private val projectID: Int
+) : Table {
+
     override val isIllegalOperation: Map<Operation, Flow<Boolean>>
         get() = table.isIllegalOperation
-    override val layout: TableLayout
-        get() = PersistentLayout(table.layout, repositoryViewModelAPI)
+    override val layout: TableLayout =
+        PersistentLayout(table.layout, repositoryViewModelAPI, projectID)
 
     override fun getCell(row: Int, col: Int): Any {
         return table.getCell(row, col)

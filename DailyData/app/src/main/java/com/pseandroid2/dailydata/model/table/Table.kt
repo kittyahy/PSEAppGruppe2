@@ -21,10 +21,11 @@
 package com.pseandroid2.dailydata.model.table
 
 import com.google.gson.Gson
-import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.model.database.entities.RowEntity
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.model.users.NullUser
+import com.pseandroid2.dailydata.model.users.User
+import com.pseandroid2.dailydata.repository.commandCenter.commands.AddColumn
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Operation
 import kotlinx.coroutines.flow.Flow
@@ -35,6 +36,9 @@ import kotlin.reflect.KClass
  * The interface, which specifies what a table should be able to do.
  */
 interface Table : Iterable<Row> {
+
+    val addableTypes: Collection<DataType>
+        get() = layout.addableTypes
 
     val isIllegalOperation: Map<Operation, Flow<Boolean>>
 
@@ -81,6 +85,9 @@ interface TableLayout : Iterable<ColumnData> {
             return ArrayListLayout(json)
         }
     }
+
+    val addableTypes: Collection<DataType>
+        get() = AddColumn.addableTypes(this)
 
     val size: Int
 

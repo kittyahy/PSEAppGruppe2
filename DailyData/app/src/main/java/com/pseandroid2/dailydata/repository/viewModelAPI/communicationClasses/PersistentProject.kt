@@ -24,9 +24,6 @@ import com.google.gson.Gson
 import com.pseandroid2.dailydata.model.graph.Graph
 import com.pseandroid2.dailydata.model.notifications.Notification
 import com.pseandroid2.dailydata.model.project.Project
-import com.pseandroid2.dailydata.model.project.ProjectSkeleton
-import com.pseandroid2.dailydata.model.project.SimpleSkeleton
-import com.pseandroid2.dailydata.model.table.ArrayListTable
 import com.pseandroid2.dailydata.model.table.ColumnData
 import com.pseandroid2.dailydata.model.table.Row
 import com.pseandroid2.dailydata.model.table.Table
@@ -63,6 +60,8 @@ class PersistentProject(
 
     override val users: List<User>
         get() = project.users
+
+    override val table: Table = PersistentTable(project.table, repo, scope, id)
 
     override val notifications: List<Notification>
         get() = project.notifications
@@ -186,9 +185,6 @@ class PersistentProject(
     override suspend fun changeNotification(id: Int, notification: Notification) {
         TODO("setNotification")
     }
-
-    override val table: Table
-        get() = PersistentTable(project.table, repo)
 
     override suspend fun removeNotification(id: Int) {
         mutableIllegalOperation[Operation.DELETE_NOTIFICATION]!!.emit(false)
