@@ -1,16 +1,13 @@
 package com.pseandroid2.dailydata.globaltests
 
-import android.util.Log
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
-import androidx.compose.ui.test.performTextReplacement
-import com.pseandroid2.dailydata.Main
 import com.pseandroid2.dailydata.MainActivity
-import com.pseandroid2.dailydata.util.Consts.LOG_TAG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -21,37 +18,38 @@ import org.junit.Rule
 import org.junit.Test
 
 /**
- * testing: "Ändere Projektnamen", 7.1.2
+ * testing: "Projektbenachrichtigung hinzufügen", 7.1.8
  */
-class GT714 {
+class GT7118 {
 
     @get:Rule
     val composeRule = createAndroidComposeRule<MainActivity>()
 
-    /**
-     * [Kresse-project] [com.pseandroid2.dailydata.globaltests.DefaultProject.createProjectTest]
-     */
-    @Ignore(" needs a \"Kresse\" Project, save does not work")
-    @Test
-    @InternalCoroutinesApi
-    fun changeProjectName() {
 
+    @Ignore("Save does not work, needs a Kresse project")
+    @InternalCoroutinesApi
+    @Test
+    fun addNotificationTest(){
         composeRule.onAllNodesWithText("Kresse").onFirst().performClick()
         composeRule.onNodeWithText("Settings").performClick()
-        composeRule.onNodeWithText("Kresse").performTextReplacement("Neue Kresse")
-        TODO("Save does not work yet")
+        composeRule.onNodeWithText("Add Notification").performClick()
+        composeRule.onNodeWithText("Name").performTextInput("Neue Notification")
+        composeRule.onNodeWithText("OK").performClick()
         composeRule.onNodeWithText("Save").performClick()
+        TODO("Save button does not work")
+        runBlocking {
+            delay(3000)
+        }
         runBlocking {
             launch(Dispatchers.Main) {
                 composeRule.activity.onBackPressed()
-                Log.d(LOG_TAG, "Hit the Back Button")
             }
         }
         runBlocking {
             delay(2000)
         }
-        composeRule.onNodeWithText("Neue Kresse").assertExists()
+        composeRule.onAllNodesWithText("Kresse").onFirst().performClick()
+        composeRule.onNodeWithText("Settings").performClick()
+        composeRule.onNodeWithTag("DeleteTime").assertExists()
     }
-
-
 }
