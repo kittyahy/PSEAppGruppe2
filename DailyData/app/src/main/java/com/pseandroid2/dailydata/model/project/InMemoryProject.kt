@@ -30,7 +30,7 @@ import com.pseandroid2.dailydata.model.users.NullUser
 import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.repository.commandCenter.commands.IllegalOperationException
 import com.pseandroid2.dailydata.repository.viewModelAPI.ProjectHandler
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Operation
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ProjectOperation
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -68,8 +68,8 @@ constructor(
         mutableGraphs,
     )
 
-    private val mutableIllegalOperation: Map<Operation, MutableSharedFlow<Boolean>>
-    override val isIllegalOperation: Map<Operation, Flow<Boolean>>
+    private val mutableIllegalOperation: Map<ProjectOperation, MutableSharedFlow<Boolean>>
+    override val isIllegalOperation: Map<ProjectOperation, Flow<Boolean>>
 
     private var mutableTable: Table = initialTable
     override val table: Table
@@ -86,19 +86,19 @@ constructor(
         get() = mutableUsers
 
     init {
-        val operations = mutableMapOf<Operation, MutableSharedFlow<Boolean>>()
-        for (operation in Operation.values()) {
-            if (operation.type == Operation.OperationType.PROJECT) {
+        val operations = mutableMapOf<ProjectOperation, MutableSharedFlow<Boolean>>()
+        for (operation in ProjectOperation.values()) {
+            if (operation.type == ProjectOperation.OperationType.PROJECT) {
                 operations[operation] = MutableSharedFlow(1)
             }
         }
         mutableIllegalOperation = operations.toMap()
-        val immutableOperations = mutableMapOf<Operation, Flow<Boolean>>()
+        val immutableOperations = mutableMapOf<ProjectOperation, Flow<Boolean>>()
         for (entry in mutableIllegalOperation) {
             immutableOperations[entry.key] = entry.value.asSharedFlow()
         }
-        for (operation in Operation.values()) {
-            if (operation.type == Operation.OperationType.TABLE) {
+        for (operation in ProjectOperation.values()) {
+            if (operation.type == ProjectOperation.OperationType.TABLE) {
                 immutableOperations[operation] = table.isIllegalOperation[operation]!!
             }
         }

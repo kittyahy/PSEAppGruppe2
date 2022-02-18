@@ -20,7 +20,7 @@
 
 package com.pseandroid2.dailydata.model.table
 
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Operation
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ProjectOperation
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -30,18 +30,18 @@ import kotlinx.coroutines.flow.asSharedFlow
  */
 class ArrayListTable(override val layout: TableLayout = ArrayListLayout()) : Table {
 
-    private val mutableIllegalOperation: Map<Operation, MutableSharedFlow<Boolean>>
-    override val isIllegalOperation: Map<Operation, Flow<Boolean>>
+    private val mutableIllegalOperation: Map<ProjectOperation, MutableSharedFlow<Boolean>>
+    override val isIllegalOperation: Map<ProjectOperation, Flow<Boolean>>
 
     init {
-        val operations = mutableMapOf<Operation, MutableSharedFlow<Boolean>>()
-        for (operation in Operation.values()) {
-            if (operation.type == Operation.OperationType.TABLE) {
+        val operations = mutableMapOf<ProjectOperation, MutableSharedFlow<Boolean>>()
+        for (operation in ProjectOperation.values()) {
+            if (operation.type == ProjectOperation.OperationType.TABLE) {
                 operations[operation] = MutableSharedFlow(1)
             }
         }
         mutableIllegalOperation = operations.toMap()
-        val immutableOperation = mutableMapOf<Operation, Flow<Boolean>>()
+        val immutableOperation = mutableMapOf<ProjectOperation, Flow<Boolean>>()
         for (entry in mutableIllegalOperation) {
             immutableOperation[entry.key] = entry.value.asSharedFlow()
         }

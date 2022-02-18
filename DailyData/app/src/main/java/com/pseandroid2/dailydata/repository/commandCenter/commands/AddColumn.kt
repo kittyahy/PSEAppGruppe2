@@ -1,6 +1,5 @@
 package com.pseandroid2.dailydata.repository.commandCenter.commands
 
-import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.table.ColumnData
 import com.pseandroid2.dailydata.model.table.TableLayout
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
@@ -9,8 +8,8 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Da
 class AddColumn(projectID: Int, private val specs: ColumnData, api: RepositoryViewModelAPI) :
     ProjectCommand(projectID = projectID, repositoryViewModelAPI = api) {
     companion object {
-        fun isIllegal(project: Project): Boolean {
-            return addableTypes(project.table.layout).isEmpty()
+        fun isIllegal(layout: TableLayout): Boolean {
+            return addableTypes(layout).isEmpty()
         }
 
         const val isAdminOperation: Boolean = true

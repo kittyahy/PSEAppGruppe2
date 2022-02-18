@@ -19,7 +19,7 @@ class PersistentTable(
     private val projectID: Int
 ) : Table {
 
-    override val isIllegalOperation: Map<Operation, Flow<Boolean>>
+    override val isIllegalOperation: Map<ProjectOperation, Flow<Boolean>>
         get() = table.isIllegalOperation
     override val layout: TableLayout =
         PersistentLayout(table.layout, repositoryViewModelAPI, projectID)

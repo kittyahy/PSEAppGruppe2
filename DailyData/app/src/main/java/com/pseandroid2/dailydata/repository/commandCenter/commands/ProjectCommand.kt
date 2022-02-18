@@ -28,7 +28,7 @@ abstract class ProjectCommand(
          * Shows whether it is impossible to perform the command action on the given project.
          * Must ALWAYS be overridden in the subclass. Default is calling this fun in the superclass.
          */
-        fun isIllegal(project: Project): Boolean {
+        fun isIllegal(): Boolean {
             return true
         }
 

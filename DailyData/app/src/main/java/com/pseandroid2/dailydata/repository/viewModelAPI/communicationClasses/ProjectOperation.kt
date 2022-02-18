@@ -15,88 +15,68 @@ import com.pseandroid2.dailydata.repository.commandCenter.commands.SetDescriptio
 import com.pseandroid2.dailydata.repository.commandCenter.commands.SetTitle
 import com.pseandroid2.dailydata.repository.commandCenter.commands.SetWallpaper
 
-enum class Operation(val type: OperationType, val adminOp: Boolean) {
-    SET_PROJECT_NAME(OperationType.PROJECT, false) {
+enum class ProjectOperation(val adminOp: Boolean) {
+    SET_PROJECT_NAME(false) {
         override fun isIllegalByData(project: Project): Boolean {
             return SetTitle.isIllegal(project)
         }
     },
-    SET_PROJECT_DESC(OperationType.PROJECT, false) {
+    SET_PROJECT_DESC(false) {
         override fun isIllegalByData(project: Project): Boolean {
             return SetDescription.isIllegal(project)
         }
     },
-    DELETE(OperationType.PROJECT, false) {
+    DELETE(false) {
         override fun isIllegalByData(project: Project): Boolean {
             return DeleteProject.isIllegal(project)
         }
     },
-    ADD_GRAPH(OperationType.PROJECT, false) {
+    ADD_GRAPH(false) {
         override fun isIllegalByData(project: Project): Boolean {
             return AddGraph.isIllegal(project)
         }
     },
-    ADD_USER(OperationType.PROJECT, false) {
+    ADD_USER(false) {
         override fun isIllegalByData(project: Project): Boolean {
             return AddUser.isIllegal(project)
         }
     },
-    LEAVE_PROJECT(OperationType.PROJECT, false) {
+    LEAVE_PROJECT(false) {
         override fun isIllegalByData(project: Project): Boolean {
             return LeaveOnlineProject.isIllegal(project)
         }
     },
-    SET_ADMIN(OperationType.PROJECT, false) {
+    SET_ADMIN(false) {
         override fun isIllegalByData(project: Project): Boolean {
             return TODO("SetAdmin isIllegal")
         }
     },
-    SET_COLOR(OperationType.PROJECT, false) {
+    SET_COLOR(false) {
         override fun isIllegalByData(project: Project): Boolean {
             return SetWallpaper.isIllegal(project)
         }
     },
-    CHANGE_NOTIFICATION(OperationType.PROJECT, false) {
+    CHANGE_NOTIFICATION(false) {
         override fun isIllegalByData(project: Project): Boolean {
             return TODO("SetNotification isIllegal")
         }
     },
-    ADD_NOTIFICATION(OperationType.PROJECT, false) {
+    ADD_NOTIFICATION(false) {
         override fun isIllegalByData(project: Project): Boolean {
             return AddNotification.isIllegal(project)
         }
     },
-    DELETE_NOTIFICATION(OperationType.PROJECT, false) {
+    DELETE_NOTIFICATION(false) {
         override fun isIllegalByData(project: Project): Boolean {
             return DeleteNotification.isIllegal(project)
         }
     },
-    PUBLISH_PROJECT(OperationType.PROJECT, false) {
+    PUBLISH_PROJECT(false) {
         override fun isIllegalByData(project: Project): Boolean {
             return PublishProject.isIllegal(project)
         }
-    },
-    ADD_ROW(OperationType.TABLE, false) {
-        override fun isIllegalByData(project: Project): Boolean {
-            return AddRow.isIllegal(project)
-        }
-    },
-    DELETE_ROW(OperationType.TABLE, false) {
-        override fun isIllegalByData(project: Project): Boolean {
-            return DeleteRow.isIllegal(project)
-        }
-    },
-    ADD_COLUMN(OperationType.TABLE, false) {
-        override fun isIllegalByData(project: Project): Boolean {
-            return AddColumn.isIllegal(project)
-        }
     };
 
-    enum class OperationType {
-        PROJECT,
-        GRAPH,
-        TABLE
-    }
 
     open fun isIllegalByData(project: Project): Boolean = false
 }

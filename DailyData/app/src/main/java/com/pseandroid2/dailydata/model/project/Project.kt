@@ -30,7 +30,7 @@ import com.pseandroid2.dailydata.model.table.TableLayout
 import com.pseandroid2.dailydata.model.transformation.TransformationFunction
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.model.users.User
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Operation
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ProjectOperation
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -42,7 +42,7 @@ interface Project {
         const val MAXIMUM_PROJECT_USERS = 24
     }
 
-    val isIllegalOperation: Map<Operation, Flow<Boolean>>
+    val isIllegalOperation: Map<ProjectOperation, Flow<Boolean>>
 
     var id: Int
 
