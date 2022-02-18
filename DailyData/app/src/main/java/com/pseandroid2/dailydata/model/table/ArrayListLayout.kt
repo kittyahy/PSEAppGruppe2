@@ -59,8 +59,8 @@ class ArrayListLayout(input: String = "") : TableLayout {
         layout[col].fourth
     )
 
-    override suspend fun addColumn(type: ColumnData, name: String, unit: String): Int {
-        layout.add(Quadruple(type, name, unit, mutableListOf()))
+    override suspend fun addColumn(columnData: ColumnData): Int {
+        layout.add(Quadruple(columnData.type, columnData.name, columnData.unit, mutableListOf()))
         return size - 1
     }
 
@@ -70,6 +70,10 @@ class ArrayListLayout(input: String = "") : TableLayout {
 
     override fun toJSON(): String {
         return Gson().toJson(layout)
+    }
+
+    override suspend fun setColumn(specs: ColumnData) {
+        TODO("Not yet implemented")
     }
 
     override fun iterator() = ArrayListLayoutIterator(layout)
