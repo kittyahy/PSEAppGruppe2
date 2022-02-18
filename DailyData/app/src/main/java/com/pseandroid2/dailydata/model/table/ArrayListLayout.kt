@@ -61,7 +61,7 @@ class ArrayListLayout(input: String = "") : TableLayout {
         layout[col].fourth
     )
 
-    override fun addColumn(type: DataType, name: String, unit: String): Int {
+    override suspend fun addColumn(type: DataType, name: String, unit: String): Int {
         layout.add(Quadruple(type, name, unit, mutableListOf()))
         return size - 1
     }

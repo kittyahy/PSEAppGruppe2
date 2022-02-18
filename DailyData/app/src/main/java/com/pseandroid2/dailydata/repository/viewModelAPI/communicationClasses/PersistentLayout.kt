@@ -4,6 +4,7 @@ import com.pseandroid2.dailydata.model.table.ColumnData
 import com.pseandroid2.dailydata.model.table.TableLayout
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
+import com.pseandroid2.dailydata.repository.commandCenter.commands.AddColumn
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddUIElement
 import com.pseandroid2.dailydata.repository.commandCenter.commands.DeleteUIElement
 import com.pseandroid2.dailydata.repository.commandCenter.commands.ProjectCommand
@@ -52,11 +53,18 @@ class PersistentLayout(
     }
 
     override fun get(col: Int): ColumnData {
-        return tableLayout.get(col)
+        return tableLayout[col]
     }
 
-    override fun addColumn(type: DataType, name: String, unit: String): Int {
-        return TODO()
+    override suspend fun addColumn(type: DataType, name: String, unit: String): Int {
+        s(
+            AddColumn(
+                projectID,
+                ColumnData(type = type, name = name, unit = unit),
+                repositoryViewModelAPI
+            )
+        )
+        return 0
     }
 
     override fun deleteColumn(col: Int) {

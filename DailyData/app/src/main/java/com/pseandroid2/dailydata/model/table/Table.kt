@@ -102,7 +102,7 @@ interface TableLayout : Iterable<ColumnData> {
 
     operator fun get(col: Int): ColumnData
 
-    fun addColumn(type: DataType, name: String, unit: String = ""): Int
+    suspend fun addColumn(type: DataType, name: String, unit: String = ""): Int
 
     fun deleteColumn(col: Int)
 
