@@ -43,6 +43,10 @@ class ArrayListLayout(input: String = "") : TableLayout {
         return layout[col].fourth.size - 1
     }
 
+    override suspend fun setUIElement(col: Int, element: UIElement) {
+        layout[col].fourth[element.id] = element
+    }
+
     override suspend fun removeUIElement(col: Int, id: Int) {
         layout[col].fourth.removeAll { it.id == id }
     }
@@ -59,8 +63,8 @@ class ArrayListLayout(input: String = "") : TableLayout {
         layout[col].fourth
     )
 
-    override suspend fun addColumn(columnData: ColumnData): Int {
-        layout.add(Quadruple(columnData.type, columnData.name, columnData.unit, mutableListOf()))
+    override suspend fun addColumn(specs: ColumnData): Int {
+        layout.add(Quadruple(specs.type, specs.name, specs.unit, mutableListOf()))
         return size - 1
     }
 
@@ -73,7 +77,7 @@ class ArrayListLayout(input: String = "") : TableLayout {
     }
 
     override suspend fun setColumn(specs: ColumnData) {
-        TODO("Not yet implemented")
+        layout[specs.id] = Quadruple(specs.type, specs.name, specs.unit, mutableListOf())
     }
 
     override fun iterator() = ArrayListLayoutIterator(layout)

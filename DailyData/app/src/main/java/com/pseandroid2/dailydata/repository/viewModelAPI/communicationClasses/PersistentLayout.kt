@@ -10,12 +10,13 @@ import com.pseandroid2.dailydata.repository.commandCenter.commands.DeleteColumn
 import com.pseandroid2.dailydata.repository.commandCenter.commands.DeleteUIElement
 import com.pseandroid2.dailydata.repository.commandCenter.commands.ProjectCommand
 import com.pseandroid2.dailydata.repository.commandCenter.commands.SetColumn
+import com.pseandroid2.dailydata.repository.commandCenter.commands.SetUIElement
 import kotlin.reflect.KClass
 
 class PersistentLayout(
     private val tableLayout: TableLayout,
-    private val r: RepositoryViewModelAPI,
-    private val p: Int
+    private val repositoryViewModelAPI: RepositoryViewModelAPI,
+    private val projectID: Int
 ) :
     TableLayout {
     override val size: Int
@@ -30,20 +31,24 @@ class PersistentLayout(
     }
 
     override suspend fun addUIElement(col: Int, element: UIElement): Int {
-        s(
+        saveToDB(
             AddUIElement(
-                p,
+                projectID,
                 element,
                 col,
-                r
+                repositoryViewModelAPI
             )
         )
 
         return 0
     }
 
+    override suspend fun setUIElement(col: Int, element: UIElement) {
+        saveToDB(SetUIElement(projectID, element, col, repositoryViewModelAPI))
+    }
+
     override suspend fun removeUIElement(col: Int, id: Int) {
-        s(DeleteUIElement(p, id, r))
+        saveToDB(DeleteUIElement(projectID, id, repositoryViewModelAPI))
     }
 
     override fun getName(col: Int): String {
@@ -58,23 +63,23 @@ class PersistentLayout(
         return tableLayout[col]
     }
 
-    override suspend fun addColumn(type: ColumnData): Int {
-        s(
+    override suspend fun addColumn(specs: ColumnData): Int {
+        saveToDB(
             AddColumn(
-                p,
-                type,
-                r
+                projectID,
+                specs,
+                repositoryViewModelAPI
             )
         )
         return 0
     }
 
     override suspend fun setColumn(specs: ColumnData) {
-        s(SetColumn(p, specs, r))
+        saveToDB(SetColumn(projectID, specs, repositoryViewModelAPI))
     }
 
     override suspend fun deleteColumn(col: Int) {
-        s(DeleteColumn(p, col, r))
+        saveToDB(DeleteColumn(projectID, col, repositoryViewModelAPI))
     }
 
     override fun toJSON(): String {
@@ -85,8 +90,8 @@ class PersistentLayout(
         return tableLayout.iterator()
     }
 
-    private suspend fun s(projectCommand: ProjectCommand) {
-        r.projectHandler.executeQueue.add(projectCommand)
+    private suspend fun saveToDB(projectCommand: ProjectCommand) {
+        repositoryViewModelAPI.projectHandler.executeQueue.add(projectCommand)
     }
 
 }

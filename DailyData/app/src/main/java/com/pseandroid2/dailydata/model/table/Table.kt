@@ -102,13 +102,14 @@ interface TableLayout : Iterable<ColumnData> {
 
     operator fun get(col: Int): ColumnData
 
-    suspend fun addColumn(type: ColumnData): Int
+    suspend fun addColumn(specs: ColumnData): Int
 
     suspend fun deleteColumn(col: Int)
 
     fun toJSON(): String
 
     suspend fun setColumn(specs: ColumnData)
+    suspend fun setUIElement(col: Int, element: UIElement)
 }
 
 /**
