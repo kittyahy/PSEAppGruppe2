@@ -6,17 +6,18 @@ import androidx.compose.ui.test.performClick
 import com.pseandroid2.dailydata.Main
 import com.pseandroid2.dailydata.MainActivity
 import kotlinx.coroutines.InternalCoroutinesApi
-import org.junit.Assert
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
-class GT7147 {
-
+class GT7133 {
     @get:Rule
     val composeRule = createAndroidComposeRule<MainActivity>()
 
-    private val projectName: String = "GT7147";
+    private val projectName: String = "GT7133";
 
     @InternalCoroutinesApi
     @Before
@@ -27,18 +28,21 @@ class GT7147 {
         GlobalTestsHelpingMethods.createTestProject(composeRule, projectName)
     }
 
-    //("TODO: Lösche das Projekt nach dem Test, sodass es nicht mehrere Projekte mit dem gleichen Namen existieren, da sonst hier ein Error geworfen wird")
+    @Ignore("")
     /**
-     * tests: "Zeit zum Öffnen eines Projekts", 7.1.47
+     * tests: "Link erstellen", 7.1.33
      */
     @InternalCoroutinesApi
     @Test
     fun timeToOpenProject() {
-        val maxTime = 1000;
-
-        val startTime = composeRule.mainClock.currentTime
         composeRule.onNodeWithText(projectName).performClick()
-        composeRule.onNodeWithText("Input").assertExists() // Means that the switch to the project screen succeeded
-        Assert.assertTrue((composeRule.mainClock.currentTime-startTime) < maxTime)
+        runBlocking { delay(1000) }
+        composeRule.onNodeWithText("Settings").performClick()
+        runBlocking { delay(1000) }
+        composeRule.onNodeWithText("Create Link").performClick()
+        runBlocking { delay(500) }
+        //
+        composeRule.onNodeWithText("Create Online Project").performClick()
+
     }
 }
