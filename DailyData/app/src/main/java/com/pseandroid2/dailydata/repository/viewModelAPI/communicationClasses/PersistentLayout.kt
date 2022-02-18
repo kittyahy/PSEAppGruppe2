@@ -6,14 +6,15 @@ import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddColumn
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddUIElement
+import com.pseandroid2.dailydata.repository.commandCenter.commands.DeleteColumn
 import com.pseandroid2.dailydata.repository.commandCenter.commands.DeleteUIElement
 import com.pseandroid2.dailydata.repository.commandCenter.commands.ProjectCommand
 import kotlin.reflect.KClass
 
 class PersistentLayout(
     private val tableLayout: TableLayout,
-    private val repositoryViewModelAPI: RepositoryViewModelAPI,
-    private val projectID: Int
+    private val r: RepositoryViewModelAPI,
+    private val p: Int
 ) :
     TableLayout {
     override val size: Int
@@ -30,10 +31,10 @@ class PersistentLayout(
     override suspend fun addUIElement(col: Int, element: UIElement): Int {
         s(
             AddUIElement(
-                projectID,
+                p,
                 element,
                 col,
-                repositoryViewModelAPI
+                r
             )
         )
 
@@ -41,7 +42,7 @@ class PersistentLayout(
     }
 
     override suspend fun removeUIElement(col: Int, id: Int) {
-        s(DeleteUIElement(projectID, id, repositoryViewModelAPI))
+        s(DeleteUIElement(p, id, r))
     }
 
     override fun getName(col: Int): String {
@@ -59,16 +60,16 @@ class PersistentLayout(
     override suspend fun addColumn(type: DataType, name: String, unit: String): Int {
         s(
             AddColumn(
-                projectID,
+                p,
                 ColumnData(type = type, name = name, unit = unit),
-                repositoryViewModelAPI
+                r
             )
         )
         return 0
     }
 
-    override fun deleteColumn(col: Int) {
-        return TODO()
+    override suspend fun deleteColumn(col: Int) {
+        s(DeleteColumn(p, col, r))
     }
 
     override fun toJSON(): String {
@@ -80,7 +81,7 @@ class PersistentLayout(
     }
 
     private suspend fun s(projectCommand: ProjectCommand) {
-        repositoryViewModelAPI.projectHandler.executeQueue.add(projectCommand)
+        r.projectHandler.executeQueue.add(projectCommand)
     }
 
 }

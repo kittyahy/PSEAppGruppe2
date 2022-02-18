@@ -104,7 +104,7 @@ interface TableLayout : Iterable<ColumnData> {
 
     suspend fun addColumn(type: DataType, name: String, unit: String = ""): Int
 
-    fun deleteColumn(col: Int)
+    suspend fun deleteColumn(col: Int)
 
     fun toJSON(): String
 

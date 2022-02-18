@@ -66,7 +66,7 @@ class ArrayListLayout(input: String = "") : TableLayout {
         return size - 1
     }
 
-    override fun deleteColumn(col: Int) {
+    override suspend fun deleteColumn(col: Int) {
         layout.removeAt(col)
     }
 
