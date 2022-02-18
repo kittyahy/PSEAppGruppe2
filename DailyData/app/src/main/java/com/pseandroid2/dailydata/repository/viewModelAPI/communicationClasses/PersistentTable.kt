@@ -14,15 +14,15 @@ import kotlinx.coroutines.flow.Flow
 
 class PersistentTable(
     private val table: Table,
-    private val r: RepositoryViewModelAPI,
+    private val repositoryViewModelAPI: RepositoryViewModelAPI,
     scope: CoroutineScope,
-    private val p: Int
+    private val projectID: Int
 ) : Table {
 
     override val isIllegalOperation: Map<Operation, Flow<Boolean>>
         get() = table.isIllegalOperation
     override val layout: TableLayout =
-        PersistentLayout(table.layout, r, p)
+        PersistentLayout(table.layout, repositoryViewModelAPI, projectID)
 
     override fun getCell(row: Int, col: Int): Any {
         return table.getCell(row, col)
@@ -37,15 +37,15 @@ class PersistentTable(
     }
 
     override suspend fun addRow(row: Row) {
-        s(AddRow(p, row, r))
+        saveToDB(AddRow(projectID, row, repositoryViewModelAPI))
     }
 
     override suspend fun setRow(row: Row) {
-        s(SetRow(p, row, r))
+        saveToDB(SetRow(projectID, row, repositoryViewModelAPI))
     }
 
     override suspend fun deleteRow(row: Row) {
-        s(DeleteRow(p, row, r))
+        saveToDB(DeleteRow(projectID, row, repositoryViewModelAPI))
     }
 
     override fun getColumn(col: Int): List<Any> {
@@ -53,19 +53,24 @@ class PersistentTable(
     }
 
     override suspend fun addColumn(specs: ColumnData, default: Any): Int {
-        TODO("Not yet implemented")
+        return layout.addColumn(specs)
     }
 
+    override suspend fun setColumn(specs: ColumnData, default: Any) {
+        layout.setColumn(specs)
+    }
+
+
     override suspend fun deleteColumn(col: Int) {
-        TODO("Not yet implemented")
+        layout.deleteColumn(col)
     }
 
     override fun iterator(): Iterator<Row> {
         return table.iterator()
     }
 
-    private suspend fun s(projectCommand: ProjectCommand) {
-        r.projectHandler.executeQueue.add(projectCommand)
+    private suspend fun saveToDB(projectCommand: ProjectCommand) {
+        repositoryViewModelAPI.projectHandler.executeQueue.add(projectCommand)
     }
 
 }

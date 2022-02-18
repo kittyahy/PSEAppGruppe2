@@ -56,8 +56,12 @@ class ArrayListTable(override val layout: TableLayout = ArrayListLayout()) : Tab
     override fun getRow(row: Int) = table[row]
 
     override suspend fun addRow(row: Row) {
+        table.add(rowValidation(row))
+    }
+
+    private fun rowValidation(row: Row): ArrayListRow {
         if (assertLayout(row)) {
-            table.add(row.toArrayListRow())
+            return row.toArrayListRow()
         } else {
             throw IllegalArgumentException(
                 "Tried to add a row to a table but the layouts did not match"
@@ -66,11 +70,18 @@ class ArrayListTable(override val layout: TableLayout = ArrayListLayout()) : Tab
     }
 
     override suspend fun setRow(row: Row) {
-        TODO("Not yet implemented")
+        val arrayListRow = rowValidation(row)
+        val index = table.indexOf(rowValidation(arrayListRow))
+        table.remove(arrayListRow)
+        table.add(index, arrayListRow)
     }
 
     override suspend fun deleteRow(row: Row) {
-        table.remove(row)
+        table.remove(rowValidation(row))
+    }
+
+    override suspend fun setColumn(specs: ColumnData, default: Any) {
+        TODO("Not yet implemented")
     }
 
     override fun getColumn(col: Int): List<Any> {
