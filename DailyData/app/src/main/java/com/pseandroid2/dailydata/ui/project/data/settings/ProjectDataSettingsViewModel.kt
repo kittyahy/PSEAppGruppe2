@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.pseandroid2.dailydata.model.graph.Graph
+import com.pseandroid2.dailydata.model.graph.GraphType
 import com.pseandroid2.dailydata.model.notifications.Notification
 import com.pseandroid2.dailydata.model.notifications.TimeNotification
 import com.pseandroid2.dailydata.model.project.Project
@@ -68,11 +69,11 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
     var graphs by mutableStateOf(listOf<Graph<*, *>>())
         private set
 
-    var currentGraphType by mutableStateOf<String?>(null)
+    var currentGraphType by mutableStateOf<GraphType?>(null)
         private set
     var xAxis by mutableStateOf<Int?>(null)
         private set
-    var mapping by mutableStateOf<List<Int>?>(null)
+    var mapping by mutableStateOf<List<ColumnData>?>(null)
         private set
     var graphName by mutableStateOf<String?>(null)
         private set
@@ -207,7 +208,7 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
                     }
                     var graphStrategy: GraphCreationStrategy? = null
                     when (currentGraphType) {
-                        Graph.LINE_CHART_STR -> {
+                        GraphType.TIME_LINE_CHART, GraphType.INT_LINE_CHART, GraphType.FLOAT_LINE_CHART -> {
                             if (xAxis != null) {
                                 when (project.value!!.table.layout[xAxis!!].type) {
                                     DataType.TIME -> graphStrategy = TimeLineChartStrategy()
@@ -220,7 +221,7 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
                                 }
                             }
                         }
-                        Graph.PIE_CHART_STR -> graphStrategy = PieChartStrategy()
+                        GraphType.PIE_CHART -> graphStrategy = PieChartStrategy()
                     }
                     if (graphStrategy == null) {
                         Log.e(

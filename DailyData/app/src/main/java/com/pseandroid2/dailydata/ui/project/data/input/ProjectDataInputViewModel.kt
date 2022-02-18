@@ -64,7 +64,7 @@ class ProjectDataInputScreenViewModel @Inject constructor(
                     repository.projectHandler.initializeProjectProvider(event.projectId)
                 }
                 viewModelScope.launch {
-                    repository.projectHandler.getProjectByID(id = event.projectId)
+                    /*repository.projectHandler.getProjectByID(id = event.projectId)
                         .collect { project ->
                             title = project.title
                             description = project.desc
@@ -74,7 +74,7 @@ class ProjectDataInputScreenViewModel @Inject constructor(
                             members = project.members
                             isOnlineProject = project.isOnlineProject
                             initialViewModelProject = project
-                        }
+                        }*/
                 }
 
             }
@@ -128,7 +128,7 @@ class ProjectDataInputScreenViewModel @Inject constructor(
                     }
                 }
                 viewModelScope.launch {
-                    if (initialViewModelProject.addRowIsPossible().first()) {
+                    /*if (initialViewModelProject.addRowIsPossible().first()) {
                         initialViewModelProject.addRow(Row(id = 0, elements = columnValues))
                         val mutable = columnValues.toMutableList()
                         val currentTime = LocalTime.now()
@@ -142,7 +142,7 @@ class ProjectDataInputScreenViewModel @Inject constructor(
                         columnValues = mutable.toList()
                     }else {
                         sendUiEvent(UiEvent.ShowToast("Could not add row"))
-                    }
+                    }*/
                 }
             }
             is ProjectDataInputScreenEvent.OnRowDialogShow -> {
@@ -160,12 +160,12 @@ class ProjectDataInputScreenViewModel @Inject constructor(
             }
             is ProjectDataInputScreenEvent.OnRowDeleteClick -> {
                 viewModelScope.launch {
-                    if (initialViewModelProject.deleteRowIsPossible(table[rowEdit]).first()) {
+                    /*if (initialViewModelProject.deleteRowIsPossible(table[rowEdit]).first()) {
                         initialViewModelProject.deleteRow(table[rowEdit])
                         isRowDialogOpen = false
                     } else {
                         sendUiEvent(UiEvent.ShowToast("Could not delete row"))
-                    }
+                    }*/
                 }
             }
         }

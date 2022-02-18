@@ -132,8 +132,8 @@ interface Project {
     @Suppress("Deprecation")
     fun <D : Any> createDataTransformation(
         function: TransformationFunction<D>,
-        cols: List<Int> = IntArray(table.layout.size) { it }.toList()
-    ) = DataTransformation(table, function, cols)
+        cols: List<ColumnData> = table.layout.columnDataList
+    ) = DataTransformation(table, function, cols.toMutableList())
 
     /**
      * This class represents the Data transformation. It specifies how the data of a given project should be handled.
@@ -145,8 +145,10 @@ interface Project {
     constructor(
         private val table: Table,
         private val function: TransformationFunction<D>,
-        val cols: List<Int>
+        cols: MutableList<ColumnData>
     ) {
+        private var mutableCols = cols
+        val columns = mutableCols.toList()
 
         /**
          * This method reapplied the function to the table.
@@ -162,10 +164,20 @@ interface Project {
             return function.toCompleteString()
         }
 
+        fun addColumn(col: ColumnData) {
+            if (!mutableCols.contains(col)) {
+                mutableCols.add(col)
+            }
+        }
+
+        fun removeColumn(col: ColumnData) {
+            mutableCols.remove(col)
+        }
+
         private fun map(table: Table): List<List<Any>> {
             val returnList = mutableListOf<List<Any>>()
-            for (i in cols) {
-                returnList.add(table.getColumn(i))
+            for (col in columns) {
+                returnList.add(table.getColumn(col.id))
             }
             return returnList
         }

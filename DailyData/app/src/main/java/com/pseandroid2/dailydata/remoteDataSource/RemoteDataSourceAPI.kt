@@ -97,14 +97,11 @@ class RemoteDataSourceAPI @Inject constructor(uAccount: UserAccount?, sManager: 
     }
 
     // -----------------------------UserDetails-------------------------------
-    fun getUser(): User {
-        return SimpleUser(getUserID(), getUserName())
-    }
-
     /**
      * Get the currently signed in user.
      */
     fun getUser(): User {
+        @Suppress("Deprecation")
         return SimpleUser(getUserID(), getUserName())
     }
 

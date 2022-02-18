@@ -31,7 +31,6 @@ import com.pseandroid2.dailydata.model.graph.LineChart.Companion.DOT_COLOR_KEY
 import com.pseandroid2.dailydata.model.graph.LineChart.Companion.LINE_STYLE_KEY
 import com.pseandroid2.dailydata.model.graph.LineChart.Companion.LINE_STYLE_NONE
 import com.pseandroid2.dailydata.model.graph.LineChart.Companion.LINE_STYLE_SOLID
-import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.table.TableLayout
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import kotlinx.coroutines.flow.Flow
@@ -122,13 +121,13 @@ fun ModelGraph<*, *>.toViewGraph(layout: TableLayout): Graph {
                     LineType.CONTINUOUS
                 }
             val columns = mutableListOf<Column>()
-            for (i in this.getCalculationFunction().cols) {
+            for (col in this.getCalculationFunction().columns) {
                 columns.add(
                     Column(
-                        i,
-                        layout[i].name,
-                        layout[i].unit,
-                        layout[i].type
+                        col.id,
+                        col.name,
+                        col.unit,
+                        col.type
                     )
                 )
             }

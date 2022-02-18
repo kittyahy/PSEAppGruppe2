@@ -2,6 +2,7 @@ package com.pseandroid2.dailydata.model.graph
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import androidx.compose.ui.graphics.Color
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineDataSet
 import com.pseandroid2.dailydata.model.graph.Graph.Companion.SET_LABEL_KEY
@@ -26,6 +27,8 @@ abstract class LineChart<T : Any>(
         const val LINE_STYLE_NONE = "NONE"
         const val LINE_STYLE_SOLID = "SOLID"
     }
+
+    override val primaryColors: MutableMap<Int, Color> = mutableMapOf()
 
     override fun getDataSets(): List<LineDataSet> {
         val dataSetMaps = xToFloat(transformation.recalculate())

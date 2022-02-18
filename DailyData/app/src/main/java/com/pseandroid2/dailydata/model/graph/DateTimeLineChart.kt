@@ -1,5 +1,6 @@
 package com.pseandroid2.dailydata.model.graph
 
+import androidx.compose.ui.graphics.Color
 import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.settings.Settings
 import java.time.LocalDateTime
@@ -48,5 +49,9 @@ class DateTimeLineChart(
             floatMap[floatKey] = entry.value
         }
         return floatMap
+    }
+
+    override fun applyTemplateSettings(template: GraphTemplate) {
+        TODO("Not yet implemented")
     }
 }

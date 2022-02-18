@@ -19,7 +19,7 @@ import org.junit.BeforeClass
 import org.junit.Test
 
 class FlowTester {
-    private lateinit var handle: ProjectFlowProvider
+    /*private lateinit var handle: ProjectFlowProvider
     var id = 0
 
     companion object {
@@ -76,5 +76,5 @@ class FlowTester {
                 Log.d(LOG_TAG, "Changed Name and setting")
             }
         }
-    }
+    }*/
 }

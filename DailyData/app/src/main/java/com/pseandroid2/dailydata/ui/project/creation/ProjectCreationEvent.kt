@@ -22,7 +22,8 @@ package com.pseandroid2.dailydata.ui.project.creation
 
 import androidx.compose.ui.graphics.Color
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
+import com.pseandroid2.dailydata.model.graph.Graph
+import com.pseandroid2.dailydata.model.graph.GraphType
 import java.time.LocalTime
 
 sealed class ProjectCreationEvent {
@@ -36,8 +37,8 @@ sealed class ProjectCreationEvent {
     data class OnButtonRemove(val id: Int, val columnID: Int) : ProjectCreationEvent()
     data class OnNotificationAdd(val message : String, val time : LocalTime) : ProjectCreationEvent()
     data class OnNotificationRemove(val index : Int) : ProjectCreationEvent()
-    data class OnGraphAdd(val graph: Graph) : ProjectCreationEvent()
-    data class OnGraphRemove(val index : Int) : ProjectCreationEvent()
+    data class OnGraphAdd(val graph: GraphType) : ProjectCreationEvent()
+    data class OnGraphRemove(val graph: Graph<*, *>) : ProjectCreationEvent()
     object OnSaveClick : ProjectCreationEvent()
 
     //dialogs

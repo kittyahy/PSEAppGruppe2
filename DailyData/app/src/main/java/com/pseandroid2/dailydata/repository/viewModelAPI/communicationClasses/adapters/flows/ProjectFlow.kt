@@ -55,7 +55,11 @@ class ProjectFlow(
     fun getProject(): Flow<Project> = provider.provideFlow.map { project ->
         val ret = if (project == null) {
             Log.d(LOG_TAG, "Got null Project from database")
-            ViewModelProject(repo = repositoryViewModelAPI, admin = SimpleUser("", ""))
+            ViewModelProject(
+                repo = repositoryViewModelAPI,
+                admin = SimpleUser("", ""),
+                scope = provider.scope
+            )
         } else {
             project
         }

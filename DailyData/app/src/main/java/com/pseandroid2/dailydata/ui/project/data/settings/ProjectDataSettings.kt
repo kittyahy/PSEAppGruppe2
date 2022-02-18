@@ -47,6 +47,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.pseandroid2.dailydata.R
 import com.pseandroid2.dailydata.model.graph.Graph
 import com.pseandroid2.dailydata.model.graph.Graph.Companion.LINE_CHART_STR
+import com.pseandroid2.dailydata.model.graph.GraphType
 import com.pseandroid2.dailydata.model.table.ColumnData
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.model.users.User
@@ -378,7 +379,11 @@ fun ProjectDataSettingsScreen(
                 },
                 onClick = { graphType ->
                     viewModel.onEvent(ProjectDataSettingsScreenEvent.OnChoseGraphType(graphType))
-                    if (graphType == LINE_CHART_STR) {
+                    if (
+                        graphType == GraphType.FLOAT_LINE_CHART
+                        || graphType == GraphType.INT_LINE_CHART
+                        || graphType == GraphType.TIME_LINE_CHART
+                    ) {
                         viewModel.onEvent(ProjectDataSettingsScreenEvent.OnShowXAxisDialog(true))
                     } else {
                         viewModel.onEvent(

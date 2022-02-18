@@ -14,4 +14,8 @@ class FloatLineChart(
     }
 
     override fun getType() = GraphType.FLOAT_LINE_CHART
+
+    override fun applyTemplateSettings(template: GraphTemplate) {
+        TODO("Not yet implemented")
+    }
 }

@@ -51,7 +51,7 @@ class ProjectCreationScreenViewModel @Inject constructor(
     private val _uiEvent = MutableSharedFlow<UiEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
 
-    var project by mutableStateOf(CacheOnlyProject())
+    var project by mutableStateOf(InMemoryProject(0))
         private set
 
     var isWallpaperDialogOpen by mutableStateOf(false)
@@ -137,7 +137,7 @@ class ProjectCreationScreenViewModel @Inject constructor(
                 TODO("CacheOnlyProject RemoveGraph")
             }
             is ProjectCreationEvent.OnSaveClick -> {
-                val default = InMemoryProject()
+                val default = InMemoryProject(0)
                 when {
                     default.name == project.name -> sendUiEvent(UiEvent.ShowToast("Please Enter a title"))
                     project.table.layout.size == 0 -> sendUiEvent(UiEvent.ShowToast("Please Enter a column"))

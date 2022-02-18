@@ -15,6 +15,23 @@ class ArrayListLayout(input: String = "") : TableLayout {
     override val size: Int
         get() = layout.size
 
+    override val columnDataList: List<ColumnData>
+        get() {
+            val columns = mutableListOf<ColumnData>()
+            for (i in layout.indices) {
+                columns.add(
+                    ColumnData(
+                        i,
+                        layout[i].first,
+                        layout[i].second,
+                        layout[i].third,
+                        layout[i].fourth
+                    )
+                )
+            }
+            return columns.toList()
+        }
+
     private var layout: MutableList<Quadruple<DataType, String, String, MutableList<UIElement>>> =
         if (input == "") {
             mutableListOf()

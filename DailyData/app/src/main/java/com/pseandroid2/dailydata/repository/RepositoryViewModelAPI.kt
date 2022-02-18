@@ -28,6 +28,7 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.ProjectHandler
 import com.pseandroid2.dailydata.repository.viewModelAPI.ServerHandler
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectPreviewFlow
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectTemplateFlow
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.InternalCoroutinesApi
 import javax.inject.Inject
 

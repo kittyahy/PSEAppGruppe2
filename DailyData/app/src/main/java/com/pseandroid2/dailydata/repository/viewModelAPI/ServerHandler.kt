@@ -39,7 +39,7 @@ class ServerHandler(private val appDataBase: AppDataBase, private val api: Remot
     private val amILoggedInKey = "amILoggedIn"
     private val defaultKey = "default"
     private val loginKey = "login"
-    private val supportedCommands = mapOf<String, Boolean>(
+    private val supportedCommands = mapOf(
         Pair(defaultKey, true),
         Pair(amILoggedInKey, api.getUserName() != ""),
         Pair(loginKey, api.getUserName() == "")

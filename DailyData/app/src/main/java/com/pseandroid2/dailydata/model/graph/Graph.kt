@@ -22,6 +22,7 @@ package com.pseandroid2.dailydata.model.graph
 
 import android.graphics.Bitmap
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import com.github.mikephil.charting.data.DataSet
 import com.github.mikephil.charting.data.Entry
 import com.pseandroid2.dailydata.model.graph.Graph.Companion.LINE_CHART_STR
@@ -47,6 +48,8 @@ interface Graph<T : DataSet<S>, S : Entry> {
     fun getDataSets(): List<T>
 
     fun getCustomizing(): Settings
+
+    val primaryColors: MutableMap<Int, Color>
 
     fun getImage(): Bitmap?
 

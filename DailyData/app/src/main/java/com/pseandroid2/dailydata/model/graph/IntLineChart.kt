@@ -22,4 +22,8 @@ class IntLineChart(
     }
 
     override fun getType() = GraphType.INT_LINE_CHART
+
+    override fun applyTemplateSettings(template: GraphTemplate) {
+        TODO("Not yet implemented")
+    }
 }

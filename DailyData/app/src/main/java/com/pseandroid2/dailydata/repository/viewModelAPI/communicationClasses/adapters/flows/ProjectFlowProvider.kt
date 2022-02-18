@@ -9,6 +9,7 @@ import com.pseandroid2.dailydata.model.table.ArrayListLayout
 import com.pseandroid2.dailydata.model.table.ArrayListTable
 import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.util.Consts.LOG_TAG
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -25,6 +26,8 @@ class ProjectFlowProvider(val projId: Int, private val db: AppDataBase) :
         private const val USER_INIT = "users"
     }
 
+    lateinit var scope: CoroutineScope
+
     private val project = InMemoryProject(projId)
     private var graphProvider = GraphFlowProvider(project, db)
 
@@ -36,6 +39,7 @@ class ProjectFlowProvider(val projId: Int, private val db: AppDataBase) :
     )
 
     override suspend fun initialize() = coroutineScope {
+        scope = this
         //TODO Probably the different launches should be their own respective methods
         //Observe changes to ProjectData
         launch(Dispatchers.IO) {

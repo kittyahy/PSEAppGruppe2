@@ -4,6 +4,8 @@ import androidx.compose.ui.graphics.Color
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
 import com.pseandroid2.dailydata.model.graph.Graph
 import com.pseandroid2.dailydata.model.graph.GraphType
+import com.pseandroid2.dailydata.model.table.ColumnData
+import com.pseandroid2.dailydata.model.users.User
 import java.time.LocalTime
 
 sealed class ProjectDataSettingsScreenEvent {
@@ -52,8 +54,8 @@ sealed class ProjectDataSettingsScreenEvent {
     data class OnUserRemove(val user: User) : ProjectDataSettingsScreenEvent()
 
     data class OnChoseXAxis(val col: Int) : ProjectDataSettingsScreenEvent()
-    data class OnChoseGraphType(val graphType: String) : ProjectDataSettingsScreenEvent()
-    data class OnChoseMapping(val mapping: List<Int>) : ProjectDataSettingsScreenEvent()
+    data class OnChoseGraphType(val graphType: GraphType) : ProjectDataSettingsScreenEvent()
+    data class OnChoseMapping(val mapping: List<ColumnData>) : ProjectDataSettingsScreenEvent()
     data class OnChoseGraphName(val name: String) : ProjectDataSettingsScreenEvent()
 
     object OnLeaveProject : ProjectDataSettingsScreenEvent()

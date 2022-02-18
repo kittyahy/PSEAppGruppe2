@@ -102,6 +102,12 @@ dependencies {
     //Coroutines Testing
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
+    //Color Picker
+    implementation 'com.godaddy.android.colorpicker:compose-color-picker:0.4.2'
+
+    // with Android ColorInt extensions
+    implementation 'com.godaddy.android.colorpicker:compose-color-picker-android:0.4.2'
+
 
     kapt "androidx.room:room-compiler:$roomVersion"
     annotationProcessor "androidx.room:room-compiler:$roomVersion" //Room Annotations

@@ -101,6 +101,8 @@ interface TableLayout : Iterable<ColumnData> {
 
     fun toJSON(): String
 
+    val columnDataList: List<ColumnData>
+
 }
 
 /**

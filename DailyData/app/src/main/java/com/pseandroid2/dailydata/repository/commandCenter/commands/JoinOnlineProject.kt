@@ -4,6 +4,7 @@ import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.users.SimpleUser
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ViewModelProject
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 
@@ -23,7 +24,7 @@ class JoinOnlineProject(
         const val publishable: Boolean = false
     }
 
-    override suspend fun execute() {
+    override suspend fun execute() = coroutineScope { //TODO Does this still work?
         @Suppress("DEPRECATION")
         repositoryViewModelAPI.remoteDataSourceAPI.joinProject(onlineID)
         val admin = SimpleUser(
@@ -31,7 +32,7 @@ class JoinOnlineProject(
             "ADMIN"
         )
         val onlineProject =
-            ViewModelProject(repo = repositoryViewModelAPI, admin = admin)
+            ViewModelProject(repo = repositoryViewModelAPI, admin = admin, scope = this)
         val idFlow = MutableSharedFlow<Int>()
         CreateProject(onlineProject, idFlow, repositoryViewModelAPI).execute()
         val id: Int = idFlow.first()

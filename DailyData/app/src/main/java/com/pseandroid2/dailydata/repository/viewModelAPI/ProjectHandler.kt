@@ -22,6 +22,7 @@ package com.pseandroid2.dailydata.repository.viewModelAPI
 
 
 import com.pseandroid2.dailydata.model.database.AppDataBase
+import com.pseandroid2.dailydata.model.project.InMemoryProject
 import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
@@ -134,7 +135,7 @@ class ProjectHandler(
     fun joinOnlineProjectIsPossible(): Flow<Boolean> {
         val flow = MutableSharedFlow<Boolean>(1)
         runBlocking {
-            flow.emit(JoinOnlineProject.isPossible())
+            flow.emit(JoinOnlineProject.isIllegal(InMemoryProject(0)))//TODO should only get an onlineID
         }
         return flow
     }

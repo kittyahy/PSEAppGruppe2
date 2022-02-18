@@ -2,6 +2,7 @@ package com.pseandroid2.dailydata.model.graph
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import androidx.compose.ui.graphics.Color
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.pseandroid2.dailydata.model.graph.Graph.Companion.SET_LABEL_KEY
@@ -22,6 +23,14 @@ class PieChart(
 
         const val VALUE_LABEL_ENABLE_KEY = "ENABLE VALUES LABEL"
         const val VALUE_LABEL_KEY = "VALUE LABEL"
+    }
+
+    override val primaryColors: MutableMap<Int, Color> = mutableMapOf()
+
+    val showPercentages: Boolean = false
+
+    suspend fun setShowPercentage(showPercentages: Boolean) {
+        TODO("Call the respective Command")
     }
 
     override fun getDataSets(): List<PieDataSet> {
@@ -52,4 +61,8 @@ class PieChart(
     override fun getType() = GraphType.PIE_CHART
 
     override fun getCalculationFunction() = transformation
+
+    override fun applyTemplateSettings(template: GraphTemplate) {
+        TODO("Not yet implemented")
+    }
 }

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -53,10 +54,11 @@ import com.pseandroid2.dailydata.model.graph.GraphType
 import com.pseandroid2.dailydata.model.graph.LineChart
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.LineType
 import com.pseandroid2.dailydata.model.graph.PieChart
+import com.pseandroid2.dailydata.model.table.ColumnData
 import com.pseandroid2.dailydata.model.table.Table
 import com.pseandroid2.dailydata.ui.composables.EnumDropDownMenu
 import com.pseandroid2.dailydata.ui.project.creation.AppDialog
-import com.pseandroid2.dailydata.ui.project.creation.WallpaperDialog
+import com.pseandroid2.dailydata.ui.project.creation.ColorDialog
 import com.pseandroid2.dailydata.util.ui.Wallpapers
 import kotlinx.coroutines.launch
 
@@ -176,23 +178,32 @@ fun PieChartDialog(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
-    var iscolorDialogOpen by remember { mutableStateOf(false) }
-    var colorIndex = 0
+    var isColorDialogOpen by remember { mutableStateOf(false) }
+    var columnIndex = -1
+    var currentColor by remember { mutableStateOf(Color.Black) }
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        GraphImage(modifier = Modifier.fillMaxWidth(), graph = graph)
+        GraphImage(modifier = Modifier.fillMaxWidth().fillMaxHeight(0.5f), graph = graph)
 
-        if (iscolorDialogOpen) {
+        /*if (isColorDialogOpen) {
             WallpaperDialog(
-                isOpen = iscolorDialogOpen,
-                onDismissRequest = { iscolorDialogOpen = false },
+                isOpen = isColorDialogOpen,
+                onDismissRequest = { isColorDialogOpen = false },
                 onWallpaperClick = {
                     graph.addMappingColor(index = colorIndex, it.value.toArgb())
                 }
             )
-        }
-        graph.mapping.forEachIndexed { index, column ->
+
+        }*/
+        ColorDialog(
+            isOpen = isColorDialogOpen,
+            onDismissRequest = { isColorDialogOpen = false },
+            onColor = { color ->
+                currentColor = color
+            }
+        )
+        graph.getCalculationFunction().columns.forEachIndexed { _, column ->
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -210,10 +221,12 @@ fun PieChartDialog(
                             modifier = Modifier
                                 .size((25.dp))
                                 .clip(CircleShape)
-                                .background(color = Color(graph.color[index]))
+                                .background(
+                                    color = graph.primaryColors[column.id] ?: Color.Transparent
+                                )
                                 .clickable {
-                                    iscolorDialogOpen = true
-                                    colorIndex = index
+                                    isColorDialogOpen = true
+                                    columnIndex = column.id
                                 }
                         )
                     }
@@ -227,21 +240,18 @@ fun PieChartDialog(
             }
         }
 
-        val suggestions = table.map { it.name }
-        var col by remember { mutableStateOf(0) }
+        val suggestions = table.layout.map { Pair(it, it.name) }
+        var col by remember { mutableStateOf(table.layout.first()) }
         EnumDropDownMenu(
             suggestions = suggestions,
-            value = suggestions[col],
-            onClick = { col = it }
+            value = col.name,
+            onClick = { _, column ->
+                col = column.first as ColumnData
+            }
         )
         TextButton(onClick = {
             coroutineScope.launch {
-                if (graph.addMappingIsPossible().first()) {
-                    graph.addMapping(column = table[col])
-                } else {
-                    Toast.makeText(context, "Could not change add mapping", Toast.LENGTH_SHORT)
-                        .show()
-                }
+                graph.getCalculationFunction().addColumn(col)
             }
         }) {
             Text(text = "Add Column")
@@ -251,12 +261,7 @@ fun PieChartDialog(
         ) {
             Checkbox(checked = graph.showPercentages, onCheckedChange = {
                 coroutineScope.launch {
-                    if (graph.showPercentagesIsPossible().first()) {
-                        graph.showPercentages(show = it)
-                    } else {
-                        Toast.makeText(context, "Could not edit percentages", Toast.LENGTH_SHORT)
-                            .show()
-                    }
+                    graph.setShowPercentage(it)
                 }
             })
             Text(text = "Show Percentages")
@@ -266,21 +271,17 @@ fun PieChartDialog(
 
 @Composable
 fun LineChartDialog(
-    graph: LineChart,
-    table: List<Column>
+    graph: LineChart<*>,
+    table: Table
 ) {
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.chart),
-            contentDescription = "",
-            modifier = Modifier.fillMaxWidth()
-        )
+        GraphImage(modifier = Modifier.fillMaxWidth(), graph = graph)
 
-        graph.mappingVertical.forEachIndexed { index, column ->
+        graph.getCalculationFunction().columns.forEachIndexed { index, column ->
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -293,35 +294,37 @@ fun LineChartDialog(
                     tint = MaterialTheme.colors.onBackground,
                     modifier = Modifier.clickable {
                         coroutineScope.launch {
-                            if (graph.deleteVerticalMappingIsPossible().first()) {
-                                graph.deleteVerticalMapping(index = index)
-                            } else {
-                                Toast.makeText(
-                                    context,
-                                    "Could not delete mapping",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
+                            /* if (graph.deleteVerticalMappingIsPossible().first()) {
+                                 graph.deleteVerticalMapping(index = index)
+                             } else {
+                                 Toast.makeText(
+                                     context,
+                                     "Could not delete mapping",
+                                     Toast.LENGTH_SHORT
+                                 ).show()
+                             }*/
                         }
                     }
                 )
             }
         }
 
-        val suggestions = table.map { it.name }
-        var col by remember { mutableStateOf(0) }
+        val suggestions = table.layout.map { Pair(it, it.name) }
+        var col by remember { mutableStateOf(table.layout.first()) }
         EnumDropDownMenu(
             suggestions = suggestions,
-            value = suggestions[col],
-            onClick = { col = it }
+            value = col.name,
+            onClick = { _, column ->
+                col = column.first as ColumnData
+            }
         )
         TextButton(onClick = {
             coroutineScope.launch {
-                if (graph.addVerticalMappingIsPossible().first()) {
+                /*if (graph.addVerticalMappingIsPossible().first()) {
                     graph.addVerticalMapping(column = table[col])
                 } else {
                     Toast.makeText(context, "Could not add mapping", Toast.LENGTH_SHORT).show()
-                }
+                }*/
             }
         }) {
             Text(text = "Add Column")
@@ -332,7 +335,7 @@ fun LineChartDialog(
         ) {
             Text(text = "Dot Size", modifier = Modifier.width(100.dp))
             val suggestions = DotSize.values().map { it.representation }
-            EnumDropDownMenu(
+            /*EnumDropDownMenu(
                 suggestions = suggestions,
                 value = graph.dotSize.representation,
                 onClick = {
@@ -345,14 +348,14 @@ fun LineChartDialog(
                         }
                     }
                 }
-            )
+            )*/
         }
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(text = "Dot Color", modifier = Modifier.width(100.dp))
             val suggestions = Wallpapers.values().map { it.representation }
-            EnumDropDownMenu(
+            /*EnumDropDownMenu(
                 suggestions = suggestions,
                 value = graph.dotColor.toString(),
                 onClick = {
@@ -368,14 +371,14 @@ fun LineChartDialog(
                         }
                     }
                 }
-            )
+            )*/
         }
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(text = "Line Type", modifier = Modifier.width(100.dp))
             val suggestions = LineType.values().map { it.representation }
-            EnumDropDownMenu(
+            /*EnumDropDownMenu(
                 suggestions = suggestions,
                 value = graph.lineType.representation,
                 onClick = {
@@ -391,7 +394,7 @@ fun LineChartDialog(
                         }
                     }
                 }
-            )
+            )*/
         }
     }
 }
@@ -409,7 +412,8 @@ fun GraphImage(modifier: Modifier, graph: Graph<*, *>) {
         AndroidView(
             factory = {
                 Generator.generateChart(graph, it)
-            }
+            },
+            modifier = modifier
         )
     }
 }

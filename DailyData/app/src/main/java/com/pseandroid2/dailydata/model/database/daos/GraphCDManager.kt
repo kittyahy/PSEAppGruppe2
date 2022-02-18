@@ -76,7 +76,7 @@ class GraphCDManager(
                 newId,
                 projectId,
                 graph.getCalculationFunction().toFunctionString(),
-                Gson().toJson(graph.getCalculationFunction().cols),
+                Gson().toJson(graph.getCalculationFunction().columns),
                 graph.getType(),
                 graph.getPath() ?: ""
             )

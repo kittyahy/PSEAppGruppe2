@@ -28,7 +28,7 @@ class GraphFlowProvider(private val project: Project, private val db: AppDataBas
                 val graphs = mutableListOf<Graph<*, *>>()
                 for (data in graphData) {
                     val settings = db.settingsDAO().getSingleGraphSettings(project.id, data.id)
-                    graphs.add(
+                    graphs.add( //TODO fix layout parsing
                         when (data.type) {
                             GraphType.INT_LINE_CHART -> {
                                 @Suppress("Unchecked_Cast")
@@ -36,10 +36,10 @@ class GraphFlowProvider(private val project: Project, private val db: AppDataBas
                                     data.id,
                                     project.createDataTransformation(
                                         TransformationFunction.parse(data.function),
-                                        Gson().fromJson(
+                                        /*Gson().fromJson(
                                             data.cols,
                                             List::class.java
-                                        ) as List<Int>
+                                        ) as List<Int>*/
                                     ) as Project.DataTransformation<Map<Int, Float>>,
                                     settings
                                 )
@@ -50,10 +50,10 @@ class GraphFlowProvider(private val project: Project, private val db: AppDataBas
                                     data.id,
                                     project.createDataTransformation(
                                         TransformationFunction.parse(data.function),
-                                        Gson().fromJson(
+                                        /*Gson().fromJson(
                                             data.cols,
                                             List::class.java
-                                        ) as List<Int>
+                                        ) as List<Int>*/
                                     ) as Project.DataTransformation<Map<Float, Float>>,
                                     settings
                                 ))
@@ -64,10 +64,10 @@ class GraphFlowProvider(private val project: Project, private val db: AppDataBas
                                     data.id,
                                     project.createDataTransformation(
                                         TransformationFunction.parse(data.function),
-                                        Gson().fromJson(
+                                        /*Gson().fromJson(
                                             data.cols,
                                             List::class.java
-                                        ) as List<Int>
+                                        ) as List<Int>*/
                                     ) as Project.DataTransformation<Map<LocalDateTime, Float>>,
                                     settings
                                 ))
@@ -78,10 +78,10 @@ class GraphFlowProvider(private val project: Project, private val db: AppDataBas
                                     data.id,
                                     project.createDataTransformation(
                                         TransformationFunction.parse(data.function),
-                                        Gson().fromJson(
+                                        /*Gson().fromJson(
                                             data.cols,
                                             List::class.java
-                                        ) as List<Int>
+                                        ) as List<Int>*/
                                     ) as Project.DataTransformation<Float>,
                                     settings
                                 )

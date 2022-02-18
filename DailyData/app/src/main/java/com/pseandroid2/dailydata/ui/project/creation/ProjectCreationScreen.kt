@@ -43,7 +43,7 @@ import com.pseandroid2.dailydata.R
 import com.pseandroid2.dailydata.model.table.ColumnData
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
+import com.pseandroid2.dailydata.model.graph.Graph
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Notification
 import com.pseandroid2.dailydata.ui.composables.ListInput
 import com.pseandroid2.dailydata.ui.composables.SaveButton
@@ -246,7 +246,7 @@ fun ProjectCreationScreen(
                 isOpen = viewModel.isGraphDialogOpen,
                 onDismissRequest = { viewModel.onEvent(ProjectCreationEvent.OnShowGraphDialog(false)) },
                 onClick = { graph ->
-                    viewModel.onEvent(ProjectCreationEvent.OnGraphAdd(Graph.createFromType(graph)))
+                    viewModel.onEvent(ProjectCreationEvent.OnGraphAdd(graph))
                     viewModel.onEvent(ProjectCreationEvent.OnShowGraphDialog(false))
                 }
             )
@@ -254,10 +254,12 @@ fun ProjectCreationScreen(
                 label = "Add Graph",
                 mainIcon = ImageVector.vectorResource(id = R.drawable.ic_chart),
                 onClick = { viewModel.onEvent(ProjectCreationEvent.OnShowGraphDialog(true)) },
-                onClickItem = { viewModel.onEvent(ProjectCreationEvent.OnGraphRemove(index = it)) },
+                onClickItem = { _, graph ->
+                    viewModel.onEvent(ProjectCreationEvent.OnGraphRemove(graph = graph.first as Graph<*, *>))
+                },
                 elements = viewModel.project.graphs.map {
                     Pair(
-                        it.getType(),
+                        it,
                         it.getType().representation
                     )
                 }

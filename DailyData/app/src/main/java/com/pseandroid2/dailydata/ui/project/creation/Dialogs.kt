@@ -35,12 +35,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.godaddy.android.colorpicker.ClassicColorPicker
 import com.pseandroid2.dailydata.model.graph.GraphType
 import com.pseandroid2.dailydata.model.table.ColumnData
 import com.pseandroid2.dailydata.model.table.TableLayout
@@ -111,6 +113,19 @@ fun WallpaperDialog(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun ColorDialog(
+    isOpen: Boolean,
+    onDismissRequest: () -> Unit,
+    onColor: (Color) -> Unit
+) {
+    AppDialog(isOpen = isOpen, onDismissRequest = onDismissRequest) {
+        ClassicColorPicker(onColorChanged = { hsv ->
+            onColor(hsv.toColor())
+        })
     }
 }
 
@@ -203,7 +218,7 @@ fun ButtonDialog(
         var valueError by remember { mutableStateOf(false) }
 
         var column by remember { mutableStateOf(0) }
-        var selected by remember { mutableStateOf<Any?>(null) }
+        var selected by remember { mutableStateOf<ColumnData?>(null) }
 
         Column(
             modifier = Modifier
@@ -237,7 +252,7 @@ fun ButtonDialog(
                 value = buttons[column].second,
                 onClick = { col, value ->
                     column = col
-                    selected = value
+                    selected = value.first as ColumnData
                 }
             )
             Spacer(modifier = Modifier.padding(10.dp))
@@ -341,11 +356,11 @@ fun NotificationDialog(
 fun GraphDialog(
     isOpen: Boolean,
     onDismissRequest: () -> Unit,
-    onClick: (String) -> Unit
+    onClick: (GraphType) -> Unit
 ) {
     AppDialog(isOpen = isOpen, onDismissRequest = onDismissRequest, padding = 0.dp) {
-        Column(modifier = Modifier.width(200.dp)) {
-            Graph.availableGraphs.forEachIndexed { index, graph ->
+        Column(modifier = Modifier.width(200.dp)) { //TODO fix this
+            GraphType.values().forEachIndexed { index, graph ->
                 Box(
                     modifier = Modifier
                         .padding(8.dp)
@@ -354,7 +369,7 @@ fun GraphDialog(
                         .clickable { onClick(graph) },
                     contentAlignment = Alignment.CenterStart
                 ) {
-                    Text(text = graph)
+                    Text(text = graph.representation)
                 }
                 if (index < Graph.availableGraphs.lastIndex) {
                     Divider()
@@ -395,10 +410,10 @@ fun XAxisSelectionDialog(
 fun MappingDialog(
     isOpen: Boolean,
     onDismissRequest: () -> Unit,
-    onClick: (List<Int>) -> Unit,
+    onClick: (List<ColumnData>) -> Unit,
     layout: TableLayout
 ) {
-    val selected: MutableList<Int> = mutableListOf()
+    val selected: MutableList<ColumnData> = mutableListOf()
     AppDialog(isOpen = isOpen, onDismissRequest = { onDismissRequest }) {
         Column(modifier = Modifier.width(200.dp)) {
             layout.filter { columnData ->
@@ -418,7 +433,7 @@ fun MappingDialog(
                     ) {
                         Checkbox(checked = false, onCheckedChange = { wasSelected ->
                             if (wasSelected) {
-                                selected.add(columnData.id)
+                                selected.add(columnData)
                             }
                         })
                         Text(text = columnData.name)
