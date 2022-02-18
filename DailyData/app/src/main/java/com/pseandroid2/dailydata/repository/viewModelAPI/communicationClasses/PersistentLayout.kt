@@ -9,6 +9,7 @@ import com.pseandroid2.dailydata.repository.commandCenter.commands.AddUIElement
 import com.pseandroid2.dailydata.repository.commandCenter.commands.DeleteColumn
 import com.pseandroid2.dailydata.repository.commandCenter.commands.DeleteUIElement
 import com.pseandroid2.dailydata.repository.commandCenter.commands.ProjectCommand
+import com.pseandroid2.dailydata.repository.commandCenter.commands.SetColumn
 import kotlin.reflect.KClass
 
 class PersistentLayout(
@@ -57,15 +58,19 @@ class PersistentLayout(
         return tableLayout[col]
     }
 
-    override suspend fun addColumn(type: DataType, name: String, unit: String): Int {
+    override suspend fun addColumn(type: ColumnData): Int {
         s(
             AddColumn(
                 p,
-                ColumnData(type = type, name = name, unit = unit),
+                type,
                 r
             )
         )
         return 0
+    }
+
+    override suspend fun setColumn(specs: ColumnData) {
+        s(SetColumn(p, specs, r))
     }
 
     override suspend fun deleteColumn(col: Int) {

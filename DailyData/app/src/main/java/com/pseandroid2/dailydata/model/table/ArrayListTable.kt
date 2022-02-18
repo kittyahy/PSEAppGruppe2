@@ -78,7 +78,7 @@ class ArrayListTable(override val layout: TableLayout = ArrayListLayout()) : Tab
     }
 
     override suspend fun addColumn(specs: ColumnData, default: Any): Int {
-        val newId = layout.addColumn(specs.type, specs.name, specs.unit)
+        val newId = layout.addColumn(specs)
         for (row in table) {
             row.createCell(default)
         }
