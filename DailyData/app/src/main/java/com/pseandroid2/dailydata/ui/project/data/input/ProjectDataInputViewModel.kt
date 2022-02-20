@@ -23,7 +23,6 @@ import kotlinx.coroutines.launch
 import java.time.LocalTime
 import javax.inject.Inject
 
-@InternalCoroutinesApi
 @HiltViewModel
 class ProjectDataInputScreenViewModel @Inject constructor(
     private val repository: RepositoryViewModelAPI

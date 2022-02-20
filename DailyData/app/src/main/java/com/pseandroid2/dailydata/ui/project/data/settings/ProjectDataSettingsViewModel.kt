@@ -10,6 +10,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.pseandroid2.dailydata.model.database.entities.ProjectData
 import com.pseandroid2.dailydata.model.graph.Graph
 import com.pseandroid2.dailydata.model.graph.GraphType
 import com.pseandroid2.dailydata.model.notifications.Notification
@@ -40,7 +41,6 @@ import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
-@InternalCoroutinesApi
 @HiltViewModel
 class ProjectDataSettingsScreenViewModel @Inject constructor(
     private val repository: RepositoryViewModelAPI
@@ -69,7 +69,7 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
     var graphs by mutableStateOf(listOf<Graph<*, *>>())
         private set
 
-    var currentGraphType by mutableStateOf<GraphType?>(null)
+    var currentGraphType by mutableStateOf<String?>(null)
         private set
     var xAxis by mutableStateOf<Int?>(null)
         private set
@@ -201,14 +201,14 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
                     if (currentGraphType == null || mapping == null) {
                         Log.e(
                             LOG_TAG,
-                            "Could not create Graph because graph type or mapping have not" +
+                            "Could not create Graph because graph type or mapping have not " +
                                     "been set"
                         )
                         return@launch
                     }
                     var graphStrategy: GraphCreationStrategy? = null
                     when (currentGraphType) {
-                        GraphType.TIME_LINE_CHART, GraphType.INT_LINE_CHART, GraphType.FLOAT_LINE_CHART -> {
+                        Graph.LINE_CHART_STR -> {
                             if (xAxis != null) {
                                 when (project.value!!.table.layout[xAxis!!].type) {
                                     DataType.TIME -> graphStrategy = TimeLineChartStrategy()
@@ -221,7 +221,7 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
                                 }
                             }
                         }
-                        GraphType.PIE_CHART -> graphStrategy = PieChartStrategy()
+                        Graph.PIE_CHART_STR -> graphStrategy = PieChartStrategy()
                     }
                     if (graphStrategy == null) {
                         Log.e(
@@ -306,6 +306,10 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
             }
             is ProjectDataSettingsScreenEvent.OnShowGraphNameDialog -> {
                 isGraphNameDialogOpen = event.isOpen
+            }
+            is ProjectDataSettingsScreenEvent.OnChoseGraphName -> {
+                graphName = event.name
+                onEvent(ProjectDataSettingsScreenEvent.OnGraphAdd)
             }
 
             is ProjectDataSettingsScreenEvent.OnNavigateBack -> {

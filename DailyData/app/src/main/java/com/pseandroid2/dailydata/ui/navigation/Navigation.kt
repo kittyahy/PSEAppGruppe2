@@ -39,7 +39,6 @@ import com.pseandroid2.dailydata.ui.server.ServerScreen
 import com.pseandroid2.dailydata.ui.templates.TemplatesScreen
 import kotlinx.coroutines.InternalCoroutinesApi
 
-@InternalCoroutinesApi
 @Composable
 fun Navigation(navController: NavHostController) {
 
@@ -67,7 +66,6 @@ fun Navigation(navController: NavHostController) {
     }
 }
 
-@InternalCoroutinesApi
 @Composable
 fun ProjectNavigation(
     navController: NavHostController,

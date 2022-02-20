@@ -71,7 +71,6 @@ import com.pseandroid2.dailydata.util.ui.UiEvent
 import kotlinx.coroutines.InternalCoroutinesApi
 
 @SuppressLint("ServiceCast")
-@InternalCoroutinesApi
 @Composable
 fun ProjectDataSettingsScreen(
     projectId: Int,
@@ -380,9 +379,7 @@ fun ProjectDataSettingsScreen(
                 onClick = { graphType ->
                     viewModel.onEvent(ProjectDataSettingsScreenEvent.OnChoseGraphType(graphType))
                     if (
-                        graphType == GraphType.FLOAT_LINE_CHART
-                        || graphType == GraphType.INT_LINE_CHART
-                        || graphType == GraphType.TIME_LINE_CHART
+                        graphType == LINE_CHART_STR
                     ) {
                         viewModel.onEvent(ProjectDataSettingsScreenEvent.OnShowXAxisDialog(true))
                     } else {

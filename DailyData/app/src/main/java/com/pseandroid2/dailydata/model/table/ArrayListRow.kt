@@ -26,7 +26,7 @@ import com.pseandroid2.dailydata.model.database.entities.RowEntity
 /**
  * This is a implementation of a row with array lists.
  */
-class ArrayListRow(
+data class ArrayListRow(
     private val values: MutableList<Any>,
     private var rowMetaData: RowMetaData = RowMetaData()
 ) : Row {
@@ -34,7 +34,7 @@ class ArrayListRow(
 
     companion object {
         fun createFromEntity(entity: RowEntity): ArrayListRow {
-            val metaData: RowMetaData =
+            val metaData =
                 RowMetaData(entity.createdOn, entity.publishedOnServer, entity.createdBy)
             val values = getValuesFromJSON(entity.values)
             return ArrayListRow(values.toMutableList(), metaData)

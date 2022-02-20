@@ -194,7 +194,7 @@ class ViewModelProject(
         table.addUIElement(col, uiElement)
     }
 
-    override suspend fun deleteUIElement(col: Int, id: Int) {
+    override suspend fun removeUIElement(col: Int, id: Int) {
         table.removeUIElement(col, id)
     }
 

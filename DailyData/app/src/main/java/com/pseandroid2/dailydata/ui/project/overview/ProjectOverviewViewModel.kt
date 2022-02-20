@@ -38,7 +38,6 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@InternalCoroutinesApi
 @HiltViewModel
 class ProjectOverviewViewModel @Inject constructor(
     val repository: RepositoryViewModelAPI

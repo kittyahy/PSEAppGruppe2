@@ -33,7 +33,6 @@ import com.pseandroid2.dailydata.ui.project.data.settings.ProjectDataSettingsScr
 import com.pseandroid2.dailydata.util.ui.UiEvent
 import kotlinx.coroutines.InternalCoroutinesApi
 
-@InternalCoroutinesApi
 @Composable
 fun ProjectDataScreen(
     onPopBackStack : () -> Unit,

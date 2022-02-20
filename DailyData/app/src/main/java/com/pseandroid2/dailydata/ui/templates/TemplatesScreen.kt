@@ -33,7 +33,6 @@ import com.pseandroid2.dailydata.ui.composables.PreviewCard
 import com.pseandroid2.dailydata.ui.composables.TopNavigationBar
 import kotlinx.coroutines.InternalCoroutinesApi
 
-@InternalCoroutinesApi
 @Composable
 fun TemplatesScreen(
     viewModel: TemplatesScreenViewModel = hiltViewModel()

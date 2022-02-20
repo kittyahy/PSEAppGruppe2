@@ -38,7 +38,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@InternalCoroutinesApi
 @HiltViewModel
 class TemplatesScreenViewModel @Inject constructor(
     val repository: RepositoryViewModelAPI

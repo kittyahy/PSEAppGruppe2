@@ -24,31 +24,52 @@ import androidx.compose.ui.graphics.Color
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
 import com.pseandroid2.dailydata.model.graph.Graph
 import com.pseandroid2.dailydata.model.graph.GraphType
+import com.pseandroid2.dailydata.model.table.ColumnData
+import com.pseandroid2.dailydata.ui.project.data.settings.ProjectDataSettingsScreenEvent
 import java.time.LocalTime
 
 sealed class ProjectCreationEvent {
 
-    data class OnTitleChange(val title : String) : ProjectCreationEvent()
-    data class OnDescriptionChange(val description : String) : ProjectCreationEvent()
-    data class OnWallpaperChange(val wallpaper : Color) : ProjectCreationEvent()
-    data class OnTableAdd(val name : String, val unit : String, val dataType: DataType) : ProjectCreationEvent()
-    data class OnTableRemove(val index : Int) : ProjectCreationEvent()
-    data class OnButtonAdd(val name : String, val columnId : Int, val value: Int) : ProjectCreationEvent()
+    data class OnTitleChange(val title: String) : ProjectCreationEvent()
+    data class OnDescriptionChange(val description: String) : ProjectCreationEvent()
+    data class OnWallpaperChange(val wallpaper: Color) : ProjectCreationEvent()
+    data class OnTableAdd(val name: String, val unit: String, val dataType: DataType) :
+        ProjectCreationEvent()
+
+    data class OnTableRemove(val index: Int) : ProjectCreationEvent()
+    data class OnButtonAdd(val name: String, val columnId: Int, val value: Int) :
+        ProjectCreationEvent()
+
     data class OnButtonRemove(val id: Int, val columnID: Int) : ProjectCreationEvent()
-    data class OnNotificationAdd(val message : String, val time : LocalTime) : ProjectCreationEvent()
-    data class OnNotificationRemove(val index : Int) : ProjectCreationEvent()
-    data class OnGraphAdd(val graph: GraphType) : ProjectCreationEvent()
-    data class OnGraphRemove(val graph: Graph<*, *>) : ProjectCreationEvent()
+    data class OnNotificationAdd(val message: String, val time: LocalTime) : ProjectCreationEvent()
+    data class OnNotificationRemove(val index: Int) : ProjectCreationEvent()
+    object OnGraphAdd : ProjectCreationEvent()
+    data class OnGraphRemove(val id: Int) : ProjectCreationEvent()
     object OnSaveClick : ProjectCreationEvent()
+    data class OnChoseXAxis(val col: Int) : ProjectCreationEvent()
+    data class OnChoseGraphType(val graphType: String) : ProjectCreationEvent()
+    data class OnChoseMapping(val mapping: List<ColumnData>) : ProjectCreationEvent()
+    data class OnChoseGraphName(val name: String) : ProjectCreationEvent()
 
     //dialogs
-    data class OnShowWallpaperDialog(val isOpen : Boolean) : ProjectCreationEvent()
-    data class OnShowTableDialog(val isOpen : Boolean) : ProjectCreationEvent()
-    data class OnShowButtonsDialog(val isOpen : Boolean) : ProjectCreationEvent()
-    data class OnShowNotificationDialog(val isOpen : Boolean) : ProjectCreationEvent()
-    data class OnShowGraphDialog(val isOpen : Boolean) : ProjectCreationEvent()
+    data class OnShowWallpaperDialog(val isOpen: Boolean) : ProjectCreationEvent()
+    data class OnShowTableDialog(val isOpen: Boolean) : ProjectCreationEvent()
+    data class OnShowButtonsDialog(val isOpen: Boolean) : ProjectCreationEvent()
+    data class OnShowNotificationDialog(val isOpen: Boolean) : ProjectCreationEvent()
+    data class OnShowGraphDialog(val isOpen: Boolean) : ProjectCreationEvent()
 
-    data class OnShowBackDialog(val isOpen : Boolean) : ProjectCreationEvent()
+    data class OnShowXAxisDialog(val isOpen: Boolean, val hasSuccessfullyChosen: Boolean = false) :
+        ProjectCreationEvent()
+
+    data class OnShowMappingDialog(
+        val isOpen: Boolean,
+        val hasSuccessfullyChosen: Boolean = false
+    ) : ProjectCreationEvent()
+
+    data class OnShowGraphNameDialog(val isOpen: Boolean) : ProjectCreationEvent()
+
+
+    data class OnShowBackDialog(val isOpen: Boolean) : ProjectCreationEvent()
 
     object OnNavigateBack : ProjectCreationEvent()
 

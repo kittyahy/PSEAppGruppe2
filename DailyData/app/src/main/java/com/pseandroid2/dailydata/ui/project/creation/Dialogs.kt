@@ -1,6 +1,7 @@
 package com.pseandroid2.dailydata.ui.project.creation
 
 import android.app.TimePickerDialog
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -28,6 +29,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,8 +49,9 @@ import com.pseandroid2.dailydata.model.graph.GraphType
 import com.pseandroid2.dailydata.model.table.ColumnData
 import com.pseandroid2.dailydata.model.table.TableLayout
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
+import com.pseandroid2.dailydata.model.graph.Graph
 import com.pseandroid2.dailydata.ui.composables.EnumDropDownMenu
+import com.pseandroid2.dailydata.util.Consts.LOG_TAG
 import com.pseandroid2.dailydata.util.ui.Wallpapers
 import java.time.LocalTime
 import java.util.Calendar
@@ -356,11 +359,11 @@ fun NotificationDialog(
 fun GraphDialog(
     isOpen: Boolean,
     onDismissRequest: () -> Unit,
-    onClick: (GraphType) -> Unit
+    onClick: (String) -> Unit
 ) {
     AppDialog(isOpen = isOpen, onDismissRequest = onDismissRequest, padding = 0.dp) {
-        Column(modifier = Modifier.width(200.dp)) { //TODO fix this
-            GraphType.values().forEachIndexed { index, graph ->
+        Column(modifier = Modifier.width(200.dp)) {
+            Graph.ChartRepresentations.forEachIndexed { index, graph ->
                 Box(
                     modifier = Modifier
                         .padding(8.dp)
@@ -369,9 +372,9 @@ fun GraphDialog(
                         .clickable { onClick(graph) },
                     contentAlignment = Alignment.CenterStart
                 ) {
-                    Text(text = graph.representation)
+                    Text(text = graph)
                 }
-                if (index < Graph.availableGraphs.lastIndex) {
+                if (index < Graph.ChartRepresentations.lastIndex) {
                     Divider()
                 }
             }
@@ -431,7 +434,9 @@ fun MappingDialog(
                             .fillMaxWidth()
                             .fillMaxHeight()
                     ) {
-                        Checkbox(checked = false, onCheckedChange = { wasSelected ->
+                        var checked by remember { mutableStateOf(false) }
+                        Checkbox(checked = checked, onCheckedChange = { wasSelected ->
+                            checked = wasSelected
                             if (wasSelected) {
                                 selected.add(columnData)
                             }
@@ -441,7 +446,7 @@ fun MappingDialog(
                 }
             }
             Button(onClick = { onClick(selected) }) {
-
+                Text("OK")
             }
         }
     }
@@ -458,11 +463,15 @@ fun GraphNameDialog(
 
     AppDialog(isOpen = isOpen, onDismissRequest = { onDismissRequest }) {
         Column(modifier = Modifier.width(200.dp)) {
+            var text by remember {
+                mutableStateOf("")
+            }
             OutlinedTextField(
                 label = { Text("Name") },
-                value = "",
+                value = text,
                 isError = nameError,
                 onValueChange = {
+                    text = it
                     if (it != "") {
                         name = it
                         nameError = false
@@ -484,6 +493,7 @@ fun GraphNameDialog(
                         nameError = true
                     }
                     if (!nameError) {
+                        Log.d(LOG_TAG, "No name error occurred")
                         onClick(name)
                     }
                 }) {

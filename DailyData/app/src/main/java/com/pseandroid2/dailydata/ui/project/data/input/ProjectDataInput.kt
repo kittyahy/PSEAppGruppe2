@@ -67,7 +67,6 @@ import com.pseandroid2.dailydata.util.ui.UiEvent
 import kotlinx.coroutines.InternalCoroutinesApi
 import java.util.Calendar
 
-@InternalCoroutinesApi
 @Composable
 fun ProjectDataInputScreen(
     projectId : Int,

@@ -54,7 +54,7 @@ sealed class ProjectDataSettingsScreenEvent {
     data class OnUserRemove(val user: User) : ProjectDataSettingsScreenEvent()
 
     data class OnChoseXAxis(val col: Int) : ProjectDataSettingsScreenEvent()
-    data class OnChoseGraphType(val graphType: GraphType) : ProjectDataSettingsScreenEvent()
+    data class OnChoseGraphType(val graphType: String) : ProjectDataSettingsScreenEvent()
     data class OnChoseMapping(val mapping: List<ColumnData>) : ProjectDataSettingsScreenEvent()
     data class OnChoseGraphName(val name: String) : ProjectDataSettingsScreenEvent()
 

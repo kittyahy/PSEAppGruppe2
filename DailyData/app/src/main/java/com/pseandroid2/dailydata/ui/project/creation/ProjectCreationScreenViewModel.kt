@@ -20,6 +20,7 @@
 
 package com.pseandroid2.dailydata.ui.project.creation
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -27,6 +28,8 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pseandroid2.dailydata.model.graph.Graph
+import com.pseandroid2.dailydata.model.graph.GraphType
 import com.pseandroid2.dailydata.model.notifications.TimeNotification
 import com.pseandroid2.dailydata.model.project.InMemoryProject
 import com.pseandroid2.dailydata.model.table.ColumnData
@@ -34,12 +37,20 @@ import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.model.uielements.UIElementType
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
+import com.pseandroid2.dailydata.ui.grapthstrategy.FloatLineChartStrategy
+import com.pseandroid2.dailydata.ui.grapthstrategy.GraphCreationStrategy
+import com.pseandroid2.dailydata.ui.grapthstrategy.IntLineChartStrategy
+import com.pseandroid2.dailydata.ui.grapthstrategy.PieChartStrategy
+import com.pseandroid2.dailydata.ui.grapthstrategy.TimeLineChartStrategy
+import com.pseandroid2.dailydata.ui.navigation.Routes
+import com.pseandroid2.dailydata.ui.project.data.settings.ProjectDataSettingsScreenEvent
+import com.pseandroid2.dailydata.util.Consts.LOG_TAG
 import com.pseandroid2.dailydata.util.ui.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -64,44 +75,82 @@ class ProjectCreationScreenViewModel @Inject constructor(
         private set
     var isGraphDialogOpen by mutableStateOf(false)
         private set
+    var isXAxisDialogOpen by mutableStateOf(false)
+        private set
+    var isMappingDialogOpen by mutableStateOf(false)
+        private set
+    var isGraphNameDialogOpen by mutableStateOf(false)
+        private set
+
+    var currentGraphType by mutableStateOf<String?>(null)
+        private set
+    var xAxis by mutableStateOf<Int?>(null)
+        private set
+    var mapping by mutableStateOf<List<ColumnData>?>(null)
+        private set
+    var graphName by mutableStateOf<String?>(null)
+        private set
 
     var isBackDialogOpen by mutableStateOf(false)
         private set
 
     init {
-        assert(-1 != savedStateHandle.get<Int>("projectTemplateId")!!)
+        //assert(-1 != savedStateHandle.get<Int>("projectTemplateId")!!)
     }
 
-    @InternalCoroutinesApi
+    //Most events will recreate the Project Object as MutableState won't recognize it as a new value
+    //otherwise
     fun onEvent(event: ProjectCreationEvent) {
         when (event) {
             is ProjectCreationEvent.OnTitleChange -> {
-                viewModelScope.launch { project.setName(event.title) }
+                viewModelScope.launch {
+                    val tmp = InMemoryProject(project)
+                    tmp.setName(event.title)
+                    project = tmp
+                }
             }
             is ProjectCreationEvent.OnDescriptionChange -> {
-                viewModelScope.launch { project.setDesc(event.description) }
+                viewModelScope.launch {
+                    val tmp = InMemoryProject(project)
+                    tmp.setDesc(event.description)
+                    project = tmp
+                }
             }
             is ProjectCreationEvent.OnWallpaperChange -> {
-                viewModelScope.launch { project.setColor(event.wallpaper.toArgb()) }
+                viewModelScope.launch {
+                    val tmp = InMemoryProject(project)
+                    tmp.setColor(event.wallpaper.toArgb())
+                    project = tmp
+                }
             }
             is ProjectCreationEvent.OnTableAdd -> {
                 viewModelScope.launch {
-                    project.table.addColumn(
+                    val tmp = InMemoryProject(project)
+                    tmp.addColumn(
                         ColumnData(
                             type = event.dataType,
                             name = event.name,
                             unit = event.unit
-                        )
+                        ),
+                        event.dataType.initialValue
                     )
+                    Log.d(LOG_TAG, "Layout-Size pre-Update: ${project.table.layout.size}")
+                    project = tmp
+                    Log.d(LOG_TAG, "Layout-Size post-Update: ${project.table.layout.size}")
                 }
             }
             is ProjectCreationEvent.OnTableRemove -> {//TODO Rename
-                viewModelScope.launch { project.table.deleteColumn(event.index) }
+                viewModelScope.launch {
+                    val tmp = InMemoryProject(project)
+                    tmp.deleteColumn(event.index)
+                    project = tmp
+                }
 
             }
             is ProjectCreationEvent.OnButtonAdd -> {
                 viewModelScope.launch {
-                    project.table.addUIElement(
+                    val tmp = InMemoryProject(project)
+                    tmp.addUIElement(
                         event.columnId,
                         UIElement(
                             name = event.name,
@@ -109,33 +158,110 @@ class ProjectCreationScreenViewModel @Inject constructor(
                             state = event.value.toString()
                         )
                     )
+                    project = tmp
                 }
             }
             is ProjectCreationEvent.OnButtonRemove -> {
                 viewModelScope.launch {
-                    project.table.removeUIElement(event.columnID, event.id)
+                    val tmp = InMemoryProject(project)
+                    tmp.removeUIElement(event.columnID, event.id)
+                    project = tmp
                 }
             }
             is ProjectCreationEvent.OnNotificationAdd -> {
                 viewModelScope.launch {
-                    project.addNotification(
+                    val tmp = InMemoryProject(project)
+                    tmp.addNotification(
                         TimeNotification(
                             initId = 0,
                             messageString = event.message,
                             send = event.time
                         )
                     )
+                    project = tmp
                 }
             }
             is ProjectCreationEvent.OnNotificationRemove -> {
-                viewModelScope.launch { project.removeNotification(event.index) }
+                viewModelScope.launch {
+                    val tmp = InMemoryProject(project)
+                    tmp.removeNotification(event.index)
+                    project = tmp
+                }
             }
             is ProjectCreationEvent.OnGraphAdd -> {
-                TODO("CacheOnlyProject AddGraph")
+                viewModelScope.launch {
+                    if (currentGraphType == null || mapping == null) {
+                        Log.e(
+                            LOG_TAG,
+                            "Could not create Graph because graph type or mapping have not " +
+                                    "been set"
+                        )
+                        return@launch
+                    }
+                    var graphStrategy: GraphCreationStrategy? = null
+                    when (currentGraphType) {
+                        Graph.LINE_CHART_STR -> {
+                            if (xAxis != null) {
+                                when (project.table.layout[xAxis!!].type) {
+                                    DataType.TIME -> graphStrategy = TimeLineChartStrategy()
+                                    DataType.WHOLE_NUMBER -> graphStrategy = IntLineChartStrategy()
+                                    DataType.FLOATING_POINT_NUMBER -> graphStrategy =
+                                        FloatLineChartStrategy()
+                                    else -> {
+                                        /*Nothing to do here*/
+                                    }
+                                }
+                            }
+                        }
+                        Graph.PIE_CHART_STR -> graphStrategy = PieChartStrategy()
+                    }
+                    if (graphStrategy == null) {
+                        Log.e(
+                            LOG_TAG, "Could not create Graph because the chosen graph type was" +
+                                    "not known or no xAxis value was given for a LineChart"
+                        )
+                        return@launch
+
+                    }
+                    val transformation = try {
+                        graphStrategy.createTransformation(xAxis)
+                    } catch (ex: IllegalArgumentException) {
+                        Log.e(LOG_TAG, ex.message ?: "Could not create TransformationFunction")
+                        return@launch
+                    }
+                    val tmp = InMemoryProject(project)
+                    tmp.addGraph(
+                        graphStrategy.createGraph(
+                            tmp.createDataTransformation(transformation, mapping!!),
+                            graphStrategy.createBaseSettings(graphName)
+                        )
+                    )
+                    project = tmp
+                }
             }
             is ProjectCreationEvent.OnGraphRemove -> {
-                TODO("CacheOnlyProject RemoveGraph")
+                viewModelScope.launch {
+                    val tmp = InMemoryProject(project)
+                    tmp.removeGraph(event.id)
+                    project = tmp
+                }
             }
+
+            is ProjectCreationEvent.OnChoseGraphType -> {
+                currentGraphType = event.graphType
+            }
+            is ProjectCreationEvent.OnChoseXAxis -> {
+                xAxis = event.col
+                onEvent(ProjectCreationEvent.OnShowMappingDialog(true))
+            }
+            is ProjectCreationEvent.OnChoseMapping -> {
+                mapping = event.mapping
+            }
+            is ProjectCreationEvent.OnChoseGraphName -> {
+                graphName = event.name
+                onEvent(ProjectCreationEvent.OnGraphAdd)
+            }
+
             is ProjectCreationEvent.OnSaveClick -> {
                 val default = InMemoryProject(0)
                 when {
@@ -143,7 +269,10 @@ class ProjectCreationScreenViewModel @Inject constructor(
                     project.table.layout.size == 0 -> sendUiEvent(UiEvent.ShowToast("Please Enter a column"))
                     else -> {
                         viewModelScope.launch {
-                            project.writeToDBAsync(repository.projectHandler)
+                            val newProject = project.writeToDBAsync(repository.projectHandler)
+                            val id = newProject.await()
+                            sendUiEvent(UiEvent.PopBackStack)
+                            sendUiEvent(UiEvent.Navigate(Routes.DATA + "?projectId=$id"))
                         }
                     }
                 }
@@ -161,6 +290,22 @@ class ProjectCreationScreenViewModel @Inject constructor(
                 } else {
                     isButtonsDialogOpen = event.isOpen
                 }
+            }
+            is ProjectCreationEvent.OnShowXAxisDialog -> {
+                Log.d(LOG_TAG, event.isOpen.toString())
+                isXAxisDialogOpen = event.isOpen
+                if (!event.isOpen && event.hasSuccessfullyChosen) {
+                    onEvent(ProjectCreationEvent.OnShowMappingDialog(true))
+                }
+            }
+            is ProjectCreationEvent.OnShowMappingDialog -> {
+                isMappingDialogOpen = event.isOpen
+                if (!event.isOpen && event.hasSuccessfullyChosen) {
+                    onEvent(ProjectCreationEvent.OnShowGraphNameDialog(true))
+                }
+            }
+            is ProjectCreationEvent.OnShowGraphNameDialog -> {
+                isGraphNameDialogOpen = event.isOpen
             }
             is ProjectCreationEvent.OnShowNotificationDialog -> {
                 isNotificationDialogOpen = event.isOpen

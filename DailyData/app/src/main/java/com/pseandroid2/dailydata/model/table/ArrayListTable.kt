@@ -21,9 +21,11 @@
 package com.pseandroid2.dailydata.model.table
 
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Operation
+import com.pseandroid2.dailydata.util.hashOf
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import java.util.function.Consumer
 
 /**
  *
@@ -32,6 +34,14 @@ class ArrayListTable(override val layout: TableLayout = ArrayListLayout()) : Tab
 
     private val mutableIllegalOperation: Map<Operation, MutableSharedFlow<Boolean>>
     override val isIllegalOperation: Map<Operation, Flow<Boolean>>
+
+    constructor(table: ArrayListTable) : this(
+        ArrayListLayout(table.layout as ArrayListLayout)
+    ) {
+        for (row in table) {
+            this.table.add(row as ArrayListRow)
+        }
+    }
 
     init {
         val operations = mutableMapOf<Operation, MutableSharedFlow<Boolean>>()
@@ -102,9 +112,22 @@ class ArrayListTable(override val layout: TableLayout = ArrayListLayout()) : Tab
     }
 
     @Deprecated("Shouldn't be used from outside the model. Iterate over the Table instead")
-    fun getAllRows() = table.toList()
+    fun getAllRows(): List<Row> {
+        return table.toList()
+    }
 
     override fun iterator() = ArrayListTableIterator(this)
+
+    override fun equals(other: Any?): Boolean {
+        if (other != null && other is ArrayListTable) {
+            return other.table == table && other.layout == layout
+        }
+        return false
+    }
+
+    override fun hashCode(): Int {
+        return hashOf(table, layout)
+    }
 }
 
 class ArrayListTableIterator(table: ArrayListTable) :

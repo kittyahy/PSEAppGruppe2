@@ -27,7 +27,7 @@ import com.pseandroid2.dailydata.model.notifications.Notification
 import com.pseandroid2.dailydata.model.settings.MapSettings
 import com.pseandroid2.dailydata.model.settings.Settings
 
-class SimpleSkeleton(
+data class SimpleSkeleton(
     override var id: Int = -1,
     override var onlineId: Long = -1,
     override var name: String = "",

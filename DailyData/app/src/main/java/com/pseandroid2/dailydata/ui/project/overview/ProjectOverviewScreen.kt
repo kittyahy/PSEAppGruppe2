@@ -59,7 +59,6 @@ import com.pseandroid2.dailydata.ui.project.creation.AppDialog
 import com.pseandroid2.dailydata.util.ui.UiEvent
 import kotlinx.coroutines.InternalCoroutinesApi
 
-@InternalCoroutinesApi
 @Composable
 fun ProjectOverviewScreen(
     onNavigate: (UiEvent.Navigate) -> Unit,

@@ -36,6 +36,7 @@ interface Graph<T : DataSet<S>, S : Entry> {
     companion object {
         const val LINE_CHART_STR = "Line Chart"
         const val PIE_CHART_STR = "Pie Chart"
+        val ChartRepresentations = listOf(LINE_CHART_STR, PIE_CHART_STR)
 
         const val SET_LABEL_KEY = "SET LABEL"
 

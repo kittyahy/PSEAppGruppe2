@@ -20,6 +20,7 @@
 
 package com.pseandroid2.dailydata.ui.project.creation
 
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
@@ -39,6 +40,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.vectorResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.gson.Gson
 import com.pseandroid2.dailydata.R
 import com.pseandroid2.dailydata.model.table.ColumnData
 import com.pseandroid2.dailydata.model.uielements.UIElement
@@ -49,10 +51,10 @@ import com.pseandroid2.dailydata.ui.composables.ListInput
 import com.pseandroid2.dailydata.ui.composables.SaveButton
 import com.pseandroid2.dailydata.ui.composables.TextInput
 import com.pseandroid2.dailydata.ui.composables.WallpaperElement
+import com.pseandroid2.dailydata.util.Consts.LOG_TAG
 import com.pseandroid2.dailydata.util.ui.UiEvent
 import kotlinx.coroutines.InternalCoroutinesApi
 
-@InternalCoroutinesApi
 @Composable
 fun ProjectCreationScreen(
     onNavigate: (UiEvent.Navigate) -> Unit,
@@ -102,7 +104,10 @@ fun ProjectCreationScreen(
             TextInput(
                 placeholder = "Add Title",
                 value = viewModel.project.name,
-                onValueChange = { viewModel.onEvent(ProjectCreationEvent.OnTitleChange(it)) }
+                onValueChange = {
+                    viewModel.onEvent(ProjectCreationEvent.OnTitleChange(it))
+                    Log.d(LOG_TAG, viewModel.project.name)
+                }
             )
             Divider()
             TextInput(
@@ -145,6 +150,7 @@ fun ProjectCreationScreen(
                         )
                     )
                     viewModel.onEvent(ProjectCreationEvent.OnShowTableDialog(false))
+                    Log.d(LOG_TAG, viewModel.project.table.layout.size.toString())
                 }
             )
             ListInput(
@@ -159,6 +165,7 @@ fun ProjectCreationScreen(
                     )
                 },
                 elements = viewModel.project.table.layout.map {
+                    Log.d(LOG_TAG, Gson().toJson(viewModel.project.table.layout))
                     Pair(
                         it,
                         "${it.name} in ${it.unit}"
@@ -242,26 +249,89 @@ fun ProjectCreationScreen(
                 elements = viewModel.project.notifications.map { Pair(it, it.displayString) }
             )
             Divider()
+            XAxisSelectionDialog(
+                isOpen = viewModel.isXAxisDialogOpen,
+                onDismissRequest = {
+                    viewModel.onEvent(
+                        ProjectCreationEvent.OnShowXAxisDialog(false)
+                    )
+                },
+                onClick = { col ->
+                    viewModel.onEvent(
+                        ProjectCreationEvent.OnChoseXAxis(col)
+                    )
+                    viewModel.onEvent(ProjectCreationEvent.OnShowXAxisDialog(false))
+                },
+                columns = viewModel.project.table.layout
+            )
+            MappingDialog(
+                isOpen = viewModel.isMappingDialogOpen,
+                onDismissRequest = {
+                    viewModel.onEvent(
+                        ProjectCreationEvent.OnShowMappingDialog(false)
+                    )
+                },
+                onClick = { mapping ->
+                    viewModel.onEvent(ProjectCreationEvent.OnChoseMapping(mapping))
+                    viewModel.onEvent(
+                        ProjectCreationEvent.OnShowMappingDialog(
+                            isOpen = false,
+                            hasSuccessfullyChosen = true
+                        )
+                    )
+                },
+                layout = viewModel.project.table.layout
+            )
+            GraphNameDialog(
+                isOpen = viewModel.isGraphNameDialogOpen,
+                onDismissRequest = {
+                    viewModel.onEvent(
+                        ProjectCreationEvent.OnShowGraphNameDialog(false)
+                    )
+                },
+                onClick = { name ->
+                    viewModel.onEvent(ProjectCreationEvent.OnChoseGraphName(name))
+                    viewModel.onEvent(ProjectCreationEvent.OnShowGraphNameDialog(false))
+                }
+            )
             GraphDialog(
                 isOpen = viewModel.isGraphDialogOpen,
-                onDismissRequest = { viewModel.onEvent(ProjectCreationEvent.OnShowGraphDialog(false)) },
-                onClick = { graph ->
-                    viewModel.onEvent(ProjectCreationEvent.OnGraphAdd(graph))
+                onDismissRequest = {
+                    viewModel.onEvent(
+                        ProjectCreationEvent.OnShowGraphDialog(false)
+                    )
+                },
+                onClick = { graphType ->
+                    viewModel.onEvent(ProjectCreationEvent.OnChoseGraphType(graphType))
+                    if (
+                        graphType == Graph.LINE_CHART_STR
+                    ) {
+                        viewModel.onEvent(ProjectCreationEvent.OnShowXAxisDialog(true))
+                    } else {
+                        viewModel.onEvent(
+                            ProjectCreationEvent.OnShowMappingDialog(true)
+                        )
+                    }
                     viewModel.onEvent(ProjectCreationEvent.OnShowGraphDialog(false))
                 }
             )
             ListInput(
                 label = "Add Graph",
                 mainIcon = ImageVector.vectorResource(id = R.drawable.ic_chart),
-                onClick = { viewModel.onEvent(ProjectCreationEvent.OnShowGraphDialog(true)) },
+                onClick = {
+                    viewModel.onEvent(
+                        ProjectCreationEvent.OnShowGraphDialog(true)
+                    )
+                },
                 onClickItem = { _, graph ->
-                    viewModel.onEvent(ProjectCreationEvent.OnGraphRemove(graph = graph.first as Graph<*, *>))
+                    viewModel.onEvent(
+                        ProjectCreationEvent.OnGraphRemove(
+                            (graph.first as Graph<*, *>).id
+                        )
+                    )
                 },
                 elements = viewModel.project.graphs.map {
-                    Pair(
-                        it,
-                        it.getType().representation
-                    )
+                    Pair(it, it.getType().representation)
                 }
             )
         }

@@ -54,7 +54,6 @@ var pID: Long = -1
 class MainActivity : ComponentActivity() {
     private val joinProjectLinkManager = JoinProjectLinkManager()
 
-    @InternalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -108,7 +107,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@InternalCoroutinesApi
 @Composable
 fun Main() {
     val navController = rememberNavController()

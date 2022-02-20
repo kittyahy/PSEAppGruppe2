@@ -93,7 +93,7 @@ interface Project {
 
     suspend fun addUIElement(col: Int, uiElement: UIElement)
 
-    suspend fun deleteUIElement(col: Int, id: Int)
+    suspend fun removeUIElement(col: Int, id: Int)
 
     val admin: User
 

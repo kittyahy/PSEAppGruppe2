@@ -21,9 +21,11 @@
 package com.pseandroid2.dailydata.repository.viewModelAPI
 
 
+import android.util.Log
 import com.pseandroid2.dailydata.model.database.AppDataBase
 import com.pseandroid2.dailydata.model.project.InMemoryProject
 import com.pseandroid2.dailydata.model.project.Project
+import com.pseandroid2.dailydata.model.users.NullUser
 import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
@@ -45,6 +47,7 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ad
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectTemplateFlow
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectTemplateFlowProvider
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectTemplatePreviewFlow
+import com.pseandroid2.dailydata.util.Consts.LOG_TAG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -119,6 +122,12 @@ class ProjectHandler(
 
     suspend fun newProjectAsync(project: Project) = coroutineScope {
         async(Dispatchers.IO) {
+            if (!project.isOnline && project.admin is NullUser) {
+                project.setAdmin(rds.getUser())
+                Log.d(LOG_TAG, "Admin was set to the current User")
+            } else {
+                Log.e(LOG_TAG, "Online Project must have an admin")
+            }
             val idFlow = MutableSharedFlow<Int>()
             val createProject = CreateProject(project, idFlow, repositoryViewModelAPI)
             executeQueue.add(createProject)

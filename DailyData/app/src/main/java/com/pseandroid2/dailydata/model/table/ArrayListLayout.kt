@@ -6,6 +6,7 @@ import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Da
 import com.pseandroid2.dailydata.util.Quadruple
 import com.pseandroid2.dailydata.util.fromJson
 import com.pseandroid2.dailydata.util.getSerializableClassName
+import com.pseandroid2.dailydata.util.hashOf
 import kotlin.reflect.KClass
 
 /**
@@ -51,6 +52,10 @@ class ArrayListLayout(input: String = "") : TableLayout {
             )
         }
     }
+
+    constructor(layout: ArrayListLayout) : this(
+        layout.columnDataList
+    )
 
     override fun getColumnType(col: Int) =
         Class.forName(layout[col].first.serializableClassName).kotlin
@@ -98,11 +103,22 @@ class ArrayListLayout(input: String = "") : TableLayout {
         level = DeprecationLevel.ERROR
     )
     fun getList() = layout
+
+    override fun equals(other: Any?): Boolean {
+        if (other != null && other is ArrayListLayout) {
+            return other.layout == layout
+        }
+        return false
+    }
+
+    override fun hashCode(): Int {
+        return hashOf(layout)
+    }
 }
 
 class ArrayListLayoutIterator(private val layoutList: List<Quadruple<DataType, String, String, List<UIElement>>>) :
     Iterator<ColumnData> {
-    var index = 0
+    var index = -1
 
     override fun hasNext() = (index + 1) in layoutList.indices
 

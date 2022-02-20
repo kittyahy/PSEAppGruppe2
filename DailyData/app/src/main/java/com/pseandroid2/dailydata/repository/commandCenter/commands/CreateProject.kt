@@ -1,9 +1,11 @@
 package com.pseandroid2.dailydata.repository.commandCenter.commands
 
+import android.util.Log
 import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ViewModelProject
+import com.pseandroid2.dailydata.util.Consts.LOG_TAG
 import kotlinx.coroutines.flow.MutableSharedFlow
 
 class CreateProject(

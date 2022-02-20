@@ -20,6 +20,7 @@
 
 package com.pseandroid2.dailydata.model.project
 
+import android.util.Log
 import com.pseandroid2.dailydata.model.graph.Graph
 import com.pseandroid2.dailydata.model.notifications.Notification
 import com.pseandroid2.dailydata.model.table.ArrayListTable
@@ -31,6 +32,8 @@ import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.repository.commandCenter.commands.IllegalOperationException
 import com.pseandroid2.dailydata.repository.viewModelAPI.ProjectHandler
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Operation
+import com.pseandroid2.dailydata.util.Consts.LOG_TAG
+import com.pseandroid2.dailydata.util.hashOf
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -66,6 +69,21 @@ constructor(
         isOnline,
         mutableUsers,
         mutableGraphs,
+    )
+
+    constructor(project: Project) : this(
+        project.id,
+        project.onlineId,
+        project.name,
+        project.desc,
+        project.color,
+        project.path,
+        project.notifications.toMutableList(),
+        project.isOnline,
+        ArrayListTable(project.table as ArrayListTable),
+        project.graphs.toMutableList(),
+        project.users.toMutableList(),
+        project.admin
     )
 
     private val mutableIllegalOperation: Map<Operation, MutableSharedFlow<Boolean>>
@@ -203,7 +221,7 @@ constructor(
         table.layout.addUIElement(col, uiElement)
     }
 
-    override suspend fun deleteUIElement(col: Int, id: Int) {
+    override suspend fun removeUIElement(col: Int, id: Int) {
         table.layout.removeUIElement(col, id)
     }
 
@@ -255,5 +273,26 @@ constructor(
 
     suspend fun writeToDBAsync(projectHandler: ProjectHandler): Deferred<Int> {
         return projectHandler.newProjectAsync(this)
+    }
+
+    override fun equals(other: Any?): Boolean {
+        val equals = if (other != null && other is InMemoryProject) {
+            skeleton == other.skeleton
+                    && table == other.table
+                    && graphs == other.graphs
+                    && admin == other.admin
+                    && isOnline == other.isOnline
+                    && users == other.users
+        } else {
+            false
+        }
+        Log.d(LOG_TAG, equals.toString())
+        return equals
+    }
+
+    override fun hashCode(): Int {
+        val hash = hashOf(skeleton, table, graphs, admin, isOnline, users)
+        Log.d(LOG_TAG, hash.toString())
+        return hash
     }
 }

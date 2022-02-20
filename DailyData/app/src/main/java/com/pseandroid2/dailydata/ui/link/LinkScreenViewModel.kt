@@ -20,7 +20,6 @@ class LinkScreenViewModel @Inject constructor(
     private val _uiEvent = MutableSharedFlow<UiEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
 
-    @InternalCoroutinesApi
     fun onEvent(event : LinkScreenEvent) {
         when(event) {
             is LinkScreenEvent.OnButtonClick -> {
