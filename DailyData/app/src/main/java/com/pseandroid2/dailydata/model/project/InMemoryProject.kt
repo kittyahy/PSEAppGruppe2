@@ -31,6 +31,7 @@ import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.repository.commandCenter.commands.IllegalOperationException
 import com.pseandroid2.dailydata.repository.viewModelAPI.ProjectHandler
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ProjectOperation
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.TableOperation
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -68,8 +69,18 @@ constructor(
         mutableGraphs,
     )
 
-    private val mutableIllegalOperation: Map<ProjectOperation, MutableSharedFlow<Boolean>>
-    override val isIllegalOperation: Map<ProjectOperation, Flow<Boolean>>
+    @Deprecated("Internal function, should not be used outside the RepositoryViewModelAPI")
+    @Suppress("DEPRECATION")
+    override val mutableIllegalOperation: MutableMap<String, MutableSharedFlow<Boolean>> =
+        mutableMapOf()
+
+    init {
+        for (operation in ProjectOperation.values()) {
+            @Suppress("DEPRECATION")
+            mutableIllegalOperation[operation.id] = MutableSharedFlow(1)
+        }
+        addFlows(table)
+    }
 
     private var mutableTable: Table = initialTable
     override val table: Table
@@ -84,26 +95,6 @@ constructor(
 
     override val users: List<User>
         get() = mutableUsers
-
-    init {
-        val operations = mutableMapOf<ProjectOperation, MutableSharedFlow<Boolean>>()
-        for (operation in ProjectOperation.values()) {
-            if (operation.type == ProjectOperation.OperationType.PROJECT) {
-                operations[operation] = MutableSharedFlow(1)
-            }
-        }
-        mutableIllegalOperation = operations.toMap()
-        val immutableOperations = mutableMapOf<ProjectOperation, Flow<Boolean>>()
-        for (entry in mutableIllegalOperation) {
-            immutableOperations[entry.key] = entry.value.asSharedFlow()
-        }
-        for (operation in ProjectOperation.values()) {
-            if (operation.type == ProjectOperation.OperationType.TABLE) {
-                immutableOperations[operation] = table.isIllegalOperation[operation]!!
-            }
-        }
-        isIllegalOperation = immutableOperations.toMap()
-    }
 
     override var id: Int
         get() = skeleton.id

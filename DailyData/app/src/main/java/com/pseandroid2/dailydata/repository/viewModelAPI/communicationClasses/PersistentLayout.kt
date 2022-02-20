@@ -11,6 +11,7 @@ import com.pseandroid2.dailydata.repository.commandCenter.commands.DeleteUIEleme
 import com.pseandroid2.dailydata.repository.commandCenter.commands.ProjectCommand
 import com.pseandroid2.dailydata.repository.commandCenter.commands.SetColumn
 import com.pseandroid2.dailydata.repository.commandCenter.commands.SetUIElement
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlin.reflect.KClass
 
 class PersistentLayout(
@@ -41,6 +42,18 @@ class PersistentLayout(
         )
 
         return 0
+    }
+
+    @Deprecated("Internal function, should not be used outside the RepositoryViewModelAPI")
+    @Suppress("DEPRECATION")
+    override val mutableIllegalOperation: MutableMap<String, MutableSharedFlow<Boolean>> =
+        mutableMapOf()
+
+    init {
+        for (operation in LayoutOperation.values()) {
+            @Suppress("DEPRECATION")
+            mutableIllegalOperation[operation.id] = MutableSharedFlow(1)
+        }
     }
 
     override suspend fun setUIElement(col: Int, element: UIElement) {

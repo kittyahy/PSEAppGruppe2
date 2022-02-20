@@ -51,8 +51,6 @@ class PersistentProject(
     scope: CoroutineScope
 ) : Project {
 
-    private val mutableIllegalOperation: Map<ProjectOperation, MutableSharedFlow<Boolean>>
-    override val isIllegalOperation: Map<ProjectOperation, Flow<Boolean>>
 
     private val executeQueue = r.projectHandler.executeQueue
 
@@ -67,27 +65,18 @@ class PersistentProject(
     override val notifications: List<Notification>
         get() = project.notifications
 
+
+    @Deprecated("Internal function, should not be used outside the RepositoryViewModelAPI")
+    @Suppress("DEPRECATION")
+    override val mutableIllegalOperation: MutableMap<String, MutableSharedFlow<Boolean>> =
+        mutableMapOf()
+
     init {
-        val operations = mutableMapOf<ProjectOperation, MutableSharedFlow<Boolean>>()
         for (operation in ProjectOperation.values()) {
-            if (operation.type == ProjectOperation.OperationType.PROJECT) {
-                operations[operation] = MutableSharedFlow(1)
-                scope.launch(Dispatchers.IO) {
-                    operations[operation]!!.emit(operation.isIllegalByData(this@PersistentProject))
-                }
-            }
+            @Suppress("DEPRECATION")
+            mutableIllegalOperation[operation.id] = MutableSharedFlow(1)
         }
-        mutableIllegalOperation = operations.toMap()
-        val immutableOperations = mutableMapOf<ProjectOperation, Flow<Boolean>>()
-        for (entry in mutableIllegalOperation) {
-            immutableOperations[entry.key] = entry.value.asSharedFlow()
-        }
-        for (operation in ProjectOperation.values()) {
-            if (operation.type == ProjectOperation.OperationType.TABLE) {
-                immutableOperations[operation] = table.isIllegalOperation[operation]!!
-            }
-        }
-        isIllegalOperation = immutableOperations.toMap()
+        addFlows(table)
     }
 
     override var id: Int
@@ -100,7 +89,7 @@ class PersistentProject(
         get() = project.name
 
     override suspend fun setName(name: String) {
-        mutableIllegalOperation[ProjectOperation.SET_PROJECT_NAME]!!.emit(false)
+        mutableIllegalOperation[ProjectOperation.SET_PROJECT_NAME.id]!!.emit(false)
         executeQueue.add(SetTitle(id, name, r))
     }
 
@@ -108,7 +97,7 @@ class PersistentProject(
         get() = project.desc
 
     override suspend fun setDesc(desc: String) {
-        mutableIllegalOperation[ProjectOperation.SET_PROJECT_DESC]!!.emit(false)
+        mutableIllegalOperation[ProjectOperation.SET_PROJECT_DESC.id]!!.emit(false)
         executeQueue.add(SetDescription(id, desc, r))
     }
 
@@ -127,7 +116,7 @@ class PersistentProject(
     }
 
     override suspend fun addGraph(graph: Graph<*, *>) {
-        mutableIllegalOperation[ProjectOperation.ADD_GRAPH]!!.emit(false)
+        mutableIllegalOperation[ProjectOperation.ADD_GRAPH.id]!!.emit(false)
         executeQueue.add(AddGraph(id, graph, r))
     }
 
@@ -173,7 +162,7 @@ class PersistentProject(
         get() = TODO("Not yet implemented")
 
     override suspend fun addNotification(notification: Notification) {
-        mutableIllegalOperation[ProjectOperation.ADD_NOTIFICATION]!!.emit(false)
+        mutableIllegalOperation[ProjectOperation.ADD_NOTIFICATION.id]!!.emit(false)
         executeQueue.add(AddNotification(id, notification, r))
     }
 
@@ -188,13 +177,13 @@ class PersistentProject(
     }
 
     override suspend fun removeNotification(id: Int) {
-        mutableIllegalOperation[ProjectOperation.DELETE_NOTIFICATION]!!.emit(false)
+        mutableIllegalOperation[ProjectOperation.DELETE_NOTIFICATION.id]!!.emit(false)
         TODO("Not yet implemented after refactoring")
     }
 
     override suspend fun addUser(user: User) {
         if (user !in users && users.size < Project.MAXIMUM_PROJECT_USERS) {
-            mutableIllegalOperation[ProjectOperation.ADD_USER]!!.emit(false)
+            mutableIllegalOperation[ProjectOperation.ADD_USER.id]!!.emit(false)
             executeQueue.add(AddUser(id, user, r))
         } else {
             throw IllegalOperationException(
@@ -222,12 +211,12 @@ class PersistentProject(
         get() = project.onlineId
 
     override suspend fun publish() {
-        mutableIllegalOperation[ProjectOperation.PUBLISH_PROJECT]!!.emit(false)
+        mutableIllegalOperation[ProjectOperation.PUBLISH_PROJECT.id]!!.emit(false)
         executeQueue.add(PublishProject(id, r))
     }
 
     override suspend fun setAdmin(admin: User) {
-        mutableIllegalOperation[ProjectOperation.SET_ADMIN]!!.emit(false)
+        mutableIllegalOperation[ProjectOperation.SET_ADMIN.id]!!.emit(false)
         executeQueue.add(TODO("Set Admin Command"))
     }
 

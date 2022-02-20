@@ -30,19 +30,17 @@ import com.pseandroid2.dailydata.model.table.TableLayout
 import com.pseandroid2.dailydata.model.transformation.TransformationFunction
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.model.users.User
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ProjectOperation
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.ContainsOperations
 import kotlinx.coroutines.flow.Flow
 
 /**
  * Contains all data of one specific Project
  */
-interface Project {
+interface Project : ContainsOperations {
 
     companion object {
         const val MAXIMUM_PROJECT_USERS = 24
     }
-
-    val isIllegalOperation: Map<ProjectOperation, Flow<Boolean>>
 
     var id: Int
 

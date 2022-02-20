@@ -15,63 +15,63 @@ import com.pseandroid2.dailydata.repository.commandCenter.commands.SetDescriptio
 import com.pseandroid2.dailydata.repository.commandCenter.commands.SetTitle
 import com.pseandroid2.dailydata.repository.commandCenter.commands.SetWallpaper
 
-enum class ProjectOperation(val adminOp: Boolean) {
-    SET_PROJECT_NAME(false) {
+enum class ProjectOperation(val adminOp: Boolean, val id: String) {
+    SET_PROJECT_NAME(false, "SET_PROJECT_NAME") {
         override fun isIllegalByData(project: Project): Boolean {
             return SetTitle.isIllegal(project)
         }
     },
-    SET_PROJECT_DESC(false) {
+    SET_PROJECT_DESC(false,"SET_PROJECT_DESC") {
         override fun isIllegalByData(project: Project): Boolean {
             return SetDescription.isIllegal(project)
         }
     },
-    DELETE(false) {
+    DELETE(false,"DELETE") {
         override fun isIllegalByData(project: Project): Boolean {
             return DeleteProject.isIllegal(project)
         }
     },
-    ADD_GRAPH(false) {
+    ADD_GRAPH(false,"ADD_GRAPH") {
         override fun isIllegalByData(project: Project): Boolean {
             return AddGraph.isIllegal(project)
         }
     },
-    ADD_USER(false) {
+    ADD_USER(false, "ADD_USER") {
         override fun isIllegalByData(project: Project): Boolean {
             return AddUser.isIllegal(project)
         }
     },
-    LEAVE_PROJECT(false) {
+    LEAVE_PROJECT(false, "LEAVE_PROJECT") {
         override fun isIllegalByData(project: Project): Boolean {
             return LeaveOnlineProject.isIllegal(project)
         }
     },
-    SET_ADMIN(false) {
+    SET_ADMIN(false, "SET_ADMIN") {
         override fun isIllegalByData(project: Project): Boolean {
             return TODO("SetAdmin isIllegal")
         }
     },
-    SET_COLOR(false) {
+    SET_COLOR(false, "SET_COLOR") {
         override fun isIllegalByData(project: Project): Boolean {
             return SetWallpaper.isIllegal(project)
         }
     },
-    CHANGE_NOTIFICATION(false) {
+    CHANGE_NOTIFICATION(false, "CHANGE_NOTIFICATION") {
         override fun isIllegalByData(project: Project): Boolean {
             return TODO("SetNotification isIllegal")
         }
     },
-    ADD_NOTIFICATION(false) {
+    ADD_NOTIFICATION(false, "ADD_NOTIFICATION") {
         override fun isIllegalByData(project: Project): Boolean {
             return AddNotification.isIllegal(project)
         }
     },
-    DELETE_NOTIFICATION(false) {
+    DELETE_NOTIFICATION(false, "DELETE_NOTIFICATION") {
         override fun isIllegalByData(project: Project): Boolean {
             return DeleteNotification.isIllegal(project)
         }
     },
-    PUBLISH_PROJECT(false) {
+    PUBLISH_PROJECT(false, "PUBLISH_PROJECT") {
         override fun isIllegalByData(project: Project): Boolean {
             return PublishProject.isIllegal(project)
         }

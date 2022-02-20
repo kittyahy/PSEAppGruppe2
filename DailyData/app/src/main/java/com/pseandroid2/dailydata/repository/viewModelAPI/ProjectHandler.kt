@@ -29,6 +29,9 @@ import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
 import com.pseandroid2.dailydata.repository.commandCenter.commands.CreateProject
 import com.pseandroid2.dailydata.repository.commandCenter.commands.JoinOnlineProject
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.HandlerOperation
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.LayoutOperation
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.ContainsOperations
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.GraphTemplateFlow
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.GraphTemplateFlowProvider
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows.ProjectFlow
@@ -50,7 +53,21 @@ import kotlinx.coroutines.runBlocking
 
 class ProjectHandler(
     private val repositoryViewModelAPI: RepositoryViewModelAPI
-) {
+) : ContainsOperations {
+
+
+    @Deprecated("Internal function, should not be used outside the RepositoryViewModelAPI")
+    @Suppress("DEPRECATION")
+    override val mutableIllegalOperation: MutableMap<String, MutableSharedFlow<Boolean>> =
+        mutableMapOf()
+
+    init {
+        for (operation in LayoutOperation.values()) {
+            @Suppress("DEPRECATION")
+            mutableIllegalOperation[operation.id] = MutableSharedFlow(1)
+        }
+    }
+
     val executeQueue: ExecuteQueue =
         ExecuteQueue(repositoryViewModelAPI, PublishQueue(repositoryViewModelAPI))
 
@@ -120,25 +137,9 @@ class ProjectHandler(
         }
     }
 
-    /**
-     * If false, it would be imprudent to use the corresponding "manipulation" fun.
-     * Thus it should be used to block input options from being used if false.
-     * e.g. If manipulationIsPossible.first() is false,
-     *      users should not be able to call manipulation().
-     */
-    fun joinOnlineProjectIsPossible(): Flow<Boolean> {
-        val flow = MutableSharedFlow<Boolean>(1)
-        runBlocking {
-            flow.emit(JoinOnlineProject.isPossible())
-        }
-        return flow
-    }
-
-
-    suspend fun joinOnlineProject(onlineID: Long): Flow<Int> {
-        val idFlow = MutableSharedFlow<Int>()
-        executeQueue.add(JoinOnlineProject(onlineID, idFlow, repositoryViewModelAPI))
-        return idFlow
-
+    suspend fun joinOnlineProject(onlineID: Long) {
+        @Suppress("DEPRECATION")
+        mutableIllegalOperation[HandlerOperation.JOIN_ONLINE_PROJECT.id]!!.emit(false)
+        executeQueue.add(JoinOnlineProject(onlineID, repositoryViewModelAPI))
     }
 }

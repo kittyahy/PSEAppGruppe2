@@ -4,6 +4,7 @@ import com.pseandroid2.dailydata.model.project.InMemoryProject
 import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.users.SimpleUser
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
+import com.pseandroid2.dailydata.repository.viewModelAPI.ProjectHandler
 
 
 class JoinOnlineProject(
@@ -11,8 +12,8 @@ class JoinOnlineProject(
     api: RepositoryViewModelAPI
 ) : ProjectCommand(-1, repositoryViewModelAPI = api) {
     companion object {
-        fun isIllegal(project: Project): Boolean {
-            return true
+        fun isIllegal(project: ProjectHandler): Boolean {
+            return isIllegal()
         }
 
         const val isAdminOperation: Boolean = false

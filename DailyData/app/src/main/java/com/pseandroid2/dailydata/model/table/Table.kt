@@ -28,6 +28,7 @@ import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddColumn
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ProjectOperation
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.ContainsOperations
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDateTime
 import kotlin.reflect.KClass
@@ -35,12 +36,10 @@ import kotlin.reflect.KClass
 /**
  * The interface, which specifies what a table should be able to do.
  */
-interface Table : Iterable<Row> {
+interface Table : Iterable<Row>, ContainsOperations {
 
     val addableTypes: Collection<DataType>
         get() = layout.addableTypes
-
-    val isIllegalOperation: Map<ProjectOperation, Flow<Boolean>>
 
     val layout: TableLayout
 
@@ -79,7 +78,7 @@ interface Table : Iterable<Row> {
 /**
  * This interface specifies what a table should do and have.
  */
-interface TableLayout : Iterable<ColumnData> {
+interface TableLayout : Iterable<ColumnData>, ContainsOperations {
 
     companion object {
         @JvmStatic

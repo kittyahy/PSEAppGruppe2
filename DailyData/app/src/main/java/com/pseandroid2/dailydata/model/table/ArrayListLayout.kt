@@ -3,8 +3,11 @@ package com.pseandroid2.dailydata.model.table
 import com.google.gson.Gson
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.LayoutOperation
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.TableOperation
 import com.pseandroid2.dailydata.util.Quadruple
 import com.pseandroid2.dailydata.util.fromJson
+import kotlinx.coroutines.flow.MutableSharedFlow
 
 /**
  * This is a implementation of a tableLayout with array lists.
@@ -30,6 +33,18 @@ class ArrayListLayout(input: String = "") : TableLayout {
                     col.uiElements.toMutableList()
                 )
             )
+        }
+    }
+
+    @Deprecated("Internal function, should not be used outside the RepositoryViewModelAPI")
+    @Suppress("DEPRECATION")
+    override val mutableIllegalOperation: MutableMap<String, MutableSharedFlow<Boolean>> =
+        mutableMapOf()
+
+    init {
+        for (operation in LayoutOperation.values()) {
+            @Suppress("DEPRECATION")
+            mutableIllegalOperation[operation.id] = MutableSharedFlow(1)
         }
     }
 

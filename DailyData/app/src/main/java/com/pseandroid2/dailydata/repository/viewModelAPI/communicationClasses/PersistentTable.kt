@@ -11,6 +11,7 @@ import com.pseandroid2.dailydata.repository.commandCenter.commands.ProjectComman
 import com.pseandroid2.dailydata.repository.commandCenter.commands.SetRow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 
 class PersistentTable(
     private val table: Table,
@@ -19,10 +20,21 @@ class PersistentTable(
     private val projectID: Int
 ) : Table {
 
-    override val isIllegalOperation: Map<ProjectOperation, Flow<Boolean>>
-        get() = table.isIllegalOperation
+    @Deprecated("Internal function, should not be used outside the RepositoryViewModelAPI")
+    @Suppress("DEPRECATION")
+    override val mutableIllegalOperation: MutableMap<String, MutableSharedFlow<Boolean>> =
+        mutableMapOf()
+
     override val layout: TableLayout =
         PersistentLayout(table.layout, repositoryViewModelAPI, projectID)
+
+    init {
+        for (operation in TableOperation.values()) {
+            @Suppress("DEPRECATION")
+            mutableIllegalOperation[operation.id] = MutableSharedFlow(1)
+        }
+        addFlows(layout)
+    }
 
     override fun getCell(row: Int, col: Int): Any {
         return table.getCell(row, col)

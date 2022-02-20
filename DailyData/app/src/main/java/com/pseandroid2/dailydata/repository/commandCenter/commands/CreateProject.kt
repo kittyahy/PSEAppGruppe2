@@ -2,6 +2,7 @@ package com.pseandroid2.dailydata.repository.commandCenter.commands
 
 import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
+import com.pseandroid2.dailydata.repository.viewModelAPI.ProjectHandler
 import kotlinx.coroutines.flow.MutableSharedFlow
 
 class CreateProject(
@@ -16,8 +17,8 @@ class CreateProject(
 ) {
 
     companion object {
-        fun isIllegal(project: Project): Boolean {
-            return ProjectCommand.isIllegal(project)
+        fun isIllegal(project: ProjectHandler): Boolean {
+            return isIllegal()
         }
 
         const val isAdminOperation: Boolean = false
@@ -27,9 +28,9 @@ class CreateProject(
 
     override suspend fun execute() {
         @Suppress("Deprecation")
-        val id = repositoryViewModelAPI.appDataBase.projectCDManager().insertProject(project)
-        projectID = id
-        projectIDReturn?.emit(id)
+        val project1 = repositoryViewModelAPI.appDataBase.projectCDManager().insertProject(project)
+        projectID = project1.id
+        projectIDReturn?.emit(projectID)
         super.execute()
     }
 
