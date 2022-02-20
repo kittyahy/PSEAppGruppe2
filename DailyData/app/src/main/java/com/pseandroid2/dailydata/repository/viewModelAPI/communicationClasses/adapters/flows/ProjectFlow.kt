@@ -21,23 +21,13 @@
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.flows
 
 import android.util.Log
-import com.google.gson.Gson
 import com.pseandroid2.dailydata.model.database.AppDataBase
-import com.pseandroid2.dailydata.model.notifications.TimeNotification
+import com.pseandroid2.dailydata.model.project.InMemoryProject
 import com.pseandroid2.dailydata.model.project.Project
-import com.pseandroid2.dailydata.model.table.ArrayListLayout
-import com.pseandroid2.dailydata.model.users.NullUser
-import com.pseandroid2.dailydata.model.users.SimpleUser
 import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Button
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Graph
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Member
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Notification
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ViewModelProject
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Row
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.toViewGraph
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.PersistentProject
 import com.pseandroid2.dailydata.util.Consts.LOG_TAG
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -55,10 +45,10 @@ class ProjectFlow(
     fun getProject(): Flow<Project> = provider.provideFlow.map { project ->
         val ret = if (project == null) {
             Log.d(LOG_TAG, "Got null Project from database")
-            ViewModelProject(
-                repo = repositoryViewModelAPI,
-                admin = SimpleUser("", ""),
-                scope = provider.scope
+            PersistentProject(
+                InMemoryProject(),
+                repositoryViewModelAPI,
+                provider.scope
             )
         } else {
             project

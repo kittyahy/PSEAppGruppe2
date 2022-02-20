@@ -41,7 +41,7 @@ class DateTimeConversion {
      */
     @TypeConverter
     fun dateTimeToLong(dateTime: LocalDateTime): Long {
-        return  dateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+        return dateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
     }
 
     /**

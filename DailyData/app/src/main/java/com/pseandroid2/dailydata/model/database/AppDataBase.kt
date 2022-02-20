@@ -28,6 +28,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.pseandroid2.dailydata.model.database.daos.GraphCDManager
 import com.pseandroid2.dailydata.model.database.daos.GraphDAO
+import com.pseandroid2.dailydata.model.database.daos.LayoutDAO
 import com.pseandroid2.dailydata.model.database.daos.NotificationsDAO
 import com.pseandroid2.dailydata.model.database.daos.ProjectCDManager
 import com.pseandroid2.dailydata.model.database.daos.ProjectDataDAO
@@ -35,6 +36,7 @@ import com.pseandroid2.dailydata.model.database.daos.SettingsDAO
 import com.pseandroid2.dailydata.model.database.daos.TableContentDAO
 import com.pseandroid2.dailydata.model.database.daos.TemplateDAO
 import com.pseandroid2.dailydata.model.database.daos.UIElementDAO
+import com.pseandroid2.dailydata.model.database.entities.ColumnEntity
 import com.pseandroid2.dailydata.model.database.entities.GraphEntity
 import com.pseandroid2.dailydata.model.database.entities.GraphSettingEntity
 import com.pseandroid2.dailydata.model.database.entities.GraphTemplateEntity
@@ -62,7 +64,8 @@ import com.pseandroid2.dailydata.model.database.entities.UIElementMap
         ProjectTemplateEntity::class,
         NotificationEntity::class,
         ProjectSettingEntity::class,
-        GraphSettingEntity::class
+        GraphSettingEntity::class,
+        ColumnEntity::class
     ],
     version = 1
 )
@@ -109,6 +112,8 @@ abstract class AppDataBase protected constructor() : RoomDatabase() {
     abstract fun settingsDAO(): SettingsDAO
 
     abstract fun templateDAO(): TemplateDAO
+
+    abstract fun layoutDAO(): LayoutDAO
 
     /**
      * @throws NullPointerException when database creation fails

@@ -2,19 +2,18 @@ package com.pseandroid2.dailydata.repository.commandCenter.commands
 
 import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ViewModelProject
 
 class SetTitle(
-    viewModelProject: ViewModelProject,
+    projectID: Int,
     private val newTitle: String,
     api: RepositoryViewModelAPI
-) : ProjectCommand(projectID = viewModelProject.id, repositoryViewModelAPI = api) {
+) : ProjectCommand(projectID = projectID, repositoryViewModelAPI = api) {
 
 
     companion object {
 
         fun isIllegal(project: Project): Boolean {
-            return ProjectCommand.isIllegal(project)
+            return isIllegal()
         }
 
         const val isAdminOperation: Boolean = true
@@ -23,7 +22,7 @@ class SetTitle(
     }
 
     override suspend fun execute() {
-        repositoryViewModelAPI.appDataBase.projectDataDAO().setName(projectID!!, newTitle)
+        repositoryViewModelAPI.appDataBase.projectDataDAO().setName(projectID, newTitle)
     }
 
     override suspend fun publish(): Boolean {

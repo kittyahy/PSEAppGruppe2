@@ -24,12 +24,12 @@ class LinkScreenViewModel @Inject constructor(
         when(event) {
             is LinkScreenEvent.OnButtonClick -> {
                 viewModelScope.launch {
-                    if(repository.projectHandler.joinOnlineProjectIsPossible().first()) {
+                    /*if(repository.projectHandler.joinOnlineProjectIsPossible().first()) {
                         repository.projectHandler.joinOnlineProject(onlineID = event.id)
                         event.onJoinLink()
                     } else {
                         sendUiEvent(UiEvent.ShowToast("Could not join project"))
-                    }
+                    }*/
                 }
             }
         }

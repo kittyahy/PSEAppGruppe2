@@ -13,22 +13,20 @@ import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
+/**
+ * testing: "Leeres Projekt erstellen", 7.1.2
+ */
 class GT712 {
 
     @get:Rule
     val composeRule = createAndroidComposeRule<MainActivity>()
 
 
-    @Ignore
-    /**
-     * tests: "Leeres Projekt erstellen", 7.1.2
-     */
+    @Ignore("Graph error, back to Overview is missing")
     @InternalCoroutinesApi
     @Test
     fun createEmptyProjectTest() {
-        composeRule.setContent {
-            Main()
-        }
+
         composeRule.onNodeWithText("Add new Project").performClick()
 
         composeRule.onNodeWithText("Add Title").performTextInput("Kresse")

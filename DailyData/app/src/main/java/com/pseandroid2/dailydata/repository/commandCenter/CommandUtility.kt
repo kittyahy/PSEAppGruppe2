@@ -14,6 +14,7 @@ object CommandUtility {
         projectCommand.wentOnline = projectCommandInfo.wentOnline
         projectCommand.commandByUser = projectCommandInfo.commandByUser
         projectCommand.createdByAdmin = projectCommandInfo.isProjectAdmin
+        projectCommand.repositoryViewModelAPI = repositoryViewModelAPI
         @Suppress("DEPRECATION")
         projectCommand.projectID = repositoryViewModelAPI.appDataBase.projectDataDAO()
             .getIdForOnlineId(projectCommandInfo.onlineProjectID)

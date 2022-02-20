@@ -8,7 +8,7 @@ class SetButton(projectID: Int, val button: UIElement, api: RepositoryViewModelA
     ProjectCommand(projectID = projectID, repositoryViewModelAPI = api) {
     companion object {
         fun isIllegal(project: Project): Boolean {
-            return ProjectCommand.isIllegal(project)
+            return isIllegal()
         }
 
         const val isAdminOperation: Boolean = false
@@ -20,8 +20,8 @@ class SetButton(projectID: Int, val button: UIElement, api: RepositoryViewModelA
         val uIElementDAO =
             @Suppress("DEPRECATION")
             repositoryViewModelAPI.appDataBase.uiElementDAO()
-        uIElementDAO.changeUIElementName(projectID!!, button.id, button.name)
-        uIElementDAO.changeUIElementState(projectID!!, button.id, button.state)
+        uIElementDAO.changeUIElementName(projectID, button.id, button.name)
+        uIElementDAO.changeUIElementState(projectID, button.id, button.state)
 
         super.execute()
     }

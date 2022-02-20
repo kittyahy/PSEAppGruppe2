@@ -1,14 +1,13 @@
 package com.pseandroid2.dailydata.repository.commandCenter.commands
 
-import com.pseandroid2.dailydata.model.graph.Graph
 import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 
-class DeleteGraph(projectID: Int, val graph: Graph<*, *>, api: RepositoryViewModelAPI) :
+class DeleteGraph(projectID: Int, val id: Int, api: RepositoryViewModelAPI) :
     ProjectCommand(projectID = projectID, repositoryViewModelAPI = api) {
     companion object {
         fun isIllegal(project: Project): Boolean {
-            return ProjectCommand.isIllegal(project)
+            return isIllegal()
         }
 
         const val isAdminOperation: Boolean = false
@@ -18,7 +17,7 @@ class DeleteGraph(projectID: Int, val graph: Graph<*, *>, api: RepositoryViewMod
 
     override suspend fun execute() {
         @Suppress("Deprecation")
-        repositoryViewModelAPI.appDataBase.graphCDManager().deleteGraph(projectID!!, graph.id)
+        repositoryViewModelAPI.appDataBase.graphCDManager().deleteGraph(projectID, id)
         super.execute()
     }
 

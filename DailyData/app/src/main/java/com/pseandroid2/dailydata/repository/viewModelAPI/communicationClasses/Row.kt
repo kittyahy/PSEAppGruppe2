@@ -20,21 +20,16 @@
 
 package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
-import com.pseandroid2.dailydata.model.table.ArrayListRow
 import com.pseandroid2.dailydata.model.table.Row
-import com.pseandroid2.dailydata.model.table.RowMetaData
-import com.pseandroid2.dailydata.model.users.SimpleUser
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
 import kotlinx.coroutines.flow.Flow
-import java.time.LocalDateTime
-import com.pseandroid2.dailydata.model.project.Project as ModelProject
 
 class Row(
     override var id: Int,
     val elements: List<String>
 ) : Identifiable{
     override lateinit var executeQueue: ExecuteQueue
-    override lateinit var viewModelProject: ViewModelProject
+    override lateinit var persistentProject: PersistentProject
 
     constructor(row: Row) : this(
         row.getMetaData().createdOn.hashCode(), //TODO Richtige ID

@@ -20,20 +20,19 @@
 
 package com.pseandroid2.dailydata.model.table
 
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Operation
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.TableOperation
 import com.pseandroid2.dailydata.util.hashOf
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import java.util.function.Consumer
 
 /**
  *
  */
 class ArrayListTable(override val layout: TableLayout = ArrayListLayout()) : Table {
 
-    private val mutableIllegalOperation: Map<Operation, MutableSharedFlow<Boolean>>
-    override val isIllegalOperation: Map<Operation, Flow<Boolean>>
+    @Deprecated("Internal function, should not be used outside the RepositoryViewModelAPI")
+    @Suppress("DEPRECATION")
+    override val mutableIllegalOperation: MutableMap<String, MutableSharedFlow<Boolean>> =
+        mutableMapOf()
 
     constructor(table: ArrayListTable) : this(
         ArrayListLayout(table.layout as ArrayListLayout)
@@ -44,18 +43,11 @@ class ArrayListTable(override val layout: TableLayout = ArrayListLayout()) : Tab
     }
 
     init {
-        val operations = mutableMapOf<Operation, MutableSharedFlow<Boolean>>()
-        for (operation in Operation.values()) {
-            if (operation.type == Operation.OperationType.TABLE) {
-                operations[operation] = MutableSharedFlow(1)
-            }
+        for (operation in TableOperation.values()) {
+            @Suppress("DEPRECATION")
+            mutableIllegalOperation[operation.id] = MutableSharedFlow(1)
         }
-        mutableIllegalOperation = operations.toMap()
-        val immutableOperation = mutableMapOf<Operation, Flow<Boolean>>()
-        for (entry in mutableIllegalOperation) {
-            immutableOperation[entry.key] = entry.value.asSharedFlow()
-        }
-        isIllegalOperation = immutableOperation.toMap()
+        addFlows(layout)
     }
 
     private val table: MutableList<ArrayListRow> = mutableListOf()
@@ -66,8 +58,12 @@ class ArrayListTable(override val layout: TableLayout = ArrayListLayout()) : Tab
     override fun getRow(row: Int) = table[row]
 
     override suspend fun addRow(row: Row) {
+        table.add(rowValidation(row))
+    }
+
+    private fun rowValidation(row: Row): ArrayListRow {
         if (assertLayout(row)) {
-            table.add(row.toArrayListRow())
+            return row.toArrayListRow()
         } else {
             throw IllegalArgumentException(
                 "Tried to add a row to a table but the layouts did not match"
@@ -75,8 +71,25 @@ class ArrayListTable(override val layout: TableLayout = ArrayListLayout()) : Tab
         }
     }
 
-    override suspend fun deleteRow(row: Int) {
-        table.removeAt(row)
+    override suspend fun setRow(row: Row) {
+        @Suppress("DEPRECATION")
+        mutableIllegalOperation[TableOperation.CHANGE_ROW.id]!!.emit(false)
+        val arrayListRow = rowValidation(row)
+        val index = table.indexOf(rowValidation(arrayListRow))
+        table.remove(arrayListRow)
+        table.add(index, arrayListRow)
+    }
+
+    override suspend fun deleteRow(row: Row) {
+        @Suppress("DEPRECATION")
+        mutableIllegalOperation[TableOperation.DELETE_ROW.id]!!.emit(false)
+        table.remove(rowValidation(row))
+    }
+
+    override suspend fun setColumn(specs: ColumnData, default: Any) {
+        @Suppress("DEPRECATION")
+        mutableIllegalOperation[TableOperation.CHANGE_ROW.id]!!.emit(false)
+        TODO("Not yet implemented")
     }
 
     override fun getColumn(col: Int): List<Any> {
@@ -88,7 +101,7 @@ class ArrayListTable(override val layout: TableLayout = ArrayListLayout()) : Tab
     }
 
     override suspend fun addColumn(specs: ColumnData, default: Any): Int {
-        val newId = layout.addColumn(specs.type, specs.name, specs.unit)
+        val newId = layout.addColumn(specs)
         for (row in table) {
             row.createCell(default)
         }
@@ -112,9 +125,7 @@ class ArrayListTable(override val layout: TableLayout = ArrayListLayout()) : Tab
     }
 
     @Deprecated("Shouldn't be used from outside the model. Iterate over the Table instead")
-    fun getAllRows(): List<Row> {
-        return table.toList()
-    }
+    fun getAllRows() = table.toList()
 
     override fun iterator() = ArrayListTableIterator(this)
 

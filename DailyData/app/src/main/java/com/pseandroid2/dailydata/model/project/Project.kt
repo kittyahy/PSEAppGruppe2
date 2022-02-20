@@ -30,21 +30,18 @@ import com.pseandroid2.dailydata.model.table.TableLayout
 import com.pseandroid2.dailydata.model.transformation.TransformationFunction
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.model.users.User
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Operation
-import kotlinx.coroutines.flow.Flow
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ContainsOperations
 
 /**
  * Contains all data of one specific Project
  */
-interface Project {
+interface Project : ContainsOperations {
 
     companion object {
         const val MAXIMUM_PROJECT_USERS = 24
     }
 
-    val isIllegalOperation: Map<Operation, Flow<Boolean>>
-
-    val id: Int
+    var id: Int
 
     val onlineId: Long
 
@@ -97,14 +94,14 @@ interface Project {
 
     val admin: User
 
-    suspend fun setAdmin(admin: User)
+    suspend fun resetAdmin()
 
     val isOnline: Boolean
 
     /**
      * Unlinks this project from synchronisation with the server
      */
-    suspend fun unlink()
+    suspend fun unsubscribe()
 
     suspend fun publish()
 

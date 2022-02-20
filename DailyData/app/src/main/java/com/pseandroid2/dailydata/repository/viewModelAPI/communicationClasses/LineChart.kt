@@ -22,23 +22,10 @@ package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
 import android.graphics.Bitmap
 import com.pseandroid2.dailydata.model.database.AppDataBase
-import com.pseandroid2.dailydata.model.graph.DateTimeLineChart
-import com.pseandroid2.dailydata.model.graph.FloatLineChart
-import com.pseandroid2.dailydata.model.graph.Generator
-import com.pseandroid2.dailydata.model.graph.IntLineChart
-import com.pseandroid2.dailydata.model.settings.MapSettings
-import com.pseandroid2.dailydata.model.transformation.DateTimeLineChartTransformation
-import com.pseandroid2.dailydata.model.transformation.FloatIdentity
-import com.pseandroid2.dailydata.model.transformation.FloatLineChartTransformation
-import com.pseandroid2.dailydata.model.transformation.IntLineChartTransformation
 import com.pseandroid2.dailydata.repository.commandCenter.ExecuteQueue
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType.FLOATING_POINT_NUMBER
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType.TIME
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType.WHOLE_NUMBER
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.runBlocking
-import com.pseandroid2.dailydata.model.graph.Graph as ModelGraph
 
 class LineChart(
     override var id: Int = -1,
@@ -49,7 +36,7 @@ class LineChart(
     var mappingVertical: List<Column> = ArrayList()
 ) : Graph() {
     override lateinit var executeQueue: ExecuteQueue
-    override lateinit var viewModelProject: ViewModelProject
+    override lateinit var persistentProject: PersistentProject
     override lateinit var appDataBase: AppDataBase
     override val typeName: String = "Line Chart" //TODO Magic String
 

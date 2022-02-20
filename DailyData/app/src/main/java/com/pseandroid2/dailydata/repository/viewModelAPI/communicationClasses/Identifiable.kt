@@ -31,7 +31,7 @@ interface Identifiable {
     var executeQueue: ExecuteQueue
 
     @Deprecated("Internal function, should not be used outside the RepositoryViewModelAPI")
-    var viewModelProject: ViewModelProject
+    var persistentProject: PersistentProject
     fun deleteIsPossible(): Flow<Boolean>
 
     //@throws IllegalOperationException
@@ -44,10 +44,10 @@ interface Identifiable {
     }
 
     @Deprecated("Internal function, should not be used outside the RepositoryViewModelAPI")
-    fun connectToProject(viewModelProject: ViewModelProject) {
+    fun connectToProject(persistentProject: PersistentProject) {
         @Suppress("DEPRECATION")
-        this.viewModelProject = viewModelProject
+        this.persistentProject = persistentProject
         @Suppress("DEPRECATION")
-        this.connectToRepository(viewModelProject.repo)
+        this.connectToRepository(persistentProject.repositoryViewModelAPI)
     }
 }

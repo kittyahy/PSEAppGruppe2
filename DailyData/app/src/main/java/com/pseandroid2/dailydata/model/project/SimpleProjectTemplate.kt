@@ -21,8 +21,7 @@ class SimpleProjectTemplate(
             -1,
             "",
             0,
-            NullUser(),
-            ArrayListLayout()
+            NullUser()
         )
     ) : this(
         SimpleSkeleton(
@@ -33,7 +32,7 @@ class SimpleProjectTemplate(
             data.wallpaper,
             data.color
         ),
-        data.layout,
+        ArrayListLayout(),
         data.creator,
         mutableListOf()
     )

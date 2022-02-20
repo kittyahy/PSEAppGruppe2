@@ -22,10 +22,7 @@ package com.pseandroid2.dailydata.model.project
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import com.pseandroid2.dailydata.model.graph.Graph
 import com.pseandroid2.dailydata.model.notifications.Notification
-import com.pseandroid2.dailydata.model.settings.MapSettings
-import com.pseandroid2.dailydata.model.settings.Settings
 
 data class SimpleSkeleton(
     override var id: Int = -1,
@@ -36,5 +33,15 @@ data class SimpleSkeleton(
     override var color: Int = -1,
     override var notifications: MutableList<Notification> = mutableListOf()
 ) : ProjectSkeleton {
+    constructor(project: Project) : this(
+        project.id,
+        project.onlineId,
+        project.name,
+        project.desc,
+        project.path,
+        project.color,
+        project.notifications.toMutableList()
+    )
+
     override fun getWallpaper(): Bitmap? = BitmapFactory.decodeFile(path)
 }

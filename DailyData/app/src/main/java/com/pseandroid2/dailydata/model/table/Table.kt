@@ -21,22 +21,23 @@
 package com.pseandroid2.dailydata.model.table
 
 import com.google.gson.Gson
-import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.model.database.entities.RowEntity
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.model.users.NullUser
+import com.pseandroid2.dailydata.model.users.User
+import com.pseandroid2.dailydata.repository.commandCenter.commands.AddColumn
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Operation
-import kotlinx.coroutines.flow.Flow
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ContainsOperations
 import java.time.LocalDateTime
 import kotlin.reflect.KClass
 
 /**
  * The interface, which specifies what a table should be able to do.
  */
-interface Table : Iterable<Row> {
+interface Table : Iterable<Row>, ContainsOperations {
 
-    val isIllegalOperation: Map<Operation, Flow<Boolean>>
+    val addableTypes: Collection<DataType>
+        get() = layout.addableTypes
 
     val layout: TableLayout
 
@@ -48,7 +49,7 @@ interface Table : Iterable<Row> {
 
     suspend fun addRow(row: Row)
 
-    suspend fun deleteRow(row: Int)
+    suspend fun deleteRow(row: Row)
 
     fun getColumn(col: Int): List<Any>
 
@@ -68,12 +69,14 @@ interface Table : Iterable<Row> {
 
     suspend fun removeUIElement(col: Int, id: Int) = layout.removeUIElement(col, id)
 
+    suspend fun setRow(row: Row)
+    suspend fun setColumn(specs: ColumnData, default: Any)
 }
 
 /**
  * This interface specifies what a table should do and have.
  */
-interface TableLayout : Iterable<ColumnData> {
+interface TableLayout : Iterable<ColumnData>, ContainsOperations {
 
     companion object {
         @JvmStatic
@@ -82,24 +85,30 @@ interface TableLayout : Iterable<ColumnData> {
         }
     }
 
+    val addableTypes: Collection<DataType>
+        get() = AddColumn.addableTypes(this)
+
     val size: Int
 
     fun getColumnType(col: Int): KClass<out Any>
 
     fun getUIElements(col: Int): List<UIElement>
-    fun addUIElement(col: Int, element: UIElement): Int
-    fun removeUIElement(col: Int, id: Int)
+    suspend fun addUIElement(col: Int, element: UIElement): Int
+    suspend fun removeUIElement(col: Int, id: Int)
 
     fun getName(col: Int): String
     fun getUnit(col: Int): String
 
     operator fun get(col: Int): ColumnData
 
-    fun addColumn(type: DataType, name: String, unit: String = ""): Int
+    suspend fun addColumn(specs: ColumnData): Int
 
-    fun deleteColumn(col: Int)
+    suspend fun deleteColumn(col: Int)
 
     fun toJSON(): String
+
+    suspend fun setColumn(specs: ColumnData)
+    suspend fun setUIElement(col: Int, element: UIElement)
 
     val columnDataList: List<ColumnData>
 
@@ -153,5 +162,5 @@ data class ColumnData(
     val type: DataType,
     val name: String,
     val unit: String,
-    val uiElements: List<UIElement> = listOf()
+    val uiElements: MutableList<UIElement> = mutableListOf()
 )

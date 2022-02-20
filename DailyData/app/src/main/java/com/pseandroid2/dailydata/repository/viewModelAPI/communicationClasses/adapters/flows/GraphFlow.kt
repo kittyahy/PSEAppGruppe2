@@ -45,10 +45,7 @@ class GraphFlow(
             val graphList = mutableListOf<Graph>()
             for (graph in graphs) {
                 val addGraph = graph.toViewGraph(
-                    Gson().fromJson(
-                        db.projectDataDAO().getCurrentLayout(projectId),
-                        ArrayListLayout::class.java
-                    )
+                    TODO()
                 )
                 @Suppress("Deprecation")
                 addGraph.executeQueue = eq

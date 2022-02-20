@@ -4,8 +4,8 @@ import android.util.Log
 import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ViewModelProject
 import com.pseandroid2.dailydata.util.Consts.LOG_TAG
+import com.pseandroid2.dailydata.repository.viewModelAPI.ProjectHandler
 import kotlinx.coroutines.flow.MutableSharedFlow
 
 class CreateProject(
@@ -13,14 +13,15 @@ class CreateProject(
     private val projectIDReturn: MutableSharedFlow<Int>? = null,
     api: RepositoryViewModelAPI
 ) : ProjectCommand(
+    project.id,
     commandByUser = @Suppress("Deprecation") api.remoteDataSourceAPI.getUserID(),
     createdByAdmin = true,
     repositoryViewModelAPI = api
 ) {
 
     companion object {
-        fun isIllegal(project: Project): Boolean {
-            return ProjectCommand.isIllegal(project)
+        fun isIllegal(project: ProjectHandler): Boolean {
+            return isIllegal()
         }
 
         const val isAdminOperation: Boolean = false
@@ -30,26 +31,12 @@ class CreateProject(
 
     override suspend fun execute() {
         @Suppress("Deprecation")
-        val id = repositoryViewModelAPI.appDataBase.projectCDManager().insertProject(project)
-        projectID = id
-        projectIDReturn?.emit(id)
+        val project1 = repositoryViewModelAPI.appDataBase.projectCDManager().insertProject(project)
+        projectID = project1.id
+        projectIDReturn?.emit(projectID)
         super.execute()
     }
 
-    //TODO which one is the correct one? Commented function is the one on my local branch but as I didnt change anything there it was on main at some point at least...
-/*<<<<<<< HEAD
-    override suspend fun publish(): Boolean {
-        //ReserveServerSlot
-        @Suppress("Deprecation")
-        onlineProjectID =
-            repositoryViewModelAPI.remoteDataSourceAPI.createNewOnlineProject("") //TODO Add project details as JSON here
-
-        //Make Created Project Online Project
-        @Suppress("Deprecation")
-        repositoryViewModelAPI.appDataBase.projectDataDAO()
-            .setOnlineID(projectID!!, onlineProjectID!!)
-        return super.publish()
-=======*/
     override suspend fun publish(): Boolean {
         return super.publish() && publishable
     }

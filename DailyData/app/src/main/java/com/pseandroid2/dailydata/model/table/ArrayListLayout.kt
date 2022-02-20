@@ -3,11 +3,14 @@ package com.pseandroid2.dailydata.model.table
 import com.google.gson.Gson
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.LayoutOperation
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.TableOperation
 import com.pseandroid2.dailydata.util.Quadruple
 import com.pseandroid2.dailydata.util.fromJson
 import com.pseandroid2.dailydata.util.getSerializableClassName
 import com.pseandroid2.dailydata.util.hashOf
 import kotlin.reflect.KClass
+import kotlinx.coroutines.flow.MutableSharedFlow
 
 /**
  * This is a implementation of a tableLayout with array lists.
@@ -53,6 +56,18 @@ class ArrayListLayout(input: String = "") : TableLayout {
         }
     }
 
+    @Deprecated("Internal function, should not be used outside the RepositoryViewModelAPI")
+    @Suppress("DEPRECATION")
+    override val mutableIllegalOperation: MutableMap<String, MutableSharedFlow<Boolean>> =
+        mutableMapOf()
+
+    init {
+        for (operation in LayoutOperation.values()) {
+            @Suppress("DEPRECATION")
+            mutableIllegalOperation[operation.id] = MutableSharedFlow(1)
+        }
+    }
+
     constructor(layout: ArrayListLayout) : this(
         layout.columnDataList
     )
@@ -62,12 +77,22 @@ class ArrayListLayout(input: String = "") : TableLayout {
 
     override fun getUIElements(col: Int): List<UIElement> = layout[col].fourth.toList()
 
-    override fun addUIElement(col: Int, element: UIElement): Int {
+    override suspend fun addUIElement(col: Int, element: UIElement): Int {
+        @Suppress("DEPRECATION")
+        mutableIllegalOperation[LayoutOperation.ADD_UIELEMENT.id]!!.emit(false)
         layout[col].fourth.add(element)
         return layout[col].fourth.size - 1
     }
 
-    override fun removeUIElement(col: Int, id: Int) {
+    override suspend fun setUIElement(col: Int, element: UIElement) {
+        @Suppress("DEPRECATION")
+        mutableIllegalOperation[LayoutOperation.CHANGE_UIELEMENT.id]!!.emit(false)
+        layout[col].fourth[element.id] = element
+    }
+
+    override suspend fun removeUIElement(col: Int, id: Int) {
+        @Suppress("DEPRECATION")
+        mutableIllegalOperation[LayoutOperation.DELETE_UIELEMENT.id]!!.emit(false)
         layout[col].fourth.removeAll { it.id == id }
     }
 
@@ -80,20 +105,30 @@ class ArrayListLayout(input: String = "") : TableLayout {
         layout[col].first,
         layout[col].second,
         layout[col].third,
-        layout[col].fourth.toList()
+        layout[col].fourth
     )
 
-    override fun addColumn(type: DataType, name: String, unit: String): Int {
-        layout.add(Quadruple(type, name, unit, mutableListOf()))
+    override suspend fun addColumn(specs: ColumnData): Int {
+        @Suppress("DEPRECATION")
+        mutableIllegalOperation[LayoutOperation.ADD_COLUMN.id]!!.emit(false)
+        layout.add(Quadruple(specs.type, specs.name, specs.unit, mutableListOf()))
         return size - 1
     }
 
-    override fun deleteColumn(col: Int) {
+    override suspend fun deleteColumn(col: Int) {
+        @Suppress("DEPRECATION")
+        mutableIllegalOperation[LayoutOperation.DELETE_COLUMN.id]!!.emit(false)
         layout.removeAt(col)
     }
 
     override fun toJSON(): String {
         return Gson().toJson(layout)
+    }
+
+    override suspend fun setColumn(specs: ColumnData) {
+        @Suppress("DEPRECATION")
+        mutableIllegalOperation[LayoutOperation.CHANGE_COLUMN.id]!!.emit(false)
+        layout[specs.id] = Quadruple(specs.type, specs.name, specs.unit, mutableListOf())
     }
 
     override fun iterator() = ArrayListLayoutIterator(layout)
@@ -124,7 +159,7 @@ class ArrayListLayoutIterator(private val layoutList: List<Quadruple<DataType, S
 
     override fun next(): ColumnData {
         val next = layoutList[++index]
-        return ColumnData(index, next.first, next.second, next.third, next.fourth.toList())
+        return ColumnData(index, next.first, next.second, next.third, next.fourth.toMutableList())
     }
 
 }

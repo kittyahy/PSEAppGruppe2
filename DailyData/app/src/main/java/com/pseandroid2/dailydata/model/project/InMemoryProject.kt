@@ -29,15 +29,14 @@ import com.pseandroid2.dailydata.model.table.Table
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.model.users.NullUser
 import com.pseandroid2.dailydata.model.users.User
+import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
 import com.pseandroid2.dailydata.repository.commandCenter.commands.IllegalOperationException
 import com.pseandroid2.dailydata.repository.viewModelAPI.ProjectHandler
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Operation
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ProjectOperation
 import com.pseandroid2.dailydata.util.Consts.LOG_TAG
 import com.pseandroid2.dailydata.util.hashOf
 import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 
 class InMemoryProject
 constructor(
@@ -50,7 +49,7 @@ constructor(
 ) : Project {
 
     constructor(
-        id: Int,
+        id: Int = -1,
         onlineId: Long = -1,
         name: String = "",
         desc: String = "",
@@ -86,8 +85,19 @@ constructor(
         project.admin
     )
 
-    private val mutableIllegalOperation: Map<Operation, MutableSharedFlow<Boolean>>
-    override val isIllegalOperation: Map<Operation, Flow<Boolean>>
+
+    @Deprecated("Internal function, should not be used outside the RepositoryViewModelAPI")
+    @Suppress("DEPRECATION")
+    override val mutableIllegalOperation: MutableMap<String, MutableSharedFlow<Boolean>> =
+        mutableMapOf()
+
+    init {
+        for (operation in ProjectOperation.values()) {
+            @Suppress("DEPRECATION")
+            mutableIllegalOperation[operation.id] = MutableSharedFlow(1)
+        }
+        addFlows(table)
+    }
 
     private var mutableTable: Table = initialTable
     override val table: Table
@@ -103,32 +113,11 @@ constructor(
     override val users: List<User>
         get() = mutableUsers
 
-    init {
-        val operations = mutableMapOf<Operation, MutableSharedFlow<Boolean>>()
-        for (operation in Operation.values()) {
-            if (operation.type == Operation.OperationType.PROJECT) {
-                operations[operation] = MutableSharedFlow(1)
-            }
-        }
-        mutableIllegalOperation = operations.toMap()
-        val immutableOperations = mutableMapOf<Operation, Flow<Boolean>>()
-        for (entry in mutableIllegalOperation) {
-            immutableOperations[entry.key] = entry.value.asSharedFlow()
-        }
-        for (operation in Operation.values()) {
-            if (operation.type == Operation.OperationType.TABLE) {
-                immutableOperations[operation] = table.isIllegalOperation[operation]!!
-            }
-        }
-        isIllegalOperation = immutableOperations.toMap()
-    }
-
-    override val id: Int
+    override var id: Int
         get() = skeleton.id
-
-    fun setId(id: Int) {
-        skeleton.id = id
-    }
+        set(value) {
+            skeleton.id = value
+        }
 
     override val name: String
         get() = skeleton.name
@@ -225,8 +214,12 @@ constructor(
         table.layout.removeUIElement(col, id)
     }
 
-    override suspend fun setAdmin(admin: User) {
-        mutableAdmin = admin
+    override suspend fun resetAdmin() {
+        throw IllegalOperationException("Local Project only. Create an actual project in order to publish it")
+    }
+
+    fun getAdminFromRDS(rds: RemoteDataSourceAPI) {
+        mutableAdmin = rds.getUser()
     }
 
     override val onlineId: Long
@@ -236,7 +229,7 @@ constructor(
         throw IllegalOperationException("Local Project only. Create an actual project in order to publish it")
     }
 
-    override suspend fun unlink() {
+    override suspend fun unsubscribe() {
         throw IllegalOperationException("Local Project only. Create an actual project in order to unlink it")
     }
 

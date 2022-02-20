@@ -8,7 +8,7 @@ import kotlinx.coroutines.launch
 
 class ExecuteQueue(
     override val repositoryViewModelAPI: RepositoryViewModelAPI,
-    private val publishQueue: PublishQueue
+    val publishQueue: PublishQueue
 ) :
     CommandQueue(repositoryViewModelAPI), ProjectCommandQueueObserver {
     override suspend fun performCommandAction(command: ProjectCommand) {
@@ -27,8 +27,12 @@ class ExecuteQueue(
     override suspend fun commandFailedAction(command: ProjectCommand) {}
 
     override fun update() {
-        while (repositoryViewModelAPI.remoteDataSourceAPI.getProjectCommandQueueLength() > 0) {
+        while (
+            @Suppress("DEPRECATION")
+            repositoryViewModelAPI.remoteDataSourceAPI.getProjectCommandQueueLength() > 0
+        ) {
             val projectCommandInfo =
+                @Suppress("DEPRECATION")
                 repositoryViewModelAPI.remoteDataSourceAPI.getProjectCommandFromQueue()!!
             var command = CommandWrapper.fromJson(projectCommandInfo.projectCommand)
             command =

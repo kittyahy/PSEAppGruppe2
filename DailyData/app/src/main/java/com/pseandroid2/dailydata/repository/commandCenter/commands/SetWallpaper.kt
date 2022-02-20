@@ -7,8 +7,8 @@ class SetWallpaper(projectID: Int, private val newWallpaper: Int, api: Repositor
     ProjectCommand(projectID = projectID, repositoryViewModelAPI = api) {
 
     companion object {
-         fun isIllegal(project: Project): Boolean {
-            return ProjectCommand.isIllegal(project)
+        fun isIllegal(project: Project): Boolean {
+            return isIllegal()
         }
 
         const val isAdminOperation: Boolean = true
@@ -18,7 +18,7 @@ class SetWallpaper(projectID: Int, private val newWallpaper: Int, api: Repositor
 
     override suspend fun execute() {
         @Suppress("Deprecation")
-        repositoryViewModelAPI.appDataBase.projectDataDAO().setColor(projectID!!, newWallpaper)
+        repositoryViewModelAPI.appDataBase.projectDataDAO().setColor(projectID, newWallpaper)
     }
 
     override suspend fun publish(): Boolean {

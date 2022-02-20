@@ -1,21 +1,15 @@
 package com.pseandroid2.dailydata.repository.commandCenter.commands
 
 import com.pseandroid2.dailydata.model.project.Project
+import com.pseandroid2.dailydata.model.table.TableLayout
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
-import com.pseandroid2.dailydata.repository.commandCenter.PublishQueue
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.Button
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ViewModelProject
 
-class AddButton(
-    projectID: Int,
-    val uiElement: UIElement,
-    val col: Int,
-    api: RepositoryViewModelAPI
-) : ProjectCommand(projectID = projectID, repositoryViewModelAPI = api) {
+class DeleteUIElement(projectID: Int, val uiElement: Int, api: RepositoryViewModelAPI) :
+    ProjectCommand(projectID = projectID, repositoryViewModelAPI = api) {
     companion object {
-        fun isIllegal(project: Project): Boolean {
-            return ProjectCommand.isIllegal(project)
+        fun isIllegal(layout: TableLayout): Boolean {
+            return isIllegal()
         }
 
         const val isAdminOperation: Boolean = false
@@ -26,7 +20,7 @@ class AddButton(
     override suspend fun execute() {
         @Suppress("Deprecation")
         repositoryViewModelAPI.appDataBase.uiElementDAO()
-            .insertUIElement(projectID!!, col, uiElement)
+            .removeUIElements(projectID, uiElement)
         super.execute()
     }
 

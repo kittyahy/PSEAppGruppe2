@@ -57,9 +57,6 @@ abstract class ProjectDataDAO {
     @Query("SELECT id, name, description, wallpaper, onlineId, color FROM project WHERE id = :id")
     abstract fun getProjectData(id: Int): Flow<ProjectData?>
 
-    @Query("SELECT layout FROM project WHERE id = :id")
-    abstract suspend fun getCurrentLayout(id: Int): String
-
     @Query("SELECT isOnline FROM project WHERE id = :id")
     abstract fun isOnline(id: Int): Flow<Boolean>
 
@@ -129,6 +126,7 @@ abstract class ProjectDataDAO {
      * It adds a specified user to the given project.
      */
     suspend fun addUser(projectId: Int, user: User) {
+        @Suppress("Deprecation")
         insertProjectUserMap(ProjectUserMap(projectId, user))
     }
 
@@ -137,6 +135,7 @@ abstract class ProjectDataDAO {
      */
     suspend fun removeUsers(projectId: Int, vararg users: User) {
         for (user: User in users) {
+            @Suppress("Deprecation")
             deleteProjectUserMap(ProjectUserMap(projectId, user))
         }
     }

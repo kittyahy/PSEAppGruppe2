@@ -10,9 +10,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.pseandroid2.dailydata.model.database.entities.ProjectData
 import com.pseandroid2.dailydata.model.graph.Graph
-import com.pseandroid2.dailydata.model.graph.GraphType
 import com.pseandroid2.dailydata.model.notifications.Notification
 import com.pseandroid2.dailydata.model.notifications.TimeNotification
 import com.pseandroid2.dailydata.model.project.Project
@@ -30,15 +28,12 @@ import com.pseandroid2.dailydata.ui.grapthstrategy.IntLineChartStrategy
 import com.pseandroid2.dailydata.ui.grapthstrategy.PieChartStrategy
 import com.pseandroid2.dailydata.ui.grapthstrategy.TimeLineChartStrategy
 import com.pseandroid2.dailydata.ui.link.appLinks.JoinProjectLinkManager
-import com.pseandroid2.dailydata.ui.project.data.DataTabs
 import com.pseandroid2.dailydata.util.Consts.LOG_TAG
 import com.pseandroid2.dailydata.util.ui.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import java.lang.IllegalArgumentException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -319,7 +314,7 @@ class ProjectDataSettingsScreenViewModel @Inject constructor(
             is ProjectDataSettingsScreenEvent.OnLeaveProject -> {
                 viewModelScope.launch {
                     project.value!!.removeUser(repository.serverHandler.loggedIn)
-                    project.value!!.unlink()
+                    project.value!!.unsubscribe()
                     sendUiEvent(UiEvent.PopBackStack)
                 }
             }

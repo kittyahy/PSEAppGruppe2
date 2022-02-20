@@ -3,20 +3,24 @@ package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.a
 import android.util.Log
 import com.google.gson.Gson
 import com.pseandroid2.dailydata.model.database.AppDataBase
-import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.project.InMemoryProject
+import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.model.table.ArrayListLayout
 import com.pseandroid2.dailydata.model.table.ArrayListTable
 import com.pseandroid2.dailydata.model.users.User
+import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
 import com.pseandroid2.dailydata.util.Consts.LOG_TAG
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class ProjectFlowProvider(val projId: Int, private val db: AppDataBase) :
+class ProjectFlowProvider(
+    private val projId: Int,
+    private val db: AppDataBase,
+    private val rds: RemoteDataSourceAPI
+) :
     FlowProvider<Project?>() {
 
     companion object {
@@ -50,7 +54,7 @@ class ProjectFlowProvider(val projId: Int, private val db: AppDataBase) :
                     project.setDesc(it.description)
                     project.setPath(it.wallpaper)
                     project.setColor(it.color)
-                    project.setAdmin(db.projectDataDAO().getAdminByIds(it.id).first()[0].user)
+                    project.getAdminFromRDS(rds)
                     if (emitData()) {
                         mutableFlow.emit(project)
                         Log.v(LOG_TAG, "Emission of ProjectData: ${Gson().toJson(it)}")
@@ -93,7 +97,7 @@ class ProjectFlowProvider(val projId: Int, private val db: AppDataBase) :
         launch(Dispatchers.IO) {
             Log.i(LOG_TAG, "Start observing the Table of Project with id $projId")
             db.tableContentDAO().getRowsById(projId).distinctUntilChanged().collect { rows ->
-                val layout = ArrayListLayout(db.projectDataDAO().getCurrentLayout(projId))
+                val layout = ArrayListLayout(db.layoutDAO().getCurrentColumns(projId))
                 val table = ArrayListTable(layout)
                 for (row in rows) {
                     table.addRow(row)
