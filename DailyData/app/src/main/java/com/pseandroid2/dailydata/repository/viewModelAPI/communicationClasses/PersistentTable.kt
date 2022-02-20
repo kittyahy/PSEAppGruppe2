@@ -10,7 +10,6 @@ import com.pseandroid2.dailydata.repository.commandCenter.commands.DeleteRow
 import com.pseandroid2.dailydata.repository.commandCenter.commands.ProjectCommand
 import com.pseandroid2.dailydata.repository.commandCenter.commands.SetRow
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 
 class PersistentTable(
@@ -49,15 +48,15 @@ class PersistentTable(
     }
 
     override suspend fun addRow(row: Row) {
-        saveToDB(AddRow(projectID, row, repositoryViewModelAPI))
+        saveToDB(AddRow(projectID, row, repositoryViewModelAPI), TableOperation.ADD_ROW.id)
     }
 
     override suspend fun setRow(row: Row) {
-        saveToDB(SetRow(projectID, row, repositoryViewModelAPI))
+        saveToDB(SetRow(projectID, row, repositoryViewModelAPI), TableOperation.CHANGE_ROW.id)
     }
 
     override suspend fun deleteRow(row: Row) {
-        saveToDB(DeleteRow(projectID, row, repositoryViewModelAPI))
+        saveToDB(DeleteRow(projectID, row, repositoryViewModelAPI), TableOperation.DELETE_ROW.id)
     }
 
     override fun getColumn(col: Int): List<Any> {
@@ -81,7 +80,11 @@ class PersistentTable(
         return table.iterator()
     }
 
-    private suspend fun saveToDB(projectCommand: ProjectCommand) {
+    private suspend fun saveToDB(projectCommand: ProjectCommand, vararg operationIDs: String) {
+        for (id in operationIDs) {
+            @Suppress("DEPRECATION")
+            mutableIllegalOperation[id]!!.emit(false)
+        }
         repositoryViewModelAPI.projectHandler.executeQueue.add(projectCommand)
     }
 

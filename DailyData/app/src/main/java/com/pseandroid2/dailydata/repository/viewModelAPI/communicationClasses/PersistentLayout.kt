@@ -38,7 +38,8 @@ class PersistentLayout(
                 element,
                 col,
                 repositoryViewModelAPI
-            )
+            ),
+            LayoutOperation.ADD_COLUMN.id
         )
 
         return 0
@@ -57,11 +58,17 @@ class PersistentLayout(
     }
 
     override suspend fun setUIElement(col: Int, element: UIElement) {
-        saveToDB(SetUIElement(projectID, element, col, repositoryViewModelAPI))
+        saveToDB(
+            SetUIElement(projectID, element, col, repositoryViewModelAPI),
+            LayoutOperation.CHANGE_UIELEMENT.id
+        )
     }
 
     override suspend fun removeUIElement(col: Int, id: Int) {
-        saveToDB(DeleteUIElement(projectID, id, repositoryViewModelAPI))
+        saveToDB(
+            DeleteUIElement(projectID, id, repositoryViewModelAPI),
+            LayoutOperation.DELETE_UIELEMENT.id
+        )
     }
 
     override fun getName(col: Int): String {
@@ -82,17 +89,23 @@ class PersistentLayout(
                 projectID,
                 specs,
                 repositoryViewModelAPI
-            )
+            ), LayoutOperation.ADD_COLUMN.id
         )
         return 0
     }
 
     override suspend fun setColumn(specs: ColumnData) {
-        saveToDB(SetColumn(projectID, specs, repositoryViewModelAPI))
+        saveToDB(
+            SetColumn(projectID, specs, repositoryViewModelAPI),
+            LayoutOperation.CHANGE_COLUMN.id
+        )
     }
 
     override suspend fun deleteColumn(col: Int) {
-        saveToDB(DeleteColumn(projectID, col, repositoryViewModelAPI))
+        saveToDB(
+            DeleteColumn(projectID, col, repositoryViewModelAPI),
+            LayoutOperation.DELETE_COLUMN.id
+        )
     }
 
     override fun toJSON(): String {
@@ -103,7 +116,11 @@ class PersistentLayout(
         return tableLayout.iterator()
     }
 
-    private suspend fun saveToDB(projectCommand: ProjectCommand) {
+    private suspend fun saveToDB(projectCommand: ProjectCommand, vararg operationIDs: String) {
+        for (id in operationIDs) {
+            @Suppress("DEPRECATION")
+            mutableIllegalOperation[id]!!.emit(false)
+        }
         repositoryViewModelAPI.projectHandler.executeQueue.add(projectCommand)
     }
 

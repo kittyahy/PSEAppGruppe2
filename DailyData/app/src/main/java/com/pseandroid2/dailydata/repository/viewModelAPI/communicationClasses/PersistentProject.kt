@@ -89,16 +89,14 @@ class PersistentProject(
         get() = project.name
 
     override suspend fun setName(name: String) {
-        mutableIllegalOperation[ProjectOperation.SET_PROJECT_NAME.id]!!.emit(false)
-        executeQueue.add(SetTitle(id, name, r))
+        s(SetTitle(id, name, r), ProjectOperation.SET_PROJECT_NAME.id)
     }
 
     override val desc: String
         get() = project.desc
 
     override suspend fun setDesc(desc: String) {
-        mutableIllegalOperation[ProjectOperation.SET_PROJECT_DESC.id]!!.emit(false)
-        executeQueue.add(SetDescription(id, desc, r))
+        s(SetDescription(id, desc, r), ProjectOperation.SET_PROJECT_DESC.id)
     }
 
     override val path: String
@@ -116,8 +114,7 @@ class PersistentProject(
     }
 
     override suspend fun addGraph(graph: Graph<*, *>) {
-        mutableIllegalOperation[ProjectOperation.ADD_GRAPH.id]!!.emit(false)
-        executeQueue.add(AddGraph(id, graph, r))
+        s(AddGraph(id, graph, r), ProjectOperation.ADD_GRAPH.id)
     }
 
     override suspend fun addGraphs(graphsToAdd: Collection<Graph<*, *>>) {
@@ -162,8 +159,7 @@ class PersistentProject(
         get() = TODO("Not yet implemented")
 
     override suspend fun addNotification(notification: Notification) {
-        mutableIllegalOperation[ProjectOperation.ADD_NOTIFICATION.id]!!.emit(false)
-        executeQueue.add(AddNotification(id, notification, r))
+        s(AddNotification(id, notification, r), ProjectOperation.ADD_NOTIFICATION.id)
     }
 
     override suspend fun addNotifications(notifications: Collection<Notification>) {
@@ -177,14 +173,12 @@ class PersistentProject(
     }
 
     override suspend fun removeNotification(id: Int) {
-        mutableIllegalOperation[ProjectOperation.DELETE_NOTIFICATION.id]!!.emit(false)
-        TODO("Not yet implemented after refactoring")
+        s(TODO("Not yet implemented after refactoring"), ProjectOperation.DELETE_NOTIFICATION.id)
     }
 
     override suspend fun addUser(user: User) {
         if (user !in users && users.size < Project.MAXIMUM_PROJECT_USERS) {
-            mutableIllegalOperation[ProjectOperation.ADD_USER.id]!!.emit(false)
-            executeQueue.add(AddUser(id, user, r))
+            s(AddUser(id, user, r), ProjectOperation.ADD_USER.id)
         } else {
             throw IllegalOperationException(
                 "Could not add the User ${Gson().toJson(user)} to " +
@@ -211,13 +205,11 @@ class PersistentProject(
         get() = project.onlineId
 
     override suspend fun publish() {
-        mutableIllegalOperation[ProjectOperation.PUBLISH_PROJECT.id]!!.emit(false)
-        executeQueue.add(PublishProject(id, r))
+        s(PublishProject(id, r), ProjectOperation.PUBLISH_PROJECT.id)
     }
 
     override suspend fun setAdmin(admin: User) {
-        mutableIllegalOperation[ProjectOperation.SET_ADMIN.id]!!.emit(false)
-        executeQueue.add(TODO("Set Admin Command"))
+        s(TODO("Set Admin Command"), ProjectOperation.SET_ADMIN.id)
     }
 
     override val isOnline: Boolean
@@ -231,7 +223,11 @@ class PersistentProject(
         TODO("deleteProj")
     }
 
-    private suspend fun s(projectCommand: ProjectCommand) {
-        r.projectHandler.executeQueue.add(projectCommand)
+    private suspend fun s(projectCommand: ProjectCommand, vararg operationIDs: String) {
+        for (id in operationIDs) {
+            @Suppress("DEPRECATION")
+            mutableIllegalOperation[id]!!.emit(false)
+        }
+        executeQueue.add(projectCommand)
     }
 }

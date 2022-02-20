@@ -63,6 +63,8 @@ class ArrayListTable(override val layout: TableLayout = ArrayListLayout()) : Tab
     }
 
     override suspend fun setRow(row: Row) {
+        @Suppress("DEPRECATION")
+        mutableIllegalOperation[TableOperation.CHANGE_ROW.id]!!.emit(false)
         val arrayListRow = rowValidation(row)
         val index = table.indexOf(rowValidation(arrayListRow))
         table.remove(arrayListRow)
@@ -70,10 +72,14 @@ class ArrayListTable(override val layout: TableLayout = ArrayListLayout()) : Tab
     }
 
     override suspend fun deleteRow(row: Row) {
+        @Suppress("DEPRECATION")
+        mutableIllegalOperation[TableOperation.DELETE_ROW.id]!!.emit(false)
         table.remove(rowValidation(row))
     }
 
     override suspend fun setColumn(specs: ColumnData, default: Any) {
+        @Suppress("DEPRECATION")
+        mutableIllegalOperation[TableOperation.CHANGE_ROW.id]!!.emit(false)
         TODO("Not yet implemented")
     }
 

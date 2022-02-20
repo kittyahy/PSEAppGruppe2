@@ -31,11 +31,8 @@ import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.repository.commandCenter.commands.IllegalOperationException
 import com.pseandroid2.dailydata.repository.viewModelAPI.ProjectHandler
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ProjectOperation
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.TableOperation
 import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 
 class InMemoryProject
 constructor(
