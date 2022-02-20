@@ -114,7 +114,7 @@ fun WallpaperElement(
                 modifier = Modifier
                     .size((height / 2))
                     .clip(CircleShape)
-                    .background(color = color)
+                    .background(color = color).testTag("wallpaperColor")
             )
         }
         Column(
