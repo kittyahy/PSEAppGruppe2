@@ -48,6 +48,6 @@ interface Identifiable {
         @Suppress("DEPRECATION")
         this.persistentProject = persistentProject
         @Suppress("DEPRECATION")
-        this.connectToRepository(persistentProject.r)
+        this.connectToRepository(persistentProject.repositoryViewModelAPI)
     }
 }

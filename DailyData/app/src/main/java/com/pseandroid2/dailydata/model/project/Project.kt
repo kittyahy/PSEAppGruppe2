@@ -94,7 +94,7 @@ interface Project : ContainsOperations {
 
     val admin: User
 
-    suspend fun setAdmin(admin: User)
+    suspend fun resetAdmin()
 
     val isOnline: Boolean
 

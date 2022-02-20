@@ -8,7 +8,7 @@ class AddNotification(projectID: Int, val notification: Notification, api: Repos
     ProjectCommand(projectID = projectID, repositoryViewModelAPI = api) {
     companion object {
         fun isIllegal(project: Project): Boolean {
-            return ProjectCommand.isIllegal(project)
+            return isIllegal()
         }
 
         const val isAdminOperation: Boolean = false

@@ -2,6 +2,7 @@ package com.pseandroid2.dailydata.repository.commandCenter.commands
 
 import com.pseandroid2.dailydata.model.project.Project
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
+import kotlinx.coroutines.flow.first
 
 class PublishProject(projectID: Int, api: RepositoryViewModelAPI) :
     ProjectCommand(projectID = projectID, repositoryViewModelAPI = api) {
@@ -23,13 +24,13 @@ class PublishProject(projectID: Int, api: RepositoryViewModelAPI) :
             repositoryViewModelAPI.remoteDataSourceAPI.createNewOnlineProject("")
         ) //Todo Fehlerbehandlung, falls publishen fehl schlägt
         repositoryViewModelAPI.appDataBase.projectDataDAO().setOnline(true, projectID)
-        if (publish()) {
-            repositoryViewModelAPI.projectHandler.executeQueue.publishQueue.add(
-                CreateProject(
-                    projectID, null, repositoryViewModelAPI
-                )
+
+        val project = repositoryViewModelAPI.projectHandler.getProjectByID(projectID)
+        repositoryViewModelAPI.projectHandler.executeQueue.publishQueue.add(
+            CreateProject(
+                project.first(), null, repositoryViewModelAPI
             )
-        }
+        )
 
 
     }

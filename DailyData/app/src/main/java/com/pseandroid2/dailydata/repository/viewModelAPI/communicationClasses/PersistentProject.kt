@@ -28,31 +28,36 @@ import com.pseandroid2.dailydata.model.table.ColumnData
 import com.pseandroid2.dailydata.model.table.Row
 import com.pseandroid2.dailydata.model.table.Table
 import com.pseandroid2.dailydata.model.uielements.UIElement
+import com.pseandroid2.dailydata.model.users.SimpleUser
 import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddGraph
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddNotification
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddUser
+import com.pseandroid2.dailydata.repository.commandCenter.commands.DeleteGraph
+import com.pseandroid2.dailydata.repository.commandCenter.commands.DeleteNotification
+import com.pseandroid2.dailydata.repository.commandCenter.commands.DeleteProject
+import com.pseandroid2.dailydata.repository.commandCenter.commands.DeleteUser
 import com.pseandroid2.dailydata.repository.commandCenter.commands.IllegalOperationException
+import com.pseandroid2.dailydata.repository.commandCenter.commands.LeaveOnlineProject
 import com.pseandroid2.dailydata.repository.commandCenter.commands.ProjectCommand
 import com.pseandroid2.dailydata.repository.commandCenter.commands.PublishProject
+import com.pseandroid2.dailydata.repository.commandCenter.commands.ResetAdmin
 import com.pseandroid2.dailydata.repository.commandCenter.commands.SetDescription
 import com.pseandroid2.dailydata.repository.commandCenter.commands.SetTitle
+import com.pseandroid2.dailydata.repository.commandCenter.commands.SetWallpaper
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
 class PersistentProject(
     private val project: Project,
-    val r: RepositoryViewModelAPI,
+    val repositoryViewModelAPI: RepositoryViewModelAPI,
     scope: CoroutineScope
 ) : Project {
 
 
-    private val executeQueue = r.projectHandler.executeQueue
+    private val executeQueue = repositoryViewModelAPI.projectHandler.executeQueue
 
     override val graphs: List<Graph<*, *>>
         get() = project.graphs
@@ -60,7 +65,7 @@ class PersistentProject(
     override val users: List<User>
         get() = project.users
 
-    override val table: Table = PersistentTable(project.table, r, scope, id)
+    override val table: Table = PersistentTable(project.table, repositoryViewModelAPI, scope, id)
 
     override val notifications: List<Notification>
         get() = project.notifications
@@ -77,6 +82,16 @@ class PersistentProject(
             mutableIllegalOperation[operation.id] = MutableSharedFlow(1)
         }
         addFlows(table)
+        scope.launch {
+            admin = SimpleUser(
+                @Suppress("DEPRECATION")
+                repositoryViewModelAPI.remoteDataSourceAPI.getProjectAdmin(
+                    repositoryViewModelAPI.appDataBase.projectDataDAO().getOnlineId(id)
+                ),
+                "ADMIN"
+            )
+        }
+
     }
 
     override var id: Int
@@ -89,14 +104,14 @@ class PersistentProject(
         get() = project.name
 
     override suspend fun setName(name: String) {
-        s(SetTitle(id, name, r), ProjectOperation.SET_PROJECT_NAME.id)
+        saveToDB(SetTitle(id, name, repositoryViewModelAPI), ProjectOperation.SET_PROJECT_NAME.id)
     }
 
     override val desc: String
         get() = project.desc
 
     override suspend fun setDesc(desc: String) {
-        s(SetDescription(id, desc, r), ProjectOperation.SET_PROJECT_DESC.id)
+        saveToDB(SetDescription(id, desc, repositoryViewModelAPI), ProjectOperation.SET_PROJECT_DESC.id)
     }
 
     override val path: String
@@ -110,11 +125,11 @@ class PersistentProject(
         get() = project.color
 
     override suspend fun setColor(color: Int) {
-        TODO("changeWallpaper")
+        saveToDB(SetWallpaper(id, color, repositoryViewModelAPI), ProjectOperation.SET_COLOR.id)
     }
 
     override suspend fun addGraph(graph: Graph<*, *>) {
-        s(AddGraph(id, graph, r), ProjectOperation.ADD_GRAPH.id)
+        saveToDB(AddGraph(id, graph, repositoryViewModelAPI), ProjectOperation.ADD_GRAPH.id)
     }
 
     override suspend fun addGraphs(graphsToAdd: Collection<Graph<*, *>>) {
@@ -124,7 +139,7 @@ class PersistentProject(
     }
 
     override suspend fun removeGraph(id: Int) {
-        TODO("Not yet implemented")
+        saveToDB(DeleteGraph(this.id, id, repositoryViewModelAPI), ProjectOperation.DELETE_GRAPH.id)
     }
 
     override fun createTransformationFromString(transformationString: String): Project.DataTransformation<out Any> {
@@ -155,11 +170,10 @@ class PersistentProject(
         table.removeUIElement(col, id)
     }
 
-    override val admin: User
-        get() = TODO("Not yet implemented")
+    override lateinit var admin: User
 
     override suspend fun addNotification(notification: Notification) {
-        s(AddNotification(id, notification, r), ProjectOperation.ADD_NOTIFICATION.id)
+        saveToDB(AddNotification(id, notification, repositoryViewModelAPI), ProjectOperation.ADD_NOTIFICATION.id)
     }
 
     override suspend fun addNotifications(notifications: Collection<Notification>) {
@@ -173,12 +187,12 @@ class PersistentProject(
     }
 
     override suspend fun removeNotification(id: Int) {
-        s(TODO("Not yet implemented after refactoring"), ProjectOperation.DELETE_NOTIFICATION.id)
+        saveToDB(DeleteNotification(this.id, id, repositoryViewModelAPI), ProjectOperation.DELETE_NOTIFICATION.id)
     }
 
     override suspend fun addUser(user: User) {
         if (user !in users && users.size < Project.MAXIMUM_PROJECT_USERS) {
-            s(AddUser(id, user, r), ProjectOperation.ADD_USER.id)
+            saveToDB(AddUser(id, user, repositoryViewModelAPI), ProjectOperation.ADD_USER.id)
         } else {
             throw IllegalOperationException(
                 "Could not add the User ${Gson().toJson(user)} to " +
@@ -189,41 +203,47 @@ class PersistentProject(
     }
 
     override suspend fun addUsers(usersToAdd: Collection<User>) {
-        TODO("Not yet implemented")
+        for (user in usersToAdd) {
+            saveToDB(AddUser(id, user, repositoryViewModelAPI), ProjectOperation.ADD_USER.id)
+        }
     }
 
     override suspend fun removeUser(user: User) {
-        if (user in users && users.size > 1) {
-            TODO("deleteMember")
-        } else {
-            //TODO this error Message doesn't make any sense whatsoever considering what the if statement checks against
-            throw IllegalOperationException("This command is only usable by project admins and you are no project admin.")
+        @Suppress("DEPRECATION")
+        if (user.id == admin.id) {
+            saveToDB(ResetAdmin(id, repositoryViewModelAPI), ProjectOperation.SET_ADMIN.id)
+            if (user in users && users.size > 1) {
+                saveToDB(DeleteUser(id, user, repositoryViewModelAPI), ProjectOperation.DELETE_USER.id)
+            } else {
+                throw IllegalOperationException("This project does not contain this user.")
+            }
         }
+
     }
 
     override val onlineId: Long
         get() = project.onlineId
 
     override suspend fun publish() {
-        s(PublishProject(id, r), ProjectOperation.PUBLISH_PROJECT.id)
+        saveToDB(PublishProject(id, repositoryViewModelAPI), ProjectOperation.PUBLISH_PROJECT.id)
     }
 
-    override suspend fun setAdmin(admin: User) {
-        s(TODO("Set Admin Command"), ProjectOperation.SET_ADMIN.id)
+    override suspend fun resetAdmin() {
+        saveToDB(ResetAdmin(id, repositoryViewModelAPI), ProjectOperation.SET_ADMIN.id)
     }
 
     override val isOnline: Boolean
-        get() = TODO("Not yet implemented")
+        get() = onlineId != (-1).toLong()
 
     override suspend fun unsubscribe() {
-        TODO("Not yet implemented")
+        saveToDB(LeaveOnlineProject(id, repositoryViewModelAPI), ProjectOperation.LEAVE_PROJECT.id)
     }
 
     override suspend fun delete() {
-        TODO("deleteProj")
+        saveToDB(DeleteProject(id, repositoryViewModelAPI), ProjectOperation.DELETE.id)
     }
 
-    private suspend fun s(projectCommand: ProjectCommand, vararg operationIDs: String) {
+    private suspend fun saveToDB(projectCommand: ProjectCommand, vararg operationIDs: String) {
         for (id in operationIDs) {
             @Suppress("DEPRECATION")
             mutableIllegalOperation[id]!!.emit(false)

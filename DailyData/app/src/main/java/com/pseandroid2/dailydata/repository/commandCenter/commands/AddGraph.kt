@@ -8,7 +8,7 @@ class AddGraph(val id: Int, val graph: Graph<*, *>, api: RepositoryViewModelAPI)
     ProjectCommand(projectID = id, repositoryViewModelAPI = api) {
     companion object {
         fun isIllegal(project: Project): Boolean {
-            return ProjectCommand.isIllegal(project)
+            return isIllegal()
         }
 
         const val isAdminOperation: Boolean = false

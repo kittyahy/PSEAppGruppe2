@@ -11,7 +11,7 @@ class SetDescription(
 
     companion object {
         fun isIllegal(project: Project): Boolean {
-            return ProjectCommand.isIllegal(project)
+            return isIllegal()
         }
 
         const val isAdminOperation: Boolean = true

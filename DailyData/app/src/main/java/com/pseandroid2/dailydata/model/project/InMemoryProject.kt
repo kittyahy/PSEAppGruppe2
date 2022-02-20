@@ -194,8 +194,8 @@ constructor(
         table.layout.removeUIElement(col, id)
     }
 
-    override suspend fun setAdmin(admin: User) {
-        mutableAdmin = admin
+    override suspend fun resetAdmin() {
+        throw IllegalOperationException("Local Project only. Create an actual project in order to publish it")
     }
 
     override val onlineId: Long

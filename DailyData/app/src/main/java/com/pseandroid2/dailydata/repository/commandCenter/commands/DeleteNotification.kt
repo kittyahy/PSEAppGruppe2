@@ -6,7 +6,7 @@ import com.pseandroid2.dailydata.repository.RepositoryViewModelAPI
 
 class DeleteNotification(
     projectID: Int,
-    val notification: Notification,
+    val id: Int,
     api: RepositoryViewModelAPI
 ) :
     ProjectCommand(projectID = projectID, repositoryViewModelAPI = api) {
@@ -23,7 +23,7 @@ class DeleteNotification(
     override suspend fun execute() {
         @Suppress("DEPRECATION")
         repositoryViewModelAPI.appDataBase.notificationsDAO()
-            .deleteNotification(projectID, notification.id)
+            .deleteNotification(projectID, id)
         super.execute()
     }
 

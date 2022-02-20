@@ -13,7 +13,7 @@ class DeleteProject(private val projectId: Int, api: RepositoryViewModelAPI) :
     companion object {
         const val publishable: Boolean = false
         fun isIllegal(project: Project): Boolean {
-            return ProjectCommand.isIllegal(project)
+            return isIllegal()
         }
     }
 

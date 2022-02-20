@@ -46,7 +46,7 @@ class ProjectFlowProvider(private val projId: Int, private val db: AppDataBase) 
                     project.setDesc(it.description)
                     project.setPath(it.wallpaper)
                     project.setColor(it.color)
-                    project.setAdmin(db.projectDataDAO().getAdminByIds(it.id).first()[0].user)
+                    project.resetAdmin(db.projectDataDAO().getAdminByIds(it.id).first()[0].user)
                     if (emitData()) {
                         mutableFlow.emit(project)
                         Log.v(LOG_TAG, "Emission of ProjectData: ${Gson().toJson(it)}")
