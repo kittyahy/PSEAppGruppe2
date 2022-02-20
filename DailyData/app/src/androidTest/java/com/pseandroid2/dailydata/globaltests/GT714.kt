@@ -31,7 +31,7 @@ class GT714 {
     /**
      * [Kresse-project] [com.pseandroid2.dailydata.globaltests.DefaultProject.createProjectTest]
      */
-  //  @Ignore(" needs a \"Kresse\" Project, save does not work")
+   @Ignore(" needs a \"Kresse\" Project, save does not work")
     @Test
     @InternalCoroutinesApi
     fun changeProjectName() {
