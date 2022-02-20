@@ -57,6 +57,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
@@ -115,7 +116,7 @@ fun WallpaperElement(
                 modifier = Modifier
                     .size((height / 2))
                     .clip(CircleShape)
-                    .background(color = color)
+                    .background(color = color).testTag("wallpaperColor")
             )
         }
         Column(
@@ -180,7 +181,7 @@ fun ListInput(
                         modifier = Modifier
                             .size(height)
                             .wrapContentSize(Alignment.Center)
-                            .clickable(onClick = { onClickItem(index, elements[index]) })
+                            .clickable(onClick = { onClickItem(index, elements[index]) }).testTag("DeleteTime")
                     ) {
                         Icon(
                             imageVector = elementIcon,

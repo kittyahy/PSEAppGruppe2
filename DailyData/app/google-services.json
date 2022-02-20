@@ -9,7 +9,27 @@
       "client_info": {
         "mobilesdk_app_id": "1:240472992001:android:300a7a66a6ce6dec8ad300",
         "android_client_info": {
-          "package_name": "com.pseandroid2.dailydata"
+          "/*
+
+    DailyData is an android app to easily create diagrams from data one has collected
+    Copyright (C) 2022  Antonia Heiming, Anton Kadelbach, Arne Kuchenbecker, Merlin Opp, Robin Amman
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+*/
+
+package_name": "com.pseandroid2.dailydata"
         }
       },
       "oauth_client": [
@@ -17,7 +37,27 @@
           "client_id": "240472992001-lq15nsv3m37e1fosirn5t6ciuqksm5l2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.pseandroid2.dailydata",
+            "/*
+
+    DailyData is an android app to easily create diagrams from data one has collected
+    Copyright (C) 2022  Antonia Heiming, Anton Kadelbach, Arne Kuchenbecker, Merlin Opp, Robin Amman
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+*/
+
+package_name": "com.pseandroid2.dailydata",
             "certificate_hash": "5b6f9c991923e434d4cffcf53741650ada490747"
           }
         },

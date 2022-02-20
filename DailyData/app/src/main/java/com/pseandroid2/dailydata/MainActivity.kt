@@ -58,10 +58,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             DailyDataTheme {
-                println("LINK_HELP_0")
                 Main()
                 joinProjectLink()
-                println("LINK_HELP_X")
             }
         }
     }
@@ -71,18 +69,14 @@ class MainActivity : ComponentActivity() {
      * If it was started by an correct link it will call openJoinProjectScreen()
      */
     private fun joinProjectLink() {
-        println("LINK_HELP_0.1")
-        println("LINK_HELP_0.2")
         val dynamicLink = Firebase.dynamicLinks.getDynamicLink(intent)
             .addOnSuccessListener(this) { pendingDynamicLinkData ->
-                println("LINK_HELP_1")
                 // Get deep link from result (may be null if no link is found)
                 var deepLink: Uri? = null
                 if (pendingDynamicLinkData != null) {
                     deepLink = pendingDynamicLinkData.link
                 }
 
-                println("LINK_HELP_2")
                 if (deepLink != null) {
                     // get projectID from link
                     val projectIDString: String = deepLink.getQueryParameter("projectid")
@@ -90,10 +84,7 @@ class MainActivity : ComponentActivity() {
                     val projectID: Long = joinProjectLinkManager.decodePostID(projectIDString)
 
                     // open join project screen when project id is valid
-                    println("LINK_HELP_3")
-                    println("HEEEEEEEELP: " + projectID)
                     if (projectID > 0) {
-                        println("LINK_HELP_4: " + projectID)
                         pID = projectID
                     }
                 } else {
@@ -102,8 +93,7 @@ class MainActivity : ComponentActivity() {
 
             }
             .addOnFailureListener(this) {
-                e -> Log.w("DynamicLink", "getDynamicLink:onFailure", e)
-                println("LINK_HELP_-1")}
+                e -> Log.w("DynamicLink", "getDynamicLink:onFailure", e)}
     }
 }
 
