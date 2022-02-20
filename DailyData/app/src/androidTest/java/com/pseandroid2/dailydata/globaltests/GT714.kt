@@ -21,7 +21,7 @@ import org.junit.Rule
 import org.junit.Test
 
 /**
- * testing: "Ändere Projektnamen", 7.1.2
+ * testing: "Ändere Projektnamen", 7.1.4
  */
 class GT714 {
 
@@ -31,7 +31,7 @@ class GT714 {
     /**
      * [Kresse-project] [com.pseandroid2.dailydata.globaltests.DefaultProject.createProjectTest]
      */
-    @Ignore(" needs a \"Kresse\" Project, save does not work")
+   @Ignore(" needs a \"Kresse\" Project, save does not work")
     @Test
     @InternalCoroutinesApi
     fun changeProjectName() {
@@ -44,7 +44,6 @@ class GT714 {
         runBlocking {
             launch(Dispatchers.Main) {
                 composeRule.activity.onBackPressed()
-                Log.d(LOG_TAG, "Hit the Back Button")
             }
         }
         runBlocking {
