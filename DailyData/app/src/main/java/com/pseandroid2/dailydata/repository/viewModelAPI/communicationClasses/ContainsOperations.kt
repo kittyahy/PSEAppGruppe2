@@ -1,4 +1,4 @@
-package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters
+package com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow

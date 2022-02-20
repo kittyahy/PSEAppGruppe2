@@ -25,6 +25,7 @@ class JoinOnlineProject(
         @Suppress("DEPRECATION")
         repositoryViewModelAPI.remoteDataSourceAPI.joinProject(onlineID)
         val admin = SimpleUser(
+            @Suppress("DEPRECATION")
             repositoryViewModelAPI.remoteDataSourceAPI.getProjectAdmin(onlineID),
             "ADMIN"
         )

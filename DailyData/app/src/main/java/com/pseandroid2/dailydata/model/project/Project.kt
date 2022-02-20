@@ -30,8 +30,7 @@ import com.pseandroid2.dailydata.model.table.TableLayout
 import com.pseandroid2.dailydata.model.transformation.TransformationFunction
 import com.pseandroid2.dailydata.model.uielements.UIElement
 import com.pseandroid2.dailydata.model.users.User
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.ContainsOperations
-import kotlinx.coroutines.flow.Flow
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ContainsOperations
 
 /**
  * Contains all data of one specific Project

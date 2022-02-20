@@ -27,9 +27,7 @@ import com.pseandroid2.dailydata.model.users.NullUser
 import com.pseandroid2.dailydata.model.users.User
 import com.pseandroid2.dailydata.repository.commandCenter.commands.AddColumn
 import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.DataType
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ProjectOperation
-import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.adapters.ContainsOperations
-import kotlinx.coroutines.flow.Flow
+import com.pseandroid2.dailydata.repository.viewModelAPI.communicationClasses.ContainsOperations
 import java.time.LocalDateTime
 import kotlin.reflect.KClass
 
