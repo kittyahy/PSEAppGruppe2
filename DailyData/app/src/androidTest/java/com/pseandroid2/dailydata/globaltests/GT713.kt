@@ -29,7 +29,7 @@ class GT713 {
     @Test
     fun createProjectFromProjectTemplate(){
         composeRule.onNodeWithText("Project from Template").performClick()
-        TODO("If anything need to be filled, fill it")
+        TODO("If anything need to be in the template filled, fill it")
         TODO("Save the template")
 
         runBlocking {

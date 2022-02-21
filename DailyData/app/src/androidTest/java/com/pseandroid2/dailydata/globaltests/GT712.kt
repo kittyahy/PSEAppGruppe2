@@ -21,7 +21,6 @@ import org.junit.Test
 
 /**
  * testing: "Leeres Projekt erstellen", 7.1.2
- * testing: "Graphtypen auswählen", 7.1.19
  */
 class GT712 {
 
@@ -76,9 +75,6 @@ class GT712 {
 
         composeRule.onNodeWithText("Add new Project").assertExists()
         composeRule.onAllNodes(matcher = hasText("Kresse")).onFirst().assertExists()
-        composeRule.onAllNodes(matcher = hasText("Kresse")).onFirst().performClick()
-        composeRule.onNodeWithText("Settings").performClick()
-        composeRule.onNodeWithText("Line Chart").assertExists()
     }
 
 }

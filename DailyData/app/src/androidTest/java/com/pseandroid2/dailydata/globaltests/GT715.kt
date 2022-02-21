@@ -20,7 +20,7 @@ import org.junit.Test
 
 
 /**
- * testing: "Ändere Projektnamen", 7.1.2
+ * testing: "Ändere Projektbeschreibung", 7.1.5
  */
 class GT715 {
 
@@ -30,7 +30,7 @@ class GT715 {
     /**
      * [Kresse-project] [com.pseandroid2.dailydata.globaltests.DefaultProject.createProjectTest]
      */
-    @Ignore("back to overview is missing, needs a \"Kresse\" Project")
+    @Ignore(", needs a \"Kresse\" Project")
     @Test
     //TODO(needs a project "Kresse")
     @InternalCoroutinesApi
