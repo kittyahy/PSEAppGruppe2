@@ -8,6 +8,7 @@ import com.pseandroid2.dailydata.MainActivity
 import kotlinx.coroutines.InternalCoroutinesApi
 import org.junit.Assert
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
@@ -27,7 +28,7 @@ class GT7147 {
         GlobalTestsHelpingMethods.createTestProject(composeRule, projectName)
     }
 
-    //("TODO: Lösche das Projekt nach dem Test, sodass es nicht mehrere Projekte mit dem gleichen Namen existieren, da sonst hier ein Error geworfen wird")
+    @Ignore("TODO: Lösche das Projekt nach dem Test, sodass es nicht mehrere Projekte mit dem gleichen Namen existieren, da sonst hier ein Error geworfen wird")
     /**
      * tests: "Zeit zum Öffnen eines Projekts", 7.1.47
      */
