@@ -58,7 +58,7 @@ class PostsControllerPostContentTests {
 
     /**
      * Converts Ints into an byte array
-    */
+     */
     private fun byteArrayOfInts(vararg ints: Int) =
         ByteArray(ints.size) { pos -> ints[pos].toByte() }
 
@@ -109,7 +109,6 @@ class PostsControllerPostContentTests {
         Assert.assertEquals("graph template", graphTemplate)
     }
 
-    /* TODO: In the quality phase
     @ExperimentalCoroutinesApi
     @Test
     fun getFromWrongPostID() = runTest {
@@ -120,5 +119,4 @@ class PostsControllerPostContentTests {
         Assert.assertEquals("", restAPI.getProjectTemplate(-1, authToken))
         Assert.assertEquals("", restAPI.getGraphTemplate(-1, 1, authToken))
     }
-    */
 }
