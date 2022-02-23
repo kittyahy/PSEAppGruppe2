@@ -19,7 +19,7 @@ abstract class OnlineAdminCommand(project: Project) :
         }
     }
 
-    override val publishable = true
+    val publishable = true
 
     override suspend fun publish(
         repositoryViewModelAPI: RepositoryViewModelAPI,

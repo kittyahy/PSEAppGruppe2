@@ -26,7 +26,7 @@ class AddMember(projectID: Int, private val member: Member) :
         super.execute(repositoryViewModelAPI, publishQueue)
     }
 
-    override fun publish(
+    override suspend fun publish(
         repositoryViewModelAPI: RepositoryViewModelAPI,
         publishQueue: PublishQueue
     ): Boolean {

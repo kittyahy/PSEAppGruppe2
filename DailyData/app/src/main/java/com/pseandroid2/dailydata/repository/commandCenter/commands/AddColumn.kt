@@ -31,7 +31,7 @@ class AddColumn(projectID: Int, column: Column) : ProjectCommand(projectID = pro
         super.execute(repositoryViewModelAPI, publishQueue)
     }
 
-    override fun publish(
+    override suspend fun publish(
         repositoryViewModelAPI: RepositoryViewModelAPI,
         publishQueue: PublishQueue
     ): Boolean {

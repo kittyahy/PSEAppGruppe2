@@ -25,7 +25,7 @@ class SetDescription(projectID: Int, private val newDescription: String) :
             .setDescription(projectID!!, newDescription)
     }
 
-    override fun publish(
+    override suspend fun publish(
         repositoryViewModelAPI: RepositoryViewModelAPI,
         publishQueue: PublishQueue
     ): Boolean {

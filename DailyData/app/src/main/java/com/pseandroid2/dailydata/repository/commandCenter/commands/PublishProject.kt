@@ -40,7 +40,7 @@ class PublishProject(private val project: Project) :
         }
     }
 
-    override fun publish(
+    override suspend fun publish(
         repositoryViewModelAPI: RepositoryViewModelAPI,
         publishQueue: PublishQueue
     ): Boolean {

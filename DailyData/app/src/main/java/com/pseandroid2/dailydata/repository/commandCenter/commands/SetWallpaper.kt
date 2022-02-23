@@ -24,7 +24,7 @@ class SetWallpaper(projectID: Int, private val newWallpaper: Int) :
         repositoryViewModelAPI.appDataBase.projectDataDAO().setColor(projectID!!, newWallpaper)
     }
 
-    override fun publish(
+    override suspend fun publish(
         repositoryViewModelAPI: RepositoryViewModelAPI,
         publishQueue: PublishQueue
     ): Boolean {

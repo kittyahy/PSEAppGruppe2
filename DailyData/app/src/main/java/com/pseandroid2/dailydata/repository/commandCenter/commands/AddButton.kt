@@ -26,7 +26,7 @@ class AddButton(projectID: Int, val button: Button) : ProjectCommand(projectID =
         super.execute(repositoryViewModelAPI, publishQueue)
     }
 
-    override fun publish(
+    override suspend fun publish(
         repositoryViewModelAPI: RepositoryViewModelAPI,
         publishQueue: PublishQueue
     ): Boolean {

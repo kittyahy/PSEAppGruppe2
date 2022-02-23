@@ -25,7 +25,7 @@ class AddGraph(projectID: Int, val graph: Graph) : ProjectCommand(projectID = pr
         super.execute(repositoryViewModelAPI, publishQueue)
     }
 
-    override fun publish(
+    override suspend fun publish(
         repositoryViewModelAPI: RepositoryViewModelAPI,
         publishQueue: PublishQueue
     ): Boolean {

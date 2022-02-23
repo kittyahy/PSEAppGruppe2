@@ -29,7 +29,7 @@ class LeaveOnlineProject(projectID: Int) :
         super.execute(repositoryViewModelAPI, publishQueue)
     }
 
-    override fun publish(
+    override suspend fun publish(
         repositoryViewModelAPI: RepositoryViewModelAPI,
         publishQueue: PublishQueue
     ): Boolean {

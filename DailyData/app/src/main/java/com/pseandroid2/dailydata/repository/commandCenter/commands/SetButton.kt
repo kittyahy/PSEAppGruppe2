@@ -29,7 +29,7 @@ class SetButton(projectID: Int, val button: UIElement) : ProjectCommand(projectI
         super.execute(repositoryViewModelAPI, publishQueue)
     }
 
-    override fun publish(
+    override suspend fun publish(
         repositoryViewModelAPI: RepositoryViewModelAPI,
         publishQueue: PublishQueue
     ): Boolean {

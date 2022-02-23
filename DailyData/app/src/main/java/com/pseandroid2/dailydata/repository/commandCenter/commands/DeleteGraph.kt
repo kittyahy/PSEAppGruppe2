@@ -24,7 +24,7 @@ class DeleteGraph(projectID: Int, val graph: Graph<*, *>) : ProjectCommand(proje
         super.execute(repositoryViewModelAPI, publishQueue)
     }
 
-    override fun publish(
+    override suspend fun publish(
         repositoryViewModelAPI: RepositoryViewModelAPI,
         publishQueue: PublishQueue
     ): Boolean {
