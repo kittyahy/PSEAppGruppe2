@@ -10,8 +10,8 @@ import kotlinx.coroutines.test.runTest
 
 
 class FirebaseRegisterNewUser {
-     // NOTE: The test works but it got removed because every time a new email and password ist needed and we don't want to have to many test firebase accounts in our firebase-project
-
+    // NOTE: The test works but it got removed because every time a new email and password ist needed and we don't want to have to many test firebase accounts in our firebase-project
+    /*
     @ExperimentalCoroutinesApi
     @Test
     fun registerNewUser() = runTest {
@@ -20,10 +20,9 @@ class FirebaseRegisterNewUser {
 
         var fm = FirebaseManager(null)
 
-
-         for (i in 3..TestsUsers.email.size-1) {
-             Assert.assertEquals(FirebaseReturnOptions.REGISTERED, fm.registerUserWithEmailAndPassword(TestsUsers.email[i], TestsUsers.password[i]))
+         for (i in 0..TestsUsers.email.size) {
+             Assert.assertEquals(FirebaseReturnOptions.REGISTERED, fm.registerUserWithEmailAndPassword(TestsUsers.email[0], TestsUsers.password[0]))
          }
     }
-
+     */
 }
