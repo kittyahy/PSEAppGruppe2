@@ -44,5 +44,4 @@ class DefaultProject {
         composeRule.onNodeWithText("OK").performClick()
         composeRule.onNodeWithText("Save").performClick()
     }
-
 }
