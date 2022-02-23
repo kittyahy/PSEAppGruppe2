@@ -35,7 +35,7 @@ class GT7133 {
         GlobalTestsHelpingMethods.createTestProject(composeRule, projectName)
     }
 
-    @Ignore("")
+    @Ignore("Not all for this test necessary features exists")
     /**
      * tests: "Link erstellen", 7.1.33
      */

@@ -1,7 +1,7 @@
 package com.pseandroid2.dailydata.globaltests
 
 object TestUsers {
-    val userEMail: Array<String> = arrayOf("test@student.kit.edu", "pseFan@student.kit.edu", "unermüdlicherStudent@student.kit.edu",
+    val eMail: Array<String> = arrayOf("test@student.kit.edu", "pseFan@student.kit.edu", "unermüdlicherStudent@student.kit.edu",
         "3@student.kit.edu", "4@student.kit.edu", "5@student.kit.edu",
         "6@student.kit.edu", "7@student.kit.edu", "8@student.kit.edu",
         "9@student.kit.edu", "10@student.kit.edu", "11@student.kit.edu",
