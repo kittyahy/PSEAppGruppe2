@@ -28,7 +28,6 @@ class DefaultProject {
     @InternalCoroutinesApi
     @Test
     fun createProjectTest() {
-
         composeRule.onNodeWithText("Add new Project").performClick()
         composeRule.onNodeWithText("Add Title").performTextInput("Kresse")
         composeRule.onNodeWithText("Add Table Column").performClick()

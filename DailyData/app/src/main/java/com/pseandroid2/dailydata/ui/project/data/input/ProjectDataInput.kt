@@ -203,18 +203,25 @@ fun IncButtons(
     onClickDec : (id : Int) -> Unit,
     onClickAdd : (id : Int) -> Unit
 ) {
-    IncButton(
-        name = "Coffee",
-        value = 0,
-        onClickInc = {  },
-        onClickDec = {  },
-        onClickAdd = {  }
-    )
     Column(
         modifier = Modifier
             .padding(horizontal = 16.dp)
             .fillMaxWidth()
     ) {
+        IncButton(
+            name = "Coffee 1",
+            value = 0,
+            onClickInc = {  },
+            onClickDec = {  },
+            onClickAdd = {  }
+        )
+        IncButton(
+            name = "Coffee 2",
+            value = 5,
+            onClickInc = {  },
+            onClickDec = {  },
+            onClickAdd = {  }
+        )
         for(button in buttons) {
             IncButton(
                 name = button.name,
@@ -301,6 +308,42 @@ fun Columns (
         .padding(horizontal = 16.dp)
         .fillMaxWidth()
     ) {
+        TableColumn(
+            name = "Coffee 1",
+            dataType = DataType.WHOLE_NUMBER,
+            value = "",
+            placeholder = "",
+            onValueChange = {
+
+            }
+        )
+        TableColumn(
+            name = "Coffee 1",
+            dataType = DataType.FLOATING_POINT_NUMBER,
+            value = "",
+            placeholder = "",
+            onValueChange = {
+
+            }
+        )
+        TableColumn(
+            name = "Coffee 1",
+            dataType = DataType.STRING,
+            value = "",
+            placeholder = "",
+            onValueChange = {
+
+            }
+        )
+        TableColumn(
+            name = "Coffee 1",
+            dataType = DataType.TIME,
+            value = "",
+            placeholder = "",
+            onValueChange = {
+
+            }
+        )
         for (i in table.indices) {
             TableColumn(
                 name = table[i].name,
@@ -322,7 +365,6 @@ fun Columns (
             }
         }
     }
-
 }
 
 @Composable
@@ -405,6 +447,7 @@ fun Table(
     val screenHeight = configuration.screenHeightDp.dp
     val state = rememberScrollState()
     val width = 100.dp
+    /*
     Column(modifier = Modifier
         .fillMaxWidth()
         .heightIn(0.dp, screenHeight - 160.dp)
@@ -426,6 +469,80 @@ fun Table(
                         Text(text = "(${header[i].unit})", fontSize = 10.sp)
                     }
                     if (i < header.lastIndex) {
+                        Divider(modifier = Modifier
+                            .fillMaxHeight()
+                            .width(1.dp)
+                        )
+                    }
+                }
+            }
+            Divider()
+        }
+        LazyColumn {
+            itemsIndexed(data) { index, row ->
+                Row(
+                    modifier = Modifier
+                        .horizontalScroll(state = state)
+                        .height(IntrinsicSize.Min)
+                        .pointerInput(Unit) {
+                            detectTapGestures(
+                                onLongPress = {
+                                    onPress(index)
+                                }
+                            )
+                        },
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    for(i in row.elements.indices) {
+                        Text(text = row.elements[i], modifier = Modifier
+                            .width(width)
+                            .padding(vertical = 4.dp))
+                        if(i < row.elements.lastIndex) {
+                            Divider(modifier = Modifier
+                                .fillMaxHeight()
+                                .width(1.dp)
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+     */
+    val data = listOf(
+        Row(id = 0, elements = listOf("0", "1", "2", "3", "4")),
+        Row(id = 1, elements = listOf("0", "1", "2", "3", "4")),
+        Row(id = 2, elements = listOf("0", "1", "2", "3", "4")),
+        Row(id = 3, elements = listOf("0", "1", "2", "3", "4")),
+        Row(id = 4, elements = listOf("0", "1", "2", "3", "4")),
+        Row(id = 5, elements = listOf("0", "1", "2", "3", "4")),
+        Row(id = 6, elements = listOf("0", "1", "2", "3", "4")),
+        Row(id = 7, elements = listOf("0", "1", "2", "3", "4")),
+        Row(id = 8, elements = listOf("0", "1", "2", "3", "4")),
+        Row(id = 9, elements = listOf("0", "1", "2", "3", "4")),
+        Row(id = 10, elements = listOf("0", "1", "2", "3", "4")),
+    )
+    Column(modifier = Modifier
+        .fillMaxWidth()
+        .heightIn(0.dp, screenHeight - 160.dp)
+    ) {
+        Column {
+            Row(
+                modifier = Modifier
+                    .horizontalScroll(state = state)
+                    .height(IntrinsicSize.Min),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                for (i in 0..4) {
+                    Column(
+                        modifier = Modifier
+                            .width(width)
+                            .padding(vertical = 4.dp)
+                    ) {
+                        Text(text = "Name $i")
+                        Text(text = "(Unit $i)", fontSize = 10.sp)
+                    }
+                    if (i < 4) {
                         Divider(modifier = Modifier
                             .fillMaxHeight()
                             .width(1.dp)
