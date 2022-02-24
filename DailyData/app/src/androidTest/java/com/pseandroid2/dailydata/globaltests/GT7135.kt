@@ -1,6 +1,7 @@
 package com.pseandroid2.dailydata.globaltests
 
 import android.content.Context
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
@@ -130,14 +131,16 @@ class GT7135 {
         // Join the Project
         composeRule.onNodeWithText("Join Project").performClick()
 
-        // Open the project
-        composeRule.onNodeWithTag(Routes.SERVER).performClick()
+        // Open The project
+        composeRule.onNodeWithTag(Routes.PROJECT).performClick()
         runBlocking { delay(1000) }
         composeRule.onNodeWithText(projectName).performClick()
         runBlocking { delay(1000) }
-        composeRule.onNodeWithText("Input").assertExists() // Means that the switch to the project screen succeeded
+        composeRule.onNodeWithText("Settings").performClick()
+        runBlocking { delay(500) }
 
         // Check who the project admin is
         TODO("Implementiere die Funktionalität: Projektadministrator anzeigen")
+        composeRule.onNodeWithTag("Admin").assertTextEquals(TestUsers.eMail[0])
     }
 }
