@@ -3,7 +3,9 @@ package com.pseandroid2.dailydata.globaltests
 import android.content.Context
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onChildAt
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onParent
@@ -30,6 +32,9 @@ import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
+/**
+ * Tests: "Aus Projekt austreten", 7.1.37
+ */
 class GT7137 {
     private val rds: RemoteDataSourceAPI = RemoteDataSourceAPI(
         UserAccount(FirebaseManager(null)), ServerManager(RESTAPI(URLs.testServer_BASE_URL))
@@ -38,7 +43,7 @@ class GT7137 {
     @get:Rule
     val composeRule = createAndroidComposeRule<MainActivity>()
 
-    private val projectName: String = "GT7137";
+    private val projectName: String = "GT7.1.37";
 
 
     @ExperimentalCoroutinesApi
@@ -53,6 +58,7 @@ class GT7137 {
         GlobalTestsHelpingMethods.createTestProject(composeRule, projectName)
     }
 
+    @ExperimentalCoroutinesApi
     @After
     fun teardown() = runTest {
         Assert.assertTrue(RESTAPI(URLs.testServer_BASE_URL).clearServer())
@@ -60,7 +66,6 @@ class GT7137 {
 
     @ExperimentalCoroutinesApi
     /**
-     * tests: "Aus Projekt austreten", 7.1.37
      * This tests if the global test works in the rdsAPI
      */
     @InternalCoroutinesApi
@@ -109,14 +114,11 @@ class GT7137 {
 
 
     @Ignore("Not all for this test necessary features exists")
-    /**
-     * tests: "Aus Projekt austreten", 7.1.37
-     */
     @InternalCoroutinesApi
     @Test
     fun leaveProject() {
         // TODO("Implementiere die Funktionalität: Nutzende können sich anmelden")
-        // Login user 1
+        // Login user N0
         GlobalTestsHelpingMethods.loginUser(
             composeRule,
             TestUsers.eMail[0],
@@ -127,7 +129,7 @@ class GT7137 {
         // Create a project
         composeRule.onNodeWithTag(Routes.PROJECT).performClick()
         runBlocking { delay(1000) }
-        composeRule.onNodeWithText(projectName).performClick()
+        composeRule.onAllNodesWithText(projectName).onFirst().performClick()
         runBlocking { delay(1000) }
 
         // Change offline to online project
@@ -139,7 +141,7 @@ class GT7137 {
         val clipboardManager =
             composeRule.activity.baseContext.getSystemService(Context.CLIPBOARD_SERVICE) as androidx.compose.ui.platform.ClipboardManager
 
-        // Login user 2
+        // Login user N1 (The user who will leave the project)
         GlobalTestsHelpingMethods.loginUser(
             composeRule,
             TestUsers.eMail[1],
@@ -157,7 +159,7 @@ class GT7137 {
         // Open the project
         composeRule.onNodeWithTag(Routes.PROJECT).performClick()
         runBlocking { delay(1000) }
-        composeRule.onNodeWithText(projectName).performClick()
+        composeRule.onAllNodesWithText(projectName).onFirst().performClick()
         runBlocking { delay(1000) }
         composeRule.onNodeWithText("Settings").performClick()
         runBlocking { delay(500) }
@@ -166,7 +168,7 @@ class GT7137 {
         // TODO("Implementiere die Funktionalität: Prüfe, ob man sich in einem Onlineproject befindet")
         composeRule.onNodeWithTag("ProjectType").assertTextEquals("Online project")
 
-        // User 2 leaves the project
+        // User N1 leaves the project
         composeRule.onNodeWithTag(Routes.PROJECT).performClick()
         runBlocking { delay(1000) }
         composeRule.onNodeWithText(projectName).performClick()
@@ -180,7 +182,7 @@ class GT7137 {
         // Open the project
         composeRule.onNodeWithTag(Routes.PROJECT).performClick()
         runBlocking { delay(1000) }
-        composeRule.onNodeWithText(projectName).performClick()
+        composeRule.onAllNodesWithText(projectName).onFirst().performClick()
         runBlocking { delay(1000) }
         composeRule.onNodeWithText("Settings").performClick()
         runBlocking { delay(500) }

@@ -11,7 +11,7 @@ import org.junit.Rule
 import org.junit.Test
 
 /**
- * testing: "Projekterstellung öffnen",  7.1.1
+ * Tests: "Projekterstellung öffnen",  7.1.1
  */
 class GT711 {
     @get:Rule

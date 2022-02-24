@@ -3,11 +3,11 @@ package com.pseandroid2.dailydata.globaltests
 import android.content.Context
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performTextInput
 import com.pseandroid2.dailydata.Main
 import com.pseandroid2.dailydata.MainActivity
 import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
@@ -29,8 +29,10 @@ import org.junit.Before
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
-import java.util.regex.Matcher
 
+/**
+ * Tests: "Projektadministrator, Projektmitglied", 7.1.35
+ */
 class GT7135 {
     private val rds: RemoteDataSourceAPI = RemoteDataSourceAPI(
         UserAccount(FirebaseManager(null)), ServerManager(RESTAPI(URLs.testServer_BASE_URL))
@@ -39,7 +41,7 @@ class GT7135 {
     @get:Rule
     val composeRule = createAndroidComposeRule<MainActivity>()
 
-    private val projectName: String = "GT7135";
+    private val projectName: String = "GT7.1.35";
 
 
     @ExperimentalCoroutinesApi
@@ -54,6 +56,7 @@ class GT7135 {
         GlobalTestsHelpingMethods.createTestProject(composeRule, projectName)
     }
 
+    @ExperimentalCoroutinesApi
     @After
     fun teardown() = runTest {
         Assert.assertTrue(RESTAPI(URLs.testServer_BASE_URL).clearServer())
@@ -61,7 +64,6 @@ class GT7135 {
 
     @ExperimentalCoroutinesApi
     /**
-     * tests: "Projektadministrator, Projektmitglied", 7.1.35
      * This tests if the global test works in the rdsAPI
      */
     @InternalCoroutinesApi
@@ -89,9 +91,6 @@ class GT7135 {
     }
 
     @Ignore("Not all for this test necessary features exists")
-    /**
-     * tests: "Projektadministrator, Projektmitglied", 7.1.35
-     */
     @InternalCoroutinesApi
     @Test
     fun joinProject() {
@@ -102,9 +101,13 @@ class GT7135 {
         // Create Project
         composeRule.onNodeWithTag(Routes.PROJECT).performClick()
         runBlocking { delay(1000) }
+        composeRule.onNodeWithText(projectName).performClick()
+        runBlocking { delay(1000) }
+        composeRule.onNodeWithText("Settings").performClick()
+        runBlocking { delay(500) }
 
         // Change offline to online project
-        TODO("Implementiere die Funktionalität: Offlineprojekt zu Onlinprojekt wechseln")
+        // TODO("Implementiere die Funktionalität: Offlineprojekt zu Onlinprojekt wechseln")
         composeRule.onNodeWithText("Create Online Project").performClick()
         runBlocking { delay(500) }
         composeRule.onNodeWithText("Create Link").performClick()
@@ -123,7 +126,7 @@ class GT7135 {
         // Open The project
         composeRule.onNodeWithTag(Routes.PROJECT).performClick()
         runBlocking { delay(1000) }
-        composeRule.onNodeWithText(projectName).performClick()
+        composeRule.onAllNodesWithText(projectName).onFirst().performClick()
         runBlocking { delay(1000) }
         composeRule.onNodeWithText("Settings").performClick()
         runBlocking { delay(500) }

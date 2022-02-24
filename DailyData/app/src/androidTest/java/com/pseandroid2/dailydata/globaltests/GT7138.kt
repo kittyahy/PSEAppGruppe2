@@ -2,7 +2,9 @@ package com.pseandroid2.dailydata.globaltests
 
 import android.content.Context
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onChildAt
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onParent
@@ -40,7 +42,7 @@ class GT7138 {
     @get:Rule
     val composeRule = createAndroidComposeRule<MainActivity>()
 
-    private val projectName: String = "GT7138";
+    private val projectName: String = "GT7.1.38";
 
 
     @ExperimentalCoroutinesApi
@@ -61,10 +63,11 @@ class GT7138 {
         Assert.assertTrue(RESTAPI(URLs.testServer_BASE_URL).clearServer())
     }
 
-    @ExperimentalCoroutinesApi
+
     /**
      * This tests if the global test works in the rdsAPI.
      */
+    @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
     @Test
     fun removeOneUserRDS() = runTest {
@@ -112,7 +115,7 @@ class GT7138 {
     @ExperimentalCoroutinesApi
     /**
      * This tests if the global test works in the rdsAPI.
-     * Tests if it works to remove multiple users.
+     * Tests if the test still works even when removing multiple users.
      */
     @InternalCoroutinesApi
     @Test
@@ -183,7 +186,7 @@ class GT7138 {
         // Create a project
         composeRule.onNodeWithTag(Routes.PROJECT).performClick()
         runBlocking { delay(1000) }
-        composeRule.onNodeWithText(projectName).performClick()
+        composeRule.onAllNodesWithText(projectName).onFirst().performClick()
         runBlocking { delay(1000) }
 
         // Change offline to online project
@@ -221,7 +224,7 @@ class GT7138 {
         // Open project
         composeRule.onNodeWithTag(Routes.PROJECT).performClick()
         runBlocking { delay(1000) }
-        composeRule.onNodeWithText(projectName).performClick()
+        composeRule.onAllNodesWithText(projectName).onFirst().performClick()
         runBlocking { delay(1000) }
         composeRule.onNodeWithText("Settings").performClick()
         runBlocking { delay(500) }

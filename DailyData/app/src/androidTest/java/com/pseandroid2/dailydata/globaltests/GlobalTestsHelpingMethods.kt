@@ -18,8 +18,12 @@ object GlobalTestsHelpingMethods {
      * Creates a testproject with the projectName and returns to the project selection screen
      *
      */
-    fun createTestProject(composeRule: AndroidComposeTestRule<ActivityScenarioRule<MainActivity>, MainActivity>, projectName: String) {
-        if (composeRule.onAllNodesWithText(projectName).fetchSemanticsNodes().isNotEmpty()){
+    fun createTestProject(
+        composeRule: AndroidComposeTestRule<ActivityScenarioRule<MainActivity>, MainActivity>,
+        projectName: String,
+        projectDescription: String = "Projekt für einen globalen Test"
+    ) {
+        if (composeRule.onAllNodesWithText(projectName).fetchSemanticsNodes().isNotEmpty()) {
             return
         }
 
@@ -28,7 +32,7 @@ object GlobalTestsHelpingMethods {
         composeRule.onNodeWithText("Add Title").performTextInput(projectName)
 
         composeRule.onNodeWithText("Add Description")
-            .performTextInput("Projekt für einen globalen Test")
+            .performTextInput(projectDescription)
 
         composeRule.onNodeWithText("Change Wallpaper").performClick()
         composeRule.onNodeWithText("Green").performClick()
@@ -36,6 +40,11 @@ object GlobalTestsHelpingMethods {
         composeRule.onNodeWithText("Add Table Column").performClick()
         composeRule.onNodeWithText("Name").performTextInput("Höhe")
         composeRule.onNodeWithText("Unit").performTextInput("cm")
+        composeRule.onNodeWithText("OK").performClick()
+
+        // Notification
+        composeRule.onNodeWithText("Add Notification").performClick()
+        composeRule.onNodeWithText("Name").performTextInput("Notification")
         composeRule.onNodeWithText("OK").performClick()
 
         composeRule.onNodeWithText("Save").performClick()
@@ -47,11 +56,16 @@ object GlobalTestsHelpingMethods {
         runBlocking { delay(1000) }
     }
 
-    fun loginUser(composeRule: AndroidComposeTestRule<ActivityScenarioRule<MainActivity>, MainActivity>, eMail: String, password: String, signOut: Boolean) {
+    fun loginUser(
+        composeRule: AndroidComposeTestRule<ActivityScenarioRule<MainActivity>, MainActivity>,
+        eMail: String,
+        password: String,
+        signOut: Boolean
+    ) {
         TODO("Implementiere die Funktionalität: Nutzende können sich anmelden")
         composeRule.onNodeWithTag(Routes.SERVER).performClick()
         runBlocking { delay(1000) }
-        if(signOut) {
+        if (signOut) {
             composeRule.onNodeWithText("SignOut").performClick()
             runBlocking { delay(1000) }
         }

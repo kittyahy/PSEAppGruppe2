@@ -1,37 +1,31 @@
 package com.pseandroid2.dailydata.globaltests
 
-import android.util.Log
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTextReplacement
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
-import com.pseandroid2.dailydata.Main
 import com.pseandroid2.dailydata.MainActivity
-import com.pseandroid2.dailydata.util.Consts.LOG_TAG
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
 /**
- * testing: "Ändere Projektnamen", 7.1.4
+ * Tests: "Ändere Projektnamen", 7.1.4
  */
 class GT714 {
     @get:Rule
     val composeRule = createAndroidComposeRule<MainActivity>()
 
-    val projectName = "GT714"
+    val projectName = "GT7.1.4"
     val newProjectName = "ChangedName$projectName"
+
     @Ignore("Saving project changes does not work")
     @ExperimentalCoroutinesApi
     @Test

@@ -8,18 +8,15 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import com.pseandroid2.dailydata.MainActivity
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
 /**
- * testing: "Leeres Projekt erstellen", 7.1.2
+ * Tests: "Leeres Projekt erstellen", 7.1.2
  */
 class GT712 {
     @get:Rule
@@ -27,7 +24,7 @@ class GT712 {
 
     private val projectName: String = "GT7.1.2"
 
-    @Ignore("Graph error")
+    //@Ignore("Graph error")
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
     @Test
@@ -57,11 +54,11 @@ class GT712 {
         composeRule.onNodeWithText("Name").performTextInput("Meine Kresse")
         composeRule.onNodeWithText("OK").performClick()
 
-
+        // TODO("Implementiere die Funktionalität: Füge einen Graphen zu dem Projekt hinzu")
         composeRule.onNodeWithText("Add Graph").performClick()
         composeRule.onNodeWithText("Line Chart").performClick()
 
-        // TODO("Implementiere die Funktionalität: Füge einen Graphen zu dem Projekt hinzu")
+
         composeRule.onNodeWithText("Save").performClick()
 
         // Check if project exists in the start screen
@@ -74,5 +71,4 @@ class GT712 {
         composeRule.onNodeWithText("Add new Project").assertExists()
         composeRule.onAllNodes(matcher = hasText(projectName)).onFirst().assertExists()
     }
-
 }
