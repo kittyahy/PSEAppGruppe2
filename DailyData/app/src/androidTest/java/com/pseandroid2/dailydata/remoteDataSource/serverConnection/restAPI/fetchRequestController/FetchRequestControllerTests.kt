@@ -128,15 +128,4 @@ class FetchRequestControllerTests {
             requestsToSend.size
         ) // The send fetch requests from user1 were received by user2
     }
-
-    /* TODO: Implement this in the quality control phase
-    @ExperimentalCoroutinesApi@Test
-    fun getFetchRequestsWhenNoProjectMember() = runTest {
-        Assert.assertTrue(restAPI.demandOldData(projectID, "request information", authToken))
-        //User 3 is no project member
-        Assert.assertEquals(0, restAPI.getFetchRequests(projectID, authToken3).size)
-    }
-    */
-
-    // TODO: Test Ideas for quality control: 1. getFetchrequests from the same account who send them
 }

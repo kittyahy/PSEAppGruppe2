@@ -162,15 +162,6 @@ class ProjectParticipantsTests {
         Assert.assertFalse(serverManager.isProjectParticipant(authToken, projectID, userID2))
     }
 
-    /* TODO: Implement this in quality control phase
-    @ExperimentalCoroutinesApi
-    @Test
-    fun getParticipantsFromNotExistingProject() = runTest {
-        restAPI.getProjectParticipants(authToken, -1)
-        Assert.assertNotEquals(mutableListOf<List<String>>(), restAPI.getProjectParticipants(authToken, -1))
-    }
-    */
-
     @ExperimentalCoroutinesApi
     @Test
     fun getProjectAdmin() = runTest {
@@ -223,14 +214,15 @@ class ProjectParticipantsTests {
         Assert.assertTrue(restAPI.removeUser(userID, projectID2, authToken))
     }
 
-    /* TODO: Implement this in quality control phase
     @ExperimentalCoroutinesApi
     @Test
     fun userIsNoProjectMember() = runTest {
-        Assert.assertNotEquals(mutableListOf<List<String>>(), restAPI.getProjectParticipants(authToken, projectID))
+        Assert.assertNotEquals(
+            mutableListOf<List<String>>(),
+            restAPI.getProjectParticipants(authToken, projectID)
+        )
         Assert.assertNotEquals("", restAPI.getProjectAdmin(authToken, projectID))
     }
-    */
 
     @ExperimentalCoroutinesApi
     @Test

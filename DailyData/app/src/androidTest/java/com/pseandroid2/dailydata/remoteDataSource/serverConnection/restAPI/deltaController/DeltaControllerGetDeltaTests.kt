@@ -123,14 +123,6 @@ class DeltaControllerGetDeltaTests {
         Assert.assertTrue(deltaFound)
     }
 
-    /* TODO: Implement this in the quality control phase
-    @ExperimentalCoroutinesApi
-    @Test
-    fun getDeltaWhenNoProjectMember() = runTest {
-        val downloadedDeltas = restAPI.getDelta(projectID, authToken2) as MutableList
-        Assert.assertEquals(0, downloadedDeltas.size)
-    } */
-
     @ExperimentalCoroutinesApi
     @Test
     fun getSameDeltaTwice() = runTest {

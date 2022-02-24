@@ -8,6 +8,7 @@ import com.pseandroid2.dailydata.remoteDataSource.userManager.FirebaseReturnOpti
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.AfterClass
 import org.junit.Assert
 import org.junit.Before
@@ -70,8 +71,18 @@ class DeltaControllerSaveDeltasTests {
             runBlocking {
                 // Remove all users from project so that the project gets removed
                 restAPI?.removeUser(userToRemove1, projectID, authToken)
+                restAPI?.clearServer()
             }
         }
+    }
+
+    @ExperimentalCoroutinesApi
+    @After
+    fun tearDown() = runTest {
+        Teardown.restAPI?.clearServer()
+        // Create new project
+        projectID = restAPI.addProject(authToken, "project details")
+        Assert.assertTrue(projectID > 0)
     }
 
     @ExperimentalCoroutinesApi
@@ -84,8 +95,7 @@ class DeltaControllerSaveDeltasTests {
         )
     }
 
-    //TODO: We have currently a problem that the server can't handle too many uploaded deltas at a time
-    /*
+
     @ExperimentalCoroutinesApi
     @Test
     fun saveTenDeltas() = runTest {
@@ -103,15 +113,12 @@ class DeltaControllerSaveDeltasTests {
     @ExperimentalCoroutinesApi
     @Test
     fun exceedCommandUploadLimit() = runTest {
-        val projectID2 = restAPI.addProject(authToken, "new project details")
-        Assert.assertTrue(projectID2 > 0)
-
         val projectCommands: MutableList<String> = mutableListOf()
         for (i in 1..commandLimit) {
             projectCommands.add("command$i")
         }
         val successfullySendCommands = serverManager.sendCommandsToServer(
-            projectID2,
+            projectID,
             projectCommands,
             authToken
         ) as MutableList
@@ -119,8 +126,13 @@ class DeltaControllerSaveDeltasTests {
             Assert.assertTrue(successfullySendCommands.remove(it))
         }
 
-        val projectCommand = listOf("exceeds the upload limit")
-        Assert.assertEquals(projectCommand, projectCommand)
+        val projectCommandExceedsLimit = listOf("exceeds the upload limit")
+        Assert.assertEquals(
+            0, serverManager.sendCommandsToServer(
+                projectID,
+                projectCommandExceedsLimit,
+                authToken
+            ).size
+        )
     }
-    */
 }
