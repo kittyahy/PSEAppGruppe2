@@ -32,7 +32,7 @@ import org.junit.Test
 import java.util.regex.Matcher
 
 class GT7135 {
-    val rds: RemoteDataSourceAPI = RemoteDataSourceAPI(
+    private val rds: RemoteDataSourceAPI = RemoteDataSourceAPI(
         UserAccount(FirebaseManager(null)), ServerManager(RESTAPI(URLs.testServer_BASE_URL))
     )
 
@@ -95,20 +95,15 @@ class GT7135 {
     @InternalCoroutinesApi
     @Test
     fun joinProject() {
-        TODO("Implementiere die Funktionalität: Melde dich in der App mit einem Account an")
-
+        // TODO("Implementiere die Funktionalität: Nutzende können sich anmelden")
         // Login User 1
-        composeRule.onNodeWithText(projectName).performClick()
-        composeRule.onNodeWithTag(Routes.SERVER).performClick()
-        runBlocking { delay(1000) }
-        composeRule.onNodeWithText("Email").performTextInput(TestUsers.eMail[0])
-        composeRule.onNodeWithText("Password").performTextInput(TestUsers.password[0])
-        composeRule.onNodeWithText("Login").performClick()
-        runBlocking { delay(2000) }
+        GlobalTestsHelpingMethods.loginUser(composeRule, TestUsers.eMail[0], TestUsers.password[0], false)
 
         // Create Project
         composeRule.onNodeWithTag(Routes.PROJECT).performClick()
         runBlocking { delay(1000) }
+
+        // Change offline to online project
         TODO("Implementiere die Funktionalität: Offlineprojekt zu Onlinprojekt wechseln")
         composeRule.onNodeWithText("Create Online Project").performClick()
         runBlocking { delay(500) }
@@ -117,16 +112,10 @@ class GT7135 {
         val clipboardManager = composeRule.activity.baseContext.getSystemService(Context.CLIPBOARD_SERVICE) as androidx.compose.ui.platform.ClipboardManager
 
         // Login User 2
-        composeRule.onNodeWithText(projectName).performClick()
-        composeRule.onNodeWithTag(Routes.SERVER).performClick()
-        runBlocking { delay(1000) }
-        composeRule.onNodeWithText("Email").performTextInput(TestUsers.eMail[1])
-        composeRule.onNodeWithText("Password").performTextInput(TestUsers.password[1])
-        composeRule.onNodeWithText("Login").performClick()
-        runBlocking { delay(2000) }
+        GlobalTestsHelpingMethods.loginUser(composeRule, TestUsers.eMail[1], TestUsers.password[1], true)
 
         // Close app
-        TODO("Finde eine Möglichkeit die App zu schließen und den Link in dem clipboard zu öffnen")
+        // TODO("Finde eine Möglichkeit die App zu schließen und den Link in dem clipboard zu öffnen")
 
         // Join the Project
         composeRule.onNodeWithText("Join Project").performClick()
@@ -140,7 +129,7 @@ class GT7135 {
         runBlocking { delay(500) }
 
         // Check who the project admin is
-        TODO("Implementiere die Funktionalität: Projektadministrator anzeigen")
+        // TODO("Implementiere die Funktionalität: Projektadministrator anzeigen")
         composeRule.onNodeWithTag("Admin").assertTextEquals(TestUsers.eMail[0])
     }
 }

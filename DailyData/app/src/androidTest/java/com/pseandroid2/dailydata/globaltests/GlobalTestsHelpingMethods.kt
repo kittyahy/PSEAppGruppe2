@@ -2,12 +2,14 @@ package com.pseandroid2.dailydata.globaltests
 
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import com.pseandroid2.dailydata.MainActivity
+import com.pseandroid2.dailydata.ui.navigation.Routes
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 
@@ -42,6 +44,22 @@ object GlobalTestsHelpingMethods {
         UiThreadStatement.runOnUiThread {
             composeRule.activity.onBackPressed()
         }
+        runBlocking { delay(1000) }
+    }
+
+    fun loginUser(composeRule: AndroidComposeTestRule<ActivityScenarioRule<MainActivity>, MainActivity>, eMail: String, password: String, signOut: Boolean) {
+        TODO("Implementiere die Funktionalität: Nutzende können sich anmelden")
+        composeRule.onNodeWithTag(Routes.SERVER).performClick()
+        runBlocking { delay(1000) }
+        if(signOut) {
+            composeRule.onNodeWithText("SignOut").performClick()
+            runBlocking { delay(1000) }
+        }
+        composeRule.onNodeWithText("Email").performTextInput(TestUsers.eMail[1])
+        composeRule.onNodeWithText("Password").performTextInput(TestUsers.password[1])
+        composeRule.onNodeWithText("Login").performClick()
+        runBlocking { delay(2000) }
+        composeRule.onNodeWithTag(Routes.PROJECT).performClick()
         runBlocking { delay(1000) }
     }
 }

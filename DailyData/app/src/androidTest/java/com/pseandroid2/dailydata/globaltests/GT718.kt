@@ -48,7 +48,7 @@ class GT718 {
         composeRule.onNodeWithText("Change Wallpaper").performClick()
         composeRule.onNodeWithText("Blue").performClick()
         composeRule.onNodeWithText("Save").performClick()
-        TODO("Save does not work yet")
+        // TODO("Save does not work yet")
         runBlocking {
             launch(Dispatchers.Main) {
                 composeRule.activity.onBackPressed()
@@ -61,7 +61,7 @@ class GT718 {
         composeRule.onAllNodesWithText("Kresse").onFirst().performClick()
         composeRule.onNodeWithText("Settings").performClick()
         composeRule.onNodeWithTag("WallpaperColor").assertIsDisplayed()
-        TODO("find out how to check the background")
+        // TODO("find out how to check the background")
     }
 }
 

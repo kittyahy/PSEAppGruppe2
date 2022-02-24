@@ -46,7 +46,8 @@ class GT7133 {
         runBlocking { delay(1000) }
         composeRule.onNodeWithText("Settings").performClick()
         runBlocking { delay(1000) }
-        TODO("Implementiere die Funktionalität: Offlineprojekt zu Onlinprojekt wechseln")
+
+        // TODO("Implementiere die Funktionalität: Offlineprojekt zu Onlinprojekt wechseln")
         composeRule.onNodeWithText("Create Online Project").performClick()
         runBlocking { delay(500) }
         composeRule.onNodeWithText("Create Link").performClick()

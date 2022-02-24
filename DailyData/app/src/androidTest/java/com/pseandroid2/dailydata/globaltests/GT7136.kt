@@ -3,9 +3,11 @@ package com.pseandroid2.dailydata.globaltests
 import android.content.Context
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onChildAt
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onParent
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import com.pseandroid2.dailydata.Main
@@ -32,7 +34,7 @@ import org.junit.Test
 import java.util.regex.Matcher
 
 class GT7136 {
-    val rds: RemoteDataSourceAPI = RemoteDataSourceAPI(
+    private val rds: RemoteDataSourceAPI = RemoteDataSourceAPI(
         UserAccount(FirebaseManager(null)), ServerManager(RESTAPI(URLs.testServer_BASE_URL))
     )
 
@@ -130,74 +132,53 @@ class GT7136 {
     @InternalCoroutinesApi
     @Test
     fun newProjectAdmin() {
-        TODO("Implementiere die Funktionalität: Melde dich in der App mit einem Account an")
+        // TODO("Implementiere die Funktionalität: Nutzende können sich anmelden")
+        // Login user 1
+        GlobalTestsHelpingMethods.loginUser(composeRule, TestUsers.eMail[0], TestUsers.password[0], false)
 
-        // Login User 1
-        composeRule.onNodeWithTag(Routes.SERVER).performClick()
-        runBlocking { delay(1000) }
-        composeRule.onNodeWithText("Email").performTextInput(TestUsers.eMail[0])
-        composeRule.onNodeWithText("Password").performTextInput(TestUsers.password[0])
-        composeRule.onNodeWithText("Login").performClick()
-        runBlocking { delay(2000) }
-
-        // Create Project
+        // Create a project
         composeRule.onNodeWithTag(Routes.PROJECT).performClick()
         runBlocking { delay(1000) }
         composeRule.onNodeWithText(projectName).performClick()
         runBlocking { delay(1000) }
-        TODO("Implementiere die Funktionalität: Offlineprojekt zu Onlinprojekt wechseln")
+
+        // Change offline to online project
+        // TODO("Implementiere die Funktionalität: Offlineprojekt zu Onlinprojekt wechseln")
         composeRule.onNodeWithText("Create Online Project").performClick()
         runBlocking { delay(500) }
         composeRule.onNodeWithText("Create Link").performClick()
         runBlocking { delay(1000) }
         val clipboardManager = composeRule.activity.baseContext.getSystemService(Context.CLIPBOARD_SERVICE) as androidx.compose.ui.platform.ClipboardManager
 
+        // Login user 2
+        GlobalTestsHelpingMethods.loginUser(composeRule, TestUsers.eMail[1], TestUsers.password[1], true)
 
-        // Login User 2
-        composeRule.onNodeWithTag(Routes.SERVER).performClick()
-        runBlocking { delay(1000) }
-        composeRule.onNodeWithText("Email").performTextInput(TestUsers.eMail[1])
-        composeRule.onNodeWithText("Password").performTextInput(TestUsers.password[1])
-        composeRule.onNodeWithText("Login").performClick()
-        runBlocking { delay(2000) }
+        // Close the app and start it with the join project link
+        // TODO("Finde eine Möglichkeit die App zu schließen und den Link in dem clipboard zu öffnen")
 
-
-        // Close app
-        TODO("Finde eine Möglichkeit die App zu schließen und den Link in dem clipboard zu öffnen")
-
-        // Join the Project
+        // Join the project
         composeRule.onNodeWithText("Join Project").performClick()
         runBlocking { delay(1000) }
 
-        // Login User 1 and remove User 1 from the project
-        composeRule.onNodeWithTag(Routes.SERVER).performClick()
-        runBlocking { delay(1000) }
-        composeRule.onNodeWithText("Email").performTextInput(TestUsers.eMail[0])
-        composeRule.onNodeWithText("Password").performTextInput(TestUsers.password[0])
-        composeRule.onNodeWithText("Login").performClick()
-        runBlocking { delay(2000) }
+        // Login user 1
+        GlobalTestsHelpingMethods.loginUser(composeRule, TestUsers.eMail[0], TestUsers.password[0], true)
+
+        // Open the project
         composeRule.onNodeWithTag(Routes.PROJECT).performClick()
         runBlocking { delay(1000) }
         composeRule.onNodeWithText(projectName).performClick()
         runBlocking { delay(1000) }
         composeRule.onNodeWithText("Settings").performClick()
         runBlocking { delay(1000) }
-        composeRule.onNodeWithText("Member").performClick()
-        runBlocking { delay(500) }
-        composeRule.onNodeWithText(TestUsers.eMail[0]).performClick() // Delete User1
-        runBlocking { delay(500) }
-        composeRule.onNodeWithText("Yes").performClick()
+
+        // User 1 removes himself from the project
+        composeRule.onNodeWithText(TestUsers.eMail[0]).performClick().onParent().onChildAt(1) // Remove User1
         runBlocking { delay(500) }
 
-        // Login User 2
-        composeRule.onNodeWithTag(Routes.SERVER).performClick()
-        runBlocking { delay(1000) }
-        composeRule.onNodeWithText("Email").performTextInput(TestUsers.eMail[1])
-        composeRule.onNodeWithText("Password").performTextInput(TestUsers.password[1])
-        composeRule.onNodeWithText("Login").performClick()
-        runBlocking { delay(2000) }
+        // Login user 2
+        GlobalTestsHelpingMethods.loginUser(composeRule, TestUsers.eMail[1], TestUsers.password[1], true)
 
-        // Open project
+        // Open the project
         composeRule.onNodeWithTag(Routes.PROJECT).performClick()
         runBlocking { delay(1000) }
         composeRule.onNodeWithText(projectName).performClick()
@@ -205,8 +186,8 @@ class GT7136 {
         composeRule.onNodeWithText("Settings").performClick()
         runBlocking { delay(500) }
 
-        // Check who the project admin is
-        TODO("Implementiere die Funktionalität: Projektadministrator anzeigen")
+        // Check which member is the admin
+        // TODO("Implementiere die Funktionalität: Projektadministrator anzeigen")
         composeRule.onNodeWithTag("Admin").assertTextEquals(TestUsers.eMail[1])
     }
 }

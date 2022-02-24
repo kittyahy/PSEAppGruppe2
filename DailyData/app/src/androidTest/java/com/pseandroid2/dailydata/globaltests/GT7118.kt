@@ -36,7 +36,7 @@ class GT7118 {
         composeRule.onNodeWithText("Name").performTextInput("Neue Notification")
         composeRule.onNodeWithText("OK").performClick()
         composeRule.onNodeWithText("Save").performClick()
-        TODO("Save button does not work")
+        // TODO("Save button does not work")
         runBlocking {
             delay(3000)
         }
@@ -50,6 +50,6 @@ class GT7118 {
         }
         composeRule.onAllNodesWithText("Kresse").onFirst().performClick()
         composeRule.onNodeWithText("Settings").performClick()
-        composeRule.onNodeWithTag("DeleteTime").assertExists()
+        composeRule.onNodeWithTag("Delete").assertExists()
     }
 }

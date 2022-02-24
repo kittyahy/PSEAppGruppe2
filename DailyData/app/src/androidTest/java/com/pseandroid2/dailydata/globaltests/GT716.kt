@@ -41,13 +41,13 @@ class GT716 {
 
         composeRule.onAllNodesWithText("Kresse").onFirst().performClick()
         composeRule.onNodeWithText("Settings").performClick()
-        composeRule.onNodeWithTag("DeleteTime").performClick()
+        composeRule.onNodeWithTag("Delete").performClick()
         composeRule.onNodeWithText("Add Notification").performClick()
         var time = LocalTime.now()
         composeRule.onNodeWithText("Name").performTextInput("Meine Kresse")
         composeRule.onNodeWithText("OK").performClick()
         composeRule.onNodeWithText("Save").performClick()
-        TODO("Save does not work yet")
+        // TODO("Save does not work yet")
         runBlocking {
             launch(Dispatchers.Main) {
                 composeRule.activity.onBackPressed()

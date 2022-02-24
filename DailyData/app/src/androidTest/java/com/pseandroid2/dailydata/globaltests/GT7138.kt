@@ -1,7 +1,6 @@
 package com.pseandroid2.dailydata.globaltests
 
 import android.content.Context
-import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onChildAt
 import androidx.compose.ui.test.onNodeWithTag
@@ -30,7 +29,10 @@ import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
-class GT7137 {
+/**
+ * tests: " Mitglieder entfernen", 7.1.38
+ */
+class GT7138 {
     private val rds: RemoteDataSourceAPI = RemoteDataSourceAPI(
         UserAccount(FirebaseManager(null)), ServerManager(RESTAPI(URLs.testServer_BASE_URL))
     )
@@ -38,7 +40,7 @@ class GT7137 {
     @get:Rule
     val composeRule = createAndroidComposeRule<MainActivity>()
 
-    private val projectName: String = "GT7137";
+    private val projectName: String = "GT7138";
 
 
     @ExperimentalCoroutinesApi
@@ -53,6 +55,7 @@ class GT7137 {
         GlobalTestsHelpingMethods.createTestProject(composeRule, projectName)
     }
 
+    @ExperimentalCoroutinesApi
     @After
     fun teardown() = runTest {
         Assert.assertTrue(RESTAPI(URLs.testServer_BASE_URL).clearServer())
@@ -60,12 +63,11 @@ class GT7137 {
 
     @ExperimentalCoroutinesApi
     /**
-     * tests: "Aus Projekt austreten", 7.1.37
-     * This tests if the global test works in the rdsAPI
+     * This tests if the global test works in the rdsAPI.
      */
     @InternalCoroutinesApi
     @Test
-    fun leaveProjectRDS() = runTest {
+    fun removeOneUserRDS() = runTest {
         var projectID: Long = -1
 
         // User N1 creates the online project
@@ -92,10 +94,7 @@ class GT7137 {
         var projectParticipants = rds.getProjectParticipants(projectID) as MutableList
         Assert.assertTrue(projectParticipants.remove(TestUsers.userID[1]))
 
-        // N2 leaves project
-        Assert.assertTrue(rds.removeUser(TestUsers.userID[1], projectID))
-
-        // Check that N2 is no project member
+        // N1 removes N2
         Assert.assertTrue(
             rds.signInUser(
                 TestUsers.eMail[0],
@@ -103,20 +102,77 @@ class GT7137 {
                 SignInTypes.EMAIL
             ).success
         )
+        Assert.assertTrue(rds.removeUser(TestUsers.userID[1], projectID))
+
+        // Check that N2 is no project member
         projectParticipants = rds.getProjectParticipants(projectID) as MutableList
         Assert.assertFalse(projectParticipants.remove(TestUsers.userID[1]))
     }
 
-
-    @Ignore("Not all for this test necessary features exists")
+    @ExperimentalCoroutinesApi
     /**
-     * tests: "Aus Projekt austreten", 7.1.37
+     * This tests if the global test works in the rdsAPI.
+     * Tests if it works to remove multiple users.
      */
     @InternalCoroutinesApi
     @Test
-    fun leaveProject() {
+    fun removeAllUsersRDS() = runTest {
+        var projectID: Long = -1
+
+        // User N1 creates the online project
+        Assert.assertTrue(
+            rds.signInUser(
+                TestUsers.eMail[0],
+                TestUsers.password[0],
+                SignInTypes.EMAIL
+            ).success
+        )
+        projectID = rds.createNewOnlineProject("projectDetails")
+
+        // User Ni join the project
+        for (i in 1..23) {
+            Assert.assertTrue(
+                rds.signInUser(
+                    TestUsers.eMail[i],
+                    TestUsers.password[i],
+                    SignInTypes.EMAIL
+                ).success
+            )
+            Assert.assertEquals(rds.joinProject(projectID), "projectDetails")
+        }
+
+        // Login User N1 (project admin)
+        Assert.assertTrue(
+            rds.signInUser(
+                TestUsers.eMail[0],
+                TestUsers.password[0],
+                SignInTypes.EMAIL
+            ).success
+        )
+
+        // Check if Ni is project member
+        var projectParticipants = rds.getProjectParticipants(projectID) as MutableList
+        for (i in 1..23) {
+            Assert.assertTrue(projectParticipants.remove(TestUsers.userID[i]))
+        }
+        Assert.assertEquals(mutableListOf(TestUsers.userID[0]), projectParticipants)
+
+        // N1 removes all Ni
+        for (i in 1..23) {
+            Assert.assertTrue(rds.removeUser(TestUsers.userID[i], projectID))
+        }
+
+        // Check if N1 is only project member
+        projectParticipants = rds.getProjectParticipants(projectID) as MutableList
+        Assert.assertEquals(listOf(TestUsers.userID[0]), projectParticipants)
+    }
+
+    @Ignore("Not all for this test necessary features exists")
+    @InternalCoroutinesApi
+    @Test
+    fun removeUser() {
         // TODO("Implementiere die Funktionalität: Nutzende können sich anmelden")
-        // Login user 1
+        // Login user N1
         GlobalTestsHelpingMethods.loginUser(
             composeRule,
             TestUsers.eMail[0],
@@ -139,7 +195,7 @@ class GT7137 {
         val clipboardManager =
             composeRule.activity.baseContext.getSystemService(Context.CLIPBOARD_SERVICE) as androidx.compose.ui.platform.ClipboardManager
 
-        // Login user 2
+        // Login user N2
         GlobalTestsHelpingMethods.loginUser(
             composeRule,
             TestUsers.eMail[1],
@@ -154,7 +210,15 @@ class GT7137 {
         composeRule.onNodeWithText("Join Project").performClick()
         runBlocking { delay(1000) }
 
-        // Open the project
+        // Login user N1
+        GlobalTestsHelpingMethods.loginUser(
+            composeRule,
+            TestUsers.eMail[0],
+            TestUsers.password[0],
+            true
+        )
+
+        // Open project
         composeRule.onNodeWithTag(Routes.PROJECT).performClick()
         runBlocking { delay(1000) }
         composeRule.onNodeWithText(projectName).performClick()
@@ -162,31 +226,13 @@ class GT7137 {
         composeRule.onNodeWithText("Settings").performClick()
         runBlocking { delay(500) }
 
-        // Check if the project is now an online project
-        // TODO("Implementiere die Funktionalität: Prüfe, ob man sich in einem Onlineproject befindet")
-        composeRule.onNodeWithTag("ProjectType").assertTextEquals("Online project")
+        // Checks if user N2 is project member
+        composeRule.onNodeWithText(TestUsers.eMail[1]).assertExists()
+        runBlocking { delay(500) }
 
-        // User 2 leaves the project
-        composeRule.onNodeWithTag(Routes.PROJECT).performClick()
-        runBlocking { delay(1000) }
-        composeRule.onNodeWithText(projectName).performClick()
-        runBlocking { delay(1000) }
-        composeRule.onNodeWithText("Settings").performClick()
-        runBlocking { delay(1000) }
+        // Remove user N2
         composeRule.onNodeWithText(TestUsers.eMail[1]).performClick().onParent()
-            .onChildAt(1) // Remove User2
-        runBlocking { delay(500) }
-
-        // Open the project
-        composeRule.onNodeWithTag(Routes.PROJECT).performClick()
-        runBlocking { delay(1000) }
-        composeRule.onNodeWithText(projectName).performClick()
-        runBlocking { delay(1000) }
-        composeRule.onNodeWithText("Settings").performClick()
-        runBlocking { delay(500) }
-
-        // Check if the project is now an offline project
-        // TODO("Implementiere die Funktionalität: Prüfe, ob man sich in einem Onlineproject befindet")
-        composeRule.onNodeWithTag("ProjectType").assertTextEquals("Offline project")
+            .onChildAt(1)
+        composeRule.onNodeWithText(TestUsers.eMail[1]).assertDoesNotExist()
     }
 }

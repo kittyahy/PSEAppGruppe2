@@ -8,14 +8,17 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTextReplacement
+import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import com.pseandroid2.dailydata.Main
 import com.pseandroid2.dailydata.MainActivity
 import com.pseandroid2.dailydata.util.Consts.LOG_TAG
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
@@ -24,32 +27,34 @@ import org.junit.Test
  * testing: "Ändere Projektnamen", 7.1.4
  */
 class GT714 {
-
     @get:Rule
     val composeRule = createAndroidComposeRule<MainActivity>()
 
-    /**
-     * [Kresse-project] [com.pseandroid2.dailydata.globaltests.DefaultProject.createProjectTest]
-     */
-   @Ignore(" needs a \"Kresse\" Project, save does not work")
+    val projectName = "GT714"
+    val newProjectName = "ChangedName$projectName"
+    @Ignore("Saving project changes does not work")
+    @ExperimentalCoroutinesApi
     @Test
     @InternalCoroutinesApi
-    fun changeProjectName() {
+    fun changeProjectName() = runTest {
+        // Create and open new project
+        GlobalTestsHelpingMethods.createTestProject(composeRule, projectName)
+        composeRule.onAllNodesWithText(projectName).onFirst().performClick()
+        delay(500)
 
-        composeRule.onAllNodesWithText("Kresse").onFirst().performClick()
+        // Change the project name
         composeRule.onNodeWithText("Settings").performClick()
-        composeRule.onNodeWithText("Kresse").performTextReplacement("Neue Kresse")
-        TODO("Save does not work yet")
+        delay(500)
+        composeRule.onNodeWithText(projectName).performTextReplacement(newProjectName)
+        // TODO("Implementiere die Funktionalität: Speichere Projektänderungen")
         composeRule.onNodeWithText("Save").performClick()
-        runBlocking {
-            launch(Dispatchers.Main) {
-                composeRule.activity.onBackPressed()
-            }
+        UiThreadStatement.runOnUiThread {
+            composeRule.activity.onBackPressed()
         }
-        runBlocking {
-            delay(2000)
-        }
-        composeRule.onNodeWithText("Neue Kresse").assertExists()
+        delay(2000)
+
+        // Check if project name changed
+        composeRule.onNodeWithText(newProjectName).assertExists()
     }
 
 

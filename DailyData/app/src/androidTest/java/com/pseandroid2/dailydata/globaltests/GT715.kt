@@ -39,7 +39,7 @@ class GT715 {
         composeRule.onAllNodesWithText("Kresse").onFirst().performClick()
         composeRule.onNodeWithText("Settings").performClick()
         composeRule.onNodeWithText("Add Description").performTextInput("Das ist meine Kresse")
-        TODO("Save does not work yet")
+        // TODO("Save does not work yet")
         composeRule.onNodeWithText("Save").performClick()
         runBlocking {
             launch(Dispatchers.Main) {
