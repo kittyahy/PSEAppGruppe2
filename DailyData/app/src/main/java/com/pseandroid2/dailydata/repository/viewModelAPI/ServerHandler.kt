@@ -88,7 +88,7 @@ class ServerHandler(private val appDataBase: AppDataBase, private val api: Remot
     suspend fun login(email: String, password: String) {
         isPossibleMap[amILoggedInKey]!!.emit(true)
         isPossibleMap[loginKey]!!.emit(false)
-        api.signInUser(email, password, SignInTypes.EMAIL) //Todo erweiterbarkeit
+        api.signInUser(email, password, SignInTypes.EMAIL) //Todo Erweiterbarkeit
     }
 
     /**

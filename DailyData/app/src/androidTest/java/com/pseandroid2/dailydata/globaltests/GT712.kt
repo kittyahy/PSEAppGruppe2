@@ -32,7 +32,6 @@ class GT712 {
     @InternalCoroutinesApi
     @Test
     fun createEmptyProjectTest() {
-
         composeRule.onNodeWithText("Add new Project").performClick()
 
         composeRule.onNodeWithText("Add Title").performTextInput("Kresse")
