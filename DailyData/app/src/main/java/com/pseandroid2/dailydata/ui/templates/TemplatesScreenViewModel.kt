@@ -49,9 +49,6 @@ class TemplatesScreenViewModel @Inject constructor(
     var tab by mutableStateOf(0)
         private set
 
-    private val _uiEvent = MutableSharedFlow<UiEvent>()
-    val uiEvent = _uiEvent.asSharedFlow()
-
     var graphTemplates = getGraphTemplateFlow()
         private set
     var projectTemplates = getProjectTemplateFlow()
@@ -76,12 +73,6 @@ class TemplatesScreenViewModel @Inject constructor(
                     }
                 }
             }
-        }
-    }
-
-    private fun sendUiEvent(event: UiEvent) {
-        viewModelScope.launch {
-            _uiEvent.emit(event)
         }
     }
 

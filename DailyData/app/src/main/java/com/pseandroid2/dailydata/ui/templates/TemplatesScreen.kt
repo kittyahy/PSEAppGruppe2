@@ -38,8 +38,8 @@ import kotlinx.coroutines.InternalCoroutinesApi
 fun TemplatesScreen(
     viewModel: TemplatesScreenViewModel = hiltViewModel()
 ) {
-    var graphTemplates = viewModel.graphTemplates.collectAsState(initial = listOf())
-    var projectTemplates = viewModel.projectTemplates.collectAsState(initial = listOf())
+    val graphTemplates = viewModel.graphTemplates.collectAsState(initial = listOf())
+    val projectTemplates = viewModel.projectTemplates.collectAsState(initial = listOf())
 
     Column {
         TopNavigationBar(

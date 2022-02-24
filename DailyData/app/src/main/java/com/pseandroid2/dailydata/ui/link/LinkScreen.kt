@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -42,7 +43,7 @@ fun LinkScreen(
     }
 
     Column(
-        modifier = Modifier.padding(vertical = 40.dp),
+        modifier = Modifier.padding(vertical = 40.dp).fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(30.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -55,9 +56,11 @@ fun LinkScreen(
         ) {
 
         }
-        Text(text = "Title")
-        Button(onClick = { viewModel.onEvent(LinkScreenEvent.OnButtonClick(id = pID, onJoinLink = onJoinClick)) }
-            ) {
+        Text(text = "$pID")
+        Button(onClick = {
+            viewModel.onEvent(LinkScreenEvent.OnButtonClick(id = pID, onJoinLink = onJoinClick))
+        }
+        ) {
             Text(text = "Join Project")
         }
     }

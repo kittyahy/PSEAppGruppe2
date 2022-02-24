@@ -19,21 +19,9 @@ import com.pseandroid2.dailydata.util.ui.UiEvent
 
 @Composable
 fun ServerTemplatesScreen(
-    onNavigate: (UiEvent.Navigate) -> Unit,
     viewModel: ServerTemplateScreenViewModel = hiltViewModel()
 ) {
-    val context = LocalContext.current
     val posts = viewModel.posts
-
-    LaunchedEffect(key1 = true) {
-        viewModel.uiEvent.collect { event ->
-            when(event) {
-                is UiEvent.Navigate -> onNavigate(event)
-                is UiEvent.ShowToast -> Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
-                else -> { }
-            }
-        }
-    }
 
     if(posts.isNotEmpty()) {
         val templates = viewModel.post.postEntries

@@ -66,7 +66,7 @@ fun ProjectDataGraphScreen(
     projectId : Int,
     viewModel: ProjectDataGraphScreenViewModel = hiltViewModel()
 ) {
-    var templates : List<GraphTemplate> = listOf()
+    val templates : List<GraphTemplate> = listOf()
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 

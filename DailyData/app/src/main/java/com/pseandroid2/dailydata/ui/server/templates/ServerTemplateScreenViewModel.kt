@@ -20,9 +20,6 @@ class ServerTemplateScreenViewModel @Inject constructor(
     val repository: RepositoryViewModelAPI
 ) : ViewModel() {
 
-    private val _uiEvent = MutableSharedFlow<UiEvent>()
-    val uiEvent = _uiEvent.asSharedFlow()
-
     var posts = listOf<PostPreview>()
         private set
     lateinit var post: Post
@@ -50,8 +47,7 @@ class ServerTemplateScreenViewModel @Inject constructor(
 
             is ServerTemplateScreenEvent.OnPostDownload -> {
                 viewModelScope.launch {
-                    var post =
-                        repository.serverHandler.getPost(posts.find { it.id == event.id }!!.id)
+                    val post = repository.serverHandler.getPost(posts.find { it.id == event.id }!!.id)
                     post.downloadProjectTemplate()
                     for (i in 1 until post.postEntries.size) {
                         post.downloadGraphTemplate(i)
@@ -62,17 +58,11 @@ class ServerTemplateScreenViewModel @Inject constructor(
 
             is ServerTemplateScreenEvent.OnPostEntryDownload -> {
                 viewModelScope.launch {
-                    var postTemp = repository.serverHandler.getPost(post.id)
+                    val postTemp = repository.serverHandler.getPost(post.id)
                     postTemp.downloadGraphTemplate(event.id)
                 }
 
             }
-        }
-    }
-
-    private fun sendUiEvent(event: UiEvent) {
-        viewModelScope.launch {
-            _uiEvent.emit(event)
         }
     }
 }

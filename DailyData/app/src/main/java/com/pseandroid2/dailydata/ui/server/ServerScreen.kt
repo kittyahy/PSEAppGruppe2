@@ -28,11 +28,10 @@ import com.pseandroid2.dailydata.util.ui.UiEvent
 
 @Composable
 fun ServerScreen(
-    onNavigate: (UiEvent.Navigate) -> Unit,
     viewModel: ServerScreenViewModel = hiltViewModel()
 ) {
     if(viewModel.loggedIn) {
-        ServerTemplatesScreen(onNavigate = onNavigate)
+        ServerTemplatesScreen()
     } else {
         LoginScreen()
     }
