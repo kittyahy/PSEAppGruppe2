@@ -5,17 +5,15 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import com.pseandroid2.dailydata.Main
 import com.pseandroid2.dailydata.MainActivity
 import kotlinx.coroutines.InternalCoroutinesApi
 import org.junit.Rule
 import org.junit.Test
 
 /**
- * testing: "Projekterstellung öffnen",  7.1.1
+ * Tests: "Projekterstellung öffnen",  7.1.1
  */
 class GT711 {
-
     @get:Rule
     val composeRule = createAndroidComposeRule<MainActivity>()
 

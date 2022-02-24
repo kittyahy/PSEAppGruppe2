@@ -179,7 +179,7 @@ fun ListInput(
                         modifier = Modifier
                             .size(height)
                             .wrapContentSize(Alignment.Center)
-                            .clickable(onClick = { onClickItem(index) }).testTag("DeleteTime")
+                            .clickable(onClick = { onClickItem(index) }).testTag("Delete")
                     ) {
                         Icon(
                             imageVector = elementIcon,

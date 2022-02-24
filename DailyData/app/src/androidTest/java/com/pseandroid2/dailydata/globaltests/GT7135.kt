@@ -1,12 +1,13 @@
 package com.pseandroid2.dailydata.globaltests
 
 import android.content.Context
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performTextInput
 import com.pseandroid2.dailydata.Main
 import com.pseandroid2.dailydata.MainActivity
 import com.pseandroid2.dailydata.remoteDataSource.RemoteDataSourceAPI
@@ -28,17 +29,19 @@ import org.junit.Before
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
-import java.util.regex.Matcher
 
+/**
+ * Tests: "Projektadministrator, Projektmitglied", 7.1.35
+ */
 class GT7135 {
-    val rds: RemoteDataSourceAPI = RemoteDataSourceAPI(
+    private val rds: RemoteDataSourceAPI = RemoteDataSourceAPI(
         UserAccount(FirebaseManager(null)), ServerManager(RESTAPI(URLs.testServer_BASE_URL))
     )
 
     @get:Rule
     val composeRule = createAndroidComposeRule<MainActivity>()
 
-    private val projectName: String = "GT7135";
+    private val projectName: String = "GT7.1.35";
 
 
     @ExperimentalCoroutinesApi
@@ -53,6 +56,7 @@ class GT7135 {
         GlobalTestsHelpingMethods.createTestProject(composeRule, projectName)
     }
 
+    @ExperimentalCoroutinesApi
     @After
     fun teardown() = runTest {
         Assert.assertTrue(RESTAPI(URLs.testServer_BASE_URL).clearServer())
@@ -60,7 +64,6 @@ class GT7135 {
 
     @ExperimentalCoroutinesApi
     /**
-     * tests: "Projektadministrator, Projektmitglied", 7.1.35
      * This tests if the global test works in the rdsAPI
      */
     @InternalCoroutinesApi
@@ -88,27 +91,23 @@ class GT7135 {
     }
 
     @Ignore("Not all for this test necessary features exists")
-    /**
-     * tests: "Projektadministrator, Projektmitglied", 7.1.35
-     */
     @InternalCoroutinesApi
     @Test
     fun joinProject() {
-        TODO("Implementiere die Funktionalität: Melde dich in der App mit einem Account an")
-
+        // TODO("Implementiere die Funktionalität: Nutzende können sich anmelden")
         // Login User 1
-        composeRule.onNodeWithText(projectName).performClick()
-        composeRule.onNodeWithTag(Routes.SERVER).performClick()
-        runBlocking { delay(1000) }
-        composeRule.onNodeWithText("Email").performTextInput(TestUsers.eMail[0])
-        composeRule.onNodeWithText("Password").performTextInput(TestUsers.password[0])
-        composeRule.onNodeWithText("Login").performClick()
-        runBlocking { delay(2000) }
+        GlobalTestsHelpingMethods.loginUser(composeRule, TestUsers.eMail[0], TestUsers.password[0], false)
 
         // Create Project
         composeRule.onNodeWithTag(Routes.PROJECT).performClick()
         runBlocking { delay(1000) }
-        TODO("Implementiere die Funktionalität: Offlineprojekt zu Onlinprojekt wechseln")
+        composeRule.onNodeWithText(projectName).performClick()
+        runBlocking { delay(1000) }
+        composeRule.onNodeWithText("Settings").performClick()
+        runBlocking { delay(500) }
+
+        // Change offline to online project
+        // TODO("Implementiere die Funktionalität: Offlineprojekt zu Onlinprojekt wechseln")
         composeRule.onNodeWithText("Create Online Project").performClick()
         runBlocking { delay(500) }
         composeRule.onNodeWithText("Create Link").performClick()
@@ -116,28 +115,24 @@ class GT7135 {
         val clipboardManager = composeRule.activity.baseContext.getSystemService(Context.CLIPBOARD_SERVICE) as androidx.compose.ui.platform.ClipboardManager
 
         // Login User 2
-        composeRule.onNodeWithText(projectName).performClick()
-        composeRule.onNodeWithTag(Routes.SERVER).performClick()
-        runBlocking { delay(1000) }
-        composeRule.onNodeWithText("Email").performTextInput(TestUsers.eMail[1])
-        composeRule.onNodeWithText("Password").performTextInput(TestUsers.password[1])
-        composeRule.onNodeWithText("Login").performClick()
-        runBlocking { delay(2000) }
+        GlobalTestsHelpingMethods.loginUser(composeRule, TestUsers.eMail[1], TestUsers.password[1], true)
 
         // Close app
-        TODO("Finde eine Möglichkeit die App zu schließen und den Link in dem clipboard zu öffnen")
+        // TODO("Finde eine Möglichkeit die App zu schließen und den Link in dem clipboard zu öffnen")
 
         // Join the Project
         composeRule.onNodeWithText("Join Project").performClick()
 
-        // Open the project
-        composeRule.onNodeWithTag(Routes.SERVER).performClick()
+        // Open The project
+        composeRule.onNodeWithTag(Routes.PROJECT).performClick()
         runBlocking { delay(1000) }
-        composeRule.onNodeWithText(projectName).performClick()
+        composeRule.onAllNodesWithText(projectName).onFirst().performClick()
         runBlocking { delay(1000) }
-        composeRule.onNodeWithText("Input").assertExists() // Means that the switch to the project screen succeeded
+        composeRule.onNodeWithText("Settings").performClick()
+        runBlocking { delay(500) }
 
         // Check who the project admin is
-        TODO("Implementiere die Funktionalität: Projektadministrator anzeigen")
+        // TODO("Implementiere die Funktionalität: Projektadministrator anzeigen")
+        composeRule.onNodeWithTag("Admin").assertTextEquals(TestUsers.eMail[0])
     }
 }

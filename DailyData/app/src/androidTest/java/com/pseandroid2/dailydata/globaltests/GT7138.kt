@@ -1,7 +1,6 @@
 package com.pseandroid2.dailydata.globaltests
 
 import android.content.Context
-import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onChildAt
@@ -33,9 +32,9 @@ import org.junit.Rule
 import org.junit.Test
 
 /**
- * Tests: "Neuer Projektadministrator", 7.1.36
+ * tests: " Mitglieder entfernen", 7.1.38
  */
-class GT7136 {
+class GT7138 {
     private val rds: RemoteDataSourceAPI = RemoteDataSourceAPI(
         UserAccount(FirebaseManager(null)), ServerManager(RESTAPI(URLs.testServer_BASE_URL))
     )
@@ -43,7 +42,7 @@ class GT7136 {
     @get:Rule
     val composeRule = createAndroidComposeRule<MainActivity>()
 
-    private val projectName: String = "GT7.1.36"
+    private val projectName: String = "GT7.1.38";
 
 
     @ExperimentalCoroutinesApi
@@ -64,14 +63,14 @@ class GT7136 {
         Assert.assertTrue(RESTAPI(URLs.testServer_BASE_URL).clearServer())
     }
 
+
     /**
-     * n = 1
-     * This tests if the global test works in the rdsAPI
+     * This tests if the global test works in the rdsAPI.
      */
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
     @Test
-    fun newProjectAdminRDS() = runTest {
+    fun removeOneUserRDS() = runTest {
         var projectID: Long = -1
 
         // User N1 creates the online project
@@ -94,10 +93,11 @@ class GT7136 {
         )
         Assert.assertEquals(rds.joinProject(projectID), "projectDetails")
 
-        // User N1 is project admin
-        Assert.assertEquals(TestUsers.userID[0], rds.getProjectAdmin(projectID))
+        // Check if N2 is project member
+        var projectParticipants = rds.getProjectParticipants(projectID) as MutableList
+        Assert.assertTrue(projectParticipants.remove(TestUsers.userID[1]))
 
-        // Remove N1 from the project
+        // N1 removes N2
         Assert.assertTrue(
             rds.signInUser(
                 TestUsers.eMail[0],
@@ -105,28 +105,21 @@ class GT7136 {
                 SignInTypes.EMAIL
             ).success
         )
-        Assert.assertTrue(rds.removeUser(TestUsers.userID[0], projectID))
+        Assert.assertTrue(rds.removeUser(TestUsers.userID[1], projectID))
 
-        // User N2 is project admin
-        Assert.assertTrue(
-            rds.signInUser(
-                TestUsers.eMail[1],
-                TestUsers.password[1],
-                SignInTypes.EMAIL
-            ).success
-        )
-        Assert.assertEquals(TestUsers.userID[1], rds.getProjectAdmin(projectID))
+        // Check that N2 is no project member
+        projectParticipants = rds.getProjectParticipants(projectID) as MutableList
+        Assert.assertFalse(projectParticipants.remove(TestUsers.userID[1]))
     }
 
-
-    /**
-     * n = 24
-     * This tests if the global test works in the rdsAPI
-     */
     @ExperimentalCoroutinesApi
+    /**
+     * This tests if the global test works in the rdsAPI.
+     * Tests if the test still works even when removing multiple users.
+     */
     @InternalCoroutinesApi
     @Test
-    fun newProjectAdminWithNEquals24RDS() = runTest {
+    fun removeAllUsersRDS() = runTest {
         var projectID: Long = -1
 
         // User N1 creates the online project
@@ -139,7 +132,7 @@ class GT7136 {
         )
         projectID = rds.createNewOnlineProject("projectDetails")
 
-        // Users N2-N25 join the project
+        // User Ni join the project
         for (i in 1..23) {
             Assert.assertTrue(
                 rds.signInUser(
@@ -151,10 +144,7 @@ class GT7136 {
             Assert.assertEquals(rds.joinProject(projectID), "projectDetails")
         }
 
-        // User N1 is project admin
-        Assert.assertEquals(TestUsers.userID[0], rds.getProjectAdmin(projectID))
-
-        // Remove N1 from the project
+        // Login User N1 (project admin)
         Assert.assertTrue(
             rds.signInUser(
                 TestUsers.eMail[0],
@@ -162,23 +152,28 @@ class GT7136 {
                 SignInTypes.EMAIL
             ).success
         )
-        Assert.assertTrue(rds.removeUser(TestUsers.userID[0], projectID))
 
-        // User N2 is project admin
-        Assert.assertTrue(
-            rds.signInUser(
-                TestUsers.eMail[1],
-                TestUsers.password[1],
-                SignInTypes.EMAIL
-            ).success
-        )
-        Assert.assertEquals(TestUsers.userID[1], rds.getProjectAdmin(projectID))
+        // Check if Ni is project member
+        var projectParticipants = rds.getProjectParticipants(projectID) as MutableList
+        for (i in 1..23) {
+            Assert.assertTrue(projectParticipants.remove(TestUsers.userID[i]))
+        }
+        Assert.assertEquals(mutableListOf(TestUsers.userID[0]), projectParticipants)
+
+        // N1 removes all Ni
+        for (i in 1..23) {
+            Assert.assertTrue(rds.removeUser(TestUsers.userID[i], projectID))
+        }
+
+        // Check if N1 is only project member
+        projectParticipants = rds.getProjectParticipants(projectID) as MutableList
+        Assert.assertEquals(listOf(TestUsers.userID[0]), projectParticipants)
     }
 
     @Ignore("Not all for this test necessary features exists")
     @InternalCoroutinesApi
     @Test
-    fun newProjectAdmin() {
+    fun removeUser() {
         // TODO("Implementiere die Funktionalität: Nutzende können sich anmelden")
         // Login user N1
         GlobalTestsHelpingMethods.loginUser(
@@ -212,7 +207,7 @@ class GT7136 {
         )
 
         // Close the app and start it with the join project link
-        // TODO("Finde eine Möglichkeit die App zu schließen und den Link in dem clipboard zu öffnen")
+        // TODO("Finde eine Möglichkeit die App zu schließen und sie mit dem Link im clipboard zu öffnen")
 
         // Join the project
         composeRule.onNodeWithText("Join Project").performClick()
@@ -226,28 +221,7 @@ class GT7136 {
             true
         )
 
-        // Open the project
-        composeRule.onNodeWithTag(Routes.PROJECT).performClick()
-        runBlocking { delay(1000) }
-        composeRule.onAllNodesWithText(projectName).onFirst().performClick()
-        runBlocking { delay(1000) }
-        composeRule.onNodeWithText("Settings").performClick()
-        runBlocking { delay(1000) }
-
-        // User N1 removes himself from the project
-        composeRule.onNodeWithText(TestUsers.eMail[0]).performClick().onParent()
-            .onChildAt(1) // Remove User1
-        runBlocking { delay(500) }
-
-        // Login user N2
-        GlobalTestsHelpingMethods.loginUser(
-            composeRule,
-            TestUsers.eMail[1],
-            TestUsers.password[1],
-            true
-        )
-
-        // Open the project
+        // Open project
         composeRule.onNodeWithTag(Routes.PROJECT).performClick()
         runBlocking { delay(1000) }
         composeRule.onAllNodesWithText(projectName).onFirst().performClick()
@@ -255,8 +229,13 @@ class GT7136 {
         composeRule.onNodeWithText("Settings").performClick()
         runBlocking { delay(500) }
 
-        // Check which member is the admin
-        // TODO("Implementiere die Funktionalität: Projektadministrator anzeigen")
-        composeRule.onNodeWithTag("Admin").assertTextEquals(TestUsers.eMail[1])
+        // Checks if user N2 is project member
+        composeRule.onNodeWithText(TestUsers.eMail[1]).assertExists()
+        runBlocking { delay(500) }
+
+        // Remove user N2
+        composeRule.onNodeWithText(TestUsers.eMail[1]).performClick().onParent()
+            .onChildAt(1)
+        composeRule.onNodeWithText(TestUsers.eMail[1]).assertDoesNotExist()
     }
 }

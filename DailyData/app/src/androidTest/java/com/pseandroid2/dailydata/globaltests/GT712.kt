@@ -1,40 +1,39 @@
 package com.pseandroid2.dailydata.globaltests
 
-import android.util.Log
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
-import com.pseandroid2.dailydata.Main
+import androidx.test.internal.runner.junit4.statement.UiThreadStatement
 import com.pseandroid2.dailydata.MainActivity
-import com.pseandroid2.dailydata.util.Consts.LOG_TAG
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
 /**
- * testing: "Leeres Projekt erstellen", 7.1.2
+ * Tests: "Leeres Projekt erstellen", 7.1.2
  */
 class GT712 {
-
     @get:Rule
     val composeRule = createAndroidComposeRule<MainActivity>()
 
+    private val projectName: String = "GT7.1.2"
 
     @Ignore("Graph error")
+    @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
     @Test
-    fun createEmptyProjectTest() {
+    fun createEmptyProjectTest() = runTest {
+        // Create a project
         composeRule.onNodeWithText("Add new Project").performClick()
 
-        composeRule.onNodeWithText("Add Title").performTextInput("Kresse")
+        composeRule.onNodeWithText("Add Title").performTextInput(projectName)
 
         composeRule.onNodeWithText("Add Description")
             .performTextInput("Hier speichere ich die Höhe meiner Kresse")
@@ -56,25 +55,21 @@ class GT712 {
         composeRule.onNodeWithText("Name").performTextInput("Meine Kresse")
         composeRule.onNodeWithText("OK").performClick()
 
+        // TODO("Implementiere die Funktionalität: Füge einen Graphen zu dem Projekt hinzu")
         composeRule.onNodeWithText("Add Graph").performClick()
         composeRule.onNodeWithText("Line Chart").performClick()
-        //TODO("com.pseandroid2.dailydata.workingtest.ReproduceTest.addGraphTest")
+
 
         composeRule.onNodeWithText("Save").performClick()
-        runBlocking {
-            delay(3000)
+
+        // Check if project exists in the start screen
+        delay(3000)
+        UiThreadStatement.runOnUiThread {
+            composeRule.activity.onBackPressed()
         }
-        runBlocking {
-            launch(Dispatchers.Main) {
-                composeRule.activity.onBackPressed()
-            }
-        }
-        runBlocking {
-            delay(2000)
-        }
+        delay(2000)
 
         composeRule.onNodeWithText("Add new Project").assertExists()
-        composeRule.onAllNodes(matcher = hasText("Kresse")).onFirst().assertExists()
+        composeRule.onAllNodes(matcher = hasText(projectName)).onFirst().assertExists()
     }
-
 }
