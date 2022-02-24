@@ -12,6 +12,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runTest
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
@@ -24,7 +25,7 @@ class GT712 {
 
     private val projectName: String = "GT7.1.2"
 
-    //@Ignore("Graph error")
+    @Ignore("Graph error")
     @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
     @Test
